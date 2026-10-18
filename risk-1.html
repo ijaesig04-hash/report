@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0b2a5b">
+<title>작업전 위험예지활동 보고</title>
+<style>
+  :root{
+    --navy:#0b2a5b; --blue:#1663d1; --sky:#eaf1fc;
+    --green:#0f9d58; --red:#d93025; --amber:#e8930c;
+    --ink:#1c2733; --sub:#66788c; --line:#dde5ef; --bg:#f2f5f9;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;}
+  .wrap{max-width:520px;margin:0 auto;padding:0 14px 90px;}
+  header{background:linear-gradient(135deg,#0b2a5b,#1663d1);color:#fff;
+    padding:20px 18px 16px;border-radius:0 0 18px 18px;margin:0 -14px 14px;}
+  header h1{margin:0;font-size:19px;letter-spacing:-.3px;}
+  header p{margin:5px 0 0;font-size:12.5px;opacity:.85;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:16px 14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(16,42,91,.05);}
+  .card h2{margin:0 0 12px;font-size:14.5px;color:var(--navy);display:flex;align-items:center;gap:6px;}
+  .card h2 .num{background:var(--navy);color:#fff;width:20px;height:20px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;font-size:11.5px;flex:0 0 20px;}
+  .row2{display:flex;gap:8px;}
+  .row2>div{flex:1;}
+  label{display:block;font-size:12px;color:var(--sub);margin:10px 2px 4px;font-weight:600;}
+  input[type=text],input[type=number],select{
+    width:100%;padding:12px;border:1.5px solid var(--line);border-radius:10px;
+    font-size:16px;background:#fbfcfe;color:var(--ink);outline:none;}
+  input:focus,select:focus{border-color:var(--blue);background:#fff;}
+  .seg{display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;}
+  .seg button{flex:1;padding:12px 4px;border:0;background:#fbfcfe;font-size:14px;color:var(--sub);}
+  .seg button.on{background:var(--blue);color:#fff;font-weight:700;}
+  /* photos */
+  .photos{display:flex;gap:10px;}
+  .ph{flex:1;aspect-ratio:1/1;border:1.8px dashed #b9c8dd;border-radius:12px;background:var(--sky);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    color:var(--blue);font-size:13px;font-weight:600;position:relative;overflow:hidden;}
+  .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .ph .del{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;
+    background:rgba(0,0,0,.55);color:#fff;border:0;font-size:14px;line-height:1;z-index:2;}
+  .ph .ico{font-size:26px;}
+  .hint{font-size:11.5px;color:var(--sub);margin-top:8px;}
+  /* AI rows */
+  .ai-status{font-size:12px;padding:9px 11px;border-radius:9px;background:var(--sky);
+    color:var(--navy);margin-bottom:10px;line-height:1.5;}
+  .ai-status.err{background:#fdeceb;color:var(--red);}
+  .ai-status.ok{background:#e7f6ec;color:#0a7a43;}
+  .airow{display:flex;align-items:center;gap:10px;padding:11px 10px;border:1.5px solid var(--line);
+    border-radius:11px;margin-bottom:8px;background:#fbfcfe;}
+  .airow .nm{flex:1;font-size:14px;font-weight:600;}
+  .airow .st{font-size:13.5px;font-weight:700;padding:6px 11px;border-radius:20px;background:#eef1f5;color:var(--sub);}
+  .airow.v-ok .st{background:#e7f6ec;color:var(--green);}
+  .airow.v-no .st{background:#fdeceb;color:var(--red);}
+  .airow.v-uk .st{background:#fdf3e3;color:var(--amber);}
+  .airow .conf{font-size:11px;color:var(--sub);display:block;margin-top:2px;}
+  .tap{font-size:10.5px;color:#9aa9bb;}
+  .spin{width:15px;height:15px;border:2.5px solid #cdd9ea;border-top-color:var(--blue);
+    border-radius:50%;animation:sp 1s linear infinite;display:inline-block;vertical-align:-3px;}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .prog{height:6px;background:#e2e9f3;border-radius:4px;overflow:hidden;margin-top:6px;display:none;}
+  .prog i{display:block;height:100%;width:0;background:var(--blue);transition:width .3s;}
+  /* buttons */
+  .btn{width:100%;padding:15px;border:0;border-radius:12px;font-size:16px;font-weight:700;}
+  .btn-main{background:var(--navy);color:#fff;box-shadow:0 3px 10px rgba(11,42,91,.25);}
+  .btn-main:disabled{background:#aab8cc;box-shadow:none;}
+  .btn-line{background:#fff;color:var(--navy);border:1.5px solid var(--navy);margin-top:8px;}
+  .btnrow{display:flex;gap:8px;margin-top:10px;}
+  .btnrow .btn{font-size:14.5px;padding:13px 6px;}
+  /* result */
+  #resultCard{display:none;}
+  #reportImg{width:100%;border-radius:10px;border:1px solid var(--line);}
+  .foot{text-align:center;font-size:11px;color:#9aa9bb;margin:18px 0 8px;line-height:1.6;}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:rgba(20,30,45,.92);
+    color:#fff;font-size:13px;padding:11px 18px;border-radius:24px;opacity:0;transition:opacity .3s;
+    pointer-events:none;z-index:99;white-space:nowrap;}
+  .toast.show{opacity:1;}
+  /* feedback */
+  #fbCard h2 .num{background:var(--amber);}
+  .fb-empty{font-size:12.5px;color:var(--sub);background:var(--sky);padding:11px;border-radius:9px;line-height:1.5;}
+  .fb{border:1.5px solid #f3d9a8;background:#fffaf0;border-radius:11px;padding:11px 12px;margin-bottom:8px;}
+  .fb b{display:block;font-size:13.5px;color:#9a5b00;margin-bottom:5px;}
+  .fb ul{margin:0;padding-left:16px;}
+  .fb li{font-size:12.5px;color:#5a4a2f;line-height:1.55;margin-bottom:2px;}
+  .fb.alert{border-color:#f2b8b5;background:#fef1f0;}
+  .fb.alert b{color:var(--red);}
+  .fb.alert li{color:#7a2e2a;}
+
+  .stats-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .mini-note{font-size:11.5px;color:var(--sub);line-height:1.55;margin-top:8px;}
+  .year-table{overflow:auto;border:1px solid var(--line);border-radius:10px;}
+  .year-table table{min-width:720px;width:100%;border-collapse:collapse;font-size:12px;}
+  .year-table th,.year-table td{padding:8px 6px;border-right:1px solid #eef2f7;border-bottom:1px solid #eef2f7;text-align:center;white-space:nowrap;}
+  .year-table th{background:#f2f5f9;color:var(--sub);font-weight:700;}
+  .year-table th:first-child,.year-table td:first-child{position:sticky;left:0;background:#fff;text-align:left;font-weight:700;z-index:1;}
+  .year-table th:first-child{background:#f2f5f9;}
+  .year-table .total{font-weight:800;background:#f7faff;}
+  .target{display:flex;gap:8px;align-items:center;margin-top:10px;}
+  .target input{width:110px;}
+  .tabs{display:flex;gap:8px;margin:0 0 12px;background:#fff;padding:6px;border:1px solid var(--line);border-radius:14px;position:sticky;top:6px;z-index:20;box-shadow:0 2px 8px rgba(16,42,91,.08);}
+  .tabbtn{flex:1;border:0;border-radius:10px;padding:12px 8px;background:#f2f5f9;color:var(--sub);font-weight:800;font-size:14px;}
+  .tabbtn.active{background:var(--navy);color:#fff;}
+  .tabs{pointer-events:auto !important; position:relative !important; z-index:99999 !important;}
+  .tabbtn{position:relative;z-index:100000 !important;cursor:pointer;pointer-events:auto !important;touch-action:manipulation;}
+  body.employee-mode #sharedCard,body.employee-mode #setupGuideCard,body.employee-mode #rosterCard,body.employee-mode #statsCard{display:none!important;}
+/* 관리자용은 직원 입력/AI/사진/보고생성 메뉴를 숨기고 관리자 기능만 표시 */
+body.admin-mode .container > .card:not(#sharedCard):not(#rosterCard):not(#statsCard),
+body.admin-mode #btnMake,
+body.admin-mode #resultCard{display:none!important;}
+body.admin-mode #setupGuideCard{display:none!important;}
+body.admin-mode .foot{display:none!important;}
+  body.admin-mode #adminLockNote{display:block;}
+  #adminLockNote{display:none;background:#fff7e8;border:1px solid #f0d39a;color:#7a5200;border-radius:12px;padding:12px;font-size:12px;line-height:1.5;margin-bottom:12px;}
+
+/* 관리자 화면: 직원 입력/AI/보고 메뉴 완전 숨김 */
+body.admin-mode > .wrap > .card:not(#sharedCard):not(#rosterCard):not(#statsCard){display:none!important;}
+body.admin-mode > .wrap > #setupGuideCard{display:none!important;}
+body.admin-mode > .wrap #sharedCard,
+body.admin-mode > .wrap #rosterCard,
+body.admin-mode > .wrap #statsCard{display:block;}
+body.employee-mode > .wrap #sharedCard,
+body.employee-mode > .wrap #setupGuideCard,
+body.employee-mode > .wrap #rosterCard,
+body.employee-mode > .wrap #statsCard{display:none!important;}
+</style>
+<script>
+/* 탭 전환은 본체 기능과 분리: 본체 JS 오류가 있어도 탭 자체는 작동 */
+window.__switchMainTab=function(mode){
+  var body=document.body, emp=document.getElementById('tabEmployee'), adm=document.getElementById('tabAdmin');
+  if(mode==='admin'){
+    body.classList.remove('employee-mode'); body.classList.add('admin-mode');
+    if(emp) emp.classList.remove('active'); if(adm) adm.classList.add('active');
+    var note=document.getElementById('adminLockNote'); if(note) note.style.display='block';
+    ['sharedCard'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='';});
+    ['setupGuideCard','rosterCard','statsCard'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='none';});
+    try{ if(typeof window.activateAdmin==='function') window.activateAdmin(); }catch(e){}
+  }else{
+    body.classList.remove('admin-mode'); body.classList.add('employee-mode');
+    if(adm) adm.classList.remove('active'); if(emp) emp.classList.add('active');
+    var note=document.getElementById('adminLockNote'); if(note) note.style.display='none';
+    ['sharedCard','setupGuideCard','rosterCard','statsCard'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='none';});
+    try{ if(typeof window.activateEmployee==='function') window.activateEmployee(); }catch(e){}
+  }
+};
+</script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🦺 작업전 위험예지활동 보고</h1>
+    <p>6개 항목 입력 → 현장사진 촬영 → AI 안전판정 → 보고 이미지 생성</p>
+  </header>
+
+  <div class="tabs">
+    <button type="button" class="tabbtn active" id="tabEmployee" onclick="window.__switchMainTab('employee')">👷 직원용</button>
+    <button type="button" class="tabbtn" id="tabAdmin" onclick="window.__switchMainTab('admin')">📊 관리자용</button>
+  </div>
+  <div id="adminLockNote">🔐 관리자 화면입니다. 관리자 PIN으로 접속하면 누계현황·직원명단·누계 초기화 메뉴만 표시됩니다.</div>
+
+  <!-- 1. 기본정보 -->
+  <div class="card">
+    <h2><span class="num">1</span>기본 정보</h2>
+    <div class="row2">
+      <div>
+        <label>호수</label>
+        <select id="f_ho">
+          <option value="">호수 선택</option>
+          <option value="26호">26호</option>
+          <option value="27호">27호</option>
+          <option value="28호">28호</option>
+          <option value="127호">127호</option>
+          <option value="160호">160호</option>
+        </select>
+      </div>
+      <div>
+        <label>이름</label>
+        <select id="f_name">
+          <option value="">직원 선택</option>
+        </select>
+      </div>
+    </div>
+    <label>활동일자</label>
+    <input type="date" id="f_date">
+    <div id="myStat" class="ai-status" style="margin-top:10px;margin-bottom:0;"></div>
+  </div>
+
+  <!-- 2. 6개 항목 -->
+  <div class="card">
+    <h2><span class="num">2</span>작업 정보 (6개 항목)</h2>
+    <label>계약처명</label>
+    <input type="text" id="f_place" placeholder="예) 군포초본관">
+    <label>방문목적</label>
+    <input type="text" id="f_purpose" list="dl_purpose" placeholder="예) 기기점검">
+    <datalist id="dl_purpose">
+      <option value="기기점검"><option value="장애처리"><option value="공사">
+      <option value="철거"><option value="이설"><option value="기타">
+    </datalist>
+    <label>업종</label>
+    <input type="text" id="f_biz" list="dl_biz" placeholder="예) 기타사무실">
+    <datalist id="dl_biz">
+      <option value="기타사무실"><option value="학교"><option value="금융">
+      <option value="공공기관"><option value="상가"><option value="공장"><option value="주택">
+    </datalist>
+    <label>높이 (m)</label>
+    <input type="number" id="f_height" step="0.1" min="0" inputmode="decimal" placeholder="예) 2.2">
+    <label>작업내용</label>
+    <input type="text" id="f_work" placeholder="예) 열선교체">
+    <label>위험요인 확인 이행여부</label>
+    <div class="seg" id="segRisk">
+      <button type="button" class="on" data-v="확인함">확인함</button>
+      <button type="button" data-v="미확인">미확인</button>
+    </div>
+  </div>
+
+  <!-- 3. 위험예지 피드백 -->
+  <div class="card" id="fbCard">
+    <h2><span class="num">!</span>AI 위험예지 피드백</h2>
+    <div id="fbList" class="fb-empty">작업내용·높이를 입력하면 예상 위험요소와 안전 조치를 알려드립니다.</div>
+  </div>
+
+  <!-- 4. 사진 -->
+  <div class="card">
+    <h2><span class="num">3</span>현장 사진 (최대 2장)</h2>
+    <div class="photos">
+      <div class="ph" id="ph0"><span class="ico">📷</span>사진 촬영/선택</div>
+      <div class="ph" id="ph1"><span class="ico">🤳</span>착용 확인 셀피</div>
+    </div>
+    <input type="file" id="file0" accept="image/*" hidden>
+    <input type="file" id="file1" accept="image/*" hidden>
+    <div class="hint">※ 1장은 작업현장, 1장은 안전모·장갑이 보이도록 본인 모습을 찍으면 AI 판정이 정확해집니다.</div>
+  </div>
+
+  <!-- 4. AI 판정 -->
+  <div class="card">
+    <h2><span class="num">4</span>AI 안전 판정</h2>
+    <div class="ai-status" id="aiStatus">사진을 추가하면 AI가 자동으로 분석합니다.
+      <div class="prog" id="aiProg"><i id="aiProgBar"></i></div>
+    </div>
+    <div class="airow" id="row_helmet">
+      <div class="nm">① 안전모 착용여부<span class="conf" id="conf_helmet"></span></div>
+      <div class="st" id="st_helmet">대기</div>
+    </div>
+    <div class="airow" id="row_gloves">
+      <div class="nm">② 장갑 착용여부<span class="conf" id="conf_gloves"></span></div>
+      <div class="st" id="st_gloves">대기</div>
+    </div>
+    <div class="airow" id="row_gear">
+      <div class="nm">③ 안전장구 구비여부<span class="conf" id="conf_gear"></span></div>
+      <div class="st" id="st_gear">대기</div>
+    </div>
+    <div class="tap" style="text-align:right;margin-top:2px;">※ 판정 결과를 탭하면 수동으로 수정할 수 있습니다</div>
+  </div>
+
+  <!-- 5. 생성 -->
+  <button class="btn btn-main" id="btnMake">📋 보고 이미지 생성</button>
+
+  <!-- 5. 월별/연간 인당 실적 집계 -->
+  <div class="card" id="sharedCard">
+    <h2><span class="num">🔐</span>관리자 인증</h2>
+    <div class="row2">
+      <div>
+        <label>관리자 PIN</label>
+        <input type="password" id="syncPin" placeholder="관리자 PIN" inputmode="numeric">
+      </div>
+      <div style="display:flex;align-items:end">
+        <button type="button" class="btn btn-main" style="padding:12px 8px" id="btnSync">관리자 접속</button>
+      </div>
+    </div>
+    <div id="syncStatus" class="ai-status" style="margin:0;padding:10px">관리자 PIN을 입력하세요</div>
+  </div>
+
+  <div class="card" id="setupGuideCard" style="border:2px solid #dbeafe;background:#f8fbff;">
+    <h2><span class="num">i</span>처음 한 번만 설정</h2>
+    <div style="font-size:13px;line-height:1.7;color:#334155">
+      <b>①</b> 파트장님이 아래의 「초간단 공용서버 Apps Script」 파일을 Google Apps Script에 붙여넣습니다.<br>
+      <b>②</b> <b>배포 → 새 배포 → 웹 앱 → 액세스: 모든 사용자</b>로 배포합니다.<br>
+      <b>③</b> 생성된 웹앱 주소와 관리자 PIN을 이 화면에 한 번 입력합니다.<br>
+      <b>④</b> 직원에게는 별도의 「직원용」 HTML 파일만 공유합니다. 직원은 PIN을 입력하지 않습니다.
+    </div>
+    <div class="mini-note">※ 이 버전은 Google 스프레드시트를 사용하지 않고 Apps Script의 공용 저장공간에 실적을 저장합니다.</div>
+  </div>
+
+  <div class="card" id="rosterCard">
+    <h2><span class="num">5</span>북서울지사 직원명단 관리</h2>
+    <div class="row2">
+      <div style="flex:2">
+        <label>직원 추가</label>
+        <input type="text" id="newPerson" placeholder="직원 이름 입력">
+      </div>
+      <div style="display:flex;align-items:end">
+        <button type="button" class="btn btn-main" style="padding:12px 8px" id="btnAddPerson">직원 추가</button>
+      </div>
+    </div>
+    <label>현재 등록 직원</label>
+    <div id="rosterList" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    <div class="mini-note">※ 직원 이름을 미리 등록하면 활동 입력 화면에서 목록으로 선택할 수 있습니다. 전출·퇴사 직원은 명단에서 제거해도 기존 실적은 유지됩니다.</div>
+  </div>
+
+  <div class="card" id="statsCard">
+    <h2><span class="num">6</span>파트 월별·인당 위험예지활동 집계</h2>
+    <div class="row2">
+      <div>
+        <label>조회 연도</label>
+        <input type="number" id="statYear" min="2020" max="2100" inputmode="numeric">
+      </div>
+      <div>
+        <label>조회 월</label>
+        <select id="statMonth"><option value="01">1월</option><option value="02">2월</option><option value="03">3월</option><option value="04">4월</option><option value="05">5월</option><option value="06">6월</option><option value="07">7월</option><option value="08">8월</option><option value="09">9월</option><option value="10">10월</option><option value="11">11월</option><option value="12">12월</option></select>
+      </div>
+    </div>
+    <div id="statSummary" class="ai-status" style="margin-top:10px;">등록된 활동을 인당 건수로 집계합니다.</div>
+    <div id="statTable"></div>
+    <div class="target">
+      <label style="margin:0;flex:1">월 목표(인당)</label>
+      <input type="number" id="monthlyTarget" min="0" step="1" inputmode="numeric" placeholder="예) 10">
+    </div>
+    <div id="yearTable" class="year-table" style="margin-top:10px;"></div>
+    <div class="stats-actions" style="margin-top:10px;">
+      <button type="button" class="btn btn-line" style="margin-top:0" id="btnClearStats">전체 누계 초기화</button>
+    </div>
+    <div class="mini-note">※ 직원들이 입력한 위험예지활동 실적을 공용 서버 기준으로 집계합니다. 초기화하면 누계 데이터가 삭제됩니다.</div>
+  </div>
+
+  <div class="card" id="resultCard">
+    <h2><span class="num">7</span>보고 이미지</h2>
+    <img id="reportImg" alt="보고 이미지">
+    <div class="btnrow">
+      <button class="btn btn-main" id="btnShare">공유 (카톡 등)</button>
+      <button class="btn btn-line" style="margin-top:0" id="btnSave">이미지 저장</button>
+    </div>
+  </div>
+
+  <div class="foot">S-1 작업전 위험예지활동 · 안전한 현장을 만듭니다<br>AI 판정은 보조 수단이며 최종 확인 책임은 작업자 본인에게 있습니다.</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+
+
+"use strict";
+/* ================= 상태 ================= */
+const S = {
+  photos: [null, null],          // dataURL
+  ai: { helmet:null, gloves:null, gear:null },  // 'ok'|'no'|'uk'|null
+  envHazards: [],                // 사진 환경 분석 결과
+  aiConf: { helmet:null, gloves:null, gear:null },
+  aiManual: { helmet:false, gloves:false, gear:false },
+  risk: '확인함',
+  classifier: null,
+  aiMode: 'loading',             // loading | ready | manual
+  analyzing: false,
+  loggedKey: null,
+};
+const $ = id => document.getElementById(id);
+const toast = m => { const t=$('toast'); t.textContent=m; t.classList.add('show');
+  clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2200); };
+
+/* 편의: 호수/이름 기억 (미지원 환경에서도 동작) */
+const store = {
+  get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+};
+const FIXED_SERVER_URL = 'https://script.google.com/macros/s/AKfycbygmjwcblQ9W9rF8KPHh9HhHaMuJ6Ys8e13QainA_ktd_0PmTRJs3DeD8eHmldXzvfA/exec';
+const PUBLIC_EMPLOYEE_KEY = 'PUBLIC_EMPLOYEE_KEY';
+const sync = {
+  url: FIXED_SERVER_URL,
+  pin: store.get('rk_sync_pin') || '',
+  busy: false,
+};
+
+function saveSyncConfig(){
+  sync.url=FIXED_SERVER_URL;
+  sync.pin=$('syncPin').value||'';
+  store.set('rk_sync_url',sync.url); store.set('rk_sync_pin',sync.pin);
+}
+function setSyncStatus(msg,ok=false){
+  const el=$('syncStatus'); if(!el)return; el.textContent=msg; el.className='ai-status '+(ok?'ok':'');
+}
+let currentMode='employee';
+let adminUnlocked=false;
+
+async function publicGetRoster(){
+  const res=await fetch(FIXED_SERVER_URL+'?action=roster&key='+encodeURIComponent(PUBLIC_EMPLOYEE_KEY),{cache:'no-store'});
+  const data=await res.json();
+  if(!data.ok) throw new Error(data.error||'서버 오류');
+  if(data.roster) setRoster(data.roster);
+  if(data.target!==undefined && data.target!==null){
+    store.set('rk_target',String(data.target));
+    if($('monthlyTarget')) $('monthlyTarget').value=data.target||'';
+  }
+  renderRoster();
+  renderMyStat();
+  return data;
+}
+
+async function api(action,payload={}){
+  if(!sync.url) throw new Error('공유 서버 주소가 없습니다');
+  const res=await fetch(sync.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,key:sync.pin,...payload})});
+  const data=await res.json();
+  if(!data.ok) throw new Error(data.error||'서버 오류');
+  return data;
+}
+async function syncFromServer(showToast=true){
+  if(!sync.url) return false;
+  // 이미 동기화 중이면 끝날 때까지 기다렸다가 다시 시도 (버튼 여러 번 눌러야 하는 문제 방지)
+  let waited=0;
+  while(sync.busy && waited<8000){ await new Promise(r=>setTimeout(r,150)); waited+=150; }
+  sync.busy=true; setSyncStatus('동기화 중…');
+  try{
+    const res=await fetch(sync.url+'?action=get&key='+encodeURIComponent(sync.pin),{cache:'no-store'});
+    const data=await res.json(); if(!data.ok) throw new Error(data.error||'서버 오류');
+    const server=data.records||[];
+    // 서버 데이터가 항상 기준(authoritative). 아직 서버에 올라가지 못한(synced:false) 로컬 기록만 남겨서 합침.
+    // 이렇게 해야 다른 기기에서 '전체 누계 초기화'를 했을 때 이 기기에도 정상 반영됨.
+    const localPending=getRecords().filter(r=>r.synced===false);
+    const serverKeys=new Set(server.map(r=>[r.date,r.name,r.ho,r.place,r.purpose,r.work].join('|')));
+    const stillPending=localPending.filter(r=>!serverKeys.has([r.date,r.name,r.ho,r.place,r.purpose,r.work].join('|')));
+    const merged=[...server.map(r=>({...r,synced:true})), ...stillPending];
+    const before=getRecords().length;
+    setRecords(merged);
+    if(data.roster) setRoster(data.roster);
+    if(data.target!==undefined && data.target!==null) { store.set('rk_target',String(data.target)); if($('monthlyTarget')) $('monthlyTarget').value=data.target||''; }
+    if(stillPending.length) await api('addRecords',{records:stillPending}).then(()=>{
+      const rows=getRecords().map(r=>stillPending.some(p=>p.id===r.id)?{...r,synced:true}:r);
+      setRecords(rows);
+    }).catch(()=>{});
+    renderRoster(); renderStats(); renderMyStat();
+    setSyncStatus('✅ 공용 서버 연결됨 · '+new Date().toLocaleTimeString('ko-KR'),true);
+    if(showToast) toast(merged.length!==before?'공용 실적을 최신 상태로 갱신했습니다':'공용 실적과 최신 상태입니다');
+    return true;
+  }catch(e){
+    setSyncStatus('⚠️ 동기화 실패: '+e.message,false); if(showToast) toast('공유 서버 연결을 확인해 주세요'); return false;
+  }finally{ sync.busy=false; }
+}
+async function pushRecordToServer(r){
+  if(!sync.url)return;
+  try{
+    const payload={action:'addRecords',key:(currentMode==='employee'?PUBLIC_EMPLOYEE_KEY:sync.pin),records:[r]};
+    const res=await fetch(FIXED_SERVER_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+    const data=await res.json();
+    if(!data.ok) throw new Error(data.error||'서버 오류');
+    const rows=getRecords().map(row=>row.id===r.id?{...row,synced:true}:row);
+    setRecords(rows);
+    setSyncStatus('✅ 서버 저장 완료 · '+new Date().toLocaleTimeString('ko-KR'),true);
+  }catch(e){
+    setSyncStatus('⚠️ 서버 저장 실패 — 재동기화 필요',false);
+  }
+}
+function todayISO(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function monthISO(){
+  return todayISO().slice(0,7);
+}
+function getRecords(){
+  try{ return JSON.parse(localStorage.getItem('rk_records')||'[]'); }
+  catch(e){ return []; }
+}
+function setRecords(rows){
+  try{ localStorage.setItem('rk_records',JSON.stringify(rows)); }catch(e){}
+}
+function formKey(){
+  return [
+    $('f_date').value,$('f_ho').value.trim(),$('f_name').value.trim(),
+    $('f_place').value.trim(),$('f_purpose').value.trim(),$('f_biz').value.trim(),
+    $('f_height').value.trim(),$('f_work').value.trim(),S.risk
+  ].join('|');
+}
+function registerActivity(){
+  const key=formKey();
+  if(S.loggedKey===key) return false;
+  const rows=getRecords();
+  const record={
+    id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random()),
+    date:$('f_date').value || todayISO(), ho:$('f_ho').value.trim(), name:$('f_name').value.trim(),
+    place:$('f_place').value.trim(), purpose:$('f_purpose').value.trim(), work:$('f_work').value.trim(),
+    synced:false
+  };
+  rows.push(record);
+  setRecords(rows);
+  S.loggedKey=key;
+  renderStats();
+  renderMyStat();
+  pushRecordToServer(record);
+  return true;
+}
+function getRoster(){
+  try{ return JSON.parse(localStorage.getItem('rk_roster')||'[]').filter(Boolean); }catch(e){ return []; }
+}
+function setRoster(rows){ try{ localStorage.setItem('rk_roster',JSON.stringify([...new Set(rows)])); }catch(e){} }
+function allPeople(rows){
+  const names=[...getRoster(),...rows.map(r=>r.name||'')].filter(Boolean);
+  return [...new Set(names)].sort((a,b)=>a.localeCompare(b,'ko'));
+}
+function renderStats(){
+  const year=Number($('statYear').value)||Number(todayISO().slice(0,4));
+  const all=getRecords().filter(r=>String(r.date||'').slice(0,4)===String(year));
+  const people=allPeople(all);
+  const monthly=Array.from({length:12},()=>({}));
+  all.forEach(r=>{const m=Number(String(r.date||'').slice(5,7))-1; if(m>=0&&m<12){const n=r.name||'(이름 미입력)'; monthly[m][n]=(monthly[m][n]||0)+1;}});
+  const total=all.length;
+  const active=new Set(all.map(r=>r.name||'(이름 미입력)'));
+  const avg=active.size?(total/active.size).toFixed(1):'0.0';
+  $('statSummary').className='ai-status ok';
+  $('statSummary').textContent=`${year}년 · 총 ${total}건 · 참여 ${active.size}명 · 참여자 인당 평균 ${avg}건 · 등록 인원 ${people.length}명`;
+
+  const month=String($('statMonth')?.value||'').slice(5,7);
+  const selected=month?Number(month)-1:new Date().getMonth();
+  const counts=monthly[selected]||{};
+  const target=Number($('monthlyTarget').value)||0;
+  const monthRows=people.map(n=>({name:n,count:counts[n]||0}));
+  const el=$('statTable');
+  if(!people.length){ el.innerHTML='<div class="fb-empty">해당 연도에 등록된 활동이 없습니다. 직원 실적 CSV를 취합하거나 보고서를 생성해 주세요.</div>'; }
+  else {
+    const totalM=Object.values(counts).reduce((a,b)=>a+b,0);
+    el.innerHTML='<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">'+
+      `<thead><tr style="background:#f2f5f9;color:#66788c"><th style="padding:9px;text-align:left">${selected+1}월 이름</th><th style="padding:9px;text-align:center">건수</th><th style="padding:9px;text-align:center">목표</th><th style="padding:9px;text-align:center">달성률</th></tr></thead>`+
+      '<tbody>'+monthRows.map(r=>{const rate=target?Math.round(r.count/target*100):0;return `<tr><td style="padding:9px;border-top:1px solid #eef2f7;font-weight:600">${escapeHtml(r.name)}</td><td style="padding:9px;border-top:1px solid #eef2f7;text-align:center;font-weight:700">${r.count}</td><td style="padding:9px;border-top:1px solid #eef2f7;text-align:center">${target||'-'}</td><td style="padding:9px;border-top:1px solid #eef2f7;text-align:center">${target?rate+'%':'-'}</td></tr>`;}).join('')+
+      `<tr><td style="padding:9px;border-top:2px solid #dde5ef;font-weight:700">합계</td><td style="padding:9px;border-top:2px solid #dde5ef;text-align:center;font-weight:700">${totalM}</td><td></td><td></td></tr></tbody></table></div>`;
+  }
+  // 연간 1~12월 × 직원별 건수
+  let html='<table><thead><tr><th>이름</th>'+Array.from({length:12},(_,i)=>`<th>${i+1}월</th>`).join('')+'<th>연간</th><th>월평균</th></tr></thead><tbody>';
+  people.forEach(n=>{const vals=monthly.map(x=>x[n]||0);const sum=vals.reduce((a,b)=>a+b,0);html+=`<tr><td>${escapeHtml(n)}</td>`+vals.map(v=>`<td class="${target&&v>=target?'total':''}">${v}</td>`).join('')+`<td class="total">${sum}</td><td>${(sum/12).toFixed(1)}</td></tr>`;});
+  if(people.length){const sums=monthly.map(x=>Object.values(x).reduce((a,b)=>a+b,0));html+='<tr class="total"><td>월 합계</td>'+sums.map(v=>`<td>${v}</td>`).join('')+`<td>${sums.reduce((a,b)=>a+b,0)}</td><td>${(sums.reduce((a,b)=>a+b,0)/12).toFixed(1)}</td></tr>`;}
+  html+='</tbody></table>';
+  $('yearTable').innerHTML=html;
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function renderMyStat(){
+  const el=$('myStat'); if(!el) return;
+  const name=($('f_name').value||'').trim();
+  const target=Number(store.get('rk_target'))||20;
+  if(!name){ el.className='ai-status'; el.textContent=`이름을 선택하면 이번달 실적을 볼 수 있어요 (월 목표 ${target}건)`; return; }
+  const ym=todayISO().slice(0,7);
+  const count=getRecords().filter(r=>(r.name||'').trim()===name && String(r.date||'').slice(0,7)===ym).length;
+  const rate=target?Math.round(count/target*100):0;
+  el.className='ai-status'+(target&&count>=target?' ok':'');
+  el.textContent=`📊 이번달 ${name}님 실적: ${count} / ${target}건 (${rate}%)`;
+}
+function renderRoster(){
+  const roster=getRoster();
+  const sel=$('f_name');
+  const current=sel.value||store.get('rk_name')||'';
+  sel.innerHTML='<option value="">직원 선택</option>'+roster.map(n=>`<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
+  if(roster.includes(current)) sel.value=current;
+  const el=$('rosterList');
+  el.innerHTML=roster.length ? roster.map(n=>`<span style="display:inline-flex;align-items:center;gap:5px;background:#eef4fc;border:1px solid #d7e4f5;border-radius:18px;padding:7px 9px 7px 11px;font-size:12.5px;font-weight:600">${escapeHtml(n)}<button type="button" data-remove="${escapeHtml(n)}" style="border:0;background:transparent;color:#d93025;font-weight:800;font-size:14px;padding:0 2px">×</button></span>`).join('') : '<div class="fb-empty" style="width:100%">등록된 직원이 없습니다. 직원 이름을 추가해 주세요.</div>';
+}
+function addPerson(){
+  const n=$('newPerson').value.trim();
+  if(!n){toast('추가할 직원 이름을 입력해 주세요');return;}
+  const roster=getRoster();
+  if(roster.includes(n)){toast('이미 등록된 직원입니다');return;}
+  roster.push(n);setRoster(roster);$('newPerson').value='';renderRoster();$('f_name').value=n;store.set('rk_name',n);renderStats(); if(sync.url) api('addRoster',{name:n}).catch(()=>{}); toast(n+' 직원을 등록했습니다');
+}
+$('btnAddPerson').addEventListener('click',addPerson);
+$('newPerson').addEventListener('keydown',e=>{if(e.key==='Enter')addPerson();});
+$('rosterList').addEventListener('click',e=>{
+  const b=e.target.closest('[data-remove]');if(!b)return;
+  const n=b.dataset.remove;
+  if(confirm(n+' 직원을 명단에서 제거할까요?\\n기존 실적 데이터는 삭제되지 않습니다.')){
+    setRoster(getRoster().filter(x=>x!==n));renderRoster();renderStats(); if(sync.url) api('removeRoster',{name:n}).catch(()=>{}); toast(n+' 직원을 명단에서 제거했습니다');
+  }
+});
+$('btnSync').addEventListener('click',async()=>{
+  saveSyncConfig();
+  const ok=await syncFromServer(true);
+  if(ok){ adminUnlocked=true; showAdminCards(true); renderStats(); }
+});
+if($('syncUrl')) $('syncUrl').addEventListener('change',saveSyncConfig);
+$('syncPin').addEventListener('change',saveSyncConfig);
+$('monthlyTarget').addEventListener('change',async()=>{
+  store.set('rk_target',$('monthlyTarget').value||''); renderStats(); renderMyStat();
+  if(sync.url){try{await api('setTarget',{target:Number($('monthlyTarget').value)||0});setSyncStatus('✅ 목표값 공용 저장 완료',true);}catch(e){setSyncStatus('⚠️ 목표값 서버 저장 실패',false);}}
+});
+window.addEventListener('focus',()=>{if(sync.url) syncFromServer(false);});
+setInterval(()=>{if(sync.url) syncFromServer(false);},15000);
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const ho=store.get('rk_ho'),nm=store.get('rk_name');
+  if(ho) $('f_ho').value=ho;
+  $('f_date').value=store.get('rk_date')||todayISO();
+  $('statYear').value=Number(todayISO().slice(0,4));
+  $('statMonth').value=todayISO().slice(5,7);
+  $('monthlyTarget').value=store.get('rk_target')||'';
+  renderRoster();
+  if(nm && getRoster().includes(nm)) $('f_name').value=nm;
+  if($('syncUrl')) $('syncUrl').value=FIXED_SERVER_URL;
+  $('syncPin').value=sync.pin;
+  currentMode='employee';
+  document.body.classList.add('employee-mode');
+  showAdminCards(false);
+  setTimeout(()=>publicGetRoster().catch(()=>{}),400);
+  renderStats();
+  renderMyStat();
+});
+$('f_ho').addEventListener('change',e=>store.set('rk_ho',e.target.value));
+$('f_name').addEventListener('change',e=>{store.set('rk_name',e.target.value);renderMyStat();});
+$('f_date').addEventListener('change',e=>{store.set('rk_date',e.target.value);renderMyStat();});
+$('statYear').addEventListener('input',renderStats);
+$('statMonth').addEventListener('change',renderStats);
+$('monthlyTarget').addEventListener('input',e=>{store.set('rk_target',e.target.value);renderStats();renderMyStat();});
+
+/* ================= 위험요인 토글 ================= */
+$('segRisk').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  $('segRisk').querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); S.risk=b.dataset.v;
+});
+
+/* ================= 위험예지 피드백 엔진 ================= */
+const HAZARD_RULES=[
+  {id:'elec', kw:['열선','전선','배선','전원','차단기','콘센트','케이블','통전','결선','전기','히터','감지기','경광등','싸이렌','카메라','CCTV','cctv'],
+   title:'⚡ 감전 위험',
+   tips:['작업 전 해당 회로 차단기 OFF 및 검전기로 통전 확인','절연장갑 착용, 젖은 손·땀에 젖은 장갑으로 작업 금지','임시 결선 후 절연테이프 마감 확인']},
+  {id:'ceiling', kw:['천장','텍스','덕트','배관','천정'],
+   title:'🪨 낙하물·분진 위험',
+   tips:['천장재(텍스) 낙하 주의 — 안전모 착용 필수','상부 작업 시 하부 출입 통제 및 보안경 착용']},
+  {id:'fire', kw:['용접','그라인더','절단','화기','납땜','타공','드릴'],
+   title:'🔥 화재·화상·비산 위험',
+   tips:['작업 반경 인화물 제거 후 소화기 비치','불티·분진 비산 방지 조치, 보안경 착용']},
+  {id:'heavy', kw:['철거','이설','운반','반입','반출','중량'],
+   title:'📦 중량물 취급 요통·협착 위험',
+   tips:['중량물은 2인 1조로 운반, 이동 경로 사전 확보','들어올릴 때 허리가 아닌 다리 힘 사용']},
+  {id:'confined', kw:['지하','피트','정화조','맨홀','밀폐'],
+   title:'😮‍💨 밀폐공간 질식 위험',
+   tips:['진입 전 충분히 환기, 단독 작업 절대 금지','이상 감지 시 즉시 탈출 후 보고']},
+  {id:'roof', kw:['옥상','지붕','외벽','옥외'],
+   title:'🌪 옥외·고소 추락 위험',
+   tips:['난간·안전대 걸이 확보 후 작업','강풍·우천 시 작업 중지']},
+  {id:'cut', kw:['판넬','철판','커터','유리','절곡'],
+   title:'🔪 베임·찔림 위험',
+   tips:['절단 방향에 손을 두지 않기, 보호장갑 착용','날카로운 모서리 테이프 마감']}
+];
+/* 사진 환경 분석 라벨 (CLIP zero-shot) */
+const ENV_CHECKS=[
+  {l:'a ladder or stepladder standing in the room',
+   title:'📷 사진 감지: 사다리 — 전도·추락 주의',
+   tips:['사다리 4개 지지점 모두 평탄한 바닥에 안착 확인','전도방지 조치 및 2인 1조 작업']},
+  {l:'electric cables or wires scattered on the floor',
+   title:'📷 사진 감지: 바닥 전선 — 걸려 넘어짐 주의',
+   tips:['작업 전 전선 정리 및 통행로 확보','전선 피복 손상 여부 확인']},
+  {l:'boxes and clutter blocking the walkway on the floor',
+   title:'📷 사진 감지: 바닥 적재물 — 통로 확보 필요',
+   tips:['작업 반경과 이동 통로의 적재물 정리 후 작업 시작']},
+  {l:'a wet or slippery shiny floor',
+   title:'📷 사진 감지: 미끄러운 바닥 주의',
+   tips:['물기 제거 후 작업, 이동 시 서행']},
+  {l:'a staircase or stairs',
+   title:'📷 사진 감지: 계단 구간 — 실족 주의',
+   tips:['계단 위 사다리 설치 금지, 난간 잡고 이동']}
+];
+/* 셀피·일반 실내 사진의 점수를 흡수하는 중립 라벨 */
+const ENV_NEUTRAL=['a clean and tidy indoor space','a close-up photo of a person'];
+
+function getFeedback(){
+  const work=$('f_work').value.trim(), purpose=$('f_purpose').value.trim();
+  const text=(work+' '+purpose).toLowerCase();
+  const h=parseFloat($('f_height').value);
+  const out=[];
+  if(!isNaN(h)&&h>=2.8){
+    out.push({title:'🚫 작업 불가 — 사다리 상단 2.7m 초과 (높이 '+h+'m)',alert:true,
+      tips:['사다리 작업 허용 높이(상단 2.7m)를 초과하여 사다리 작업이 금지됩니다','고소작업대 등 대체 장비 사용 또는 관리자와 작업 방법 협의 후 진행하세요']});
+  }else if(!isNaN(h)&&h>=2){
+    out.push({title:'🪜 고소작업 추락 위험 (높이 '+h+'m)',alert:true,
+      tips:['안전모 턱끈까지 체결 후 작업 시작','A형 사다리 최상단·차상단 발판 작업 금지','2인 1조 작업, 사다리 전도방지 조치(아웃트리거) 확인']});
+  }else if(!isNaN(h)&&h>=1.2){
+    out.push({title:'🪜 사다리 작업 전도 위험 (높이 '+h+'m)',
+      tips:['평탄·견고한 바닥에 사다리 설치','오르내릴 때 3점 지지(양손+한발) 유지']});
+  }
+  if(text){
+    for(const r of HAZARD_RULES){
+      if(r.kw.some(k=>text.includes(k.toLowerCase()))) out.push({title:r.title,tips:r.tips});
+      if(out.length>=4) break;
+    }
+  }
+  S.envHazards.forEach(e=>out.push({title:e.title,tips:e.tips}));
+  if(!out.length&&(work||purpose||!isNaN(h))){
+    out.push({title:'✅ 일반 안전수칙',
+      tips:['작업 전 주변 정리정돈 및 위험요인 재확인','이상 상황 발생 시 즉시 작업 중지 후 보고']});
+  }
+  if(S.ai.helmet==='no') out.unshift({title:'🚨 사진 판정: 안전모 미착용 감지',alert:true,
+    tips:['안전모 착용 후 작업을 시작하세요']});
+  return out.slice(0,5);
+}
+function renderFeedback(){
+  const list=getFeedback(), el=$('fbList');
+  if(!list.length){
+    el.className='fb-empty';
+    el.textContent='작업내용·높이를 입력하면 예상 위험요소와 안전 조치를 알려드립니다.';
+    return;
+  }
+  el.className='';
+  el.innerHTML=list.map(f=>'<div class="fb'+(f.alert?' alert':'')+'"><b>'+f.title+'</b><ul>'
+    +f.tips.map(t=>'<li>'+t+'</li>').join('')+'</ul></div>').join('');
+}
+['f_work','f_purpose','f_height'].forEach(id=>{
+  $(id).addEventListener('input',renderFeedback);
+});
+
+/* ================= 사진 ================= */
+function bindPhoto(i){
+  const ph=$('ph'+i), file=$('file'+i);
+  ph.addEventListener('click',e=>{
+    if(e.target.classList.contains('del')) return;
+    file.click();
+  });
+  file.addEventListener('change',async e=>{
+    const f=e.target.files[0]; if(!f) return;
+    const url=await resizeToDataURL(f,1280);
+    S.photos[i]=url;
+    ph.innerHTML='<img src="'+url+'"><button type="button" class="del">✕</button>';
+    ph.querySelector('.del').addEventListener('click',ev=>{
+      ev.stopPropagation();
+      S.photos[i]=null; file.value='';
+      ph.innerHTML = i===0 ? '<span class="ico">📷</span>사진 촬영/선택'
+                           : '<span class="ico">🤳</span>착용 확인 셀피';
+      resetAI();
+    });
+    runAnalysis();
+  });
+}
+bindPhoto(0); bindPhoto(1);
+
+function resizeToDataURL(file,max){
+  return new Promise(res=>{
+    const img=new Image();
+    img.onload=()=>{
+      let w=img.width,h=img.height;
+      if(Math.max(w,h)>max){ const r=max/Math.max(w,h); w=Math.round(w*r); h=Math.round(h*r); }
+      const c=document.createElement('canvas'); c.width=w; c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      res(c.toDataURL('image/jpeg',0.88));
+    };
+    img.src=URL.createObjectURL(file);
+  });
+}
+
+/* ================= AI 모델 ================= */
+const LABELS = {
+  helmet:{
+    pos:['a person wearing a white safety helmet or hard hat on their head'],
+    neg:['a person with a bare head, not wearing any helmet'],
+    none:['a photo with no people visible, only a room or equipment']
+  },
+  gloves:{
+    pos:['a person wearing work gloves on their hands'],
+    neg:['a person with bare hands without gloves'],
+    none:['a photo where no hands are visible']
+  },
+  gear:{
+    pos:['a workplace photo with safety equipment such as a ladder, safety harness, safety vest, or warning sign'],
+    neg:['a photo with no safety equipment visible'],
+    none:[]
+  }
+};
+async function loadModel(){
+  const st=$('aiStatus');
+  try{
+    st.innerHTML='<span class="spin"></span> AI 모델 준비 중… 최초 1회만 내려받습니다 (이후엔 즉시 실행).'
+      +'<div class="prog" id="aiProg" style="display:block"><i id="aiProgBar"></i></div>';
+    const { pipeline, env } = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.1');
+    env.allowLocalModels=false;
+    let done={};
+    S.classifier = await pipeline('zero-shot-image-classification','Xenova/clip-vit-base-patch32',{
+      dtype:'q8',
+      progress_callback:p=>{
+        if(p.status==='progress'&&p.total){
+          done[p.file]=p.loaded/p.total;
+          const vals=Object.values(done);
+          const pct=Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*100);
+          const bar=$('aiProgBar'); if(bar) bar.style.width=pct+'%';
+        }
+      }
+    });
+    S.aiMode='ready';
+    st.className='ai-status ok';
+    st.textContent='✅ AI 준비 완료 — 사진을 추가하면 자동 분석합니다.';
+    if(S.photos.some(p=>p)) runAnalysis();
+  }catch(err){
+    console.error(err);
+    S.aiMode='manual';
+    st.className='ai-status err';
+    st.textContent='⚠️ AI 모델을 불러올 수 없습니다(네트워크 확인). 아래 항목을 탭하여 직접 체크해 주세요.';
+    ['helmet','gloves','gear'].forEach(k=>setAI(k,'uk',null,true));
+  }
+}
+loadModel();
+
+/* ================= 분석 ================= */
+async function classifyOne(url, labelSet){
+  // returns {verdict:'ok'|'no'|'uk', conf}
+  const cand=[...labelSet.pos,...labelSet.neg,...labelSet.none];
+  const out=await S.classifier(url,cand,{hypothesis_template:'This is a photo of {}.'});
+  const score=l=>{ const f=out.find(o=>o.label===l); return f?f.score:0; };
+  const pos=Math.max(...labelSet.pos.map(score));
+  const neg=Math.max(...labelSet.neg.map(score));
+  const none=labelSet.none.length?Math.max(...labelSet.none.map(score)):0;
+  if(none>pos&&none>neg) return {verdict:'uk',conf:none};
+  if(pos>=neg) return {verdict:(pos-neg<0.12)?'uk':'ok',conf:pos};
+  return {verdict:(neg-pos<0.12)?'uk':'no',conf:neg};
+}
+async function runAnalysis(){
+  if(S.aiMode==='manual') return;
+  const photos=S.photos.filter(p=>p);
+  if(!photos.length) return;
+  if(S.aiMode==='loading'){ toast('AI 모델 준비 중입니다. 준비되면 자동 분석합니다.'); return; }
+  if(S.analyzing) return;
+  S.analyzing=true;
+  const st=$('aiStatus');
+  st.className='ai-status';
+  st.innerHTML='<span class="spin"></span> 사진 분석 중… (기기에 따라 10~30초)';
+  for(const k of ['helmet','gloves','gear']){
+    if(!S.aiManual[k]){ $('st_'+k).innerHTML='<span class="spin"></span>'; $('row_'+k).className='airow'; }
+  }
+  try{
+    for(const k of ['helmet','gloves','gear']){
+      if(S.aiManual[k]) continue;   // 사용자가 수동 고정한 항목은 유지
+      let best={verdict:'uk',conf:0};
+      for(const p of photos){
+        const r=await classifyOne(p,LABELS[k]);
+        const rank=v=>v==='ok'?2:(v==='no'?1:0);
+        if(rank(r.verdict)>rank(best.verdict)||(r.verdict===best.verdict&&r.conf>best.conf)) best=r;
+      }
+      setAI(k,best.verdict,best.conf,false);
+    }
+    /* 환경(전면) 사진 위험요소 스캔 */
+    st.innerHTML='<span class="spin"></span> 현장 환경 위험요소 스캔 중…';
+    S.envHazards=[];
+    const envCand=ENV_CHECKS.map(e=>e.l).concat(ENV_NEUTRAL);
+    for(const p of photos){
+      const out=await S.classifier(p,envCand,{hypothesis_template:'This is a photo of {}.'});
+      out.forEach(o=>{
+        const e=ENV_CHECKS.find(x=>x.l===o.label);
+        if(e&&o.score>0.22&&!S.envHazards.find(hz=>hz.l===e.l))
+          S.envHazards.push({...e,conf:o.score});
+      });
+    }
+    S.envHazards=S.envHazards.sort((a,b)=>b.conf-a.conf).slice(0,3);
+    renderFeedback();
+    st.className='ai-status ok';
+    st.textContent='✅ 분석 완료 — 착용 판정과 환경 위험요소가 반영되었습니다. 다르면 탭해 수정하세요.';
+  }catch(err){
+    console.error(err);
+    st.className='ai-status err';
+    st.textContent='⚠️ 분석 중 오류가 발생했습니다. 항목을 탭해 직접 체크해 주세요.';
+  }
+  S.analyzing=false;
+}
+
+/* ================= 판정 표시/수동수정 ================= */
+const AI_TXT={
+  helmet:{ok:'착용 ✔',no:'미착용',uk:'판단불가'},
+  gloves:{ok:'착용 ✔',no:'미착용',uk:'판단불가'},
+  gear:{ok:'구비 ✔',no:'미구비',uk:'판단불가'}
+};
+function setAI(k,v,conf,manual){
+  S.ai[k]=v; S.aiConf[k]=conf;
+  $('row_'+k).className='airow v-'+v;
+  $('st_'+k).textContent=AI_TXT[k][v]||'대기';
+  $('conf_'+k).textContent = manual ? '수동 체크'
+    : (conf!=null?('AI 확신도 '+Math.round(conf*100)+'%'):'');
+  if(k==='helmet') renderFeedback();
+}
+function resetAI(){
+  if(S.photos.some(p=>p)) { runAnalysis(); return; }
+  S.envHazards=[]; renderFeedback();
+  ['helmet','gloves','gear'].forEach(k=>{
+    if(S.aiMode==='manual') return;
+    S.ai[k]=null; S.aiManual[k]=false;
+    $('row_'+k).className='airow'; $('st_'+k).textContent='대기'; $('conf_'+k).textContent='';
+  });
+}
+['helmet','gloves','gear'].forEach(k=>{
+  $('row_'+k).addEventListener('click',()=>{
+    const order=['ok','no','uk'];
+    const cur=S.ai[k];
+    const next=order[(order.indexOf(cur)+1)%3]||'ok';
+    S.aiManual[k]=true;
+    setAI(k,next,null,true);
+  });
+});
+
+/* ================= 보고 이미지 생성 ================= */
+$('btnMake').addEventListener('click',async ()=>{
+  const need=[['f_ho','호수'],['f_name','이름'],['f_place','계약처명'],['f_purpose','방문목적'],
+              ['f_biz','업종'],['f_height','높이'],['f_work','작업내용']];
+  for(const [id,nm] of need){
+    if(!$(id).value.trim()){ toast(nm+'을(를) 입력해 주세요'); $(id).focus(); return; }
+  }
+  if(!S.photos.some(p=>p)){ toast('현장 사진을 1장 이상 추가해 주세요'); return; }
+  if(!S.ai.helmet){ toast('안전 판정이 완료되지 않았습니다. 항목을 탭해 체크해 주세요.'); return; }
+  $('btnMake').disabled=true; $('btnMake').textContent='이미지 생성 중…';
+  try{
+    const url=await drawReport();
+    $('reportImg').src=url;
+    $('resultCard').style.display='block';
+    registerActivity();
+    $('resultCard').scrollIntoView({behavior:'smooth'});
+  }catch(e){ console.error(e); toast('이미지 생성 오류: '+e.message); }
+  $('btnMake').disabled=false; $('btnMake').textContent='📋 보고 이미지 생성';
+});
+
+function loadImg(src){ return new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=src; }); }
+
+async function drawReport(){
+  const W=1080, M=48;
+  const photos=S.photos.filter(p=>p);
+  const imgs=await Promise.all(photos.map(loadImg));
+  const phH = imgs.length? 620 : 0;
+  const now=new Date();
+  const dt=($('f_date').value||todayISO())+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+
+  const items=[
+    ['계약처명',$('f_place').value.trim()],
+    ['방문목적',$('f_purpose').value.trim()],
+    ['업종',$('f_biz').value.trim()],
+    ['높이',$('f_height').value.trim()+' m'],
+    ['작업내용',$('f_work').value.trim()],
+    ['위험요인 확인 이행여부',S.risk]
+  ];
+  const aiItems=[
+    ['안전모 착용여부',S.ai.helmet,'helmet'],
+    ['장갑 착용여부',S.ai.gloves,'gloves'],
+    ['안전장구 구비여부',S.ai.gear,'gear']
+  ];
+  const headH=210, itemH=64, aiH=64;
+  const itemsH=items.length*itemH+130, aiBoxH=aiItems.length*aiH+130;
+
+  /* 위험예지 피드백 측정 */
+  const fb=getFeedback();
+  const mc=document.createElement('canvas').getContext('2d');
+  const fbInnerW=W-M*2-68;
+  mc.font='700 30px "Malgun Gothic",sans-serif';
+  const fbBlocks=fb.map(f=>{
+    mc.font='700 30px "Malgun Gothic",sans-serif';
+    const titleLines=wrapText(mc,f.title,fbInnerW);
+    mc.font='400 27px "Malgun Gothic",sans-serif';
+    const tipLines=f.tips.flatMap(t=>wrapText(mc,'· '+t,fbInnerW-24));
+    return {titleLines,tipLines,alert:f.alert};
+  });
+  const fbBoxH=fb.length?(120+fbBlocks.reduce((a,b)=>a+b.titleLines.length*44+b.tipLines.length*38+16,0)):0;
+
+  const H=headH+phH+(phH?30:0)+aiBoxH+fbBoxH+itemsH+120;
+
+  const c=document.createElement('canvas'); c.width=W; c.height=H;
+  const x=c.getContext('2d');
+  x.fillStyle='#f4f6fa'; x.fillRect(0,0,W,H);
+
+  /* 헤더 */
+  const g=x.createLinearGradient(0,0,W,headH);
+  g.addColorStop(0,'#0b2a5b'); g.addColorStop(1,'#1663d1');
+  x.fillStyle=g; x.fillRect(0,0,W,headH);
+  x.fillStyle='#fff';
+  x.font='700 44px "Malgun Gothic",sans-serif';
+  x.fillText('작업전 위험예지활동 보고',M,84);
+  x.font='800 52px "Malgun Gothic",sans-serif';
+  x.fillText($('f_ho').value.trim()+'  '+$('f_name').value.trim(),M,160);
+  x.font='400 30px "Malgun Gothic",sans-serif';
+  x.textAlign='right'; x.fillStyle='rgba(255,255,255,.85)';
+  x.fillText(dt,W-M,160); x.textAlign='left';
+
+  let y=headH+30;
+
+  /* 사진 */
+  if(imgs.length){
+    const gap=20, pw=(W-M*2-gap*(imgs.length-1))/imgs.length;
+    imgs.forEach((im,i)=>{
+      const px=M+i*(pw+gap);
+      roundClip(x,px,y,pw,phH-30,18,()=>{
+        const r=Math.max(pw/im.width,(phH-30)/im.height);
+        const dw=im.width*r, dh=im.height*r;
+        x.drawImage(im,px-(dw-pw)/2,y-(dh-(phH-30))/2,dw,dh);
+      });
+    });
+    y+=phH;
+  }
+
+  /* AI 판정 박스 */
+  roundRect(x,M,y,W-M*2,aiBoxH-20,18,'#ffffff','#dfe6f0');
+  x.fillStyle='#0b2a5b'; x.font='700 34px "Malgun Gothic",sans-serif';
+  x.fillText('🤖 AI 안전 판정',M+34,y+58);
+  let ay=y+100;
+  aiItems.forEach(([nm,v,k])=>{
+    x.fillStyle='#33414f'; x.font='400 32px "Malgun Gothic",sans-serif';
+    x.fillText(nm,M+34,ay+30);
+    const txt=AI_TXT[k][v]||'-';
+    const col=v==='ok'?'#0f9d58':(v==='no'?'#d93025':'#e8930c');
+    const badge=(v==='ok'?'✔ ':'')+txt.replace(' ✔','');
+    x.font='700 32px "Malgun Gothic",sans-serif';
+    const bw=x.measureText(badge).width+48;
+    roundRect(x,W-M-34-bw,ay-8,bw,52,26,hexA(col,.12),null);
+    x.fillStyle=col; x.textAlign='center';
+    x.fillText(badge,W-M-34-bw/2,ay+30); x.textAlign='left';
+    ay+=aiH;
+  });
+  y+=aiBoxH;
+
+  /* 위험예지 피드백 박스 */
+  if(fb.length){
+    roundRect(x,M,y,W-M*2,fbBoxH-20,18,'#fffaf0','#eed9a9');
+    x.fillStyle='#9a5b00'; x.font='700 34px "Malgun Gothic",sans-serif';
+    x.fillText('⚠️ AI 위험예지 피드백',M+34,y+58);
+    let fy=y+112;
+    fbBlocks.forEach(b=>{
+      x.font='700 30px "Malgun Gothic",sans-serif';
+      x.fillStyle=b.alert?'#d93025':'#9a5b00';
+      b.titleLines.forEach(l=>{ x.fillText(l,M+34,fy); fy+=44; });
+      x.font='400 27px "Malgun Gothic",sans-serif';
+      x.fillStyle='#5a4a2f';
+      b.tipLines.forEach(l=>{ x.fillText(l,M+58,fy); fy+=38; });
+      fy+=16;
+    });
+    y+=fbBoxH;
+  }
+
+  /* 6개 항목 */
+  roundRect(x,M,y,W-M*2,itemsH-20,18,'#ffffff','#dfe6f0');
+  x.fillStyle='#0b2a5b'; x.font='700 34px "Malgun Gothic",sans-serif';
+  x.fillText('📋 작업 정보',M+34,y+58);
+  let iy=y+104;
+  items.forEach(([nm,v])=>{
+    x.fillStyle='#66788c'; x.font='400 29px "Malgun Gothic",sans-serif';
+    x.fillText(nm,M+34,iy+26);
+    x.fillStyle='#1c2733'; x.font='700 31px "Malgun Gothic",sans-serif';
+    x.textAlign='right'; x.fillText(v,W-M-34,iy+26); x.textAlign='left';
+    if(nm!==items[items.length-1][0]){
+      x.strokeStyle='#eef2f7'; x.lineWidth=2;
+      x.beginPath(); x.moveTo(M+34,iy+46); x.lineTo(W-M-34,iy+46); x.stroke();
+    }
+    iy+=itemH;
+  });
+  y+=itemsH;
+
+  /* 푸터 */
+  x.fillStyle='#9aa9bb'; x.font='400 24px "Malgun Gothic",sans-serif';
+  x.textAlign='center';
+  x.fillText('S-1 작업전 위험예지활동 · AI 판정은 보조 수단이며 최종 확인 책임은 작업자에게 있습니다',W/2,y+40);
+  x.textAlign='left';
+
+  return c.toDataURL('image/png');
+}
+function wrapText(ctx,text,maxW){
+  const lines=[]; let cur='';
+  for(const ch of text){
+    if(ctx.measureText(cur+ch).width>maxW){ lines.push(cur); cur=ch; }
+    else cur+=ch;
+  }
+  if(cur) lines.push(cur);
+  return lines;
+}
+function roundRect(x,px,py,w,h,r,fill,stroke){
+  x.beginPath();
+  x.moveTo(px+r,py); x.arcTo(px+w,py,px+w,py+h,r); x.arcTo(px+w,py+h,px,py+h,r);
+  x.arcTo(px,py+h,px,py,r); x.arcTo(px,py,px+w,py,r); x.closePath();
+  if(fill){ x.fillStyle=fill; x.fill(); }
+  if(stroke){ x.strokeStyle=stroke; x.lineWidth=2; x.stroke(); }
+}
+function roundClip(x,px,py,w,h,r,draw){
+  x.save();
+  x.beginPath();
+  x.moveTo(px+r,py); x.arcTo(px+w,py,px+w,py+h,r); x.arcTo(px+w,py+h,px,py+h,r);
+  x.arcTo(px,py+h,px,py,r); x.arcTo(px,py,px+w,py,r); x.closePath();
+  x.clip(); draw(); x.restore();
+}
+function hexA(hex,a){
+  const n=parseInt(hex.slice(1),16);
+  return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';
+}
+
+/* ================= 저장/공유 ================= */
+function fileName(){
+  const d=new Date();
+  return '위험예지_'+$('f_ho').value.trim()+'_'+d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'.png';
+}
+$('btnSave').addEventListener('click',()=>{
+  const a=document.createElement('a');
+  a.href=$('reportImg').src; a.download=fileName(); a.click();
+  toast('이미지가 저장(다운로드)되었습니다');
+});
+$('btnShare').addEventListener('click',async ()=>{
+  try{
+    const blob=await (await fetch($('reportImg').src)).blob();
+    const file=new File([blob],fileName(),{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:'작업전 위험예지활동 보고'});
+    }else{
+      toast('이 브라우저는 공유 미지원 — 이미지 저장 후 카톡에 첨부하세요');
+    }
+  }catch(e){ if(e.name!=='AbortError') toast('공유 실패 — 이미지 저장 후 첨부해 주세요'); }
+});
+
+function downloadCsv(lines,filename){
+  const csv='\ufeff'+lines.map(row=>row.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(',')).join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();URL.revokeObjectURL(a.href);
+}
+if($('btnExport')) $('btnExport').addEventListener('click',()=>{
+  const year=Number($('statYear').value)||Number(todayISO().slice(0,4));
+  const rows=getRecords().filter(r=>String(r.date||'').slice(0,4)===String(year));
+  if(!rows.length){toast('해당 연도의 데이터가 없습니다');return;}
+  const counts={};rows.forEach(r=>{const n=r.name||'(이름 미입력)';counts[n]=(counts[n]||0)+1;});
+  const lines=[['활동일자','이름','호수','계약처명','방문목적','작업내용','연간 인당건수']];
+  rows.sort((a,b)=>String(a.date).localeCompare(String(b.date))||String(a.name).localeCompare(String(b.name),'ko'));
+  rows.forEach(r=>lines.push([r.date,r.name,r.ho,r.place,r.purpose,r.work,counts[r.name||'(이름 미입력)']]));
+  downloadCsv(lines,`위험예지활동_${year}_실적.csv`);toast('실적 CSV를 내보냈습니다');
+});
+if($('btnExportSummary')) $('btnExportSummary').addEventListener('click',()=>{
+  const year=Number($('statYear').value)||Number(todayISO().slice(0,4));const rows=getRecords().filter(r=>String(r.date||'').slice(0,4)===String(year));
+  const people=allPeople(rows);const lines=[['이름',...Array.from({length:12},(_,i)=>`${i+1}월`),'연간합계','월평균']];
+  people.forEach(n=>{const vals=Array.from({length:12},(_,i)=>rows.filter(r=>String(r.date||'').slice(5,7)===String(i+1).padStart(2,'0')&&(r.name||'')===n).length);const sum=vals.reduce((a,b)=>a+b,0);lines.push([n,...vals,sum,(sum/12).toFixed(1)]);});
+  if(!people.length){toast('내보낼 데이터가 없습니다');return;}downloadCsv(lines,`위험예지활동_${year}_월별인당집계.csv`);toast('월별 집계 CSV를 내보냈습니다');
+});
+if($('btnImport') && $('importCsv')) $('btnImport').addEventListener('click',()=>$('importCsv').click());
+if($('importCsv')) $('importCsv').addEventListener('change',async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{
+    const text=await f.text();const rows=parseCsv(text);if(rows.length<2)throw new Error('데이터 없음');
+    const head=rows[0].map(x=>x.trim());const idx=n=>head.indexOf(n);
+    const dateI=idx('활동일자'),nameI=idx('이름'),hoI=idx('호수'),placeI=idx('계약처명'),purposeI=idx('방문목적'),workI=idx('작업내용');
+    if(dateI<0||nameI<0)throw new Error('활동일자/이름 열이 필요합니다');
+    const existing=getRecords();const keys=new Set(existing.map(r=>[r.date,r.name,r.ho,r.place,r.purpose,r.work].join('|')));let added=0;
+    rows.slice(1).forEach(a=>{const r={id:Date.now()+added,date:a[dateI]||'',name:a[nameI]||'',ho:hoI>=0?a[hoI]||'':'',place:placeI>=0?a[placeI]||'':'',purpose:purposeI>=0?a[purposeI]||'':'',work:workI>=0?a[workI]||'':''};if(!r.date||!r.name)return;const k=[r.date,r.name,r.ho,r.place,r.purpose,r.work].join('|');if(!keys.has(k)){existing.push(r);keys.add(k);added++;}});
+    setRecords(existing);setRoster(allPeople(existing));renderStats();toast(`${added}건을 취합했습니다`);
+  }catch(err){toast('CSV 형식을 확인해 주세요');console.error(err);}e.target.value='';
+});
+function parseCsv(text){
+  const out=[],row=[];let cur='',q=false;
+  for(let i=0;i<text.length;i++){const c=text[i],n=text[i+1];if(c==='"'){if(q&&n==='"'){cur+='"';i++;}else q=!q;}else if(c===','&&!q){row.push(cur);cur='';}else if((c==='\n'||c==='\r')&&!q){if(c==='\r'&&n==='\n')i++;row.push(cur);out.push(row.splice(0));cur='';}else cur+=c;}if(cur!==''||row.length){row.push(cur);out.push(row);}return out.filter(r=>r.some(v=>v!==''));
+}
+$('btnClearStats').addEventListener('click',()=>{if(!getRecords().length){toast('초기화할 데이터가 없습니다');return;}if(confirm('저장된 모든 위험예지활동 집계 데이터를 삭제할까요?')){localStorage.removeItem('rk_records');S.loggedKey=null;renderStats();renderMyStat(); if(sync.url) api('clearRecords').catch(()=>{}); toast('집계 데이터를 초기화했습니다');}});
+
+/* ================= 탭 전환 ================= */
+function showAdminCards(show){
+  ['sharedCard','setupGuideCard','rosterCard','statsCard'].forEach(id=>{
+    const el=$(id); if(el) el.style.display=show?'':'none';
+  });
+}
+function activateEmployee(){
+  currentMode='employee';
+  document.body.classList.remove('admin-mode');
+  document.body.classList.add('employee-mode');
+  $('tabEmployee').classList.add('active');
+  $('tabAdmin').classList.remove('active');
+  $('adminLockNote').style.display='none';
+  showAdminCards(false);
+  publicGetRoster().catch(()=>{});
+}
+async function activateAdmin(){
+  currentMode='admin';
+  document.body.classList.remove('employee-mode');
+  document.body.classList.add('admin-mode');
+  $('tabEmployee').classList.remove('active');
+  $('tabAdmin').classList.add('active');
+  $('adminLockNote').style.display='block';
+  if(!adminUnlocked){
+    showAdminCards(false);
+    $('sharedCard').style.display='';
+    $('syncStatus').textContent='관리자 PIN을 입력하세요';
+    $('syncStatus').className='ai-status';
+    const pin=store.get('rk_sync_pin')||'';
+    if(pin){
+      $('syncPin').value=pin;
+      const ok=await syncFromServer(false);
+      if(ok){ adminUnlocked=true; showAdminCards(true); renderStats(); }
+    }
+  }else{
+    showAdminCards(true);
+    renderStats();
+  }
+}
+$('tabEmployee').addEventListener('click',function(e){e.preventDefault();e.stopPropagation();activateEmployee();});
+$('tabAdmin').addEventListener('click',function(e){e.preventDefault();e.stopPropagation();activateAdmin();});
+$('tabEmployee').addEventListener('touchend',function(e){e.preventDefault();activateEmployee();},{passive:false});
+$('tabAdmin').addEventListener('touchend',function(e){e.preventDefault();activateAdmin();},{passive:false});
+
+/* 테스트 훅 (개발용) */
+window.__rk = S;
+window.__setClassifierForTest = fn => { S.classifier=fn; S.aiMode='ready';
+  const st=$('aiStatus'); st.className='ai-status ok'; st.textContent='✅ AI 준비 완료(테스트)'; };
+</script>
+</body>
+</html>
