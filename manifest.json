@@ -1,6 +1,6 @@
 {
   "name": "북서울 Report",
-  "short_name": "북서울 서비스지표 Report",
+  "short_name": "북서울 Report",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
