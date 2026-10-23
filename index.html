@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261023062701">
+<meta name="bsr-ver" content="20261023063529">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -770,6 +770,9 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .tr-r em{font-style:normal;font-size:11px;text-align:right}.tr-r em.up{color:#15803d}.tr-r em.dn{color:#b91c1c}
 .goodt{color:#15803d}.warnt{color:#b45309}.badt{color:#b91c1c}
 .op-f{font-size:11px;color:#64748b;margin-top:8px}
+.vtg{width:100%;border:0;background:linear-gradient(90deg,#eef2ff,#fff);border-radius:14px 14px 0 0;cursor:pointer;flex-wrap:wrap;gap:2px 8px;padding:12px 14px!important;text-align:left;font:inherit;color:inherit}
+.vtg b{font-size:16px}.vtg em{width:100%;font-style:normal;font-size:12px;font-weight:700;color:#3730a3}
+.vdo{padding:0 2px}
 .bq{flex:0 0 auto;width:118px;height:100px;scroll-snap-align:start;text-align:left;border:0;border-radius:16px;padding:11px 12px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;color:#fff;box-shadow:0 6px 14px rgba(15,23,42,.14);font-family:"Noto Sans KR",sans-serif;position:relative;overflow:hidden}
 .bq::after{content:"";position:absolute;right:-24px;top:-24px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.12)}
 .bq small{font-size:11px;font-weight:700;opacity:.88;white-space:nowrap}
@@ -1560,7 +1563,7 @@ function viewVeh(){
     bonusPanel(vFull, vNear, VEH.length, '대', BONUS_V, dV, '차량 지표 5개를 모두 100% 이상 달성하면')+'</div>'+focusCard();
   return top+'<div class="sec"><h2>차량별 달성률 <span>행을 누르면 상세</span></h2><div class="card heat">'+heatHead()+rows+'</div>'+
     '<details class="vnote"><summary>ⓘ 지표 이름 설명</summary><p class="note">불필요=불필요출동률 · 발보율=서비스출동 발보율 · 25분↑=25분 초과율 · 체감=고객체감 출동시간 · 일괄=당사일괄 총시간</p></details>'+fcTable()+'</div>'+
-    '<div class="sec"><div class="card"><div class="vhead">'+v.no+'호 상세<span>'+v.lead+' 파트장 · 달성 '+okc(v)+'/5</span></div>'+note('veh:'+v.no,SD.veh)+bonusBox(v,BONUS_V,"")+fcBox(v.m,fcVeh(v),SD.veh)+trendCard("veh",v.no)+(function(){var f=focusInfo(),fi=focusIdx(),r=v.m[fi].r;return '<div class="bbox'+(r>=100?' good':'')+'"><b>🎯 '+(f.active?f.mo+'월 집중개선: ':f.nm+'월 집중개선(예상): ')+M[fi].name+' '+fr(r)+'</b><span>'+FOCUS_BR+' 지사 최저 항목 · '+(f.active?f.endLbl+'에 100% 이상이면 +'+FOCUS_PTS+'점':f.endLbl+' 확정 후 '+f.nm+'월 말 100% 이상이면 +'+FOCUS_PTS+'점')+'</span></div>'})()+'<div class="mlist">'+detail+'</div></div></div>';
+    '<div class="sec"><div class="card"><button type="button" class="vhead vtg" data-vdo="1" aria-expanded="'+!!state.vdo+'"><b>'+v.no+'호 상세</b><span>'+v.lead+' 파트장 · 달성 '+okc(v)+'/5</span><em>'+(state.vdo?'접기 ▴':'코멘트·가점·월말 예상 ▾')+'</em></button>'+(state.vdo?'<div class="vdo">'+note('veh:'+v.no,SD.veh)+bonusBox(v,BONUS_V,"")+fcBox(v.m,fcVeh(v),SD.veh)+'</div>':'')+trendCard("veh",v.no)+(function(){var f=focusInfo(),fi=focusIdx(),r=v.m[fi].r;return '<div class="bbox'+(r>=100?' good':'')+'"><b>🎯 '+(f.active?f.mo+'월 집중개선: ':f.nm+'월 집중개선(예상): ')+M[fi].name+' '+fr(r)+'</b><span>'+FOCUS_BR+' 지사 최저 항목 · '+(f.active?f.endLbl+'에 100% 이상이면 +'+FOCUS_PTS+'점':f.endLbl+' 확정 후 '+f.nm+'월 말 100% 이상이면 +'+FOCUS_PTS+'점')+'</span></div>'})()+'<div class="mlist">'+detail+'</div></div></div>';
 }
 
 
@@ -3300,6 +3303,7 @@ document.getElementById("view").addEventListener("click",function(e){   var dsw 
   else if(e.target.closest("[data-sms]")){ showSms(); }
   else if(e.target.closest("[data-goppl]")){ state.pp = e.target.closest("[data-goppl]").dataset.goppl; state.pf="all"; var tb=document.querySelector('#tabs [data-tab="ppl"]'); if(tb) tb.click(); }
   else if(e.target.closest("[data-fco]")){ state.fco = !state.fco; render(); }
+  else if(e.target.closest("[data-vdo]")){ state.vdo = !state.vdo; render(); }
   else if(e.target.closest("[data-av]")){ var avv=e.target.closest("[data-av]").dataset.av; state.av = (state.av===avv && avv!=="all")?"all":avv; render(); }
   else if(e.target.closest("[data-as]")){ state.as = e.target.closest("[data-as]").dataset.as; render(); }
   else if(e.target.closest("[data-al]")){ state.al = e.target.closest("[data-al]").dataset.al; render(); }
