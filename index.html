@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261023050700">
+<meta name="bsr-ver" content="20261023051122">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3018,7 +3018,8 @@ function brief(){
     (near.length?'<div>'+(fin2?'😢 아깝게 4/5 ':'⚡ 1개만 더! ')+'<b>'+nearTxt.join(', ')+'</b></div>':'')+
     (vnear.length?'<div>🚓 차량 '+(fin2?'아깝게 4/5 ':'1개만 더 ')+'<b>'+vnear.map(function(v){return v.no+'호'}).join(', ')+'</b> (+'+BONUS_V+'점)</div>':'')+'</div></div>';
   var hr = new Date(Date.now()+9*3600000).getUTCHours(), gp = (function(){ var k=new Date(Date.now()+9*3600000), t=k.getUTCHours()+k.getUTCMinutes()/60;
-      return t<5?['야간 근무 힘내세요','🌙','늦은 시간까지 정말 고생 많으세요']:
+      return t<6?['야간 근무 힘내세요','🌙','늦은 시간까지 정말 고생 많으세요']:
+        t<7?['야간 근무 고생 많으셨어요','🌅','퇴근길 조심히 가시고 푹 쉬세요']:
         t<10?['좋은 아침이에요','☀️','오늘 꼭 볼 것만 한 화면에 모았어요']:
         t<12?['오늘도 힘내세요','💪','오전 현황을 한눈에 확인하세요']:
         t<13.5?['점심 맛있게 드세요','🍚','식사 후 오후 일정도 확인해 보세요']:
