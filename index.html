@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261023143209">
+<meta name="bsr-ver" content="20261023143434">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2843,8 +2843,8 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
- {id:"2026-10-23j", date:"10/23", title:"사업팀 평가 6·7월 · 종합 평가", tabs:["eval","home"], items:["월별 평가 › 사업팀 평가 6·7월 반영 (순위·항목별 점수·하반기 평균)","종합 평가 = 사업팀 총점 × 80% + 지사 평가(20점) — 월별·하반기 평균 순위","브리핑 MVP에 '최근 확정 MVP(종합 평가 1~3위)' 표시"]},
- {id:"2026-10-23i", date:"10/23", title:"MVP · 관리자 할 일", tabs:["home"], items:["🏅 이달의 MVP — 개인별 평가 기준 TOP3 (사업팀 월별 평가는 익월 반영)","✅ 관리자 오늘 할 일 — 공지 미확인·다발보 미조치·미응답 미연락·앱 미설치 한 화면","📴 인터넷이 끊기면 '오프라인 · 저장본' 표시"]},
+ {id:"2026-10-23j", date:"10/23", title:"사업팀 평가 6·7월 · 종합 평가", tabs:["eval","home"], items:["월별 평가 › 사업팀 평가 6·7월 반영 (순위·항목별 점수·하반기 평균)","종합 평가 = 사업팀 총점 × 80% + 지사 평가(20점) — 월별·하반기 평균 순위"]},
+ {id:"2026-10-23i", date:"10/23", title:"관리자 할 일", tabs:["home"], items:["✅ 관리자 오늘 할 일 — 공지 미확인·다발보 미조치·미응답 미연락·앱 미설치 한 화면","📴 인터넷이 끊기면 '오프라인 · 저장본' 표시"]},
  {id:"2026-10-23h", date:"10/23", title:"빠른 열기 · 칭찬 알림 외", tabs:["home","ppl","cs"], items:["⚡ 빠른 열기 — 저장된 화면을 바로 띄우고 뒤에서 최신화 (데이터 절약)","🎉 내 고객 칭찬이 들어오면 브리핑 맨 위에 알림","미응답 '연락 체크'가 모든 폰에 공유 (누가 연락했는지 표시)","개인별 상세 — 코멘트·가점·월말 예상은 눌러서 펼치기","관리자 — 📲 설치 현황(설치/주소로만/기록 없음) · 미설치자 안내 복사"]},
  {id:"2026-10-23g", date:"10/23", title:"앱 설치 버튼", tabs:["home"], items:["주소로 열면 아래에 '📲 앱 설치' 띠 표시 — 누르면 설치(아이폰·삼성 인터넷은 설치 방법 안내)","카톡에서 링크를 누르면 크롬·사파리로 자동 이동"]},
  {id:"2026-10-23f", date:"10/23", title:"공지 · 내 할 일 · 결산 보고서", tabs:["home","alm","veh","ppl"], items:["📢 공지 — 관리자가 앱에서 공지 작성 → 앱 맨 위에 표시, '확인했어요'로 읽음 현황 확인","👤 내 할 일 — 브리핑에 이번 주 근무 · 내 미응답 · 내 월말 예상 · 운전성향 추이 (파트장은 직원 화면 미리보기)","✍️ 다발보 조치 입력 — 고객처별로 조치 내용을 앱에서 바로 저장","🧾 월말 결산 보고서(메뉴) · 📈 차량·개인 상세에 기준일별 추이 그래프"]},
@@ -3177,7 +3177,7 @@ function brief(){
              ['야간 근무 힘내세요','🌙','늦은 시간까지 정말 고생 많으세요']; })(), greet = gp[0];
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?esc2(nm2)+'님, ':'')+greet+' <i class="wv">'+gp[1]+'</i></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
-  return '<div class="sec">'+hero+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+mvpCard()+myBox()+'<div class="sec"><h2 style="font-size:14px">🚀 바로가기</h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
+  return '<div class="sec">'+hero+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px">🚀 바로가기</h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
 /* 미응답 고객 응답 요청 문자 — 예시 문구는 여기만 수정. {이름}은 앱에서 고른 이름으로 자동 입력(없으면 000) */
