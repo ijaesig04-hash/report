@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261023154232">
+<meta name="bsr-ver" content="20261023155916">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -830,6 +830,24 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .tc-tot{background:linear-gradient(90deg,#1e3a8a,#4f46e5)!important}
 .tcrit .tc-s{background:#fff;border-radius:10px;padding:7px 10px;color:#4338ca!important;font-weight:600}
 .tcrit .tc-ul li::marker{color:#4f46e5}
+.clc-r{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;padding:6px 0;border-top:1px dashed #e2e8f0}.clc-r:first-of-type{border-top:0}
+.clc-n{width:22px;height:22px;border-radius:50%;background:#4f46e5;color:#fff;font-weight:800;font-size:12px;display:grid;place-items:center}
+.clc-t{display:flex;flex-direction:column;min-width:0}.clc-t b{font-size:13px;color:#0f172a}.clc-t small{font-size:11.5px;color:#64748b}
+.clc-r em{font-style:normal;font-weight:900;color:#16a34a;font-size:15px}.xs-in .clc-r{grid-template-columns:1fr auto}
+.clc-b{margin-top:6px;border:0;background:#eef2ff;color:#3730a3;border-radius:10px;font:700 12.5px "Noto Sans KR",sans-serif;padding:7px 12px;cursor:pointer}
+.clv{border:1px solid #e2e8f0;border-radius:12px;overflow:hidden}.clv-r{display:grid;grid-template-columns:1fr 60px 110px;gap:6px;padding:7px 10px;font-size:12.5px;border-top:1px solid #f1f5f9;align-items:center}.clv-r>*:nth-child(n+2){text-align:right}.clv-h{background:#eef2ff;color:#3730a3;font-weight:800;border-top:0}
+.race{background:linear-gradient(135deg,#ecfeff,#fff);border:1.5px solid #a5f3fc;border-radius:18px;padding:12px}
+.race-h{display:flex;justify-content:space-between;align-items:baseline}.race-h b{font-size:15px;color:#0e7490}.race-h small{font-size:11.5px;color:#64748b}
+.race-r{display:grid;grid-template-columns:26px 48px 1fr 64px;gap:6px;align-items:center;padding:6px 0;border-top:1px dashed #cffafe}.race-r:first-of-type{border-top:0}
+.race-k{font-weight:900;color:#64748b;text-align:center}.race-r b{font-size:13.5px}.race-b{height:10px;background:#f1f5f9;border-radius:999px;overflow:hidden}.race-b i{display:block;height:100%;border-radius:999px}.race-b i.up{background:linear-gradient(90deg,#06b6d4,#22c55e)}.race-b i.dn{background:#fca5a5}
+.race-r em{font-style:normal;font-weight:800;font-size:13px;text-align:right}.race-r em.up{color:#16a34a}.race-r em.dn{color:#dc2626}.race-r.win b{color:#0e7490}.race-s{grid-column:2/5;font-size:11px;color:#0e7490}
+.przc{margin-top:6px;border:1px solid #f9a8d4;background:#fff;color:#be185d;border-radius:999px;font:800 12px "Noto Sans KR",sans-serif;padding:5px 12px;cursor:pointer}.przc.sm{padding:3px 9px;font-size:11px;margin:4px 0 0}
+.wk-t{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:12px;padding:10px;font:500 13px/1.55 "Noto Sans KR",sans-serif;margin-bottom:8px}
+.fd-q{width:100%;box-sizing:border-box;border:1.5px solid #6366f1;border-radius:12px;padding:11px 12px;font:600 15px "Noto Sans KR",sans-serif;margin-bottom:6px}
+.fd-c{border:1px solid #e2e8f0;border-radius:12px;padding:9px 11px;margin:8px 0}.fd-h b{font-size:14px}.fd-h small{font-size:11.5px;color:#64748b;margin-left:6px}
+.fd-s{font-size:12.5px;margin-top:5px;line-height:1.5}.fd-s .ok{color:#15803d}.fd-s .ng{color:#b91c1c}.fd-s.al{background:#fff7ed;border-radius:8px;padding:5px 8px}
+.fd-btn{border:1px solid #c7d2fe;background:#fff;color:#3730a3;border-radius:999px;font:700 12px "Noto Sans KR",sans-serif;padding:4px 10px;cursor:pointer}
+html.bsr-big .wrap,html.bsr-big .xs-in{zoom:1.15}html.bsr-big .tabs button{font-size:15px}
 .bq{flex:0 0 auto;width:118px;height:100px;scroll-snap-align:start;text-align:left;border:0;border-radius:16px;padding:11px 12px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;color:#fff;box-shadow:0 6px 14px rgba(15,23,42,.14);font-family:"Noto Sans KR",sans-serif;position:relative;overflow:hidden}
 .bq::after{content:"";position:absolute;right:-24px;top:-24px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.12)}
 .bq small{font-size:11px;font-weight:700;opacity:.88;white-space:nowrap}
@@ -2849,6 +2867,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-24a", date:"10/24", title:"계산기 · 대항전 · 칭찬 카드 외", tabs:["home","cs"], items:["🧮 내 점수 계산기 — 사업팀 배점으로 '점수 올리기 쉬운 항목 TOP3' (브리핑 › 내 할 일)","🏁 차량 대항전 — 직전 기준일보다 많이 좋아진 차량 순위","🖼️ 칭찬 카드 — 고객 칭찬을 이미지로 저장·공유","🔍 고객처 검색 — 다발보 이력·고객체감 응답·칭찬을 한 번에","🔠 글자 크게 (이름표 메뉴) · 📋 주간 보고 문구 (관리자)"]},
  {id:"2026-10-23j", date:"10/23", title:"사업팀 평가 6월 · 종합 평가", tabs:["eval","home"], items:["월별 평가 › 사업팀 평가 6월 반영 (7월은 사업팀 확정 후 반영)","종합 평가 = 사업팀 총점 × 80% + 지사 평가(20점) — 월별·하반기 평균 순위"]},
  {id:"2026-10-23i", date:"10/23", title:"관리자 할 일", tabs:["home"], items:["✅ 관리자 오늘 할 일 — 공지 미확인·다발보 미조치·미응답 미연락·앱 미설치 한 화면","📴 인터넷이 끊기면 '오프라인 · 저장본' 표시"]},
  {id:"2026-10-23h", date:"10/23", title:"빠른 열기 · 칭찬 알림 외", tabs:["home","ppl","cs"], items:["⚡ 빠른 열기 — 저장된 화면을 바로 띄우고 뒤에서 최신화 (데이터 절약)","🎉 내 고객 칭찬이 들어오면 브리핑 맨 위에 알림","미응답 '연락 체크'가 모든 폰에 공유 (누가 연락했는지 표시)","개인별 상세 — 코멘트·가점·월말 예상은 눌러서 펼치기","관리자 — 📲 설치 현황(설치/주소로만/기록 없음) · 미설치자 안내 복사"]},
@@ -3183,7 +3202,7 @@ function brief(){
              ['야간 근무 힘내세요','🌙','늦은 시간까지 정말 고생 많으세요']; })(), greet = gp[0];
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?esc2(nm2)+'님, ':'')+greet+' <i class="wv">'+gp[1]+'</i></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
-  return '<div class="sec">'+hero+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px">🚀 바로가기</h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
+  return '<div class="sec">'+hero+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+raceCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
 /* 미응답 고객 응답 요청 문자 — 예시 문구는 여기만 수정. {이름}은 앱에서 고른 이름으로 자동 입력(없으면 000) */
@@ -3263,7 +3282,7 @@ function przBanner(){
   var nm = myName(); if(!nm || CS_MGR.indexOf(nm)>=0) return '';
   var L = przNew(nm); if(!L.length) return '';
   return '<div class="prz"><div class="prz-h"><span class="prz-ic">🎉</span><b>'+esc2(nm)+'님, 고객 칭찬이 도착했어요!</b></div>'+
-    L.slice(0,3).map(function(r){ return '<div class="prz-i">'+(r[7]?'<p>“'+esc2(r[7])+'”</p>':'<p>⭐ 10점 만점 · 칭찬</p>')+'<span>'+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+esc2(r[9])+' · '+esc2(r[4])+'</span></div>'; }).join('')+
+    L.slice(0,3).map(function(r){ return '<div class="prz-i">'+(r[7]?'<p>“'+esc2(r[7])+'”</p>':'<p>⭐ 10점 만점 · 칭찬</p>')+'<span>'+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+esc2(r[9])+' · '+esc2(r[4])+'</span><button type="button" class="przc" data-przc="'+esc2(nm)+'" data-przt="'+esc2(r[7]||'')+'" data-przs="'+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+esc2(r[4])+' · 10점 만점">🖼️ 카드로 저장</button></div>'; }).join('')+
     (L.length>3?'<div class="prz-m">외 '+(L.length-3)+'건 더</div>':'')+
     '<button type="button" class="prz-ok" data-przok="'+esc2(L.map(przKey).join('\n'))+'">고마워요 👍</button></div>';
 }
@@ -3343,6 +3362,136 @@ document.addEventListener("click", function(e){
     else t='📲 북서울 Report 앱 설치 부탁드립니다!\n'+(d.inst||[]).join(', ')+'님\n\n👉 '+url+'\n링크를 열고 화면 아래 [설치] 버튼만 누르면 끝! (아이폰은 사파리 → 공유 → 홈 화면에 추가)';
     nrCopy(t); return; }
 });
+
+/* ===== 🧮 내 점수 계산기 — 사업팀 하반기 배점(CS사원)으로 '올리기 쉬운 항목' 계산 (추정) ===== */
+var CALC_W = [5,7,3,4,null];   /* 불필요·발보율·25분·체감 배점 · 일괄은 사업팀 항목 아님 */
+function calcFor(who){
+  var p = PPL.filter(function(x){return x.name===who})[0]; if(!p) return null;
+  var out = [];
+  p.m.forEach(function(c,i){ var w=CALC_W[i]; if(!w || isNaN(c.r)) return; var now=w*Math.max(0,Math.min(100,c.r))/100;
+    if(c.r<100) out.push({k:M[i].name, now:Math.round(now*10)/10, max:w, gain:Math.round((w-now)*10)/10, how:M[i].short+' '+fr(c.r)+' → 100% 달성 시', t:'m'}); });
+  var cs = csStat(who), rate = cs.sent? cs.resp/cs.sent*100 : 0;
+  if(cs.sent){ var need=0, now=7*Math.min(1,rate/100*1.0);
+    var tgt = Math.min(cs.sent, Math.ceil(cs.sent*0.6)); need = Math.max(0, tgt-cs.resp);
+    if(need>0){ var r2=(cs.resp+need)/cs.sent*100; out.push({k:'고객체감 응답률', now:Math.round(now*10)/10, max:7, gain:Math.round((7*Math.min(1,r2/100)-now)*10)/10, how:'응답 '+need+'건 더 받으면 '+Math.round(rate)+'% → '+Math.round(r2)+'%', t:'r', need:need}); } }
+  out.sort(function(a,b){return b.gain-a.gain});
+  return {p:p, items:out, rate:rate, cs:cs};
+}
+function calcBox(who){
+  var c = calcFor(who); if(!c || !c.items.length) return '';
+  return '<div class="my-c clc"><div class="my-h">🧮 점수 올리기 TOP'+Math.min(3,c.items.length)+' <small>사업팀 배점 기준 추정</small></div>'+
+    c.items.slice(0,3).map(function(x,i){ return '<div class="clc-r"><span class="clc-n">'+(i+1)+'</span><span class="clc-t"><b>'+x.k+'</b><small>'+x.how+'</small></span><em class="num">+'+x.gain+'</em></div>'; }).join('')+
+    '<button type="button" class="clc-b" data-calc="'+esc2(who)+'">계산기 자세히 ›</button></div>';
+}
+function calcView(who){
+  var c = calcFor(who); if(!c) return;
+  var rows = c.p.m.map(function(m,i){ var w=CALC_W[i]; if(!w) return ''; var now=w*Math.max(0,Math.min(100,m.r))/100;
+    return '<div class="clv-r"><span>'+M[i].name+'</span><span class="num">'+fr(m.r)+'</span><b class="num">'+(Math.round(now*10)/10)+' / '+w+'</b></div>'; }).join('');
+  openSheet('<div class="xs-h"><b>🧮 '+esc2(who)+'님 점수 계산기</b><button type="button" data-xs="close">✕</button></div>'+
+    '<p class="xs-p">사업팀 하반기 배점(CS사원)으로 계산한 <b>추정치</b>입니다. 실제 점수는 사업팀 평가표가 기준입니다.</p>'+
+    '<div class="clv"><div class="clv-r clv-h"><span>항목</span><span>달성률</span><span>점수 / 배점</span></div>'+rows+
+    '<div class="clv-r"><span>고객체감 응답률</span><span class="num">'+Math.round(c.rate)+'%</span><b class="num">발송 '+c.cs.sent+' · 응답 '+c.cs.resp+'</b></div></div>'+
+    '<div class="xs-h" style="margin-top:12px"><b>이렇게 하면 오릅니다</b></div>'+
+    (c.items.length? c.items.map(function(x){ return '<div class="clc-r"><span class="clc-t"><b>'+x.k+'</b><small>'+x.how+'</small></span><em class="num">+'+x.gain+'</em></div>'; }).join('') : '<p class="xs-p">모든 항목 만점입니다 👍</p>')+
+    '<p class="tc-src">고객체감 만족도·VOC·사고 항목은 실적 자료가 없어 계산에서 뺐습니다.</p>');
+}
+document.addEventListener("click", function(e){ var b=e.target.closest("[data-calc]"); if(b) calcView(b.dataset.calc); });
+
+/* ===== 🏁 차량 대항전 — 직전 기준일 대비 지표 개선폭 순위 ===== */
+function raceData(){
+  var cur = SD.veh, prev = null; DATES.forEach(function(x){ if(x.veh && x.d<cur && (!prev || x.d>prev.d)) prev = x; });
+  if(!prev) return null;
+  var PV = mapVEH(prev.veh), cl = function(r){ return isNaN(r)?0:Math.max(0,Math.min(200,r)); };
+  var L = VEH.map(function(v){ var q=PV.filter(function(z){return z.no===v.no})[0]; if(!q) return null;
+    var d = v.m.reduce(function(a,c,i){return a+cl(c.r)-cl(q.m[i].r)},0)/5, best=-1e9, bi=0;
+    v.m.forEach(function(c,i){ var dd=cl(c.r)-cl(q.m[i].r); if(dd>best){best=dd;bi=i;} });
+    return {no:v.no, lead:v.lead, d:Math.round(d*10)/10, best:M[bi].short, bd:Math.round(best)}; }).filter(Boolean).sort(function(a,b){return b.d-a.d});
+  return {from:prev.d, to:cur, L:L};
+}
+function raceCard(){
+  var R = raceData(); if(!R || !R.L.length) return '';
+  var mx = Math.max.apply(null, R.L.map(function(x){return Math.abs(x.d)}).concat([1]));
+  return '<div class="sec race"><div class="race-h"><b>🏁 차량 대항전</b><small>'+md(R.from)+' → '+md(R.to)+' 개선폭</small></div>'+
+    R.L.map(function(x,i){ return '<div class="race-r'+(i===0?' win':'')+'"><span class="race-k">'+(i===0?'🏆':(i+1))+'</span><b>'+x.no+'호</b><span class="race-b"><i class="'+(x.d>=0?'up':'dn')+'" style="width:'+Math.round(Math.abs(x.d)/mx*100)+'%"></i></span><em class="num '+(x.d>=0?'up':'dn')+'">'+(x.d>0?'+':'')+x.d+'%p</em>'+(i===0&&x.bd>0?'<small class="race-s">'+x.best+' +'+x.bd+'%p 상승</small>':'')+'</div>'; }).join('')+
+    '<p class="tc-src">순위가 아니라 직전 기준일보다 얼마나 좋아졌는지(5개 지표 평균 달성률 변화)로 겨룹니다.</p></div>';
+}
+
+/* ===== 🖼️ 칭찬 카드 이미지 ===== */
+function przCard(name, text, sub){
+  var c=document.createElement("canvas"), W=1080, H=1350; c.width=W; c.height=H; var x=c.getContext("2d");
+  var g=x.createLinearGradient(0,0,W,H); g.addColorStop(0,"#1e3a8a"); g.addColorStop(.55,"#4f46e5"); g.addColorStop(1,"#db2777"); x.fillStyle=g; x.fillRect(0,0,W,H);
+  x.fillStyle="rgba(255,255,255,.08)"; x.beginPath(); x.arc(940,160,260,0,7); x.fill(); x.beginPath(); x.arc(120,1220,220,0,7); x.fill();
+  var F='"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif';
+  x.fillStyle="#fde68a"; x.font="800 44px "+F; x.fillText("에스원 북서울지사 · 고객 칭찬",80,140);
+  x.fillStyle="#fff"; x.font="900 96px "+F; x.fillText("🎉 "+name+"님",80,280);
+  x.font="800 60px "+F; x.fillText("고객님의 칭찬이 도착했어요",80,370);
+  x.fillStyle="rgba(255,255,255,.95)"; var bx=70, by=450, bw=W-140, bh=620; x.beginPath(); if(x.roundRect) x.roundRect(bx,by,bw,bh,48); else x.rect(bx,by,bw,bh); x.fill();
+  x.fillStyle="#4f46e5"; x.font="900 140px Georgia,serif"; x.fillText("“",bx+40,by+150);
+  x.fillStyle="#1f2937"; x.font="700 58px "+F; var words=(text||"10점 만점, 칭찬해요!").split(""), line="", y=by+230, lh=84;
+  for(var i=0;i<words.length;i++){ var t=line+words[i]; if(x.measureText(t).width>bw-120 && line){ x.fillText(line,bx+60,y); line=words[i]; y+=lh; if(y>by+bh-60) { line+="…"; break; } } else line=t; }
+  if(line) x.fillText(line,bx+60,y);
+  x.fillStyle="#fff"; x.font="600 40px "+F; x.fillText(sub||"",80,1160);
+  x.fillStyle="#fde68a"; x.font="800 44px "+F; x.fillText("오늘도 고객의 안전을 지키는 에스원 ⭐",80,1260);
+  return c;
+}
+function przSave(name, text, sub){
+  var c = przCard(name, text, sub);
+  c.toBlob(function(b){ var f=null; try{ f=new File([b],"칭찬카드_"+name+".png",{type:"image/png"}); }catch(e){}
+    if(f && navigator.canShare && navigator.canShare({files:[f]})){ navigator.share({files:[f], text:name+"님 고객 칭찬 🎉"}).catch(function(){}); return; }
+    var a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="칭찬카드_"+name+".png"; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(a.href); a.remove();},1000); nrToast("🖼️ 칭찬 카드를 저장했어요"); },"image/png");
+}
+document.addEventListener("click", function(e){ var b=e.target.closest("[data-przc]"); if(!b) return; e.stopPropagation(); przSave(b.dataset.przc, b.dataset.przt, b.dataset.przs); });
+
+/* ===== 📋 주간 보고 문구 (파트장) ===== */
+function weeklyText(){
+  var t = kstDate(0), lines = [], pv = PREV && PREV.me;
+  lines.push("[북서울지사 서비스 주간 보고 · "+md(t)+"]");
+  lines.push(""); lines.push("■ 지사 지표 ("+md(SD.br)+" 기준"+(PREV?", "+md(PREV.d)+" 대비":"")+")");
+  me.m.forEach(function(c,i){ var d = pv ? Math.round(c.r)-Math.round(pv.m[i].r) : null; lines.push("- "+M[i].name+" "+fr(c.r)+(d?" ("+(d>0?"▲":"▼")+Math.abs(d)+"%p)":"")+(c.r>=100?" ✅":" ⚠️")); });
+  var vf = VEH.filter(function(v){return okc(v)===5}).length, pf = PPL.filter(function(p){return p.ok===5}).length;
+  lines.push(""); lines.push("■ 가점 현황 (월말 "+meLbl()+" 판정)"); lines.push("- 차량 5개 달성 "+vf+"/"+VEH.length+"대 · 개인 5개 달성 "+pf+"/"+PPL.length+"명");
+  var ck = csLatest(), cs = CSD[ck], nd = nrData();
+  if(cs){ lines.push(""); lines.push("■ 고객체감 ("+md(ck)+")"); lines.push("- 발송 "+cs.sent+" · 응답 "+cs.resp+" · 응답률 "+(cs.resp/cs.sent*100).toFixed(1)+"% · 만족도 "+cs.sat); lines.push("- 3일 지난 미응답 "+nd.old.length+"건"); }
+  var w0 = Date.now()-7*86400000, y=+ck.slice(0,4), pr = CSR.filter(function(r){ return r[6]==="칭찬" && r[3] && Date.UTC(y,+r[3].slice(0,2)-1,+r[3].slice(3))>=w0-86400000; });
+  if(pr.length) lines.push("- 이번 주 칭찬 "+pr.length+"건: "+pr.map(function(r){return r[0]}).filter(function(v,i,a){return a.indexOf(v)===i}).join(", "));
+  var dk = Object.keys(DRIVE.snaps).sort().pop(), dl = DRIVE.snaps[dk]||[];
+  lines.push(""); lines.push("■ 운전성향 ("+md(dk)+")"); lines.push("- 양호 "+dl.filter(function(r){return r[3]==="양호"}).length+" · 주의 "+dl.filter(function(r){return r[3]==="주의"}).length+" · 위험 "+dl.filter(function(r){return r[3]==="위험"}).length+"명");
+  var g={}; ALM.multi.rows.forEach(function(r){ var k=r[0]+'|'+r[1]; (g[k]=g[k]||{d:false}); if(r[6]) g[k].d=true; }); Object.keys(g).forEach(function(k){ if(actsFor(k).length) g[k].d=true; });
+  var gk=Object.keys(g), un=gk.filter(function(k){return !g[k].d}).length;
+  lines.push(""); lines.push("■ 다발보 ("+ALM.multi.period+")"); lines.push("- 고객처 "+gk.length+"곳 · 조치 완료 "+(gk.length-un)+" · 미조치 "+un+"곳");
+  var R = raceData(); if(R && R.L.length) { lines.push(""); lines.push("■ 차량 대항전 1위: "+R.L[0].no+"호 ("+(R.L[0].d>0?"+":"")+R.L[0].d+"%p)"); }
+  return lines.join("\n");
+}
+function weeklyView(){
+  var t = weeklyText();
+  openSheet('<div class="xs-h"><b>📋 주간 보고 문구</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">최신 자료로 자동 작성했습니다. 고쳐서 복사해도 됩니다.</p><textarea id="wk-t" class="wk-t" rows="18">'+esc2(t)+'</textarea><button type="button" class="ntw-go" data-wkcp="1" style="width:100%">📋 복사하기</button>');
+}
+document.addEventListener("click", function(e){ if(e.target.closest("[data-wkcp]")){ var v=(document.getElementById("wk-t")||{}).value||weeklyText(); nrCopy(v); } });
+
+/* ===== 🔍 고객처 통합 검색 ===== */
+function findView(q){
+  openSheet('<div class="xs-h"><b>🔍 고객처 검색</b><button type="button" data-xs="close">✕</button></div><input id="fd-q" class="fd-q" placeholder="고객처 이름 일부 (예: 우리은행, 월계)" value="'+esc2(q||'')+'" autocomplete="off"><div id="fd-r">'+findRes(q||'')+'</div>');
+  setTimeout(function(){ var i=document.getElementById("fd-q"); if(i){ i.focus(); var v=i.value; i.value=''; i.value=v; } },50);
+}
+function findRes(q){
+  q = (q||'').replace(/\s/g,''); if(q.length<2) return '<p class="xs-p">두 글자 이상 입력하세요. 다발보 이력 · 고객체감(발송·응답·칭찬)을 함께 찾습니다.</p>';
+  var norm=function(s){return String(s||'').replace(/\s/g,'')}, hit=function(n){ var a=norm(n), parts=q.split(''); return a.indexOf(q)>=0 || a.replace(/\*/g,'').indexOf(q.replace(/\*/g,''))>=0; };
+  var g = {};
+  ALM.multi.rows.forEach(function(r){ if(!hit(r[1])) return; var k=r[1]; (g[k]=g[k]||{al:[],cs:[],car:r[0],ind:r[9]}).al.push(r); });
+  CSR.forEach(function(r){ if(!hit(r[9])) return; var k=r[9]; (g[k]=g[k]||{al:[],cs:[],car:'',ind:r[8]}).cs.push(r); });
+  var ks = Object.keys(g); if(!ks.length) return '<p class="xs-p">"'+esc2(q)+'"(으)로 찾은 고객처가 없습니다. 고객처명은 일부 가려져 있어 앞부분으로 찾아보세요.</p>';
+  return '<p class="xs-p">'+ks.length+'곳 찾음</p>'+ks.slice(0,20).map(function(k){ var x=g[k], ua=x.car?actsFor(x.car+'|'+k):[];
+    return '<div class="fd-c"><div class="fd-h"><b>'+esc2(k)+'</b><small>'+esc2(x.ind||'')+(x.car?' · '+x.car+'호':'')+'</small></div>'+
+      (x.al.length?'<div class="fd-s al">🔁 다발보 '+x.al.length+'회 — '+x.al.map(function(r){return (+r[2].slice(0,2))+'/'+(+r[2].slice(3))+' '+r[5]}).join(', ')+(x.al.some(function(r){return r[6]})||ua.length?' · <b class="ok">조치 완료</b>':' · <b class="ng">미조치</b>')+'</div>':'')+
+      x.cs.map(function(r){ return '<div class="fd-s cs">💬 '+(+r[2].slice(0,2))+'/'+(+r[2].slice(3))+' 발송 · '+esc2(r[0])+' · '+esc2(r[4])+' — '+(r[3]?'<b class="ok">응답 '+r[5]+'점'+(r[6]?' '+r[6]:'')+'</b>'+(r[7]?' “'+esc2(r[7])+'”':''):'<b class="ng">미응답</b>')+'</div>'; }).join('')+'</div>'; }).join('');
+}
+document.addEventListener("input", function(e){ if(e.target.id==="fd-q"){ var r=document.getElementById("fd-r"); if(r) r.innerHTML=findRes(e.target.value); } });
+document.addEventListener("click", function(e){ if(e.target.closest("[data-find]")) findView(''); });
+
+/* ===== 🔠 글자 크게 ===== */
+function bigApply(){ var on=false; try{ on = localStorage.getItem("bsr_big")==="1"; }catch(e){} document.documentElement.classList.toggle("bsr-big", on); return on; }
+function bigToggle(){ var on=!document.documentElement.classList.contains("bsr-big"); try{ localStorage.setItem("bsr_big", on?"1":"0"); }catch(e){} bigApply(); nrToast(on?"🔠 글자를 크게 했어요":"🔠 글자 크기를 원래대로"); }
+bigApply();
 /* ===== 👤 내 할 일 — 직원이 이름을 고르면 브리핑에 그 사람 몫만 모아 보여줌 (파트장은 미리보기) ===== */
 function sparkSvg(v, ref, hi){
   var w=150, h=38, pts=v.filter(function(x){return !isNaN(x)}); if(pts.length<2) return '';
@@ -3371,7 +3520,7 @@ function myBox(){
   var pp = PPL.filter(function(x){return x.name===who})[0];
   var fcH = pp ? '<div class="my-c"><div class="my-h">📊 내 지표 <b class="num">'+pp.ok+'</b>/5 달성 <small>'+pp.rank+'위 · 기준일 '+md(SD.ppl)+'</small></div>'+fcBox(pp.m, fcPpl(pp), SD.ppl)+'</div>' : '';
   return '<div class="sec my"><h2 style="font-size:14px">👤 '+who+'님 할 일</h2>'+sel+
-    '<div class="my-c"><div class="my-h">🗓️ 이번 주 근무</div><div class="my-w">'+days+'</div></div>'+nrH+fcH+drH+'</div>';
+    '<div class="my-c"><div class="my-h">🗓️ 이번 주 근무</div><div class="my-w">'+days+'</div></div>'+calcBox(who)+nrH+fcH+drH+'</div>';
 }
 document.addEventListener("click", function(e){ if(e.target.closest("[data-mrep]")) showMonthReport(); });
 document.addEventListener("change", function(e){ var s=e.target.closest("[data-myv]"); if(s){ state.myv = s.value; render(); } });
@@ -3437,7 +3586,7 @@ function csExtra(){
       : '<div class="krow">미응답 건이 없습니다 👍</div>')+'</div><p class="note">고객에게 응답 안내 문자를 한 번 더 드리면 응답률이 올라갑니다. 계약처는 일부 가려서 표시합니다.</p></div>';
   var hp = '<div class="sec"><h2>👏 칭찬 게시판 <span>'+key.slice(5).replace('-','/')+' 기준 · 칭찬 '+pr.length+'건</span></h2><div class="card pz">'+
     '<div class="pz-top">'+top.map(function(n,i){return '<div class="pz-p r'+(i+1)+'">'+medal(i+1,30)+'<b>'+n+'</b><span class="num">'+cnt[n]+'건</span></div>'}).join('')+'</div>'+
-    words.map(function(r){return '<div class="pz-w"><p>“'+esc2(r[7])+'”</p><span>'+r[0]+' · '+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+r[4]+'</span></div>'}).join('')+'</div></div>';
+    words.map(function(r){return '<div class="pz-w"><p>“'+esc2(r[7])+'”</p><span>'+r[0]+' · '+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+r[4]+'</span><button type="button" class="przc sm" data-przc="'+esc2(r[0])+'" data-przt="'+esc2(r[7])+'" data-przs="'+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+esc2(r[4])+' · 10점 만점">🖼️ 카드</button></div>'}).join('')+'</div></div>';
   return h+hp;
 }
 
@@ -3698,7 +3847,7 @@ document.addEventListener("visibilitychange", function(){ if(document.visibility
 .vl-menu button:first-child{border-top:0}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="brf">📰 오늘의 브리핑</button><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 보기</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 쓰기 (관리자)</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황 (관리자)</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="brf">📰 오늘의 브리핑</button><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 쓰기 (관리자)</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황 (관리자)</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
@@ -3824,7 +3973,7 @@ document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contain
 menu.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return; menu.hidden = true;
   var a = b.dataset.vl;
-  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ notiList(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
+  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ notiList(); } else if(a==="find"){ findView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
 });
 ov.addEventListener("click", function(e){
   var n = e.target.closest("[data-nm]");
