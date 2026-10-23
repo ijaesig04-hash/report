@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261023141953">
+<meta name="bsr-ver" content="20261023143209">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2472,7 +2472,7 @@ var TEVAL_W = 0.8;
 var TEVAL_ITEMS = [["불필요출동률","g1"],["서비스출동 발보율","g1"],["25분 초과율","g1"],["고객체감 출동시간","g1"],["금융사 출동시간","g1"],["출동료 청구","g1"],
   ["고객체감","g2"],["응답률","g2"],["클레임","g2"],["VOC 30분내 접촉률","g3"],["24시간 초과","g3"],["기한내 처리율","g3"],["잠재불만 VOC","g3"],["차량사고","g4"],["안전사고","g4"],["가감점","g5"]];
 var TEVAL = {
- "2026-06":{max:{"고객체감":20,"클레임":10}, rows:{
+ "2026-07":{max:{"고객체감":20,"클레임":10}, rows:{
   "용승우":[4,98.6,[4.5,7,3,4,7,0,20,7,10,5,0,4.7,1.4,15,10,0]],
   "고혁진":[13,76.3,[4.5,7,3,4,7,0,0,4.7,10,5,0,4.7,1.4,15,10,0]],
   "윤기한":[10,89.7,[4.5,7,3,3.6,7,0,19.5,0,10,5,0,4.7,1.4,15,10,-1]],
@@ -2488,7 +2488,7 @@ var TEVAL = {
   "김동현":[8,91.0,[3.8,6,3,4,2.4,0,20,5.6,10,5,0,4.8,1.4,15,10,0]],
   "이명섭":[15,54.9,[3.8,6,0.1,3.1,5.4,0,20,0.5,10,5,0,4.8,1.4,-15,10,0]],
   "남현준":[12,78.7,[3.8,6,0,0.7,1.3,0,20,0.9,10,4.9,0,4.8,1.4,15,10,0]]}},
- "2026-07":{max:{"고객체감":25,"클레임":5}, rows:{
+ "2026-06":{max:{"고객체감":25,"클레임":5}, rows:{
   "용승우":[4,109.1,[5,5.8,3,4,7,0.6,35,7,5,5,0,4.7,2,15,10,0]],
   "고혁진":[5,109.0,[5,5.8,3,4,7,0.6,35,7,5,4.9,0,4.7,2,15,10,0]],
   "윤기한":[14,86.9,[5,5.8,0,3.7,3.9,0.6,25,2,5,4.1,0,4.7,2,15,10,0]],
@@ -2543,7 +2543,7 @@ function viewEvalTeam2(mode){
     '<div class="kpsum"><span>평균 <b class="num">'+(Math.round(avg*10)/10)+'</b>점</span><i></i><span>반영 <b class="num">'+keys.map(function(k){return +k.slice(5)}).join("·")+'</b>월</span><i></i><span>대상 <b class="num">'+list.length+'</b>명</span></div></div>'+
     '<div class="sec"><h2>순위 <span>누르면 월별 항목 점수</span></h2><div class="card">'+rows+'</div></div>'+
     '<div class="sec"><div class="card"><div class="vhead">'+sel.n+' · '+sel.rk+'위<span>'+bHo(sel.n)+' · '+(per==="sum"?H.h+' 평균 ':'')+sel.t+'점</span></div>'+det+'</div>'+
-    (mode==="total"?'<p class="note">종합 평가 = 사업팀 총점 × 80% + 지사 평가 점수(월 20점 기준). 사업팀 평가는 익월에 받아 반영합니다. 8월 이후는 사업팀 자료를 받으면 자동 계산됩니다.</p>':'<p class="note">항목 배점은 달마다 다를 수 있습니다 (예: 7월 고객체감 25점·올만족 가점 포함, 클레임 5점).</p>')+'</div>';
+    (mode==="total"?'<p class="note">종합 평가 = 사업팀 총점 × 80% + 지사 평가 점수(월 20점 기준). 사업팀 평가는 익월에 받아 반영합니다. 8월 이후는 사업팀 자료를 받으면 자동 계산됩니다.</p>':'<p class="note">항목 배점은 달마다 다를 수 있습니다 (예: 6월 고객체감 25점·올만족 가점 포함, 클레임 5점).</p>')+'</div>';
 }
 function viewEval(){
   var es = state.es || "team";
