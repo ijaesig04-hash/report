@@ -1,0 +1,22 @@
+name: 매일 아침 점검
+on:
+  schedule:
+    - cron: "30 22 * * *"   # 한국시간 매일 07:30
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  issues: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: c
+        run: python3 .github/scripts/check.py
+      - name: 확인할 것이 있으면 알림(이슈) 만들기
+        if: steps.c.outputs.need == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for n in $(gh issue list --state open --search "[점검] in:title" --json number -q '.[].number'); do gh issue close "$n" --comment "새 점검으로 대체"; done
+          gh issue create --title "$(cat check_title.txt)" --body-file check_body.txt
