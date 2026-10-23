@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261023063529">
+<meta name="bsr-ver" content="20261023065211">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -773,6 +773,7 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .vtg{width:100%;border:0;background:linear-gradient(90deg,#eef2ff,#fff);border-radius:14px 14px 0 0;cursor:pointer;flex-wrap:wrap;gap:2px 8px;padding:12px 14px!important;text-align:left;font:inherit;color:inherit}
 .vtg b{font-size:16px}.vtg em{width:100%;font-style:normal;font-size:12px;font-weight:700;color:#3730a3}
 .vdo{padding:0 2px}
+.alm-act.pend{background:#fef3c7!important;color:#92400e!important}.alm-act em{font-style:normal;font-size:11px;font-weight:800}
 .bq{flex:0 0 auto;width:118px;height:100px;scroll-snap-align:start;text-align:left;border:0;border-radius:16px;padding:11px 12px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;color:#fff;box-shadow:0 6px 14px rgba(15,23,42,.14);font-family:"Noto Sans KR",sans-serif;position:relative;overflow:hidden}
 .bq::after{content:"";position:absolute;right:-24px;top:-24px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.12)}
 .bq small{font-size:11px;font-weight:700;opacity:.88;white-space:nowrap}
@@ -2842,7 +2843,7 @@ function almMulti(a){
       var acts = {}; x.ev.forEach(function(r){ if(r[6]) acts[r[6]+' '+r[7]+'|'+r[8]] = 1; });
       var act = Object.keys(acts).map(function(t){ var p=t.split('|'); return '<div class="alm-act">✅ <span class="num">'+(+p[0].slice(0,2))+'/'+(+p[0].slice(3,5))+' '+p[0].slice(6)+'</span> '+p[1]+'</div>'; }).join('');
       var n=x.ev.length, lv = n>=4?'s4':n>=3?'s3':'s2', lb = n>=4?'심각':n>=3?'경고':'주의';
-      return '<div class="alm-g '+lv+(x.done?' done':'')+'"><div class="alm-gh"><span class="alm-cn">'+x.car+'호</span><b>'+x.name+'</b><span class="alm-lv">'+lb+'</span>'+(x.re?'<span class="alm-re">🔁 재발 '+x.re+'</span>':'')+'<span class="alm-cnt num">'+n+'회</span></div><div class="alm-ind">'+x.ind+' · '+(x.done?'<span class="gd">조치 완료</span>':'<span class="bd">미조치</span>')+'</div><ul class="alm-ev">'+ev+'</ul>'+act+x.ua.map(function(r){return '<div class="alm-act">📝 <span class="num">'+notiDate(r[0])+'</span> '+esc2(r[2])+' · '+esc2(r[3])+'</div>'}).join('')+'<button type="button" class="alm-in" data-actf="'+esc2(x.key)+'" data-actlb="'+esc2(x.car+'호 '+x.name)+'">✍️ 조치 입력</button></div>';
+      return '<div class="alm-g '+lv+(x.done?' done':'')+'"><div class="alm-gh"><span class="alm-cn">'+x.car+'호</span><b>'+x.name+'</b><span class="alm-lv">'+lb+'</span>'+(x.re?'<span class="alm-re">🔁 재발 '+x.re+'</span>':'')+'<span class="alm-cnt num">'+n+'회</span></div><div class="alm-ind">'+x.ind+' · '+(x.done?'<span class="gd">조치 완료</span>':'<span class="bd">미조치</span>')+'</div><ul class="alm-ev">'+ev+'</ul>'+act+x.ua.map(function(r){return '<div class="alm-act'+(r.pend?' pend':'')+'">📝 <span class="num">'+notiDate(r[0])+'</span> '+esc2(r[2])+' · '+esc2(r[3])+(r.pend?' <em>⏳ 공유 대기</em>':'')+'</div>'}).join('')+'<button type="button" class="alm-in" data-actf="'+esc2(x.key)+'" data-actlb="'+esc2(x.car+'호 '+x.name)+'">✍️ 조치 입력</button></div>';
     }).join('') || '<div class="krow">해당하는 고객처가 없습니다.</div>';
   return kp+
     '<h2 class="alm-h2">차량별 현황 <span>'+a.period+' · 차량을 누르면 목록 필터</span></h2>'+carT+
@@ -3711,13 +3712,26 @@ document.addEventListener("click", function(e){
   if(hd){ var hid=hd.dataset.nthide; hd.disabled=true; fetch(apiUrl("a=hide&pin="+encodeURIComponent(BSR_PIN())+"&id="+encodeURIComponent(hid)),{cache:"no-store"}).then(function(){ NOTI.items=NOTI.items.filter(function(x){return x.id!==hid}); notiWrite("공지를 내렸습니다."); render(); }).catch(function(){}); return; }
 });
 /* 다발보 조치 입력 */
-var ACTS = [];
-try{ ACTS = JSON.parse(localStorage.getItem("bsr_acts")||"[]"); }catch(e){}
+var ACTS = [], ACTS_PEND = [];
+try{ ACTS = JSON.parse(localStorage.getItem("bsr_acts")||"[]"); ACTS_PEND = JSON.parse(localStorage.getItem("bsr_acts_pend")||"[]"); }catch(e){}
+/* 서버(구글 시트)에 아직 안 올라간 조치는 이 폰에 보관했다가, 서버가 응답하면 자동으로 다시 보냄 */
+try{ if(!localStorage.getItem("bsr_acts_mig")){ ACTS_PEND = ACTS_PEND.concat(ACTS); ACTS = []; localStorage.setItem("bsr_acts_pend", JSON.stringify(ACTS_PEND)); localStorage.setItem("bsr_acts","[]"); localStorage.setItem("bsr_acts_mig","1"); } }catch(e){}
+function actsSavePend(){ try{ localStorage.setItem("bsr_acts_pend", JSON.stringify(ACTS_PEND)); }catch(e){} }
+function actSend(r){ apiPing("a=act&key="+encodeURIComponent(r[1])+"&name="+encodeURIComponent(r[2])+"&memo="+encodeURIComponent(r[3])); }
 function actsLoad(){
   if(!window.BSR_API) return;
-  fetch(apiUrl("a=acts"),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ if(!j||!j.ok) return; ACTS=j.rows||[]; try{localStorage.setItem("bsr_acts",JSON.stringify(ACTS))}catch(e){} if(window.state && state.tab==="alm") render(); }).catch(function(){});
+  fetch(apiUrl("a=acts"),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
+    if(!j||!j.ok||!j.rows) return;
+    ACTS = j.rows;
+    var left = ACTS_PEND.filter(function(p){ return !ACTS.some(function(r){return r[1]===p[1] && r[2]===p[2] && r[3]===p[3]}); });
+    if(left.length){ left.forEach(function(p){ if(!p.sent || Date.now()-p.sent>60000){ actSend(p); p.sent=Date.now(); } }); }
+    ACTS_PEND = left; actsSavePend();
+    try{localStorage.setItem("bsr_acts",JSON.stringify(ACTS))}catch(e){}
+    if(left.length) setTimeout(actsLoad, 8000);
+    if(window.state && state.tab==="alm") render();
+  }).catch(function(){});
 }
-function actsFor(key){ return ACTS.filter(function(r){return r[1]===key}); }
+function actsFor(key){ return ACTS.filter(function(r){return r[1]===key}).concat(ACTS_PEND.filter(function(r){return r[1]===key}).map(function(r){ var x=r.slice(0,4); x.pend=1; return x; })); }
 function actForm(key, label, msg){
   openSheet('<div class="xs-h"><b>✍️ 조치 입력</b><button type="button" data-xs="close">✕</button></div><p class="xs-p"><b>'+esc2(label)+'</b> 고객처에 한 조치를 짧게 적어주세요. 입력자: <b>'+esc2(myName()||'이름 없음')+'</b></p>'+
     '<div class="ntw"><textarea id="act-m" rows="3" maxlength="200" placeholder="예) 열선감지기 교체, 키맨 취급설명 완료"></textarea><button type="button" class="ntw-go" data-actgo="'+esc2(key)+'" data-actlb="'+esc2(label)+'">✅ 조치 완료로 저장</button>'+(msg?'<p class="ntw-msg">'+msg+'</p>':'')+'</div>'+
@@ -3727,8 +3741,7 @@ document.addEventListener("click", function(e){
   var f = e.target.closest("[data-actf]"); if(f){ actForm(f.dataset.actf, f.dataset.actlb); return; }
   var g = e.target.closest("[data-actgo]");
   if(g){ var m=((document.getElementById("act-m")||{}).value||"").trim(); if(!m){ actForm(g.dataset.actgo, g.dataset.actlb, "조치 내용을 적어주세요."); return; }
-    ACTS.push([Date.now(), g.dataset.actgo, myName()||"이름없음", m]); try{localStorage.setItem("bsr_acts",JSON.stringify(ACTS))}catch(_){}
-    apiPing("a=act&key="+encodeURIComponent(g.dataset.actgo)+"&name="+encodeURIComponent(myName()||"이름없음")+"&memo="+encodeURIComponent(m));
+    var nr = [Date.now(), g.dataset.actgo, myName()||"이름없음", m]; nr.sent = Date.now(); ACTS_PEND.push(nr); actsSavePend(); actSend(nr);
     var o=document.getElementById("xsheet"); if(o){ o.hidden=true; document.body.style.overflow=""; } render(); setTimeout(actsLoad, 4000); }
 });
 notiLoad(); actsLoad();
