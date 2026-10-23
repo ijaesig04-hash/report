@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261023122152">
+<meta name="bsr-ver" content="20261023123007">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3285,6 +3285,7 @@ var GREET_H = -1;
 document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible" && window.state && state.tab==="home") render(); });
 setInterval(function(){ var h=new Date(Date.now()+9*3600000).getUTCHours(); if(GREET_H!==-1 && h!==GREET_H && window.state && state.tab==="home" && document.visibilityState==="visible") render(); GREET_H=h; }, 600000);
 /* 화면 이동 시 내용 맨 위(탭 바로 아래)로 */
+function goDp(){ var f=function(){ var b=document.querySelector("#view [data-dp]"), el=b?b.parentElement:null, n=document.querySelector("nav.tabs"); if(!el){ goTop(); return; } var y=el.getBoundingClientRect().top+window.pageYOffset-(n?n.offsetHeight:0)-8; window.scrollTo(0, Math.max(0,y)); }; f(); requestAnimationFrame(f); setTimeout(f,120); }
 function goTop(){ var f=function(){ var v=document.getElementById("view"), n=document.querySelector("nav.tabs"); if(!v) return; var y=v.getBoundingClientRect().top+window.pageYOffset-(n?n.offsetHeight:0)-4; window.scrollTo(0, Math.max(0,y)); }; f(); requestAnimationFrame(f); setTimeout(f,120); }
 function render(){
   var v = state.tab==="home" ? '<div class="brt">'+viewHome()+'</div>' : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
@@ -3320,10 +3321,10 @@ document.getElementById("view").addEventListener("click",function(e){   var dsw 
   else if(e.target.closest("[data-as]")){ state.as = e.target.closest("[data-as]").dataset.as; render(); }
   else if(e.target.closest("[data-al]")){ state.al = e.target.closest("[data-al]").dataset.al; render(); }
   else if(e.target.closest("[data-vd]")){ state.vd = e.target.closest("[data-vd]").dataset.vd; render(); }
-  else if(e.target.closest("[data-dp]")){ state.dp = e.target.closest("[data-dp]").dataset.dp; state.dwk=""; render(); goTop(); }
+  else if(e.target.closest("[data-dp]")){ state.dp = e.target.closest("[data-dp]").dataset.dp; state.dwk=""; render(); goDp(); }
   else if(e.target.closest("[data-dwk]")){ var bw=e.target.closest("[data-dwk]"); if(!bw.disabled){ state.dwk = bw.dataset.dwk; render(); } }
   else if(e.target.closest("[data-dz]")){ state.dz = e.target.closest("[data-dz]").dataset.dz; render(); }
-  else if(e.target.closest("[data-dm]")){ state.dm = e.target.closest("[data-dm]").dataset.dm; state.dd = 0; state.dwk=""; render(); goTop(); }
+  else if(e.target.closest("[data-dm]")){ state.dm = e.target.closest("[data-dm]").dataset.dm; state.dd = 0; state.dwk=""; render(); goDp(); }
   else if(e.target.closest("[data-dd]")){ state.dd = +e.target.closest("[data-dd]").dataset.dd; render(); }
   else if(rsb){ state.rs = rsb.dataset.rs; render(); }
   else if(e.target.closest("[data-bm]")){ state.bm = e.target.closest("[data-bm]").dataset.bm; render(); }
