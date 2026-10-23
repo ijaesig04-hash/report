@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261023065211">
+<meta name="bsr-ver" content="20261023091114">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -774,6 +774,14 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .vtg b{font-size:16px}.vtg em{width:100%;font-style:normal;font-size:12px;font-weight:700;color:#3730a3}
 .vdo{padding:0 2px}
 .alm-act.pend{background:#fef3c7!important;color:#92400e!important}.alm-act em{font-style:normal;font-size:11px;font-weight:800}
+.inst{position:fixed;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:90;display:flex;align-items:center;gap:10px;background:#0f2a5c;color:#fff;border-radius:18px;padding:10px 10px 10px 12px;box-shadow:0 12px 30px rgba(15,42,92,.35);font-family:"Noto Sans KR",sans-serif;max-width:540px;margin:0 auto}
+.inst img{width:40px;height:40px;border-radius:10px;flex:none}.inst-t{flex:1;min-width:0;display:flex;flex-direction:column}.inst-t b{font-size:14px}.inst-t span{font-size:11.5px;opacity:.85}
+.inst-go{border:0;border-radius:12px;background:#ffd769;color:#3a2600;font:900 14px "Noto Sans KR",sans-serif;padding:9px 16px;cursor:pointer}.inst-x{border:0;background:none;color:#fff;opacity:.7;font-size:16px;padding:6px;cursor:pointer}
+.inst-ov{position:fixed;inset:0;z-index:120;background:rgba(15,23,42,.55);display:flex;align-items:flex-end;justify-content:center;font-family:"Noto Sans KR",sans-serif}
+.inst-in{background:#fff;color:#0f172a;border-radius:20px 20px 0 0;padding:18px 18px calc(env(safe-area-inset-bottom,0px) + 18px);width:100%;max-width:540px}
+.inst-in>b{font-size:17px}.inst-in ol{margin:12px 0;padding-left:20px;line-height:1.9;font-size:14.5px}.inst-n{font-size:12.5px;color:#64748b;margin:6px 0}
+.inst-in button{width:100%;border:0;border-radius:12px;background:#1f4fd8;color:#fff;font:800 14px "Noto Sans KR",sans-serif;padding:11px;margin-top:6px}
+@media print{.inst{display:none!important}}
 .bq{flex:0 0 auto;width:118px;height:100px;scroll-snap-align:start;text-align:left;border:0;border-radius:16px;padding:11px 12px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;color:#fff;box-shadow:0 6px 14px rgba(15,23,42,.14);font-family:"Noto Sans KR",sans-serif;position:relative;overflow:hidden}
 .bq::after{content:"";position:absolute;right:-24px;top:-24px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.12)}
 .bq small{font-size:11px;font-weight:700;opacity:.88;white-space:nowrap}
@@ -2733,6 +2741,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-23g", date:"10/23", title:"앱 설치 버튼", tabs:["home"], items:["주소로 열면 아래에 '📲 앱 설치' 띠 표시 — 누르면 설치(아이폰·삼성 인터넷은 설치 방법 안내)","카톡에서 링크를 누르면 크롬·사파리로 자동 이동"]},
  {id:"2026-10-23f", date:"10/23", title:"공지 · 내 할 일 · 결산 보고서", tabs:["home","alm","veh","ppl"], items:["📢 공지 — 관리자가 앱에서 공지 작성 → 앱 맨 위에 표시, '확인했어요'로 읽음 현황 확인","👤 내 할 일 — 브리핑에 이번 주 근무 · 내 미응답 · 내 월말 예상 · 운전성향 추이 (파트장은 직원 화면 미리보기)","✍️ 다발보 조치 입력 — 고객처별로 조치 내용을 앱에서 바로 저장","🧾 월말 결산 보고서(메뉴) · 📈 차량·개인 상세에 기준일별 추이 그래프"]},
  {id:"2026-10-23e", date:"10/23", title:"월말 예상 · 결산 자동화 · 11월 근무표", tabs:["veh","ppl","duty","home"], items:["차량별·개인별 — 📈 월말 예상 달성률(추세 참고용) · 미달 위험 항목 표시","월말 결산 자동화 — 말일 자료가 들어오면 가점·집중개선 항목 '확정' 표시, D-day는 다음 달로 자동 전환","11월 근무표 반영 (근무 계획표 11/1~11/30)","관리자 접속 현황 — 주간 요약(지난주 대비) · 보고용 복사"]},
  {id:"2026-10-23d", date:"10/23", title:"미응답 알림 공유 기능", tabs:["cs"], items:["미응답 알림 — 단톡방 전체 알림 보내기 · 근무자별 카톡 보내기(목록+문자 예시) · 고객별 연락 체크","관리자(최문혁·이재식)는 평가 대상 제외 — 미응답 알림·사원별 응답·칭찬 게시판·배지에서 뺌"]},
@@ -3746,6 +3755,44 @@ document.addEventListener("click", function(e){
 });
 notiLoad(); actsLoad();
 document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible"){ notiLoad(); actsLoad(); } });
+</script>
+<script>
+/* ===== 📲 앱 설치 유도 — 주소로 보는 사람에게 설치 버튼/안내, 카톡 안에서 열면 크롬·사파리로 자동 이동 ===== */
+(function(){
+  if(!/^https?:/.test(location.protocol)) return;
+  var ua = navigator.userAgent||"", isIOS = /iPhone|iPad|iPod/i.test(ua), isKakao = /KAKAOTALK/i.test(ua), isSam = /SamsungBrowser/i.test(ua);
+  var standalone = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+  if(standalone){ try{ localStorage.setItem("bsr_installed","1"); }catch(e){} return; }
+  /* 카톡 안에서 열면 외부 브라우저로 */
+  if(isKakao){ location.href = "kakaotalk://web/openExternal?url="+encodeURIComponent(location.href.split("#")[0]); return; }
+  var deferred = null;
+  window.addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); deferred = e; show(); });
+  window.addEventListener("appinstalled", function(){ try{ localStorage.setItem("bsr_installed","1"); }catch(_){} hide();
+    try{ if(window.BSR_API) apiPing("a=log&name="+encodeURIComponent(myName()||"이름없음")+"&tab="+encodeURIComponent("앱 설치")+"&ua="+encodeURIComponent(ua.slice(0,80))); }catch(_){} });
+  function snoozed(){ try{ var t=+localStorage.getItem("bsr_inst_snz")||0; return Date.now()-t < 2*86400000; }catch(e){ return false; } }
+  var bar = null;
+  function hide(){ if(bar){ bar.remove(); bar=null; } }
+  function show(){
+    if(bar || snoozed()) return;
+    bar = document.createElement("div"); bar.className = "inst";
+    bar.innerHTML = '<img src="icon-192.png" alt=""><div class="inst-t"><b>북서울 Report 앱 설치</b><span>홈 화면에서 바로 열고, 더 빠르게 봅니다</span></div><button type="button" class="inst-go">설치</button><button type="button" class="inst-x" aria-label="나중에">✕</button>';
+    document.body.appendChild(bar);
+    bar.querySelector(".inst-go").onclick = go;
+    bar.querySelector(".inst-x").onclick = function(){ try{ localStorage.setItem("bsr_inst_snz", Date.now()); }catch(_){} hide(); };
+  }
+  function go(){
+    if(deferred){ deferred.prompt(); deferred.userChoice.then(function(c){ if(c && c.outcome==="accepted") hide(); deferred=null; }); return; }
+    var steps = isIOS ? ['아래쪽 <b>공유 버튼(□↑)</b>을 누릅니다','<b>홈 화면에 추가</b>를 누릅니다','오른쪽 위 <b>추가</b>를 누르면 끝!']
+      : isSam ? ['아래쪽 <b>≡ 메뉴</b>를 누릅니다','<b>현재 페이지 추가 → 홈 화면</b>을 누릅니다','<b>추가</b>를 누르면 끝!']
+      : ['오른쪽 위 <b>⋮ 메뉴</b>를 누릅니다','<b>앱 설치</b> 또는 <b>홈 화면에 추가</b>를 누릅니다','<b>설치(추가)</b>를 누르면 끝!'];
+    var o = document.createElement("div"); o.className = "inst-ov";
+    o.innerHTML = '<div class="inst-in"><b>📲 앱으로 설치하기</b>'+(isIOS?'<p class="inst-n">※ 아이폰은 <b>사파리</b>에서만 설치됩니다</p>':'')+'<ol>'+steps.map(function(s){return '<li>'+s+'</li>'}).join('')+'</ol><p class="inst-n">설치 후에는 홈 화면의 <b>북서울 Report</b> 아이콘으로 여세요.</p><button type="button">확인</button></div>';
+    o.onclick = function(e){ if(e.target===o || e.target.tagName==="BUTTON") o.remove(); };
+    document.body.appendChild(o);
+  }
+  /* 안드로이드 크롬은 설치 준비 신호가 오면, 그 외(아이폰·삼성 인터넷 등)는 2초 뒤 안내 띠 표시 */
+  setTimeout(function(){ if(!deferred) show(); }, 2500);
+})();
 </script>
 <script>BSLP(95);window.addEventListener("load",function(){BSLP(100)});setTimeout(function(){BSLP(100)},4000);</script>
 
