@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261023013351">
+<meta name="bsr-ver" content="20261023014339">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -722,6 +722,25 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .nr-cp{background:#eef2ff;color:#3730a3}
 .nrh-all{position:relative;z-index:1;display:block;width:100%;margin:0 0 8px;border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.16);color:#fff;font:800 14px "Noto Sans KR",sans-serif;border-radius:14px;padding:11px 14px;cursor:pointer}
 .nr-toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 28px);transform:translateX(-50%);z-index:120;background:#0f172a;color:#fff;border-radius:999px;padding:10px 18px;font:700 13px "Noto Sans KR",sans-serif;box-shadow:0 8px 22px rgba(0,0,0,.3)}
+.fcx{margin:10px 0;border:1px solid #c7d2fe;border-radius:14px;padding:10px 12px;background:linear-gradient(135deg,#eef2ff,#fff)}
+.fcx-h{font-weight:800;font-size:13.5px;color:#3730a3;display:flex;justify-content:space-between;align-items:baseline;gap:6px;flex-wrap:wrap}.fcx-h small{font-weight:500;font-size:11px;color:#64748b}
+.fcx-g5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:8px 0 6px}
+.fcx-c{border-radius:10px;padding:5px 2px;text-align:center;background:#f8fafc;display:flex;flex-direction:column;gap:1px}
+.fcx-c span{font-size:10.5px;color:#64748b}.fcx-c b{font-size:14px}.fcx-c em{font-style:normal;font-size:10px;color:#64748b}
+.fcx-c.good{background:#dcfce7}.fcx-c.good b{color:#15803d}.fcx-c.warn{background:#fef3c7}.fcx-c.warn b{color:#b45309}.fcx-c.bad{background:#fee2e2}.fcx-c.bad b{color:#b91c1c}
+.fcx-m{margin:0;font-size:12.5px;color:#334155}.fcx-r{color:#b91c1c;font-weight:700}.fcx-g{color:#15803d;font-weight:700}
+.fct{margin-top:8px;border:1px solid #c7d2fe;border-radius:14px;background:#fff;padding:0 10px}
+.fct summary{list-style:none;padding:11px 2px;font-weight:800;font-size:13.5px;color:#3730a3;cursor:pointer}.fct summary::-webkit-details-marker{display:none}.fct summary small{font-weight:500;color:#64748b;font-size:11px;margin-left:4px}
+.fct-h,.fct-r{display:grid;grid-template-columns:44px repeat(5,minmax(0,1fr)) 40px;gap:4px;align-items:center;padding:3px 0;font-size:11px;text-align:center}
+.fct-h{color:#64748b}.fct-r .no{font-weight:800;font-size:12px;text-align:left}
+.fct-c{border-radius:8px;padding:5px 0;font-weight:800;font-size:12.5px;background:#f1f5f9}.fct-c.good{background:#dcfce7;color:#15803d}.fct-c.warn{background:#fef3c7;color:#b45309}.fct-c.bad{background:#fee2e2;color:#b91c1c}
+.fct-k{font-size:12px;color:#64748b}.fct-k.ok{color:#15803d}
+.bz-dd.fin b{color:#16a34a}
+.vlw-k{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 8px}.vlw-k>div{background:#f1f5ff;border-radius:12px;padding:8px 10px;display:flex;flex-direction:column}
+.vlw-k span{font-size:11.5px;color:#64748b}.vlw-k b{font-size:22px}.vlw-k b small{font-size:12px;color:#64748b}.vlw-k em{font-style:normal;font-size:11px;color:#64748b}.vlw-k em.up{color:#15803d}.vlw-k em.dn{color:#b91c1c}
+.vlw-t{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0;align-items:center}.vlw-t b{width:100%;font-size:12px;color:#334155}
+.vlw-t span{background:#eef2ff;color:#3730a3;border-radius:999px;padding:3px 9px;font-size:12px}.vlw-t span i{font-style:normal;font-weight:800}.vlw-t.ng span{background:#fee2e2;color:#b91c1c}
+.vlw-cp{width:100%;margin-top:6px;border:0;border-radius:12px;background:#1f4fd8;color:#fff;font:800 13px "Noto Sans KR",sans-serif;padding:10px;cursor:pointer}
 .bq{flex:0 0 auto;width:118px;height:100px;scroll-snap-align:start;text-align:left;border:0;border-radius:16px;padding:11px 12px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;color:#fff;box-shadow:0 6px 14px rgba(15,23,42,.14);font-family:"Noto Sans KR",sans-serif;position:relative;overflow:hidden}
 .bq::after{content:"";position:absolute;right:-24px;top:-24px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.12)}
 .bq small{font-size:11px;font-weight:700;opacity:.88;white-space:nowrap}
@@ -1427,6 +1446,47 @@ function worstIdx(v){ var w=-1; v.m.forEach(function(c,i){ if(!isNaN(c.r) && (w<
 function p2(n){return (n<10?'0':'')+n}
 function lastDay(y,m){return new Date(Date.UTC(y,m,0)).getUTCDate()}
 function brRow(arr){ var r=mapBR(arr).filter(function(b){return b.name===FOCUS_BR})[0]; return r||null; }
+
+/* 월말 예상 — 같은 달 이전 기준일(5일 이상 전)과 비교한 추세로 월말 달성률을 추정 (누적 지표라 추세의 절반만 반영, 참고용) */
+function fcBaseD(cur){
+  var mo = cur.slice(0,7), best = null;
+  DATES.forEach(function(x){ if(x.veh && x.d.slice(0,7)===mo && x.d<cur){ var gap=(Date.parse(cur)-Date.parse(x.d))/86400000; if(gap>=5 && (!best || x.d>best.d)) best={d:x.d, gap:gap}; } });
+  if(!best) DATES.forEach(function(x){ if(x.veh && x.d.slice(0,7)===mo && x.d<cur && (!best || x.d<best.d)) best={d:x.d, gap:(Date.parse(cur)-Date.parse(x.d))/86400000}; });
+  return best;
+}
+function fcLeft(cur){ var e=dataME(cur); return e.ld - (+cur.slice(8,10)); }
+function fcProj(now, base, gap, left){
+  if(isNaN(now)) return NaN; if(base==null || isNaN(base) || !gap) return now;
+  return Math.max(0, Math.min(200, now + (now-base)/gap*left*0.5));
+}
+function fcVeh(v){
+  var cur = SD.veh, left = fcLeft(cur), b = fcBaseD(cur); if(left<=0 || !b) return null;
+  var bv = mapVEH(pick("veh",b.d).veh).filter(function(q){return q.no===v.no})[0];
+  return v.m.map(function(c,i){ return fcProj(c.r, bv?bv.m[i].r:null, b.gap, left); });
+}
+function fcPpl(p){
+  var cur = SD.ppl, left = fcLeft(cur), b = fcBaseD(cur); if(left<=0 || !b) return null;
+  var q = null; for(var k=0;k<DATES.length;k++){ if(DATES[k].d===b.d && DATES[k].ppl){ var VP=mapVEH(pick("veh",b.d).veh); DATES[k].ppl.forEach(function(x){ if(x[0]!==p.name) return; var no=String(parseInt(x[1],10)), v=VP.filter(function(z){return z.no===no})[0]; if(v) q=v.m.slice(0,2).concat(P(x[2])); }); } }
+  return p.m.map(function(c,i){ return fcProj(c.r, q?q[i].r:null, b.gap, left); });
+}
+function fcBox(m, pr, cur){
+  if(!pr) return '';
+  var okN = pr.filter(function(r){return r>=100}).length, risk = [], save = [];
+  m.forEach(function(c,i){ if(isNaN(c.r)||isNaN(pr[i])) return; if(c.r>=100 && pr[i]<100) risk.push(M[i].short); if(c.r<100 && pr[i]>=100) save.push(M[i].short); });
+  var cells = m.map(function(c,i){ var p=pr[i], d=isNaN(p)||isNaN(c.r)?0:p-c.r;
+    return '<div class="fcx-c '+lvl(p)+'"><span>'+M[i].short+'</span><b class="num">'+(isNaN(p)?'-':Math.round(p)+'%')+'</b><em class="num">'+(d>=1?'▲':d<=-1?'▼':'·')+'</em></div>'; }).join('');
+  var msg = okN===5 ? '이대로면 <b>5개 모두 달성</b> 예상 👍' : '이대로면 <b>'+okN+'/5</b> 달성 예상';
+  if(risk.length) msg += ' · <span class="fcx-r">⚠ '+risk.join('·')+' 미달 위험</span>';
+  if(save.length) msg += ' · <span class="fcx-g">↗ '+save.join('·')+' 회복 가능</span>';
+  return '<div class="fcx"><div class="fcx-h">📈 월말('+meLbl()+') 예상 <small>추세 참고용 · '+md(fcBaseD(cur).d)+'→'+md(cur)+' 변화 기준</small></div><div class="fcx-g5">'+cells+'</div><p class="fcx-m">'+msg+'</p></div>';
+}
+function fcTable(){
+  var cur = SD.veh, b = fcBaseD(cur); if(fcLeft(cur)<=0 || !b) return '';
+  var rows = VEH.map(function(v){ var pr=fcVeh(v); if(!pr) return ''; var ok=pr.filter(function(r){return r>=100}).length;
+    return '<div class="fct-r"><span class="no">'+v.no+'호</span>'+pr.map(function(p){return '<span class="fct-c '+lvl(p)+'">'+(isNaN(p)?'-':Math.round(p))+'</span>'}).join('')+'<b class="fct-k'+(ok===5?' ok':'')+'">'+ok+'/5</b></div>'; }).join('');
+  return '<details class="fct"><summary>📈 월말('+meLbl()+') 예상 달성률 보기 <small>추세 참고용</small></summary><div class="fct-h"><span></span>'+M.map(function(m){return '<span>'+m.short+'</span>'}).join('')+'<span>달성</span></div>'+rows+
+    '<p class="note">'+md(b.d)+' → '+md(cur)+' 변화가 월말까지 절반 정도 이어진다고 보고 계산한 값입니다. 실제와 다를 수 있습니다.</p></details>';
+}
 function focusInfo(){
   var cur = SD.veh, y=+cur.slice(0,4), mo=+cur.slice(5,7);
   var py = mo===1?y-1:y, pm = mo===1?12:mo-1, baseD = py+'-'+p2(pm)+'-'+p2(lastDay(py,pm));
@@ -1451,10 +1511,11 @@ function focusCard(){
     return x;
   }
   if(f.active) h += block(f.mo+'월 집중개선', f.baseLbl+' 지사 기준 선정 · '+f.endLbl+' 판정', f.active.i, f.active.r, f.baseLbl, true);
-  h += block(f.nm+'월 집중개선 (예상)', f.endLbl+' 지사 수치로 확정', f.next.i, f.next.r, md(f.next.d), false);
+  var nfin = isFinal(f.next.d);
+  h += block(f.nm+'월 집중개선 '+(nfin?'(확정)':'(예상)'), nfin? f.endLbl+' 지사 기준 확정 · '+f.nm+'월 말일 판정' : f.endLbl+' 지사 수치로 확정', f.next.i, f.next.r, md(f.next.d), false);
   h += '<p class="fc-foot">'+(f.active?'':'※ 첫 선정은 '+f.endLbl+' 기준 → '+f.nm+'월 적용. 지금은 예상(중간 현황)입니다. ')+'차량별 달성률 표의 🎯 칸이 집중개선 항목입니다.</p>';
   var it = f.active? f.active.i : f.next.i, okN = VEH.filter(function(v){return v.m[it].r>=100}).length, op = !!state.fco;
-  var sum = '<button type="button" class="fc-sum" data-fco="1" aria-expanded="'+op+'"><span class="fc-s1">🎯 집중개선 가점 <i>+'+FOCUS_PTS+'점</i></span><span class="fc-s2">'+(f.active?f.mo+'월':f.nm+'월(예상)')+' <b>'+M[it].name+'</b> · 차량 <b>'+okN+'/'+VEH.length+'</b> 달성</span><span class="fc-arr">'+(op?'접기 ▴':'자세히 ▾')+'</span></button>';
+  var sum = '<button type="button" class="fc-sum" data-fco="1" aria-expanded="'+op+'"><span class="fc-s1">🎯 집중개선 가점 <i>+'+FOCUS_PTS+'점</i></span><span class="fc-s2">'+(f.active?f.mo+'월':f.nm+'월'+(isFinal(f.next.d)?'(확정)':'(예상)'))+' <b>'+M[it].name+'</b> · 차량 <b>'+okN+'/'+VEH.length+'</b> 달성</span><span class="fc-arr">'+(op?'접기 ▴':'자세히 ▾')+'</span></button>';
   return '<div class="sec">'+sum+(op?'<div class="card fc" style="margin-top:8px">'+h+'</div>':'')+'</div>';
 }
 function viewVeh(){
@@ -1469,8 +1530,8 @@ function viewVeh(){
   var top = '<div class="sec"><h2>차량별 지표 <span>북서울 '+VEH.length+'대 · 기준일 '+md(SD.veh)+'</span></h2>'+
     bonusPanel(vFull, vNear, VEH.length, '대', BONUS_V, dV, '차량 지표 5개를 모두 100% 이상 달성하면')+'</div>'+focusCard();
   return top+'<div class="sec"><h2>차량별 달성률 <span>행을 누르면 상세</span></h2><div class="card heat">'+heatHead()+rows+'</div>'+
-    '<details class="vnote"><summary>ⓘ 지표 이름 설명</summary><p class="note">불필요=불필요출동률 · 발보율=서비스출동 발보율 · 25분↑=25분 초과율 · 체감=고객체감 출동시간 · 일괄=당사일괄 총시간</p></details></div>'+
-    '<div class="sec"><div class="card"><div class="vhead">'+v.no+'호 상세<span>'+v.lead+' 파트장 · 달성 '+okc(v)+'/5</span></div>'+note('veh:'+v.no,SD.veh)+bonusBox(v,BONUS_V,"")+(function(){var f=focusInfo(),fi=focusIdx(),r=v.m[fi].r;return '<div class="bbox'+(r>=100?' good':'')+'"><b>🎯 '+(f.active?f.mo+'월 집중개선: ':f.nm+'월 집중개선(예상): ')+M[fi].name+' '+fr(r)+'</b><span>'+FOCUS_BR+' 지사 최저 항목 · '+(f.active?f.endLbl+'에 100% 이상이면 +'+FOCUS_PTS+'점':f.endLbl+' 확정 후 '+f.nm+'월 말 100% 이상이면 +'+FOCUS_PTS+'점')+'</span></div>'})()+'<div class="mlist">'+detail+'</div></div></div>';
+    '<details class="vnote"><summary>ⓘ 지표 이름 설명</summary><p class="note">불필요=불필요출동률 · 발보율=서비스출동 발보율 · 25분↑=25분 초과율 · 체감=고객체감 출동시간 · 일괄=당사일괄 총시간</p></details>'+fcTable()+'</div>'+
+    '<div class="sec"><div class="card"><div class="vhead">'+v.no+'호 상세<span>'+v.lead+' 파트장 · 달성 '+okc(v)+'/5</span></div>'+note('veh:'+v.no,SD.veh)+bonusBox(v,BONUS_V,"")+fcBox(v.m,fcVeh(v),SD.veh)+(function(){var f=focusInfo(),fi=focusIdx(),r=v.m[fi].r;return '<div class="bbox'+(r>=100?' good':'')+'"><b>🎯 '+(f.active?f.mo+'월 집중개선: ':f.nm+'월 집중개선(예상): ')+M[fi].name+' '+fr(r)+'</b><span>'+FOCUS_BR+' 지사 최저 항목 · '+(f.active?f.endLbl+'에 100% 이상이면 +'+FOCUS_PTS+'점':f.endLbl+' 확정 후 '+f.nm+'월 말 100% 이상이면 +'+FOCUS_PTS+'점')+'</span></div>'})()+'<div class="mlist">'+detail+'</div></div></div>';
 }
 
 
@@ -2045,10 +2106,14 @@ function staleNote(){
 }
 
 /* 가점: 월말일 기준으로 개인목표(지표 5개)를 모두 100% 이상 달성하면 +2점 */
-var BONUS = 2, BONUS_V = 3, MONTH_END_LABEL = "10/31";
+var BONUS = 2, BONUS_V = 3;
+/* 월말 결산 — 자료 기준일의 달 말일이 판정일. 말일 자료가 들어오면 자동으로 '확정' 표시 */
+function dataME(d){ d = d || SD.ppl || SD.veh || kstDate(0); var y=+d.slice(0,4), m=+d.slice(5,7), ld=lastDay(y,m); return {y:y, m:m, ld:ld, lbl:m+'/'+ld, fin:+d.slice(8,10)===ld}; }
+function meLbl(){ return dataME().lbl; }
+function isFinal(d){ return dataME(d).fin; }
 function dday(){
-  var k = new Date(Date.now()+9*3600000);
-  return Math.round((Date.UTC(2026,9,31)-Date.UTC(k.getUTCFullYear(),k.getUTCMonth(),k.getUTCDate()))/86400000);
+  var e = dataME(), k = new Date(Date.now()+9*3600000);
+  return Math.round((Date.UTC(e.y,e.m-1,e.ld)-Date.UTC(k.getUTCFullYear(),k.getUTCMonth(),k.getUTCDate()))/86400000);
 }
 function bonusPanel(full, near, total, unit, pts, dd, rule){
   var dots = ''; for(var k=0;k<total;k++) dots += '<i class="'+(k<full?'on':k<full+near?'near':'')+'"></i>';
@@ -2056,18 +2121,19 @@ function bonusPanel(full, near, total, unit, pts, dd, rule){
     '<div class="bz-main">'+
       '<div class="bz-badge"><span>+'+pts+'</span><small>점</small></div>'+
       '<div class="bz-txt"><span class="bz-k">BONUS 가점 대상</span><b class="num">'+full+'<small>'+unit+' / '+total+unit+'</small></b><div class="bz-dots">'+dots+'</div></div>'+
-      '<div class="bz-dd"><span>월말 판정</span><b class="num">'+(dd>=0?'D-'+dd:'마감')+'</b><small>'+MONTH_END_LABEL+'</small></div>'+
+      '<div class="bz-dd'+(isFinal()?' fin':'')+'"><span>월말 판정</span><b class="num">'+(isFinal()?'확정':dd>=0?'D-'+dd:'마감')+'</b><small>'+meLbl()+'</small></div>'+
     '</div>'+
     '<div class="bz-near"><span class="bz-ic">↗</span><span><b class="num">'+near+unit+'</b>'+(unit==='대'?'가':'이')+' 1개만 더 달성하면 가점</span><span class="bz-sub">현재 4/5</span></div>'+
-    '<p class="bz-rule">'+rule+' +'+pts+'점 · 지금은 중간 현황</p>'+
+    '<p class="bz-rule">'+rule+' +'+pts+'점 · '+(isFinal()?meLbl()+' 월말 확정 결과':dd<0?meLbl()+' 월말 자료 대기 중':'지금은 중간 현황')+'</p>'+
   '</div>';
 }
 function rankText(p){return p.rank+'위'+(p.tied>1?' (공동 '+p.tied+'명)':'')}
 function bonusBox(p,pts,tail){
   var miss = [];
   p.m.forEach(function(c,i){ if(c.r<100) miss.push(M[i].name); });
-  if(!miss.length) return '<div class="bbox good"><b>가점 +'+pts+'점 대상</b><span>지표 5개 모두 100% 이상입니다.'+tail+'</span></div>';
-  return '<div class="bbox"><b>가점까지 '+miss.length+'개 남음</b><span>미달: '+miss.join(", ")+'</span></div>';
+  var fin = isFinal();
+  if(!miss.length) return '<div class="bbox good"><b>'+(fin?'🎉 '+meLbl()+' 확정 · 가점 +'+pts+'점':'가점 +'+pts+'점 대상')+'</b><span>지표 5개 모두 100% 이상입니다.'+(fin?'':tail)+'</span></div>';
+  return '<div class="bbox"><b>'+(fin?meLbl()+' 확정 · 미달 '+miss.length+'개':'가점까지 '+miss.length+'개 남음')+'</b><span>미달: '+miss.join(", ")+'</span></div>';
 }
 
 function viewPpl(){
@@ -2095,7 +2161,7 @@ function viewPpl(){
   }).join("");
   var sq = sel && pv && pv.p[sel.name], sb = sel ? badges(sel.name, sel) : [];
   var binfo = sel && (sb.length || sq) ? '<div class="pbadge">'+sb.map(function(x){return '<span>'+x[0]+' '+x[1]+'</span>'}).join('')+(sq?'<span class="pd">'+md(pv.d)+' 대비 달성 '+sq.ok+' → '+sel.ok+'개</span>':'')+'</div>' : '';
-  var detail = sel ? '<div class="card"><div class="vhead">'+sel.name+'<span>'+rankText(sel)+' · 달성 '+sel.ok+'/5 · 평균 '+sel.avg+'%</span></div>'+binfo+note('ppl:'+sel.name,SD.ppl)+bonusBox(sel,BONUS,' 월말('+MONTH_END_LABEL+')까지 유지하면 확정됩니다.')+'<div class="mlist">'+
+  var detail = sel ? '<div class="card"><div class="vhead">'+sel.name+'<span>'+rankText(sel)+' · 달성 '+sel.ok+'/5 · 평균 '+sel.avg+'%</span></div>'+binfo+note('ppl:'+sel.name,SD.ppl)+bonusBox(sel,BONUS,' 월말('+meLbl()+')까지 유지하면 확정됩니다.')+fcBox(sel.m,fcPpl(sel),SD.ppl)+'<div class="mlist">'+
     sel.m.map(function(c,i){return mrow(i,c,PPL.length+'명 중 · '+(c.r>=100?'달성':'미달'),1+PPL.filter(function(q){return q.m[i].r>c.r}).length)}).join("")+'</div></div>' : '';
   var d = dday();
   return '<div class="sec"><h2>개인별 지표 <span>북서울 '+all+'명 · 기준일 '+SD.ppl+'</span></h2>'+
@@ -2387,7 +2453,7 @@ var DUTY = {src:"북서울지사 근무 계획표", cars:["026호","027호","028
  "2026-08":[["CS파트장", "최문혁", "D D AJ AJ AJ AJ AJ D D AJ AJ AJ AJ AJ D D D AJ AJ AJ AJ D D AJ AJ AJ AJ AJ D D AJ"], ["CS파트장", "이재식", "D D AJ / AJ AJ AJ D D AJ AJ AJ AJ AJ D D D AJ AJ AJ AJ D D AJ AJ AJ AJ AJ D D AJ"], ["026호", "용승우", "D D / A A A B B B D A B D A A A A B D D A D A A D B B D B B D"], ["026호", "고혁진", "A B D D A A B B B D D A A B D D / A A A B B B D A A B B B D D"], ["026호", "윤기한", "A B / / D A D A A B B D D A A A B B D D A A A A / D D B B D D"], ["027호", "주상덕", "A A D D / B B D D A A A B B B D A A A B D A A B B D B D A A B"], ["027호", "유영민", "/ / A A A B B B D A A A B B D B B D* D A* A B D D A B D B D A A"], ["027호", "김민석", "B B B D D A A A A D D / A A B B B D A A B B B D D A A D A B D"], ["028호", "김태건", "A A B B B D D A A B B B D D A D D B* B D* D A A B B B D D A A B"], ["028호", "김지원", "/ / A A D D A A B B B D A A B B D A B D D A D A A D D A A B B"], ["028호", "양심영", "B D A B B D A A D B B B D A A D D / / A A A A B D A A A D B B"], ["127호", "박수안", "D A B B B D A D D / / / A B D A A A B B B D D A B B D A A B B"], ["127호", "권재원", "B D B* D* B B D D A A A B B D B B B D A A A B B D D A A A D A A"], ["127호", "김민수", "D A A A A B D D A A B B B D D A A A B B B D B B D D A B B D A"], ["160호", "김동현", "A G G G G G G D D G G G G G D D D G G G G D D A A A B B B D A"], ["160호", "이명섭", "B B D* A* A A A B B D D A A B B D D / A B* B B D D A B B D D A A"], ["160호", "남현준", "D A A B* B B B D D A A A B D A A A B B B D D B B B D A A D D /"]],
  "2026-09":[["CS파트장", "최문혁", "AJ AJ AJ AJ D D G G AJ AJ AJ D D AJ AJ AJ AJ AJ D D AJ AJ AJ D D D D AJ AJ AJ"], ["CS파트장", "이재식", "AJ AJ AJ AJ D D AJ AJ AJ AJ AJ D D AJ AJ AJ AJ AJ D D AJ AJ AJ D D D D AJ G G"], ["026호", "용승우", "B B D A B B D D A A D D A A A B D A A B B B D D A A A B B D"], ["026호", "고혁진", "A A A B D* D A A B B B D D A A B B D D A D B D B D B D A A B*"], ["027호", "주상덕", "D D A A B B B D A A D D / A B B B D D A A A B B D B B B* D* A"], ["027호", "유영민", "A* B D A A B B D A* A A B B D D A B B B D A A B* B* D D / A A A*"], ["027호", "김민석", "D* A B B B D D A B* B B B D D A A A B B* D A A B B B D A D D A"], ["028호", "김태건", "B D B D D A B B B D D A A B B B D D A A B B B D D A A B B B"], ["028호", "김지원", "B D A A A B B B D D A A A B B B D D A A A B B D A D D / A B"], ["028호", "양심영", "B* D A A A A D D / / A A A* B B D A A D B B D A* A* B D D A B B"], ["127호", "박수안", "D A D D / A A A / B B D A A D A B B B D D A A A B B B D A* A"], ["127호", "권재원", "D A A B D B B B D A A A B B D D A A A* B B D D A A A B B D D"], ["127호", "김민수", "A B D D A A A B B B D A B* B D D A A B B B D A D D A A B B D"], ["160호", "김동현", "A A B B B D D A A A B B B D A A A B B B D D A A A D D A A A*"], ["160호", "이명섭", "A B B B D D A A A B B B D D A A B B D A A B D D A A A A B D"], ["160호", "남현준", "B B B D A A A B B D A D D A B D D A A D D A A A B B B D G G"]],
  "2026-10":[["CS파트장", "최문혁", "AJ AJ D D D AJ AJ AJ D D D AJ AJ AJ AJ AJ D D AJ AJ AJ AJ AJ D D AJ AJ AJ AJ AJ D"], ["CS파트장", "이재식", "AJ AJ D D D AJ AJ AJ D D D AJ AJ AJ AJ AJ D D AJ AJ AJ AJ AJ D D AJ AJ AJ AJ AJ D"], ["026호", "용승우", "A A A B D D A A D D A B D* A* A A A B B D A A D D B B B D A A A"], ["026호", "고혁진", "B D D A D A B B B D B D D A D D A A A B B B D A B B D A A A A"], ["026호", "김유건", "A A D B D A* A A D D A G G D A A A B B D K K K D B B B D A A D"], ["027호", "주상덕", "A A D D A A D B B B D D A B B B D A A A B B B D A A A B B D D"], ["027호", "유영민", "B B B D D A A A B B D A A D A A D A A A B B B D D A A D A B D"], ["027호", "김민석", "A A D D B B B D A A D G G B B D A A A B D A A D A B D D A A A"], ["028호", "김태건", "D D A A B B B D D A A B B B D D / / B B B B D A A B B B D D A"], ["028호", "김지원", "D D A A B B D D A A B B B D A A D D B B D A A A A G G G G G D"], ["028호", "양심영", "B D A A A D A A A D D A A A B B B D / D D / A B B D A A B B B"], ["127호", "박수안", "D B B B D D A A A B B D A D* A B B B D A A D B B D D A A B* B B"], ["127호", "권재원", "A A A B B B D D A A A B B B D A A D D / / / / A A A B B B D B"], ["127호", "김민수", "B B D A A D P B B D A A D A B B B D A B B D A D D A A A D B B"], ["160호", "김동현", "D B B B D A A A D D / A A B D B B B D A A A B B B B D A A A D"], ["160호", "이명섭", "B B B D A A B B D B B B D A A A D B B P A A A A D A B B D A D"], ["160호", "남현준", "A A D D A B B B D A A A B* D B D A A D A A B B B D D B B D* D A"]],
- "2026-11":[["CS파트장", "최문혁", "D A G G G G D D A A A A A D D AJ AJ AJ AJ AJ D D AJ AJ AJ AJ AJ D D AJ"], ["CS파트장", "이재식", "D AJ AJ AJ AJ AJ D D AJ AJ AJ AJ AJ D D A A A A A D D A A A A A D D A"], ["026호", "용승우", "A D D / A A B B D A A A B B B D A A A D D B B B D D A A B B"], ["026호", "고혁진", "B B D A A B D A A A B B B D D A A B B B D A A A D B B D D A"], ["026호", "김유건", "A B B D G A B B D A A A D B B D A A A D D B B B D D A A B B"], ["027호", "주상덕", "/ A A A B B B D A A A B B D D A A A A D D / A B B B D A A B"], ["027호", "유영민", "A B B D A A A B B B D A A B D D B D A A A B D A A A A B D D"], ["027호", "김민석", "B B B D A A B B B D A A A B B B D D A A B B D D A A A B D D"], ["028호", "김태건", "A B B B D D A A B D B B D A A B B B D D A A B B B D D A A B"], ["028호", "김지원", "A G G G G G D A G G G G A A D A A A B B B D D A A B B D D A"], ["028호", "양심영", "D A A B B B D D A A A B B D A A B B D A A D B B B D D A A A"], ["127호", "박수안", "D A A B B D A A A B B B D D A D A B B B D A A D B B D D B D"], ["127호", "권재원", "B B D A A A B B D A A A D A A B D D A A B B B D D A A B B D"], ["127호", "김민수", "B D A A B D A D B B B D A A B B D A D D A A A B B D A A B B"], ["160호", "김동현", "D A A A B B D A B B D A A D D A B D B B D D A A A B B D A B"], ["160호", "이명섭", "J J J J J D D / / / / / / A A B B B D A A A B D D A B B D A"], ["160호", "남현준", "A A B B D A A D A K K K B B B D D A B B B D D A A A B D A A"]]
+ "2026-11":[["CS파트장", "최문혁", "D A G G G G D D A A A A A D D AJ AJ AJ AJ AJ D D AJ AJ AJ AJ AJ D D AJ"], ["CS파트장", "이재식", "D AJ AJ AJ AJ AJ D D AJ AJ AJ AJ AJ D D A A A A A D D A A A A A D D A"], ["026호", "용승우", "A* D* D* / A A B B D A A A B B B D A A A D* D* B B B D D A A B B"], ["026호", "고혁진", "B B D A A B D A A A B B B D D* A A B B B D A A A D B B D D A"], ["026호", "김유건", "A B B D G A B B D A A A D B B D A A A D D B B B D D A A B B"], ["027호", "주상덕", "/ A A A B B B D A A A B B D D A A A A* D* D* / A B B B D A A B"], ["027호", "유영민", "A B B D A A A B B B D A A B D D B D A A A B D A A A A B D D"], ["027호", "김민석", "B B B D A A B B B D A A A B B B D D A A B B D D A A A B D D"], ["028호", "김태건", "A B B B D D A A B D* B B D A A B B B D D A A B B B D D A A B"], ["028호", "김지원", "A G G G G G D A G G G G A A D A A A B B B D D A A B B D* D* A"], ["028호", "양심영", "D A A B B B D D A A A B B D A A B B D A A* D* B* B B D* D* A A A"], ["127호", "박수안", "D A A B B D A A A B B B D D A D A B B B D A A D B B D D B D"], ["127호", "권재원", "B B D A A A B B D A A A D A A B D D A A B B B D D A A B B D"], ["127호", "김민수", "B D A A B D A* D* B B B D A A B B D A D* D* A A A B B D A A B B"], ["160호", "김동현", "D* A A A B B D A B B D A A* D* D* A B D B B D D A A A B B D A B"], ["160호", "이명섭", "J J J J J D D / / / / / / A A B B B D A A A B D D A B B D A"], ["160호", "남현준", "A A B B D A A D A* K K K B B B D D A B B B D D A A A B D A A"]]
 }};
 /*DUTY_END*/
 
@@ -2634,6 +2700,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-23e", date:"10/23", title:"월말 예상 · 결산 자동화 · 11월 근무표", tabs:["veh","ppl","duty","home"], items:["차량별·개인별 — 📈 월말 예상 달성률(추세 참고용) · 미달 위험 항목 표시","월말 결산 자동화 — 말일 자료가 들어오면 가점·집중개선 항목 '확정' 표시, D-day는 다음 달로 자동 전환","11월 근무표 반영 (근무 계획표 11/1~11/30)","관리자 접속 현황 — 주간 요약(지난주 대비) · 보고용 복사"]},
  {id:"2026-10-23d", date:"10/23", title:"미응답 알림 공유 기능", tabs:["cs"], items:["미응답 알림 — 단톡방 전체 알림 보내기 · 근무자별 카톡 보내기(목록+문자 예시) · 고객별 연락 체크","관리자(최문혁·이재식)는 평가 대상 제외 — 미응답 알림·사원별 응답·칭찬 게시판·배지에서 뺌"]},
  {id:"2026-10-23c", date:"10/23", title:"고객체감 10/23 반영", tabs:["cs"], items:["고객체감 10/1~10/23 기준 업데이트 (발송 151건 · 응답 47건 · 응답률 31.1%)","김상훈 2건 신규 응답(10점·칭찬) · 10/23 신규 발송 9건"]},
  {id:"2026-10-23b", date:"10/23", title:"운전성향 10/23 반영", tabs:["drv"], items:["운전성향 10/23 기준 업데이트 — 양호 14명 · 주의 0 · 위험 1명(용승우 GPS 소명 예정)","모범: 김유건 · 남현준 · 김동현"]},
@@ -2873,7 +2940,7 @@ function briefStrip(){
   var d0=dutyOn(t), d1=dutyOn(tm);
   if(d0){ var my0=dt(t), my1=d1?dt(tm):null;
     C.push(card('duty','data-brfo="1"','오늘 '+md2(t)+'('+w[new Date(t+"T00:00:00+09:00").getDay()]+')', my0||('주간 '+d0.day.length), my0?(my1?'내일은 '+my1:'근무 명단 보기'):'야간 '+d0.night.length+' · 휴무 '+d0.off.length)); }
-  var dd = dday(); if(dd>=0) C.push(card('dday','data-brfo="1"','월말 판정', 'D-'+dd, '1개만 더 '+PPL.filter(function(x){return x.ok===4}).length+'명'));
+  var dd = dday(); if(isFinal()) C.push(card('dday','data-goto="ppl"','월말 결산', '확정', meLbl()+' · 가점 '+PPL.filter(function(x){return x.ok===5}).length+'명')); else if(dd>=0) C.push(card('dday','data-brfo="1"','월말 판정', 'D-'+dd, '1개만 더 '+PPL.filter(function(x){return x.ok===4}).length+'명'));
   var ck=Object.keys(CSD).sort(), k0=ck[ck.length-1], a=CSD[k0];
   var cy=+k0.slice(0,4), ref=Date.UTC(cy,+k0.slice(5,7)-1,+k0.slice(8));
   var nr = CSR.filter(function(r){ return r[5]==null && r[1]==="서비스" && CS_MGR.indexOf(r[0])<0 && (ref-Date.UTC(cy,+r[2].slice(0,2)-1,+r[2].slice(3)))/86400000>=3; }), myNr=nr.filter(function(r){return r[0]===nm}).length;
@@ -2945,10 +3012,11 @@ function brief(){
   /* 4) 월말 D-day */
   var dd2 = dday(), near = PPL.filter(function(x){return x.ok===4}), vnear = VEH.filter(function(v){return okc(v)===4});
   var nearTxt = near.map(function(x){ var mi=x.m.findIndex(function(c){return c.r<100}); return x.name+'('+M[mi].short+' '+fr(x.m[mi].r)+')'; });
-  if(dd2>=0) h += '<div class="bf-dday"><div class="bf-dd"><b class="num">D-'+dd2+'</b><small>'+MONTH_END_LABEL+' 월말 판정</small></div><div class="bf-dl">'+
-    '<div>🏆 개인 +'+BONUS+'점 확정권 <b>'+PPL.filter(function(x){return x.ok===5}).length+'명</b></div>'+
-    (near.length?'<div>⚡ 1개만 더! <b>'+nearTxt.join(', ')+'</b></div>':'')+
-    (vnear.length?'<div>🚓 차량 1개만 더 <b>'+vnear.map(function(v){return v.no+'호'}).join(', ')+'</b> (+'+BONUS_V+'점)</div>':'')+'</div></div>';
+  var fin2 = isFinal();
+  if(dd2>=0 || fin2) h += '<div class="bf-dday"><div class="bf-dd"><b class="num">'+(fin2?'확정':'D-'+dd2)+'</b><small>'+meLbl()+(fin2?' 월말 결산':' 월말 판정')+'</small></div><div class="bf-dl">'+
+    '<div>🏆 개인 +'+BONUS+'점 '+(fin2?'확정':'확정권')+' <b>'+PPL.filter(function(x){return x.ok===5}).length+'명</b></div>'+
+    (near.length?'<div>'+(fin2?'😢 아깝게 4/5 ':'⚡ 1개만 더! ')+'<b>'+nearTxt.join(', ')+'</b></div>':'')+
+    (vnear.length?'<div>🚓 차량 '+(fin2?'아깝게 4/5 ':'1개만 더 ')+'<b>'+vnear.map(function(v){return v.no+'호'}).join(', ')+'</b> (+'+BONUS_V+'점)</div>':'')+'</div></div>';
   var hr = new Date(Date.now()+9*3600000).getUTCHours(), gp = hr<5?['야간 근무 힘내세요','🌙','늦은 시간까지 고생 많으세요']:hr<11?['좋은 아침이에요','👋','오늘 꼭 볼 것만 한 화면에 모았어요']:hr<14?['점심 맛있게 드세요','🍚','오후 일정 전에 한눈에 확인하세요']:hr<18?['좋은 오후예요','☕','오후도 안전 운행하세요']:hr<22?['오늘도 수고 많으셨어요','🌆','오늘 하루 마무리 확인해 보세요']:['야간 근무 힘내세요','🌙','늦은 시간까지 고생 많으세요'], greet = gp[0];
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?esc2(nm2)+'님, ':'')+greet+' <i class="wv">'+gp[1]+'</i></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
@@ -3329,6 +3397,30 @@ function loadAdmin(p){
     pin = p; s("bsr_pin", p); adminView(j.rows||[]);
   }).catch(function(){ pinView('불러오지 못했습니다. 잠시 후 다시 시도해 주세요.'); });
 }
+/* 주간 요약 — 최근 7일 vs 그 전 7일 */
+function vlWeek(rows, now){
+  var w0 = now-7*86400000, w1 = now-14*86400000, A = rows.filter(function(r){return r[0]>=w0}), B = rows.filter(function(r){return r[0]>=w1 && r[0]<w0});
+  function uniq(rs){ var o={}; rs.forEach(function(r){o[r[1]]=1}); return Object.keys(o).length; }
+  var days = {}; A.forEach(function(r){ var d=kst(r[0]).day; (days[r[1]]=days[r[1]]||{})[d]=1; });
+  var dn = Object.keys(days).map(function(n){return [n, Object.keys(days[n]).length]}).sort(function(a,b){return b[1]-a[1] || a[0].localeCompare(b[0],"ko")});
+  var tab = {}; A.forEach(function(r){ var t=r[2]||"앱 열기"; if(t==="앱 열기") return; tab[t]=(tab[t]||0)+1; });
+  var tk = Object.keys(tab).sort(function(a,b){return tab[b]-tab[a]}).slice(0,5);
+  var u0 = uniq(A), u1 = uniq(B), du = u0-u1, none = ALL.filter(function(n){return !days[n]});
+  var fr0 = kst(w0+86400000).md, to0 = kst(now).md;
+  VL_WEEK_TXT = '[북서울 Report 주간 접속 요약 · '+fr0+'~'+to0+']\n접속 인원 '+u0+'명 / 직원 '+ALL.length+'명 (지난주 '+u1+'명)\n접속 건수 '+A.length+'건 (지난주 '+B.length+'건)\n'+
+    (dn.length?'\n자주 본 사람: '+dn.slice(0,5).map(function(x){return x[0]+' '+x[1]+'일'}).join(', '):'')+
+    (tk.length?'\n많이 본 화면: '+tk.map(function(t){return t+' '+tab[t]}).join(', '):'')+
+    (none.length?'\n이번 주 미접속: '+none.join(', '):'\n이번 주 전원 접속 👍');
+  return '<div class="vl-card vlw"><h3>📅 주간 요약<small>'+fr0+' ~ '+to0+'</small></h3>'+
+    '<div class="vlw-k"><div><span>접속 인원</span><b>'+u0+'<small>/'+ALL.length+'</small></b><em class="'+(du>=0?'up':'dn')+'">지난주 '+u1+'명 '+(du>0?'▲'+du:du<0?'▼'+(-du):'')+'</em></div><div><span>접속 건수</span><b>'+A.length+'</b><em>지난주 '+B.length+'건</em></div></div>'+
+    (tk.length?'<div class="vlw-t"><b>많이 본 화면</b>'+tk.map(function(t){return '<span>'+esc(t)+' <i>'+tab[t]+'</i></span>'}).join('')+'</div>':'')+
+    '<div class="vlw-t"><b>자주 본 사람 (접속 일수)</b>'+(dn.length?dn.slice(0,8).map(function(x){return '<span>'+esc(x[0])+' <i>'+x[1]+'일</i></span>'}).join(''):'<span>기록 없음</span>')+'</div>'+
+    '<div class="vlw-t ng"><b>이번 주 미접속</b>'+(none.length?none.map(function(n){return '<span>'+esc(n)+'</span>'}).join(''):'<span>없음 👍</span>')+'</div>'+
+    '<button type="button" class="vlw-cp" data-vlwcp="1">📋 주간 요약 복사 (보고용)</button></div>';
+}
+var VL_WEEK_TXT = "";
+document.addEventListener("click", function(e){ if(!e.target.closest("[data-vlwcp]")) return; var b=e.target.closest("[data-vlwcp]"); var ok=function(){ b.textContent="✅ 복사됐어요"; setTimeout(function(){b.textContent="📋 주간 요약 복사 (보고용)"},1800); };
+  try{ navigator.clipboard.writeText(VL_WEEK_TXT).then(ok,fb); }catch(_){ fb(); } function fb(){ var t=document.createElement("textarea"); t.value=VL_WEEK_TXT; document.body.appendChild(t); t.select(); try{document.execCommand("copy"); ok();}catch(_){} t.remove(); } });
 function adminView(rows){
   rows = rows.filter(function(r){return r && r[0]}).sort(function(a,b){return b[0]-a[0]});
   var now = Date.now(), today = kst(now).day, days = [];
@@ -3340,6 +3432,7 @@ function adminView(rows){
   var tCnt = Object.keys(tSet).length, miss = ALL.filter(function(n){return !tSet[n]});
   var h = '<div class="vl-hero"><button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button><small>ADMIN · '+kst(now).md+' '+kst(now).hm+'</small><h2>🔒 접속 현황</h2><p>직원 '+ALL.length+'명 기준 · 최근 7일</p></div>';
   h += '<div class="vl-k"><div><span>오늘 접속</span><b>'+tCnt+'</b></div><div class="ng"><span>오늘 미접속</span><b>'+miss.length+'</b></div><div><span>최근 7일</span><b>'+Object.keys(wk).length+'</b></div></div>';
+  h += vlWeek(rows, now);
   h += '<div class="vl-card"><h3>오늘 미접속<small>'+kst(now).md+'</small></h3>'+(miss.length?miss.map(function(n){ var l=last[n]; return '<div class="vl-row"><span class="vl-dot off"></span>'+n+'<em>'+(l?'마지막 '+kst(l).md+' '+kst(l).hm:'기록 없음')+'</em></div>'; }).join(''):'<div class="vl-row">모두 접속했습니다 👍</div>')+'</div>';
   var byDay = {}; rows.forEach(function(r){ var d=kst(r[0]).day; (byDay[d]=byDay[d]||[]).push(r); });
   var dKeys = Object.keys(byDay).sort().reverse();
