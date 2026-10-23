@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261023014339">
+<meta name="bsr-ver" content="20261023050700">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3017,7 +3017,15 @@ function brief(){
     '<div>🏆 개인 +'+BONUS+'점 '+(fin2?'확정':'확정권')+' <b>'+PPL.filter(function(x){return x.ok===5}).length+'명</b></div>'+
     (near.length?'<div>'+(fin2?'😢 아깝게 4/5 ':'⚡ 1개만 더! ')+'<b>'+nearTxt.join(', ')+'</b></div>':'')+
     (vnear.length?'<div>🚓 차량 '+(fin2?'아깝게 4/5 ':'1개만 더 ')+'<b>'+vnear.map(function(v){return v.no+'호'}).join(', ')+'</b> (+'+BONUS_V+'점)</div>':'')+'</div></div>';
-  var hr = new Date(Date.now()+9*3600000).getUTCHours(), gp = hr<5?['야간 근무 힘내세요','🌙','늦은 시간까지 고생 많으세요']:hr<11?['좋은 아침이에요','👋','오늘 꼭 볼 것만 한 화면에 모았어요']:hr<14?['점심 맛있게 드세요','🍚','오후 일정 전에 한눈에 확인하세요']:hr<18?['좋은 오후예요','☕','오후도 안전 운행하세요']:hr<22?['오늘도 수고 많으셨어요','🌆','오늘 하루 마무리 확인해 보세요']:['야간 근무 힘내세요','🌙','늦은 시간까지 고생 많으세요'], greet = gp[0];
+  var hr = new Date(Date.now()+9*3600000).getUTCHours(), gp = (function(){ var k=new Date(Date.now()+9*3600000), t=k.getUTCHours()+k.getUTCMinutes()/60;
+      return t<5?['야간 근무 힘내세요','🌙','늦은 시간까지 정말 고생 많으세요']:
+        t<10?['좋은 아침이에요','☀️','오늘 꼭 볼 것만 한 화면에 모았어요']:
+        t<12?['오늘도 힘내세요','💪','오전 현황을 한눈에 확인하세요']:
+        t<13.5?['점심 맛있게 드세요','🍚','식사 후 오후 일정도 확인해 보세요']:
+        t<17?['오후도 힘내세요','☕','남은 하루도 안전 운행하세요']:
+        t<19?['오늘도 고생 많으셨어요','🌇','퇴근 전 오늘 현황 마무리해 보세요']:
+        t<22?['편안한 저녁 보내세요','🌙','야간 근무자분들은 안전 운행하세요']:
+             ['야간 근무 힘내세요','🌙','늦은 시간까지 정말 고생 많으세요']; })(), greet = gp[0];
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?esc2(nm2)+'님, ':'')+greet+' <i class="wv">'+gp[1]+'</i></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
   return '<div class="sec">'+hero+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div><div class="sec"><h2 style="font-size:14px">🚀 바로가기</h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
