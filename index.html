@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261023143723">
+<meta name="bsr-ver" content="20261023144852">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2425,13 +2425,13 @@ function viewEvalBranch(){
   return '<div class="sec"><h2>지사 평가 <span>근무자 가점·감점 · 월 20점 기준</span></h2>'+
     '<div class="chips" role="group" aria-label="기간">'+chips+'</div>'+podium+
     '<div class="kpsum"><span>평균 <b class="num">'+(Math.round(avg*10)/10)+'</b>점</span><i></i><span>반영 <b class="num">'+keys.map(function(k){return +k.slice(5)}).join("·")+'</b>월</span><i></i><span>대상 <b class="num">'+list.length+'</b>명</span></div></div>'+
-    '<div class="sec"><h2>순위 <span>누르면 월별 내역</span></h2><div class="card">'+rows+'</div></div>'+
-    '<div class="sec"><div class="card"><div class="vhead">'+sel.n+' · '+sel.rk+'위<span>'+bHo(sel.n)+' · '+(per==="sum"?H.h+' 누계 ':'')+(Math.round(sel.t*10)/10)+'점</span></div>'+det+'</div>'+
-    '<details class="crit"><summary>가·감점 기준 보기</summary><ul>'+
+    '<div class="sec">'+'<details class="crit"><summary>가·감점 기준 보기</summary><ul>'+
     '<li>지각 -1 · 무단결근 -5 · 차량사고 가해 -5 / 피해 -2 · 자차사고 -3</li><li>차량관리 부실 -2 · 클레임 VOC 원인 제공자 -3 · 복장불량 -1</li>'+
     '<li>캠페인 개인목표 달성자 +2 · 대표이사/사외/사업부 표창 +5/+3/+2</li><li>CS 기본 미준수·관리자 지시 불이행 -2 · 긴급출동테스트 80점 미만 -2 / 이상 +2</li>'+
     '<li>수명업무 달성률 -1 · 자격증(사업팀 평가 기준) +2</li><li>서비스 지표 ALL 만점(5항목) +2 (26년 9월부터 +3) · 지사 최저 부진 1항목 목표 달성 차량 +2</li>'+
-    '<li>운전습관 개선상 +1 · 필수 교육 미수료 -1 · 근무준비상태/QR 미실시 -1</li><li>차량연동 책임제: 해당자 100%, 팀원 50% 반영 (홀수 반내림)</li></ul></details></div>';
+    '<li>운전습관 개선상 +1 · 필수 교육 미수료 -1 · 근무준비상태/QR 미실시 -1</li><li>차량연동 책임제: 해당자 100%, 팀원 50% 반영 (홀수 반내림)</li></ul></details>'+'<h2>순위 <span>누르면 월별 내역</span></h2><div class="card">'+rows+'</div></div>'+
+    '<div class="sec"><div class="card"><div class="vhead">'+sel.n+' · '+sel.rk+'위<span>'+bHo(sel.n)+' · '+(per==="sum"?H.h+' 누계 ':'')+(Math.round(sel.t*10)/10)+'점</span></div>'+det+'</div>'+
+    '</div>';
 }
 
 function evalSwitch(){
