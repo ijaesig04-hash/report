@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261023135137">
+<meta name="bsr-ver" content="20261023141235">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -799,6 +799,7 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .mg-s{border:1px solid #e2e8f0;border-radius:14px;padding:10px 12px;margin:8px 0}.mg-h{display:flex;justify-content:space-between;align-items:center}.mg-h b{font-size:14px}.mg-h small{font-weight:500;color:#64748b;font-size:11px}.mg-h span{font-weight:900;font-size:16px;color:#15803d}.mg-h span.ng{color:#b91c1c}
 .mg-ok{margin:6px 0 0;font-size:12.5px;color:#64748b}.mg-l{font-size:12.5px;margin-top:6px;display:flex;flex-direction:column;gap:3px}.mg-l em{font-style:normal;color:#b91c1c;font-weight:700}
 .mg-b{margin-top:8px;border:1px solid #c7d2fe;background:#eef2ff;color:#3730a3;border-radius:10px;font:700 12.5px "Noto Sans KR",sans-serif;padding:7px 12px;cursor:pointer}
+.mvp-n{margin:6px 0 0;font-size:11px;color:#92400e}
 .bq{flex:0 0 auto;width:118px;height:100px;scroll-snap-align:start;text-align:left;border:0;border-radius:16px;padding:11px 12px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;color:#fff;box-shadow:0 6px 14px rgba(15,23,42,.14);font-family:"Noto Sans KR",sans-serif;position:relative;overflow:hidden}
 .bq::after{content:"";position:absolute;right:-24px;top:-24px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.12)}
 .bq small{font-size:11px;font-weight:700;opacity:.88;white-space:nowrap}
@@ -2758,7 +2759,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
- {id:"2026-10-23i", date:"10/23", title:"MVP · 관리자 할 일", tabs:["home"], items:["🏅 이달의 MVP — 지표·칭찬·응답률·운전성향 종합 점수 TOP3 (월말 확정)","✅ 관리자 오늘 할 일 — 공지 미확인·다발보 미조치·미응답 미연락·앱 미설치 한 화면","📴 인터넷이 끊기면 '오프라인 · 저장본' 표시"]},
+ {id:"2026-10-23i", date:"10/23", title:"MVP · 관리자 할 일", tabs:["home"], items:["🏅 이달의 MVP — 개인별 평가 기준 TOP3 (사업팀 월별 평가는 익월 반영)","✅ 관리자 오늘 할 일 — 공지 미확인·다발보 미조치·미응답 미연락·앱 미설치 한 화면","📴 인터넷이 끊기면 '오프라인 · 저장본' 표시"]},
  {id:"2026-10-23h", date:"10/23", title:"빠른 열기 · 칭찬 알림 외", tabs:["home","ppl","cs"], items:["⚡ 빠른 열기 — 저장된 화면을 바로 띄우고 뒤에서 최신화 (데이터 절약)","🎉 내 고객 칭찬이 들어오면 브리핑 맨 위에 알림","미응답 '연락 체크'가 모든 폰에 공유 (누가 연락했는지 표시)","개인별 상세 — 코멘트·가점·월말 예상은 눌러서 펼치기","관리자 — 📲 설치 현황(설치/주소로만/기록 없음) · 미설치자 안내 복사"]},
  {id:"2026-10-23g", date:"10/23", title:"앱 설치 버튼", tabs:["home"], items:["주소로 열면 아래에 '📲 앱 설치' 띠 표시 — 누르면 설치(아이폰·삼성 인터넷은 설치 방법 안내)","카톡에서 링크를 누르면 크롬·사파리로 자동 이동"]},
  {id:"2026-10-23f", date:"10/23", title:"공지 · 내 할 일 · 결산 보고서", tabs:["home","alm","veh","ppl"], items:["📢 공지 — 관리자가 앱에서 공지 작성 → 앱 맨 위에 표시, '확인했어요'로 읽음 현황 확인","👤 내 할 일 — 브리핑에 이번 주 근무 · 내 미응답 · 내 월말 예상 · 운전성향 추이 (파트장은 직원 화면 미리보기)","✍️ 다발보 조치 입력 — 고객처별로 조치 내용을 앱에서 바로 저장","🧾 월말 결산 보고서(메뉴) · 📈 차량·개인 상세에 기준일별 추이 그래프"]},
@@ -3177,28 +3178,25 @@ function przBanner(){
 }
 document.addEventListener("click", function(e){ var b=e.target.closest("[data-przok]"); if(!b) return; var s=przSeen().concat(b.dataset.przok.split('\n')); try{ localStorage.setItem("bsr_prz_seen", JSON.stringify(s.slice(-300))); }catch(_){} render(); });
 
-/* ===== 🏅 이달의 MVP — 기준(점수)은 여기서 수정 ===== */
-var MVP_RULE = {ok:10, avg:0.1, praise:3, resp:0.1, drvGood:5, drvBad:-10};
+/* ===== 🏅 이달의 MVP — 개인별 평가 기준(달성 지표 수 → 평균 달성률). 사업팀 월별 평가는 익월에 받아 확정 반영 ===== */
 function mvpList(){
-  var dk = Object.keys(DRIVE.snaps).sort().pop(), dl = DRIVE.snaps[dk]||[], R = MVP_RULE;
-  var pc = {}; CSR.forEach(function(r){ if(r[6]==="칭찬") pc[r[0]]=(pc[r[0]]||0)+1; });
-  return PPL.filter(function(p){return CS_MGR.indexOf(p.name)<0}).map(function(p){
-    var c = csStat(p.name), rate = c.sent ? c.resp/c.sent*100 : 0, d = dl.filter(function(r){return r[0]===p.name})[0], dj = d?d[3]:"";
-    var sc = p.ok*R.ok + Math.min(200,p.avg)*R.avg + (pc[p.name]||0)*R.praise + rate*R.resp + (dj==="양호"?R.drvGood:dj==="위험"?R.drvBad:0);
-    return {name:p.name, no:p.no, sc:Math.round(sc*10)/10, ok:p.ok, avg:p.avg, pr:pc[p.name]||0, rate:Math.round(rate), dj:dj};
-  }).sort(function(a,b){return b.sc-a.sc});
+  var L = PPL.filter(function(p){return CS_MGR.indexOf(p.name)<0}).slice().sort(function(a,b){return b.ok-a.ok || b.avg-a.avg || a.name.localeCompare(b.name,"ko")});
+  var rk=0, last=null; L.forEach(function(p,i){ var k=p.ok+'|'+p.avg; if(k!==last){rk=i+1; last=k;} p.mr=rk; });
+  return L.map(function(p){ var miss=[]; p.m.forEach(function(c,i){ if(c.r<100) miss.push(M[i].short); }); return {name:p.name, no:p.no, rk:p.mr, ok:p.ok, avg:p.avg, miss:miss}; });
 }
 function mvpCard(){
-  var L = mvpList().slice(0,3); if(!L.length) return '';
-  var fin = isFinal(), e = dataME(), md = ['🥇','🥈','🥉'];
-  return '<div class="sec mvp"><div class="mvp-h"><b>🏅 '+e.m+'월 MVP '+(fin?'<i class="fin">확정</i>':'<i>중간 순위</i>')+'</b><button type="button" data-mvpi="1">기준 ⓘ</button></div>'+
-    L.map(function(x,i){ return '<div class="mvp-r r'+(i+1)+'"><span class="mvp-m">'+md[i]+'</span><b>'+x.name+'</b><small>'+x.no+'호</small><span class="mvp-d">지표 '+x.ok+'/5 · 칭찬 '+x.pr+' · 응답 '+x.rate+'%'+(x.dj?' · 운전 '+x.dj:'')+'</span><em class="num">'+x.sc+'</em></div>'; }).join('')+'</div>';
+  var L = mvpList(); if(!L.length) return '';
+  var top = L.filter(function(x){return x.rk<=3}).slice(0,4), fin = isFinal(), e = dataME(), md = {1:'🥇',2:'🥈',3:'🥉'};
+  return '<div class="sec mvp"><div class="mvp-h"><b>🏅 '+e.m+'월 MVP '+(fin?'<i class="fin">지표 확정</i>':'<i>중간 순위</i>')+'</b><button type="button" data-mvpi="1">전체 순위 ⓘ</button></div>'+
+    top.map(function(x){ return '<div class="mvp-r r'+x.rk+'"><span class="mvp-m">'+md[x.rk]+'</span><b>'+x.name+'</b><small>'+x.no+'호</small><span class="mvp-d">지표 '+x.ok+'/5 달성'+(x.miss.length?' · 미달 '+x.miss.join('·'):' 🏆')+'</span><em class="num">'+Math.round(x.avg)+'%</em></div>'; }).join('')+
+    '<p class="mvp-n">개인별 평가 기준(달성 지표 수 → 평균 달성률) · 기준일 '+md2s(SD.ppl)+' · 사업팀 월별 평가는 익월 자료로 최종 반영</p></div>';
 }
+function md2s(d){ return (+d.slice(5,7))+'/'+(+d.slice(8)); }
 function mvpInfo(){
-  var R = MVP_RULE, L = mvpList();
-  openSheet('<div class="xs-h"><b>🏅 MVP 점수 기준</b><button type="button" data-xs="close">✕</button></div>'+
-    '<p class="xs-p">지표 달성 1개당 <b>'+R.ok+'점</b> + 평균 달성률×'+R.avg+' + 칭찬 1건당 <b>'+R.praise+'점</b> + 고객체감 응답률×'+R.resp+' + 운전성향 양호 <b>+'+R.drvGood+'</b> / 위험 <b>'+R.drvBad+'</b><br>월말(말일 자료)에 확정 · 파트장 제외 · 기준은 파트장님 요청 시 변경</p>'+
-    '<table class="mvp-t"><tr><th>순위</th><th>이름</th><th>지표</th><th>칭찬</th><th>응답</th><th>운전</th><th>점수</th></tr>'+L.map(function(x,i){return '<tr><td>'+(i+1)+'</td><td>'+x.name+'</td><td>'+x.ok+'/5</td><td>'+x.pr+'</td><td>'+x.rate+'%</td><td>'+(x.dj||'-')+'</td><td><b>'+x.sc+'</b></td></tr>'}).join('')+'</table>');
+  var L = mvpList();
+  openSheet('<div class="xs-h"><b>🏅 MVP 순위 (개인별 평가 기준)</b><button type="button" data-xs="close">✕</button></div>'+
+    '<p class="xs-p">달성한 지표 수가 많은 순 → 같으면 평균 달성률(지표별 최대 200%) 높은 순 · 파트장 제외<br>최종 평가는 <b>사업팀 평가 + 지사 평가 = 종합 평가</b>이며, 사업팀 월별 평가는 익월에 받아 반영합니다.</p>'+
+    '<table class="mvp-t"><tr><th>순위</th><th>이름</th><th>차량</th><th>달성</th><th>평균</th></tr>'+L.map(function(x){return '<tr><td>'+x.rk+'</td><td>'+x.name+'</td><td>'+x.no+'호</td><td>'+x.ok+'/5</td><td><b>'+Math.round(x.avg)+'%</b></td></tr>'}).join('')+'</table>');
 }
 document.addEventListener("click", function(e){ if(e.target.closest("[data-mvpi]")) mvpInfo(); });
 /* ===== ✅ 관리자 오늘 할 일 — 공지 미확인 · 다발보 미조치 · 미응답 미연락 · 앱 미설치 ===== */
