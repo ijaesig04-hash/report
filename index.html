@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261023141235">
+<meta name="bsr-ver" content="20261023141953">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -800,6 +800,10 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .mg-ok{margin:6px 0 0;font-size:12.5px;color:#64748b}.mg-l{font-size:12.5px;margin-top:6px;display:flex;flex-direction:column;gap:3px}.mg-l em{font-style:normal;color:#b91c1c;font-weight:700}
 .mg-b{margin-top:8px;border:1px solid #c7d2fe;background:#eef2ff;color:#3730a3;border-radius:10px;font:700 12.5px "Noto Sans KR",sans-serif;padding:7px 12px;cursor:pointer}
 .mvp-n{margin:6px 0 0;font-size:11px;color:#92400e}
+.teb{display:flex;height:10px;border-radius:999px;overflow:hidden;margin:8px 0 4px;background:#f1f5f9}.teb i{display:block}
+.tel{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11.5px;color:#475569}.tel i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:3px}
+.teg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin-top:8px}.tei{background:#f8fafc;border-radius:8px;padding:4px 6px;display:flex;justify-content:space-between;gap:4px;font-size:11.5px}.tei small{color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tei.neg b{color:#b91c1c}
+.mvp-f{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;margin-top:8px;border:1px solid #fcd34d;background:#fffbeb;border-radius:12px;padding:8px 10px;text-align:left;cursor:pointer;font-family:inherit}.mvp-f b{font-size:13px;color:#78350f}.mvp-f span{font-size:12.5px;color:#0f172a;font-weight:700}.mvp-f small{font-size:11px;color:#b45309}
 .bq{flex:0 0 auto;width:118px;height:100px;scroll-snap-align:start;text-align:left;border:0;border-radius:16px;padding:11px 12px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;color:#fff;box-shadow:0 6px 14px rgba(15,23,42,.14);font-family:"Noto Sans KR",sans-serif;position:relative;overflow:hidden}
 .bq::after{content:"";position:absolute;right:-24px;top:-24px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.12)}
 .bq small{font-size:11px;font-weight:700;opacity:.88;white-space:nowrap}
@@ -2432,7 +2436,7 @@ function viewEvalBranch(){
 
 function evalSwitch(){
   var es = state.es || "team";
-  var L = [["team","사업팀 평가","사업팀 기준 점수표"],["branch","지사 평가","지사 자체 평가"],["total","종합 평가","두 평가를 합산"]];
+  var L = [["team","사업팀 평가","사업팀 기준 점수표"],["branch","지사 평가","지사 자체 평가"],["total","종합 평가","사업팀 80% + 지사 20"]];
   return '<div class="evsw" role="tablist" aria-label="평가 구분">'+L.map(function(l){
     return '<button type="button" role="tab" data-es="'+l[0]+'" aria-selected="'+(es===l[0])+'"><b>'+l[1]+'</b><small>'+l[2]+'</small></button>';
   }).join("")+'</div>';
@@ -2461,11 +2465,91 @@ function halfBanner(){
   var end = H.to.replace(".", "-")+"-30";
   return '<div class="hb"><div class="hb-t"><b>'+H.y+' '+H.h+' 평가</b><span>'+H.from+' ~ '+H.to+' · 반기별 고과 반영</span></div><div class="hb-steps">'+steps+'</div></div>';
 }
+
+/* ===== 사업팀 월별 평가 (사업팀 시트, 익월 수령) =====
+   종합 평가 = 사업팀 총점 × 80% + 지사 평가(20점) · rows: 이름 -> [사업팀 순위, 사업팀 총점, [항목 점수...]] */
+var TEVAL_W = 0.8;
+var TEVAL_ITEMS = [["불필요출동률","g1"],["서비스출동 발보율","g1"],["25분 초과율","g1"],["고객체감 출동시간","g1"],["금융사 출동시간","g1"],["출동료 청구","g1"],
+  ["고객체감","g2"],["응답률","g2"],["클레임","g2"],["VOC 30분내 접촉률","g3"],["24시간 초과","g3"],["기한내 처리율","g3"],["잠재불만 VOC","g3"],["차량사고","g4"],["안전사고","g4"],["가감점","g5"]];
+var TEVAL = {
+ "2026-06":{max:{"고객체감":20,"클레임":10}, rows:{
+  "용승우":[4,98.6,[4.5,7,3,4,7,0,20,7,10,5,0,4.7,1.4,15,10,0]],
+  "고혁진":[13,76.3,[4.5,7,3,4,7,0,0,4.7,10,5,0,4.7,1.4,15,10,0]],
+  "윤기한":[10,89.7,[4.5,7,3,3.6,7,0,19.5,0,10,5,0,4.7,1.4,15,10,-1]],
+  "주상덕":[3,98.7,[5,7,3,4,7,0,20,6.3,10,5,0,5,1.4,15,10,0]],
+  "유영민":[14,76.3,[5,7,3,4,7,0,0,3.9,10,5,0,5,1.4,15,10,0]],
+  "김민석":[11,87.5,[5,7,0.2,2.7,5.6,0,20,0.5,10,5,0,5,1.4,15,10,0]],
+  "김지원":[1,99.2,[5,7,3,4,7,0,20,7,10,5,0,4.8,1.4,15,10,0]],
+  "양심영":[5,97.8,[5,7,3,4,7,0,20,5.6,10,5,0,4.8,1.4,15,10,0]],
+  "김태건":[7,93.0,[5,7,3,4,7,0,20,2,10,4.7,0,4.8,1.4,15,10,0]],
+  "박수안":[6,97.7,[4.5,7,3,4,7,0,20,5.8,10,5,0,5,1.4,15,10,0]],
+  "김민수":[9,90.3,[4.5,7,3,4,3.3,0,20,2,10,5,0,5,1.4,15,10,0]],
+  "권재원":[2,98.9,[4.5,7,3,4,7,0,20,7,10,5,0,5,1.4,15,10,0]],
+  "김동현":[8,91.0,[3.8,6,3,4,2.4,0,20,5.6,10,5,0,4.8,1.4,15,10,0]],
+  "이명섭":[15,54.9,[3.8,6,0.1,3.1,5.4,0,20,0.5,10,5,0,4.8,1.4,-15,10,0]],
+  "남현준":[12,78.7,[3.8,6,0,0.7,1.3,0,20,0.9,10,4.9,0,4.8,1.4,15,10,0]]}},
+ "2026-07":{max:{"고객체감":25,"클레임":5}, rows:{
+  "용승우":[4,109.1,[5,5.8,3,4,7,0.6,35,7,5,5,0,4.7,2,15,10,0]],
+  "고혁진":[5,109.0,[5,5.8,3,4,7,0.6,35,7,5,4.9,0,4.7,2,15,10,0]],
+  "윤기한":[14,86.9,[5,5.8,0,3.7,3.9,0.6,25,2,5,4.1,0,4.7,2,15,10,0]],
+  "주상덕":[8,101.7,[5,7,2.3,4,7,0.6,24,7,5,5,0,4.8,2,15,10,3]],
+  "유영민":[2,110.4,[5,7,3,4,7,0.6,35,7,5,5,0,4.8,2,15,10,0]],
+  "김민석":[12,92.6,[5,7,1.1,3.3,5.1,0.6,25,3.8,5,5,0,4.8,2,15,10,0]],
+  "김지원":[7,102.8,[5,6.9,3,4,7,0.6,24.4,7,5,5,0,4.9,2,15,10,3]],
+  "양심영":[3,109.3,[5,6.9,3,4,7,0.6,35,7,5,5,-1,4.9,2,15,10,0]],
+  "김태건":[10,96.9,[5,6.9,3,4,7,0.6,25,3.5,5,5,0,4.9,2,15,10,0]],
+  "박수안":[9,100.5,[5,7,3,4,7,0.6,25,7,5,5,0,4.9,2,15,10,0]],
+  "김민수":[15,64.1,[5,7,3,4,5.5,0.6,-10,7,5,5,0,4.9,2,15,10,0]],
+  "권재원":[1,113.2,[5,7,3,3.7,7,0.6,35,7,5,5,0,4.9,2,15,10,3]],
+  "김동현":[6,106.3,[4,7,1,4,7,0.6,35,7,5,5,-1,4.7,2,15,10,0]],
+  "이명섭":[11,92.6,[4,7,3,3.1,7,0.6,25,1.3,5,5,0,4.7,2,15,10,0]],
+  "남현준":[13,92.6,[4,7,2.5,2.7,3.9,0.6,25,5.1,5,5,0,4.7,2,15,10,0]]}}
+};
+var TG = {g1:["출동지표","var(--c0)"], g2:["고객","var(--c3)"], g3:["VOC","var(--c1)"], g4:["안전","var(--good)"], g5:["가감점","#f59e0b"]};
+/* 종합 점수: 사업팀×80% + 지사(BEVAL) */
+function totalOf(k, n){ var t=TEVAL[k]&&TEVAL[k].rows[n], b=BEVAL[k]&&BEVAL[k].rows[n]; if(!t) return null; return Math.round((t[1]*TEVAL_W + (b?b[4]:0))*10)/10; }
+function rankList(arr){ var rk=0,last=null; arr.forEach(function(x,i){ if(x.t!==last){rk=i+1;last=x.t;} x.rk=rk; }); return arr; }
+function evalMonthChips(keys, per, attr, half){ return '<div class="chips" role="group" aria-label="기간">'+[["sum",half+" 평균"]].concat(keys.map(function(k){return [k,+k.slice(5)+"월"]})).map(function(l){ return '<button type="button" class="chip" '+attr+'="'+l[0]+'" aria-pressed="'+(per===l[0])+'">'+l[1]+'</button>'; }).join("")+'</div>'; }
+function viewEvalTeam2(mode){
+  var H = halfOf(kstDate(0)), keys = Object.keys(TEVAL).sort(), per = state.tm && (state.tm==="sum"||TEVAL[state.tm]) ? state.tm : keys[keys.length-1];
+  var names = []; keys.forEach(function(k){ Object.keys(TEVAL[k].rows).forEach(function(n){ if(names.indexOf(n)<0) names.push(n); }); });
+  var val = function(k,n){ return mode==="total" ? totalOf(k,n) : (TEVAL[k].rows[n]?TEVAL[k].rows[n][1]:null); };
+  var score = function(n){ if(per!=="sum") return val(per,n); var v=keys.map(function(k){return val(k,n)}).filter(function(x){return x!=null}); return v.length? Math.round(v.reduce(function(a,b){return a+b},0)/v.length*10)/10 : null; };
+  var list = rankList(names.map(function(n){return {n:n,t:score(n)}}).filter(function(x){return x.t!=null}).sort(function(a,b){return b.t-a.t || a.n.localeCompare(b.n,"ko")}));
+  var sel = list.filter(function(x){return x.n===state.tp})[0] || list[0];
+  var unit = mode==="total" ? '점' : '점', full = mode==="total" ? 100 : 100;
+  var podium = '<div class="podium">'+[1,0,2].map(function(i){var x=list[i]; if(!x) return ''; return '<div class="pod p'+(i+1)+' k'+Math.min(x.rk,3)+'"><span class="pod-r">'+medal(x.rk,i===0?50:42)+'</span><b>'+x.n+'</b><span class="pod-s num">'+x.t+'<small>'+unit+'</small></span><span class="pod-c">'+bHo(x.n)+'</span></div>';}).join("")+'</div>';
+  var rows = list.map(function(x){
+    var cells = keys.map(function(k){ var v=val(k,x.n); var c=v==null?'':v>=100?'good':v>=90?'ac':v>=80?'warn':'bad'; return '<span class="bm '+c+(per===k?' cur':'')+'"><small>'+(+k.slice(5))+'월</small><b class="num">'+(v==null?'-':v)+'</b></span>'; }).join("");
+    var vs = keys.map(function(k){return val(k,x.n)}).filter(function(v){return v!=null}), tr = vs.length>1 ? Math.round((vs[vs.length-1]-vs[vs.length-2])*10)/10 : 0;
+    var trh = vs.length>1 ? '<span class="evtr '+(tr>0?'up':tr<0?'dn':'eq')+'">'+(tr>0?'▲'+tr:tr<0?'▼'+(-tr):'–')+'</span>' : '';
+    return '<button type="button" class="evr ev2'+(x===sel?' on':'')+'" data-tp="'+x.n+'"><span class="n">'+rbm(x.rk)+'</span><span class="t">'+x.n+'<small>'+bHo(x.n)+'</small>'+trh+'</span>'+
+      '<b class="r num">'+x.t+'</b><div class="evpb"><i style="width:'+Math.max(0,Math.min(100,x.t/ (mode==="total"?110:115)*100))+'%"></i></div><div class="bmrow">'+cells+'</div></button>';
+  }).join("");
+  var det = keys.map(function(k){
+    var r = TEVAL[k].rows[sel.n]; if(!r) return '';
+    var b = BEVAL[k]&&BEVAL[k].rows[sel.n], seg = {g1:0,g2:0,g3:0,g4:0,g5:0};
+    r[2].forEach(function(p,i){ seg[TEVAL_ITEMS[i][1]] += p; });
+    var bar = Object.keys(TG).map(function(g){ return '<i style="flex:'+Math.max(0,seg[g])+';background:'+TG[g][1]+'"></i>'; }).join('');
+    var items = r[2].map(function(p,i){ if(i===15 && !p) return ''; var nm=TEVAL_ITEMS[i][0]; return '<span class="tei'+(p<0?' neg':'')+'"><small>'+nm+'</small><b class="num">'+p+'</b></span>'; }).join('');
+    return '<div class="bmd"><div class="bmd-h"><b>'+(+k.slice(5))+'월</b><span class="num">'+(mode==="total"?'종합 '+totalOf(k,sel.n)+'점':'사업팀 '+r[1]+'점 · '+r[0]+'위')+'</span></div>'+
+      (mode==="total"?'<div class="bmd-g"><span>사업팀 '+r[1]+'×80%<b class="num">'+(Math.round(r[1]*TEVAL_W*10)/10)+'</b></span><span>지사 평가<b class="num">'+(b?b[4]:0)+'</b></span><span>사업팀 순위<b class="num">'+r[0]+'위</b></span></div>':'')+
+      '<div class="teb">'+bar+'</div><div class="tel">'+Object.keys(TG).map(function(g){return '<span><i style="background:'+TG[g][1]+'"></i>'+TG[g][0]+' <b class="num">'+(Math.round(seg[g]*10)/10)+'</b></span>'}).join('')+'</div>'+
+      '<div class="teg">'+items+'</div></div>';
+  }).join("");
+  var avg = list.reduce(function(a,x){return a+x.t},0)/list.length;
+  var title = mode==="total" ? '종합 평가 <span>사업팀 80% + 지사 20점</span>' : '사업팀 평가 <span>사업팀 월별 점수표 · 익월 수령</span>';
+  return '<div class="sec"><h2>'+title+'</h2>'+evalMonthChips(keys, per, 'data-tm', H.h)+podium+
+    '<div class="kpsum"><span>평균 <b class="num">'+(Math.round(avg*10)/10)+'</b>점</span><i></i><span>반영 <b class="num">'+keys.map(function(k){return +k.slice(5)}).join("·")+'</b>월</span><i></i><span>대상 <b class="num">'+list.length+'</b>명</span></div></div>'+
+    '<div class="sec"><h2>순위 <span>누르면 월별 항목 점수</span></h2><div class="card">'+rows+'</div></div>'+
+    '<div class="sec"><div class="card"><div class="vhead">'+sel.n+' · '+sel.rk+'위<span>'+bHo(sel.n)+' · '+(per==="sum"?H.h+' 평균 ':'')+sel.t+'점</span></div>'+det+'</div>'+
+    (mode==="total"?'<p class="note">종합 평가 = 사업팀 총점 × 80% + 지사 평가 점수(월 20점 기준). 사업팀 평가는 익월에 받아 반영합니다. 8월 이후는 사업팀 자료를 받으면 자동 계산됩니다.</p>':'<p class="note">항목 배점은 달마다 다를 수 있습니다 (예: 7월 고객체감 25점·올만족 가점 포함, 클레임 5점).</p>')+'</div>';
+}
 function viewEval(){
   var es = state.es || "team";
-  if(es==="team" && !EVAL.rows.length) return halfBanner()+evalSwitch()+viewEvalWait("team");
   if(es==="branch") return halfBanner()+evalSwitch()+viewEvalBranch();
-  if(es!=="team") return halfBanner()+evalSwitch()+viewEvalWait(es);
+  if(es==="team") return halfBanner()+evalSwitch()+viewEvalTeam2("team");
+  if(es==="total") return halfBanner()+evalSwitch()+viewEvalTeam2("total");
   return halfBanner()+evalSwitch()+viewEvalTeam();
 }
 function viewEvalTeam(){
@@ -2759,6 +2843,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-23j", date:"10/23", title:"사업팀 평가 6·7월 · 종합 평가", tabs:["eval","home"], items:["월별 평가 › 사업팀 평가 6·7월 반영 (순위·항목별 점수·하반기 평균)","종합 평가 = 사업팀 총점 × 80% + 지사 평가(20점) — 월별·하반기 평균 순위","브리핑 MVP에 '최근 확정 MVP(종합 평가 1~3위)' 표시"]},
  {id:"2026-10-23i", date:"10/23", title:"MVP · 관리자 할 일", tabs:["home"], items:["🏅 이달의 MVP — 개인별 평가 기준 TOP3 (사업팀 월별 평가는 익월 반영)","✅ 관리자 오늘 할 일 — 공지 미확인·다발보 미조치·미응답 미연락·앱 미설치 한 화면","📴 인터넷이 끊기면 '오프라인 · 저장본' 표시"]},
  {id:"2026-10-23h", date:"10/23", title:"빠른 열기 · 칭찬 알림 외", tabs:["home","ppl","cs"], items:["⚡ 빠른 열기 — 저장된 화면을 바로 띄우고 뒤에서 최신화 (데이터 절약)","🎉 내 고객 칭찬이 들어오면 브리핑 맨 위에 알림","미응답 '연락 체크'가 모든 폰에 공유 (누가 연락했는지 표시)","개인별 상세 — 코멘트·가점·월말 예상은 눌러서 펼치기","관리자 — 📲 설치 현황(설치/주소로만/기록 없음) · 미설치자 안내 복사"]},
  {id:"2026-10-23g", date:"10/23", title:"앱 설치 버튼", tabs:["home"], items:["주소로 열면 아래에 '📲 앱 설치' 띠 표시 — 누르면 설치(아이폰·삼성 인터넷은 설치 방법 안내)","카톡에서 링크를 누르면 크롬·사파리로 자동 이동"]},
@@ -3189,7 +3274,14 @@ function mvpCard(){
   var top = L.filter(function(x){return x.rk<=3}).slice(0,4), fin = isFinal(), e = dataME(), md = {1:'🥇',2:'🥈',3:'🥉'};
   return '<div class="sec mvp"><div class="mvp-h"><b>🏅 '+e.m+'월 MVP '+(fin?'<i class="fin">지표 확정</i>':'<i>중간 순위</i>')+'</b><button type="button" data-mvpi="1">전체 순위 ⓘ</button></div>'+
     top.map(function(x){ return '<div class="mvp-r r'+x.rk+'"><span class="mvp-m">'+md[x.rk]+'</span><b>'+x.name+'</b><small>'+x.no+'호</small><span class="mvp-d">지표 '+x.ok+'/5 달성'+(x.miss.length?' · 미달 '+x.miss.join('·'):' 🏆')+'</span><em class="num">'+Math.round(x.avg)+'%</em></div>'; }).join('')+
-    '<p class="mvp-n">개인별 평가 기준(달성 지표 수 → 평균 달성률) · 기준일 '+md2s(SD.ppl)+' · 사업팀 월별 평가는 익월 자료로 최종 반영</p></div>';
+    '<p class="mvp-n">개인별 평가 기준(달성 지표 수 → 평균 달성률) · 기준일 '+md2s(SD.ppl)+' · 사업팀 월별 평가는 익월 자료로 최종 반영</p>'+mvpFinal()+'</div>';
+}
+/* 최근 확정 MVP — 사업팀 평가를 받은 가장 최근 달의 종합 평가(사업팀 80% + 지사 20) 1~3위 */
+function mvpFinal(){
+  if(typeof TEVAL==="undefined") return '';
+  var k = Object.keys(TEVAL).sort().pop(); if(!k) return '';
+  var L = rankList(Object.keys(TEVAL[k].rows).map(function(n){return {n:n,t:totalOf(k,n)}}).sort(function(a,b){return b.t-a.t})).filter(function(x){return x.rk<=3});
+  return '<button type="button" class="mvp-f" data-goto="eval" data-es-go="total"><b>🏆 '+(+k.slice(5))+'월 확정 MVP</b><span>'+L.map(function(x){return ['','🥇','🥈','🥉'][x.rk]+' '+x.n+' '+x.t}).join(' · ')+'</span><small>종합 평가(사업팀 80% + 지사 20) 기준 ›</small></button>';
 }
 function md2s(d){ return (+d.slice(5,7))+'/'+(+d.slice(8)); }
 function mvpInfo(){
@@ -3420,7 +3512,7 @@ document.getElementById("view").addEventListener("click",function(e){   var dsw 
       pl = e.target.closest("[data-ppl]"), pf = e.target.closest("[data-pf]"), cf = e.target.closest("[data-cf]"), ps = e.target.closest("[data-ps]");
   var rp = e.target.closest("[data-rp]"), rsb = e.target.closest("[data-rs]");
   if(e.target.closest("[data-nwok]")){ markSeen("bsr_news", NEWS[0].id); render(); }
-  else if(e.target.closest("[data-goto]")){ var gt=e.target.closest("[data-goto]").dataset.goto, tb=document.querySelector('#tabs [data-tab="'+gt+'"]'); if(tb){ tb.click(); goTop(); } }
+  else if(e.target.closest("[data-goto]")){ var gq=e.target.closest("[data-goto]"); if(gq.dataset.esGo){ state.es=gq.dataset.esGo; state.tm=""; } var gt=gq.dataset.goto, tb=document.querySelector('#tabs [data-tab="'+gt+'"]'); if(tb){ tb.click(); goTop(); } }
   else if(e.target.closest("[data-cx]")){ var cxn=e.target.closest("[data-cx]").dataset.cx; state.cx = state.cx===cxn?"":cxn; render(); }
   else if(e.target.closest("[data-cd]")){ state.cd = e.target.closest("[data-cd]").dataset.cd; state.cf="all"; render(); }
   else if(e.target.closest("[data-cj]")){ state.cj = e.target.closest("[data-cj]").dataset.cj; render(); }
@@ -3429,6 +3521,8 @@ document.getElementById("view").addEventListener("click",function(e){   var dsw 
   else if(e.target.closest("[data-goppl]")){ state.pp = e.target.closest("[data-goppl]").dataset.goppl; state.pf="all"; var tb=document.querySelector('#tabs [data-tab="ppl"]'); if(tb) tb.click(); }
   else if(e.target.closest("[data-fco]")){ state.fco = !state.fco; render(); }
   else if(e.target.closest("[data-vdo]")){ state.vdo = !state.vdo; render(); }
+  else if(e.target.closest("[data-tm]")){ state.tm = e.target.closest("[data-tm]").dataset.tm; render(); }
+  else if(e.target.closest("[data-tp]")){ state.tp = e.target.closest("[data-tp]").dataset.tp; render(); }
   else if(e.target.closest("[data-pdo]")){ state.pdo = !state.pdo; render(); }
   else if(e.target.closest("[data-av]")){ var avv=e.target.closest("[data-av]").dataset.av; state.av = (state.av===avv && avv!=="all")?"all":avv; render(); }
   else if(e.target.closest("[data-as]")){ state.as = e.target.closest("[data-as]").dataset.as; render(); }
