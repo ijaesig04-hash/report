@@ -3,7 +3,7 @@
 // 2) 새 버전이 받아지면 화면 쪽 버전 확인이 자동으로 새로고침 → 항상 최신 유지
 // 3) 인터넷이 끊겨도 마지막 화면 표시
 var C="bs-report-v7";
-self.addEventListener("install",function(e){self.skipWaiting()});
+self.addEventListener("install",function(e){self.skipWaiting(); e.waitUntil(caches.open(C).then(function(c){ return fetch(new URL("./",self.registration.scope).href,{cache:"no-store"}).then(function(res){ if(res.ok) return c.put(new URL("./",self.registration.scope).href,res); }).catch(function(){}); }));});
 self.addEventListener("activate",function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k.indexOf("bs-report-v7")!==0}).map(function(k){return caches.delete(k)}))}).then(function(){return self.clients.claim()}))});
 function home(){ return new URL("./",self.registration.scope).href; }
 self.addEventListener("fetch",function(e){
