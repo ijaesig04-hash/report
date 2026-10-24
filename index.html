@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261024025643">
+<meta name="bsr-ver" content="20261024030355">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2907,7 +2907,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
- {id:"2026-10-24c", date:"10/24", title:"해피콜 발송 체크", tabs:["home"], items:["📱 퇴근 전 해피콜 문자 발송 건수(또는 미발송 사유) 제출 — 주간 16시~, 야간 다음날 04시~ 근무자에게만 표시","파트장 화면 — 주간·야간 근무자별 제출 현황 · 미제출자 안내 복사"]},
+ {id:"2026-10-24c", date:"10/24", title:"해피콜 발송 체크", tabs:["home"], items:["📱 퇴근 전 해피콜 문자 발송 건수(또는 미발송 사유) 제출 — 주간 16시~, 야간 다음날 05시~ 근무자에게만 표시","파트장 화면 — 주간·야간 근무자별 제출 현황 · 미제출자 안내 복사"]},
  {id:"2026-10-24b", date:"10/24", title:"화면 정리", tabs:["home"], items:["브리핑 정리 — 이번 주 요약·D-day, 내 미응답·지표·운전성향은 '더 보기'로","모든 탭 제목·카드·버튼·접기 메뉴 모양 통일","관리자 오늘 할 일 — 루핑 건·전일 특이사항·건강체크 확인 추가"]},
  {id:"2026-10-24a", date:"10/24", title:"계산기 · 칭찬 카드 외", tabs:["home","cs"], items:["🧮 내 점수 계산기 — 사업팀 배점으로 '점수 올리기 쉬운 항목 TOP3' (브리핑 › 내 할 일)","🖼️ 칭찬 카드 — 고객 칭찬을 이미지로 저장·공유","🔍 고객처 검색 — 다발보 이력·고객체감 응답·칭찬을 한 번에","🔠 글자 크게 (이름표 메뉴) · 📋 주간 보고 문구 (관리자)"]},
  {id:"2026-10-23j", date:"10/23", title:"사업팀 평가 6월 · 종합 평가", tabs:["eval","home"], items:["월별 평가 › 사업팀 평가 6월 반영 (7월은 사업팀 확정 후 반영)","종합 평가 = 사업팀 총점 × 80% + 지사 평가(20점) — 월별·하반기 평균 순위"]},
@@ -3544,15 +3544,15 @@ function bigToggle(){ var on=!document.documentElement.classList.contains("bsr-b
 bigApply();
 
 /* ===== 📱 해피콜 문자 발송 체크 — 퇴근 전에 제출 · 기록은 'hc|근무일|이름' 키 =====
-   실제 교대: 주간 07~17시, 야간 18~06시 · 창 열림: 주간 당일 16시~, 야간 다음날 04시~ */
+   근무표 기준: 주간 07~18시, 야간 18~07시 · 창 열림(근무표상 퇴근 2시간 전): 주간 당일 16시~, 야간 다음날 05시~ */
 var HC_REASONS = ["대상 건수 없음","유선번호 접수 건","클레임 고객"];
-var HC_SHIFT = {"주간":"07:00~17:00","야간":"18:00~다음날 06:00"};
+var HC_SHIFT = {"주간":"07:00~18:00","야간":"18:00~다음날 07:00"};
 function hcRoster(d, s){ var o = dutyOn(d); if(!o) return []; return (s==="주간"?o.day:o.night).filter(function(n){return CS_MGR.indexOf(n)<0}); }
-/* 지금 열려 있는 근무(들): 16시~ 오늘 주간 / 04~16시 어제 야간 / 00~04시 어제 주간(늦은 제출) */
+/* 지금 열려 있는 근무: 16시~ 오늘 주간 / 05~16시 어제 야간 / 00~05시 어제 주간(늦은 제출) */
 function hcOpen(){
   var h = new Date(Date.now()+9*3600000).getUTCHours(), t = kstDate(0), y = kstDate(-1);
   if(h>=16) return [{d:t, s:"주간"}];
-  if(h>=4) return [{d:y, s:"야간"}];
+  if(h>=5) return [{d:y, s:"야간"}];
   return [{d:y, s:"주간"}];
 }
 function hcLbl(x){ var w="일월화수목금토"[new Date(x.d+"T00:00:00+09:00").getDay()]; return md(x.d)+'('+w+') '+x.s+' · '+HC_SHIFT[x.s]; }
@@ -3589,7 +3589,7 @@ document.addEventListener("click", function(e){
     HC_FORM={cnt:0,why:'',edit:false}; nrToast("✅ 해피콜 발송현황을 제출했어요"); render(); setTimeout(actsLoad,4000); return; }
   if((b=e.target.closest("[data-hccp]"))){ nrCopy('📱 해피콜 문자 발송현황 제출 부탁드립니다!\n'+b.dataset.hccp+'님\n퇴근 전 앱 첫 화면(브리핑)에서 발송 건수만 눌러 제출하면 됩니다 🙏\n👉 https://ijaesig04-hash.github.io/report/'); return; }
 });
-/* 창 여는 시각(04시·16시)에 화면이 켜져 있으면 자동으로 다시 그림 */
+/* 창 여는 시각(05시·16시)에 화면이 켜져 있으면 자동으로 다시 그림 */
 setInterval(function(){ var k=JSON.stringify(hcOpen()); if(window._hcK && window._hcK!==k && window.state && state.tab==="home") render(); window._hcK=k; }, 60000);
 
 /* ===== 👤 내 할 일 — 직원이 이름을 고르면 브리핑에 그 사람 몫만 모아 보여줌 (파트장은 미리보기) ===== */
