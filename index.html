@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261024012838">
+<meta name="bsr-ver" content="20261024025643">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -886,6 +886,8 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .hcm-p{display:inline-flex;flex-direction:column;align-items:center;border-radius:12px;padding:5px 10px;font-size:13px;font-weight:800;min-width:58px}.hcm-p em{font-style:normal;font-size:11px;font-weight:700}
 .hcm-p.ok{background:#dcfce7;color:#14532d}.hcm-p.ok em{color:#15803d}.hcm-p.wy{background:#fef3c7;color:#78350f}.hcm-p.wy em{color:#b45309}.hcm-p.no{background:#fee2e2;color:#7f1d1d}.hcm-p.no em{color:#b91c1c}
 .hc-all{margin:10px 0 0;font-size:12.5px;color:#15803d;font-weight:700}
+.hc-d{display:block;margin-top:4px;font-size:11.5px;color:#64748b;font-weight:600}.hc.done .hc-d{grid-column:1/3}
+.hcm-g1{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
 .bq{flex:0 0 auto;width:118px;height:100px;scroll-snap-align:start;text-align:left;border:0;border-radius:16px;padding:11px 12px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;color:#fff;box-shadow:0 6px 14px rgba(15,23,42,.14);font-family:"Noto Sans KR",sans-serif;position:relative;overflow:hidden}
 .bq::after{content:"";position:absolute;right:-24px;top:-24px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.12)}
 .bq small{font-size:11px;font-weight:700;opacity:.88;white-space:nowrap}
@@ -2905,7 +2907,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
- {id:"2026-10-24c", date:"10/24", title:"해피콜 발송 체크", tabs:["home"], items:["📱 브리핑 첫 화면에서 오늘 해피콜 문자 발송 건수(또는 미발송 사유) 제출 — 오늘 근무자만 표시","파트장 화면 — 주간·야간 근무자별 제출 현황 · 미제출자 안내 복사"]},
+ {id:"2026-10-24c", date:"10/24", title:"해피콜 발송 체크", tabs:["home"], items:["📱 퇴근 전 해피콜 문자 발송 건수(또는 미발송 사유) 제출 — 주간 16시~, 야간 다음날 04시~ 근무자에게만 표시","파트장 화면 — 주간·야간 근무자별 제출 현황 · 미제출자 안내 복사"]},
  {id:"2026-10-24b", date:"10/24", title:"화면 정리", tabs:["home"], items:["브리핑 정리 — 이번 주 요약·D-day, 내 미응답·지표·운전성향은 '더 보기'로","모든 탭 제목·카드·버튼·접기 메뉴 모양 통일","관리자 오늘 할 일 — 루핑 건·전일 특이사항·건강체크 확인 추가"]},
  {id:"2026-10-24a", date:"10/24", title:"계산기 · 칭찬 카드 외", tabs:["home","cs"], items:["🧮 내 점수 계산기 — 사업팀 배점으로 '점수 올리기 쉬운 항목 TOP3' (브리핑 › 내 할 일)","🖼️ 칭찬 카드 — 고객 칭찬을 이미지로 저장·공유","🔍 고객처 검색 — 다발보 이력·고객체감 응답·칭찬을 한 번에","🔠 글자 크게 (이름표 메뉴) · 📋 주간 보고 문구 (관리자)"]},
  {id:"2026-10-23j", date:"10/23", title:"사업팀 평가 6월 · 종합 평가", tabs:["eval","home"], items:["월별 평가 › 사업팀 평가 6월 반영 (7월은 사업팀 확정 후 반영)","종합 평가 = 사업팀 총점 × 80% + 지사 평가(20점) — 월별·하반기 평균 순위"]},
@@ -3541,44 +3543,55 @@ function bigApply(){ var on=false; try{ on = localStorage.getItem("bsr_big")==="
 function bigToggle(){ var on=!document.documentElement.classList.contains("bsr-big"); try{ localStorage.setItem("bsr_big", on?"1":"0"); }catch(e){} bigApply(); nrToast(on?"🔠 글자를 크게 했어요":"🔠 글자 크기를 원래대로"); }
 bigApply();
 
-/* ===== 📱 해피콜 문자 발송 체크 — 오늘 근무표 명단(주간·야간)만 · 기록은 조치 입력과 같은 시트에 'hc|날짜|이름' 키 ===== */
+/* ===== 📱 해피콜 문자 발송 체크 — 퇴근 전에 제출 · 기록은 'hc|근무일|이름' 키 =====
+   실제 교대: 주간 07~17시, 야간 18~06시 · 창 열림: 주간 당일 16시~, 야간 다음날 04시~ */
 var HC_REASONS = ["대상 건수 없음","유선번호 접수 건","클레임 고객"];
-/* 근무일 기준: 새벽 7시 전에는 전날 근무로 봄 (야간 근무 07시 종료) */
-function hcDay(){ return new Date(Date.now()+9*3600000).getUTCHours()<7 ? kstDate(-1) : kstDate(0); }
-function hcToday(){ var o = dutyOn(hcDay()); if(!o) return []; return o.day.map(function(n){return {n:n,s:"주간"}}).concat(o.night.map(function(n){return {n:n,s:"야간"}})).filter(function(x){return CS_MGR.indexOf(x.n)<0}); }
-function hcGet(n){ if(typeof actsFor!=="function") return null; var L=actsFor('hc|'+hcDay()+'|'+n); if(!L.length) return null; var r=L.slice().sort(function(a,b){return a[0]-b[0]}).pop(); var p=String(r[3]).split('|'); return {t:r[0], cnt:+p[0]||0, why:p[1]||'', pend:!!r.pend}; }
+var HC_SHIFT = {"주간":"07:00~17:00","야간":"18:00~다음날 06:00"};
+function hcRoster(d, s){ var o = dutyOn(d); if(!o) return []; return (s==="주간"?o.day:o.night).filter(function(n){return CS_MGR.indexOf(n)<0}); }
+/* 지금 열려 있는 근무(들): 16시~ 오늘 주간 / 04~16시 어제 야간 / 00~04시 어제 주간(늦은 제출) */
+function hcOpen(){
+  var h = new Date(Date.now()+9*3600000).getUTCHours(), t = kstDate(0), y = kstDate(-1);
+  if(h>=16) return [{d:t, s:"주간"}];
+  if(h>=4) return [{d:y, s:"야간"}];
+  return [{d:y, s:"주간"}];
+}
+function hcLbl(x){ var w="일월화수목금토"[new Date(x.d+"T00:00:00+09:00").getDay()]; return md(x.d)+'('+w+') '+x.s+' · '+HC_SHIFT[x.s]; }
+function hcGet(d, n){ if(typeof actsFor!=="function") return null; var L=actsFor('hc|'+d+'|'+n); if(!L.length) return null; var r=L.slice().sort(function(a,b){return a[0]-b[0]}).pop(); var p=String(r[3]).split('|'); return {t:r[0], cnt:+p[0]||0, why:p[1]||'', pend:!!r.pend}; }
 var HC_FORM = {cnt:0, why:'', edit:false};
 function hcCard(){
-  var nm = myName(), L = hcToday(), me = L.filter(function(x){return x.n===nm})[0];
-  if(mgrIs()) return hcMgr(L);
-  if(!me) return '';
-  var v = hcGet(nm);
-  if(v && !HC_FORM.edit) return '<div class="hc done"><div class="hc-h"><b>📱 오늘 해피콜 문자</b><span class="hc-s">'+me.s+'</span></div>'+
-    '<div class="hc-ok"><span>✓ 제출 완료 · <b>'+(v.cnt?v.cnt+'건 발송':esc2(v.why||'0건'))+'</b></span><small>'+notiDate(v.t)+(v.pend?' · 공유 대기':'')+'</small></div><button type="button" class="hc-e" data-hced="1">수정</button></div>';
+  var nm = myName(), op = hcOpen();
+  if(mgrIs()) return hcMgr(op);
+  var x = op.filter(function(o){ return hcRoster(o.d, o.s).indexOf(nm)>=0; })[0];
+  if(!x) return '';
+  var v = hcGet(x.d, nm), lbl = '<small class="hc-d">🕒 '+hcLbl(x)+'</small>';
+  if(v && !HC_FORM.edit) return '<div class="hc done"><div class="hc-h"><b>📱 해피콜 문자</b><span class="hc-s">'+x.s+'</span></div>'+lbl+
+    '<div class="hc-ok"><span>✓ 제출 완료 · <b>'+(v.cnt?v.cnt+'건 발송':esc2(v.why||'0건'))+'</b></span><small>'+notiDate(v.t)+(v.pend?' · 공유 대기':'')+'</small></div><button type="button" class="hc-e" data-hced="'+x.d+'">수정</button></div>';
   var f = HC_FORM;
-  return '<div class="hc"><div class="hc-h"><b>📱 오늘 해피콜 문자 보내셨나요?</b><span class="hc-s">'+me.s+' 근무</span></div>'+
+  return '<div class="hc"><div class="hc-h"><b>📱 퇴근 전, 해피콜 문자 보내셨나요?</b><span class="hc-s">'+x.s+'</span></div>'+lbl+
     '<div class="hc-c"><button type="button" data-hcn="-1">−</button><b class="num">'+f.cnt+'</b><button type="button" data-hcn="1">+</button><span>건 발송</span></div>'+
     (f.cnt===0?'<div class="hc-w">'+HC_REASONS.map(function(r){return '<button type="button" class="chip" data-hcw="'+r+'" aria-pressed="'+(f.why===r)+'">'+r+'</button>'}).join('')+'</div>':'')+
-    '<button type="button" class="hc-go" data-hcgo="1"'+(f.cnt===0&&!f.why?' disabled':'')+'>제출하기</button></div>';
+    '<button type="button" class="hc-go" data-hcgo="'+x.d+'"'+(f.cnt===0&&!f.why?' disabled':'')+'>제출하기</button></div>';
 }
-function hcMgr(L){
-  if(!L.length) return '';
-  var st = L.map(function(x){ return {n:x.n, s:x.s, v:hcGet(x.n)}; }), done = st.filter(function(x){return x.v}).length, sum = st.reduce(function(a,x){return a+(x.v?x.v.cnt:0)},0);
-  var grp = function(s){ var g=st.filter(function(x){return x.s===s}); if(!g.length) return ''; return '<div class="hcm-g"><span class="hcm-l">'+s+'</span><div>'+g.map(function(x){ var v=x.v;
-      return '<span class="hcm-p '+(v?(v.cnt?'ok':'wy'):'no')+'">'+x.n+'<em>'+(v?(v.cnt?v.cnt+'건':esc2(v.why)):'미제출')+'</em></span>'; }).join('')+'</div></div>'; };
-  var miss = st.filter(function(x){return !x.v}).map(function(x){return x.n});
-  return '<div class="hc mgr-hc"><div class="hc-h"><b>📱 '+md(hcDay())+' 해피콜 발송</b><span class="hc-s">제출 '+done+'/'+st.length+' · '+sum+'건</span></div>'+grp('주간')+grp('야간')+
+function hcMgr(op){
+  var x = op[0], L = hcRoster(x.d, x.s); if(!L.length) return '';
+  var st = L.map(function(n){ return {n:n, v:hcGet(x.d, n)}; }), done = st.filter(function(q){return q.v}).length, sum = st.reduce(function(a,q){return a+(q.v?q.v.cnt:0)},0);
+  var miss = st.filter(function(q){return !q.v}).map(function(q){return q.n});
+  return '<div class="hc mgr-hc"><div class="hc-h"><b>📱 해피콜 발송 현황</b><span class="hc-s">제출 '+done+'/'+st.length+' · '+sum+'건</span></div><small class="hc-d">🕒 '+hcLbl(x)+'</small>'+
+    '<div class="hcm-g1">'+st.map(function(q){ var v=q.v; return '<span class="hcm-p '+(v?(v.cnt?'ok':'wy'):'no')+'">'+q.n+'<em>'+(v?(v.cnt?v.cnt+'건':esc2(v.why)):'미제출')+'</em></span>'; }).join('')+'</div>'+
     (miss.length?'<button type="button" class="hc-e" data-hccp="'+esc2(miss.join(', '))+'">📋 미제출자 안내 복사</button>':'<p class="hc-all">모두 제출했어요 👍</p>')+'</div>';
 }
 document.addEventListener("click", function(e){
   var b;
   if((b=e.target.closest("[data-hcn]"))){ HC_FORM.cnt=Math.max(0,HC_FORM.cnt+(+b.dataset.hcn)); if(HC_FORM.cnt>0) HC_FORM.why=''; render(); return; }
   if((b=e.target.closest("[data-hcw]"))){ HC_FORM.why = HC_FORM.why===b.dataset.hcw?'':b.dataset.hcw; render(); return; }
-  if(e.target.closest("[data-hced]")){ var v=hcGet(myName()); HC_FORM={cnt:v?v.cnt:0, why:v?v.why:'', edit:true}; render(); return; }
-  if(e.target.closest("[data-hcgo]")){ var nm=myName(); if(!nm) return; var nr=[Date.now(), 'hc|'+hcDay()+'|'+nm, nm, HC_FORM.cnt+'|'+(HC_FORM.cnt?'':HC_FORM.why)]; nr.sent=Date.now(); ACTS_PEND.push(nr); actsSavePend(); actSend(nr);
+  if((b=e.target.closest("[data-hced]"))){ var v=hcGet(b.dataset.hced, myName()); HC_FORM={cnt:v?v.cnt:0, why:v?v.why:'', edit:true}; render(); return; }
+  if((b=e.target.closest("[data-hcgo]"))){ var nm=myName(); if(!nm) return; var nr=[Date.now(), 'hc|'+b.dataset.hcgo+'|'+nm, nm, HC_FORM.cnt+'|'+(HC_FORM.cnt?'':HC_FORM.why)]; nr.sent=Date.now(); ACTS_PEND.push(nr); actsSavePend(); actSend(nr);
     HC_FORM={cnt:0,why:'',edit:false}; nrToast("✅ 해피콜 발송현황을 제출했어요"); render(); setTimeout(actsLoad,4000); return; }
-  if((b=e.target.closest("[data-hccp]"))){ nrCopy('📱 오늘 해피콜 문자 발송현황 제출 부탁드립니다!\n'+b.dataset.hccp+'님\n앱 첫 화면(브리핑)에서 발송 건수만 눌러 제출하면 됩니다 🙏\n👉 https://ijaesig04-hash.github.io/report/'); return; }
+  if((b=e.target.closest("[data-hccp]"))){ nrCopy('📱 해피콜 문자 발송현황 제출 부탁드립니다!\n'+b.dataset.hccp+'님\n퇴근 전 앱 첫 화면(브리핑)에서 발송 건수만 눌러 제출하면 됩니다 🙏\n👉 https://ijaesig04-hash.github.io/report/'); return; }
 });
+/* 창 여는 시각(04시·16시)에 화면이 켜져 있으면 자동으로 다시 그림 */
+setInterval(function(){ var k=JSON.stringify(hcOpen()); if(window._hcK && window._hcK!==k && window.state && state.tab==="home") render(); window._hcK=k; }, 60000);
+
 /* ===== 👤 내 할 일 — 직원이 이름을 고르면 브리핑에 그 사람 몫만 모아 보여줌 (파트장은 미리보기) ===== */
 function sparkSvg(v, ref, hi){
   var w=150, h=38, pts=v.filter(function(x){return !isNaN(x)}); if(pts.length<2) return '';
