@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261024003410">
+<meta name="bsr-ver" content="20261024003809">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3358,7 +3358,7 @@ function mgrData(){
   var n0 = NT.items[0], ak = n0 && NT.acks ? (NT.acks[n0.id]||[]) : null, unNoti = n0 && ak ? staff.filter(function(n){return ak.indexOf(n)<0}) : null;
   var g = {}; ALM.multi.rows.forEach(function(r){ var k=r[0]+'|'+r[1]; (g[k]=g[k]||{car:r[0],name:r[1],n:0,done:false}).n++; if(r[6]) g[k].done=true; });
   Object.keys(g).forEach(function(k){ if(typeof actsFor==="function" && actsFor(k).length) g[k].done=true; });
-  var undone = Object.keys(g).map(function(k){return g[k]}).filter(function(x){return !x.done}).sort(function(a,b){return b.n-a.n});
+  var undone = Object.keys(g).map(function(k){return g[k]}).filter(function(x){return !x.done && x.n>=3}).sort(function(a,b){return b.n-a.n});
   var chk = MGR_CHK.map(function(c){ return {id:c[0], t:c[1], d:c[2], v:chkGet(c[0])}; });
   return {n0:n0, unNoti:unNoti, undone:undone, chk:chk};
 }
@@ -3366,7 +3366,7 @@ function mgrCard(){
   if(!mgrIs()) return '';
   var d = mgrData(), left = d.chk.filter(function(c){return !c.v}).length, tot = (d.unNoti?d.unNoti.length:0) + d.undone.length + left;
   return '<div class="sec"><button type="button" class="mgr" data-mgr="1"><span class="mgr-ic">✅</span><span class="mgr-t"><b>관리자 오늘 할 일</b><small>'+
-    ['오늘 확인 '+(3-left)+'/3', d.unNoti?'공지 미확인 '+d.unNoti.length:'', '다발보 미조치 '+d.undone.length].filter(Boolean).join(' · ')+'</small></span><em class="num">'+tot+'</em></button></div>';
+    ['오늘 확인 '+(3-left)+'/3', d.unNoti?'공지 미확인 '+d.unNoti.length:'', '다발보(3회↑) 미조치 '+d.undone.length].filter(Boolean).join(' · ')+'</small></span><em class="num">'+tot+'</em></button></div>';
 }
 function mgrView(){
   var d = mgrData();
@@ -3378,7 +3378,7 @@ function mgrView(){
       (v?'<button type="button" class="mgc-x" data-chk="'+c.id+'" data-chkv="취소">취소</button>':'<button type="button" class="mgc-b" data-chk="'+c.id+'" data-chkv="확인">확인 완료</button>')+
       (c.id==="prev"&&!v?'<input class="mgc-i" id="chk-prev" maxlength="100" placeholder="특이사항 메모 (선택)">':'')+'</div>'; }).join('')+'</div>';
   h += d.n0 ? sec('📢 공지 미확인 <small>'+esc2(d.n0.title)+'</small>', d.unNoti?d.unNoti.length:'-', d.unNoti?chips(d.unNoti):'<p class="mg-ok">관리자 PIN을 넣은 폰에서 확인됩니다</p>', d.unNoti&&d.unNoti.length?'<button type="button" class="mg-b" data-mgcp="noti">📋 미확인자 안내 복사</button>':'') : sec('📢 공지', 0, '<p class="mg-ok">올린 공지가 없습니다</p>');
-  h += sec('🔁 다발보 미조치', d.undone.length, d.undone.length?'<div class="mg-l">'+d.undone.slice(0,8).map(function(x){return '<div>'+x.car+'호 · '+esc2(x.name)+' <em>'+x.n+'회</em></div>'}).join('')+(d.undone.length>8?'<div>외 '+(d.undone.length-8)+'곳</div>':'')+'</div>':'<p class="mg-ok">없음 👍</p>', '<button type="button" class="mg-b" data-mggo="alm">발보관리로 이동 ›</button>');
+  h += sec('🔁 다발보 미조치 <small>3회 이상</small>', d.undone.length, d.undone.length?'<div class="mg-l">'+d.undone.slice(0,8).map(function(x){return '<div>'+x.car+'호 · '+esc2(x.name)+' <em>'+x.n+'회</em></div>'}).join('')+(d.undone.length>8?'<div>외 '+(d.undone.length-8)+'곳</div>':'')+'</div>':'<p class="mg-ok">없음 👍</p>', '<button type="button" class="mg-b" data-mggo="alm">발보관리로 이동 ›</button>');
   openSheet(h);
 }
 document.addEventListener("click", function(e){ var b=e.target.closest("[data-chk]"); if(!b) return;
