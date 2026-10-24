@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261024040734">
+<meta name="bsr-ver" content="20261024042730">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -847,7 +847,7 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .fd-c{border:1px solid #e2e8f0;border-radius:12px;padding:9px 11px;margin:8px 0}.fd-h b{font-size:14px}.fd-h small{font-size:11.5px;color:#64748b;margin-left:6px}
 .fd-s{font-size:12.5px;margin-top:5px;line-height:1.5}.fd-s .ok{color:#15803d}.fd-s .ng{color:#b91c1c}.fd-s.al{background:#fff7ed;border-radius:8px;padding:5px 8px}
 .fd-btn{border:1px solid #c7d2fe;background:#fff;color:#3730a3;border-radius:999px;font:700 12px "Noto Sans KR",sans-serif;padding:4px 10px;cursor:pointer}
-html.bsr-big .wrap,html.bsr-big .xs-in{zoom:1.15}html.bsr-big .tabs button{font-size:15px}
+html.bsr-big .tabs button{font-size:15px}
 
 /* ===== 디자인 통일 (미리보기) ===== */
 :root{--u-r:16px;--u-sh:0 4px 14px rgba(15,42,92,.08);--u-ac:#1f4fd8}
@@ -2915,6 +2915,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-24h", date:"10/24", title:"글자 크게 · 공지", tabs:["home"], items:["🔠 글자 크게 — 화면 배치는 그대로, 작은 글자만 키워 깔끔하게","📢 공지 — 한 폰에서 이름을 바꿔도 새 이름으로 공지가 보이게"]},
  {id:"2026-10-24g", date:"10/24", title:"이름별 기능 안내", tabs:["home"], items:["📱 해피콜 발송 현황 — 서비스 관리자(서비스팀장·파트장)만 보기","이름 선택 화면에 이름별로 보이는 기능 안내 추가"]},
  {id:"2026-10-24f", date:"10/24", title:"직책 표시", tabs:["home"], items:["최문혁 — 선임파트장","차량별 대포장 표시 (용승우·주상덕·김태건·박수안·김동현)"]},
  {id:"2026-10-24e", date:"10/24", title:"이름 선택 표시", tabs:["home"], items:["'파트장' 묶음 이름을 '서비스 관리자'로 변경","최문혁·이재식 이름 아래 '파트장' 직책 표시","이재식 — 👨‍💻 앱 개발자 표시"]},
@@ -3551,7 +3552,30 @@ document.addEventListener("input", function(e){ if(e.target.id==="fd-q"){ var r=
 document.addEventListener("click", function(e){ if(e.target.closest("[data-find]")) findView(''); });
 
 /* ===== 🔠 글자 크게 ===== */
-function bigApply(){ var on=false; try{ on = localStorage.getItem("bsr_big")==="1"; }catch(e){} document.documentElement.classList.toggle("bsr-big", on); return on; }
+/* 화면 배치는 그대로 두고, 작은 글자(14.5px 미만)만 키움 — 칸을 넘치면 원래대로 */
+var BIG_MAX = 14.5, BIG_Q = false;
+function bigFix(){
+  BIG_Q = false;
+  var on = document.documentElement.classList.contains("bsr-big");
+  if(!on){ document.querySelectorAll("[data-bf]").forEach(function(el){ el.style.fontSize=""; el.removeAttribute("data-bf"); }); return; }
+  var L = [];
+  document.querySelectorAll("#view *, #xsheet *, #vlmenu *").forEach(function(el){
+    if(el.hasAttribute("data-bf") || el.closest(".dt3-sw") || /^(SCRIPT|STYLE|SVG|PATH|svg|path|BR|IMG|INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
+    var t=false; for(var c=el.firstChild;c;c=c.nextSibling){ if(c.nodeType===3 && c.nodeValue.trim()){ t=true; break; } } if(!t) return;
+    var fs = parseFloat(getComputedStyle(el).fontSize); if(!(fs>0) || fs>=BIG_MAX) return;
+    L.push([el, fs, el.getBoundingClientRect().height]);
+  });
+  L.forEach(function(x){ x[0].setAttribute("data-bf",""); x[0].style.fontSize = Math.min(x[1]*1.25, BIG_MAX).toFixed(1)+"px"; });
+  var bad = function(x){ var el=x[0], p=el.parentElement, h=el.getBoundingClientRect().height, nf=parseFloat(el.style.fontSize);
+    if(el.clientWidth>0 && getComputedStyle(el).display!=="inline" && el.scrollWidth > el.clientWidth+1) return true;
+    if(p && p.clientWidth>0 && p.scrollWidth > p.clientWidth+1 && getComputedStyle(p).overflowX==="visible") return true;
+    var r=el.getBoundingClientRect(), sc=el.closest(".chips,.tabs,[class*=scroll],.hscroll"); if(!sc && r.width>0 && r.right > document.documentElement.clientWidth-6) return true;
+    return x[2] < x[1]*2 && h > nf*1.9;   /* 한 줄이던 글자가 두 줄로 깨지면 */ };
+  L.forEach(function(x){ if(bad(x)){ x[0].style.fontSize = Math.min(x[1]*1.1, BIG_MAX).toFixed(1)+"px"; if(bad(x)) x[0].style.fontSize = x[1]+"px"; } });
+}
+function bigQ(){ if(!BIG_Q){ BIG_Q = true; requestAnimationFrame(bigFix); } }
+try{ new MutationObserver(function(){ if(document.documentElement.classList.contains("bsr-big")) bigQ(); }).observe(document.body,{childList:true,subtree:true}); }catch(e){}
+function bigApply(){ var on=false; try{ on = localStorage.getItem("bsr_big")==="1"; }catch(e){} document.documentElement.classList.toggle("bsr-big", on); bigQ(); return on; }
 function bigToggle(){ var on=!document.documentElement.classList.contains("bsr-big"); try{ localStorage.setItem("bsr_big", on?"1":"0"); }catch(e){} bigApply(); nrToast(on?"🔠 글자를 크게 했어요":"🔠 글자 크기를 원래대로"); }
 bigApply();
 
@@ -4189,7 +4213,8 @@ function notiLoad(){
     if(window.state) render();
   }).catch(function(){});
 }
-function notiAcked(id){ return !!lsGet("bsr_ack_"+id); }
+function notiAckKey(id){ return "bsr_ack_"+(myName()||"")+"_"+id; }
+function notiAcked(id){ return !!lsGet(notiAckKey(id)); }
 function notiDate(t){ var d=new Date(t+9*3600000); return (d.getUTCMonth()+1)+'/'+d.getUTCDate()+' '+("0"+d.getUTCHours()).slice(-2)+':'+("0"+d.getUTCMinutes()).slice(-2); }
 function notiBanner(){
   var n = NOTI.items.filter(function(x){return !notiAcked(x.id)});
@@ -4218,7 +4243,7 @@ function notiWrite(msg){
 }
 document.addEventListener("click", function(e){
   var a = e.target.closest("[data-ntack]");
-  if(a){ var id=a.dataset.ntack; lsSet("bsr_ack_"+id,"1"); apiPing("a=ack&id="+encodeURIComponent(id)+"&name="+encodeURIComponent(myName()||"이름없음")); render(); return; }
+  if(a){ var id=a.dataset.ntack; lsSet(notiAckKey(id),"1"); apiPing("a=ack&id="+encodeURIComponent(id)+"&name="+encodeURIComponent(myName()||"이름없음")); render(); return; }
   if(e.target.closest("[data-ntpost]")){
     var t=(document.getElementById("ntw-t")||{}).value||"", b=(document.getElementById("ntw-b")||{}).value||"";
     if(!t.trim()){ notiWrite("제목을 입력해 주세요."); return; }
