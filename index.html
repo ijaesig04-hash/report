@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261024054717">
+<meta name="bsr-ver" content="20261024060309">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -886,7 +886,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .wx-w{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}.wx-w div{background:rgba(255,255,255,.75);border-radius:9px;padding:4px 0;text-align:center;display:flex;flex-direction:column;gap:1px}.wx-w div.on{background:#fff;box-shadow:inset 0 0 0 1.5px #7dd3fc}.wx-w small{font-size:10.5px;color:#64748b;font-weight:700}.wx-w i{font-style:normal;font-size:16px}.wx-w b{font-size:12.5px;color:#dc2626}.wx-w span{font-size:11.5px;color:#2563eb}.wx-w em{font-style:normal;font-size:9.5px;color:#0284c7;min-height:11px;white-space:nowrap}
 .wx-pm{display:grid;grid-template-columns:1fr 1fr;gap:8px}.wx-pm div{border-radius:10px;padding:6px;text-align:center;background:#fff;display:flex;flex-direction:column}.wx-pm small{font-size:11.5px;color:#64748b}.wx-pm b{font-size:16px}.wx-pm em{font-style:normal;font-size:11px;color:#64748b}
 .wx-pm .g b{color:#0284c7}.wx-pm .n b{color:#16a34a}.wx-pm .b b{color:#ea580c}.wx-pm .x b{color:#dc2626}
-.wx-al .wx-k{color:#9a3412}.wx-al.r .wx-k{color:#b91c1c}
+.wx-al .wx-k{color:#9a3412}.wx-al.g .wx-k{color:#15803d}.wx-al.g .wx-a{background:#f0fdf4;border-color:#bbf7d0}.wx-al.g .wx-a b{color:#14532d}.wx-al.r .wx-k{color:#b91c1c}
 .wx-a{display:flex;gap:8px;align-items:center;background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:5px 9px;margin-bottom:4px}.wx-al.r .wx-a:first-of-type{background:#fef2f2;border-color:#fecaca}.wx-al.y .wx-a{background:#fefce8;border-color:#fde68a}
 .wx-a i{font-style:normal;font-size:20px}.wx-a span{display:flex;flex-direction:column}.wx-a b{font-size:13px;color:#7c2d12}.wx-a small{font-size:11.5px;color:#57534e}
 .wx-dt{display:flex;justify-content:center;gap:5px;margin-top:5px}.wx-dt i{width:6px;height:6px;border-radius:50%;background:#bae6fd;transition:all .2s}.wx-dt i.on{width:16px;border-radius:3px;background:#0284c7}
@@ -2934,6 +2934,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-24m", date:"10/24", title:"맑은 날 날씨 한마디", tabs:["home"], items:["😊 특이 날씨가 없는 날에도 날씨 칸 첫 장에 '오늘 날씨 한마디' — 날씨·기온·시간대에 맞는 안내 (날마다 문구 바뀜)"]},
  {id:"2026-10-24l", date:"10/24", title:"날씨 기준 · 주간 날씨", tabs:["home"], items:["🌤️ 날씨 기준 — 북서울지사 관할(강북·도봉·노원) 중심","📅 날씨 슬라이드에 주간 날씨(7일) 추가 — 최고/최저 · 강수확률"]},
  {id:"2026-10-24k", date:"10/24", title:"브리핑 정돈", tabs:["home"], items:["🌤️ 날씨 칸 크기 축소","관리자 오늘 할 일 · 직원 화면 미리보기 · 바로가기 칸 간격 정리"]},
  {id:"2026-10-24j", date:"10/24", title:"오늘 날씨 · 해피콜 접기", tabs:["home"], items:["🌤️ 브리핑에 오늘 날씨 — 지금·시간별·내일·미세먼지를 옆으로 넘겨 보기","⚠️ 비·눈·한파·폭염·강풍·안개·미세먼지 등 특이 날씨는 맨 앞에 안내 문구로","📱 해피콜 발송 현황 — 눌러서 접기/펼치기"]},
@@ -3660,6 +3661,20 @@ function wxAlerts(d, aq){
   if(tmax - tmin >= 12) A.push(["🧥","일교차 큼 ("+Math.round(tmax-tmin)+"°)","겉옷 챙기세요 · 아침저녁 쌀쌀해요","y"]);
   return A;
 }
+/* 특이 날씨가 없을 때 — 날씨·기온·시간대에 맞는 한마디 (날짜별로 문구가 바뀜) */
+function wxTips(d){
+  var c = d.current, dl = d.daily, code = c.weather_code, tmax = dl.temperature_2m_max[0], tmin = dl.temperature_2m_min[0];
+  var hr = new Date(Date.now()+9*3600000).getUTCHours(), day = +kstDate(0).slice(8), T = [];
+  var pick = function(L){ return L[day % L.length]; };
+  if(code<=1) T.push(pick([["☀️","맑고 쾌청한 하루","운행하기 좋은 날씨예요 · 오늘도 안전운행!"],["😎","햇살 좋은 날","역광 구간은 선글라스·선바이저 활용하세요"],["🌤️","화창한 날씨","고객님께 밝은 인사로 하루를 시작해요 😊"]]));
+  else if(code<=3) T.push(pick([["⛅","구름 조금, 비 소식 없음","무난한 날씨예요 · 차간거리 지키며 안전운행"],["☁️","흐리지만 비는 없어요","시야가 어두우면 전조등을 켜 주세요"]]));
+  if(tmax < 5) T.push(["🧤","쌀쌀한 날 (최고 "+Math.round(tmax)+"°)","장갑·두꺼운 외투 챙기세요 · 손 시려워요"]);
+  else if(tmax < 12) T.push(["🧣","선선한 날 (최고 "+Math.round(tmax)+"°)","겉옷 하나 꼭 챙기세요"]);
+  else if(tmax <= 24) T.push(pick([["🍂","활동하기 좋은 기온 ("+Math.round(tmin)+"~"+Math.round(tmax)+"°)","현장 점검하기 딱 좋은 날이에요"],["🙂","포근한 하루 ("+Math.round(tmin)+"~"+Math.round(tmax)+"°)","가벼운 스트레칭으로 몸도 풀어 주세요"]]));
+  else T.push(["🥤","따뜻한 날 (최고 "+Math.round(tmax)+"°)","물 자주 드시고 차량 환기도 해 주세요"]);
+  if(hr >= 17 || hr < 6) T.unshift(["🌙","야간 운행 안전","전조등 확인 · 보행자·이륜차 특히 주의하세요"]);
+  return T.slice(0,2);
+}
 function wxCard(){
   wxLoad();
   if(!WX || !WX.d) return '';
@@ -3669,6 +3684,8 @@ function wxCard(){
   /* 1) 주의 안내 */
   if(A.length) S.push('<div class="wx-s wx-al '+A[0][3]+'"><div class="wx-k">⚠️ 오늘 날씨 주의 '+(A.length>1?'<em>'+A.length+'건</em>':'')+'</div>'+
     A.slice(0,2).map(function(a){ return '<div class="wx-a"><i>'+a[0]+'</i><span><b>'+a[1]+'</b><small>'+a[2]+'</small></span></div>'; }).join('')+'</div>');
+  else S.push('<div class="wx-s wx-al g"><div class="wx-k">😊 오늘 날씨 한마디</div>'+
+    wxTips(d).map(function(a){ return '<div class="wx-a"><i>'+a[0]+'</i><span><b>'+a[1]+'</b><small>'+a[2]+'</small></span></div>'; }).join('')+'</div>');
   /* 2) 지금 */
   S.push('<div class="wx-s wx-now"><div class="wx-k">지금 · '+WX_LOC.name+'</div><div class="wx-m"><i>'+ic[0]+'</i><b class="num">'+Math.round(c.temperature_2m)+'°</b><span>'+ic[1]+'<small>체감 '+Math.round(c.apparent_temperature)+'° · 습도 '+Math.round(c.relative_humidity_2m)+'% · 바람 '+(+c.wind_speed_10m).toFixed(1)+'m/s</small></span></div>'+
     '<div class="wx-r"><span>최저 <b class="num">'+Math.round(dl.temperature_2m_min[0])+'°</b></span><span>최고 <b class="num">'+Math.round(dl.temperature_2m_max[0])+'°</b></span><span>강수확률 <b class="num">'+(dl.precipitation_probability_max[0]==null?'-':dl.precipitation_probability_max[0]+'%')+'</b></span></div></div>');
