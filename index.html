@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261024093745">
+<meta name="bsr-ver" content="20261024093856">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3423,7 +3423,7 @@ function mgrCard(){
   if(!mgrIs()) return '';
   var d = mgrData(), left = d.chk.filter(function(c){return !c.v}).length, H = HC_SVC.indexOf(myName())>=0 ? hcStat() : null, hm = H ? H.miss.length : 0, tot = (d.unNoti?d.unNoti.length:0) + d.undone.length + left + hm;
   return '<div class="sec"><button type="button" class="mgr" data-mgr="1"><span class="mgr-ic">✅</span><span class="mgr-t"><b>관리자 오늘 할 일</b><small>'+
-    ['확인 '+(3-left)+'/3', H?'해피콜 미제출 '+hm+'명':'', d.unNoti?'공지 '+d.unNoti.length+'명':'', '다발보 '+d.undone.length+'건'].filter(Boolean).join(' · ')+'</small></span><em class="num">'+tot+'</em></button></div>';
+    ['확인 '+(3-left)+'/3', H?'해피콜 '+hm+'명':'', d.unNoti?'공지 '+d.unNoti.length+'명':'', '다발보 '+d.undone.length+'건'].filter(Boolean).join(' · ')+'</small></span><em class="num">'+tot+'</em></button></div>';
 }
 function mgrView(){
   var d = mgrData();
