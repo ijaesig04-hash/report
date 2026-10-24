@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261024051921">
+<meta name="bsr-ver" content="20261024053642">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -794,8 +794,10 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .mvp-r{display:grid;grid-template-columns:28px auto 1fr auto;grid-template-rows:auto auto;align-items:center;column-gap:6px;padding:7px 4px;border-top:1px dashed #fde68a}
 .mvp-m{grid-row:span 2;font-size:22px}.mvp-r b{font-size:14.5px;color:#0f172a}.mvp-r small{font-size:11px;color:#64748b}.mvp-d{grid-column:2/4;font-size:11.5px;color:#78350f}.mvp-r em{grid-row:1/3;grid-column:4;font-style:normal;font-weight:900;color:#b45309;font-size:16px}
 .mvp-t{width:100%;border-collapse:collapse;font-size:12.5px}.mvp-t th,.mvp-t td{border-bottom:1px solid #eef2f7;padding:5px 3px;text-align:center}
+.brt>.sec+.sec{margin-top:14px}.brt>.brf-img{margin-top:16px}
+.my-pvc{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:10px 12px;box-shadow:0 2px 8px rgba(15,23,42,.05)}.my-pvc b{font-size:13.5px;color:#0f2a5c;white-space:nowrap}.my-pvc small{display:block;font-size:11px;color:#64748b;font-weight:500}.my-pvc select{flex:1;min-width:0;border:1px solid #cbd5e1;border-radius:10px;padding:8px;font:600 13px 'Noto Sans KR',sans-serif;background:#f8fafc}
 .mgr{width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:16px;padding:12px 14px;background:linear-gradient(135deg,#dcfce7,#bbf7d0 60%,#a7f3d0);color:#14532d;text-align:left;cursor:pointer;box-shadow:0 6px 16px rgba(22,163,74,.15);border:1px solid #86efac!important}.mgr .mgr-t small{opacity:1;color:#166534}.mgr em{background:#fff!important;color:#15803d}
-.mgr-ic{font-size:22px}.mgr-t{flex:1;display:flex;flex-direction:column}.mgr-t b{font-size:15px}.mgr-t small{font-size:11.5px;opacity:.85}.mgr em{font-style:normal;font-size:22px;font-weight:900;background:rgba(255,255,255,.18);border-radius:12px;padding:2px 10px}
+.mgr-ic{font-size:22px}.mgr-t{flex:1;display:flex;flex-direction:column}.mgr-t b{font-size:15px}.mgr-t small{font-size:11.5px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mgr-t{min-width:0}.mgr em{font-style:normal;font-size:22px;font-weight:900;background:rgba(255,255,255,.18);border-radius:12px;padding:2px 10px}
 .mg-s{border:1px solid #e2e8f0;border-radius:14px;padding:10px 12px;margin:8px 0}.mg-h{display:flex;justify-content:space-between;align-items:center}.mg-h b{font-size:14px}.mg-h small{font-weight:500;color:#64748b;font-size:11px}.mg-h span{font-weight:900;font-size:16px;color:#15803d}.mg-h span.ng{color:#b91c1c}
 .mg-ok{margin:6px 0 0;font-size:12.5px;color:#64748b}.mg-l{font-size:12.5px;margin-top:6px;display:flex;flex-direction:column;gap:3px}.mg-l em{font-style:normal;color:#b91c1c;font-weight:700}
 .mg-b{margin-top:8px;border:1px solid #c7d2fe;background:#eef2ff;color:#3730a3;border-radius:10px;font:700 12.5px "Noto Sans KR",sans-serif;padding:7px 12px;cursor:pointer}
@@ -873,20 +875,20 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mgc-t{display:flex;flex-direction:column}.mgc-t b{font-size:13.5px}.mgc-t small{font-size:11.5px;color:#64748b}.mgc.on .mgc-t b{color:#15803d}.mgc.on .mgc-t small{color:#15803d}
 .mgc-b{border:0;border-radius:10px;background:#1f4fd8;color:#fff;font:800 12.5px "Noto Sans KR",sans-serif;padding:8px 12px;cursor:pointer}.mgc-x{border:1px solid #e2e8f0;background:#fff;color:#64748b;border-radius:10px;font:700 12px "Noto Sans KR",sans-serif;padding:6px 10px}
 .mgc-i{grid-column:1/3;border:1px solid #cbd5e1;border-radius:10px;padding:8px 10px;font:500 13px "Noto Sans KR",sans-serif}
-.wx{margin-top:12px;border-radius:18px;background:linear-gradient(160deg,#e0f2fe,#f0f9ff 60%,#fff);border:1px solid #bae6fd;box-shadow:0 6px 16px rgba(14,116,144,.10);padding:12px 0 8px;overflow:hidden}
-.wx-t{display:flex;justify-content:space-between;align-items:baseline;padding:0 14px 8px}.wx-t b{font-size:15px;color:#0c4a6e}.wx-t small{font-size:11px;color:#64748b}
+.wx{margin-top:10px;border-radius:16px;background:linear-gradient(160deg,#e0f2fe,#f0f9ff 60%,#fff);border:1px solid #bae6fd;box-shadow:0 4px 12px rgba(14,116,144,.08);padding:9px 0 6px;overflow:hidden}
+.wx-t{display:flex;justify-content:space-between;align-items:baseline;padding:0 12px 5px}.wx-t b{font-size:14px;color:#0c4a6e}.wx-t small{font-size:10.5px;color:#64748b}
 .wx-sl{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}.wx-sl::-webkit-scrollbar{display:none}
-.wx-s{flex:0 0 100%;width:100%;overflow:hidden;scroll-snap-align:start;box-sizing:border-box;padding:2px 14px;min-height:118px}
-.wx-k{font-size:12px;font-weight:800;color:#0369a1;margin-bottom:8px}.wx-k em{font-style:normal;background:#fff;border-radius:999px;padding:1px 7px;margin-left:4px;font-size:11px}
-.wx-m{display:flex;align-items:center;gap:10px}.wx-m i{font-style:normal;font-size:40px;line-height:1}.wx-m b{font-size:30px;color:#0c4a6e;white-space:nowrap}.wx-m span{display:flex;flex-direction:column;font-size:14px;font-weight:700;color:#0f172a}.wx-m small{font-size:11.5px;font-weight:500;color:#475569;margin-top:2px}
-.wx-r{display:flex;gap:6px;margin-top:10px}.wx-r span{flex:1;background:rgba(255,255,255,.75);border-radius:10px;padding:6px 4px;text-align:center;font-size:11.5px;color:#475569}.wx-r b{display:block;font-size:14px;color:#0c4a6e}
-.wx-h{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}.wx-h div{background:rgba(255,255,255,.75);border-radius:10px;padding:6px 0;text-align:center;display:flex;flex-direction:column;gap:2px}.wx-h small{font-size:10.5px;color:#64748b;white-space:nowrap}.wx-h i{font-style:normal;font-size:20px}.wx-h b{font-size:14px;color:#0c4a6e}.wx-h em{font-style:normal;font-size:10px;color:#0284c7;min-height:12px}
-.wx-pm{display:grid;grid-template-columns:1fr 1fr;gap:8px}.wx-pm div{border-radius:12px;padding:10px;text-align:center;background:#fff;display:flex;flex-direction:column}.wx-pm small{font-size:11.5px;color:#64748b}.wx-pm b{font-size:18px}.wx-pm em{font-style:normal;font-size:11px;color:#64748b}
+.wx-s{flex:0 0 100%;width:100%;overflow:hidden;scroll-snap-align:start;box-sizing:border-box;padding:0 12px;min-height:84px}
+.wx-k{font-size:11.5px;font-weight:800;color:#0369a1;margin-bottom:4px}.wx-k em{font-style:normal;background:#fff;border-radius:999px;padding:1px 7px;margin-left:4px;font-size:11px}
+.wx-m{display:flex;align-items:center;gap:10px}.wx-m i{font-style:normal;font-size:30px;line-height:1}.wx-m b{font-size:24px;color:#0c4a6e;white-space:nowrap}.wx-m span{display:flex;flex-direction:column;font-size:13px;font-weight:700;color:#0f172a}.wx-m small{font-size:11px;font-weight:500;color:#475569;margin-top:2px}
+.wx-r{display:flex;gap:6px;margin-top:6px}.wx-r span{flex:1;background:rgba(255,255,255,.75);border-radius:9px;padding:4px;text-align:center;font-size:11px;color:#475569;display:flex;justify-content:center;gap:5px;align-items:baseline}.wx-r b{font-size:13px;color:#0c4a6e}
+.wx-h{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}.wx-h div{background:rgba(255,255,255,.75);border-radius:9px;padding:4px 0;text-align:center;display:flex;flex-direction:column;gap:2px}.wx-h small{font-size:10.5px;color:#64748b;white-space:nowrap}.wx-h i{font-style:normal;font-size:17px}.wx-h b{font-size:13px;color:#0c4a6e}.wx-h em{font-style:normal;font-size:10px;color:#0284c7;min-height:12px}
+.wx-pm{display:grid;grid-template-columns:1fr 1fr;gap:8px}.wx-pm div{border-radius:10px;padding:6px;text-align:center;background:#fff;display:flex;flex-direction:column}.wx-pm small{font-size:11.5px;color:#64748b}.wx-pm b{font-size:16px}.wx-pm em{font-style:normal;font-size:11px;color:#64748b}
 .wx-pm .g b{color:#0284c7}.wx-pm .n b{color:#16a34a}.wx-pm .b b{color:#ea580c}.wx-pm .x b{color:#dc2626}
 .wx-al .wx-k{color:#9a3412}.wx-al.r .wx-k{color:#b91c1c}
-.wx-a{display:flex;gap:10px;align-items:center;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:7px 10px;margin-bottom:5px}.wx-al.r .wx-a:first-of-type{background:#fef2f2;border-color:#fecaca}.wx-al.y .wx-a{background:#fefce8;border-color:#fde68a}
-.wx-a i{font-style:normal;font-size:24px}.wx-a span{display:flex;flex-direction:column}.wx-a b{font-size:13.5px;color:#7c2d12}.wx-a small{font-size:11.5px;color:#57534e}
-.wx-dt{display:flex;justify-content:center;gap:5px;margin-top:6px}.wx-dt i{width:6px;height:6px;border-radius:50%;background:#bae6fd;transition:all .2s}.wx-dt i.on{width:16px;border-radius:3px;background:#0284c7}
+.wx-a{display:flex;gap:8px;align-items:center;background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:5px 9px;margin-bottom:4px}.wx-al.r .wx-a:first-of-type{background:#fef2f2;border-color:#fecaca}.wx-al.y .wx-a{background:#fefce8;border-color:#fde68a}
+.wx-a i{font-style:normal;font-size:20px}.wx-a span{display:flex;flex-direction:column}.wx-a b{font-size:13px;color:#7c2d12}.wx-a small{font-size:11.5px;color:#57534e}
+.wx-dt{display:flex;justify-content:center;gap:5px;margin-top:5px}.wx-dt i{width:6px;height:6px;border-radius:50%;background:#bae6fd;transition:all .2s}.wx-dt i.on{width:16px;border-radius:3px;background:#0284c7}
 .hc-fold{width:100%;border:0;background:none;padding:0;cursor:pointer;text-align:left;font:inherit}.hc-fold .hc-ar{font-size:12px;color:#3730a3;margin-left:4px}
 .hc{margin-top:12px;border-radius:18px;padding:14px;background:#fff;border:1.5px solid #c7d2fe;box-shadow:0 6px 16px rgba(31,79,216,.10)}
 .hc.done{background:#f0fdf4;border-color:#86efac;display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 8px}.hc.done .hc-h{grid-column:1/3}
@@ -2931,6 +2933,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-24k", date:"10/24", title:"브리핑 정돈", tabs:["home"], items:["🌤️ 날씨 칸 크기 축소","관리자 오늘 할 일 · 직원 화면 미리보기 · 바로가기 칸 간격 정리"]},
  {id:"2026-10-24j", date:"10/24", title:"오늘 날씨 · 해피콜 접기", tabs:["home"], items:["🌤️ 브리핑에 오늘 날씨 — 지금·시간별·내일·미세먼지를 옆으로 넘겨 보기","⚠️ 비·눈·한파·폭염·강풍·안개·미세먼지 등 특이 날씨는 맨 앞에 안내 문구로","📱 해피콜 발송 현황 — 눌러서 접기/펼치기"]},
  {id:"2026-10-24i", date:"10/24", title:"공지 보기 정리", tabs:["home"], items:["📢 공지 보기 — '작성자'와 '내 확인 여부'를 따로 표시 (✓ ○○님 확인 완료)","안 본 공지는 목록에서 바로 확인하기","관리자 — 직원 확인 인원·미확인자 표시"]},
  {id:"2026-10-24h", date:"10/24", title:"글자 크게 · 공지", tabs:["home"], items:["🔠 글자 크게 — 화면 배치는 그대로, 작은 글자만 키워 깔끔하게","📢 공지 — 한 폰에서 이름을 바꿔도 새 이름으로 공지가 보이게"]},
@@ -3413,7 +3416,7 @@ function mgrCard(){
   if(!mgrIs()) return '';
   var d = mgrData(), left = d.chk.filter(function(c){return !c.v}).length, tot = (d.unNoti?d.unNoti.length:0) + d.undone.length + left;
   return '<div class="sec"><button type="button" class="mgr" data-mgr="1"><span class="mgr-ic">✅</span><span class="mgr-t"><b>관리자 오늘 할 일</b><small>'+
-    ['오늘 확인 '+(3-left)+'/3', d.unNoti?'공지 미확인 '+d.unNoti.length:'', '다발보(3회↑) 미조치 '+d.undone.length].filter(Boolean).join(' · ')+'</small></span><em class="num">'+tot+'</em></button></div>';
+    ['확인 '+(3-left)+'/3', d.unNoti?'공지 미확인 '+d.unNoti.length:'', '다발보 미조치 '+d.undone.length].filter(Boolean).join(' · ')+'</small></span><em class="num">'+tot+'</em></button></div>';
 }
 function mgrView(){
   var d = mgrData();
@@ -3663,7 +3666,7 @@ function wxCard(){
   var S = [];
   /* 1) 주의 안내 */
   if(A.length) S.push('<div class="wx-s wx-al '+A[0][3]+'"><div class="wx-k">⚠️ 오늘 날씨 주의 '+(A.length>1?'<em>'+A.length+'건</em>':'')+'</div>'+
-    A.slice(0,3).map(function(a){ return '<div class="wx-a"><i>'+a[0]+'</i><span><b>'+a[1]+'</b><small>'+a[2]+'</small></span></div>'; }).join('')+'</div>');
+    A.slice(0,2).map(function(a){ return '<div class="wx-a"><i>'+a[0]+'</i><span><b>'+a[1]+'</b><small>'+a[2]+'</small></span></div>'; }).join('')+'</div>');
   /* 2) 지금 */
   S.push('<div class="wx-s wx-now"><div class="wx-k">지금 · '+WX_LOC.name+'</div><div class="wx-m"><i>'+ic[0]+'</i><b class="num">'+Math.round(c.temperature_2m)+'°</b><span>'+ic[1]+'<small>체감 '+Math.round(c.apparent_temperature)+'° · 습도 '+Math.round(c.relative_humidity_2m)+'% · 바람 '+(+c.wind_speed_10m).toFixed(1)+'m/s</small></span></div>'+
     '<div class="wx-r"><span>최저 <b class="num">'+Math.round(dl.temperature_2m_min[0])+'°</b></span><span>최고 <b class="num">'+Math.round(dl.temperature_2m_max[0])+'°</b></span><span>강수확률 <b class="num">'+(dl.precipitation_probability_max[0]==null?'-':dl.precipitation_probability_max[0]+'%')+'</b></span></div></div>');
@@ -3755,7 +3758,7 @@ function myBox(){
   var nm = myName(), emp = (function(){ var lm=Object.keys(DUTY.months).sort().filter(function(m){return m<=kstDate(0).slice(0,7)}).pop()||Object.keys(DUTY.months).sort().pop(); return DUTY.months[lm].filter(function(r){return r[0]!=="CS파트장"}).map(function(r){return r[1]}); })().filter(function(n){return CS_MGR.indexOf(n)<0});
   var mgr = !nm || emp.indexOf(nm)<0, who = mgr ? (state.myv||'') : nm;
   var sel = mgr ? '<div class="my-pv"><span>👀 직원 화면 미리보기</span><select data-myv aria-label="직원 선택"><option value="">직원 선택</option>'+emp.map(function(n){return '<option'+(n===who?' selected':'')+'>'+n+'</option>'}).join('')+'</select></div>' : '';
-  if(!who) return mgr ? '<div class="sec my"><h2 style="font-size:14px">👤 직원별 \'내 할 일\'</h2>'+sel+'</div>' : '';
+  if(!who) return mgr ? '<div class="sec my"><div class="my-pvc"><span><b>👀 직원 화면 미리보기</b><small>직원별 \'내 할 일\' 확인</small></span><select data-myv aria-label="직원 선택"><option value="">직원 선택</option>'+emp.map(function(n){return '<option>'+n+'</option>'}).join('')+'</select></div></div>' : '';
   var w="일월화수목금토", I=dutyIndex(), pd=I.idx[who], days='';
   for(var k=0;k<7;k++){ var d=kstDate(k), c=pd&&pd.d[d]?pd.d[d].c:'', g=c?dCat(c):'', lb={A:'주간',AJ:'조석',U:'유동',B:'야간',D:'휴무',G:'교육','/':'휴가',J:'경조',K:'공가',P:'예비군'}[c]||c||'-';
     days += '<div class="my-d '+g+(k===0?' on':'')+'"><small>'+(k===0?'오늘':(+d.slice(8))+'('+w[new Date(d+"T00:00:00+09:00").getDay()]+')')+'</small><b>'+lb+'</b></div>'; }
