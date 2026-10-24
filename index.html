@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261024034810">
+<meta name="bsr-ver" content="20261024035413">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2915,6 +2915,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-24e", date:"10/24", title:"이름 선택 표시", tabs:["home"], items:["'파트장' 묶음 이름을 '서비스 관리자'로 변경","최문혁·이재식 이름 아래 '파트장' 직책 표시","이재식 — 👨‍💻 앱 개발자 표시"]},
  {id:"2026-10-24d", date:"10/24", title:"이름 선택 화면 정리", tabs:["home"], items:["👑 지사장 · ⭐ 서비스팀장 추가 — 파트장과 같은 관리자 권한","서비스팀장은 파트장 줄 맨 왼쪽으로","'관리자' 항목 삭제 — 관리자로 들어왔던 폰은 이름을 다시 선택"]},
  {id:"2026-10-24c", date:"10/24", title:"해피콜 발송 체크", tabs:["home"], items:["📱 해피콜 발송 체크 — 근무 중엔 작게 표시, 퇴근 3시간 전부터 펼쳐서 표시 · 체크하면 숨김 (근무자에게만)","파트장 화면 — 주간·야간 근무자별 제출 현황 · 미제출자 안내 복사"]},
  {id:"2026-10-24b", date:"10/24", title:"화면 정리", tabs:["home"], items:["브리핑 정리 — 이번 주 요약·D-day, 내 미응답·지표·운전성향은 '더 보기'로","모든 탭 제목·카드·버튼·접기 메뉴 모양 통일","관리자 오늘 할 일 — 루핑 건·전일 특이사항·건강체크 확인 추가"]},
@@ -3962,10 +3963,10 @@ document.addEventListener("visibilitychange", function(){ if(document.visibility
 <script>
 (function(){
 var LOG_URL = "https://script.google.com/macros/s/AKfycbxh2WI3i7AdlxSxTkxvoO3aQ1v6auL1o2nAjMRsvyYiuqOrUTXqYZnLPj3DIkYVy6ZKhw/exec"; /*LOG_URL*/
-var STAFF = [["지사 관리",["지사장"]],["파트장",["서비스팀장","최문혁","이재식"]],["26호",["용승우","고혁진","김유건"]],["27호",["주상덕","유영민","김민석"]],["28호",["김태건","김지원","양심영"]],["127호",["박수안","권재원","김민수"]],["160호",["김동현","이명섭","남현준"]]];
+var STAFF = [["지사 관리",["지사장"]],["서비스 관리자",["서비스팀장","최문혁","이재식"]],["26호",["용승우","고혁진","김유건"]],["27호",["주상덕","유영민","김민석"]],["28호",["김태건","김지원","양심영"]],["127호",["박수안","권재원","김민수"]],["160호",["김동현","이명섭","남현준"]]];
 var ALL = []; STAFF.forEach(function(g){ ALL = ALL.concat(g[1]); });
 var MGRS = ["지사장","서비스팀장","최문혁","이재식"]; window.BSR_MGRS = MGRS;
-var NM_SUB = {"지사장":"지사 총괄 책임자","서비스팀장":"서비스 관리 책임자","이재식":"앱 개발"};
+var NM_SUB = {"지사장":"지사 총괄 책임자","서비스팀장":"서비스 관리 책임자","최문혁":"파트장","이재식":"파트장 · 앱 개발자"};
 window.BSR_API = LOG_URL; window.BSR_ALL = ALL;
 function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function s(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
@@ -3989,7 +3990,7 @@ function esc(x){ return String(x).replace(/[&<>"]/g,function(c){return {"&":"&am
 function ro(w){ var c=w.charCodeAt(w.length-1)-0xAC00; if(c<0||c>11171) return "로"; var j=c%28; return (j===0||j===8)?"로":"으로"; }
 function pickView(){
   var h = '<div class="vl-hero">'+(me?'<button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button>':'')+'<small>BUKSEOUL REPORT</small><h2>누구신가요? 👋</h2><p>처음 한 번만 선택하면 이 폰에서 기억합니다.</p></div><div class="vl-grid">';
-  STAFF.forEach(function(gr){ h += '<div class="vl-g">'+gr[0]+'</div>'; gr[1].forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':'')+n+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
+  STAFF.forEach(function(gr){ h += '<div class="vl-g">'+gr[0]+'</div>'; gr[1].forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':n==="이재식"?'👨‍💻 ':'')+n+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
   var listed = ALL.concat(["타부서"]), typed = pick && listed.indexOf(pick)<0 ? pick : "";
   h += '<div class="vl-g">그 외</div>'+["타부서"].map(function(n){ return '<button type="button" class="vl-n" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+n+'</button>'; }).join('')+
     '<div class="vl-div"><span>목록에 이름이 없으면</span></div><div class="vl-in-row"><label for="vlname">직접 입력</label><input id="vlname" type="text" maxlength="10" autocomplete="off" placeholder="이름을 입력하세요" value="'+esc(typed)+'" aria-label="이름 직접 입력"></div></div>';
