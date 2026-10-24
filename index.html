@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261024053642">
+<meta name="bsr-ver" content="20261024054717">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -883,6 +883,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .wx-m{display:flex;align-items:center;gap:10px}.wx-m i{font-style:normal;font-size:30px;line-height:1}.wx-m b{font-size:24px;color:#0c4a6e;white-space:nowrap}.wx-m span{display:flex;flex-direction:column;font-size:13px;font-weight:700;color:#0f172a}.wx-m small{font-size:11px;font-weight:500;color:#475569;margin-top:2px}
 .wx-r{display:flex;gap:6px;margin-top:6px}.wx-r span{flex:1;background:rgba(255,255,255,.75);border-radius:9px;padding:4px;text-align:center;font-size:11px;color:#475569;display:flex;justify-content:center;gap:5px;align-items:baseline}.wx-r b{font-size:13px;color:#0c4a6e}
 .wx-h{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}.wx-h div{background:rgba(255,255,255,.75);border-radius:9px;padding:4px 0;text-align:center;display:flex;flex-direction:column;gap:2px}.wx-h small{font-size:10.5px;color:#64748b;white-space:nowrap}.wx-h i{font-style:normal;font-size:17px}.wx-h b{font-size:13px;color:#0c4a6e}.wx-h em{font-style:normal;font-size:10px;color:#0284c7;min-height:12px}
+.wx-w{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}.wx-w div{background:rgba(255,255,255,.75);border-radius:9px;padding:4px 0;text-align:center;display:flex;flex-direction:column;gap:1px}.wx-w div.on{background:#fff;box-shadow:inset 0 0 0 1.5px #7dd3fc}.wx-w small{font-size:10.5px;color:#64748b;font-weight:700}.wx-w i{font-style:normal;font-size:16px}.wx-w b{font-size:12.5px;color:#dc2626}.wx-w span{font-size:11.5px;color:#2563eb}.wx-w em{font-style:normal;font-size:9.5px;color:#0284c7;min-height:11px;white-space:nowrap}
 .wx-pm{display:grid;grid-template-columns:1fr 1fr;gap:8px}.wx-pm div{border-radius:10px;padding:6px;text-align:center;background:#fff;display:flex;flex-direction:column}.wx-pm small{font-size:11.5px;color:#64748b}.wx-pm b{font-size:16px}.wx-pm em{font-style:normal;font-size:11px;color:#64748b}
 .wx-pm .g b{color:#0284c7}.wx-pm .n b{color:#16a34a}.wx-pm .b b{color:#ea580c}.wx-pm .x b{color:#dc2626}
 .wx-al .wx-k{color:#9a3412}.wx-al.r .wx-k{color:#b91c1c}
@@ -2933,6 +2934,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-24l", date:"10/24", title:"날씨 기준 · 주간 날씨", tabs:["home"], items:["🌤️ 날씨 기준 — 북서울지사 관할(강북·도봉·노원) 중심","📅 날씨 슬라이드에 주간 날씨(7일) 추가 — 최고/최저 · 강수확률"]},
  {id:"2026-10-24k", date:"10/24", title:"브리핑 정돈", tabs:["home"], items:["🌤️ 날씨 칸 크기 축소","관리자 오늘 할 일 · 직원 화면 미리보기 · 바로가기 칸 간격 정리"]},
  {id:"2026-10-24j", date:"10/24", title:"오늘 날씨 · 해피콜 접기", tabs:["home"], items:["🌤️ 브리핑에 오늘 날씨 — 지금·시간별·내일·미세먼지를 옆으로 넘겨 보기","⚠️ 비·눈·한파·폭염·강풍·안개·미세먼지 등 특이 날씨는 맨 앞에 안내 문구로","📱 해피콜 발송 현황 — 눌러서 접기/펼치기"]},
  {id:"2026-10-24i", date:"10/24", title:"공지 보기 정리", tabs:["home"], items:["📢 공지 보기 — '작성자'와 '내 확인 여부'를 따로 표시 (✓ ○○님 확인 완료)","안 본 공지는 목록에서 바로 확인하기","관리자 — 직원 확인 인원·미확인자 표시"]},
@@ -3600,11 +3602,11 @@ function bigApply(){ var on=false; try{ on = localStorage.getItem("bsr_big")==="
 function bigToggle(){ var on=!document.documentElement.classList.contains("bsr-big"); try{ localStorage.setItem("bsr_big", on?"1":"0"); }catch(e){} bigApply(); nrToast(on?"🔠 글자를 크게 했어요":"🔠 글자 크기를 원래대로"); }
 bigApply();
 
-/* ===== 🌤️ 오늘 날씨 — 기상청(KMA) 예보 모델(Open-Meteo 제공) · 서울 강북 기준 · 30분 캐시 =====
+/* ===== 🌤️ 오늘 날씨 — 기상청(KMA) 예보 모델(Open-Meteo 제공) · 강북·도봉·노원 관할 기준 · 30분 캐시 =====
    특이 날씨(비·눈·한파·폭염·강풍·안개·미세먼지 등)는 맨 앞 카드에 안내 문구로 */
-var WX_LOC = {lat:37.6396, lon:127.0257, name:"서울 강북"};
+var WX_LOC = {lat:37.6540, lon:127.0480, name:"강북·도봉·노원"};   /* 북서울지사 관할 3개 구의 중심(도봉구 창동 부근) */
 var WX = null, WX_BUSY = false;
-try{ WX = JSON.parse(localStorage.getItem("bsr_wx")||"null"); }catch(e){}
+try{ WX = JSON.parse(localStorage.getItem("bsr_wx")||"null"); if(WX && (WX.v!==2)) WX = null; }catch(e){}
 var WX_CODE = {0:["☀️","맑음"],1:["🌤️","대체로 맑음"],2:["⛅","구름 조금"],3:["☁️","흐림"],45:["🌫️","안개"],48:["🌫️","짙은 안개"],51:["🌦️","약한 이슬비"],53:["🌦️","이슬비"],55:["🌧️","강한 이슬비"],56:["🌧️","어는 이슬비"],57:["🌧️","어는 이슬비"],61:["🌧️","약한 비"],63:["🌧️","비"],65:["🌧️","강한 비"],66:["🌧️","어는 비"],67:["🌧️","강한 어는 비"],71:["🌨️","약한 눈"],73:["🌨️","눈"],75:["❄️","많은 눈"],77:["🌨️","싸락눈"],80:["🌦️","소나기"],81:["🌧️","소나기"],82:["⛈️","강한 소나기"],85:["🌨️","눈 소나기"],86:["❄️","강한 눈 소나기"],95:["⛈️","뇌우"],96:["⛈️","뇌우·우박"],99:["⛈️","강한 뇌우·우박"]};
 function wxC(c){ return WX_CODE[c] || WX_CODE[Math.floor(c/10)*10] || ["🌡️","-"]; }
 function wxUrl(model){
@@ -3612,7 +3614,7 @@ function wxUrl(model){
     "&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,relative_humidity_2m,precipitation"+
     "&hourly=temperature_2m,weather_code,precipitation_probability,precipitation,snowfall,wind_gusts_10m"+
     "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,snowfall_sum,wind_gusts_10m_max"+
-    "&timezone=Asia%2FSeoul&forecast_days=2&wind_speed_unit=ms"+(model?"&models="+model:"");
+    "&timezone=Asia%2FSeoul&forecast_days=7&wind_speed_unit=ms"+(model?"&models="+model:"");
 }
 /* 기상청 모델 값을 우선, 빈 값(강수확률 등)은 기본 모델로 채움 */
 function wxMerge(a, b){
@@ -3629,7 +3631,7 @@ function wxLoad(force){
   Promise.all([get(wxUrl("kma_seamless")), get(wxUrl("")),
     get("https://air-quality-api.open-meteo.com/v1/air-quality?latitude="+WX_LOC.lat+"&longitude="+WX_LOC.lon+"&current=pm10,pm2_5&timezone=Asia%2FSeoul")])
   .then(function(r){ WX_BUSY = false; var d = wxMerge(r[0]&&r[0].current?r[0]:null, r[1]&&r[1].current?r[1]:null); if(!d) return;
-    WX = {at:Date.now(), kma:!!(r[0]&&r[0].current), d:d, aq:r[2]&&r[2].current||null};
+    WX = {v:2, at:Date.now(), kma:!!(r[0]&&r[0].current), d:d, aq:r[2]&&r[2].current||null};
     try{ localStorage.setItem("bsr_wx", JSON.stringify(WX)); }catch(e){}
     if(window.state && state.tab==="home") render(); });
 }
@@ -3677,7 +3679,11 @@ function wxCard(){
   /* 4) 내일 */
   if(dl.time.length>1){ var ti = wxC(dl.weather_code[1]);
     S.push('<div class="wx-s"><div class="wx-k">내일 · '+dl.time[1].slice(5).replace('-','/')+'</div><div class="wx-m"><i>'+ti[0]+'</i><b class="num">'+Math.round(dl.temperature_2m_min[1])+'° / '+Math.round(dl.temperature_2m_max[1])+'°</b><span>'+ti[1]+'<small>강수확률 '+(dl.precipitation_probability_max[1]==null?'-':dl.precipitation_probability_max[1]+'%')+((dl.snowfall_sum[1]||0)>0?' · 눈 '+dl.snowfall_sum[1].toFixed(1)+'cm':(dl.precipitation_sum[1]||0)>=1?' · 비 '+Math.round(dl.precipitation_sum[1])+'mm':'')+'</small></span></div></div>'); }
-  /* 5) 미세먼지 */
+  /* 5) 주간 날씨 */
+  if(dl.time.length>2){ var wd="일월화수목금토";
+    S.push('<div class="wx-s"><div class="wx-k">주간 날씨 · '+dl.time.length+'일</div><div class="wx-w">'+dl.time.map(function(t,i){ var p=dl.precipitation_probability_max[i];
+      return '<div'+(i===0?' class="on"':'')+'><small>'+(i===0?'오늘':i===1?'내일':wd[new Date(t+"T00:00:00+09:00").getDay()])+'</small><i>'+wxC(dl.weather_code[i])[0]+'</i><b class="num">'+Math.round(dl.temperature_2m_max[i])+'°</b><span class="num">'+Math.round(dl.temperature_2m_min[i])+'°</span><em>'+(p==null?'':'💧'+p+'%')+'</em></div>'; }).join('')+'</div></div>'); }
+  /* 6) 미세먼지 */
   if(WX.aq){ var g1=pmGrade(WX.aq.pm10), g2=pmGrade(WX.aq.pm2_5,1);
     S.push('<div class="wx-s"><div class="wx-k">미세먼지 · 지금</div><div class="wx-pm"><div class="'+(g1?g1[1]:'')+'"><small>미세먼지</small><b>'+(g1?g1[0]:'-')+'</b><em class="num">'+(WX.aq.pm10==null?'-':Math.round(WX.aq.pm10))+'㎍</em></div><div class="'+(g2?g2[1]:'')+'"><small>초미세먼지</small><b>'+(g2?g2[0]:'-')+'</b><em class="num">'+(WX.aq.pm2_5==null?'-':Math.round(WX.aq.pm2_5))+'㎍</em></div></div></div>'); }
   return '<div class="wx"><div class="wx-t"><b>'+ic[0]+' 오늘 날씨</b><small>'+(WX.kma?'기상청(KMA) 예보 모델':'기상 예보')+' · '+('0'+up.getUTCHours()).slice(-2)+':'+('0'+up.getUTCMinutes()).slice(-2)+' 기준</small></div>'+
