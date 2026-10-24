@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261024061745">
+<meta name="bsr-ver" content="20261024093745">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -886,7 +886,9 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .wx-w{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}.wx-w div{background:rgba(255,255,255,.75);border-radius:9px;padding:4px 0;text-align:center;display:flex;flex-direction:column;gap:1px}.wx-w div.on{background:#fff;box-shadow:inset 0 0 0 1.5px #7dd3fc}.wx-w small{font-size:10.5px;color:#64748b;font-weight:700}.wx-w i{font-style:normal;font-size:16px}.wx-w b{font-size:12.5px;color:#dc2626}.wx-w span{font-size:11.5px;color:#2563eb}.wx-w em{font-style:normal;font-size:9.5px;color:#0284c7;min-height:11px;white-space:nowrap}
 .wx-pm{display:grid;grid-template-columns:1fr 1fr;gap:8px}.wx-pm div{border-radius:10px;padding:6px;text-align:center;background:#fff;display:flex;flex-direction:column}.wx-pm small{font-size:11.5px;color:#64748b}.wx-pm b{font-size:16px}.wx-pm em{font-style:normal;font-size:11px;color:#64748b}
 .wx-pm .g b{color:#0284c7}.wx-pm .n b{color:#16a34a}.wx-pm .b b{color:#ea580c}.wx-pm .x b{color:#dc2626}
-.wx-al .wx-k{color:#9a3412}.wx-al.g .wx-k{color:#15803d}.wx-al.g .wx-a{background:#f0fdf4;border-color:#bbf7d0}.wx-al.g .wx-a b{color:#14532d}.wx-al.r .wx-k{color:#b91c1c}
+.wx-al .wx-k{color:#9a3412}.wx-k{display:flex;align-items:center;gap:4px}.wx-kma{margin-left:auto;font-size:10.5px;font-weight:700;color:#b91c1c;background:#fff;border:1px solid #fecaca;border-radius:999px;padding:2px 8px;text-decoration:none;white-space:nowrap}
+.wx-a.o{background:#fff7ed!important;border-color:#fed7aa!important}.wx-a.o b{color:#7c2d12!important}.wx-a.g{background:#eef2ff!important;border-color:#c7d2fe!important}.wx-a.g b{color:#312e81!important}
+.wx-ld{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px!important;font-size:13px;color:#0c4a6e;font-weight:700}.wx-ld small{display:block;font-size:11px;color:#64748b;font-weight:500}.wx-ld button{border:1px solid #7dd3fc;background:#fff;color:#0369a1;border-radius:999px;padding:5px 12px;font:700 12px 'Noto Sans KR',sans-serif;cursor:pointer;white-space:nowrap}.wx-al.g .wx-k{color:#15803d}.wx-al.g .wx-a{background:#f0fdf4;border-color:#bbf7d0}.wx-al.g .wx-a b{color:#14532d}.wx-al.r .wx-k{color:#b91c1c}
 .wx-a{display:flex;gap:8px;align-items:center;background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:5px 9px;margin-bottom:4px}.wx-al.r .wx-a:first-of-type{background:#fef2f2;border-color:#fecaca}.wx-al.y .wx-a{background:#fefce8;border-color:#fde68a}
 .wx-a i{font-style:normal;font-size:20px}.wx-a span{display:flex;flex-direction:column}.wx-a b{font-size:13px;color:#7c2d12}.wx-a small{font-size:11.5px;color:#57534e}
 .wx-dt{display:flex;justify-content:center;gap:5px;margin-top:5px}.wx-dt i{width:6px;height:6px;border-radius:50%;background:#bae6fd;transition:all .2s}.wx-dt i.on{width:16px;border-radius:3px;background:#0284c7}
@@ -2934,6 +2936,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-24o", date:"10/24", title:"해피콜 할 일 · 날씨 보완", tabs:["home"], items:["✅ 관리자 오늘 할 일에 해피콜 미제출 인원 포함 (서비스 관리자)","🌙 야간 근무자 — 오늘 밤 근무 날씨(18~07시) 한 줄 안내","🚨 날씨 칸에 '기상청 특보 확인' 바로가기","날씨를 못 불러오면 안내와 '다시 시도' 버튼"]},
  {id:"2026-10-24n", date:"10/24", title:"날씨 순서", tabs:["home"], items:["🌤️ 날씨 칸 — 지금 날씨가 첫 장, 날씨 한마디(주의 안내)가 두 번째 장"]},
  {id:"2026-10-24m", date:"10/24", title:"맑은 날 날씨 한마디", tabs:["home"], items:["😊 특이 날씨가 없는 날에도 날씨 칸 첫 장에 '오늘 날씨 한마디' — 날씨·기온·시간대에 맞는 안내 (날마다 문구 바뀜)"]},
  {id:"2026-10-24l", date:"10/24", title:"날씨 기준 · 주간 날씨", tabs:["home"], items:["🌤️ 날씨 기준 — 북서울지사 관할(강북·도봉·노원) 중심","📅 날씨 슬라이드에 주간 날씨(7일) 추가 — 최고/최저 · 강수확률"]},
@@ -3418,9 +3421,9 @@ function mgrData(){
 }
 function mgrCard(){
   if(!mgrIs()) return '';
-  var d = mgrData(), left = d.chk.filter(function(c){return !c.v}).length, tot = (d.unNoti?d.unNoti.length:0) + d.undone.length + left;
+  var d = mgrData(), left = d.chk.filter(function(c){return !c.v}).length, H = HC_SVC.indexOf(myName())>=0 ? hcStat() : null, hm = H ? H.miss.length : 0, tot = (d.unNoti?d.unNoti.length:0) + d.undone.length + left + hm;
   return '<div class="sec"><button type="button" class="mgr" data-mgr="1"><span class="mgr-ic">✅</span><span class="mgr-t"><b>관리자 오늘 할 일</b><small>'+
-    ['확인 '+(3-left)+'/3', d.unNoti?'공지 미확인 '+d.unNoti.length:'', '다발보 미조치 '+d.undone.length].filter(Boolean).join(' · ')+'</small></span><em class="num">'+tot+'</em></button></div>';
+    ['확인 '+(3-left)+'/3', H?'해피콜 미제출 '+hm+'명':'', d.unNoti?'공지 '+d.unNoti.length+'명':'', '다발보 '+d.undone.length+'건'].filter(Boolean).join(' · ')+'</small></span><em class="num">'+tot+'</em></button></div>';
 }
 function mgrView(){
   var d = mgrData();
@@ -3431,6 +3434,8 @@ function mgrView(){
     d.chk.map(function(c){ var v=c.v; return '<div class="mgc'+(v?' on':'')+'"><div class="mgc-t"><b>'+c.t+'</b><small>'+(v?'✓ '+esc2(v[2])+' · '+notiDate(v[0])+(v[3]&&v[3]!=="확인"?' · '+esc2(v[3]):''):c.d)+'</small></div>'+
       (v?'<button type="button" class="mgc-x" data-chk="'+c.id+'" data-chkv="취소">취소</button>':'<button type="button" class="mgc-b" data-chk="'+c.id+'" data-chkv="확인">확인 완료</button>')+
       (c.id==="prev"&&!v?'<input class="mgc-i" id="chk-prev" maxlength="100" placeholder="특이사항 메모 (선택)">':'')+'</div>'; }).join('')+'</div>';
+  var H = HC_SVC.indexOf(myName())>=0 ? hcStat() : null;
+  if(H) h += sec('📱 해피콜 미제출 <small>'+hcLbl(H.x)+'</small>', H.miss.length, H.miss.length?chips(H.miss):'<p class="mg-ok">모두 제출했어요 👍</p>', H.miss.length?'<button type="button" class="mg-b" data-hccp="'+esc2(H.miss.join(', '))+'">📋 미제출자 안내 복사</button>':'');
   h += d.n0 ? sec('📢 공지 미확인 <small>'+esc2(d.n0.title)+'</small>', d.unNoti?d.unNoti.length:'-', d.unNoti?chips(d.unNoti):'<p class="mg-ok">관리자 PIN을 넣은 폰에서 확인됩니다</p>', d.unNoti&&d.unNoti.length?'<button type="button" class="mg-b" data-mgcp="noti">📋 미확인자 안내 복사</button>':'') : sec('📢 공지', 0, '<p class="mg-ok">올린 공지가 없습니다</p>');
   h += sec('🔁 다발보 미조치 <small>3회 이상</small>', d.undone.length, d.undone.length?'<div class="mg-l">'+d.undone.slice(0,8).map(function(x){return '<div>'+x.car+'호 · '+esc2(x.name)+' <em>'+x.n+'회</em></div>'}).join('')+(d.undone.length>8?'<div>외 '+(d.undone.length-8)+'곳</div>':'')+'</div>':'<p class="mg-ok">없음 👍</p>', '<button type="button" class="mg-b" data-mggo="alm">발보관리로 이동 ›</button>');
   openSheet(h);
@@ -3607,7 +3612,7 @@ bigApply();
 /* ===== 🌤️ 오늘 날씨 — 기상청(KMA) 예보 모델(Open-Meteo 제공) · 강북·도봉·노원 관할 기준 · 30분 캐시 =====
    특이 날씨(비·눈·한파·폭염·강풍·안개·미세먼지 등)는 맨 앞 카드에 안내 문구로 */
 var WX_LOC = {lat:37.6540, lon:127.0480, name:"강북·도봉·노원"};   /* 북서울지사 관할 3개 구의 중심(도봉구 창동 부근) */
-var WX = null, WX_BUSY = false;
+var WX = null, WX_BUSY = false, WX_ERR = false, WX_ERRAT = 0;
 try{ WX = JSON.parse(localStorage.getItem("bsr_wx")||"null"); if(WX && (WX.v!==2)) WX = null; }catch(e){}
 var WX_CODE = {0:["☀️","맑음"],1:["🌤️","대체로 맑음"],2:["⛅","구름 조금"],3:["☁️","흐림"],45:["🌫️","안개"],48:["🌫️","짙은 안개"],51:["🌦️","약한 이슬비"],53:["🌦️","이슬비"],55:["🌧️","강한 이슬비"],56:["🌧️","어는 이슬비"],57:["🌧️","어는 이슬비"],61:["🌧️","약한 비"],63:["🌧️","비"],65:["🌧️","강한 비"],66:["🌧️","어는 비"],67:["🌧️","강한 어는 비"],71:["🌨️","약한 눈"],73:["🌨️","눈"],75:["❄️","많은 눈"],77:["🌨️","싸락눈"],80:["🌦️","소나기"],81:["🌧️","소나기"],82:["⛈️","강한 소나기"],85:["🌨️","눈 소나기"],86:["❄️","강한 눈 소나기"],95:["⛈️","뇌우"],96:["⛈️","뇌우·우박"],99:["⛈️","강한 뇌우·우박"]};
 function wxC(c){ return WX_CODE[c] || WX_CODE[Math.floor(c/10)*10] || ["🌡️","-"]; }
@@ -3628,11 +3633,13 @@ function wxMerge(a, b){
 }
 function wxLoad(force){
   if(WX_BUSY) return; if(!force && WX && Date.now()-WX.at < 30*60000) return;
+  if(!force && WX_ERR && Date.now()-WX_ERRAT < 120000) return;   /* 실패 후 2분은 자동 재시도 안 함 */
   WX_BUSY = true;
   var get = function(u){ return fetch(u,{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; }); };
   Promise.all([get(wxUrl("kma_seamless")), get(wxUrl("")),
     get("https://air-quality-api.open-meteo.com/v1/air-quality?latitude="+WX_LOC.lat+"&longitude="+WX_LOC.lon+"&current=pm10,pm2_5&timezone=Asia%2FSeoul")])
-  .then(function(r){ WX_BUSY = false; var d = wxMerge(r[0]&&r[0].current?r[0]:null, r[1]&&r[1].current?r[1]:null); if(!d) return;
+  .then(function(r){ WX_BUSY = false; var d = wxMerge(r[0]&&r[0].current?r[0]:null, r[1]&&r[1].current?r[1]:null);
+    if(!d){ WX_ERR = true; WX_ERRAT = Date.now(); if(window.state && state.tab==="home") render(); return; } WX_ERR = false;
     WX = {v:2, at:Date.now(), kma:!!(r[0]&&r[0].current), d:d, aq:r[2]&&r[2].current||null};
     try{ localStorage.setItem("bsr_wx", JSON.stringify(WX)); }catch(e){}
     if(window.state && state.tab==="home") render(); });
@@ -3676,9 +3683,27 @@ function wxTips(d){
   if(hr >= 17 || hr < 6) T.unshift(["🌙","야간 운행 안전","전조등 확인 · 보행자·이륜차 특히 주의하세요"]);
   return T.slice(0,2);
 }
+/* 야간 근무자: 오늘 밤(18시~다음날 07시) 날씨 한 줄 */
+function wxNight(d){
+  var nm = myName(); if(!nm || typeof hcRoster!=="function") return null;
+  var hr = new Date(Date.now()+9*3600000).getUTCHours(), nd = hr < 9 ? kstDate(-1) : kstDate(0);
+  if(hcRoster(nd, "야간").indexOf(nm) < 0) return null;
+  var a = Date.parse(nd+"T18:00:00+09:00"), b = a + 13*3600000, now = Date.now(), h = d.hourly, I = [];
+  h.time.forEach(function(t,i){ var ms = Date.parse(t+":00+09:00"); if(ms >= Math.max(a, now-3600000) && ms < b) I.push(i); });
+  if(!I.length) return null;
+  var tmin = Math.min.apply(null, I.map(function(i){return h.temperature_2m[i]})), pop = Math.max.apply(null, I.map(function(i){return h.precipitation_probability[i]||0})),
+      rain = I.reduce(function(s,i){return s+(h.precipitation[i]||0)},0), snow = I.reduce(function(s,i){return s+(h.snowfall[i]||0)},0), codes = I.map(function(i){return h.weather_code[i]});
+  var msg = [];
+  if(snow > 0) msg.push("밤사이 눈 · 빙판길 감속");
+  else if(rain >= 1 || pop >= 60) msg.push("밤사이 비 · 빗길 감속");
+  if(tmin <= 0) msg.push("새벽 영하 · 결빙 주의");
+  if(codes.some(function(c){return c===45||c===48})) msg.push("새벽 안개 · 전조등 켜기");
+  if(!msg.length) msg.push(tmin < 8 ? "새벽엔 쌀쌀해요 · 겉옷 챙기세요" : "특별한 날씨 없음 · 전조등 확인하고 안전운행");
+  return ["🌙", "오늘 밤 근무 날씨 (최저 "+Math.round(tmin)+"° · 강수 "+pop+"%)", msg.join(" · "), (snow>0||rain>=1||pop>=60||tmin<=0)?"o":"g"];
+}
 function wxCard(){
   wxLoad();
-  if(!WX || !WX.d) return '';
+  if(!WX || !WX.d) return '<div class="wx wx-ld"><span>'+(WX_ERR&&!WX_BUSY?'🌥️ 날씨를 불러오지 못했어요 <small>인터넷 연결을 확인해 주세요</small>':'🌤️ 날씨를 불러오는 중이에요…')+'</span>'+(WX_ERR&&!WX_BUSY?'<button type="button" data-wxre="1">↻ 다시 시도</button>':'')+'</div>';
   var d = WX.d, c = d.current, dl = d.daily, h = d.hourly, ic = wxC(c.weather_code), A = wxAlerts(d, WX.aq);
   var now = Date.now(), up = new Date(WX.at+9*3600000);
   var S = [];
@@ -3686,10 +3711,12 @@ function wxCard(){
   S.push('<div class="wx-s wx-now"><div class="wx-k">지금 · '+WX_LOC.name+'</div><div class="wx-m"><i>'+ic[0]+'</i><b class="num">'+Math.round(c.temperature_2m)+'°</b><span>'+ic[1]+'<small>체감 '+Math.round(c.apparent_temperature)+'° · 습도 '+Math.round(c.relative_humidity_2m)+'% · 바람 '+(+c.wind_speed_10m).toFixed(1)+'m/s</small></span></div>'+
     '<div class="wx-r"><span>최저 <b class="num">'+Math.round(dl.temperature_2m_min[0])+'°</b></span><span>최고 <b class="num">'+Math.round(dl.temperature_2m_max[0])+'°</b></span><span>강수확률 <b class="num">'+(dl.precipitation_probability_max[0]==null?'-':dl.precipitation_probability_max[0]+'%')+'</b></span></div></div>');
   /* 2) 주의 안내 · 날씨 한마디 */
-  if(A.length) S.push('<div class="wx-s wx-al '+A[0][3]+'"><div class="wx-k">⚠️ 오늘 날씨 주의 '+(A.length>1?'<em>'+A.length+'건</em>':'')+'</div>'+
-    A.slice(0,2).map(function(a){ return '<div class="wx-a"><i>'+a[0]+'</i><span><b>'+a[1]+'</b><small>'+a[2]+'</small></span></div>'; }).join('')+'</div>');
-  else S.push('<div class="wx-s wx-al g"><div class="wx-k">😊 오늘 날씨 한마디</div>'+
-    wxTips(d).map(function(a){ return '<div class="wx-a"><i>'+a[0]+'</i><span><b>'+a[1]+'</b><small>'+a[2]+'</small></span></div>'; }).join('')+'</div>');
+  var NT = wxNight(d), na = function(a){ return '<div class="wx-a'+(a[3]?' '+a[3]:'')+'"><i>'+a[0]+'</i><span><b>'+a[1]+'</b><small>'+a[2]+'</small></span></div>'; };
+  var KMA = '<a class="wx-kma" href="https://www.weather.go.kr/w/special-report/overall.do" target="_blank" rel="noopener">🚨 기상청 특보 확인 ›</a>';
+  if(A.length) S.push('<div class="wx-s wx-al '+A[0][3]+'"><div class="wx-k">⚠️ 오늘 날씨 주의 '+(A.length>1?'<em>'+A.length+'건</em>':'')+KMA+'</div>'+(NT?na(NT):'')+
+    A.slice(0,NT?1:2).map(function(a){ return '<div class="wx-a"><i>'+a[0]+'</i><span><b>'+a[1]+'</b><small>'+a[2]+'</small></span></div>'; }).join('')+'</div>');
+  else S.push('<div class="wx-s wx-al g"><div class="wx-k">😊 오늘 날씨 한마디'+KMA+'</div>'+(NT?na(NT):'')+
+    wxTips(d).slice(0,NT?1:2).map(function(a){ return '<div class="wx-a"><i>'+a[0]+'</i><span><b>'+a[1]+'</b><small>'+a[2]+'</small></span></div>'; }).join('')+'</div>');
   /* 3) 시간별 (3시간 간격 6칸) */
   var hs = []; for(var i=0;i<h.time.length && hs.length<6;i++){ var ms=Date.parse(h.time[i]+":00+09:00"); if(ms >= now-1800000 && (+h.time[i].slice(11,13))%3===0) hs.push(i); }
   if(hs.length) S.push('<div class="wx-s"><div class="wx-k">시간별</div><div class="wx-h">'+hs.map(function(i){ var hh=+h.time[i].slice(11,13), p=h.precipitation_probability[i];
@@ -3713,6 +3740,7 @@ document.addEventListener("scroll", function(e){ var sl=e.target; if(!sl || sl.i
 document.addEventListener("touchstart", function(e){ if(e.target.closest && e.target.closest("#wxsl")) WX_HOLD = Date.now(); }, {passive:true});
 if(!WX_T) WX_T = setInterval(function(){ var sl=document.getElementById("wxsl"); if(!sl || document.hidden || Date.now()-WX_HOLD < 15000) return; var n=sl.children.length, i=Math.round(sl.scrollLeft/sl.clientWidth); sl.scrollTo({left: ((i+1)%n)*sl.clientWidth, behavior:"smooth"}); }, 6000);
 document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible") wxLoad(); });
+document.addEventListener("click", function(e){ if(e.target.closest("[data-wxre]")){ WX_ERR = false; wxLoad(true); render(); } });
 
 /* ===== 📱 해피콜 문자 발송 체크 — 근무표 시간 기준 · 기록은 'hc|근무일|이름' 키 =====
    주간 07~18시, 야간 18~다음날 07시 · 근무 중엔 작게 접어서, 퇴근 3시간 전부터 펼쳐서 고정 · 제출하면 '고생하셨어요' 후 숨김 */
@@ -3729,7 +3757,7 @@ function hcGet(d, n){ if(typeof actsFor!=="function") return null; var L=actsFor
 var HC_FORM = {cnt:0, why:'', open:false}, HC_THX = null;
 function hcCard(){
   var nm = myName();
-  if(mgrIs()) return ['서비스팀장','최문혁','이재식'].indexOf(nm)>=0 ? hcMgr() : '';
+  if(mgrIs()) return HC_SVC.indexOf(nm)>=0 ? hcMgr() : '';
   if(HC_THX && Date.now()<HC_THX.until) return '<div class="hc thx"><b>🙌 '+esc2(nm)+'님, 오늘도 고생 많으셨어요!</b><span>해피콜 '+HC_THX.txt+' 제출 완료 · 조심히 퇴근하세요</span></div>';
   var x = hcMine(nm); if(!x) return '';
   if(hcGet(x.d, nm)) return '';
@@ -3742,12 +3770,17 @@ function hcCard(){
     '<button type="button" class="hc-go" data-hcgo="'+x.d+'"'+(f.cnt===0&&!f.why?' disabled':'')+'>발송 체크 완료</button></div>';
 }
 /* 파트장: 퇴근 3시간 전부터 그 근무조, 그 전에는 직전 근무조 현황 */
-function hcMgr(){
+var HC_SVC = ["서비스팀장","최문혁","이재식"];   /* 해피콜 현황을 보는 서비스 관리자 */
+function hcStat(){
   var h = new Date(Date.now()+9*3600000).getUTCHours(), t = kstDate(0), y = kstDate(-1);
   var x = h>=15 ? {d:t,s:"주간"} : h>=4 ? {d:y,s:"야간"} : {d:y,s:"주간"};
-  var L = hcRoster(x.d, x.s); if(!L.length) return '';
-  var st = L.map(function(n){ return {n:n, v:hcGet(x.d, n)}; }), done = st.filter(function(q){return q.v}).length, sum = st.reduce(function(a,q){return a+(q.v?q.v.cnt:0)},0);
-  var miss = st.filter(function(q){return !q.v}).map(function(q){return q.n});
+  var L = hcRoster(x.d, x.s); if(!L.length) return null;
+  var st = L.map(function(n){ return {n:n, v:hcGet(x.d, n)}; });
+  return {x:x, st:st, done:st.filter(function(q){return q.v}).length, sum:st.reduce(function(a,q){return a+(q.v?q.v.cnt:0)},0), miss:st.filter(function(q){return !q.v}).map(function(q){return q.n})};
+}
+function hcMgr(){
+  var H = hcStat(); if(!H) return '';
+  var x = H.x, st = H.st, done = H.done, sum = H.sum, miss = H.miss;
   var fold = lsGet("bsr_hcfold")!=="0";
   var head = '<button type="button" class="hc-fold" data-hcfold="1" aria-expanded="'+!fold+'"><div class="hc-h"><b>📱 해피콜 발송 현황</b><span class="hc-s">제출 '+done+'/'+st.length+' · '+sum+'건<span class="hc-ar">'+(fold?'▾':'▴')+'</span></span></div></button>';
   if(fold) return '<div class="hc mgr-hc">'+head+'</div>';
