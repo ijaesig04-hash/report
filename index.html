@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261024042730">
+<meta name="bsr-ver" content="20261024050002">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1095,6 +1095,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .xs-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.xs-h b{font-size:16px}
 .xs-h button{border:0;background:#eef2f8;border-radius:10px;padding:7px 11px;font:700 13px "Noto Sans KR",sans-serif;cursor:pointer;margin-left:4px;color:#14213a}
 .xs-n{border-top:1px solid #e3e9f3;padding:10px 0}.xs-n div{display:flex;gap:8px;align-items:baseline}.xs-n span{color:#1f4fd8;font-weight:800;font-size:12px}
+.nl-by{margin:6px 0 0;font-size:12px;color:#64748b}.xs-n .nl-row{margin-top:6px}.nl-ok{display:inline-block;background:#e7f7ee;color:#137a3f!important;border-radius:999px;padding:4px 10px;font-size:12.5px;font-weight:700}.nl-go{border:0;background:#1f4fd8;color:#fff;border-radius:999px;padding:6px 12px;font:700 12.5px 'Noto Sans KR',sans-serif;cursor:pointer}.nl-st{margin:6px 0 0;font-size:12px;color:#475569;background:#f1f5fc;border-radius:10px;padding:6px 10px}
 .xs-n ul{margin:4px 0 0;padding-left:18px;font-size:12.5px;color:#475569;line-height:1.55}
 .xs-p{font-size:13px;color:#475569}.xs-pre{white-space:pre-wrap;font:13px/1.55 "Noto Sans KR",sans-serif;background:#f1f5fc;border-radius:12px;padding:12px;user-select:all;-webkit-user-select:all}
 .op{font-size:12px}.op-t{display:flex;justify-content:space-between;align-items:baseline;border-bottom:3px solid #1f4fd8;padding-bottom:6px;margin-bottom:6px}.op-t b{font-size:17px}.op-t span{font-size:11px;color:#64748b}
@@ -2915,6 +2916,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-24i", date:"10/24", title:"공지 보기 정리", tabs:["home"], items:["📢 공지 보기 — '작성자'와 '내 확인 여부'를 따로 표시 (✓ ○○님 확인 완료)","안 본 공지는 목록에서 바로 확인하기","관리자 — 직원 확인 인원·미확인자 표시"]},
  {id:"2026-10-24h", date:"10/24", title:"글자 크게 · 공지", tabs:["home"], items:["🔠 글자 크게 — 화면 배치는 그대로, 작은 글자만 키워 깔끔하게","📢 공지 — 한 폰에서 이름을 바꿔도 새 이름으로 공지가 보이게"]},
  {id:"2026-10-24g", date:"10/24", title:"이름별 기능 안내", tabs:["home"], items:["📱 해피콜 발송 현황 — 서비스 관리자(서비스팀장·파트장)만 보기","이름 선택 화면에 이름별로 보이는 기능 안내 추가"]},
  {id:"2026-10-24f", date:"10/24", title:"직책 표시", tabs:["home"], items:["최문혁 — 선임파트장","차량별 대포장 표시 (용승우·주상덕·김태건·박수안·김동현)"]},
@@ -4226,7 +4228,11 @@ function notiBanner(){
 }
 function notiList(){
   var h = '<div class="xs-h"><b>📢 공지</b><button type="button" data-xs="close">✕</button></div>';
-  h += NOTI.items.length ? NOTI.items.map(function(x){ return '<div class="xs-n"><div><span class="num">'+notiDate(x.t)+'</span><b>'+esc2(x.title)+'</b></div><p class="ntc-lb">'+esc2(x.body||'')+'</p><small>'+esc2(x.by||'')+(notiAcked(x.id)?' · ✓ 확인함':'')+'</small></div>'; }).join('') : '<p class="xs-p">아직 공지가 없습니다.</p>';
+  var me = myName(), all = (window.BSR_ALL||[]).filter(function(n){return CS_MGR.indexOf(n)<0});
+  h += NOTI.items.length ? NOTI.items.map(function(x){ var v = lsGet(notiAckKey(x.id)), ak = NOTI.acks && mgrIs() ? (NOTI.acks[x.id]||[]) : null;
+      var mine = me ? (v ? '<span class="nl-ok">✓ '+esc2(me)+'님 확인 완료'+(+v>1?' · '+notiDate(+v):'')+'</span>' : '<button type="button" class="nl-go" data-ntack="'+esc2(x.id)+'">✓ '+esc2(me)+'님 확인하기</button>') : '';
+      var st = ak ? '<p class="nl-st">👥 직원 확인 <b>'+all.filter(function(n){return ak.indexOf(n)>=0}).length+'</b>/'+all.length+'명'+(function(){ var m=all.filter(function(n){return ak.indexOf(n)<0}); return m.length?' · 미확인: '+m.join(', '):' · 모두 확인 👍'; })()+'</p>' : '';
+      return '<div class="xs-n"><div><span class="num">'+notiDate(x.t)+'</span><b>'+esc2(x.title)+'</b></div><p class="ntc-lb">'+esc2(x.body||'')+'</p><p class="nl-by">✍️ 작성 '+esc2(x.by||'')+'</p><div class="nl-row">'+mine+'</div>'+st+'</div>'; }).join('') : '<p class="xs-p">아직 공지가 없습니다.</p>';
   openSheet(h);
 }
 function notiWrite(msg){
@@ -4243,7 +4249,7 @@ function notiWrite(msg){
 }
 document.addEventListener("click", function(e){
   var a = e.target.closest("[data-ntack]");
-  if(a){ var id=a.dataset.ntack; lsSet(notiAckKey(id),"1"); apiPing("a=ack&id="+encodeURIComponent(id)+"&name="+encodeURIComponent(myName()||"이름없음")); render(); return; }
+  if(a){ var id=a.dataset.ntack; lsSet(notiAckKey(id),String(Date.now())); apiPing("a=ack&id="+encodeURIComponent(id)+"&name="+encodeURIComponent(myName()||"이름없음")); render(); if(a.closest("#xsheet")) notiList(); else nrToast("✅ 공지 확인 완료 — 관리자에게 전달됐어요"); return; }
   if(e.target.closest("[data-ntpost]")){
     var t=(document.getElementById("ntw-t")||{}).value||"", b=(document.getElementById("ntw-b")||{}).value||"";
     if(!t.trim()){ notiWrite("제목을 입력해 주세요."); return; }
