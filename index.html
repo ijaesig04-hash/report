@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025143110">
+<meta name="bsr-ver" content="20261025143537">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -989,6 +989,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mx-top{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;position:relative;z-index:1}.mx-top div{background:rgba(255,255,255,.08);border-radius:10px;padding:6px 10px;font-size:13px;display:flex;justify-content:space-between}.mx-top em{font-style:normal;color:#ffd769}
 .mx-note{display:block;width:100%;text-align:left;margin-top:12px;font:500 11.5px "Noto Sans KR",sans-serif;color:#c9d6f5;background:none;border:0;border-top:1px solid rgba(255,255,255,.15);padding:8px 0 0;cursor:pointer;position:relative;z-index:1}
 .mx-cr{display:flex;flex-direction:column;gap:6px}.mx-cr p{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:center;margin:0;border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px}.mx-cr i{grid-row:1/3;width:8px;height:30px;border-radius:4px}.mx-cr b{font-size:13.5px}.mx-cr em{grid-row:1/3;grid-column:3;font-style:normal;font-weight:800;color:#0f2a5c}.mx-cr small{grid-column:2;font-size:12px;color:#64748b}
+.mxst{font-size:.72em;margin-left:2px;letter-spacing:-2px;vertical-align:.12em;white-space:nowrap}
 .mx-ms{margin:4px 0 8px}.mx-info{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:8px 10px;font-size:12.5px;color:#1e3a8a;margin:6px 0}.mx-ok{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:8px 10px;font-size:13px;color:#065f46;margin:6px 0}.mx-warn{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:8px 10px;font-size:12.5px;color:#9a3412;margin:6px 0}
 .mx-leg{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:12px;color:#64748b;margin:8px 0}.mx-leg span{display:flex;align-items:center;gap:4px}.mx-leg i{width:10px;height:10px;border-radius:3px}.mx-leg small{margin-left:auto}
 .mx-rk{display:flex;flex-direction:column;gap:6px}
@@ -3097,6 +3098,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-25n", date:"10/25", title:"MVP 별", tabs:["home"], items:["⭐ MVP로 확정된 횟수만큼 이름 옆에 별 표시 (1번 ⭐ · 2번 ⭐⭐) — 근무 현황·근무표·개인별·이름 선택 등 앱 전체"]},
  {id:"2026-10-25m", date:"10/25", title:"MVP 오류 수정", tabs:["home"], items:["🏆 지표 자료가 없는 달(9월)은 MVP 확정 버튼을 막고, 0점 결과는 브리핑에 띄우지 않게 수정"]},
  {id:"2026-10-25l", date:"10/25", title:"관리자 메뉴 보안", tabs:["home"], items:["🔒 관리자 PIN을 넣었던 폰이라도 직원 이름으로 바꾸면 관리자 메뉴·기능이 보이지 않게 수정"]},
  {id:"2026-10-25k", date:"10/25", title:"MVP 하반기 전체", tabs:["home"], items:["🏆 이달의 MVP 관리자 화면 — 하반기 6월~이번 달까지 월별로 보기 · 확정한 달은 🏆 표시","6월은 사업팀 평가 출동지표, 10월부터는 개인별 지표 · 가감점은 지사평가 기준"]},
@@ -3635,6 +3637,30 @@ function mxInfo(){
     '<p><i style="background:#7c3aed"></i><b>📱 앱 활용도</b><em>20점</em><small>공지 확인율 8점 · 다발보 조치 입력 1건 2점 (최대 6) · 해피콜 제출률 6점</small></p></div>'+
     '<p class="xs-p">동점이면 개인별 지표 평균 달성률이 높은 사람이 MVP입니다.</p>');
 }
+/* ⭐ MVP 별 — 확정된 MVP 횟수만큼 이름 옆에 별 (화면 어디서든 이름만 있는 글자에 자동으로 붙임) */
+var MX_ST = {k:'', map:{}};
+function mxStarMap(){
+  var A = window.ACTS||[], k = A.length+'|'+(A.length?A[A.length-1][0]:0); if(k===MX_ST.k) return MX_ST.map;
+  var last = {}; A.forEach(function(r){ if(/^mvpwin\|/.test(r[1]) && (!last[r[1]] || last[r[1]][0] <= r[0])) last[r[1]] = r; });
+  var map = {}; Object.keys(last).forEach(function(key){ var p = String(last[key][3]).split('|'); if(p[0] && p[0]!=="취소" && +p[2]>0) map[p[0]] = (map[p[0]]||0)+1; });
+  MX_ST = {k:k, map:map}; return map;
+}
+function mxStars(n){ var c = mxStarMap()[n]||0; return c ? (c<=3 ? new Array(c+1).join('⭐') : '⭐'+c) : ''; }
+var MX_SQ = false;
+function mxStarFix(){
+  MX_SQ = false; var map = mxStarMap(), names = Object.keys(map); if(!names.length) return;
+  var re = new RegExp('^(?:[👑⭐👨‍💻🏆 ]*)('+names.join('|')+')(님)?$');
+  document.querySelectorAll("#view *, #xsheet *, #vlin *, #mechip").forEach(function(el){
+    if(el.querySelector(':scope > .mxst')) return;
+    var t = ''; for(var c=el.firstChild;c;c=c.nextSibling){ if(c.nodeType===3) t += c.nodeValue; } t = t.trim(); if(!t) return;
+    var m = t.match(re); if(!m) return;
+    var sp = document.createElement('span'); sp.className = 'mxst'; sp.textContent = mxStars(m[1]); sp.title = 'MVP '+map[m[1]]+'회';
+    var tn = null; for(var c2=el.firstChild;c2;c2=c2.nextSibling){ if(c2.nodeType===3 && c2.nodeValue.indexOf(m[1])>=0) tn = c2; }
+    if(tn) el.insertBefore(sp, tn.nextSibling); else el.appendChild(sp);
+  });
+}
+function mxStarQ(){ if(!MX_SQ){ MX_SQ = true; requestAnimationFrame(mxStarFix); } }
+try{ new MutationObserver(mxStarQ).observe(document.body,{childList:true,subtree:true}); }catch(e){}
 /* 관리자: 순위 · 소개/인상 입력 · 확정 */
 function mxView(m){
   var cm = kstDate(0).slice(0,7), y = +cm.slice(0,4), mo = +cm.slice(5), pm = mo===1 ? (y-1)+'-12' : y+'-'+('0'+(mo-1)).slice(-2);
@@ -3643,7 +3669,7 @@ function mxView(m){
   var seg = function(v,c){ return v>0?'<s style="width:'+v+'%;background:'+c+'"></s>':''; };
   var h = '<div class="xs-h"><b>🏆 이달의 MVP (관리자)</b><button type="button" data-xs="close">✕</button></div>'+
     '<div class="chips mx-ms">'+mxMonths().map(function(k){return '<button type="button" class="chip" data-mxm="'+k+'" aria-pressed="'+(k===m)+'">'+(+k.slice(5))+'월'+(k===cm?' (진행 중)':'')+(mxWin(k)?' 🏆':'')+'</button>'}).join('')+'</div>'+
-    (w?'<p class="mx-ok">✅ '+(+m.slice(5))+'월 MVP 확정: <b>'+esc2(w.n)+'</b> ('+w.t+'점) · '+esc2(w.by)+' '+notiDate(w.at)+'</p>':'')+
+    '<p class="xs-p" style="margin:2px 0 6px">⭐ MVP로 확정될 때마다 앱 곳곳의 이름 옆에 별이 하나씩 붙어요 (2번이면 ⭐⭐).</p>'+(w?'<p class="mx-ok">✅ '+(+m.slice(5))+'월 MVP 확정: <b>'+esc2(w.n)+'</b> ('+w.t+'점) · '+esc2(w.by)+' '+notiDate(w.at)+'</p>':'')+
     (R.src==='teval'?'<p class="mx-info">ℹ️ '+(+m.slice(5))+'월 개인별 지표는 사업팀 평가의 출동지표 5개(불필요·발보율·25분·체감 출동시간·금융사 출동시간) 만점 여부로 계산했어요.</p>':'')+
     (R.src==='beval'?'<p class="mx-info">ℹ️ '+(+m.slice(5))+'월은 개인별 지표 자료가 없어, 지표 점수를 지사평가 점수(위험예지·판넬 등, 가감점 제외)를 40점으로 환산해 넣었어요.</p>':'')+
     (!R.src?'<p class="mx-warn">⚠️ '+(+m.slice(5))+'월 개인별 지표 자료가 없어 지표 점수가 모두 0점이에요. 사업팀 평가나 개인별 지표 자료를 주시면 반영할게요.</p>':'')+
