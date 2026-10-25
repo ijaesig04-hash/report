@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025151320">
+<meta name="bsr-ver" content="20261025152040">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2782,10 +2782,10 @@ function viewEvalTeam2(mode){
 }
 function viewEval(){
   var es = state.es || "team";
-  if(es==="branch") return halfBanner()+mxHist()+evalSwitch()+viewEvalBranch();
-  if(es==="team") return halfBanner()+mxHist()+evalSwitch()+viewEvalTeam2("team");
-  if(es==="total") return halfBanner()+mxHist()+evalSwitch()+viewEvalTeam2("total");
-  return halfBanner()+mxHist()+evalSwitch()+viewEvalTeam();
+  if(es==="branch") return mxHist()+halfBanner()+evalSwitch()+viewEvalBranch();
+  if(es==="team") return mxHist()+halfBanner()+evalSwitch()+viewEvalTeam2("team");
+  if(es==="total") return mxHist()+halfBanner()+evalSwitch()+viewEvalTeam2("total");
+  return mxHist()+halfBanner()+evalSwitch()+viewEvalTeam();
 }
 function viewEvalTeam(){
   var rows = EVAL.rows, n = rows.length;
@@ -3115,6 +3115,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-26c", date:"10/26", title:"월별 평가 순서", tabs:["eval"], items:["월별 평가 탭 — 이달의 MVP를 맨 위로, 하반기 평가 안내는 그 아래로"]},
  {id:"2026-10-26b", date:"10/26", title:"MVP 당선 축하", tabs:["home"], items:["🎉 MVP로 뽑힌 직원이 앱을 열면 폭죽과 당선 축하 메시지 — '감사합니다'를 누를 때까지 매번 표시"]},
  {id:"2026-10-26a", date:"10/26", title:"월별 평가 · MVP 이력", tabs:["eval"], items:["🏆 월별 평가 탭 맨 위에 이달의 MVP 이력 (6월~11월) · 누적 횟수","📘 선정 기준·취지 펼쳐 보기 — 고과 미반영 · 동기부여 목적"]},
  {id:"2026-10-25o", date:"10/25", title:"MVP 6~9월 기준", tabs:["home"], items:["🏆 6~9월 MVP는 지사평가 자료로 계산 (개인별 지표는 10월 신설) · 9월은 자료 반영 후 계산"]},
