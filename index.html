@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025154952">
+<meta name="bsr-ver" content="20261025160409">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -991,6 +991,11 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mx-cr{display:flex;flex-direction:column;gap:6px}.mx-cr p{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:center;margin:0;border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px}.mx-cr i{grid-row:1/3;width:8px;height:30px;border-radius:4px}.mx-cr b{font-size:13.5px}.mx-cr em{grid-row:1/3;grid-column:3;font-style:normal;font-weight:800;color:#0f2a5c}.mx-cr small{grid-column:2;font-size:12px;color:#64748b}
 .mxst{font-size:.72em;margin-left:2px;letter-spacing:-2px;vertical-align:.12em;white-space:nowrap}
 .mx-ms{margin:4px 0 8px}
+.aa{margin-top:12px;border-radius:18px;padding:12px 14px;background:linear-gradient(135deg,#fff7ed,#fffbeb);border:1.5px solid #fdba74;box-shadow:0 6px 16px rgba(234,88,12,.12)}
+.aa-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}.aa-h b{font-size:15px;color:#9a3412}.aa-h em{font-style:normal;color:#ea580c}
+.aa-ok{border:0;border-radius:999px;background:#ea580c;color:#fff;font:800 12.5px "Noto Sans KR",sans-serif;padding:6px 14px;cursor:pointer}
+.aa-r{display:grid;grid-template-columns:auto auto 1fr;gap:2px 8px;align-items:baseline;padding:7px 0;border-top:1px dashed #fed7aa}.aa-r span{font-size:11.5px;color:#9a3412}.aa-r b{font-size:13.5px;color:#0f2a5c}.aa-r small{font-size:12px;color:#64748b;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.aa-r p{grid-column:1/-1;margin:0;font-size:13px;color:#334155;word-break:keep-all}
+.aa-more{margin:4px 0 0;font-size:12px;color:#9a3412}.aa-go{margin-top:8px;width:100%;border:1px solid #fdba74;background:#fff;color:#c2410c;border-radius:12px;padding:8px;font:800 13px "Noto Sans KR",sans-serif;cursor:pointer}
 .hm-hero b .hm-nm,.hm-hero b .hm-gr{display:block!important;font:inherit!important;color:inherit!important;margin:0!important;opacity:1!important;letter-spacing:inherit!important}.hm-hero b .hm-nm{font-size:.86em!important;opacity:.9!important;margin-bottom:2px!important}.hm-hero b .hm-gr{word-break:keep-all}.hm-hero b .hm-gr.long{font-size:.9em!important}
 .mxc{position:fixed;inset:0;z-index:2147483100;background:radial-gradient(circle at 50% 30%,rgba(29,58,154,.92),rgba(6,13,34,.96));display:flex;align-items:center;justify-content:center;padding:20px}
 .mxc canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
@@ -3116,6 +3121,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-26f", date:"10/26", title:"다발보 조치 알림", tabs:["home","alm"], items:["🔔 근무자가 다발보 조치를 입력하면 관리자 브리핑 맨 위에 알림 카드 (확인 누르면 사라짐)","앱을 열어 둔 상태면 '○○님이 다발보 조치를 입력했어요' 알림 · 3분마다 새로 확인"]},
  {id:"2026-10-26e", date:"10/26", title:"인사말 정렬", tabs:["home"], items:["브리핑 인사말 — 이름은 첫 줄, 인사는 다음 줄로 나눠 보기 좋게"]},
  {id:"2026-10-26d", date:"10/26", title:"관리자 인사 · 이름 선택 구분", tabs:["home"], items:["관리자가 열면 브리핑 인사말이 관리자용으로 (시간대별)","이름 선택 화면 — 관리자 / 차량 근무자 경계선으로 구분"]},
  {id:"2026-10-26c", date:"10/26", title:"월별 평가 순서", tabs:["eval"], items:["월별 평가 탭 — 이달의 MVP를 맨 위로, 하반기 평가 안내는 그 아래로"]},
@@ -3495,7 +3501,7 @@ function brief(){
              ['야간 근무 힘내세요','🌙','늦은 시간까지 정말 고생 많으세요']; })(), greet = gp[0];
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?'<span class="hm-nm">'+esc2(nm2)+'님,</span>':'')+'<span class="hm-gr'+(greet.replace(/ /g,'').length>10?' long':'')+'">'+greet+' <i class="wv">'+gp[1]+'</i></span></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
-  return '<div class="sec">'+hero+mxCard()+wxCard()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
+  return '<div class="sec">'+hero+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
 /* 미응답 고객 응답 요청 문자 — 예시 문구는 여기만 수정. {이름}은 앱에서 고른 이름으로 자동 입력(없으면 000) */
@@ -4925,9 +4931,29 @@ function actsLoad(){
     ACTS_PEND = left; actsSavePend();
     try{localStorage.setItem("bsr_acts",JSON.stringify(ACTS))}catch(e){}
     if(left.length) setTimeout(actsLoad, 8000);
+    try{ actNotify(); }catch(_){}
     if(window.state && (state.tab==="alm"||state.tab==="cs"||state.tab==="home")) render();
   }).catch(function(){});
 }
+/* 🔔 다발보 조치 알림 — 근무자가 조치를 입력하면 관리자 브리핑 맨 위에 알림 카드 + 앱을 열어 둔 상태면 토스트 (MVP 앱 활용도 항목) */
+function actIsAlm(k){ return !/^(hc|chk|nr|mvp|mvpwin|mvpack)\|/.test(k); }
+function actNew(){
+  if(typeof mgrIs!=="function" || !mgrIs()) return [];
+  var me = myName(), kk = 'bsr_actseen_'+me, seen = +lsGet(kk)||0; if(!seen){ seen = Date.now()-86400000; lsSet(kk, String(seen)); }
+  return ACTS.filter(function(r){ return actIsAlm(r[1]) && r[0]>seen && r[2]!==me; }).sort(function(a,b){return b[0]-a[0]});
+}
+function actLb(k){ var p = String(k).split('|'); return p.length>1 ? (/^\d+$/.test(p[0])?p[0]+'호 ':p[0]+' ')+p.slice(1).join(' ') : k; }
+function actAlertCard(){
+  var L = actNew(); if(!L.length) return '';
+  return '<div class="aa"><div class="aa-h"><b>🔔 새 다발보 조치 <em class="num">'+L.length+'</em>건</b><button type="button" class="aa-ok" data-aaok="1">확인</button></div>'+
+    L.slice(0,4).map(function(r){ return '<div class="aa-r"><span class="num">'+notiDate(r[0])+'</span><b>'+esc2(r[2])+'</b><small>'+esc2(actLb(r[1]))+'</small><p>'+esc2(r[3])+'</p></div>'; }).join('')+
+    (L.length>4?'<p class="aa-more">외 '+(L.length-4)+'건</p>':'')+
+    '<button type="button" class="aa-go" data-goto="alm">발보관리에서 보기 ›</button></div>';
+}
+var AA_N = -1;
+function actNotify(){ var L = actNew(); if(AA_N>=0 && L.length>AA_N){ var r = L[0]; nrToast('🔔 '+r[2]+'님이 다발보 조치를 입력했어요'); } AA_N = L.length; }
+document.addEventListener("click", function(e){ if(e.target.closest("[data-aaok]")){ lsSet('bsr_actseen_'+myName(), String(Date.now())); AA_N = 0; render(); } });
+setInterval(function(){ if(document.visibilityState==="visible" && typeof mgrIs==="function" && mgrIs()) actsLoad(); }, 180000);
 function actsFor(key){ return ACTS.filter(function(r){return r[1]===key}).concat(ACTS_PEND.filter(function(r){return r[1]===key}).map(function(r){ var x=r.slice(0,4); x.pend=1; return x; })); }
 function actForm(key, label, msg){
   openSheet('<div class="xs-h"><b>✍️ 조치 입력</b><button type="button" data-xs="close">✕</button></div><p class="xs-p"><b>'+esc2(label)+'</b> 고객처에 한 조치를 짧게 적어주세요. 입력자: <b>'+esc2(myName()||'이름 없음')+'</b></p>'+
