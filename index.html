@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025153849">
+<meta name="bsr-ver" content="20261025154952">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -991,6 +991,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mx-cr{display:flex;flex-direction:column;gap:6px}.mx-cr p{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:center;margin:0;border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px}.mx-cr i{grid-row:1/3;width:8px;height:30px;border-radius:4px}.mx-cr b{font-size:13.5px}.mx-cr em{grid-row:1/3;grid-column:3;font-style:normal;font-weight:800;color:#0f2a5c}.mx-cr small{grid-column:2;font-size:12px;color:#64748b}
 .mxst{font-size:.72em;margin-left:2px;letter-spacing:-2px;vertical-align:.12em;white-space:nowrap}
 .mx-ms{margin:4px 0 8px}
+.hm-hero b .hm-nm,.hm-hero b .hm-gr{display:block!important;font:inherit!important;color:inherit!important;margin:0!important;opacity:1!important;letter-spacing:inherit!important}.hm-hero b .hm-nm{font-size:.86em!important;opacity:.9!important;margin-bottom:2px!important}.hm-hero b .hm-gr{word-break:keep-all}.hm-hero b .hm-gr.long{font-size:.9em!important}
 .mxc{position:fixed;inset:0;z-index:2147483100;background:radial-gradient(circle at 50% 30%,rgba(29,58,154,.92),rgba(6,13,34,.96));display:flex;align-items:center;justify-content:center;padding:20px}
 .mxc canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .mxc-in{position:relative;z-index:1;width:100%;max-width:360px;background:linear-gradient(160deg,#fffdf4,#fff6d6);border:2px solid #d4a017;border-radius:24px;padding:22px 20px 18px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.45);animation:mxpop .6s cubic-bezier(.2,1.4,.4,1)}
@@ -3115,6 +3116,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-26e", date:"10/26", title:"인사말 정렬", tabs:["home"], items:["브리핑 인사말 — 이름은 첫 줄, 인사는 다음 줄로 나눠 보기 좋게"]},
  {id:"2026-10-26d", date:"10/26", title:"관리자 인사 · 이름 선택 구분", tabs:["home"], items:["관리자가 열면 브리핑 인사말이 관리자용으로 (시간대별)","이름 선택 화면 — 관리자 / 차량 근무자 경계선으로 구분"]},
  {id:"2026-10-26c", date:"10/26", title:"월별 평가 순서", tabs:["eval"], items:["월별 평가 탭 — 이달의 MVP를 맨 위로, 하반기 평가 안내는 그 아래로"]},
  {id:"2026-10-26b", date:"10/26", title:"MVP 당선 축하", tabs:["home"], items:["🎉 MVP로 뽑힌 직원이 앱을 열면 폭죽과 당선 축하 메시지 — '감사합니다'를 누를 때까지 매번 표시"]},
@@ -3474,14 +3476,14 @@ function brief(){
     (vnear.length?'<div>🚓 차량 '+(fin2?'아깝게 4/5 ':'1개만 더 ')+'<b>'+vnear.map(function(v){return v.no+'호'}).join(', ')+'</b> (+'+BONUS_V+'점)</div>':'')+'</div></div>';
   h += '</div></details>';
   var hr = new Date(Date.now()+9*3600000).getUTCHours(), gp = (function(){ var k=new Date(Date.now()+9*3600000), t=k.getUTCHours()+k.getUTCMinutes()/60;
-      if(mgrIs()) return t<6?['늦은 시간까지 수고 많으세요','🌙','야간 근무 현황을 한눈에 확인하세요']:
+      if(mgrIs()) return t<6?['늦게까지 수고 많으세요','🌙','야간 근무 현황을 한눈에 확인하세요']:
         t<9?['좋은 아침이에요','☀️','오늘 근무 인원과 관리자 할 일을 먼저 확인하세요']:
         t<12?['오전도 힘내세요','💼','지표 변화와 다발보 조치 현황을 점검해 보세요']:
         t<13.5?['점심 맛있게 드세요','🍚','오후엔 공지 확인·해피콜 제출 현황을 챙겨 보세요']:
         t<17?['오후도 힘내세요','☕','오늘 확인할 일 중 남은 것이 있는지 살펴보세요']:
         t<19?['오늘도 수고 많으셨어요','🌇','주간 근무 마무리와 해피콜 제출을 확인해 주세요']:
         t<22?['편안한 저녁 보내세요','🌙','야간 근무 인원과 특이사항을 확인해 보세요']:
-             ['늦은 시간까지 수고 많으세요','🌙','야간 근무 현황을 한눈에 확인하세요'];
+             ['늦게까지 수고 많으세요','🌙','야간 근무 현황을 한눈에 확인하세요'];
       return t<6?['야간 근무 힘내세요','🌙','늦은 시간까지 정말 고생 많으세요']:
         t<7?['야간 근무 고생 많으셨어요','🌅','퇴근길 조심히 가시고 푹 쉬세요']:
         t<10?['상쾌한 아침이에요','☀️','오늘 꼭 볼 것만 한 화면에 모았어요']:
@@ -3491,7 +3493,7 @@ function brief(){
         t<19?['오늘도 고생 많으셨어요','🌇','퇴근 전 오늘 현황 마무리해 보세요']:
         t<22?['편안한 저녁 보내세요','🌙','야간 근무자분들은 안전 운행하세요']:
              ['야간 근무 힘내세요','🌙','늦은 시간까지 정말 고생 많으세요']; })(), greet = gp[0];
-  var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?esc2(nm2)+'님, ':'')+greet+' <i class="wv">'+gp[1]+'</i></b><span>'+gp[2]+'</span></div>';
+  var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?'<span class="hm-nm">'+esc2(nm2)+'님,</span>':'')+'<span class="hm-gr'+(greet.replace(/ /g,'').length>10?' long':'')+'">'+greet+' <i class="wv">'+gp[1]+'</i></span></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
   return '<div class="sec">'+hero+mxCard()+wxCard()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
