@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025152040">
+<meta name="bsr-ver" content="20261025153849">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3115,6 +3115,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-26d", date:"10/26", title:"관리자 인사 · 이름 선택 구분", tabs:["home"], items:["관리자가 열면 브리핑 인사말이 관리자용으로 (시간대별)","이름 선택 화면 — 관리자 / 차량 근무자 경계선으로 구분"]},
  {id:"2026-10-26c", date:"10/26", title:"월별 평가 순서", tabs:["eval"], items:["월별 평가 탭 — 이달의 MVP를 맨 위로, 하반기 평가 안내는 그 아래로"]},
  {id:"2026-10-26b", date:"10/26", title:"MVP 당선 축하", tabs:["home"], items:["🎉 MVP로 뽑힌 직원이 앱을 열면 폭죽과 당선 축하 메시지 — '감사합니다'를 누를 때까지 매번 표시"]},
  {id:"2026-10-26a", date:"10/26", title:"월별 평가 · MVP 이력", tabs:["eval"], items:["🏆 월별 평가 탭 맨 위에 이달의 MVP 이력 (6월~11월) · 누적 횟수","📘 선정 기준·취지 펼쳐 보기 — 고과 미반영 · 동기부여 목적"]},
@@ -3473,6 +3474,14 @@ function brief(){
     (vnear.length?'<div>🚓 차량 '+(fin2?'아깝게 4/5 ':'1개만 더 ')+'<b>'+vnear.map(function(v){return v.no+'호'}).join(', ')+'</b> (+'+BONUS_V+'점)</div>':'')+'</div></div>';
   h += '</div></details>';
   var hr = new Date(Date.now()+9*3600000).getUTCHours(), gp = (function(){ var k=new Date(Date.now()+9*3600000), t=k.getUTCHours()+k.getUTCMinutes()/60;
+      if(mgrIs()) return t<6?['늦은 시간까지 수고 많으세요','🌙','야간 근무 현황을 한눈에 확인하세요']:
+        t<9?['좋은 아침이에요','☀️','오늘 근무 인원과 관리자 할 일을 먼저 확인하세요']:
+        t<12?['오전도 힘내세요','💼','지표 변화와 다발보 조치 현황을 점검해 보세요']:
+        t<13.5?['점심 맛있게 드세요','🍚','오후엔 공지 확인·해피콜 제출 현황을 챙겨 보세요']:
+        t<17?['오후도 힘내세요','☕','오늘 확인할 일 중 남은 것이 있는지 살펴보세요']:
+        t<19?['오늘도 수고 많으셨어요','🌇','주간 근무 마무리와 해피콜 제출을 확인해 주세요']:
+        t<22?['편안한 저녁 보내세요','🌙','야간 근무 인원과 특이사항을 확인해 보세요']:
+             ['늦은 시간까지 수고 많으세요','🌙','야간 근무 현황을 한눈에 확인하세요'];
       return t<6?['야간 근무 힘내세요','🌙','늦은 시간까지 정말 고생 많으세요']:
         t<7?['야간 근무 고생 많으셨어요','🌅','퇴근길 조심히 가시고 푹 쉬세요']:
         t<10?['상쾌한 아침이에요','☀️','오늘 꼭 볼 것만 한 화면에 모았어요']:
@@ -4478,6 +4487,7 @@ document.addEventListener("visibilitychange", function(){ if(document.visibility
 .vl-div{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:10px 0 2px;font-size:12px;font-weight:700;color:#5b6880}
 .vl-div::before,.vl-div::after{content:"";flex:1;height:1px;background:currentColor;opacity:.45}
 .vl-ov.pk .vl-div{color:#c9d6f5}
+.vl-div.vl-sec{margin:14px 0 0;font-size:13px;letter-spacing:.04em}.vl-div.vl-sec:first-child,.vl-role+.vl-div.vl-sec{margin-top:6px}.vl-ov.pk .vl-div.vl-sec{color:#ffd769}.vl-ov.pk .vl-div.vl-sec::before,.vl-ov.pk .vl-div.vl-sec::after{opacity:.6}
 .vl-in-row{grid-column:1/-1;display:flex;align-items:center;gap:10px}
 .vl-in-row label{flex:none;font-weight:800;font-size:14px;color:#14213a;white-space:nowrap}
 .vl-ov.pk .vl-in-row label{color:#fff}
@@ -4569,7 +4579,7 @@ function pickView(){
     '<p><i>⭐ 서비스 관리자</i><span>관리자 기능 + 📱 해피콜 현황</span></p>'+
     '<p><i>🚗 직원</i><span>내 근무·미응답·지표 · 해피콜 제출</span></p>'+
     '<p><i>👀 타부서</i><span>지표 보기 전용</span></p></div>';
-  STAFF.forEach(function(gr){ h += '<div class="vl-g">'+gr[0]+'</div>'; gr[1].forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':n==="이재식"?'👨‍💻 ':'')+n+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
+  STAFF.forEach(function(gr, gi){ if(gi===0) h += '<div class="vl-div vl-sec"><span>🔒 관리자</span></div>'; if(gi===2) h += '<div class="vl-div vl-sec"><span>🚓 차량 근무자</span></div>'; h += '<div class="vl-g">'+gr[0]+'</div>'; gr[1].forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':n==="이재식"?'👨‍💻 ':'')+n+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
   var listed = ALL.concat(["타부서"]), typed = pick && listed.indexOf(pick)<0 ? pick : "";
   h += '<div class="vl-g">그 외</div>'+["타부서"].map(function(n){ return '<button type="button" class="vl-n" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('')+
     '<div class="vl-div"><span>목록에 이름이 없으면</span></div><div class="vl-in-row"><label for="vlname">직접 입력</label><input id="vlname" type="text" maxlength="10" autocomplete="off" placeholder="이름을 입력하세요" value="'+esc(typed)+'" aria-label="이름 직접 입력"></div></div>';
