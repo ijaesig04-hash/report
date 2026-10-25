@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025093143">
+<meta name="bsr-ver" content="20261025093945">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -476,8 +476,8 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .dimg-b.zoom{display:block}.dimg-b.zoom img{width:260%;max-width:none}
 .dimg-n{color:#c9d6f5;font-size:12px;text-align:center;margin:8px 0 12px}
 .dz-bt{display:flex;gap:6px}.dz-bt .dimg-btn{padding:8px 11px;font-size:12.5px}
-.dimg.rot{inset:auto;top:0;left:0;width:100vh;height:100vw;transform:translateX(100vw) rotate(90deg);transform-origin:top left;padding:0 env(safe-area-inset-top,0px)}
-@supports (height:100dvh){.dimg.rot{width:100dvh;height:100dvw;transform:translateX(100dvw) rotate(90deg)}}
+.dimg.rot{inset:auto;top:0;left:0;width:100vh;height:100vw;transform:translateX(100vw) rotate(90deg);transform-origin:top left;padding:0}
+.dimg-b{min-height:0}.dimg-b:not(.zoom) img{max-width:100%;max-height:100%;width:auto;object-fit:contain}.dimg-b:not(.zoom){overflow:hidden}.dimg-b:not(.zoom) .dwrap{overflow:visible!important;width:auto}
 .dimg .dwrap{background:#fff;border-radius:0;margin:0;width:100%}.dimg .dimg-b>.dwrap{align-self:center}
 .dimg.rot .dimg-h{padding:8px 14px}.dimg.rot .dimg-n{margin:4px 0 6px}
 .dzoom{display:flex;gap:4px;background:var(--track);padding:3px;border-radius:999px;align-self:flex-start}
@@ -2857,8 +2857,19 @@ function dimgOpen(title, body, note, rot){
   o.className = "dimg"+(rot?" rot":"");
   o.innerHTML = '<div class="dimg-h"><b>'+title+'</b><button type="button" data-dimgr="1">'+(rot?'↺ 세로':'↻ 가로')+'</button><button type="button" data-dimgz="1">🔍 확대</button><button type="button" data-dimgx="1" aria-label="닫기">✕</button></div>'+
     '<div class="dimg-b">'+body+'</div><p class="dimg-n">'+note+'</p>';
-  o.hidden = false; document.body.style.overflow = "hidden";
+  o.hidden = false; document.body.style.overflow = "hidden"; dimgFit();
 }
+/* 화면 크기에 맞춤 — 가로 보기는 실제 보이는 화면(innerWidth/innerHeight) 기준으로 돌리고, 표·사진이 잘리지 않게 축소 */
+function dimgFit(){
+  var o = document.getElementById("dimg"); if(!o || o.hidden) return;
+  var W = window.innerWidth, H = window.innerHeight, rot = o.classList.contains("rot");
+  if(rot){ o.style.width = H+"px"; o.style.height = W+"px"; o.style.transform = "translateX("+W+"px) rotate(90deg)"; }
+  else { o.style.width = o.style.height = o.style.transform = ""; }
+  var bx = o.querySelector(".dimg-b"); if(!bx) return; var zoom = bx.classList.contains("zoom");
+  var t = bx.querySelector(".dtab");
+  if(t){ t.style.zoom = 1; if(!zoom){ var k = Math.min((bx.clientWidth-4)/t.scrollWidth, (bx.clientHeight-4)/t.scrollHeight, 1.6); t.style.zoom = k.toFixed(3); } }
+}
+window.addEventListener("resize", function(){ setTimeout(dimgFit, 150); });
 function dutyImgView(m, rot){
   var src = DUTY_IMG[m]; if(!src) return;
   dimgOpen('🗂️ '+(+m.slice(5))+'월 근무 계획표 원본', '<img src="'+src+'" alt="'+(+m.slice(5))+'월 근무 계획표 원본">', '사번은 가려서 표시합니다', rot);
@@ -2871,9 +2882,9 @@ function dutyTblView(rot){
 document.addEventListener("click", function(e){
   var b = e.target.closest("[data-dimg]"); if(b){ dutyImgView(b.dataset.dimg); return; }
   if(e.target.closest("[data-dtbl]")){ dutyTblView(true); return; }
-  if(e.target.closest("[data-dimgr]")){ var o=document.getElementById("dimg"); if(o){ o.classList.toggle("rot"); e.target.closest("[data-dimgr]").textContent = o.classList.contains("rot")?"↺ 세로":"↻ 가로"; var bx=o.querySelector(".dimg-b"); if(bx){ bx.scrollTop=0; bx.scrollLeft=0; } } return; }
+  if(e.target.closest("[data-dimgr]")){ var o=document.getElementById("dimg"); if(o){ o.classList.toggle("rot"); e.target.closest("[data-dimgr]").textContent = o.classList.contains("rot")?"↺ 세로":"↻ 가로"; var bx=o.querySelector(".dimg-b"); if(bx){ bx.scrollTop=0; bx.scrollLeft=0; } dimgFit(); } return; }
   if(e.target.closest("[data-dimgx]")){ var o=document.getElementById("dimg"); if(o){ o.hidden=true; o.innerHTML=''; document.body.style.overflow=""; } return; }
-  var z = e.target.closest("[data-dimgz]"); if(z){ var bx=document.querySelector("#dimg .dimg-b"); var on=bx.classList.toggle("zoom"); z.textContent = on?"↔ 맞춤":"🔍 확대"; return; }
+  var z = e.target.closest("[data-dimgz]"); if(z){ var bx=document.querySelector("#dimg .dimg-b"); var on=bx.classList.toggle("zoom"); z.textContent = on?"↔ 맞춤":"🔍 확대"; dimgFit(); return; }
 });
 function viewDuty(){
   var months = Object.keys(DUTY.months).sort(), today = kstToday(), tm = today.slice(0,7);
@@ -2990,6 +3001,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-25e", date:"10/25", title:"가로 보기 잘림 수정", tabs:["duty"], items:["↻ 가로 보기 — 월 근무표·원본이 위아래 잘리지 않게 화면에 맞춰 표시 (🔍 확대로 크게)"]},
  {id:"2026-10-25d", date:"10/25", title:"근무표 가로 보기", tabs:["duty"], items:["↻ 근무표 탭 '가로 보기' 버튼 — 폰 자동회전이 꺼져 있어도 월 근무표·원본을 가로로 크게","앱 설치본도 폰을 돌리면 가로 화면 허용"]},
  {id:"2026-10-25c", date:"10/25", title:"날짜별 근무 정돈", tabs:["duty"], items:["📅 근무표 탭 날짜별 근무 — 크기 축소 · 주간(하늘)·야간(보라)·휴무(회색) 색 구분"]},
  {id:"2026-10-25b", date:"10/25", title:"11월 근무표 원본", tabs:["duty"], items:["🗂️ 11월 근무 계획표 원본 추가 (사번 가림) · 앱 근무표와 대조 확인 완료"]},
