@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025144322">
+<meta name="bsr-ver" content="20261025150142">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -990,7 +990,12 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mx-note{display:block;width:100%;text-align:left;margin-top:12px;font:500 11.5px "Noto Sans KR",sans-serif;color:#c9d6f5;background:none;border:0;border-top:1px solid rgba(255,255,255,.15);padding:8px 0 0;cursor:pointer;position:relative;z-index:1}
 .mx-cr{display:flex;flex-direction:column;gap:6px}.mx-cr p{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:center;margin:0;border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px}.mx-cr i{grid-row:1/3;width:8px;height:30px;border-radius:4px}.mx-cr b{font-size:13.5px}.mx-cr em{grid-row:1/3;grid-column:3;font-style:normal;font-weight:800;color:#0f2a5c}.mx-cr small{grid-column:2;font-size:12px;color:#64748b}
 .mxst{font-size:.72em;margin-left:2px;letter-spacing:-2px;vertical-align:.12em;white-space:nowrap}
-.mx-ms{margin:4px 0 8px}.mx-info{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:8px 10px;font-size:12.5px;color:#1e3a8a;margin:6px 0}.mx-ok{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:8px 10px;font-size:13px;color:#065f46;margin:6px 0}.mx-warn{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:8px 10px;font-size:12.5px;color:#9a3412;margin:6px 0}
+.mx-ms{margin:4px 0 8px}
+.mh-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.mh-c{border-radius:12px;padding:8px 6px;text-align:center;background:#f1f5f9;border:1px solid #e2e8f0;display:flex;flex-direction:column;gap:1px;min-height:64px;justify-content:center}
+.mh-c small{font-size:11px;font-weight:700;color:#64748b}.mh-c.on{background:linear-gradient(150deg,#0b1736,#1d3a9a);border-color:#d4a017}.mh-c.on small{color:#ffd769}
+.mh-n{font-size:14.5px;color:#fff}.mh-c em{font-style:normal;font-size:11px;color:#c9d6f5}.mh-e{font-size:12px;color:#94a3b8}.mh-c.now{border:1.5px dashed #1f4fd8;background:#eef2ff}.mh-c.now .mh-e{color:#1f4fd8;font-weight:700}
+.mh-s{margin:8px 0 0;font-size:12.5px;color:#475569}.mh-d{margin-top:10px}.mh-b{padding:10px 4px 2px}.mx-info{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:8px 10px;font-size:12.5px;color:#1e3a8a;margin:6px 0}.mx-ok{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:8px 10px;font-size:13px;color:#065f46;margin:6px 0}.mx-warn{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:8px 10px;font-size:12.5px;color:#9a3412;margin:6px 0}
 .mx-leg{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:12px;color:#64748b;margin:8px 0}.mx-leg span{display:flex;align-items:center;gap:4px}.mx-leg i{width:10px;height:10px;border-radius:3px}.mx-leg small{margin-left:auto}
 .mx-rk{display:flex;flex-direction:column;gap:6px}
 .mx-r{display:grid;grid-template-columns:24px 1fr auto;gap:3px 8px;align-items:center;padding:8px 10px;border-radius:12px;border:1px solid #e2e8f0;background:#fff}.mx-r.first{border-color:#d4a017;background:#fff8e1}
@@ -2765,10 +2770,10 @@ function viewEvalTeam2(mode){
 }
 function viewEval(){
   var es = state.es || "team";
-  if(es==="branch") return halfBanner()+evalSwitch()+viewEvalBranch();
-  if(es==="team") return halfBanner()+evalSwitch()+viewEvalTeam2("team");
-  if(es==="total") return halfBanner()+evalSwitch()+viewEvalTeam2("total");
-  return halfBanner()+evalSwitch()+viewEvalTeam();
+  if(es==="branch") return halfBanner()+mxHist()+evalSwitch()+viewEvalBranch();
+  if(es==="team") return halfBanner()+mxHist()+evalSwitch()+viewEvalTeam2("team");
+  if(es==="total") return halfBanner()+mxHist()+evalSwitch()+viewEvalTeam2("total");
+  return halfBanner()+mxHist()+evalSwitch()+viewEvalTeam();
 }
 function viewEvalTeam(){
   var rows = EVAL.rows, n = rows.length;
@@ -3098,6 +3103,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-26a", date:"10/26", title:"월별 평가 · MVP 이력", tabs:["eval"], items:["🏆 월별 평가 탭 맨 위에 이달의 MVP 이력 (6월~11월) · 누적 횟수","📘 선정 기준·취지 펼쳐 보기 — 고과 미반영 · 동기부여 목적"]},
  {id:"2026-10-25o", date:"10/25", title:"MVP 6~9월 기준", tabs:["home"], items:["🏆 6~9월 MVP는 지사평가 자료로 계산 (개인별 지표는 10월 신설) · 9월은 자료 반영 후 계산"]},
  {id:"2026-10-25n", date:"10/25", title:"MVP 별", tabs:["home"], items:["⭐ MVP로 확정된 횟수만큼 이름 옆에 별 표시 (1번 ⭐ · 2번 ⭐⭐) — 근무 현황·근무표·개인별·이름 선택 등 앱 전체"]},
  {id:"2026-10-25m", date:"10/25", title:"MVP 오류 수정", tabs:["home"], items:["🏆 지표 자료가 없는 달(9월)은 MVP 확정 버튼을 막고, 0점 결과는 브리핑에 띄우지 않게 수정"]},
@@ -3630,14 +3636,26 @@ function mxCard(){
     (w.top.length?'<div class="mx-top">'+w.top.slice(0,2).map(function(x,i){return '<div><span>'+(i===0?'🥈':'🥉')+' '+esc2(x[0])+'</span><em class="num">'+x[1]+'</em></div>'}).join('')+'</div>':'')+
     '<button type="button" class="mx-note" data-mxinfo="1">ℹ️ 이달의 MVP는 고과에 반영되지 않습니다. 서로 응원하고 잘한 점을 알리기 위한 제도예요 · 선정 기준 ›</button></div>';
 }
-function mxInfo(){
-  openSheet('<div class="xs-h"><b>🏆 이달의 MVP 선정 기준</b><button type="button" data-xs="close">✕</button></div>'+
-    '<p class="xs-p">매월 말 기준으로 점수를 계산해 다음 달 브리핑에 띄웁니다. <b>고과에는 반영되지 않는</b> 동기부여·인지도 제도입니다. 관리자(지사장·서비스팀장·파트장)는 대상에서 빠집니다.</p>'+
+function mxInfo(){ openSheet('<div class="xs-h"><b>🏆 이달의 MVP 선정 기준</b><button type="button" data-xs="close">✕</button></div>'+mxRule()); }
+function mxRule(){
+  return '<p class="xs-p"><b>취지</b> — 한 달 동안 지표·지사 기여·고객 응대·앱 활용까지 고르게 잘한 동료를 뽑아 함께 축하하는 제도예요. <b>고과에는 반영되지 않고</b>, 서로 응원하고 잘한 점을 알리기 위한 동기부여·인지도 목적입니다.</p>'+
+    '<p class="xs-p">매월 말 기준으로 점수를 계산해 관리자가 확정하면 다음 달 브리핑 맨 위에 게시되고, MVP가 될 때마다 이름 옆에 ⭐가 하나씩 붙어요. 관리자(지사장·서비스팀장·파트장)는 대상에서 빠집니다.</p>'+
     '<div class="mx-cr"><p><i style="background:#1f6fd8"></i><b>📊 개인별 지표</b><em>40점</em><small>5개 지표 중 달성 1개당 8점 (월말 기준)</small></p>'+
     '<p><i style="background:#0e9f6e"></i><b>🤝 지사 기여도</b><em>25점</em><small>소개 1건 5점 · 인상 1건 3점 (최대 25점)</small></p>'+
     '<p><i style="background:#c2410c"></i><b>➕➖ 각종 가감점</b><em>±15점</em><small>지사평가 가감점 · 고객 칭찬 1건 +1 (최대 +3) · 운전성향 위험 −3</small></p>'+
     '<p><i style="background:#7c3aed"></i><b>📱 앱 활용도</b><em>20점</em><small>공지 확인율 8점 · 다발보 조치 입력 1건 2점 (최대 6) · 해피콜 제출률 6점</small></p></div>'+
-    '<p class="xs-p">동점이면 개인별 지표 평균 달성률이 높은 사람이 MVP입니다.</p>');
+    '<p class="xs-p">동점이면 개인별 지표 평균 달성률이 높은 사람이 MVP입니다. 개인별 지표가 생기기 전인 6~9월은 지사평가 점수(위험예지·판넬 등)로 대신 계산했어요.</p>';
+}
+/* 월별 평가 탭 — MVP 이력 + 선정 기준·취지 */
+function mxHist(){
+  var t = kstDate(0), H = halfOf(t), cm = t.slice(0,7);
+  var cells = H.months.map(function(mo){ var y = mo===12 ? H.y-1 : H.y, k = y+'-'+('0'+mo).slice(-2), w = mxWin(k); if(w && !(w.t>0)) w = null;
+    return '<div class="mh-c'+(w?' on':k===cm?' now':'')+'"><small>'+mo+'월</small>'+(w?'<b class="mh-n">'+esc2(w.n)+'</b><em class="num">'+w.t+'점</em>':'<span class="mh-e">'+(k===cm?'진행 중':k>cm?'–':'선정 전')+'</span>')+'</div>'; }).join('');
+  var cnt = mxStarMap(), top = Object.keys(cnt).sort(function(a,b){return cnt[b]-cnt[a] || a.localeCompare(b,"ko")});
+  return '<div class="sec mh"><h2>🏆 이달의 MVP <span>고과 미반영 · 동기부여</span></h2>'+
+    '<div class="mh-g">'+cells+'</div>'+
+    (top.length?'<p class="mh-s">'+H.h+' 누적 · '+top.map(function(n){return '<b>'+esc2(n)+'</b> '+cnt[n]+'회'}).join(' · ')+'</p>':'')+
+    '<details class="fct mh-d"><summary>📘 선정 기준 · 취지 보기</summary><div class="mh-b">'+mxRule()+'</div></details></div>';
 }
 /* ⭐ MVP 별 — 확정된 MVP 횟수만큼 이름 옆에 별 (화면 어디서든 이름만 있는 글자에 자동으로 붙임) */
 var MX_ST = {k:'', map:{}};
