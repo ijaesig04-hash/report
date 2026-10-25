@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025140959">
+<meta name="bsr-ver" content="20261025142329">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3097,6 +3097,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-25l", date:"10/25", title:"관리자 메뉴 보안", tabs:["home"], items:["🔒 관리자 PIN을 넣었던 폰이라도 직원 이름으로 바꾸면 관리자 메뉴·기능이 보이지 않게 수정"]},
  {id:"2026-10-25k", date:"10/25", title:"MVP 하반기 전체", tabs:["home"], items:["🏆 이달의 MVP 관리자 화면 — 하반기 6월~이번 달까지 월별로 보기 · 확정한 달은 🏆 표시","6월은 사업팀 평가 출동지표, 10월부터는 개인별 지표 · 가감점은 지사평가 기준"]},
  {id:"2026-10-25j", date:"10/25", title:"관리자 메뉴 구분", tabs:["home"], items:["이름표 메뉴 — '🔒 관리자 메뉴' 칸을 따로 나눠 노란색으로 표시","직원 화면에서는 관리자 메뉴가 아예 안 보이게 수정"]},
  {id:"2026-10-25i", date:"10/25", title:"🏆 이달의 MVP", tabs:["home"], items:["매월 MVP를 뽑아 브리핑 맨 위에 게시 — 고과 미반영 · 동기부여·인지도 목적","선정 기준: 개인별 지표 40 + 지사 기여도 25(소개 5·인상 3) + 가감점 ±15 + 앱 활용도 20","관리자 메뉴 '🏆 이달의 MVP' — 순위 확인 · 소개·인상 입력 · 확정·게시"]},
@@ -4444,7 +4445,7 @@ function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function s(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 var me = g("bsr_me"); if(me==="관리자"){ me=null; try{ localStorage.removeItem("bsr_me"); }catch(e){} }
 var pick = me, sent = {}, hiddenAt = 0, pin = g("bsr_pin")||"";
-window.BSR_PIN = function(){ return pin; };
+window.BSR_PIN = function(){ return MGRS.indexOf(me)>=0 ? pin : ""; };
 var chip = document.getElementById("mechip"), menu = document.getElementById("vlmenu"), ov = document.getElementById("vlov"), box = document.getElementById("vlin");
 function tabName(t){ return (window.TABNAME && TABNAME[t]) || t; }
 function send(what){
@@ -4559,7 +4560,7 @@ function adminView(rows){
   h += '<button type="button" class="vl-btn sub" data-vl="reload">새로고침</button>';
   open(h);
 }
-chip.addEventListener("click", function(e){ e.stopPropagation(); var adm = !!pin || MGRS.indexOf(me)>=0; menu.querySelectorAll(".vl-adm").forEach(function(x){ x.hidden = !adm; }); menu.hidden = !menu.hidden; });
+chip.addEventListener("click", function(e){ e.stopPropagation(); var adm = MGRS.indexOf(me)>=0;   /* 관리자 메뉴는 관리자 이름을 고른 경우에만 (PIN이 저장된 폰이라도 직원 이름이면 숨김) */ menu.querySelectorAll(".vl-adm").forEach(function(x){ x.hidden = !adm; }); menu.hidden = !menu.hidden; });
 document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contains(e.target)) menu.hidden = true; });
 menu.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return; menu.hidden = true;
