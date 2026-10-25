@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025135145">
+<meta name="bsr-ver" content="20261025135709">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3097,6 +3097,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-25j", date:"10/25", title:"관리자 메뉴 구분", tabs:["home"], items:["이름표 메뉴 — '🔒 관리자 메뉴' 칸을 따로 나눠 노란색으로 표시","직원 화면에서는 관리자 메뉴가 아예 안 보이게 수정"]},
  {id:"2026-10-25i", date:"10/25", title:"🏆 이달의 MVP", tabs:["home"], items:["매월 MVP를 뽑아 브리핑 맨 위에 게시 — 고과 미반영 · 동기부여·인지도 목적","선정 기준: 개인별 지표 40 + 지사 기여도 25(소개 5·인상 3) + 가감점 ±15 + 앱 활용도 20","관리자 메뉴 '🏆 이달의 MVP' — 순위 확인 · 소개·인상 입력 · 확정·게시"]},
  {id:"2026-10-25h", date:"10/25", title:"공지 분류 · 교육 자료", tabs:["home"], items:["📚 공지 분류 — 차량사고·안전사고·업무공지·중요이슈·경조사·일반","브리핑 맨 위에 '○○ 자료가 도착했습니다' 카드 → 눌러서 내용 확인 후 '확인했습니다'","관리자 공지 보내기 — 분류 선택 · 교육 자료(경위·사진·수칙·확인 문제) 첨부","🚗 교차로 좌회전 추돌 사고사례 교육 자료 추가"]},
  {id:"2026-10-25g", date:"10/25", title:"메뉴 정리", tabs:["home"], items:["이름표 메뉴에서 '오늘의 브리핑' 삭제 — 브리핑은 맨 앞 탭으로 바로 보기"]},
@@ -4412,9 +4413,13 @@ document.addEventListener("visibilitychange", function(){ if(document.visibility
 .vl-menu[hidden]{display:none}
 .vl-menu button{display:block;width:100%;text-align:left;border:0;background:#fff;padding:13px 16px;font:600 14px "Noto Sans KR",sans-serif;color:#14213a;border-top:1px solid #eef2f8;cursor:pointer}
 .vl-menu button:first-child{border-top:0}
+.vl-menu{max-height:calc(100dvh - 70px);overflow-y:auto}
+.vl-sep{padding:9px 16px 6px;font:800 11.5px "Noto Sans KR",sans-serif;letter-spacing:.04em;color:#9a6b00;background:#fff7dd;border-top:2px solid #f2d27a}
+.vl-menu [hidden]{display:none!important}
+.vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP (관리자)</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기 (관리자)</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황 (관리자)</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
