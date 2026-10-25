@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025143537">
+<meta name="bsr-ver" content="20261025144322">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3098,6 +3098,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-25o", date:"10/25", title:"MVP 6~9월 기준", tabs:["home"], items:["🏆 6~9월 MVP는 지사평가 자료로 계산 (개인별 지표는 10월 신설) · 9월은 자료 반영 후 계산"]},
  {id:"2026-10-25n", date:"10/25", title:"MVP 별", tabs:["home"], items:["⭐ MVP로 확정된 횟수만큼 이름 옆에 별 표시 (1번 ⭐ · 2번 ⭐⭐) — 근무 현황·근무표·개인별·이름 선택 등 앱 전체"]},
  {id:"2026-10-25m", date:"10/25", title:"MVP 오류 수정", tabs:["home"], items:["🏆 지표 자료가 없는 달(9월)은 MVP 확정 버튼을 막고, 0점 결과는 브리핑에 띄우지 않게 수정"]},
  {id:"2026-10-25l", date:"10/25", title:"관리자 메뉴 보안", tabs:["home"], items:["🔒 관리자 PIN을 넣었던 폰이라도 직원 이름으로 바꾸면 관리자 메뉴·기능이 보이지 않게 수정"]},
@@ -3589,7 +3590,8 @@ function mxRoster(m){ var rows = DUTY.months[m] || DUTY.months[Object.keys(DUTY.
 function mxIn(m, n){ if(MX_DRAFT[m+'|'+n]) return MX_DRAFT[m+'|'+n]; var L = typeof actsFor==="function" ? actsFor('mvp|'+m+'|'+n) : []; if(!L.length) return [0,0]; var r = L.slice().sort(function(a,b){return a[0]-b[0]}).pop(); var p = String(r[3]).split('|'); return [+p[0]||0, +p[1]||0]; }
 function mxCalc(m){
   var W = MX_W, rost = mxRoster(m), P = pplAt(m+"-32"); if(P && P.d.slice(0,7)!==m) P = null;
-  var T = !P && TEVAL[m] ? TEVAL[m] : null, tmax = T ? [0,1,2,3,4].map(function(i){ return Math.max.apply(null, Object.keys(T.rows).map(function(k){ return +T.rows[k][2][i]||0; })); }) : null;
+  /* 개인별 지표는 10월 신설 — 6~9월은 지사평가 자료로 대체 */
+  var T = null, tmax = T ? [0,1,2,3,4].map(function(i){ return Math.max.apply(null, Object.keys(T.rows).map(function(k){ return +T.rows[k][2][i]||0; })); }) : null;
   var appOn = m >= "2026-10";   /* 앱 기록(공지 확인·조치 입력·해피콜)은 10월부터 */
   var B = BEVAL[m], dk = Object.keys(DRIVE.snaps).filter(function(k){return k.slice(0,7)===m}).sort().pop(), drv = dk ? DRIVE.snaps[dk] : [];
   var mo = m.slice(5), nt = (NOTI.items||[]).filter(function(x){ return mxYm(x.t)===m; }), acks = NOTI.acks;
@@ -3609,9 +3611,9 @@ function mxCalc(m){
     var ex = 0, sb = 0; for(var d=1; d<=me; d++){ var ds = m+'-'+('0'+d).slice(-2); if(ds<d0 || ds>today) continue; ["주간","야간"].forEach(function(s){ if(hcRoster(ds,s).indexOf(n)>=0){ ex++; if(hcGet(ds,n)) sb++; } }); }
     var hr = ex ? sb/ex : 1;
     var dd = appOn ? Math.round((nr==null?0:nr)*W.noti + Math.min(W.actCap, ac*W.act) + hr*W.hc) : 0;
-    return {n:n, car:r[0], a:kp, b:b, c:c, d:dd, t:kp+b+c+dd, bsrc:!!br, app:appOn, ok:ok, avg:avg, so:io[0], up:io[1], pr:pr, risk:risk, adj:adj, nr:nr, ac:ac, hr:hr, ex:ex};
+    return {n:n, car:r[0], a:kp, b:b, c:c, d:dd, t:kp+b+c+dd, bsrc:!!br, app:appOn, tb:br?(+br[1]||0)+(+br[2]||0):0, ok:ok, avg:avg, so:io[0], up:io[1], pr:pr, risk:risk, adj:adj, nr:nr, ac:ac, hr:hr, ex:ex};
   });
-  L.sort(function(x,y){ return y.t-x.t || y.avg-x.avg || x.n.localeCompare(y.n,"ko"); });
+  L.sort(function(x,y){ return y.t-x.t || y.avg-x.avg || y.tb-x.tb || x.n.localeCompare(y.n,"ko"); });   /* 동점: 평균 달성률(지사평가 점수) → 위험예지+판넬 건수 */
   return {m:m, L:L, ppl:P?P.d:null, src:P?'ppl':T?'teval':B?'beval':'', appOn:appOn, acksOk:!appOn || !nt.length || !!acks, nt:nt.length};
 }
 function mxWhy(x){ return [x.bsrc?'지사평가 우수':x.ok+'개 지표 달성'].concat(x.so?['소개 '+x.so+'건']:[]).concat(x.up?['인상 '+x.up+'건']:[]).concat(x.pr?['고객 칭찬 '+x.pr+'건']:[]).concat(x.d>=16?['앱 활용 우수']:[]); }
@@ -3671,8 +3673,8 @@ function mxView(m){
     '<div class="chips mx-ms">'+mxMonths().map(function(k){return '<button type="button" class="chip" data-mxm="'+k+'" aria-pressed="'+(k===m)+'">'+(+k.slice(5))+'월'+(k===cm?' (진행 중)':'')+(mxWin(k)?' 🏆':'')+'</button>'}).join('')+'</div>'+
     '<p class="xs-p" style="margin:2px 0 6px">⭐ MVP로 확정될 때마다 앱 곳곳의 이름 옆에 별이 하나씩 붙어요 (2번이면 ⭐⭐).</p>'+(w?'<p class="mx-ok">✅ '+(+m.slice(5))+'월 MVP 확정: <b>'+esc2(w.n)+'</b> ('+w.t+'점) · '+esc2(w.by)+' '+notiDate(w.at)+'</p>':'')+
     (R.src==='teval'?'<p class="mx-info">ℹ️ '+(+m.slice(5))+'월 개인별 지표는 사업팀 평가의 출동지표 5개(불필요·발보율·25분·체감 출동시간·금융사 출동시간) 만점 여부로 계산했어요.</p>':'')+
-    (R.src==='beval'?'<p class="mx-info">ℹ️ '+(+m.slice(5))+'월은 개인별 지표 자료가 없어, 지표 점수를 지사평가 점수(위험예지·판넬 등, 가감점 제외)를 40점으로 환산해 넣었어요.</p>':'')+
-    (!R.src?'<p class="mx-warn">⚠️ '+(+m.slice(5))+'월 개인별 지표 자료가 없어 지표 점수가 모두 0점이에요. 사업팀 평가나 개인별 지표 자료를 주시면 반영할게요.</p>':'')+
+    (R.src==='beval'?'<p class="mx-info">ℹ️ '+(+m.slice(5))+'월은 개인별 지표(10월 신설) 대신 지사평가 점수(위험예지·판넬 등, 가감점 제외)를 40점으로 환산했어요.</p>':'')+
+    (!R.src?'<p class="mx-warn">⚠️ '+(+m.slice(5))+'월 지사평가 자료가 아직 없어 확정할 수 없어요. 자료가 들어오면 자동으로 계산됩니다.</p>':'')+
     (!R.appOn?'<p class="mx-info">ℹ️ 앱 활용도(공지 확인·조치 입력·해피콜)는 앱 기록이 시작된 10월부터 반영해요. '+(+m.slice(5))+'월은 0점으로 모두 같아요.</p>':'')+
     (!R.acksOk?'<p class="mx-warn">⚠️ 관리자 PIN을 넣어야 공지 확인율이 계산됩니다 (지금은 0점)</p>':'')+
     '<div class="mx-leg"><span><i style="background:#1f6fd8"></i>지표</span><span><i style="background:#0e9f6e"></i>기여</span><span><i style="background:#c2410c"></i>가감</span><span><i style="background:#7c3aed"></i>앱</span><small>소개·인상은 ＋/− 로 입력</small></div>'+
