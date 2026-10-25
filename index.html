@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025160409">
+<meta name="bsr-ver" content="20261025165235">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1009,6 +1009,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mxc-s{display:flex;flex-direction:column;align-items:center;margin:12px 0 4px}.mxc-s b{font-size:34px;color:#b8860b;line-height:1}.mxc-s small{font-size:12px;color:#8a6d1f}.mxc-s span{margin-top:6px;font-size:12.5px;font-weight:700;color:#0b1736}
 .mxc-st{margin:8px 0 0;font-size:13px;color:#6b4e00}.mxc-n{margin:8px 0 0;font-size:11.5px;color:#64748b}
 .mxc-ok{margin-top:14px;width:100%;border:0;border-radius:14px;padding:13px;font:900 16px "Noto Sans KR",sans-serif;color:#3d2c00;background:linear-gradient(135deg,#ffe28a,#d4a017);cursor:pointer;box-shadow:0 6px 14px rgba(212,160,23,.35)}
+.sec.mh{background:linear-gradient(160deg,#fffaf0,#fff1cc);border:1.5px solid #f0c24b;border-radius:20px;padding:14px 14px 12px;box-shadow:0 6px 18px rgba(212,160,23,.16)}.sec.mh h2{color:#6b4e00}.sec.mh h2 span{color:#9a7414}.sec.mh .mh-c:not(.on):not(.now){background:#fffdf7;border-color:#f3e2b3}.sec.mh .mh-s{color:#6b4e00}.sec.mh .mh-d>summary{background:#fff!important;color:#8a6200!important;border:1px solid #f0d58a!important}
 .mh-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .mh-c{border-radius:12px;padding:8px 6px;text-align:center;background:#f1f5f9;border:1px solid #e2e8f0;display:flex;flex-direction:column;gap:1px;min-height:64px;justify-content:center}
 .mh-c small{font-size:11px;font-weight:700;color:#64748b}.mh-c.on{background:linear-gradient(150deg,#0b1736,#1d3a9a);border-color:#d4a017}.mh-c.on small{color:#ffd769}
@@ -3121,6 +3122,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-26g", date:"10/26", title:"MVP 칸 구분", tabs:["eval"], items:["🏆 월별 평가 탭 이달의 MVP 칸 — 금색 테두리·배경으로 구분"]},
  {id:"2026-10-26f", date:"10/26", title:"다발보 조치 알림", tabs:["home","alm"], items:["🔔 근무자가 다발보 조치를 입력하면 관리자 브리핑 맨 위에 알림 카드 (확인 누르면 사라짐)","앱을 열어 둔 상태면 '○○님이 다발보 조치를 입력했어요' 알림 · 3분마다 새로 확인"]},
  {id:"2026-10-26e", date:"10/26", title:"인사말 정렬", tabs:["home"], items:["브리핑 인사말 — 이름은 첫 줄, 인사는 다음 줄로 나눠 보기 좋게"]},
  {id:"2026-10-26d", date:"10/26", title:"관리자 인사 · 이름 선택 구분", tabs:["home"], items:["관리자가 열면 브리핑 인사말이 관리자용으로 (시간대별)","이름 선택 화면 — 관리자 / 차량 근무자 경계선으로 구분"]},
