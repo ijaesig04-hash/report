@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025220625">
+<meta name="bsr-ver" content="20261025135145">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -978,6 +978,27 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mgc-t{display:flex;flex-direction:column}.mgc-t b{font-size:13.5px}.mgc-t small{font-size:11.5px;color:#64748b}.mgc.on .mgc-t b{color:#15803d}.mgc.on .mgc-t small{color:#15803d}
 .mgc-b{border:0;border-radius:10px;background:#1f4fd8;color:#fff;font:800 12.5px "Noto Sans KR",sans-serif;padding:8px 12px;cursor:pointer}.mgc-x{border:1px solid #e2e8f0;background:#fff;color:#64748b;border-radius:10px;font:700 12px "Noto Sans KR",sans-serif;padding:6px 10px}
 .mgc-i{grid-column:1/3;border:1px solid #cbd5e1;border-radius:10px;padding:8px 10px;font:500 13px "Noto Sans KR",sans-serif}
+.mx{position:relative;margin-top:12px;border-radius:20px;padding:16px;color:#fff;background:radial-gradient(120% 90% at 100% 0%,#3b5bdb 0%,transparent 55%),linear-gradient(150deg,#0b1736,#14286b 70%,#1d3a9a);overflow:hidden;box-shadow:0 10px 26px rgba(11,23,54,.28)}
+.mx::after{content:"";position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,215,105,.35),transparent 70%);pointer-events:none}
+.mx-k{font-size:11px;letter-spacing:.14em;font-weight:700;color:#ffd769}
+.mx-m{display:flex;align-items:center;gap:14px;margin-top:10px;position:relative;z-index:1}
+.mx-av{width:58px;height:58px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:900;font-size:17px;color:#3d2c00;background:conic-gradient(from 200deg,#ffe28a,#d4a017,#fff2bf,#d4a017,#ffe28a);box-shadow:0 0 0 3px rgba(255,215,105,.35)}
+.mx-n{font-size:22px;font-weight:900;line-height:1.2}.mx-n small{display:block;font-size:12px;font-weight:500;color:#c9d6f5}
+.mx-s{margin-left:auto;text-align:right}.mx-s b{font-size:28px;color:#ffd769}.mx-s small{display:block;font-size:11px;color:#c9d6f5}
+.mx-why{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;position:relative;z-index:1}.mx-why span{font-size:12px;font-weight:700;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 10px}
+.mx-top{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;position:relative;z-index:1}.mx-top div{background:rgba(255,255,255,.08);border-radius:10px;padding:6px 10px;font-size:13px;display:flex;justify-content:space-between}.mx-top em{font-style:normal;color:#ffd769}
+.mx-note{display:block;width:100%;text-align:left;margin-top:12px;font:500 11.5px "Noto Sans KR",sans-serif;color:#c9d6f5;background:none;border:0;border-top:1px solid rgba(255,255,255,.15);padding:8px 0 0;cursor:pointer;position:relative;z-index:1}
+.mx-cr{display:flex;flex-direction:column;gap:6px}.mx-cr p{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:center;margin:0;border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px}.mx-cr i{grid-row:1/3;width:8px;height:30px;border-radius:4px}.mx-cr b{font-size:13.5px}.mx-cr em{grid-row:1/3;grid-column:3;font-style:normal;font-weight:800;color:#0f2a5c}.mx-cr small{grid-column:2;font-size:12px;color:#64748b}
+.mx-ms{margin:4px 0 8px}.mx-ok{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:8px 10px;font-size:13px;color:#065f46;margin:6px 0}.mx-warn{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:8px 10px;font-size:12.5px;color:#9a3412;margin:6px 0}
+.mx-leg{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:12px;color:#64748b;margin:8px 0}.mx-leg span{display:flex;align-items:center;gap:4px}.mx-leg i{width:10px;height:10px;border-radius:3px}.mx-leg small{margin-left:auto}
+.mx-rk{display:flex;flex-direction:column;gap:6px}
+.mx-r{display:grid;grid-template-columns:24px 1fr auto;gap:3px 8px;align-items:center;padding:8px 10px;border-radius:12px;border:1px solid #e2e8f0;background:#fff}.mx-r.first{border-color:#d4a017;background:#fff8e1}
+.mx-r .p{font-weight:900;color:#64748b;text-align:center}.mx-r .nm{font-weight:800;font-size:14px}.mx-r .nm small{font-weight:500;color:#64748b;font-size:11.5px;margin-left:4px}.mx-r .t{font-size:16px;color:#0f2a5c}
+.mx-r .bar{grid-column:2/4;display:flex;height:7px;border-radius:4px;overflow:hidden;background:#eef2f7}.mx-r .bar s{display:block;height:100%}
+.mx-r .dt{grid-column:2/4;font-size:11px;color:#64748b;line-height:1.4}
+.mx-io{grid-column:2/4;display:flex;align-items:center;gap:6px;font-size:12px;color:#334155}.mx-io button{width:28px;height:26px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;font:800 14px sans-serif;cursor:pointer}.mx-io b{min-width:16px;text-align:center}.mx-io span:nth-of-type(2){margin-left:10px}
+.mx-save,.mx-go{width:100%;margin-top:10px;border:0;border-radius:14px;padding:12px;font:800 14.5px "Noto Sans KR",sans-serif;cursor:pointer}.mx-save{background:#0e9f6e;color:#fff}.mx-go{background:#0b1736;color:#ffd769}.mx-go:disabled{opacity:.4}
+.mx-x{width:100%;margin-top:6px;border:1px solid #e2e8f0;background:#fff;color:#64748b;border-radius:12px;padding:9px;font:700 13px "Noto Sans KR",sans-serif;cursor:pointer}
 .wx{margin-top:10px;border-radius:16px;background:linear-gradient(160deg,#e0f2fe,#f0f9ff 60%,#fff);border:1px solid #bae6fd;box-shadow:0 4px 12px rgba(14,116,144,.08);padding:9px 0 6px;overflow:hidden}
 .wx-t{display:flex;justify-content:space-between;align-items:baseline;padding:0 12px 5px}.wx-t b{font-size:14px;color:#0c4a6e}.wx-t small{font-size:10.5px;color:#64748b}
 .wx-sl{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}.wx-sl::-webkit-scrollbar{display:none}
@@ -3076,6 +3097,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-25i", date:"10/25", title:"🏆 이달의 MVP", tabs:["home"], items:["매월 MVP를 뽑아 브리핑 맨 위에 게시 — 고과 미반영 · 동기부여·인지도 목적","선정 기준: 개인별 지표 40 + 지사 기여도 25(소개 5·인상 3) + 가감점 ±15 + 앱 활용도 20","관리자 메뉴 '🏆 이달의 MVP' — 순위 확인 · 소개·인상 입력 · 확정·게시"]},
  {id:"2026-10-25h", date:"10/25", title:"공지 분류 · 교육 자료", tabs:["home"], items:["📚 공지 분류 — 차량사고·안전사고·업무공지·중요이슈·경조사·일반","브리핑 맨 위에 '○○ 자료가 도착했습니다' 카드 → 눌러서 내용 확인 후 '확인했습니다'","관리자 공지 보내기 — 분류 선택 · 교육 자료(경위·사진·수칙·확인 문제) 첨부","🚗 교차로 좌회전 추돌 사고사례 교육 자료 추가"]},
  {id:"2026-10-25g", date:"10/25", title:"메뉴 정리", tabs:["home"], items:["이름표 메뉴에서 '오늘의 브리핑' 삭제 — 브리핑은 맨 앞 탭으로 바로 보기"]},
  {id:"2026-10-25f", date:"10/25", title:"날씨 칸 정리", tabs:["home"], items:["🌤️ 날씨 '내일' 장 삭제 — 내일 날씨는 주간 날씨에서 확인 (5장으로 정리)"]},
@@ -3435,7 +3457,7 @@ function brief(){
              ['야간 근무 힘내세요','🌙','늦은 시간까지 정말 고생 많으세요']; })(), greet = gp[0];
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?esc2(nm2)+'님, ':'')+greet+' <i class="wv">'+gp[1]+'</i></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
-  return '<div class="sec">'+hero+wxCard()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
+  return '<div class="sec">'+hero+mxCard()+wxCard()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
 /* 미응답 고객 응답 요청 문자 — 예시 문구는 여기만 수정. {이름}은 앱에서 고른 이름으로 자동 입력(없으면 000) */
@@ -3549,6 +3571,96 @@ function mvpInfo(){
     '<table class="mvp-t"><tr><th>순위</th><th>이름</th><th>차량</th><th>달성</th><th>평균</th></tr>'+L.map(function(x){return '<tr><td>'+x.rk+'</td><td>'+x.name+'</td><td>'+x.no+'호</td><td>'+x.ok+'/5</td><td><b>'+Math.round(x.avg)+'%</b></td></tr>'}).join('')+'</table>');
 }
 document.addEventListener("click", function(e){ if(e.target.closest("[data-mvpi]")) mvpInfo(); });
+/* ===== 🏆 이달의 MVP — 고과 미반영 · 동기부여/인지도 목적 =====
+   개인별 지표 40(달성 1개 8점) + 지사 기여도 25(소개 5 · 인상 3) + 가감점 ±15(지사평가 가감 · 칭찬 +1(최대 3) · 운전 위험 −3) + 앱 활용 20(공지 확인 8 · 다발보 조치 입력 2/건 최대 6 · 해피콜 제출 6)
+   소개·인상 입력: 'mvp|월|이름' (메모 '소개|인상') · 확정 결과: 'mvpwin|월' (메모 '이름|차량|점수|이유,이유|2위:점수,3위:점수') — 조치 입력과 같은 시트 */
+var MX_W = {kpi:8, so:5, up:3, cap:25, pr:1, prCap:3, risk:-3, adj:15, noti:8, act:2, actCap:6, hc:6};
+var MX_HC_START = "2026-10-24", MX_DRAFT = {}, MX_SEL = null;
+function mxYm(t){ return new Date(t+9*3600000).toISOString().slice(0,7); }
+function mxRoster(m){ var rows = DUTY.months[m] || DUTY.months[Object.keys(DUTY.months).sort().filter(function(k){return k<=m}).pop()] || []; return rows.filter(function(r){ return r[0]!=="CS파트장" && CS_MGR.indexOf(r[1])<0; }); }
+function mxIn(m, n){ if(MX_DRAFT[m+'|'+n]) return MX_DRAFT[m+'|'+n]; var L = typeof actsFor==="function" ? actsFor('mvp|'+m+'|'+n) : []; if(!L.length) return [0,0]; var r = L.slice().sort(function(a,b){return a[0]-b[0]}).pop(); var p = String(r[3]).split('|'); return [+p[0]||0, +p[1]||0]; }
+function mxCalc(m){
+  var W = MX_W, rost = mxRoster(m), P = pplAt(m+"-32"); if(P && P.d.slice(0,7)!==m) P = null;
+  var B = BEVAL[m], dk = Object.keys(DRIVE.snaps).filter(function(k){return k.slice(0,7)===m}).sort().pop(), drv = dk ? DRIVE.snaps[dk] : [];
+  var mo = m.slice(5), nt = (NOTI.items||[]).filter(function(x){ return mxYm(x.t)===m; }), acks = NOTI.acks;
+  var me = new Date(+m.slice(0,4), +mo, 0).getDate(), today = kstDate(0), d0 = MX_HC_START > m+"-01" ? MX_HC_START : m+"-01";
+  var L = rost.map(function(r){
+    var n = r[1], pp = P && P.p[n], ok = pp ? pp.ok : 0;
+    var avg = pp ? pp.m.reduce(function(a,c){return a+(isNaN(c.r)?0:Math.max(0,Math.min(200,c.r)))},0)/5 : 0;
+    var io = mxIn(m, n), b = Math.min(W.cap, io[0]*W.so + io[1]*W.up);
+    var adj = B && B.rows[n] ? +B.rows[n][0]||0 : 0, pr = CSR.filter(function(x){ return x[0]===n && x[6]==="칭찬" && String(x[2]).slice(0,2)===mo; }).length;
+    var dr = drv.filter(function(x){return x[0]===n})[0], risk = dr && dr[3]==="위험" && !(DRIVE.notes[n] && DRIVE.notes[n].from<=m+"-31" && DRIVE.notes[n].to>=m+"-01");
+    var c = Math.max(-W.adj, Math.min(W.adj, adj + Math.min(W.prCap, pr*W.pr) + (risk?W.risk:0)));
+    var nr = nt.length ? (acks ? nt.filter(function(x){ return (acks[x.id]||[]).indexOf(n)>=0; }).length/nt.length : null) : 1;
+    var ac = (ACTS||[]).filter(function(x){ return x[2]===n && mxYm(x[0])===m && !/^(hc|chk|nr|mvp|mvpwin)\|/.test(x[1]); }).length;
+    var ex = 0, sb = 0; for(var d=1; d<=me; d++){ var ds = m+'-'+('0'+d).slice(-2); if(ds<d0 || ds>today) continue; ["주간","야간"].forEach(function(s){ if(hcRoster(ds,s).indexOf(n)>=0){ ex++; if(hcGet(ds,n)) sb++; } }); }
+    var hr = ex ? sb/ex : 1;
+    var dd = Math.round((nr==null?0:nr)*W.noti + Math.min(W.actCap, ac*W.act) + hr*W.hc);
+    return {n:n, car:r[0], a:ok*W.kpi, b:b, c:c, d:dd, t:ok*W.kpi+b+c+dd, ok:ok, avg:avg, so:io[0], up:io[1], pr:pr, risk:risk, adj:adj, nr:nr, ac:ac, hr:hr, ex:ex};
+  });
+  L.sort(function(x,y){ return y.t-x.t || y.avg-x.avg || x.n.localeCompare(y.n,"ko"); });
+  return {m:m, L:L, ppl:P?P.d:null, acksOk:!nt.length || !!acks, nt:nt.length};
+}
+function mxWhy(x){ return [x.ok+'개 지표 달성'].concat(x.so?['소개 '+x.so+'건']:[]).concat(x.up?['인상 '+x.up+'건']:[]).concat(x.pr?['고객 칭찬 '+x.pr+'건']:[]).concat(x.d>=16?['앱 활용 우수']:[]); }
+/* 확정 결과 */
+function mxWin(m){ var L = typeof actsFor==="function" ? actsFor('mvpwin|'+m) : []; if(!L.length) return null; var r = L.slice().sort(function(a,b){return a[0]-b[0]}).pop(), p = String(r[3]).split('|'); if(!p[0] || p[0]==="취소") return null;
+  return {m:m, n:p[0], car:p[1], t:+p[2], why:(p[3]||'').split(',').filter(Boolean), top:(p[4]||'').split(',').filter(Boolean).map(function(q){var z=q.split(':'); return [z[0], +z[1]];}), by:r[2], at:r[0]}; }
+function mxCard(){
+  var cm = kstDate(0).slice(0,7), y = +cm.slice(0,4), mo = +cm.slice(5), pm = mo===1 ? (y-1)+'-12' : y+'-'+('0'+(mo-1)).slice(-2);
+  var w = mxWin(cm) || mxWin(pm); if(!w) return '';
+  var M = +w.m.slice(5), EN = ["","JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"][M];
+  return '<div class="mx"><div class="mx-k">'+EN+' MVP · '+M+'월 이달의 MVP</div>'+
+    '<div class="mx-m"><div class="mx-av">'+esc2(w.n.slice(1))+'</div><div class="mx-n">'+esc2(w.n)+'<small>'+esc2(w.car)+' · 축하합니다! 🎉</small></div><div class="mx-s"><b class="num">'+w.t+'</b><small>/ 100점</small></div></div>'+
+    (w.why.length?'<div class="mx-why">'+w.why.map(function(x){return '<span>'+esc2(x)+'</span>'}).join('')+'</div>':'')+
+    (w.top.length?'<div class="mx-top">'+w.top.slice(0,2).map(function(x,i){return '<div><span>'+(i===0?'🥈':'🥉')+' '+esc2(x[0])+'</span><em class="num">'+x[1]+'</em></div>'}).join('')+'</div>':'')+
+    '<button type="button" class="mx-note" data-mxinfo="1">ℹ️ 이달의 MVP는 고과에 반영되지 않습니다. 서로 응원하고 잘한 점을 알리기 위한 제도예요 · 선정 기준 ›</button></div>';
+}
+function mxInfo(){
+  openSheet('<div class="xs-h"><b>🏆 이달의 MVP 선정 기준</b><button type="button" data-xs="close">✕</button></div>'+
+    '<p class="xs-p">매월 말 기준으로 점수를 계산해 다음 달 브리핑에 띄웁니다. <b>고과에는 반영되지 않는</b> 동기부여·인지도 제도입니다. 관리자(지사장·서비스팀장·파트장)는 대상에서 빠집니다.</p>'+
+    '<div class="mx-cr"><p><i style="background:#1f6fd8"></i><b>📊 개인별 지표</b><em>40점</em><small>5개 지표 중 달성 1개당 8점 (월말 기준)</small></p>'+
+    '<p><i style="background:#0e9f6e"></i><b>🤝 지사 기여도</b><em>25점</em><small>소개 1건 5점 · 인상 1건 3점 (최대 25점)</small></p>'+
+    '<p><i style="background:#c2410c"></i><b>➕➖ 각종 가감점</b><em>±15점</em><small>지사평가 가감점 · 고객 칭찬 1건 +1 (최대 +3) · 운전성향 위험 −3</small></p>'+
+    '<p><i style="background:#7c3aed"></i><b>📱 앱 활용도</b><em>20점</em><small>공지 확인율 8점 · 다발보 조치 입력 1건 2점 (최대 6) · 해피콜 제출률 6점</small></p></div>'+
+    '<p class="xs-p">동점이면 개인별 지표 평균 달성률이 높은 사람이 MVP입니다.</p>');
+}
+/* 관리자: 순위 · 소개/인상 입력 · 확정 */
+function mxView(m){
+  var cm = kstDate(0).slice(0,7), y = +cm.slice(0,4), mo = +cm.slice(5), pm = mo===1 ? (y-1)+'-12' : y+'-'+('0'+(mo-1)).slice(-2);
+  m = m || MX_SEL || (+kstDate(0).slice(8) <= 10 ? pm : cm); MX_SEL = m;
+  var R = mxCalc(m), w = mxWin(m), dirty = Object.keys(MX_DRAFT).some(function(k){return k.indexOf(m+'|')===0});
+  var seg = function(v,c){ return v>0?'<s style="width:'+v+'%;background:'+c+'"></s>':''; };
+  var h = '<div class="xs-h"><b>🏆 이달의 MVP (관리자)</b><button type="button" data-xs="close">✕</button></div>'+
+    '<div class="chips mx-ms">'+[pm, cm].map(function(k){return '<button type="button" class="chip" data-mxm="'+k+'" aria-pressed="'+(k===m)+'">'+(+k.slice(5))+'월'+(k===cm?' (진행 중)':'')+'</button>'}).join('')+'</div>'+
+    (w?'<p class="mx-ok">✅ '+(+m.slice(5))+'월 MVP 확정: <b>'+esc2(w.n)+'</b> ('+w.t+'점) · '+esc2(w.by)+' '+notiDate(w.at)+'</p>':'')+
+    (!R.ppl?'<p class="mx-warn">⚠️ '+(+m.slice(5))+'월 개인별 지표 자료가 없어 지표 점수가 0점으로 계산됩니다.</p>':'')+
+    (!R.acksOk?'<p class="mx-warn">⚠️ 관리자 PIN을 넣어야 공지 확인율이 계산됩니다 (지금은 0점)</p>':'')+
+    '<div class="mx-leg"><span><i style="background:#1f6fd8"></i>지표</span><span><i style="background:#0e9f6e"></i>기여</span><span><i style="background:#c2410c"></i>가감</span><span><i style="background:#7c3aed"></i>앱</span><small>소개·인상은 ＋/− 로 입력</small></div>'+
+    '<div class="mx-rk">'+R.L.map(function(x,i){
+      return '<div class="mx-r'+(i===0?' first':'')+'"><span class="p num">'+(i+1)+'</span><span class="nm">'+(i===0?'🏆 ':'')+x.n+'<small>'+x.car+'</small></span><b class="t num">'+x.t+'</b>'+
+        '<div class="bar">'+seg(x.a,'#1f6fd8')+seg(x.b,'#0e9f6e')+seg(Math.max(0,x.c),'#c2410c')+seg(x.d,'#7c3aed')+'</div>'+
+        '<small class="dt">지표 '+x.ok+'개 '+x.a+' · 기여 '+x.b+' · 가감 '+(x.c>0?'+':'')+x.c+(x.pr?' (칭찬 '+x.pr+')':'')+(x.risk?' (운전 위험)':'')+' · 앱 '+x.d+' (공지 '+(x.nr==null?'-':Math.round(x.nr*100)+'%')+' · 조치 '+x.ac+' · 해피콜 '+Math.round(x.hr*100)+'%)</small>'+
+        '<div class="mx-io"><span>소개</span><button type="button" data-mxio="'+x.n+'|0|-1">−</button><b class="num">'+x.so+'</b><button type="button" data-mxio="'+x.n+'|0|1">＋</button><span>인상</span><button type="button" data-mxio="'+x.n+'|1|-1">−</button><b class="num">'+x.up+'</b><button type="button" data-mxio="'+x.n+'|1|1">＋</button></div></div>'; }).join('')+'</div>'+
+    (dirty?'<button type="button" class="mx-save" data-mxsave="'+m+'">💾 소개·인상 입력 저장</button>':'')+
+    '<button type="button" class="mx-go" data-mxgo="'+m+'"'+(dirty?' disabled':'')+'>📢 '+(+m.slice(5))+'월 MVP 확정 · 브리핑에 게시</button>'+
+    (w?'<button type="button" class="mx-x" data-mxcancel="'+m+'">게시 내리기</button>':'')+
+    '<p class="xs-p" style="margin-top:8px">확정하면 모든 직원 브리핑 맨 위에 다음 달 말까지 보입니다. 월 중 순위는 관리자에게만 보입니다.</p>';
+  openSheet(h);
+}
+function mxSend(key, memo){ var nr=[Date.now(), key, myName()||"관리자", memo]; nr.sent=Date.now(); ACTS_PEND.push(nr); actsSavePend(); actSend(nr); }
+document.addEventListener("click", function(e){
+  var b;
+  if(e.target.closest("[data-mxinfo]")){ mxInfo(); return; }
+  if((b=e.target.closest("[data-mxm]"))){ MX_SEL=b.dataset.mxm; mxView(MX_SEL); return; }
+  if((b=e.target.closest("[data-mxio]"))){ var p=b.dataset.mxio.split('|'), m=MX_SEL, v=mxIn(m,p[0]).slice(); v[+p[1]]=Math.max(0, v[+p[1]]+(+p[2])); MX_DRAFT[m+'|'+p[0]]=v; var sc=document.querySelector('#xsheet .xs-in'), st=sc?sc.scrollTop:0; mxView(m); sc=document.querySelector('#xsheet .xs-in'); if(sc) sc.scrollTop=st; return; }
+  if((b=e.target.closest("[data-mxsave]"))){ var m2=b.dataset.mxsave; Object.keys(MX_DRAFT).filter(function(k){return k.indexOf(m2+'|')===0}).forEach(function(k){ var n=k.split('|')[1], v=MX_DRAFT[k]; mxSend('mvp|'+m2+'|'+n, v[0]+'|'+v[1]); ACTS.push([Date.now(),'mvp|'+m2+'|'+n,myName()||"관리자",v[0]+'|'+v[1]]); delete MX_DRAFT[k]; }); nrToast("💾 소개·인상 입력을 저장했어요"); mxView(m2); setTimeout(actsLoad,4000); return; }
+  if((b=e.target.closest("[data-mxgo]"))){ var m3=b.dataset.mxgo, R=mxCalc(m3), w=R.L[0]; if(!w) return;
+    var memo = [w.n, w.car, w.t, mxWhy(w).join(','), R.L.slice(1,3).map(function(x){return x.n+':'+x.t}).join(',')].join('|');
+    mxSend('mvpwin|'+m3, memo); ACTS.push([Date.now(),'mvpwin|'+m3,myName()||"관리자",memo]); nrToast("🏆 "+w.n+"님을 "+(+m3.slice(5))+"월 MVP로 게시했어요"); mxView(m3); render(); setTimeout(actsLoad,4000); return; }
+  if((b=e.target.closest("[data-mxcancel]"))){ var m4=b.dataset.mxcancel; mxSend('mvpwin|'+m4, '취소'); ACTS.push([Date.now(),'mvpwin|'+m4,myName()||"관리자",'취소']); nrToast("게시를 내렸어요"); mxView(m4); render(); return; }
+});
+
+
 /* ===== ✅ 관리자 오늘 할 일 — 공지 미확인 · 다발보 미조치 · 미응답 미연락 · 앱 미설치 ===== */
 var MGR_LOG = null;
 function mgrIs(){ var n=myName(); return CS_MGR.indexOf(n)>=0; }
@@ -4302,7 +4414,7 @@ document.addEventListener("visibilitychange", function(){ if(document.visibility
 .vl-menu button:first-child{border-top:0}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기 (관리자)</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황 (관리자)</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP (관리자)</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기 (관리자)</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황 (관리자)</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
@@ -4436,7 +4548,7 @@ document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contain
 menu.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return; menu.hidden = true;
   var a = b.dataset.vl;
-  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ notiList(); } else if(a==="find"){ findView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
+  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ notiList(); } else if(a==="find"){ findView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
 });
 ov.addEventListener("click", function(e){
   var n = e.target.closest("[data-nm]");
