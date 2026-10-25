@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025150142">
+<meta name="bsr-ver" content="20261025151320">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -991,6 +991,18 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mx-cr{display:flex;flex-direction:column;gap:6px}.mx-cr p{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:center;margin:0;border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px}.mx-cr i{grid-row:1/3;width:8px;height:30px;border-radius:4px}.mx-cr b{font-size:13.5px}.mx-cr em{grid-row:1/3;grid-column:3;font-style:normal;font-weight:800;color:#0f2a5c}.mx-cr small{grid-column:2;font-size:12px;color:#64748b}
 .mxst{font-size:.72em;margin-left:2px;letter-spacing:-2px;vertical-align:.12em;white-space:nowrap}
 .mx-ms{margin:4px 0 8px}
+.mxc{position:fixed;inset:0;z-index:2147483100;background:radial-gradient(circle at 50% 30%,rgba(29,58,154,.92),rgba(6,13,34,.96));display:flex;align-items:center;justify-content:center;padding:20px}
+.mxc canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.mxc-in{position:relative;z-index:1;width:100%;max-width:360px;background:linear-gradient(160deg,#fffdf4,#fff6d6);border:2px solid #d4a017;border-radius:24px;padding:22px 20px 18px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.45);animation:mxpop .6s cubic-bezier(.2,1.4,.4,1)}
+@keyframes mxpop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){.mxc-in{animation:none}}
+.mxc-tr{font-size:58px;line-height:1;filter:drop-shadow(0 6px 10px rgba(212,160,23,.5))}
+.mxc-k{display:inline-block;margin-top:8px;font-size:12px;font-weight:800;letter-spacing:.08em;color:#6b4e00;background:#ffe28a;border-radius:999px;padding:3px 12px}
+.mxc-in h3{margin:10px 0 6px;font-size:22px;font-weight:900;color:#0b1736}
+.mxc-m{margin:0;font-size:14px;line-height:1.6;color:#334155}
+.mxc-s{display:flex;flex-direction:column;align-items:center;margin:12px 0 4px}.mxc-s b{font-size:34px;color:#b8860b;line-height:1}.mxc-s small{font-size:12px;color:#8a6d1f}.mxc-s span{margin-top:6px;font-size:12.5px;font-weight:700;color:#0b1736}
+.mxc-st{margin:8px 0 0;font-size:13px;color:#6b4e00}.mxc-n{margin:8px 0 0;font-size:11.5px;color:#64748b}
+.mxc-ok{margin-top:14px;width:100%;border:0;border-radius:14px;padding:13px;font:900 16px "Noto Sans KR",sans-serif;color:#3d2c00;background:linear-gradient(135deg,#ffe28a,#d4a017);cursor:pointer;box-shadow:0 6px 14px rgba(212,160,23,.35)}
 .mh-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .mh-c{border-radius:12px;padding:8px 6px;text-align:center;background:#f1f5f9;border:1px solid #e2e8f0;display:flex;flex-direction:column;gap:1px;min-height:64px;justify-content:center}
 .mh-c small{font-size:11px;font-weight:700;color:#64748b}.mh-c.on{background:linear-gradient(150deg,#0b1736,#1d3a9a);border-color:#d4a017}.mh-c.on small{color:#ffd769}
@@ -3103,6 +3115,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-26b", date:"10/26", title:"MVP 당선 축하", tabs:["home"], items:["🎉 MVP로 뽑힌 직원이 앱을 열면 폭죽과 당선 축하 메시지 — '감사합니다'를 누를 때까지 매번 표시"]},
  {id:"2026-10-26a", date:"10/26", title:"월별 평가 · MVP 이력", tabs:["eval"], items:["🏆 월별 평가 탭 맨 위에 이달의 MVP 이력 (6월~11월) · 누적 횟수","📘 선정 기준·취지 펼쳐 보기 — 고과 미반영 · 동기부여 목적"]},
  {id:"2026-10-25o", date:"10/25", title:"MVP 6~9월 기준", tabs:["home"], items:["🏆 6~9월 MVP는 지사평가 자료로 계산 (개인별 지표는 10월 신설) · 9월은 자료 반영 후 계산"]},
  {id:"2026-10-25n", date:"10/25", title:"MVP 별", tabs:["home"], items:["⭐ MVP로 확정된 횟수만큼 이름 옆에 별 표시 (1번 ⭐ · 2번 ⭐⭐) — 근무 현황·근무표·개인별·이름 선택 등 앱 전체"]},
@@ -3613,7 +3626,7 @@ function mxCalc(m){
     var dr = drv.filter(function(x){return x[0]===n})[0], risk = dr && dr[3]==="위험" && !(DRIVE.notes[n] && DRIVE.notes[n].from<=m+"-31" && DRIVE.notes[n].to>=m+"-01");
     var c = Math.max(-W.adj, Math.min(W.adj, adj + Math.min(W.prCap, pr*W.pr) + (risk?W.risk:0)));
     var nr = nt.length ? (acks ? nt.filter(function(x){ return (acks[x.id]||[]).indexOf(n)>=0; }).length/nt.length : null) : 1;
-    var ac = (ACTS||[]).filter(function(x){ return x[2]===n && mxYm(x[0])===m && !/^(hc|chk|nr|mvp|mvpwin)\|/.test(x[1]); }).length;
+    var ac = (ACTS||[]).filter(function(x){ return x[2]===n && mxYm(x[0])===m && !/^(hc|chk|nr|mvp|mvpwin|mvpack)\|/.test(x[1]); }).length;
     var ex = 0, sb = 0; for(var d=1; d<=me; d++){ var ds = m+'-'+('0'+d).slice(-2); if(ds<d0 || ds>today) continue; ["주간","야간"].forEach(function(s){ if(hcRoster(ds,s).indexOf(n)>=0){ ex++; if(hcGet(ds,n)) sb++; } }); }
     var hr = ex ? sb/ex : 1;
     var dd = appOn ? Math.round((nr==null?0:nr)*W.noti + Math.min(W.actCap, ac*W.act) + hr*W.hc) : 0;
@@ -3668,7 +3681,7 @@ function mxStarMap(){
 function mxStars(n){ var c = mxStarMap()[n]||0; return c ? (c<=3 ? new Array(c+1).join('⭐') : '⭐'+c) : ''; }
 var MX_SQ = false;
 function mxStarFix(){
-  MX_SQ = false; var map = mxStarMap(), names = Object.keys(map); if(!names.length) return;
+  MX_SQ = false; try{ mxCongrats(); }catch(_){} var map = mxStarMap(), names = Object.keys(map); if(!names.length) return;
   var re = new RegExp('^(?:[👑⭐👨‍💻🏆 ]*)('+names.join('|')+')(님)?$');
   document.querySelectorAll("#view *, #xsheet *, #vlin *, #mechip").forEach(function(el){
     if(el.querySelector(':scope > .mxst')) return;
@@ -3679,6 +3692,45 @@ function mxStarFix(){
     if(tn) el.insertBefore(sp, tn.nextSibling); else el.appendChild(sp);
   });
 }
+/* 🎉 MVP 당선 축하 — 뽑힌 직원이 앱을 열면 폭죽 + 당선 메시지, '확인'을 누를 때까지 매번 ('mvpack|월|이름' 기록) */
+var MX_CG = false;
+function mxCongrats(){
+  if(MX_CG) return; var n = myName(); if(!n || typeof mxWin!=="function") return;
+  var ms = mxMonths(), w = null;
+  for(var i=ms.length-1;i>=0;i--){ var x = mxWin(ms[i]); if(x && x.t>0 && x.n===n && !lsGet('bsr_mvpok_'+ms[i]+'_'+n) && !actsFor('mvpack|'+ms[i]+'|'+n).length){ w = x; break; } }
+  if(!w) return; MX_CG = true;
+  var M = +w.m.slice(5), c = mxStarMap()[n]||1;
+  var o = document.createElement('div'); o.className = 'mxc'; o.id = 'mxc';
+  o.innerHTML = '<canvas id="mxfw"></canvas><div class="mxc-in" role="dialog" aria-modal="true">'+
+    '<div class="mxc-tr">🏆</div><div class="mxc-k">'+M+'월 이달의 MVP</div>'+
+    '<h3>축하합니다, '+esc2(n)+'님!</h3>'+
+    '<p class="mxc-m">'+esc2(n)+'님이 북서울지사 <b>'+M+'월 이달의 MVP</b>로 선정되셨습니다. 한 달 동안 보여 주신 성실함과 노력에 동료 모두가 박수를 보냅니다 👏</p>'+
+    '<div class="mxc-s"><b class="num">'+w.t+'</b><small>점</small>'+(w.why.length?'<span>'+w.why.map(esc2).join(' · ')+'</span>':'')+'</div>'+
+    '<p class="mxc-st">'+(c>1?'벌써 <b>'+c+'번째</b> MVP예요! 이름 옆에 '+mxStars(n)+'가 빛나고 있어요':'이제 앱 곳곳의 이름 옆에 ⭐가 붙어요')+'</p>'+
+    '<p class="mxc-n">이달의 MVP는 고과에 반영되지 않는, 서로 응원하기 위한 제도예요.</p>'+
+    '<button type="button" class="mxc-ok" data-mxok="'+w.m+'">🎉 감사합니다!</button></div>';
+  document.body.appendChild(o); document.body.style.overflow = 'hidden';
+  mxFireworks(document.getElementById('mxfw'));
+}
+function mxFireworks(cv){
+  if(!cv || !cv.getContext) return; var ctx = cv.getContext('2d'), W, H, P = [], t0 = Date.now(), dur = 6500, last = 0;
+  var rs = function(){ W = cv.width = innerWidth*devicePixelRatio; H = cv.height = innerHeight*devicePixelRatio; }; rs();
+  if(matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) dur = 0;
+  var COL = ['#ffd769','#ff6b6b','#4dabf7','#69db7c','#f783ac','#ffa94d','#ffffff'];
+  var boom = function(){ var x = W*(0.15+Math.random()*0.7), y = H*(0.12+Math.random()*0.35), c = COL[Math.floor(Math.random()*COL.length)], n = 46;
+    for(var i=0;i<n;i++){ var a = Math.PI*2*i/n, v = (2+Math.random()*3.2)*devicePixelRatio; P.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c:Math.random()<.25?'#fff':c,r:(1.6+Math.random()*1.6)*devicePixelRatio}); } };
+  var conf = function(){ for(var i=0;i<6;i++) P.push({x:Math.random()*W,y:-10,vx:(Math.random()-.5)*2,vy:(1.5+Math.random()*2)*devicePixelRatio,l:1.6,c:COL[Math.floor(Math.random()*COL.length)],r:3*devicePixelRatio,sq:1,rot:Math.random()*6}); };
+  (function step(){ var el = Date.now()-t0; if(!document.getElementById('mxfw')) return;
+    ctx.clearRect(0,0,W,H);
+    if(el < dur){ if(el-last > 420){ boom(); last = el; } if(Math.random()<.6) conf(); }
+    P.forEach(function(p){ p.x+=p.vx; p.y+=p.vy; p.vy+=0.045*devicePixelRatio; p.vx*=0.985; p.l-=p.sq?0.004:0.012; ctx.globalAlpha=Math.max(0,Math.min(1,p.l)); ctx.fillStyle=p.c;
+      if(p.sq){ p.rot+=0.1; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r); ctx.restore(); } else { ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,7); ctx.fill(); } });
+    P = P.filter(function(p){ return p.l>0 && p.y<H+20; }); ctx.globalAlpha = 1;
+    if(el < dur || P.length) requestAnimationFrame(step); })();
+}
+document.addEventListener("click", function(e){ var b = e.target.closest("[data-mxok]"); if(!b) return; var m = b.dataset.mxok, n = myName();
+  lsSet('bsr_mvpok_'+m+'_'+n, String(Date.now())); try{ mxSend('mvpack|'+m+'|'+n, '확인'); }catch(_){}
+  var o = document.getElementById('mxc'); if(o) o.remove(); document.body.style.overflow = ''; });
 function mxStarQ(){ if(!MX_SQ){ MX_SQ = true; requestAnimationFrame(mxStarFix); } }
 try{ new MutationObserver(mxStarQ).observe(document.body,{childList:true,subtree:true}); }catch(e){}
 /* 관리자: 순위 · 소개/인상 입력 · 확정 */
