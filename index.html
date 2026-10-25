@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261025024115">
+<meta name="bsr-ver" content="20261025024949">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -412,6 +412,22 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .dg{border-top:1px solid var(--line);padding:10px 0 8px}
 .dg-h{display:flex;align-items:baseline;gap:8px;margin-bottom:8px} .dg-h b{font-size:14px} .dg-h span{font-size:11.5px;color:var(--muted)} .dg-h em{margin-left:auto;font-style:normal;font-size:12px;color:var(--muted)}
 .dg-l{display:flex;flex-wrap:wrap;gap:6px}
+/* 날짜별 근무 — 컴팩트 + 색 */
+.dcard{gap:8px!important;padding:12px 12px 10px!important}
+.dc-t b{font-size:16px!important}
+.dcnt{display:flex;gap:6px}.dcnt span{flex:1;text-align:center;border-radius:10px;padding:4px 0;font-size:12px;font-weight:700}.dcnt b{font-size:15px;margin-left:2px}
+.dcnt .ca{background:#e0f2fe;color:#075985}.dcnt .cb{background:#ede9fe;color:#4c1d95}.dcnt .co{background:#f1f5f9;color:#475569}
+.dcard .dg{border-top:0!important;border-radius:12px;padding:8px 10px!important}
+.dcard .dg-h{margin-bottom:6px!important}.dcard .dg-h b{font-size:13.5px}.dcard .dg-h span{font-size:11px}
+.dcard .dg.A{background:linear-gradient(135deg,#e0f2fe,#f0f9ff);border:1px solid #bae6fd}.dcard .dg.A .dg-h b{color:#0369a1}
+.dcard .dg.AJ,.dcard .dg.U{background:#ecfdf5;border:1px solid #a7f3d0}.dcard .dg.AJ .dg-h b,.dcard .dg.U .dg-h b{color:#047857}
+.dcard .dg.B{background:linear-gradient(135deg,#ede9fe,#f5f3ff);border:1px solid #ddd6fe}.dcard .dg.B .dg-h b{color:#5b21b6}
+.dcard .dg.off{background:#f8fafc;border:1px solid #e2e8f0}.dcard .dg.off .dg-h b{color:#475569}
+.dcard .dp{padding:4px 9px!important;border-radius:9px!important;font-size:13px!important;gap:4px!important}.dcard .dp b{font-size:13.5px!important}.dcard .dp small{font-size:10.5px!important}
+.dcard .dg.A .dp{background:#fff!important;color:#0c4a6e!important;border:1px solid #bae6fd}
+.dcard .dg.AJ .dp,.dcard .dg.U .dp{background:#fff!important;color:#065f46!important;border:1px solid #a7f3d0}
+.dcard .dg.B .dp{background:#4c1d95!important;color:#fff!important}.dcard .dg.B .dp small{color:#ddd6fe!important}
+.dcard .dg.off .dp{background:#fff!important;color:#64748b!important;border:1px solid #e2e8f0}
 .dp{display:inline-flex;align-items:baseline;gap:5px;padding:6px 10px;border-radius:10px;font-size:13.5px;background:var(--track)}
 .dp small{font-size:11px;color:var(--muted)}
 .dg.A .dp{background:#e3efff} .dg.B .dp{background:#2b2366;color:#fff} .dg.B .dp small{color:#c9c3f5}
@@ -2858,11 +2874,11 @@ function viewDuty(){
   var grp = {A:[],B:[],AJ:[],U:[],off:[]};
   P.forEach(function(p){ var c=p.d[day-1]; if(!c) return; var item={n:p.n,car:p.car,c:c.c,x:c.x,o:ojtOn(p.n,m+'-'+('0'+day).slice(-2))};
     if(c.c==="A") grp.A.push(item); else if(c.c==="B") grp.B.push(item); else if(c.c==="AJ") grp.AJ.push(item); else if(c.c==="U") grp.U.push(item); else grp.off.push(item); });
-  var chip = function(it,showCode){ return '<span class="dp'+(it.x?' chg':'')+'"><b>'+it.n+'</b>'+(it.o?'<i class="ojtb">OJT</i>':'')+'<small>'+it.car.replace("CS파트장","파트장")+(it.o?' · '+it.o.with+' 동승':'')+(showCode?' · '+(DC[it.c]?DC[it.c][0]:it.c):'')+'</small></span>'; };
+  var chip = function(it,showCode){ return '<span class="dp'+(it.x?' chg':'')+'"><b>'+it.n+'</b>'+(it.o?'<i class="ojtb">OJT</i>':'')+'<small>'+it.car.replace("CS파트장","파트장")+(it.o?' · '+it.o.with+' 동승':'')+(showCode&&it.c!=='D'?' · '+(DC[it.c]?DC[it.c][0]:it.c):'')+'</small></span>'; };
   var block = function(cls,title,sub,list,showCode){ return list.length? '<div class="dg '+cls+'"><div class="dg-h"><b>'+title+'</b><span>'+sub+'</span><em class="num">'+list.length+'명</em></div><div class="dg-l">'+list.map(function(it){return chip(it,showCode)}).join("")+'</div></div>' : ''; };
   var dw = wk[new Date(y,mo-1,day).getDay()];
   var dayCard = '<div class="card dcard"><div class="dc-t"><b>'+mo+'월 '+day+'일 ('+dw+')</b>'+(m===tm&&day===+today.slice(8)?'<span class="dtag">오늘</span>':'')+'</div>'+
-    '<div class="tiles3 dt3"><div class="tile dt-a"><h3>주간</h3><div class="v">'+grp.A.length+'<small>명</small></div></div><div class="tile dt-b"><h3>야간</h3><div class="v">'+grp.B.length+'<small>명</small></div></div><div class="tile dt-o"><h3>휴무·휴가</h3><div class="v">'+grp.off.length+'<small>명</small></div></div></div>'+
+    '<div class="dcnt"><span class="ca">☀️ 주간 <b class="num">'+(grp.A.length+grp.AJ.length+grp.U.length)+'</b></span><span class="cb">🌙 야간 <b class="num">'+grp.B.length+'</b></span><span class="co">🏠 휴무 <b class="num">'+grp.off.length+'</b></span></div>'+
     block("A","주간 근무","07:00~18:00",grp.A)+block("B","야간 근무","18:00~07:00",grp.B)+block("AJ","조석회","07:00~19:00",grp.AJ)+block("U","유동","09:00~18:00",grp.U)+block("off","쉬는 사람","휴무·휴가·교육",grp.off,true)+'</div>';
   /* 월 근무표 */
   var head = '<tr><th class="dn">이름</th>'; for(var d2=1; d2<=nd; d2++){ var w2=new Date(y,mo-1,d2).getDay(); head += '<th class="'+(w2===0?'sun':w2===6?'sat':'')+(d2===day?' cur':'')+'"><b>'+d2+'</b><small>'+wk[w2]+'</small></th>'; } head += '<th class="dsum">주</th><th class="dsum">야</th><th class="dsum">휴</th></tr>';
@@ -2957,6 +2973,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-25c", date:"10/25", title:"날짜별 근무 정돈", tabs:["duty"], items:["📅 근무표 탭 날짜별 근무 — 크기 축소 · 주간(하늘)·야간(보라)·휴무(회색) 색 구분"]},
  {id:"2026-10-25b", date:"10/25", title:"11월 근무표 원본", tabs:["duty"], items:["🗂️ 11월 근무 계획표 원본 추가 (사번 가림) · 앱 근무표와 대조 확인 완료"]},
  {id:"2026-10-25a", date:"10/25", title:"근무표 원본 보기", tabs:["duty"], items:["🗂️ 근무표 탭 — '원본 보기'를 누르면 10월 근무 계획표 원본 캡처 (사번은 가림)"]},
  {id:"2026-10-24o", date:"10/24", title:"해피콜 할 일 · 날씨 보완", tabs:["home"], items:["✅ 관리자 오늘 할 일에 해피콜 미제출 인원 포함 (서비스 관리자)","🌙 야간 근무자 — 오늘 밤 근무 날씨(18~07시) 한 줄 안내","🚨 날씨 칸에 '기상청 특보 확인' 바로가기","날씨를 못 불러오면 안내와 '다시 시도' 버튼"]},
