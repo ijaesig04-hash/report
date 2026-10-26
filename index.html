@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261026010321">
+<meta name="bsr-ver" content="20261026013026">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2802,9 +2802,14 @@ function rankList(arr){ var rk=0,last=null; arr.forEach(function(x,i){ if(x.t!==
 function evalMonthChips(keys, per, attr, half){ return '<div class="chips" role="group" aria-label="기간">'+[["sum",half+" 평균"]].concat(keys.map(function(k){return [k,+k.slice(5)+"월"]})).map(function(l){ return '<button type="button" class="chip" '+attr+'="'+l[0]+'" aria-pressed="'+(per===l[0])+'">'+l[1]+'</button>'; }).join("")+'</div>'; }
 function viewEvalTeam2(mode){
   var H = halfOf(kstDate(0)), keys = Object.keys(TEVAL).sort().filter(function(k){ return mode!=="total" || BEVAL[k]; }), /* 종합은 지사평가가 들어온 달만 */ per = state.tm && (state.tm==="sum"||TEVAL[state.tm]) ? state.tm : keys[keys.length-1];
-  var names = []; keys.forEach(function(k){ Object.keys(TEVAL[k].rows).forEach(function(n){ if(names.indexOf(n)<0) names.push(n); }); });
+  var allK = Object.keys(TEVAL).sort(), bK = Object.keys(BEVAL).sort(), lastK = allK[allK.length-1];
+  /* 대상: 가장 최근 사업팀 평가 명단 (퇴사·전출자 제외 — 사업팀 누계표와 동일) */
+  var names = Object.keys(TEVAL[lastK].rows);
   var val = function(k,n){ return mode==="total" ? totalOf(k,n) : (TEVAL[k].rows[n]?TEVAL[k].rows[n][1]:null); };
-  var score = function(n){ if(per!=="sum") return val(per,n); var v=keys.map(function(k){return val(k,n)}).filter(function(x){return x!=null}); return v.length? Math.round(v.reduce(function(a,b){return a+b},0)/v.length*10)/10 : null; };
+  var avgOf = function(arr){ arr = arr.filter(function(x){return x!=null}); return arr.length ? arr.reduce(function(a,b){return a+b},0)/arr.length : null; };
+  /* 하반기 종합 = 사업팀 월평균(받은 달 전체) × 80% + 지사 월평균(받은 달 전체) — 사업팀 'CS 누계평가' 표와 같은 계산 */
+  var sumTotal = function(n){ var t = avgOf(allK.map(function(k){return TEVAL[k].rows[n]?TEVAL[k].rows[n][1]:null})), b = avgOf(bK.map(function(k){return BEVAL[k].rows[n]?BEVAL[k].rows[n][4]:null})); return t==null ? null : Math.round((t*TEVAL_W + (b==null?0:b))*10)/10; };
+  var score = function(n){ if(per==="sum" && mode==="total") return sumTotal(n); if(per!=="sum") return val(per,n); var v=keys.map(function(k){return val(k,n)}).filter(function(x){return x!=null}); return v.length? Math.round(v.reduce(function(a,b){return a+b},0)/v.length*10)/10 : null; };
   var list = rankList(names.map(function(n){return {n:n,t:score(n)}}).filter(function(x){return x.t!=null}).sort(function(a,b){return b.t-a.t || a.n.localeCompare(b.n,"ko")}));
   var sel = list.filter(function(x){return x.n===state.tp})[0] || list[0];
   var unit = mode==="total" ? '점' : '점', full = mode==="total" ? 100 : 100;
@@ -2830,10 +2835,10 @@ function viewEvalTeam2(mode){
   var avg = list.reduce(function(a,x){return a+x.t},0)/list.length;
   var title = mode==="total" ? '종합 평가 <span>사업팀 80% + 지사 20점</span>' : '사업팀 평가 <span>사업팀 월별 점수표 · 익월 수령</span>';
   return '<div class="sec"><h2>'+title+'</h2>'+evalMonthChips(keys, per, 'data-tm', H.h)+podium+
-    '<div class="kpsum"><span>평균 <b class="num">'+(Math.round(avg*10)/10)+'</b>점</span><i></i><span>반영 <b class="num">'+keys.map(function(k){return +k.slice(5)}).join("·")+'</b>월</span><i></i><span>대상 <b class="num">'+list.length+'</b>명</span></div></div>'+
+    '<div class="kpsum"><span>평균 <b class="num">'+(Math.round(avg*10)/10)+'</b>점</span><i></i><span>반영 <b class="num">'+(mode==="total"&&per==="sum"?'사업팀 '+allK.map(function(k){return +k.slice(5)}).join("·")+' · 지사 '+bK.map(function(k){return +k.slice(5)}).join("·"):keys.map(function(k){return +k.slice(5)}).join("·"))+'</b>월</span><i></i><span>대상 <b class="num">'+list.length+'</b>명</span></div></div>'+
     '<div class="sec">'+(mode==="team"?'<details class="crit tcrit"><summary>사업팀 하반기 평가 기준 보기 <small>\'26 하반기 CS평가안 · CS사원</small></summary><p class="tc-s">평가 방향 — 고객서비스 품질 제고 · 평가 변별력 강화 · 고객 리텐션 활동 강화</p><div class="tc-g c1"><div class="tc-gh"><b>출동</b><span>22점</span></div><div class="tc-r"><span class="tc-n">불필요 출동률</span><b class="tc-p num">5</b><p class="tc-m">차량별 목표 · 달성률 × 배점</p></div><div class="tc-r"><span class="tc-n">서비스출동 발보율</span><b class="tc-p num">7</b><p class="tc-m">SPC 오조작(객장) 제외</p></div><div class="tc-r"><span class="tc-n">긴급출동 25분 초과율</span><b class="tc-p num">3</b><p class="tc-m">차량별 목표 · 달성률 × 배점</p></div><div class="tc-r"><span class="tc-n">고객체감 출동시간</span><b class="tc-p num">4</b><p class="tc-m">차량별 목표 · 달성률 × 배점</p></div><div class="tc-r"><span class="tc-n">금융사 출동시간</span><b class="tc-p num">7/3</b><p class="tc-m">금융사 대상 없으면 시간지표 제외 → 서비스전담 3점</p></div></div><div class="tc-g c2"><div class="tc-gh"><b>리텐션</b><span>가점</span></div><div class="tc-r"><span class="tc-n">출동료 청구</span><b class="tc-p num">+5</b><p class="tc-m">청구율 구간별 60%↑ 0.5 ~ 90%↑ 2.0 · 청구율 = 청구건수 ÷ (대상건수 × 90%)</p></div></div><div class="tc-g c3"><div class="tc-gh"><b>고객체감 서비스</b><span>48점</span></div><div class="tc-r"><span class="tc-n">VOC</span><b class="tc-p num">20</b><p class="tc-m">목표 96% · 클레임 ZERO (1건당 −10, 최대 −20)</p></div><div class="tc-r"><span class="tc-n">잠재불만 VOC</span><b class="tc-p num">2</b><p class="tc-m">관리자 기준과 동일</p></div><div class="tc-r"><span class="tc-n">고객체감 만족도</span><b class="tc-p num">20</b><p class="tc-m">25 − (100 − 만족도) × 0.5 · 90점 미만 0점 · 불만 1건 −5</p></div><div class="tc-r"><span class="tc-n">고객체감 응답률</span><b class="tc-p num">7</b><p class="tc-m">목표 60% · 응답률에 비례 (발송 2건 이상)</p></div></div><div class="tc-g c4"><div class="tc-gh"><b>사건사고</b><span>25점</span></div><div class="tc-r"><span class="tc-n">차량사고</span><b class="tc-p num">15</b><p class="tc-m">ZERO · 가해 건당 −15 · 중대/음주 2배</p></div><div class="tc-r"><span class="tc-n">안전사고</span><b class="tc-p num">10</b><p class="tc-m">ZERO · 건당 −10 · 절대작업금지 위반 2배</p></div></div><div class="tc-tot"><b>총점</b><b class="num">100</b><small>가·감점, 누계 항목 제외</small></div><div class="tc-g c5"><div class="tc-gh"><b>VOC 세부</b></div><ul class="tc-ul"><li>기준시간 내 처리율 — 목표 96% · 장기미처리 −3 · 당월 발생 최대 −2 · 누계 발생 최대 −1</li><li>30분 내 접촉률 — 24시간 초과 −2 · 24시간 초과 개인발생 −1</li><li>클레임 VOC −10 · 잠재불만 VOC 전년비 개선 시 가점</li></ul></div><div class="tc-g c6"><div class="tc-gh"><b>가·감점 (CS사원)</b></div><ul class="tc-ul"><li>자격증 — Master 7 · Expert 5 · Beginner 3</li><li>베스트 서비스 건당 +2 (전사 고객만족상 2배) · 사회시상 건당 +3</li><li>테마업무(역량제고) 최대 +3 · 신입사원 멘토 +3 · 베스트파트너 +2</li><li>고객체감 — 응답률 80%↑ & 전부 매우만족 +10 · 불만 1건당 −10</li><li>운전성향 — 주의 −1 · 위험 −2 · QR 미점검 건당 −1</li><li>기본미준수 −10 · 고객정보 임의사용·허위보고 감점</li><li>사건·사고는 최종 조사결과에 따라 소급 적용 · 하반기 중 항목 변경 가능</li></ul></div><p class="tc-src">출처: 서울CS지원그룹 \'26년 하반기 CS평가(안) (\'26.6.30)</p></details>':'')+'<h2>순위 <span>누르면 월별 항목 점수</span></h2><div class="card">'+rows+'</div></div>'+
     '<div class="sec"><div class="card"><div class="vhead">'+sel.n+' · '+sel.rk+'위<span>'+bHo(sel.n)+' · '+(per==="sum"?H.h+' 평균 ':'')+sel.t+'점</span></div>'+det+'</div>'+
-    (mode==="total"?'<p class="note">종합 평가 = 사업팀 총점 × 80% + 지사 평가 점수(월 20점 기준). 사업팀 평가는 익월에 받아 반영합니다. 7월 이후는 사업팀 확정 자료를 받으면 자동 계산됩니다.</p>':'<p class="note">항목 배점은 달마다 다를 수 있습니다 (예: 6월 고객체감 25점·올만족 가점 포함, 클레임 5점) · 7월은 사업팀 확정 후 반영.</p>')+'</div>';
+    (mode==="total"?'<p class="note">종합 평가 = 사업팀 총점 × 80% + 지사 평가 점수(월 20점 기준). 하반기 평균은 사업팀 누계표와 같이 사업팀 월평균 × 80% + 지사 월평균으로 계산합니다(각각 받은 달 기준). 월별 칩은 지사평가까지 들어온 달만 보입니다.</p>':'<p class="note">항목 배점은 달마다 다를 수 있습니다 (예: 6월 고객체감 25점·올만족 가점 포함, 클레임 5점) · 7월은 사업팀 확정 후 반영.</p>')+'</div>';
 }
 function viewEval(){
   var es = state.es || "team";
@@ -3170,6 +3175,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-26m", date:"10/26", title:"종합 평가 계산 수정", tabs:["eval"], items:["종합 평가 하반기 평균 — 사업팀 누계표와 같은 방식(사업팀 월평균×80% + 지사 월평균)으로 수정","대상은 최근 사업팀 평가 명단 기준 (14명)"]},
  {id:"2026-10-26l", date:"10/26", title:"사업팀 9월 평가 반영", tabs:["eval"], items:["🏅 사업팀 9월 평가 반영 — 1위 용승우 · 2위 권재원 · 3위 주상덕","종합 평가는 9월 지사평가가 들어오면 자동 추가"]},
  {id:"2026-10-26k", date:"10/26", title:"사업팀 8월 평가 반영", tabs:["eval"], items:["🏅 사업팀 8월 평가 반영 — 1위 박수안 · 2위 권재원 · 공동 4위 용승우·고혁진","종합 평가에 8월 추가 · 지사평가 점수 시트와 대조 완료"]},
  {id:"2026-10-26j", date:"10/26", title:"지사평가 7월 수정", tabs:["eval"], items:["이명섭 7월 지사 점수 15 → 10점 (가해 차량사고 −5 반영된 합계 기준)"]},
