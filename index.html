@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261026005442">
+<meta name="bsr-ver" content="20261026010321">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2731,6 +2731,21 @@ var TEVAL_W = 0.8;
 var TEVAL_ITEMS = [["불필요출동률","g1"],["서비스출동 발보율","g1"],["25분 초과율","g1"],["고객체감 출동시간","g1"],["금융사 출동시간","g1"],["출동료 청구","g1"],
   ["고객체감","g2"],["응답률","g2"],["클레임","g2"],["VOC 30분내 접촉률","g3"],["24시간 초과","g3"],["기한내 처리율","g3"],["잠재불만 VOC","g3"],["차량사고","g4"],["안전사고","g4"],["가감점","g5"]];
 var TEVAL = {
+ "2026-09":{max:{"고객체감":20,"클레임":10}, rows:{
+  "용승우":[1,109.2,[5,7,3,4,7,0,30,7,10,5,0,4.7,1.4,15,10,0]],
+  "고혁진":[6,107.8,[5,7,3,4,7,0,30,5.6,10,5,0,4.7,1.4,15,10,0]],
+  "주상덕":[3,108.4,[4.7,7,3,4,7,0,30,6.2,10,5,0,5,1.4,15,10,0]],
+  "유영민":[8,97.2,[4.7,7,3,4,7,0,20,5,10,5,0,5,1.4,15,10,0]],
+  "김민석":[10,88.9,[4.7,7,0,2.6,6.1,0,20,2.1,10,5,0,5,1.4,15,10,0]],
+  "김지원":[7,107.7,[5,6.6,3,4,7,0,30,5.8,10,5,0,4.8,1.4,15,10,0]],
+  "양심영":[9,96.0,[5,6.6,3,4,7,0,20,4.2,10,5,0,4.8,1.4,15,10,0]],
+  "김태건":[14,72.7,[5,6.6,3,4,6.9,0,20,1.2,10,4.8,0,4.8,1.4,15,10,-20]],
+  "박수안":[4,108.0,[5,7,3,4,7,0,30,5.6,10,5,0,5,1.4,15,10,0]],
+  "김민수":[12,86.3,[5,7,3,2.5,2.4,0,20,0.9,10,5,0,5,1.4,15,10,-1]],
+  "권재원":[2,108.8,[5,7,3,3.5,7,0,30,7,10,4.9,0,5,1.4,15,10,0]],
+  "김동현":[5,107.9,[4.5,7,3,4,6.3,0,30,7,10,5,0,4.7,1.4,15,10,0]],
+  "이명섭":[11,88.6,[4.5,7,0,2.7,5.3,0,18.5,4.5,10,5,0,4.7,1.4,15,10,0]],
+  "남현준":[13,84.4,[4.5,7,0,3.4,1,0,20,2.8,10,4.6,0,4.7,1.4,15,10,0]]}},
  "2026-08":{max:{"고객체감":20,"클레임":10}, rows:{
   "용승우":[4,108.9,[4.2,6.6,3,4,7,0,30,7,10,5,0,5,2,15,10,0]],
   "고혁진":[4,108.9,[4.2,6.6,3,4,7,0,30,7,10,5,0,5,2,15,10,0]],
@@ -2786,7 +2801,7 @@ function totalOf(k, n){ var t=TEVAL[k]&&TEVAL[k].rows[n], b=BEVAL[k]&&BEVAL[k].r
 function rankList(arr){ var rk=0,last=null; arr.forEach(function(x,i){ if(x.t!==last){rk=i+1;last=x.t;} x.rk=rk; }); return arr; }
 function evalMonthChips(keys, per, attr, half){ return '<div class="chips" role="group" aria-label="기간">'+[["sum",half+" 평균"]].concat(keys.map(function(k){return [k,+k.slice(5)+"월"]})).map(function(l){ return '<button type="button" class="chip" '+attr+'="'+l[0]+'" aria-pressed="'+(per===l[0])+'">'+l[1]+'</button>'; }).join("")+'</div>'; }
 function viewEvalTeam2(mode){
-  var H = halfOf(kstDate(0)), keys = Object.keys(TEVAL).sort(), per = state.tm && (state.tm==="sum"||TEVAL[state.tm]) ? state.tm : keys[keys.length-1];
+  var H = halfOf(kstDate(0)), keys = Object.keys(TEVAL).sort().filter(function(k){ return mode!=="total" || BEVAL[k]; }), /* 종합은 지사평가가 들어온 달만 */ per = state.tm && (state.tm==="sum"||TEVAL[state.tm]) ? state.tm : keys[keys.length-1];
   var names = []; keys.forEach(function(k){ Object.keys(TEVAL[k].rows).forEach(function(n){ if(names.indexOf(n)<0) names.push(n); }); });
   var val = function(k,n){ return mode==="total" ? totalOf(k,n) : (TEVAL[k].rows[n]?TEVAL[k].rows[n][1]:null); };
   var score = function(n){ if(per!=="sum") return val(per,n); var v=keys.map(function(k){return val(k,n)}).filter(function(x){return x!=null}); return v.length? Math.round(v.reduce(function(a,b){return a+b},0)/v.length*10)/10 : null; };
@@ -3155,6 +3170,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-26l", date:"10/26", title:"사업팀 9월 평가 반영", tabs:["eval"], items:["🏅 사업팀 9월 평가 반영 — 1위 용승우 · 2위 권재원 · 3위 주상덕","종합 평가는 9월 지사평가가 들어오면 자동 추가"]},
  {id:"2026-10-26k", date:"10/26", title:"사업팀 8월 평가 반영", tabs:["eval"], items:["🏅 사업팀 8월 평가 반영 — 1위 박수안 · 2위 권재원 · 공동 4위 용승우·고혁진","종합 평가에 8월 추가 · 지사평가 점수 시트와 대조 완료"]},
  {id:"2026-10-26j", date:"10/26", title:"지사평가 7월 수정", tabs:["eval"], items:["이명섭 7월 지사 점수 15 → 10점 (가해 차량사고 −5 반영된 합계 기준)"]},
  {id:"2026-10-26i", date:"10/26", title:"사업팀 7월 평가 반영", tabs:["eval"], items:["🏅 사업팀 7월 평가 반영 — 1위 김지원 · 2위 양심영 · 3위 권재원","종합 평가(사업팀 80% + 지사 20%)에 7월 추가"]},
