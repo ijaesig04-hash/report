@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261026230304">
+<meta name="bsr-ver" content="20261026231611">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2552,7 +2552,7 @@ function fcCard(){
   if(!window.PPL || !PPL.length) return '';
   if(!FC || FC.d!==(SD.ppl||kstDate(0))) fcInit();
   var p = PPL.filter(function(x){return x.name===FC.n})[0] || PPL[0];
-  var opts = PPL.slice().sort(function(a,b){return a.name.localeCompare(b.name,"ko")}).map(function(x){return '<option'+(x.name===FC.n?' selected':'')+'>'+x.name+'</option>'}).join('');
+  var opts = PPL.slice().sort(function(a,b){return a.name.localeCompare(b.name,"ko")}).map(function(x){return '<option value="'+x.name+'"'+(x.name===FC.n?' selected':'')+'>'+x.name+'</option>'}).join('');
   var chips = M.map(function(mm,i){ var c=p.m[i]; return '<button type="button" class="chip'+(c.r<100?' fc-ng':'')+'" data-fck="'+i+'" aria-pressed="'+(i===FC.k)+'">'+mm.short+' <b class="num">'+Math.round(c.r)+'%</b></button>'; }).join('');
   var unit = FC.k>=3 ? '분' : '%', c = p.m[FC.k];
   return '<div class="sec fc"><details class="fc-d"'+(FC.open?' open':'')+'><summary><span>🧮 월말 회복 계산기</span><small>남은 기간 실적에 따라 월말 몇 %가 될지</small></summary><div class="fc-in">'+
@@ -3313,6 +3313,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-27b", date:"10/27", title:"계산기 오류 수정", tabs:["ppl"], items:["🧮 월말 회복 계산기 — MVP 별이 있는 직원(박수안 등)을 고르면 다른 사람 자료가 나오던 문제 수정 · 반응 속도 개선"]},
  {id:"2026-10-27a", date:"10/27", title:"월말 회복 계산기", tabs:["ppl"], items:["🧮 개인별 탭 맨 위에 월말 회복 계산기 — 직원·지표를 고르고 남은 일수·예상 실적을 넣으면 월말 달성률 예측","목표 100%를 위해 남은 기간 지켜야 할 실적도 함께 표시 (25분 초과율은 긴급출동 건수로도 계산)"]},
  {id:"2026-10-26p", date:"10/26", title:"운전성향 10/26 반영", tabs:["drv"], items:["운전성향 10/26 기준 업데이트 — 양호 14명 · 위험 1명(용승우 GPS 소명 예정)","모범: 남현준 · 김동현 · 이명섭"]},
  {id:"2026-10-26o", date:"10/26", title:"사업팀 항목 배점 표시", tabs:["eval"], items:["사업팀 평가 항목별 '받은 점수 / 배점' 표시 (만점 초록 · 미달 주황)"]},
@@ -3905,6 +3906,7 @@ function mxStarFix(){
   MX_SQ = false; try{ mxCongrats(); }catch(_){} var map = mxStarMap(), names = Object.keys(map); if(!names.length) return;
   var re = new RegExp('^(?:[👑⭐👨‍💻🏆 ]*)('+names.join('|')+')(님)?$');
   document.querySelectorAll("#view *, #xsheet *, #vlin *, #mechip").forEach(function(el){
+    if(/^(OPTION|SELECT|INPUT|TEXTAREA|SCRIPT|STYLE|BUTTON)$/.test(el.tagName) && el.tagName!=="BUTTON" || el.closest("select,option,textarea,.fc-in")) return;   /* 입력칸·선택상자 안에는 별을 넣지 않음 (값이 바뀌어 오작동) */
     if(el.querySelector(':scope > .mxst')) return;
     var t = ''; for(var c=el.firstChild;c;c=c.nextSibling){ if(c.nodeType===3) t += c.nodeValue; } t = t.trim(); if(!t) return;
     var m = t.match(re); if(!m) return;
@@ -3952,7 +3954,7 @@ function mxFireworks(cv){
 document.addEventListener("click", function(e){ var b = e.target.closest("[data-mxok]"); if(!b) return; var m = b.dataset.mxok, n = myName();
   lsSet('bsr_mvpok_'+m+'_'+n, String(Date.now())); try{ mxSend('mvpack|'+m+'|'+n, '확인'); }catch(_){}
   var o = document.getElementById('mxc'); if(o) o.remove(); document.body.style.overflow = ''; });
-function mxStarQ(){ if(!MX_SQ){ MX_SQ = true; requestAnimationFrame(mxStarFix); } }
+function mxStarQ(){ if(!MX_SQ){ MX_SQ = true; setTimeout(mxStarFix, 60); } }
 try{ new MutationObserver(mxStarQ).observe(document.body,{childList:true,subtree:true}); }catch(e){}
 /* 관리자: 순위 · 소개/인상 입력 · 확정 */
 function mxView(m){
