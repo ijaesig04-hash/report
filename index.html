@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261026035144">
+<meta name="bsr-ver" content="20261026230304">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -991,6 +991,18 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mx-cr{display:flex;flex-direction:column;gap:6px}.mx-cr p{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:center;margin:0;border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px}.mx-cr i{grid-row:1/3;width:8px;height:30px;border-radius:4px}.mx-cr b{font-size:13.5px}.mx-cr em{grid-row:1/3;grid-column:3;font-style:normal;font-weight:800;color:#0f2a5c}.mx-cr small{grid-column:2;font-size:12px;color:#64748b}
 .mxst{font-size:.72em;margin-left:2px;letter-spacing:-2px;vertical-align:.12em;white-space:nowrap}
 .mx-ms{margin:4px 0 8px}
+.fc-d{background:linear-gradient(150deg,#ecfeff,#f0f9ff);border:1.5px solid #67e8f9;border-radius:18px;overflow:hidden}
+.fc-d>summary{list-style:none;display:flex;flex-direction:column;gap:2px;padding:12px 14px;cursor:pointer}.fc-d>summary::-webkit-details-marker{display:none}
+.fc-d>summary span{font-weight:900;font-size:15px;color:#0e7490}.fc-d>summary span::after{content:" ▾";font-size:12px}.fc-d[open]>summary span::after{content:" ▴"}.fc-d>summary small{font-size:12px;color:#64748b}
+.fc-in{padding:0 14px 14px;display:flex;flex-direction:column;gap:10px}
+.fc-row{display:flex;align-items:center;gap:8px}.fc-row label{font-size:12.5px;font-weight:700;color:#334155}.fc-row select{flex:1;min-width:0;border:1px solid #a5f3fc;border-radius:10px;padding:8px;font:700 14px "Noto Sans KR",sans-serif;background:#fff}.fc-car{font-size:12px;color:#64748b}
+.fc-k{flex-wrap:wrap}.fc-k .chip{font-size:12.5px!important}.fc-k .chip b{margin-left:2px}.fc-k .fc-ng b{color:#dc2626}.fc-k .chip[aria-pressed="true"] b{color:inherit}
+.fc-now{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.fc-now span{background:#fff;border-radius:10px;padding:6px;text-align:center;font-size:11.5px;color:#64748b;display:flex;flex-direction:column}.fc-now b{font-size:15px;color:#0f172a}.fc-now b.ng{color:#dc2626}
+.fc-g{display:grid;grid-template-columns:1fr 1fr;gap:8px}.fc-g label{display:flex;flex-direction:column;gap:3px;font-size:12px;font-weight:700;color:#334155}.fc-g label.wide{grid-column:1/-1}.fc-g label small{font-weight:500;color:#64748b}
+.fc-g input{border:1px solid #a5f3fc;border-radius:10px;padding:9px;font:700 15px "IBM Plex Mono",monospace;background:#fff;width:100%;box-sizing:border-box}
+.fc-res{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;border-radius:14px;padding:10px 12px;background:#fff;border:2px solid #e2e8f0}.fc-res small{font-size:12px;font-weight:800;color:#64748b}.fc-res b{font-size:30px;line-height:1}.fc-res span{font-size:12.5px;color:#475569}
+.fc-res.ok{border-color:#86efac;background:#f0fdf4}.fc-res.ok b{color:#15803d}.fc-res.ng{border-color:#fecaca;background:#fef2f2}.fc-res.ng b{color:#dc2626}
+.fc-r{margin:6px 0 0;font-size:13px;color:#334155;word-break:keep-all}.fc-note{margin:0;font-size:11.5px;color:#64748b}
 .tei b i{font-style:normal;font-size:.72em;color:#94a3b8;font-weight:600;margin-left:1px}.tei small em{font-style:normal;font-size:10px;color:#b45309;background:#fef3c7;border-radius:4px;padding:0 4px;margin-left:2px}.tei.low b{color:#c2410c}.tei.full b{color:#15803d}
 .aa{margin-top:12px;border-radius:18px;padding:12px 14px;background:linear-gradient(135deg,#fff7ed,#fffbeb);border:1.5px solid #fdba74;box-shadow:0 6px 16px rgba(234,88,12,.12)}
 .aa-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}.aa-h b{font-size:15px;color:#9a3412}.aa-h em{font-style:normal;color:#ea580c}
@@ -2524,6 +2536,63 @@ function bonusBox(p,pts,tail){
   return '<div class="bbox"><b>'+(fin?meLbl()+' 확정 · 미달 '+miss.length+'개':'가점까지 '+miss.length+'개 남음')+'</b><span>미달: '+miss.join(", ")+'</span></div>';
 }
 
+/* ===== 🧮 월말 회복 계산기 (개인별 탭) =====
+   모든 지표는 '낮을수록 좋은' 지표 · 달성률 = (2 − 실적 ÷ 목표) × 100 (최대 200%)
+   월말 실적 = (지금 실적 × 지난 일수 + 남은 기간 예상 실적 × 남은 일수) ÷ 한 달 일수  — 매일 비슷한 건수가 생긴다고 가정 */
+var FC = null;
+function fcRate(a,t){ if(!(t>0)) return a>0?0:200; return Math.min(200, Math.round((2 - a/t)*1000)/10); }
+function fcInit(){
+  var d = SD.ppl || kstDate(0), y=+d.slice(0,4), m=+d.slice(5,7), ld = new Date(y,m,0).getDate(), day=+d.slice(8,10);
+  var me = myName(), p = PPL.filter(function(x){return x.name===me})[0] || PPL.filter(function(x){return x.name===(FC&&FC.n)})[0] || PPL[0];
+  var k = FC && FC.n===p.name ? FC.k : Math.max(0, p.m.findIndex(function(c){return c.r<100}));
+  FC = {n:p.name, k:k, E:day, R:Math.max(0,ld-day), ld:ld, x:null, N:'', e:0, d:d};
+  FC.x = FC.k===2 ? 0 : p.m[FC.k].a;
+}
+function fcCard(){
+  if(!window.PPL || !PPL.length) return '';
+  if(!FC || FC.d!==(SD.ppl||kstDate(0))) fcInit();
+  var p = PPL.filter(function(x){return x.name===FC.n})[0] || PPL[0];
+  var opts = PPL.slice().sort(function(a,b){return a.name.localeCompare(b.name,"ko")}).map(function(x){return '<option'+(x.name===FC.n?' selected':'')+'>'+x.name+'</option>'}).join('');
+  var chips = M.map(function(mm,i){ var c=p.m[i]; return '<button type="button" class="chip'+(c.r<100?' fc-ng':'')+'" data-fck="'+i+'" aria-pressed="'+(i===FC.k)+'">'+mm.short+' <b class="num">'+Math.round(c.r)+'%</b></button>'; }).join('');
+  var unit = FC.k>=3 ? '분' : '%', c = p.m[FC.k];
+  return '<div class="sec fc"><details class="fc-d"'+(FC.open?' open':'')+'><summary><span>🧮 월말 회복 계산기</span><small>남은 기간 실적에 따라 월말 몇 %가 될지</small></summary><div class="fc-in">'+
+    '<div class="fc-row"><label for="fc-n">직원</label><select id="fc-n" data-fcn="1">'+opts+'</select><span class="fc-car">'+(+p.no)+'호</span></div>'+
+    '<div class="chips fc-k">'+chips+'</div>'+
+    '<div class="fc-now"><span>목표 <b class="num">'+c.t+unit+'</b></span><span>지금 실적 <b class="num">'+c.a+unit+'</b></span><span>지금 달성률 <b class="num'+(c.r<100?' ng':'')+'">'+Math.round(c.r)+'%</b></span></div>'+
+    '<div class="fc-g"><label>지난 일수<input type="number" inputmode="numeric" id="fc-E" value="'+FC.E+'" min="1" max="31"></label><label>남은 일수<input type="number" inputmode="numeric" id="fc-R" value="'+FC.R+'" min="0" max="31"></label>'+
+    '<label class="wide">남은 기간 예상 실적 ('+unit+')<input type="number" inputmode="decimal" step="0.1" id="fc-x" value="'+FC.x+'"></label></div>'+
+    (FC.k===2?'<div class="fc-g"><label class="wide">지금까지 긴급출동 건수 <small>(알면 입력 · 건수로 계산)</small><input type="number" inputmode="numeric" id="fc-N" value="'+FC.N+'" placeholder="모르면 비워두기"></label><label class="wide">남은 기간 예상 25분 초과 건수 <small>(긴급출동 건수 입력 시)</small><input type="number" inputmode="numeric" id="fc-e" value="'+FC.e+'" min="0"></label></div>':'')+
+    '<div id="fc-out">'+fcOut()+'</div>'+
+    '<p class="fc-note">기준일 '+md(FC.d)+' 자료 · 매일 비슷한 건수가 생긴다고 보고 계산한 예측이에요. 실제 월말 결과와 조금 다를 수 있어요.</p></div></details></div>';
+}
+function fcOut(){
+  var p = PPL.filter(function(x){return x.name===FC.n})[0]; if(!p) return '';
+  var c = p.m[FC.k], t=c.t, a=c.a, E=+FC.E||0, R=+FC.R||0, T=E+R, x=+FC.x||0, unit = FC.k>=3?'분':'%', mm=M[FC.k];
+  if(!(E>0) || !(T>0)) return '<p class="fc-r">지난 일수를 입력해 주세요.</p>';
+  var aEnd, how = '', extra='';
+  if(FC.k===2 && +FC.N>0){
+    var N=+FC.N, exc=Math.round(a*N/100), NE=Math.round(N*T/E), e=+FC.e||0;
+    aEnd = Math.round((exc+e)/NE*1000)/10;
+    var allow = Math.floor(t*NE/100 - exc);
+    how = '지금 초과 약 <b>'+exc+'건</b> / 긴급 '+N+'건 → 월말 긴급 약 '+NE+'건 예상';
+    extra = allow>0 ? '✅ 남은 기간 25분 초과 <b>'+allow+'건까지</b> 생겨도 100% 이상' : allow===0 ? '✅ 남은 기간 25분 초과 <b>0건</b>이면 100% 이상 (1건이라도 생기면 미달)' : '⚠️ 남은 기간 초과 0건이어도 100%는 어려워요 (최대 '+Math.round(fcRate(Math.round(exc/NE*1000)/10,t))+'%)';
+  } else {
+    aEnd = Math.round((a*E + x*R)/T*100)/100;
+    var need = R>0 ? (t*T - a*E)/R : null;
+    if(need==null) extra = '남은 일수가 0이라 지금 실적이 월말 결과예요.';
+    else if(need<0) extra = '⚠️ 남은 기간 실적이 0이어도 100%는 어려워요 · 최대 <b>'+Math.round(fcRate(Math.round(a*E/T*100)/100,t))+'%</b>';
+    else extra = '✅ 남은 '+R+'일 동안 '+mm.short+' 실적을 평균 <b>'+(Math.floor(need*10)/10)+unit+' 이하</b>로 지키면 100% 달성';
+    if(FC.k<=2 && R>0) how = '남은 기간 '+(FC.k===2?'25분 초과':'발생')+' 0일 때 최대 <b>'+Math.round(fcRate(Math.round(a*E/T*100)/100,t))+'%</b>';
+  }
+  var rEnd = fcRate(aEnd,t), up = Math.round((rEnd - c.r)*10)/10;
+  return '<div class="fc-res'+(rEnd>=100?' ok':' ng')+'"><small>월말 예상</small><b class="num">'+Math.round(rEnd)+'%</b><span>실적 '+aEnd+unit+' · 지금보다 '+(up>=0?'▲':'▼')+Math.abs(Math.round(up))+'%p</span></div>'+
+    (how?'<p class="fc-r">'+how+'</p>':'')+'<p class="fc-r">'+extra+'</p>';
+}
+document.addEventListener("click", function(e){ var b=e.target.closest("[data-fck]"); if(!b) return; var p=PPL.filter(function(x){return x.name===FC.n})[0]; FC.k=+b.dataset.fck; FC.x = FC.k===2 ? 0 : p.m[FC.k].a; FC.N=''; FC.e=0; FC.open=true; render(); });
+document.addEventListener("change", function(e){ if(e.target.id==="fc-n"){ var keepOpen=true; FC.n=e.target.value; var p=PPL.filter(function(x){return x.name===FC.n})[0]; FC.k=Math.max(0,p.m.findIndex(function(c){return c.r<100})); FC.x = FC.k===2 ? 0 : p.m[FC.k].a; FC.N=''; FC.e=0; FC.open=keepOpen; render(); } });
+document.addEventListener("input", function(e){ var id=e.target.id; if(!/^fc-[ERxNe]$/.test(id)) return; FC[id.slice(3)] = e.target.value; var o=document.getElementById("fc-out"); if(o) o.innerHTML=fcOut(); });
+document.addEventListener("toggle", function(e){ if(e.target.classList && e.target.classList.contains("fc-d")) FC.open = e.target.open; }, true);
+
 function viewPpl(){
   var all = PPL.length;
   var full = PPL.filter(function(p){return p.ok===5}).length;
@@ -3244,6 +3313,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-27a", date:"10/27", title:"월말 회복 계산기", tabs:["ppl"], items:["🧮 개인별 탭 맨 위에 월말 회복 계산기 — 직원·지표를 고르고 남은 일수·예상 실적을 넣으면 월말 달성률 예측","목표 100%를 위해 남은 기간 지켜야 할 실적도 함께 표시 (25분 초과율은 긴급출동 건수로도 계산)"]},
  {id:"2026-10-26p", date:"10/26", title:"운전성향 10/26 반영", tabs:["drv"], items:["운전성향 10/26 기준 업데이트 — 양호 14명 · 위험 1명(용승우 GPS 소명 예정)","모범: 남현준 · 김동현 · 이명섭"]},
  {id:"2026-10-26o", date:"10/26", title:"사업팀 항목 배점 표시", tabs:["eval"], items:["사업팀 평가 항목별 '받은 점수 / 배점' 표시 (만점 초록 · 미달 주황)"]},
  {id:"2026-10-26n", date:"10/26", title:"지표 10/26 반영", tabs:["cmp","veh","ppl","mgt","home"], items:["지사별·차량별·개인별·관리지표 10/26 기준 업데이트","북서울 4/5 달성 (불필요출동 87%) · 차량 160호 당사일괄 99%"]},
@@ -4477,7 +4547,7 @@ setInterval(function(){ var h=new Date(Date.now()+9*3600000).getUTCHours(); if(G
 function goDp(){ var f=function(){ var b=document.querySelector("#view [data-dp]"), el=b?b.parentElement:null, n=document.querySelector("nav.tabs"); if(!el){ goTop(); return; } var y=el.getBoundingClientRect().top+window.pageYOffset-(n?n.offsetHeight:0)-8; window.scrollTo(0, Math.max(0,y)); }; f(); requestAnimationFrame(f); setTimeout(f,120); }
 function goTop(){ var f=function(){ var v=document.getElementById("view"), n=document.querySelector("nav.tabs"); if(!v) return; var y=v.getBoundingClientRect().top+window.pageYOffset-(n?n.offsetHeight:0)-4; window.scrollTo(0, Math.max(0,y)); }; f(); requestAnimationFrame(f); setTimeout(f,120); }
 function render(){
-  var v = state.tab==="home" ? przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
+  var v = state.tab==="home" ? przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? fcCard()+viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
   var nft = newsFor(state.tab); if(nft) markSeen("bsr_tab_"+state.tab, nft.id);
   document.getElementById("view").innerHTML = '<div class="wrap" style="gap:20px">'+(window.notiBanner?notiBanner():'')+newsBanner()+staleNote()+v+'</div>';
   newsDots();
