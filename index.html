@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261027212710">
+<meta name="bsr-ver" content="20261027231022">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1025,6 +1025,14 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .fc-iw em{font-style:normal;font-size:12px;color:#64748b}
 .fc-pn .fc-res{padding:8px 10px}
 .fc-pn .fc-res b{font-size:24px}
+
+.fc-pt{display:flex;align-items:baseline;gap:6px;background:#fff;border-radius:10px;padding:7px 10px;font-size:12px;color:#334155}
+.fc-pt>span{flex:1;font-weight:700}
+.fc-pt small{font-weight:500;color:#64748b;font-size:10.5px;margin-left:3px}
+.fc-pt b{font-size:16px;color:#0f172a}
+.fc-pt b.ok{color:#15803d}
+.fc-pt i{font-style:normal;color:#94a3b8}
+.fc-pt em{font-style:normal;color:#64748b;font-size:11.5px}
 .fc-tl{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
 .fc-tl span{flex:1 0 46px;display:flex;flex-direction:column;align-items:center;border-radius:8px;padding:4px 2px;background:#fef2f2}
 .fc-tl span.ok{background:#f0fdf4}
@@ -2584,6 +2592,9 @@ function bonusBox(p,pts,tail){
 var FC = null;
 function fcRate(a,t){ if(!(t>0)) return a>0?0:200; return Math.min(200, Math.round((2 - a/t)*1000)/10); }
 function fcDef(p,k){ return k>=3 ? p.m[k].t : 0; }
+/* '26 하반기 CS평가안 (CS사원) 출동 항목 배점 — 점수 = 달성률(0~100%) × 배점 */
+var FC_PT = [5,7,3,4,7];
+function fcPt(r,k){ return Math.round(Math.max(0,Math.min(100,r))/100*FC_PT[k]*10)/10; }
 function fcInit(keepName){
   var d = SD.ppl || kstDate(0), y=+d.slice(0,4), m=+d.slice(5,7), ld = new Date(y,m,0).getDate(), day=+d.slice(8,10);
   var me = myName(), nm = keepName || me, p = PPL.filter(function(x){return x.name===nm})[0] || PPL[0];
@@ -2605,7 +2616,7 @@ function fcCard(){
     '<div class="fc-now"><span>목표<b class="num">'+c.t+unit+'</b></span><span>지금 실적<b class="num">'+c.a+unit+'</b></span><span>지금 달성률<b class="num'+(c.r<100?' ng':'')+'">'+Math.round(c.r)+'%</b></span></div>'+
     '<label class="fc-in1"><span>'+(rate?'남은 기간 '+M[FC.k].short+' 실적 <small>0 = 추가 발생 없음</small>':'남은 기간 평균 '+M[FC.k].short+' 시간 <small>기본값 = 목표</small>')+'</span><span class="fc-iw"><input type="number" inputmode="decimal" step="0.1" min="0" id="fc-x" value="'+FC.x+'"><em>'+unit+'</em></span></label>'+
     '<div id="fc-out">'+fcOut()+'</div>'+
-    '<p class="fc-note">하루 출동 건수가 비슷하다고 보고 계산한 예측이에요.</p></div></div>';
+    '<p class="fc-note">하반기 CS평가안 기준 · 차량별 목표 · 달성률 = (2 − 실적÷목표)×100 · 점수 = 달성률(최대 100%) × 배점 · 하루 출동 건수가 비슷하다고 보고 계산한 예측이에요.</p></div></div>';
 }
 function fcOut(){
   var p = PPL.filter(function(x){return x.name===FC.n})[0]; if(!p) return '';
@@ -2618,7 +2629,9 @@ function fcOut(){
   if(need<0) msg = '⚠️ 추가 발생이 없어도 이번 달 100%는 어려워요 · 최대 <b>'+Math.round(fcRate(fcAt(a,0,E,T),t))+'%</b>';
   else if(c.r>=100 && rate && x===0) msg = '✅ 지금도 100% 이상 · 남은 기간 실적 <b>'+(Math.floor(need*10)/10)+unit+' 이하</b>면 유지';
   else msg = (rEnd>=100?'✅ ':'👉 ')+'월말 100% 조건: 남은 '+R+'일 '+M[FC.k].short+' <b>'+(Math.floor(need*10)/10)+unit+' 이하</b>';
+  var p0 = fcPt(c.r,FC.k), p1 = fcPt(rEnd,FC.k);
   return '<div class="fc-res'+(rEnd>=100?' ok':' ng')+'"><small>월말('+T+'일) 예상</small><b class="num">'+Math.round(rEnd)+'%</b><span>실적 '+aEnd+unit+' · 지금보다 '+(up>=0?'▲':'▼')+Math.abs(up)+'%p</span></div>'+
+    '<div class="fc-pt"><span>사업팀 점수 <small>달성률 × 배점</small></span><b class="num">'+p0+'</b><i>→</i><b class="num '+(p1>=FC_PT[FC.k]?'ok':'')+'">'+p1+'</b><em>/ '+FC_PT[FC.k]+'점</em></div>'+
     '<div class="fc-tl">'+tl+'</div>'+(hit&&c.r<100?'<p class="fc-r">📅 <b>'+(+FC.d.slice(5,7))+'/'+hit+'</b>부터 100% 넘어요</p>':'')+'<p class="fc-r">'+msg+'</p>';
 }
 document.addEventListener("click", function(e){
@@ -3376,6 +3389,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-28b", date:"10/28", title:"월말 계산기 · 평가안 점수", tabs:["ppl"], items:["🧮 하반기 CS평가안 기준 반영 — 월말 계산기에 사업팀 점수(달성률 × 항목별 배점: 불필요 5 · 발보율 7 · 25분↑ 3 · 체감 4 · 금융사(일괄) 7)를 지금 → 월말 예상으로 표시"]},
  {id:"2026-10-28a", date:"10/28", title:"월말 계산기 개선", tabs:["ppl"], items:["🧮 월말 계산기 계산 방식 정리 — 출동이 쌓이는 만큼 추가 발생이 없으면 날이 갈수록 실적·달성률이 좋아지도록 (사업팀 평가안: 달성률 = (2 − 실적÷목표)×100)","날짜별 달성률 변화와 100% 넘는 날 표시 · ↺ 초기화 버튼 추가 · 입력칸을 1개로 줄여 화면 간단히"]},
  {id:"2026-10-27h", date:"10/27", title:"11월 근무표 재반영", tabs:["duty"], items:["🗓️ 11월 근무표 최신본 반영 — 김유건 근무 일정 복원 · 원본 사진도 최신본으로 교체"]},
  {id:"2026-10-27g", date:"10/27", title:"근무표 원본 저장", tabs:["duty"], items:["⬇ 근무표 → 🗂️ 원본 화면 위쪽에 ⬇ 저장 버튼 추가 — 원본 근무 계획표를 사진 파일로 내려받을 수 있어요 (사번은 가려진 상태)"]},
