@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261027014838">
+<meta name="bsr-ver" content="20261027024118">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -995,6 +995,18 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .fc-d>summary{list-style:none;display:flex;flex-direction:column;gap:2px;padding:12px 14px;cursor:pointer}.fc-d>summary::-webkit-details-marker{display:none}
 .fc-d>summary span{font-weight:900;font-size:15px;color:#0e7490}.fc-d>summary span::after{content:" ▾";font-size:12px}.fc-d[open]>summary span::after{content:" ▴"}.fc-d>summary small{font-size:12px;color:#64748b}
 .fc-in{padding:0 14px 14px;display:flex;flex-direction:column;gap:10px}
+.psrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.psrow .chips{flex:0 1 auto;min-width:0}
+.fc-btn{flex:none;display:inline-flex;align-items:center;gap:5px;border:0;border-radius:999px;padding:8px 14px;font:800 13px "Noto Sans KR",sans-serif;color:#fff;background:linear-gradient(135deg,#06b6d4,#2563eb);box-shadow:0 3px 10px rgba(37,99,235,.38);cursor:pointer;animation:fcglow 2.4s ease-in-out infinite}
+.fc-btn[aria-expanded="true"]{background:linear-gradient(135deg,#0e7490,#1d4ed8);animation:none}
+.fc-btn span{font-size:15px;line-height:1}
+@keyframes fcglow{0%,100%{box-shadow:0 3px 10px rgba(37,99,235,.38)}50%{box-shadow:0 3px 16px rgba(6,182,212,.75)}}
+.fc-pn{margin-top:2px}
+.fc-ph{display:flex;align-items:center;justify-content:space-between;padding:11px 14px 6px}
+.fc-ph b{font-size:15px;font-weight:900;color:#0e7490}
+.fc-x{border:0;background:#fff;border-radius:999px;padding:4px 10px;font:700 12px "Noto Sans KR",sans-serif;color:#64748b;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.fc-btn{animation:none}}
+
 .fc-row{display:flex;align-items:center;gap:8px}.fc-row label{font-size:12.5px;font-weight:700;color:#334155}.fc-row select{flex:1;min-width:0;border:1px solid #a5f3fc;border-radius:10px;padding:8px;font:700 14px "Noto Sans KR",sans-serif;background:#fff}.fc-car{font-size:12px;color:#64748b}
 .fc-k{flex-wrap:wrap}.fc-k .chip{font-size:12.5px!important}.fc-k .chip b{margin-left:2px}.fc-k .fc-ng b{color:#dc2626}.fc-k .chip[aria-pressed="true"] b{color:inherit}
 .fc-now{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.fc-now span{background:#fff;border-radius:10px;padding:6px;text-align:center;font-size:11.5px;color:#64748b;display:flex;flex-direction:column}.fc-now b{font-size:15px;color:#0f172a}.fc-now b.ng{color:#dc2626}
@@ -2555,7 +2567,8 @@ function fcCard(){
   var opts = PPL.slice().sort(function(a,b){return a.name.localeCompare(b.name,"ko")}).map(function(x){return '<option value="'+x.name+'"'+(x.name===FC.n?' selected':'')+'>'+x.name+'</option>'}).join('');
   var chips = M.map(function(mm,i){ var c=p.m[i]; return '<button type="button" class="chip'+(c.r<100?' fc-ng':'')+'" data-fck="'+i+'" aria-pressed="'+(i===FC.k)+'">'+mm.short+' <b class="num">'+Math.round(c.r)+'%</b></button>'; }).join('');
   var unit = FC.k>=3 ? '분' : '%', c = p.m[FC.k];
-  return '<div class="sec fc"><details class="fc-d"'+(FC.open?' open':'')+'><summary><span>🧮 월말 회복 계산기</span><small>남은 기간 실적에 따라 월말 몇 %가 될지</small></summary><div class="fc-in">'+
+  if(!FC.open) return '';
+  return '<div class="fc-d fc-pn"><div class="fc-ph"><b>🧮 월말 회복 계산기</b><button type="button" class="fc-x" data-fcb="1">닫기 ✕</button></div><div class="fc-in">'+
     '<div class="fc-row"><label for="fc-n">직원</label><select id="fc-n" data-fcn="1">'+opts+'</select><span class="fc-car">'+(+p.no)+'호</span></div>'+
     '<div class="chips fc-k">'+chips+'</div>'+
     '<div class="fc-now"><span>목표 <b class="num">'+c.t+unit+'</b></span><span>지금 실적 <b class="num">'+c.a+unit+'</b></span><span>지금 달성률 <b class="num'+(c.r<100?' ng':'')+'">'+Math.round(c.r)+'%</b></span></div>'+
@@ -2563,7 +2576,7 @@ function fcCard(){
     '<label class="wide">남은 기간 예상 실적 ('+unit+')<input type="number" inputmode="decimal" step="0.1" id="fc-x" value="'+FC.x+'"></label></div>'+
     (FC.k===2?'<div class="fc-g"><label class="wide">지금까지 긴급출동 건수 <small>(알면 입력 · 건수로 계산)</small><input type="number" inputmode="numeric" id="fc-N" value="'+FC.N+'" placeholder="모르면 비워두기"></label><label class="wide">남은 기간 예상 25분 초과 건수 <small>(긴급출동 건수 입력 시)</small><input type="number" inputmode="numeric" id="fc-e" value="'+FC.e+'" min="0"></label></div>':'')+
     '<div id="fc-out">'+fcOut()+'</div>'+
-    '<p class="fc-note">기준일 '+md(FC.d)+' 자료 · 매일 비슷한 건수가 생긴다고 보고 계산한 예측이에요. 실제 월말 결과와 조금 다를 수 있어요.</p></div></details></div>';
+    '<p class="fc-note">기준일 '+md(FC.d)+' 자료 · 매일 비슷한 건수가 생긴다고 보고 계산한 예측이에요. 실제 월말 결과와 조금 다를 수 있어요.</p></div></div>';
 }
 function fcOut(){
   var p = PPL.filter(function(x){return x.name===FC.n})[0]; if(!p) return '';
@@ -2624,7 +2637,7 @@ function viewPpl(){
   return '<div class="sec"><h2>개인별 지표 <span>북서울 '+all+'명 · 기준일 '+SD.ppl+'</span></h2>'+
     bonusPanel(full, near, all, '명', BONUS, d, '개인목표 5개를 모두 100% 이상 달성하면')+'</div>'+
     '<div class="sec"><div class="chips" role="group" aria-label="보기 선택">'+chips+'</div>'+
-    '<div class="chips" role="group" aria-label="정렬 선택">'+schips+'</div>'+
+    '<div class="psrow"><div class="chips" role="group" aria-label="정렬 선택">'+schips+'</div><button type="button" class="fc-btn" data-fcb="1" aria-expanded="'+!!(FC&&FC.open)+'"><span>🧮</span>월말 계산기</button></div>'+fcCard()+
     '<div class="card heat" style="--namew:104px">'+heatHead()+rows+'</div>'+
     '<details class="hlp2"><summary><span class="h2i"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6M12 7.5v.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span>지표 읽는 법<svg class="h2c" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="h2g"><div><b>평균 달성률</b><span>이름 아래 %는 5개 지표의 평균</span></div>'+(pv?'<div><b>변화</b><span>▲▼는 '+md(pv.d)+' 대비 달성 지표 개수</span></div>':'')+'<div><b>배지</b><span>🏆 5개 지표 달성 · 📨 고객체감 응답률 80%↑ · 🌟 칭찬 우수(TOP3) · 📋 판넬 목표 달성(이번 달 '+panelGoal()+'건↑ · 4~10월 20건, 11~3월 10건) · 🎓 자격증 취득 · 🛡️ 안전운전 모범 — 이름을 누르면 상세에 표시</span></div><div><b>순위 기준</b><span>달성 개수 → 같으면 평균 달성률(지표별 최대 200%)</span></div><div><b>차량 공통</b><span>불필요출동률·발보율은 차량 단위라 같은 차량 근무자는 같은 값</span></div></div></details></div>'+
     '<div class="sec">'+detail+'</div>';
@@ -3335,6 +3348,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-27d", date:"10/27", title:"월말 계산기 위치 이동", tabs:["ppl"], items:["🧮 월말 회복 계산기를 정렬 버튼 오른쪽의 파란 버튼으로 옮겼어요 — 누르면 아래에 계산기가 열리고, 다시 누르거나 닫기를 누르면 접혀요"]},
  {id:"2026-10-27c", date:"10/27", title:"9월 지사평가 · 고객체감 업데이트", tabs:["eval","cs"], items:["📋 월별 평가 — 9월 지사평가 반영 (시트 합계 칸 기준) · 하반기 종합 평가와 9월 MVP 집계에 9월 포함","📞 고객체감 10/27 기준 — 새로 발송된 9건 추가 (발송 150건)"]},
  {id:"2026-10-27b", date:"10/27", title:"계산기 오류 수정", tabs:["ppl"], items:["🧮 월말 회복 계산기 — MVP 별이 있는 직원(박수안 등)을 고르면 다른 사람 자료가 나오던 문제 수정 · 반응 속도 개선"]},
  {id:"2026-10-27a", date:"10/27", title:"월말 회복 계산기", tabs:["ppl"], items:["🧮 개인별 탭 맨 위에 월말 회복 계산기 — 직원·지표를 고르고 남은 일수·예상 실적을 넣으면 월말 달성률 예측","목표 100%를 위해 남은 기간 지켜야 할 실적도 함께 표시 (25분 초과율은 긴급출동 건수로도 계산)"]},
@@ -4572,7 +4586,7 @@ setInterval(function(){ var h=new Date(Date.now()+9*3600000).getUTCHours(); if(G
 function goDp(){ var f=function(){ var b=document.querySelector("#view [data-dp]"), el=b?b.parentElement:null, n=document.querySelector("nav.tabs"); if(!el){ goTop(); return; } var y=el.getBoundingClientRect().top+window.pageYOffset-(n?n.offsetHeight:0)-8; window.scrollTo(0, Math.max(0,y)); }; f(); requestAnimationFrame(f); setTimeout(f,120); }
 function goTop(){ var f=function(){ var v=document.getElementById("view"), n=document.querySelector("nav.tabs"); if(!v) return; var y=v.getBoundingClientRect().top+window.pageYOffset-(n?n.offsetHeight:0)-4; window.scrollTo(0, Math.max(0,y)); }; f(); requestAnimationFrame(f); setTimeout(f,120); }
 function render(){
-  var v = state.tab==="home" ? przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? fcCard()+viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
+  var v = state.tab==="home" ? przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
   var nft = newsFor(state.tab); if(nft) markSeen("bsr_tab_"+state.tab, nft.id);
   document.getElementById("view").innerHTML = '<div class="wrap" style="gap:20px">'+(window.notiBanner?notiBanner():'')+newsBanner()+staleNote()+v+'</div>';
   newsDots();
@@ -4599,6 +4613,7 @@ document.getElementById("view").addEventListener("click",function(e){   var dsw 
   else if(e.target.closest("[data-brfo]")){ openBriefing(); }
   else if(e.target.closest("[data-sms]")){ showSms(); }
   else if(e.target.closest("[data-goppl]")){ state.pp = e.target.closest("[data-goppl]").dataset.goppl; state.pf="all"; var tb=document.querySelector('#tabs [data-tab="ppl"]'); if(tb) tb.click(); }
+  else if(e.target.closest("[data-fcb]")){ if(!FC || FC.d!==(SD.ppl||kstDate(0))) fcInit(); FC.open = !FC.open; render(); }
   else if(e.target.closest("[data-fco]")){ state.fco = !state.fco; render(); }
   else if(e.target.closest("[data-vdo]")){ state.vdo = !state.vdo; render(); }
   else if(e.target.closest("[data-tm]")){ state.tm = e.target.closest("[data-tm]").dataset.tm; render(); }
