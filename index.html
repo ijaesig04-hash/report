@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261029122747">
+<meta name="bsr-ver" content="20261029123436">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1039,6 +1039,16 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .vlg-w span{font-size:11.5px;background:rgba(255,255,255,.1);border-radius:999px;padding:2px 8px}
 .vlg-w span b{color:#ffd769}
 .vlg-w small{width:100%;font-size:10.5px;color:#fde68a}
+
+.vlg>summary{list-style:none;cursor:pointer;margin:0 2px}
+.vlg>summary::-webkit-details-marker{display:none}
+.vlg-cr{white-space:nowrap;flex:none;margin-left:8px}
+.vlg>summary small{line-height:1.45}
+.vlg[open]>summary{margin-bottom:6px}
+.vlg-ar{font-style:normal;font-size:12px;display:inline-block;transition:transform .2s}
+.vlg[open] .vlg-ar{transform:rotate(180deg)}
+.vlg-nt{margin:0 2px 4px;font-size:10.5px;color:#fde68a}
+.vlg-sub{margin:0 2px;font-size:10.5px;color:#c7d2fe}
 .vlg-f{margin:8px 2px 0;font-size:10.5px;color:#c7d2fe}
 .vlg-mini{width:100%;display:flex;align-items:center;gap:7px;border:0;border-radius:14px;padding:10px 12px;background:linear-gradient(90deg,#0f1b3d,#1f3a8a);color:#fff;font:600 12.5px "Noto Sans KR",sans-serif;text-align:left;cursor:pointer;margin-top:10px}
 .vlg-mini b{font-weight:900}
@@ -3515,6 +3525,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-29i", date:"10/29", title:"차량 대항전 접기", tabs:["veh"], items:["🏁 차량별 탭의 차량 대항전을 접어 두고, 누르면 펼쳐 보기","대항전 가점은 고과 미반영 · 이달의 MVP 가점에만 반영된다고 표시"]},
  {id:"2026-10-29h", date:"10/29", title:"🏁 차량 대항전 · 🎉 무사고 축하", tabs:["veh","home"], items:["🏁 차량별 탭 맨 위에 차량 대항전(주간 리그) — 달성 개수·평균 달성률 순위, 지난주 대비 ▲▼, 1위 👑 · 브리핑에도 한 줄 표시","🏆 주간 개선 1위 차량 근무자는 이달의 MVP 가점 +2점/주 (최대 +4)","🎉 무사고 기념일 — 100·200·300일·1주년·500일… 30일 전부터 D-day, 당일엔 축하 카드와 폭죽 (차량 무사고 100일 11/8)"]},
  {id:"2026-10-29g", date:"10/29", title:"운전성향 10/29 반영", tabs:["drv"], items:["운전성향 10/29 기준 업데이트 — 양호 14명 · 위험 1명(용승우 GPS 소명 예정)","모범: 남현준(0.2건) · 김동현(1.7건) · 주상덕(2.5건) · 하루 평균 최다 김민수 4.8건"]},
  {id:"2026-10-29f", date:"10/29", title:"업데이트 안 받아지는 폰 수정", tabs:["home"], items:["🔄 일부 폰에서 예전 화면이 계속 보이던 문제 보완 — 새 버전이 있으면 저장본을 바로 바꾸고 서버에서 다시 열기","이름표 메뉴에 🔄 최신 버전 받기 버튼 추가 — 화면이 예전 날짜면 한 번 눌러 주세요"]},
@@ -4177,9 +4188,11 @@ function leagueCard(){
     return '<div class="vlg-r r'+x.rk+(x.no===myCar?' me':'')+'"><span class="vlg-k">'+(md||x.rk)+'</span><span class="vlg-n"><b>'+x.no+'호'+(x.no===myCar?' <small>우리 차</small>':'')+'</b>'+tags+'<span class="vlg-d">'+dots+'</span></span><span class="vlg-s"><b class="num">'+x.ok+'<small>/5</small></b><small>평균 '+Math.round(x.avg)+'%</small></span><span class="vlg-m">'+mv+'</span></div>';
   }).join('');
   var top = D.L[0];
-  return '<div class="sec vlg"><div class="vlg-h"><div><b>🏁 차량 대항전</b><small>주간 리그 · '+md2(D.cur)+' 기준'+(D.prev?' · '+md2(D.prev)+' 대비 순위':'')+'</small></div><span class="vlg-cr">👑 '+top.no+'호</span></div>'+rows+
-    (function(){ var W = lgWeeks(D.cur.slice(0,7)); return W.length ? '<div class="vlg-w"><b>🏆 '+(+D.cur.slice(5,7))+'월 주간 개선 1위</b>'+W.map(function(w){ return '<span>'+(+w.wk.slice(5,7))+'/'+(+w.wk.slice(8))+'주 <b>'+w.no+'호</b> ▲'+Math.round(w.g)+'%p</span>'; }).join('')+'<small>개선 1위 차량 근무자 → 이달의 MVP 가점 +2점/주 (최대 +4)</small></div>' : ''; })()+
-    '<p class="vlg-f">순위 = 달성 지표 개수 → 평균 달성률(최대 200%) 순 · 🚀 지난주보다 평균이 가장 많이 오른 차량 (MVP 가점)</p></div>';
+  var mine = D.L.filter(function(x){return x.no===myCar})[0];
+  return '<details class="sec vlg"><summary class="vlg-h"><div><b>🏁 차량 대항전 <i class="vlg-ar">▾</i></b><small>주간 리그 · '+md2(D.cur)+' 기준'+(mine?' · 우리 '+mine.no+'호 '+mine.rk+'위':'')+' · 눌러서 펼치기</small></div><span class="vlg-cr">👑 '+top.no+'호</span></summary>'+
+    '<p class="vlg-nt">고과 미반영 · 이달의 MVP 가점에만 반영돼요</p>'+(D.prev?'<p class="vlg-sub">'+md2(D.prev)+' 대비 순위 변화</p>':'')+rows+
+    (function(){ var W = lgWeeks(D.cur.slice(0,7)); return W.length ? '<div class="vlg-w"><b>🏆 '+(+D.cur.slice(5,7))+'월 주간 개선 1위</b>'+W.map(function(w){ return '<span>'+(+w.wk.slice(5,7))+'/'+(+w.wk.slice(8))+'주 <b>'+w.no+'호</b> ▲'+Math.round(w.g)+'%p</span>'; }).join('')+'<small>개선 1위 차량 근무자 → 이달의 MVP 가점 +2점/주 (최대 +4) · 고과 미반영</small></div>' : ''; })()+
+    '<p class="vlg-f">순위 = 달성 지표 개수 → 평균 달성률(최대 200%) 순 · 🚀 지난주보다 평균이 가장 많이 오른 차량 (MVP 가점 · 고과 미반영)</p></details>';
 }
 function leagueMini(){
   var D = lgData(); if(!D) return ''; var p = PPL.filter(function(x){return x.name===myName()})[0], mine = p ? D.L.filter(function(x){return x.no===String(+p.no)})[0] : null, top = D.L[0];
