@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261029124325">
+<meta name="bsr-ver" content="20261029125843">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2010,7 +2010,7 @@ function viewVeh(){
   var top = '<div class="sec"><h2>차량별 지표 <span>북서울 '+VEH.length+'대 · 기준일 '+md(SD.veh)+'</span></h2>'+
     bonusPanel(vFull, vNear, VEH.length, '대', BONUS_V, dV, '차량 지표 5개를 모두 100% 이상 달성하면')+'</div>'+leagueCard()+focusCard();
   return top+'<div class="sec"><h2>차량별 달성률 <span>행을 누르면 상세</span></h2><div class="card heat">'+heatHead()+rows+'</div>'+
-    '<details class="vnote"><summary>ⓘ 지표 이름 설명</summary><p class="note">불필요=불필요출동률 · 발보율=서비스출동 발보율 · 25분↑=25분 초과율 · 체감=고객체감 출동시간 · 일괄=당사일괄 총시간</p></details>'+fcTable()+'</div>'+
+    '</div>'+
     '<div class="sec"><div class="card"><button type="button" class="vhead vtg" data-vdo="1" aria-expanded="'+!!state.vdo+'"><b>'+v.no+'호 상세</b><span>'+v.lead+' 파트장 · 달성 '+okc(v)+'/5</span><em>'+(state.vdo?'접기 ▴':'코멘트·가점·월말 예상 ▾')+'</em></button>'+(state.vdo?'<div class="vdo">'+note('veh:'+v.no,SD.veh)+bonusBox(v,BONUS_V,"")+fcBox(v.m,fcVeh(v),SD.veh)+'</div>':'')+trendCard("veh",v.no)+(function(){var f=focusInfo(),fi=focusIdx(),r=v.m[fi].r;return '<div class="bbox'+(r>=100?' good':'')+'"><b>🎯 '+(f.active?f.mo+'월 집중개선: ':f.nm+'월 집중개선(예상): ')+M[fi].name+' '+fr(r)+'</b><span>'+FOCUS_BR+' 지사 최저 항목 · '+(f.active?f.endLbl+'에 100% 이상이면 +'+FOCUS_PTS+'점':f.endLbl+' 확정 후 '+f.nm+'월 말 100% 이상이면 +'+FOCUS_PTS+'점')+'</span></div>'})()+'<div class="mlist">'+detail+'</div></div></div>';
 }
 
@@ -3550,6 +3550,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-29k", date:"10/29", title:"차량별 탭 정리", tabs:["veh"], items:["차량별 탭의 '지표 이름 설명'과 '월말 예상 달성률 보기' 칸 삭제 — 화면 간단히"]},
  {id:"2026-10-29j", date:"10/29", title:"💬 응원 코멘트", tabs:["eval"], items:["지사장님·서비스팀장님·그룹장님이 월별 평가 탭에서 상위자에게 응원 한마디를 남길 수 있어요","받은 직원은 브리핑 맨 위에 💌 응원 카드 · 월별 평가 탭 아래 응원 보드에 모아 보기","이름 선택에 🎖️ 그룹장 추가"]},
  {id:"2026-10-29i", date:"10/29", title:"차량 대항전 접기", tabs:["veh"], items:["🏁 차량별 탭의 차량 대항전을 접어 두고, 누르면 펼쳐 보기","대항전 가점은 고과 미반영 · 이달의 MVP 가점에만 반영된다고 표시"]},
  {id:"2026-10-29h", date:"10/29", title:"🏁 차량 대항전 · 🎉 무사고 축하", tabs:["veh","home"], items:["🏁 차량별 탭 맨 위에 차량 대항전(주간 리그) — 달성 개수·평균 달성률 순위, 지난주 대비 ▲▼, 1위 👑 · 브리핑에도 한 줄 표시","🏆 주간 개선 1위 차량 근무자는 이달의 MVP 가점 +2점/주 (최대 +4)","🎉 무사고 기념일 — 100·200·300일·1주년·500일… 30일 전부터 D-day, 당일엔 축하 카드와 폭죽 (차량 무사고 100일 11/8)"]},
