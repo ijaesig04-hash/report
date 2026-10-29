@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261029001321">
+<meta name="bsr-ver" content="20261029032945">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3454,6 +3454,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-29f", date:"10/29", title:"업데이트 안 받아지는 폰 수정", tabs:["home"], items:["🔄 일부 폰에서 예전 화면이 계속 보이던 문제 보완 — 새 버전이 있으면 저장본을 바로 바꾸고 서버에서 다시 열기","이름표 메뉴에 🔄 최신 버전 받기 버튼 추가 — 화면이 예전 날짜면 한 번 눌러 주세요"]},
  {id:"2026-10-29e", date:"10/29", title:"차량사고 사례 교육 자료", tabs:["home"], items:["🚗 서울동부 시장 골목길 보행자 접촉 사고(10/23) 교육 자료 추가 — 경위 · 현장 사진 · 원인 · 운전 수칙 · 확인 문제","관리자 공지 보내기에서 분류 [차량사고] · 교육 자료 첨부로 보낼 수 있어요"]},
  {id:"2026-10-29d", date:"10/29", title:"25분초과 10/29 반영", tabs:["alm"], items:["⏱️ 25분초과 10.01~10.29 — 초과 9건 / 출동 425건 (2.1%) · 김민석 3건(9.4%) · 박수안 2건(5.4%) · 남현준·권재원·김동현·유영민 각 1건"]},
  {id:"2026-10-29c", date:"10/29", title:"지표 10/29 업데이트", tabs:["cmp","veh","ppl","mgt"], items:["📊 10/29 기준 지사별·차량별·개인별·관리지표 반영 — 북서울 4/5 달성 (불필요 89% 미달)","박수안 25분↑ 101%로 달성 전환 · 26호 불필요 102% 달성 전환","관리지표: 서울동부 차량사고 1건 발생 · 북서울 영상가림 전송률 86%"]},
@@ -4911,7 +4912,7 @@ document.addEventListener("visibilitychange", function(){ if(document.visibility
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
@@ -5045,7 +5046,7 @@ document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contain
 menu.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return; menu.hidden = true;
   var a = b.dataset.vl;
-  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ notiList(); } else if(a==="find"){ findView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
+  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ notiList(); } else if(a==="find"){ findView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
 });
 ov.addEventListener("click", function(e){
   var n = e.target.closest("[data-nm]");
@@ -5098,6 +5099,7 @@ if(!me) pickView(); else { send(openTag()); sent[window.state?state.tab:"cmp"]=1
   if(!/^https?:/.test(location.protocol) || !/github\.io$/.test(location.hostname)) return;
   var cur = location.pathname.split("/").pop();
   if(cur && !/^index\.html$/i.test(cur)){ location.replace("./"+(location.hash||"")); return; }
+  if(/[?&]t=/.test(location.search)){ try{ history.replaceState(null,"","./"+(location.hash||"")); }catch(er){} }
   var mv = document.querySelector('meta[name="bsr-ver"]'), mine = mv ? mv.content : "", busy = false, last = 0;
   function check(){
     var now = Date.now(); if(busy || now-last < 20000) return; busy = true; last = now;
@@ -5107,7 +5109,9 @@ if(!me) pickView(); else { send(openTag()); sent[window.state?state.tab:"cmp"]=1
         var b = document.createElement("div");
         b.setAttribute("style","position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translateX(-50%);z-index:95;background:#1f4fd8;color:#fff;border-radius:999px;padding:9px 16px;font:700 13px 'Noto Sans KR',sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.3)");
         b.textContent = "🔄 새 업데이트를 불러오는 중…"; document.body.appendChild(b);
-        setTimeout(function(){ location.reload(); }, 700);
+        var go = function(){ location.replace("./?t="+Date.now()+(location.hash||"")); };
+        try{ caches.keys().then(function(ks){ var k=ks.filter(function(x){return /^bs-report/.test(x)})[0]; if(!k) return; return caches.open(k).then(function(c){ return c.put(new URL("./",location.href).href, new Response(t,{headers:{"Content-Type":"text/html; charset=utf-8"}})); }); }).then(go, go); }catch(er){ go(); }
+        setTimeout(go, 4000);
       }
     }).catch(function(){ busy = false; offBadge(); });
   }
