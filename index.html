@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261029123436">
+<meta name="bsr-ver" content="20261029124325">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1008,6 +1008,30 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .fc-ph b{font-size:15px;font-weight:900;color:#0e7490}
 .fc-x{border:0;background:#fff;border-radius:999px;padding:4px 10px;font:700 12px "Noto Sans KR",sans-serif;color:#64748b;cursor:pointer}
 @media (prefers-reduced-motion:reduce){.fc-btn{animation:none}}
+.ch-w{background:linear-gradient(150deg,#fff7ed,#fdf2f8);border:1.5px solid #f9a8d4;border-radius:18px;padding:12px}
+.ch-h b{font-size:15px;color:#9d174d}
+.ch-h small{display:block;font-size:11px;color:#9f1239;margin:2px 0 8px}
+.ch-cs{flex-wrap:wrap;margin-bottom:6px}
+.ch-sel{width:100%;border:1px solid #fbcfe8;border-radius:10px;padding:7px;font:600 13px "Noto Sans KR",sans-serif;margin-bottom:6px;background:#fff}
+#ch-tx{width:100%;box-sizing:border-box;border:1px solid #fbcfe8;border-radius:12px;padding:9px;font:500 14px "Noto Sans KR",sans-serif;resize:vertical;background:#fff}
+.ch-go{width:100%;margin-top:6px;border:0;border-radius:12px;padding:10px;background:linear-gradient(90deg,#db2777,#f97316);color:#fff;font:800 14px "Noto Sans KR",sans-serif;cursor:pointer}
+.ch-n{margin:6px 2px 0;font-size:10.5px;color:#9f1239}
+.ch-b .ch-i{position:relative;background:#fff;border:1px solid #fce7f3;border-radius:12px;padding:9px 11px;margin-top:6px}
+.ch-to{font-size:12px;font-weight:800;color:#be185d}
+.ch-i p{margin:3px 0;font-size:13.5px;color:#1f2937;word-break:keep-all}
+.ch-i small{font-size:11px;color:#6b7280}
+.ch-del{position:absolute;top:7px;right:8px;border:0;background:#f3f4f6;border-radius:999px;padding:2px 8px;font-size:10.5px;color:#6b7280;cursor:pointer}
+.ch-card{display:flex;gap:10px;align-items:flex-start;margin-top:10px;background:linear-gradient(135deg,#fff1f2,#fff7ed);border:1.5px solid #fda4af;border-radius:16px;padding:11px 12px}
+.ch-ic{font-size:28px;animation:sfb 1.6s ease-in-out infinite}
+.ch-card small{font-size:11.5px;font-weight:800;color:#be123c}
+.ch-card p{margin:3px 0 7px;font-size:14px;font-weight:700;color:#1f2937;word-break:keep-all}
+.ch-card button{border:0;background:#e11d48;color:#fff;border-radius:999px;padding:5px 12px;font:800 12px "Noto Sans KR",sans-serif;cursor:pointer}
+.vw{display:flex;flex-wrap:wrap;gap:5px 8px;align-items:center;margin-top:10px;background:#0f172a;color:#e2e8f0;border-radius:14px;padding:9px 11px;font-size:12px}
+.vw>b{width:100%;font-size:12.5px;color:#fde68a}
+.vw span{background:rgba(255,255,255,.1);border-radius:999px;padding:2px 9px}
+.vw em{font-style:normal;font-weight:800;color:#fff}
+.vw button{margin-left:auto;border:0;background:#fde68a;color:#422006;border-radius:999px;padding:4px 11px;font:800 11.5px "Noto Sans KR",sans-serif;cursor:pointer}
+
 .vlg{background:linear-gradient(160deg,#0f1b3d,#1f3a8a);border-radius:18px;padding:14px 12px 10px;color:#fff}
 .vlg-h{display:flex;justify-content:space-between;align-items:center;margin:0 2px 10px}
 .vlg-h b{font-size:16px;font-weight:900}
@@ -3184,7 +3208,8 @@ function viewEvalTeam2(mode){
     '<div class="sec"><div class="card"><div class="vhead">'+sel.n+' · '+sel.rk+'위<span>'+bHo(sel.n)+' · '+(per==="sum"?H.h+' 평균 ':'')+sel.t+'점</span></div>'+det+'</div>'+
     (mode==="total"?'<p class="note">종합 평가 = 사업팀 총점 × 80% + 지사 평가 점수(월 20점 기준). 하반기 평균은 사업팀 누계표와 같이 사업팀 월평균 × 80% + 지사 월평균으로 계산합니다(각각 받은 달 기준). 월별 칩은 지사평가까지 들어온 달만 보입니다.</p>':'<p class="note">항목 배점은 달마다 다를 수 있습니다 (예: 6월 고객체감 25점·올만족 가점 포함, 클레임 5점) · 7월은 사업팀 확정 후 반영.</p>')+'</div>';
 }
-function viewEval(){
+function viewEval(){ return cheerWrite()+viewEval0()+cheerBoard(); }
+function viewEval0(){
   var es = state.es || "team";
   if(es==="branch") return mxHist()+halfBanner()+evalSwitch()+viewEvalBranch();
   if(es==="team") return mxHist()+halfBanner()+evalSwitch()+viewEvalTeam2("team");
@@ -3525,6 +3550,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-29j", date:"10/29", title:"💬 응원 코멘트", tabs:["eval"], items:["지사장님·서비스팀장님·그룹장님이 월별 평가 탭에서 상위자에게 응원 한마디를 남길 수 있어요","받은 직원은 브리핑 맨 위에 💌 응원 카드 · 월별 평가 탭 아래 응원 보드에 모아 보기","이름 선택에 🎖️ 그룹장 추가"]},
  {id:"2026-10-29i", date:"10/29", title:"차량 대항전 접기", tabs:["veh"], items:["🏁 차량별 탭의 차량 대항전을 접어 두고, 누르면 펼쳐 보기","대항전 가점은 고과 미반영 · 이달의 MVP 가점에만 반영된다고 표시"]},
  {id:"2026-10-29h", date:"10/29", title:"🏁 차량 대항전 · 🎉 무사고 축하", tabs:["veh","home"], items:["🏁 차량별 탭 맨 위에 차량 대항전(주간 리그) — 달성 개수·평균 달성률 순위, 지난주 대비 ▲▼, 1위 👑 · 브리핑에도 한 줄 표시","🏆 주간 개선 1위 차량 근무자는 이달의 MVP 가점 +2점/주 (최대 +4)","🎉 무사고 기념일 — 100·200·300일·1주년·500일… 30일 전부터 D-day, 당일엔 축하 카드와 폭죽 (차량 무사고 100일 11/8)"]},
  {id:"2026-10-29g", date:"10/29", title:"운전성향 10/29 반영", tabs:["drv"], items:["운전성향 10/29 기준 업데이트 — 양호 14명 · 위험 1명(용승우 GPS 소명 예정)","모범: 남현준(0.2건) · 김동현(1.7건) · 주상덕(2.5건) · 하루 평균 최다 김민수 4.8건"]},
@@ -3936,7 +3962,7 @@ function brief(){
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?'<span class="hm-nm">'+esc2(nm2)+'님,</span>':'')+'<span class="hm-gr'+(greet.replace(/ /g,'').length>10?' long':'')+'">'+greet+' <i class="wv">'+gp[1]+'</i></span></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
   setTimeout(safeAuto, 300);
-  return '<div class="sec">'+hero+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
+  return '<div class="sec">'+hero+vwCard()+cheerCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
 /* 미응답 고객 응답 요청 문자 — 예시 문구는 여기만 수정. {이름}은 앱에서 고른 이름으로 자동 입력(없으면 000) */
@@ -4081,7 +4107,7 @@ function mxCalc(m){
     var lgw = LGW.filter(function(w){ return w.no===String(parseInt(r[0],10)); }).length, lgp = Math.min(W.lgCap, lgw*W.lg);
     var c = Math.max(-W.adj, Math.min(W.adj, adj + Math.min(W.prCap, pr*W.pr) + (risk?W.risk:0) + lgp));
     var nr = nt.length ? (acks ? nt.filter(function(x){ return (acks[x.id]||[]).indexOf(n)>=0; }).length/nt.length : null) : 1;
-    var ac = (ACTS||[]).filter(function(x){ return x[2]===n && mxYm(x[0])===m && !/^(hc|chk|nr|mvp|mvpwin|mvpack)\|/.test(x[1]); }).length;
+    var ac = (ACTS||[]).filter(function(x){ return x[2]===n && mxYm(x[0])===m && !/^(hc|chk|nr|mvp|mvpwin|mvpack|cheer|cheerdel)\|/.test(x[1]); }).length;
     var ex = 0, sb = 0; for(var d=1; d<=me; d++){ var ds = m+'-'+('0'+d).slice(-2); if(ds<d0 || ds>today) continue; ["주간","야간"].forEach(function(s){ if(hcRoster(ds,s).indexOf(n)>=0){ ex++; if(hcGet(ds,n)) sb++; } }); }
     var hr = ex ? sb/ex : 1;
     var dd = appOn ? Math.round((nr==null?0:nr)*W.noti + Math.min(W.actCap, ac*W.act) + hr*W.hc) : 0;
@@ -4230,6 +4256,70 @@ function safeAuto(){
   var S = safeInfo(); S.forEach(function(x){ if(!x.hit) return; var key='bsr_sf_'+x.k+'_'+x.d; if(lsGet(key)) return; try{ localStorage.setItem(key,'1'); }catch(e){} setTimeout(safeFire, 600); });
 }
 document.addEventListener('click', function(e){ if(e.target.closest('[data-sffw]')) safeFire(); });
+
+/* ===== 💬 응원 코멘트 — 지사장·서비스팀장·그룹장이 평가 상위자에게 응원 한마디 ('cheer|대상' · 메모=내용) ===== */
+var CHEER_BY = ["지사장","서비스팀장","그룹장"];
+function cheerCan(){ return CHEER_BY.indexOf(myName())>=0; }
+function cheerAll(){
+  if(typeof ACTS==="undefined") return [];
+  var del = {}; (ACTS||[]).concat(ACTS_PEND||[]).forEach(function(r){ if(/^cheerdel\|/.test(r[1])) del[r[1].slice(9)] = 1; });
+  return (ACTS||[]).concat((ACTS_PEND||[]).map(function(r){ var x=r.slice(0,4); x.pend=1; return x; })).filter(function(r){ return /^cheer\|/.test(r[1]) && !del[String(r[0])]; })
+    .map(function(r){ return {ts:+r[0], to:r[1].slice(6), by:r[2], tx:String(r[3]||'')}; }).sort(function(a,b){ return b.ts-a.ts; });
+}
+function cheerWho(n){ return n==="지사장"?"지사장님":n==="서비스팀장"?"서비스팀장님":n==="그룹장"?"그룹장님":n+"님"; }
+function cheerDate(t){ var d=new Date(t+9*3600000); return (d.getUTCMonth()+1)+'/'+d.getUTCDate(); }
+function cheerTop(){
+  var m = kstDate(0).slice(0,7), R = null; try{ R = mxCalc(m); }catch(e){}
+  if(!R || !R.L.length || !R.L[0].t){ var ms = mxMonths(); for(var i=ms.length-2;i>=0 && (!R || !R.L.length || !R.L[0].t);i--){ try{ R = mxCalc(ms[i]); }catch(e){} } }
+  return R ? R.L.map(function(x,i){ return {n:x.n, car:x.car, rk:i+1, t:x.t}; }) : [];
+}
+/* 쓰는 사람 화면 (월별 평가 탭 맨 위) */
+function cheerWrite(){
+  if(!cheerCan()) return '';
+  var T = cheerTop(), sel = state.chT || (T[0] && T[0].n) || '';
+  var chips = T.slice(0,5).map(function(x){ return '<button type="button" class="chip ch-c" data-cht="'+esc2(x.n)+'" aria-pressed="'+(x.n===sel)+'">'+(x.rk===1?'🥇':x.rk===2?'🥈':x.rk===3?'🥉':x.rk+'위 ')+esc2(x.n)+'</button>'; }).join('');
+  var rest = T.slice(5).map(function(x){ return '<option value="'+esc2(x.n)+'"'+(x.n===sel?' selected':'')+'>'+x.rk+'위 '+esc2(x.n)+'</option>'; }).join('');
+  return '<div class="sec ch-w"><div class="ch-h"><b>💬 응원 한마디 남기기</b><small>'+cheerWho(myName())+' · 이달 MVP 순위 상위자</small></div>'+
+    '<div class="chips ch-cs">'+chips+'</div>'+(rest?'<select class="ch-sel" data-chsel="1" aria-label="다른 직원"><option value="">다른 직원 고르기</option>'+rest+'</select>':'')+
+    '<textarea id="ch-tx" maxlength="120" rows="2" placeholder="'+esc2(sel)+'님에게 응원 한마디 (예: 이번 달 정말 잘했어요! 계속 힘내세요)"></textarea>'+
+    '<button type="button" class="ch-go" data-chgo="1">💌 '+esc2(sel)+'님에게 보내기</button><p class="ch-n">보낸 응원은 받는 직원 브리핑과 응원 보드에 이름과 함께 보여요.</p></div>';
+}
+/* 응원 보드 (월별 평가 탭 · 모두에게 보임) */
+function cheerBoard(){
+  var A = cheerAll().slice(0,8); if(!A.length) return '';
+  var me = myName(), del = me==="이재식";
+  return '<div class="sec ch-b"><h2>💬 응원 보드 <span>지사장·팀장·그룹장의 응원</span></h2>'+A.map(function(c){
+    return '<div class="ch-i"><span class="ch-to">💌 '+esc2(c.to)+'</span><p>'+esc2(c.tx)+'</p><small>— '+cheerWho(c.by)+' · '+cheerDate(c.ts)+(c.pend?' · 보내는 중':'')+'</small>'+((del||c.by===me)&&!c.pend?'<button type="button" class="ch-del" data-chdel="'+c.ts+'">지우기</button>':'')+'</div>';
+  }).join('')+'</div>';
+}
+/* 받는 사람 브리핑 카드 (14일 안, 확인 누르면 숨김) */
+function cheerCard(){
+  var me = myName(); if(!me) return '';
+  var A = cheerAll().filter(function(c){ return c.to===me && Date.now()-c.ts < 14*86400000 && !lsGet('bsr_ch_ok_'+c.ts); }); if(!A.length) return '';
+  return A.slice(0,2).map(function(c){ return '<div class="ch-card"><div class="ch-ic">💌</div><div><small>'+cheerWho(c.by)+'이 응원을 남겼어요 · '+cheerDate(c.ts)+'</small><p>“'+esc2(c.tx)+'”</p><button type="button" data-chok="'+c.ts+'">고맙습니다 👍</button></div></div>'; }).join('');
+}
+document.addEventListener('click', function(e){
+  var t = e.target.closest('[data-cht]'); if(t){ state.chT = t.dataset.cht; render(); return; }
+  if(e.target.closest('[data-chgo]')){
+    var tx = ((document.getElementById('ch-tx')||{}).value||'').trim(), to = state.chT || (cheerTop()[0]||{}).n;
+    if(!tx){ nrToast('응원 내용을 적어 주세요'); return; } if(!to) return;
+    var nr = [Date.now(), 'cheer|'+to, myName(), tx.replace(/\s+/g,' ').slice(0,120)]; nr.sent = Date.now(); ACTS_PEND.push(nr); actsSavePend(); actSend(nr);
+    nrToast('💌 '+to+'님에게 응원을 보냈어요'); render(); setTimeout(actsLoad, 4000); return; }
+  var d = e.target.closest('[data-chdel]'); if(d){ var nr2 = [Date.now(), 'cheerdel|'+d.dataset.chdel, myName(), '삭제']; nr2.sent = Date.now(); ACTS_PEND.push(nr2); actsSavePend(); actSend(nr2); render(); setTimeout(actsLoad, 4000); return; }
+  var k = e.target.closest('[data-chok]'); if(k){ try{ localStorage.setItem('bsr_ch_ok_'+k.dataset.chok,'1'); }catch(er){} render(); return; }
+});
+document.addEventListener('change', function(e){ if(e.target.dataset && e.target.dataset.chsel && e.target.value){ state.chT = e.target.value; render(); } });
+var VW = {rows:null, busy:false};
+function vwCard(){
+  if(myName()!=="이재식" || !(window.BSR_PIN && BSR_PIN()) || !window.BSR_API) return '';
+  if(!VW.rows && !VW.busy){ VW.busy = true; fetch(apiUrl("pin="+encodeURIComponent(BSR_PIN())),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ VW.rows = (j&&j.ok&&j.rows)||[]; VW.busy=false; if(window.state && state.tab==="home") render(); }).catch(function(){ VW.busy=false; VW.rows=[]; }); return ''; }
+  var known = (window.BSR_ALL||[]).slice(), seen = +lsGet('bsr_vw_seen')||(Date.now()-3*86400000), last = {};
+  (VW.rows||[]).forEach(function(r){ var n = String(r[1]||''), ts = +r[0]; if(!n || ts<=seen) return; var w = n==="지사장"||n==="그룹장"||n==="타부서"||known.indexOf(n)<0; if(!w) return; if(!last[n] || last[n].ts<ts) last[n] = {ts:ts, c:(last[n]?last[n].c:0)+1}; else last[n].c++; });
+  var ks = Object.keys(last).sort(function(a,b){ return last[b].ts-last[a].ts; }); if(!ks.length) return '';
+  var f = function(t){ var d=new Date(t+9*3600000); return (d.getUTCMonth()+1)+'/'+d.getUTCDate()+' '+('0'+d.getUTCHours()).slice(-2)+':'+('0'+d.getUTCMinutes()).slice(-2); };
+  return '<div class="vw"><b>🔔 접속 알림</b>'+ks.map(function(n){ return '<span><em>'+esc2(n)+'</em> '+f(last[n].ts)+(last[n].c>1?' · '+last[n].c+'회':'')+'</span>'; }).join('')+'<button type="button" data-vwok="1">확인</button></div>';
+}
+document.addEventListener('click', function(e){ if(e.target.closest('[data-vwok]')){ try{ localStorage.setItem('bsr_vw_seen', String(Date.now())); }catch(er){} render(); } });
 
 /* 🎉 MVP 당선 축하 — 뽑힌 직원이 앱을 열면 폭죽 + 당선 메시지, '확인'을 누를 때까지 매번 ('mvpack|월|이름' 기록) */
 var MX_CG = false;
@@ -5080,7 +5170,7 @@ var LOG_URL = "https://script.google.com/macros/s/AKfycbxh2WI3i7AdlxSxTkxvoO3aQ1
 var STAFF = [["지사 관리",["지사장"]],["서비스 관리자",["서비스팀장","최문혁","이재식"]],["26호",["용승우","고혁진","김유건"]],["27호",["주상덕","유영민","김민석"]],["28호",["김태건","김지원","양심영"]],["127호",["박수안","권재원","김민수"]],["160호",["김동현","이명섭","남현준"]]];
 var ALL = []; STAFF.forEach(function(g){ ALL = ALL.concat(g[1]); });
 var MGRS = ["지사장","서비스팀장","최문혁","이재식"]; window.BSR_MGRS = MGRS;
-var NM_SUB = {"지사장":"지사 총괄 책임자","서비스팀장":"서비스 관리 책임자","최문혁":"선임파트장","김태건":"대포장","김동현":"대포장","주상덕":"대포장","용승우":"대포장","박수안":"대포장","타부서":"보기 전용","이재식":"파트장 · 앱 개발자"};
+var NM_SUB = {"지사장":"지사 총괄 책임자","서비스팀장":"서비스 관리 책임자","최문혁":"선임파트장","김태건":"대포장","김동현":"대포장","주상덕":"대포장","용승우":"대포장","박수안":"대포장","타부서":"보기 전용","그룹장":"응원 코멘트","이재식":"파트장 · 앱 개발자"};
 window.BSR_API = LOG_URL; window.BSR_ALL = ALL;
 function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function s(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
@@ -5105,13 +5195,14 @@ function ro(w){ var c=w.charCodeAt(w.length-1)-0xAC00; if(c<0||c>11171) return "
 function pickView(){
   var h = '<div class="vl-hero">'+(me?'<button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button>':'')+'<small>BUKSEOUL REPORT</small><h2>누구신가요? 👋</h2><p>처음 한 번만 선택하면 이 폰에서 기억합니다.</p></div><div class="vl-grid">'+
     '<div class="vl-role"><b>선택한 이름에 따라 보이는 기능이 달라요</b>'+
-    '<p><i>👑 지사 관리</i><span>오늘 할 일 · 공지 쓰기 · 접속 현황</span></p>'+
+    '<p><i>👑 지사 관리</i><span>오늘 할 일 · 공지 쓰기 · 접속 현황 · 💬 응원 코멘트</span></p>'+
     '<p><i>⭐ 서비스 관리자</i><span>관리자 기능 + 📱 해피콜 현황</span></p>'+
     '<p><i>🚗 직원</i><span>내 근무·미응답·지표 · 해피콜 제출</span></p>'+
+    '<p><i>🎖️ 그룹장</i><span>지표 보기 · 💬 응원 코멘트</span></p>'+
     '<p><i>👀 타부서</i><span>지표 보기 전용</span></p></div>';
   STAFF.forEach(function(gr, gi){ if(gi===0) h += '<div class="vl-div vl-sec"><span>🔒 관리자</span></div>'; if(gi===2) h += '<div class="vl-div vl-sec"><span>🚓 차량 근무자</span></div>'; h += '<div class="vl-g">'+gr[0]+'</div>'; gr[1].forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':n==="이재식"?'👨‍💻 ':'')+n+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
-  var listed = ALL.concat(["타부서"]), typed = pick && listed.indexOf(pick)<0 ? pick : "";
-  h += '<div class="vl-g">그 외</div>'+["타부서"].map(function(n){ return '<button type="button" class="vl-n" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('')+
+  var listed = ALL.concat(["그룹장","타부서"]), typed = pick && listed.indexOf(pick)<0 ? pick : "";
+  h += '<div class="vl-g">그 외</div>'+["그룹장","타부서"].map(function(n){ return '<button type="button" class="vl-n'+(n==="그룹장"?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="그룹장"?'🎖️ ':'')+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('')+
     '<div class="vl-div"><span>목록에 이름이 없으면</span></div><div class="vl-in-row"><label for="vlname">직접 입력</label><input id="vlname" type="text" maxlength="10" autocomplete="off" placeholder="이름을 입력하세요" value="'+esc(typed)+'" aria-label="이름 직접 입력"></div></div>';
   h += '<button type="button" class="vl-btn" data-vl="start"'+(pick?'':' disabled')+'>'+(pick?esc(pick)+ro(pick)+' 시작하기':'이름을 선택해 주세요')+'</button>';
   h += '<p class="vl-tip">※ 지표 확인 현황과 화면 선호도 조사를 위해 이름을 선택해 주세요. 더 보기 편한 리포트를 만드는 데 활용됩니다.</p>';
@@ -5498,7 +5589,7 @@ function actsLoad(){
   }).catch(function(){});
 }
 /* 🔔 다발보 조치 알림 — 근무자가 조치를 입력하면 관리자 브리핑 맨 위에 알림 카드 + 앱을 열어 둔 상태면 토스트 (MVP 앱 활용도 항목) */
-function actIsAlm(k){ return !/^(hc|chk|nr|mvp|mvpwin|mvpack)\|/.test(k); }
+function actIsAlm(k){ return !/^(hc|chk|nr|mvp|mvpwin|mvpack|cheer|cheerdel)\|/.test(k); }
 function actNew(){
   if(typeof mgrIs!=="function" || !mgrIs()) return [];
   var me = myName(), kk = 'bsr_actseen_'+me, seen = +lsGet(kk)||0; if(!seen){ seen = Date.now()-86400000; lsSet(kk, String(seen)); }
