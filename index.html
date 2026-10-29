@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261029071243">
+<meta name="bsr-ver" content="20261029122747">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1008,6 +1008,66 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .fc-ph b{font-size:15px;font-weight:900;color:#0e7490}
 .fc-x{border:0;background:#fff;border-radius:999px;padding:4px 10px;font:700 12px "Noto Sans KR",sans-serif;color:#64748b;cursor:pointer}
 @media (prefers-reduced-motion:reduce){.fc-btn{animation:none}}
+.vlg{background:linear-gradient(160deg,#0f1b3d,#1f3a8a);border-radius:18px;padding:14px 12px 10px;color:#fff}
+.vlg-h{display:flex;justify-content:space-between;align-items:center;margin:0 2px 10px}
+.vlg-h b{font-size:16px;font-weight:900}
+.vlg-h small{display:block;font-size:11px;color:#c7d2fe;margin-top:2px}
+.vlg-cr{background:#ffd769;color:#3b2a00;border-radius:999px;padding:5px 11px;font:900 13px "Noto Sans KR",sans-serif}
+.vlg-r{display:grid;grid-template-columns:30px 1fr auto 34px;align-items:center;gap:8px;background:rgba(255,255,255,.08);border-radius:12px;padding:8px 10px;margin-top:6px}
+.vlg-r.r1{background:linear-gradient(90deg,rgba(255,215,105,.32),rgba(255,255,255,.08));box-shadow:inset 0 0 0 1.5px #ffd769}
+.vlg-r.me{box-shadow:inset 0 0 0 1.5px #7dd3fc}
+.vlg-r.r1.me{box-shadow:inset 0 0 0 1.5px #ffd769,0 0 0 2px #7dd3fc}
+.vlg-k{font-size:19px;text-align:center;font-weight:900}
+.vlg-n b{font-size:14.5px}
+.vlg-n b small{font-size:10.5px;color:#7dd3fc;font-weight:700}
+.vlg-d{display:flex;gap:3px;margin-top:4px}
+.vlg-d i{width:14px;height:6px;border-radius:3px;background:rgba(255,255,255,.2)}
+.vlg-d i.y{background:#4ade80}
+.vlg-tag{font-size:10px;font-weight:800;border-radius:999px;padding:1px 6px;margin-left:5px;vertical-align:1px}
+.vlg-tag.up{background:#f472b6;color:#fff}
+.vlg-tag.ok{background:#4ade80;color:#052e16}
+.vlg-s{text-align:right}
+.vlg-s b{font-size:17px}
+.vlg-s b small{font-size:11px;color:#c7d2fe}
+.vlg-s>small{display:block;font-size:10.5px;color:#c7d2fe}
+.vlg-m{text-align:center;font-weight:900;font-size:12.5px}
+.vlg-m em{font-style:normal}
+.vlg-m .up{color:#4ade80}.vlg-m .dn{color:#fca5a5}.vlg-m .eq{color:#94a3b8}
+
+.vlg-w{margin-top:10px;background:rgba(255,215,105,.14);border:1px solid rgba(255,215,105,.5);border-radius:12px;padding:9px 10px;display:flex;flex-wrap:wrap;gap:5px 8px;align-items:center}
+.vlg-w>b{width:100%;font-size:12.5px;color:#ffd769}
+.vlg-w span{font-size:11.5px;background:rgba(255,255,255,.1);border-radius:999px;padding:2px 8px}
+.vlg-w span b{color:#ffd769}
+.vlg-w small{width:100%;font-size:10.5px;color:#fde68a}
+.vlg-f{margin:8px 2px 0;font-size:10.5px;color:#c7d2fe}
+.vlg-mini{width:100%;display:flex;align-items:center;gap:7px;border:0;border-radius:14px;padding:10px 12px;background:linear-gradient(90deg,#0f1b3d,#1f3a8a);color:#fff;font:600 12.5px "Noto Sans KR",sans-serif;text-align:left;cursor:pointer;margin-top:10px}
+.vlg-mini b{font-weight:900}
+.vlg-mini em{font-style:normal;background:rgba(255,255,255,.14);border-radius:999px;padding:2px 8px;font-size:11.5px}
+.vlg-mini em.my{background:#7dd3fc;color:#0c2a4a;font-weight:800}
+.vlg-mini i{margin-left:auto;font-style:normal;opacity:.7}
+.sf{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.sf-dd{display:flex;gap:10px;align-items:center;background:linear-gradient(90deg,#ecfdf5,#f0fdfa);border:1.5px solid #6ee7b7;border-radius:14px;padding:10px 12px}
+.sf-dd>span{font-size:24px}
+.sf-dd>div{flex:1;position:relative;padding-bottom:7px}
+.sf-dd b{font-size:13.5px;color:#065f46}
+.sf-dd em{font-style:normal;background:#059669;color:#fff;border-radius:999px;padding:1px 8px;margin-left:4px;font-size:12.5px}
+.sf-dd small{display:block;font-size:11px;color:#047857;margin-top:2px}
+.sf-dd i{position:absolute;left:0;bottom:0;height:4px;border-radius:2px;background:#10b981}
+.sf-dd>div::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;border-radius:2px;background:#a7f3d0;z-index:-1}
+.sf-hit{position:relative;overflow:hidden;text-align:center;background:linear-gradient(150deg,#fff7d6,#ffe39a);border:2px solid #f5b700;border-radius:18px;padding:14px 14px 12px;color:#4a3300}
+.sf-c{font-size:34px;animation:sfb 1.4s ease-in-out infinite}
+@keyframes sfb{0%,100%{transform:scale(1) rotate(-6deg)}50%{transform:scale(1.15) rotate(6deg)}}
+.sf-hit small{display:block;font-weight:800;font-size:12px}
+.sf-hit>b{display:block;font-size:24px;font-weight:900;margin:2px 0 4px}
+.sf-hit p{margin:0 0 8px;font-size:12.5px;line-height:1.5}
+.sf-fw{border:0;background:#b45309;color:#fff;border-radius:999px;padding:7px 14px;font:800 12.5px "Noto Sans KR",sans-serif;cursor:pointer}
+.sf-ov{position:fixed;inset:0;z-index:120;pointer-events:auto}
+.sf-ov canvas{width:100%;height:100%;display:block}
+@media (prefers-reduced-motion:reduce){.sf-c{animation:none}}
+.vlg-mini b,.vlg-mini em{white-space:nowrap}
+.vlg-mini{font-size:12px;gap:6px}
+.vlg-mini em{font-size:11px;padding:2px 7px}
+
 .fc-hb{display:flex;gap:6px}
 .fc-rs{color:#0e7490!important;font-weight:800!important}
 .fc-pn .fc-ph{padding:9px 12px 4px}
@@ -1914,7 +1974,7 @@ function viewVeh(){
   var vFull = VEH.filter(function(q){return okc(q)===5}).length, vNear = VEH.filter(function(q){return okc(q)===4}).length;
   var dV = dday();
   var top = '<div class="sec"><h2>차량별 지표 <span>북서울 '+VEH.length+'대 · 기준일 '+md(SD.veh)+'</span></h2>'+
-    bonusPanel(vFull, vNear, VEH.length, '대', BONUS_V, dV, '차량 지표 5개를 모두 100% 이상 달성하면')+'</div>'+focusCard();
+    bonusPanel(vFull, vNear, VEH.length, '대', BONUS_V, dV, '차량 지표 5개를 모두 100% 이상 달성하면')+'</div>'+leagueCard()+focusCard();
   return top+'<div class="sec"><h2>차량별 달성률 <span>행을 누르면 상세</span></h2><div class="card heat">'+heatHead()+rows+'</div>'+
     '<details class="vnote"><summary>ⓘ 지표 이름 설명</summary><p class="note">불필요=불필요출동률 · 발보율=서비스출동 발보율 · 25분↑=25분 초과율 · 체감=고객체감 출동시간 · 일괄=당사일괄 총시간</p></details>'+fcTable()+'</div>'+
     '<div class="sec"><div class="card"><button type="button" class="vhead vtg" data-vdo="1" aria-expanded="'+!!state.vdo+'"><b>'+v.no+'호 상세</b><span>'+v.lead+' 파트장 · 달성 '+okc(v)+'/5</span><em>'+(state.vdo?'접기 ▴':'코멘트·가점·월말 예상 ▾')+'</em></button>'+(state.vdo?'<div class="vdo">'+note('veh:'+v.no,SD.veh)+bonusBox(v,BONUS_V,"")+fcBox(v.m,fcVeh(v),SD.veh)+'</div>':'')+trendCard("veh",v.no)+(function(){var f=focusInfo(),fi=focusIdx(),r=v.m[fi].r;return '<div class="bbox'+(r>=100?' good':'')+'"><b>🎯 '+(f.active?f.mo+'월 집중개선: ':f.nm+'월 집중개선(예상): ')+M[fi].name+' '+fr(r)+'</b><span>'+FOCUS_BR+' 지사 최저 항목 · '+(f.active?f.endLbl+'에 100% 이상이면 +'+FOCUS_PTS+'점':f.endLbl+' 확정 후 '+f.nm+'월 말 100% 이상이면 +'+FOCUS_PTS+'점')+'</span></div>'})()+'<div class="mlist">'+detail+'</div></div></div>';
@@ -3455,6 +3515,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-29h", date:"10/29", title:"🏁 차량 대항전 · 🎉 무사고 축하", tabs:["veh","home"], items:["🏁 차량별 탭 맨 위에 차량 대항전(주간 리그) — 달성 개수·평균 달성률 순위, 지난주 대비 ▲▼, 1위 👑 · 브리핑에도 한 줄 표시","🏆 주간 개선 1위 차량 근무자는 이달의 MVP 가점 +2점/주 (최대 +4)","🎉 무사고 기념일 — 100·200·300일·1주년·500일… 30일 전부터 D-day, 당일엔 축하 카드와 폭죽 (차량 무사고 100일 11/8)"]},
  {id:"2026-10-29g", date:"10/29", title:"운전성향 10/29 반영", tabs:["drv"], items:["운전성향 10/29 기준 업데이트 — 양호 14명 · 위험 1명(용승우 GPS 소명 예정)","모범: 남현준(0.2건) · 김동현(1.7건) · 주상덕(2.5건) · 하루 평균 최다 김민수 4.8건"]},
  {id:"2026-10-29f", date:"10/29", title:"업데이트 안 받아지는 폰 수정", tabs:["home"], items:["🔄 일부 폰에서 예전 화면이 계속 보이던 문제 보완 — 새 버전이 있으면 저장본을 바로 바꾸고 서버에서 다시 열기","이름표 메뉴에 🔄 최신 버전 받기 버튼 추가 — 화면이 예전 날짜면 한 번 눌러 주세요"]},
  {id:"2026-10-29e", date:"10/29", title:"차량사고 사례 교육 자료", tabs:["home"], items:["🚗 서울동부 시장 골목길 보행자 접촉 사고(10/23) 교육 자료 추가 — 경위 · 현장 사진 · 원인 · 운전 수칙 · 확인 문제","관리자 공지 보내기에서 분류 [차량사고] · 교육 자료 첨부로 보낼 수 있어요"]},
@@ -3863,7 +3924,8 @@ function brief(){
              ['야간 근무 힘내세요','🌙','늦은 시간까지 정말 고생 많으세요']; })(), greet = gp[0];
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?'<span class="hm-nm">'+esc2(nm2)+'님,</span>':'')+'<span class="hm-gr'+(greet.replace(/ /g,'').length>10?' long':'')+'">'+greet+' <i class="wv">'+gp[1]+'</i></span></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
-  return '<div class="sec">'+hero+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
+  setTimeout(safeAuto, 300);
+  return '<div class="sec">'+hero+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
 /* 미응답 고객 응답 요청 문자 — 예시 문구는 여기만 수정. {이름}은 앱에서 고른 이름으로 자동 입력(없으면 000) */
@@ -3978,9 +4040,9 @@ function mvpInfo(){
 }
 document.addEventListener("click", function(e){ if(e.target.closest("[data-mvpi]")) mvpInfo(); });
 /* ===== 🏆 이달의 MVP — 고과 미반영 · 동기부여/인지도 목적 =====
-   개인별 지표 40(달성 1개 8점) + 지사 기여도 25(소개 5 · 인상 3) + 가감점 ±15(지사평가 가감 · 칭찬 +1(최대 3) · 운전 위험 −3) + 앱 활용 20(공지 확인 8 · 다발보 조치 입력 2/건 최대 6 · 해피콜 제출 6)
+   개인별 지표 40(달성 1개 8점) + 지사 기여도 25(소개 5 · 인상 3) + 가감점 ±15(지사평가 가감 · 칭찬 +1(최대 3) · 차량 대항전 주간 개선 1위 +2/주(최대 4) · 운전 위험 −3) + 앱 활용 20(공지 확인 8 · 다발보 조치 입력 2/건 최대 6 · 해피콜 제출 6)
    소개·인상 입력: 'mvp|월|이름' (메모 '소개|인상') · 확정 결과: 'mvpwin|월' (메모 '이름|차량|점수|이유,이유|2위:점수,3위:점수') — 조치 입력과 같은 시트 */
-var MX_W = {kpi:8, so:5, up:3, cap:25, pr:1, prCap:3, risk:-3, adj:15, noti:8, act:2, actCap:6, hc:6};
+var MX_W = {kpi:8, so:5, up:3, cap:25, pr:1, prCap:3, risk:-3, adj:15, noti:8, act:2, actCap:6, hc:6, lg:2, lgCap:4};
 var MX_HC_START = "2026-10-24", MX_DRAFT = {}, MX_SEL = null;
 function mxMonths(){ var cm = kstDate(0).slice(0,7), y = +cm.slice(0,4), mo = +cm.slice(5), sy = mo>=6&&mo<=11 ? y : mo===12 ? y : y-1, sm = mo>=6&&mo<=11 ? 6 : 12, out = [];
   for(var k=0; k<6; k++){ var mm = sm+k, yy = sy + (mm>12?1:0); mm = (mm-1)%12+1; var key = yy+'-'+('0'+mm).slice(-2); if(key>cm) break; out.push(key); } return out; }
@@ -3995,6 +4057,7 @@ function mxCalc(m){
   var B = BEVAL[m], dk = Object.keys(DRIVE.snaps).filter(function(k){return k.slice(0,7)===m}).sort().pop(), drv = dk ? DRIVE.snaps[dk] : [];
   var mo = m.slice(5), nt = (NOTI.items||[]).filter(function(x){ return mxYm(x.t)===m; }), acks = NOTI.acks;
   var me = new Date(+m.slice(0,4), +mo, 0).getDate(), today = kstDate(0), d0 = MX_HC_START > m+"-01" ? MX_HC_START : m+"-01";
+  var LGW = lgWeeks(m);
   var L = rost.map(function(r){
     var n = r[1], pp = P && P.p[n], tr = T && T.rows[n], br = !P && !T && B ? B.rows[n] : null;
     var ok = pp ? pp.ok : tr ? [0,1,2,3,4].filter(function(i){ return tmax[i]>0 && (+tr[2][i]||0) >= tmax[i]; }).length : 0;
@@ -4004,13 +4067,14 @@ function mxCalc(m){
     var io = mxIn(m, n), b = Math.min(W.cap, io[0]*W.so + io[1]*W.up);
     var adj = B && B.rows[n] ? +B.rows[n][0]||0 : 0, pr = CSR.filter(function(x){ return x[0]===n && x[6]==="칭찬" && String(x[2]).slice(0,2)===mo; }).length;
     var dr = drv.filter(function(x){return x[0]===n})[0], risk = dr && dr[3]==="위험" && !(DRIVE.notes[n] && DRIVE.notes[n].from<=m+"-31" && DRIVE.notes[n].to>=m+"-01");
-    var c = Math.max(-W.adj, Math.min(W.adj, adj + Math.min(W.prCap, pr*W.pr) + (risk?W.risk:0)));
+    var lgw = LGW.filter(function(w){ return w.no===String(parseInt(r[0],10)); }).length, lgp = Math.min(W.lgCap, lgw*W.lg);
+    var c = Math.max(-W.adj, Math.min(W.adj, adj + Math.min(W.prCap, pr*W.pr) + (risk?W.risk:0) + lgp));
     var nr = nt.length ? (acks ? nt.filter(function(x){ return (acks[x.id]||[]).indexOf(n)>=0; }).length/nt.length : null) : 1;
     var ac = (ACTS||[]).filter(function(x){ return x[2]===n && mxYm(x[0])===m && !/^(hc|chk|nr|mvp|mvpwin|mvpack)\|/.test(x[1]); }).length;
     var ex = 0, sb = 0; for(var d=1; d<=me; d++){ var ds = m+'-'+('0'+d).slice(-2); if(ds<d0 || ds>today) continue; ["주간","야간"].forEach(function(s){ if(hcRoster(ds,s).indexOf(n)>=0){ ex++; if(hcGet(ds,n)) sb++; } }); }
     var hr = ex ? sb/ex : 1;
     var dd = appOn ? Math.round((nr==null?0:nr)*W.noti + Math.min(W.actCap, ac*W.act) + hr*W.hc) : 0;
-    return {n:n, car:r[0], a:kp, b:b, c:c, d:dd, t:kp+b+c+dd, bsrc:!!br, app:appOn, tb:br?(+br[1]||0)+(+br[2]||0):0, ok:ok, avg:avg, so:io[0], up:io[1], pr:pr, risk:risk, adj:adj, nr:nr, ac:ac, hr:hr, ex:ex};
+    return {n:n, car:r[0], lgw:lgw, a:kp, b:b, c:c, d:dd, t:kp+b+c+dd, bsrc:!!br, app:appOn, tb:br?(+br[1]||0)+(+br[2]||0):0, ok:ok, avg:avg, so:io[0], up:io[1], pr:pr, risk:risk, adj:adj, nr:nr, ac:ac, hr:hr, ex:ex};
   });
   L.sort(function(x,y){ return y.t-x.t || y.avg-x.avg || y.tb-x.tb || x.n.localeCompare(y.n,"ko"); });   /* 동점: 평균 달성률(지사평가 점수) → 위험예지+판넬 건수 */
   return {m:m, L:L, ppl:P?P.d:null, src:P?'ppl':T?'teval':B?'beval':'', appOn:appOn, acksOk:!appOn || !nt.length || !!acks, nt:nt.length};
@@ -4035,7 +4099,7 @@ function mxRule(){
     '<p class="xs-p">매월 말 기준으로 점수를 계산해 관리자가 확정하면 다음 달 브리핑 맨 위에 게시되고, MVP가 될 때마다 이름 옆에 ⭐가 하나씩 붙어요. 관리자(지사장·서비스팀장·파트장)는 대상에서 빠집니다.</p>'+
     '<div class="mx-cr"><p><i style="background:#1f6fd8"></i><b>📊 개인별 지표</b><em>40점</em><small>5개 지표 중 달성 1개당 8점 (월말 기준)</small></p>'+
     '<p><i style="background:#0e9f6e"></i><b>🤝 지사 기여도</b><em>25점</em><small>소개 1건 5점 · 인상 1건 3점 (최대 25점)</small></p>'+
-    '<p><i style="background:#c2410c"></i><b>➕➖ 각종 가감점</b><em>±15점</em><small>지사평가 가감점 · 고객 칭찬 1건 +1 (최대 +3) · 운전성향 위험 −3</small></p>'+
+    '<p><i style="background:#c2410c"></i><b>➕➖ 각종 가감점</b><em>±15점</em><small>지사평가 가감점 · 고객 칭찬 1건 +1 (최대 +3) · 🏁 차량 대항전 주간 개선 1위 차량 +2/주 (최대 +4) · 운전성향 위험 −3</small></p>'+
     '<p><i style="background:#7c3aed"></i><b>📱 앱 활용도</b><em>20점</em><small>공지 확인율 8점 · 다발보 조치 입력 1건 2점 (최대 6) · 해피콜 제출률 6점</small></p></div>'+
     '<p class="xs-p">동점이면 개인별 지표 평균 달성률이 높은 사람이 MVP입니다. 개인별 지표가 생기기 전인 6~9월은 지사평가 점수(위험예지·판넬 등)로 대신 계산했어요.</p>';
 }
@@ -4073,6 +4137,87 @@ function mxStarFix(){
     if(tn) el.insertBefore(sp, tn.nextSibling); else el.appendChild(sp);
   });
 }
+/* ===== 🏁 차량 대항전 (주간 리그) — 달성 개수 → 평균 달성률(최대 200%) 순, 지난주(7일 전 이전 가장 가까운 자료) 대비 순위 변화 ===== */
+function lgRank(list){
+  var L = list.map(function(v){ var ok=v.m.filter(function(c){return c.r>=100}).length, avg=v.m.reduce(function(a,c){return a+Math.min(200,c.r)},0)/v.m.length; return {no:v.no, lead:v.lead, m:v.m, ok:ok, avg:Math.round(avg*10)/10}; });
+  L.sort(function(a,b){ return b.ok-a.ok || b.avg-a.avg || (+a.no)-(+b.no); });
+  L.forEach(function(x,i){ x.rk=i+1; }); return L;
+}
+/* 주간 개선 1위: 주(월~일)마다 그 주 마지막 자료를 7일 전 이전 자료와 비교해 평균 달성률이 가장 많이 오른 차량 */
+function lgUpAt(e){
+  var ref = new Date(e.d+"T00:00:00Z"); ref.setUTCDate(ref.getUTCDate()-7); var rs = ref.toISOString().slice(0,10), prev = null;
+  for(var k=0;k<DATES.length;k++){ if(DATES[k].veh && DATES[k].d<=rs){ prev = DATES[k]; break; } }
+  if(!prev) return null;
+  var A = lgRank(mapVEH(e.veh)), B = lgRank(mapVEH(prev.veh)), best = null;
+  A.forEach(function(x){ var q = B.filter(function(y){return y.no===x.no})[0]; if(!q) return; var g = Math.round((x.avg-q.avg)*10)/10; if(g>0 && (!best || g>best.g)) best = {no:x.no, g:g}; });
+  return best ? {d:e.d, prev:prev.d, no:best.no, g:best.g} : null;
+}
+function lgWeeks(m){
+  var wk = {}; DATES.forEach(function(e){ if(!e.veh || e.d.slice(0,7)!==m) return; var t = new Date(e.d+"T00:00:00Z"), dw = (t.getUTCDay()+6)%7; t.setUTCDate(t.getUTCDate()-dw); var k = t.toISOString().slice(0,10); if(!wk[k] || wk[k].d<e.d) wk[k] = e; });
+  return Object.keys(wk).sort().map(function(k){ var u = lgUpAt(wk[k]); return u ? {wk:k, d:u.d, prev:u.prev, no:u.no, g:u.g} : null; }).filter(Boolean);
+}
+function lgData(){
+  var cur = SD.veh; if(!cur) return null;
+  var ref = new Date(cur+"T00:00:00Z"); ref.setUTCDate(ref.getUTCDate()-7); var rs = ref.toISOString().slice(0,10);
+  var prev = null; for(var k=0;k<DATES.length;k++){ if(DATES[k].veh && DATES[k].d<=rs){ prev = DATES[k]; break; } }
+  var A = lgRank(VEH), B = prev ? lgRank(mapVEH(prev.veh)) : null;
+  A.forEach(function(x){ var p = B && B.filter(function(q){return q.no===x.no})[0]; x.dr = p ? p.rk - x.rk : 0; x.dAvg = p ? Math.round((x.avg-p.avg)*10)/10 : 0; x.dOk = p ? x.ok-p.ok : 0; });
+  var up = A.slice().sort(function(a,b){return b.dAvg-a.dAvg})[0];
+  return {L:A, cur:cur, prev:prev?prev.d:null, up:(B && up && up.dAvg>0)?up.no:null};
+}
+function leagueCard(){
+  var D = lgData(); if(!D) return '';
+  var myCar = (function(){ var p = PPL.filter(function(x){return x.name===myName()})[0]; return p?String(+p.no):''; })();
+  var md2 = function(d){ return (+d.slice(5,7))+'/'+(+d.slice(8)); };
+  var rows = D.L.map(function(x){
+    var dots = x.m.map(function(c,i){ return '<i class="'+(c.r>=100?'y':'n')+'" title="'+M[i].short+' '+Math.round(c.r)+'%"></i>'; }).join('');
+    var md = x.rk===1?'👑':x.rk===2?'🥈':x.rk===3?'🥉':'';
+    var mv = !D.prev ? '' : x.dr>0 ? '<em class="up">▲'+x.dr+'</em>' : x.dr<0 ? '<em class="dn">▼'+(-x.dr)+'</em>' : '<em class="eq">–</em>';
+    var tags = (D.up===x.no?'<span class="vlg-tag up">🚀 상승</span>':'')+(x.ok===5?'<span class="vlg-tag ok">올클리어</span>':'');
+    return '<div class="vlg-r r'+x.rk+(x.no===myCar?' me':'')+'"><span class="vlg-k">'+(md||x.rk)+'</span><span class="vlg-n"><b>'+x.no+'호'+(x.no===myCar?' <small>우리 차</small>':'')+'</b>'+tags+'<span class="vlg-d">'+dots+'</span></span><span class="vlg-s"><b class="num">'+x.ok+'<small>/5</small></b><small>평균 '+Math.round(x.avg)+'%</small></span><span class="vlg-m">'+mv+'</span></div>';
+  }).join('');
+  var top = D.L[0];
+  return '<div class="sec vlg"><div class="vlg-h"><div><b>🏁 차량 대항전</b><small>주간 리그 · '+md2(D.cur)+' 기준'+(D.prev?' · '+md2(D.prev)+' 대비 순위':'')+'</small></div><span class="vlg-cr">👑 '+top.no+'호</span></div>'+rows+
+    (function(){ var W = lgWeeks(D.cur.slice(0,7)); return W.length ? '<div class="vlg-w"><b>🏆 '+(+D.cur.slice(5,7))+'월 주간 개선 1위</b>'+W.map(function(w){ return '<span>'+(+w.wk.slice(5,7))+'/'+(+w.wk.slice(8))+'주 <b>'+w.no+'호</b> ▲'+Math.round(w.g)+'%p</span>'; }).join('')+'<small>개선 1위 차량 근무자 → 이달의 MVP 가점 +2점/주 (최대 +4)</small></div>' : ''; })()+
+    '<p class="vlg-f">순위 = 달성 지표 개수 → 평균 달성률(최대 200%) 순 · 🚀 지난주보다 평균이 가장 많이 오른 차량 (MVP 가점)</p></div>';
+}
+function leagueMini(){
+  var D = lgData(); if(!D) return ''; var p = PPL.filter(function(x){return x.name===myName()})[0], mine = p ? D.L.filter(function(x){return x.no===String(+p.no)})[0] : null, top = D.L[0];
+  return '<button type="button" class="vlg-mini" data-goto="veh"><span>🏁</span><b>차량 대항전</b><em>👑 '+top.no+'호</em>'+(mine&&mine!==top?'<em class="my">우리 '+mine.no+'호 '+mine.rk+'위'+(mine.dr>0?' ▲'+mine.dr:mine.dr<0?' ▼'+(-mine.dr):'')+'</em>':mine?'<em class="my">우리 차 1위! 🎉</em>':'')+'<i>›</i></button>';
+}
+
+/* ===== 🎉 무사고 기념일 — 북서울 차량·안전 무사고가 100·200·300·365·500… 일이 되는 날 축하, 30일 안이면 D-day ===== */
+var SAFE_MS = [100,200,300,365,400,500,600,700,730,800,900,1000,1095,1200,1460,1500,1825,2000];
+function safeInfo(){
+  if(!mg) return [];
+  return [["car","🚗","차량 무사고",mg.carDays,mg.carLast],["safe","🦺","안전 무사고",mg.safeDays,mg.safeLast]].map(function(x){
+    var d = x[3], hit = SAFE_MS.indexOf(d)>=0, nx = SAFE_MS.filter(function(n){return n>d})[0];
+    return {k:x[0], ic:x[1], nm:x[2], d:d, last:x[4], hit:hit, nx:nx, left:nx?nx-d:null};
+  });
+}
+function safeLabel(n){ return n===365?'1주년':n===730?'2주년':n===1095?'3주년':n===1460?'4주년':n===1825?'5주년':n+'일'; }
+function safeCard(){
+  var S = safeInfo(); if(!S.length) return '';
+  var h = '';
+  S.forEach(function(x){
+    if(x.hit){
+      h += '<div class="sf-hit"><div class="sf-c" aria-hidden="true">🎉</div><small>'+x.ic+' 북서울 '+x.nm+'</small><b>'+safeLabel(x.d)+' 달성!</b><p>'+x.last.replace(/^(\d\d)-(\d\d)-(\d\d)$/,'20$1.$2.$3')+' 이후 <b class="num">'+x.d+'</b>일 동안 사고 없이 달려왔어요. 모두의 안전운전 덕분이에요 👏</p><button type="button" class="sf-fw" data-sffw="1">🎆 축하 폭죽</button></div>';
+    } else if(x.left!=null && x.left<=30){
+      h += '<div class="sf-dd"><span>'+x.ic+'</span><div><b>'+x.nm+' '+safeLabel(x.nx)+'까지 <em class="num">D-'+x.left+'</em></b><small>지금 '+x.d+'일째 · 최근 사고 '+x.last+'</small><i style="width:'+Math.round((x.d - (SAFE_MS.filter(function(n){return n<x.nx}).pop()||0))/(x.nx-(SAFE_MS.filter(function(n){return n<x.nx}).pop()||0))*100)+'%"></i></div></div>';
+    }
+  });
+  return h ? '<div class="sf">'+h+'</div>' : '';
+}
+function safeFire(){
+  var o = document.createElement('div'); o.className='sf-ov'; o.innerHTML='<canvas id="sffw"></canvas>'; document.body.appendChild(o);
+  if(typeof mxFireworks==="function") mxFireworks(document.getElementById('sffw'));
+  o.addEventListener('click', function(){ o.remove(); }); setTimeout(function(){ if(o.parentNode) o.remove(); }, 7000);
+}
+function safeAuto(){
+  var S = safeInfo(); S.forEach(function(x){ if(!x.hit) return; var key='bsr_sf_'+x.k+'_'+x.d; if(lsGet(key)) return; try{ localStorage.setItem(key,'1'); }catch(e){} setTimeout(safeFire, 600); });
+}
+document.addEventListener('click', function(e){ if(e.target.closest('[data-sffw]')) safeFire(); });
+
 /* 🎉 MVP 당선 축하 — 뽑힌 직원이 앱을 열면 폭죽 + 당선 메시지, '확인'을 누를 때까지 매번 ('mvpack|월|이름' 기록) */
 var MX_CG = false;
 function mxCongrats(){
@@ -4132,7 +4277,7 @@ function mxView(m){
     '<div class="mx-rk">'+R.L.map(function(x,i){
       return '<div class="mx-r'+(i===0?' first':'')+'"><span class="p num">'+(i+1)+'</span><span class="nm">'+(i===0?'🏆 ':'')+x.n+'<small>'+x.car+'</small></span><b class="t num">'+x.t+'</b>'+
         '<div class="bar">'+seg(x.a,'#1f6fd8')+seg(x.b,'#0e9f6e')+seg(Math.max(0,x.c),'#c2410c')+seg(x.d,'#7c3aed')+'</div>'+
-        '<small class="dt">'+(x.bsrc?'지사평가 '+x.a:'지표 '+x.ok+'개 '+x.a)+' · 기여 '+x.b+' · 가감 '+(x.c>0?'+':'')+x.c+(x.pr?' (칭찬 '+x.pr+')':'')+(x.risk?' (운전 위험)':'')+(x.app?' · 앱 '+x.d+' (공지 '+(x.nr==null?'-':Math.round(x.nr*100)+'%')+' · 조치 '+x.ac+' · 해피콜 '+Math.round(x.hr*100)+'%)':' · 앱 – (10월부터)')+'</small>'+
+        '<small class="dt">'+(x.bsrc?'지사평가 '+x.a:'지표 '+x.ok+'개 '+x.a)+' · 기여 '+x.b+' · 가감 '+(x.c>0?'+':'')+x.c+(x.pr?' (칭찬 '+x.pr+')':'')+(x.lgw?' (🏁 대항전 '+x.lgw+'주)':'')+(x.risk?' (운전 위험)':'')+(x.app?' · 앱 '+x.d+' (공지 '+(x.nr==null?'-':Math.round(x.nr*100)+'%')+' · 조치 '+x.ac+' · 해피콜 '+Math.round(x.hr*100)+'%)':' · 앱 – (10월부터)')+'</small>'+
         '<div class="mx-io"><span>소개</span><button type="button" data-mxio="'+x.n+'|0|-1">−</button><b class="num">'+x.so+'</b><button type="button" data-mxio="'+x.n+'|0|1">＋</button><span>인상</span><button type="button" data-mxio="'+x.n+'|1|-1">−</button><b class="num">'+x.up+'</b><button type="button" data-mxio="'+x.n+'|1|1">＋</button></div></div>'; }).join('')+'</div>'+
     (dirty?'<button type="button" class="mx-save" data-mxsave="'+m+'">💾 소개·인상 입력 저장</button>':'')+
     (!R.src || !R.L.length || R.L[0].t<=0 ? '<button type="button" class="mx-go" disabled>📢 자료가 없어 확정할 수 없어요</button>' :
