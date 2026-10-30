@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261030011111">
+<meta name="bsr-ver" content="20261030031547">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1008,6 +1008,44 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .fc-ph b{font-size:15px;font-weight:900;color:#0e7490}
 .fc-x{border:0;background:#fff;border-radius:999px;padding:4px 10px;font:700 12px "Noto Sans KR",sans-serif;color:#64748b;cursor:pointer}
 @media (prefers-reduced-motion:reduce){.fc-btn{animation:none}}
+.ld{margin-top:10px;background:linear-gradient(135deg,#fff7ed,#fffbeb);border:1.5px solid #fdba74;border-radius:16px;padding:11px 12px}
+.ld>b{display:block;font-size:14px;color:#9a3412;margin-bottom:5px}
+.ld p{display:flex;gap:8px;align-items:baseline;margin:4px 0;font-size:12.5px;color:#431407}
+.ld p em{font-style:normal;font-weight:800;background:#fed7aa;border-radius:999px;padding:1px 8px;white-space:nowrap;color:#7c2d12}
+.ld p b{color:#c2410c}
+.ld button{margin-top:6px;border:0;background:#ea580c;color:#fff;border-radius:999px;padding:6px 13px;font:800 12px "Noto Sans KR",sans-serif;cursor:pointer}
+.ld.ok{background:linear-gradient(135deg,#ecfdf5,#f0fdf4);border-color:#86efac}.ld.ok>b{color:#166534}.ld>span{font-size:12px;color:#57534e}
+.ld.mg>span{display:block;font-size:12px;color:#7c2d12;line-height:1.6}
+.md{margin-top:10px;background:linear-gradient(135deg,#fef9c3,#fde68a);border:1.5px solid #f59e0b;border-radius:16px;padding:11px 12px}
+.md b{display:block;font-size:14px;color:#78350f}.md span{display:block;font-size:12.5px;color:#713f12;margin:4px 0 7px}
+.md button{border:0;background:#b45309;color:#fff;border-radius:999px;padding:6px 13px;font:800 12px "Noto Sans KR",sans-serif;cursor:pointer}
+.hd{margin-top:10px;background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:16px;padding:10px 12px}
+.hd-h b{font-size:13.5px;color:#0f172a}.hd-h small{display:block;font-size:10.5px;color:#64748b;margin-bottom:5px}
+.hd-i{position:relative;background:#fff;border-radius:10px;padding:7px 10px;margin-top:5px;border:1px solid #e2e8f0}
+.hd-i p{margin:0;font-size:13px;color:#1e293b;word-break:keep-all;padding-right:44px}.hd-i small{font-size:10.5px;color:#64748b}
+.hd-i button{position:absolute;top:6px;right:6px;border:0;background:#f1f5f9;border-radius:999px;padding:2px 8px;font-size:10.5px;color:#64748b;cursor:pointer}
+.hd-e{margin:2px 0;font-size:12px;color:#94a3b8}
+.hd-w{display:flex;gap:6px;margin-top:7px}.hd-w input{flex:1;min-width:0;border:1px solid #cbd5e1;border-radius:10px;padding:8px;font:500 13px "Noto Sans KR",sans-serif}
+.hd-w button{border:0;background:#334155;color:#fff;border-radius:10px;padding:0 13px;font:800 12.5px "Noto Sans KR",sans-serif;cursor:pointer}
+.fr{display:grid;grid-template-columns:1.25fr 1fr;gap:8px;margin-top:10px}
+.fr button{border:0;border-radius:14px;padding:9px 10px;font:600 12px "Noto Sans KR",sans-serif;cursor:pointer;text-align:left}
+.fr-b{display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,#fff1f2,#ffedd5);color:#7c2d12}
+.fr-f{font-size:12px;font-weight:800;white-space:nowrap}.fr-f b{font-size:18px;color:#ea580c;margin-left:1px}
+.fr-b>span:nth-child(2){font-size:11.5px;line-height:1.35}.fr-b i{margin-left:auto;font-style:normal;opacity:.6}
+.fr-q{display:flex;flex-direction:column;background:linear-gradient(135deg,#eef2ff,#e0e7ff);color:#312e81}
+.fr-q span{font-size:18px}.fr-q b{font-size:12.5px}.fr-q small{font-size:11px;color:#4338ca}
+.fr-q.done{background:linear-gradient(135deg,#ecfdf5,#d1fae5);color:#065f46}.fr-q.done small{color:#047857}
+.bd-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 0}
+.bd{border:1.5px dashed #cbd5e1;border-radius:14px;padding:10px;text-align:center;opacity:.55;filter:grayscale(1)}
+.bd.on{border:1.5px solid #fbbf24;background:#fffbeb;opacity:1;filter:none}
+.bd span{display:block;font-size:26px}.bd b{display:block;font-size:12.5px;color:#0f172a}.bd small{font-size:10.5px;color:#64748b}
+.qz{margin:10px 0}.qz p{margin:0 0 6px;font-weight:800;font-size:13.5px;color:#0f172a}
+.qz-o{display:block;width:100%;text-align:left;border:1.5px solid #e2e8f0;background:#fff;border-radius:10px;padding:9px 10px;margin-top:5px;font:600 13px "Noto Sans KR",sans-serif;cursor:pointer;color:#1e293b}
+.qz-o.sel{border-color:#4f46e5;background:#eef2ff}.qz-o.ok{border-color:#16a34a;background:#f0fdf4}.qz-o.ng{border-color:#dc2626;background:#fef2f2}
+.qz small{display:block;margin-top:5px;font-size:11.5px;color:#475569}
+.qz-go{width:100%;border:0;background:#4f46e5;color:#fff;border-radius:12px;padding:11px;font:800 14px "Noto Sans KR",sans-serif;cursor:pointer;margin:6px 0}
+.qz-r{text-align:center;font-weight:900;font-size:15px;color:#4338ca;margin:8px 0}
+
 .rp-sync{display:block;margin:6px auto 0;border:1px solid #c7d2fe;background:#fff;color:#1f4fd8;border-radius:999px;padding:7px 16px;font:800 12.5px "Noto Sans KR",sans-serif;cursor:pointer}
 
 .ch-w{background:linear-gradient(150deg,#fff7ed,#fdf2f8);border:1.5px solid #f9a8d4;border-radius:18px;padding:12px}
@@ -3556,6 +3594,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-30c", date:"10/30", title:"새 기능 6가지", tabs:["home"], items:["⏰ 월말 막판 알림 — 월말 3일 전부터 브리핑에 내 미달 지표와 '추가 0건이면 몇 %'","🔁 교대 메모 — 다음 근무자에게 특이사항 한 줄 남기기 (브리핑)","🔥 연속 접속 · 🏅 배지 도감 — 재미용, 평가 미반영","🧠 주간 안전 퀴즈 — 매주 월요일 3문제, 만점자 소개","🏆 관리자: 매달 1~10일 지난달 MVP 확정 알림 · 📊 톡방 지표 요약 복사 메뉴"]},
  {id:"2026-10-30b", date:"10/30", title:"취합건 연동 수정", tabs:["rep"], items:["판넬 리텐션 이번 달 건수를 판넬 앱 서버가 직접 센 값으로 표시 — 근무자 앱의 「이번 달 n건」과 같은 숫자","위험예지는 위험예지 앱이 저장하는 시트를 바로 읽고, 연결이 막힌 폰은 다른 방법으로 다시 연결","'이번 달'을 오늘 날짜 기준으로 계산 · 🔄 지금 다시 불러오기 버튼 추가"]},
  {id:"2026-10-30a", date:"10/30", title:"고객체감 10/30 반영", tabs:["cs"], items:["📞 고객체감 10/30 기준 — 새 발송 8건 추가 (발송 175건 · 응답 55건 · 만족도 9.98)","새 응답: 박정훈(이항우부동산) · 최문혁(창도초) 10점 칭찬"]},
  {id:"2026-10-29l", date:"10/29", title:"깜빡임 수정", tabs:["home"], items:["화면이 간헐적으로 깜빡이던 문제 수정 — 이름 옆 ⭐는 화면을 그릴 때 바로 붙이고, 뒤에서 자료를 받아도 바뀐 게 없으면 다시 그리지 않음","펼쳐 둔 칸이 갑자기 접히던 문제 수정 — 자료가 새로 와도 펼친 상태와 보던 위치 유지"]},
@@ -3972,7 +4011,7 @@ function brief(){
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?'<span class="hm-nm">'+esc2(nm2)+'님,</span>':'')+'<span class="hm-gr'+(greet.replace(/ /g,'').length>10?' long':'')+'">'+greet+' <i class="wv">'+gp[1]+'</i></span></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
   setTimeout(safeAuto, 300);
-  return '<div class="sec">'+hero+vwCard()+cheerCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
+  return '<div class="sec">'+hero+vwCard()+cheerCard()+mvpDueCard()+lastCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+funRow()+hcCard()+handCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
 /* 미응답 고객 응답 요청 문자 — 예시 문구는 여기만 수정. {이름}은 앱에서 고른 이름으로 자동 입력(없으면 000) */
@@ -4117,7 +4156,7 @@ function mxCalc(m){
     var lgw = LGW.filter(function(w){ return w.no===String(parseInt(r[0],10)); }).length, lgp = Math.min(W.lgCap, lgw*W.lg);
     var c = Math.max(-W.adj, Math.min(W.adj, adj + Math.min(W.prCap, pr*W.pr) + (risk?W.risk:0) + lgp));
     var nr = nt.length ? (acks ? nt.filter(function(x){ return (acks[x.id]||[]).indexOf(n)>=0; }).length/nt.length : null) : 1;
-    var ac = (ACTS||[]).filter(function(x){ return x[2]===n && mxYm(x[0])===m && !/^(hc|chk|nr|mvp|mvpwin|mvpack|cheer|cheerdel)\|/.test(x[1]); }).length;
+    var ac = (ACTS||[]).filter(function(x){ return x[2]===n && mxYm(x[0])===m && !/^(hc|chk|nr|mvp|mvpwin|mvpack|cheer|cheerdel|hand|handdel|quiz)\|/.test(x[1]); }).length;
     var ex = 0, sb = 0; for(var d=1; d<=me; d++){ var ds = m+'-'+('0'+d).slice(-2); if(ds<d0 || ds>today) continue; ["주간","야간"].forEach(function(s){ if(hcRoster(ds,s).indexOf(n)>=0){ ex++; if(hcGet(ds,n)) sb++; } }); }
     var hr = ex ? sb/ex : 1;
     var dd = appOn ? Math.round((nr==null?0:nr)*W.noti + Math.min(W.actCap, ac*W.act) + hr*W.hc) : 0;
@@ -4330,6 +4369,152 @@ function vwCard(){
   return '<div class="vw"><b>🔔 접속 알림</b>'+ks.map(function(n){ return '<span><em>'+esc2(n)+'</em> '+f(last[n].ts)+(last[n].c>1?' · '+last[n].c+'회':'')+'</span>'; }).join('')+'<button type="button" data-vwok="1">확인</button></div>';
 }
 document.addEventListener('click', function(e){ if(e.target.closest('[data-vwok]')){ try{ localStorage.setItem('bsr_vw_seen', String(Date.now())); }catch(er){} render(); } });
+
+/* ===== 공용 도우미 ===== */
+function axAll(){ return (typeof ACTS!=="undefined" ? ACTS : []).concat(typeof ACTS_PEND!=="undefined" ? ACTS_PEND.map(function(r){ var x=r.slice(0,4); x.pend=1; return x; }) : []); }
+function axPush(key, memo){ var nr=[Date.now(), key, myName()||'이름없음', memo]; nr.sent=Date.now(); ACTS_PEND.push(nr); actsSavePend(); actSend(nr); setTimeout(actsLoad, 4000); return nr; }
+function sxCopy(title, t){
+  var show = function(ok){ openSheet('<div class="xs-h"><b>'+(ok?'📋 복사됐어요':'📋 '+title)+'</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">'+(ok?'카톡 대화방에 붙여넣기 하세요.':'아래 글을 길게 눌러 복사하세요.')+'</p><pre class="xs-pre">'+esc2(t)+'</pre>'); };
+  try{ navigator.clipboard.writeText(t).then(function(){show(1)}, function(){show(0)}); }catch(e){ show(0); }
+}
+
+/* ===== 1) 📋 톡방 지표 요약 ===== */
+function shareText(){
+  var md2 = function(d){ return (+d.slice(5,7))+'/'+(+d.slice(8)); }, L = [];
+  L.push('📊 북서울 지표 업데이트 ('+md2(SD.br)+' 기준)');
+  if(me){ var ok = me.m.filter(function(c){return c.r>=100}).length; L.push(''); L.push('✅ 지사 5개 중 '+ok+'개 달성'); L.push(me.m.map(function(c,i){ return M[i].short+' '+Math.round(c.r)+'%'+(c.r<100?' ⚠️':''); }).join(' · ')); }
+  var V = VEH.map(function(v){ return {no:v.no, ok:v.m.filter(function(c){return c.r>=100}).length, miss:v.m.map(function(c,i){return c.r<100?M[i].short+' '+Math.round(c.r)+'%':null}).filter(Boolean)}; });
+  L.push(''); L.push('🚗 차량별');
+  V.filter(function(x){return x.ok===5}).forEach(function(x){ L.push('· '+x.no+'호 5개 모두 달성 👏'); });
+  var mi = V.filter(function(x){return x.miss.length}).map(function(x){ return x.no+'호 '+x.miss.join('·'); }); if(mi.length) L.push('· 집중 필요: '+mi.join(' / '));
+  try{ var D = lgData(); if(D) L.push('· 🏁 대항전 1위 '+D.L[0].no+'호'); }catch(e){}
+  var full = PPL.filter(function(p){return p.ok===5}).length, near = PPL.filter(function(p){return p.ok===4}).length;
+  L.push(''); L.push('👤 개인별 · 가점 대상 '+full+'명 · 1개만 더 달성하면 가점 '+near+'명');
+  try{ var o = ALM.over.rows, ex = o.reduce(function(a,r){return a+r[1]},0), tt = o.reduce(function(a,r){return a+r[2]},0); L.push('⏱️ 25분 초과 '+ex+'건 / 출동 '+tt+'건 ('+(tt?(ex/tt*100).toFixed(1):'0')+'%)'); }catch(e){}
+  try{ var ck = Object.keys(CSD).sort().pop(), c = CSD[ck]; L.push('📞 고객체감 응답 '+c.resp+'건 · 만족도 '+c.sat+'점'); }catch(e){}
+  var dd = dday(); if(dd>=0 && dd<=7) L.push(''); if(dd>=0 && dd<=7) L.push('월말까지 D-'+dd+'! 끝까지 함께해요 💪');
+  L.push('👉 https://ijaesig04-hash.github.io/report/');
+  return L.join('\n');
+}
+
+/* ===== 2) ⏰ 월말 막판 알림 (D-3부터) ===== */
+function lastDays(){ var t = kstDate(0), y=+t.slice(0,4), m=+t.slice(5,7), ld = new Date(y,m,0).getDate(); return {left: ld - (+t.slice(8)), ld:ld, ym:t.slice(0,7)}; }
+function lastCard(){
+  var L = lastDays(); if(L.left>3 || L.left<0 || !SD.ppl || SD.ppl.slice(0,7)!==L.ym) return '';
+  var nm = myName(), E = +SD.ppl.slice(8), T = L.ld, R = T-E;
+  if(mgrIs()){
+    var near = PPL.filter(function(p){return p.ok===4});
+    return '<div class="ld mg"><b>⏰ 월말 '+(L.left?'D-'+L.left:'당일')+' · 1개만 더 하면 가점 '+near.length+'명</b><span>'+near.map(function(p){ var i = p.m.findIndex(function(c){return c.r<100}); return esc2(p.name)+' '+M[i].short+' '+Math.round(p.m[i].r)+'%'; }).join(' · ')+'</span></div>';
+  }
+  var p = PPL.filter(function(x){return x.name===nm})[0]; if(!p) return '';
+  var miss = p.m.map(function(c,i){ return {c:c,i:i}; }).filter(function(x){ return x.c.r<100; });
+  if(!miss.length) return '<div class="ld ok"><b>⏰ 월말 '+(L.left?'D-'+L.left:'당일')+' · 5개 모두 달성 중 🏆</b><span>끝까지 지키면 가점 +'+BONUS+'점이에요</span></div>';
+  return '<div class="ld"><b>⏰ 월말 '+(L.left?'D-'+L.left:'당일')+' · 남은 기간 이것만 지켜요</b>'+miss.map(function(x){ var c=x.c, k=x.i, t=c.t, a=c.a, u=k>=3?'분':'%', s;
+      if(k<=2 && R>0){ var r0 = Math.round(fcRate(fcAt(a,0,E,T),t)); s = '추가 발생 0건이면 월말 <b>'+r0+'%</b>'+(r0>=100?' ✅':' · 최대치'); }
+      else if(R>0){ var need = (t*T - a*E)/R; s = need>0 ? '남은 '+R+'일 평균 <b>'+(Math.floor(need*10)/10)+u+' 이하</b>면 달성' : '이번 달은 100%가 어려워요'; }
+      else s = '오늘이 마지막 날이에요';
+      return '<p><em>'+M[k].short+' '+Math.round(c.r)+'%</em><span>'+s+'</span></p>'; }).join('')+
+    '<button type="button" data-ldfc="'+miss[0].i+'">🧮 월말 계산기로 자세히</button></div>';
+}
+
+/* ===== 3) 🔁 근무 교대 메모 ===== */
+function handAll(){
+  var del = {}; axAll().forEach(function(r){ if(/^handdel\|/.test(r[1])) del[r[1].slice(8)] = 1; });
+  return axAll().filter(function(r){ return /^hand\|/.test(r[1]) && !del[String(r[0])]; }).map(function(r){ return {ts:+r[0], by:r[2], tx:String(r[3]||''), pend:r.pend}; }).sort(function(a,b){ return b.ts-a.ts; });
+}
+function handCard(){
+  var nm = myName(); if(!nm || nm==="타부서") return '';
+  var A = handAll().filter(function(h){ return Date.now()-h.ts < 36*3600000; }).slice(0,3), f = function(t){ var d=new Date(t+9*3600000); return (d.getUTCMonth()+1)+'/'+d.getUTCDate()+' '+('0'+d.getUTCHours()).slice(-2)+':'+('0'+d.getUTCMinutes()).slice(-2); };
+  return '<div class="hd"><div class="hd-h"><b>🔁 교대 메모</b><small>다음 근무자에게 한 줄 · 36시간 동안 보여요</small></div>'+
+    (A.length ? A.map(function(h){ return '<div class="hd-i"><p>'+esc2(h.tx)+'</p><small>— '+esc2(h.by)+' · '+f(h.ts)+(h.pend?' · 보내는 중':'')+'</small>'+((h.by===nm||nm==="이재식")&&!h.pend?'<button type="button" data-hddel="'+h.ts+'">지우기</button>':'')+'</div>'; }).join('') : '<p class="hd-e">아직 메모가 없어요</p>')+
+    '<div class="hd-w"><input id="hd-tx" maxlength="80" placeholder="예) ○○고객처 감지기 오작동 — 출동 시 확인"><button type="button" data-hdgo="1">남기기</button></div></div>';
+}
+
+/* ===== 4) 🏆 MVP 확정 알림 (관리자 · 매달 1~10일) ===== */
+function mvpDueCard(){
+  if(!mgrIs()) return ''; var t = kstDate(0); if(+t.slice(8) > 10) return '';
+  var y=+t.slice(0,4), mo=+t.slice(5,7), pm = mo===1 ? (y-1)+'-12' : y+'-'+('0'+(mo-1)).slice(-2);
+  if(mxMonths().indexOf(pm)<0 || mxWin(pm)) return '';
+  var R = null; try{ R = mxCalc(pm); }catch(e){} if(!R || !R.L.length || !R.L[0].t) return '';
+  return '<div class="md"><b>🏆 '+(+pm.slice(5))+'월 MVP를 확정해 주세요</b><span>'+R.L.slice(0,3).map(function(x,i){ return ['🥇','🥈','🥉'][i]+' '+esc2(x.n)+' '+x.t+'점'; }).join(' · ')+'</span><button type="button" data-mddue="'+pm+'">순위 보고 확정하기 ›</button></div>';
+}
+
+/* ===== 5) 🔥 연속 출석 · 배지 도감 ===== */
+function stDays(){ var a = []; try{ a = JSON.parse(lsGet('bsr_days')||'[]'); }catch(e){} return a; }
+function stMark(){ var t = kstDate(0), a = stDays(); if(a.indexOf(t)<0){ a.push(t); a = a.sort().slice(-60); lsSet('bsr_days', JSON.stringify(a)); } }
+function stStreak(){ var a = stDays(), n = 0; for(var k=0;k<60;k++){ if(a.indexOf(kstDate(-k))>=0) n++; else break; } return n; }
+function bdList(){
+  var nm = myName(), st = stStreak(), A = axAll();
+  var NI = typeof NOTI!=="undefined" ? (NOTI.items||[]) : [], acked = NI.length && NI.every(function(x){ return notiAcked(x.id); });
+  var act = A.filter(function(r){ return r[2]===nm && actIsAlm(r[1]); }).length;
+  var hc = A.filter(function(r){ return /^hc\|/.test(r[1]) && String(r[1]).split('|')[2]===nm; }).length;
+  var pr = CSR.filter(function(r){ return r[0]===nm && r[6]==="칭찬"; }).length;
+  var ch = (typeof cheerAll==="function") ? cheerAll().filter(function(c){return c.to===nm}).length : 0;
+  var mv = (typeof mxStarMap==="function") ? (mxStarMap()[nm]||0) : 0;
+  var qz = A.filter(function(r){ return /^quiz\|/.test(r[1]) && r[2]===nm && String(r[3]).split('|')[0]==='3'; }).length;
+  var car = (function(){ var p = PPL.filter(function(x){return x.name===nm})[0]; return p ? String(+p.no) : ''; })(), lg = 0;
+  try{ lg = lgWeeks(kstDate(0).slice(0,7)).filter(function(w){ return w.no===car; }).length; }catch(e){}
+  return [["🔥","3일 연속 접속",st>=3,"앱을 3일 연속 열기"],["🔥","7일 연속 접속",st>=7,"앱을 7일 연속 열기"],["📢","공지 완독",!!acked,"올라온 공지를 모두 확인"],
+    ["🛠️","조치 입력",act>=1,"다발보 조치를 1건 이상 입력"],["📱","해피콜 5회",hc>=5,"해피콜 문자 발송을 5번 제출"],["🌟","고객 칭찬",pr>=1,"고객체감 칭찬 받기"],
+    ["💌","응원 받음",ch>=1,"지사장·팀장·그룹장 응원 받기"],["🏆","이달의 MVP",mv>=1,"이달의 MVP 선정"],["🧠","퀴즈 만점",qz>=1,"주간 안전 퀴즈 3문제 모두 정답"],["🏁","대항전 개선 1위",lg>=1,"우리 차량이 주간 개선 1위"]];
+}
+function funRow(){
+  var nm = myName(); if(!nm || nm==="타부서") return '';
+  stMark(); var st = stStreak(), B = bdList(), got = B.filter(function(b){return b[2]}).length, q = qzMine();
+  return '<div class="fr"><button type="button" class="fr-b" data-bdopen="1"><span class="fr-f">🔥<b class="num">'+st+'</b>일</span><span>연속 접속 · 배지 <b>'+got+'</b>/'+B.length+' '+B.filter(function(b){return b[2]}).slice(0,4).map(function(b){return b[0]}).join('')+'</span><i>›</i></button>'+
+    '<button type="button" class="fr-q'+(q?' done':'')+'" data-qzopen="1"><span>🧠</span><b>이번 주 안전 퀴즈</b><small>'+(q?'완료 '+q.sc+'/3'+(q.sc===3?' 🎉':''):'3문제 · 1분')+'</small></button></div>';
+}
+function bdView(){
+  var B = bdList(), st = stStreak();
+  openSheet('<div class="xs-h"><b>🏅 배지 도감</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">🔥 <b>'+st+'일</b> 연속 접속 중 · 모은 배지 <b>'+B.filter(function(b){return b[2]}).length+'</b>/'+B.length+'</p><div class="bd-g">'+
+    B.map(function(b){ return '<div class="bd'+(b[2]?' on':'')+'"><span>'+b[0]+'</span><b>'+b[1]+'</b><small>'+(b[2]?'획득 ✓':b[3])+'</small></div>'; }).join('')+'</div><p class="xs-p" style="font-size:11px">연속 접속은 이 폰 기준이에요. 배지는 재미용이며 평가에는 들어가지 않아요.</p>');
+}
+
+/* ===== 6) 🧠 주간 안전 퀴즈 (매주 월요일 3문제) ===== */
+var QZ = [
+ ["교차로에서 좌회전한 직후 가장 먼저 대비할 것은?",["뒤따라오는 차","횡단보도 보행자·신호 변경","라디오 볼륨"],1,"회전 직후 횡단보도 보행신호로 앞차가 멈출 수 있어요."],
+ ["시내에서 앞차와의 안전거리는?",["바짝 붙어 따라간다","차 1대 이상, 회전할 땐 더 넉넉히","상관없다"],1,"속도가 느려도 거리가 없으면 멈출 공간이 없어요."],
+ ["시장·골목길에 보행자가 몰려 있으면?",["경적을 울리고 지나간다","긴급출동이니 그대로 간다","일시정지 후 지나간 뒤 출발"],2,"골목에서는 사람이 먼저예요."],
+ ["마주 오는 보행자끼리 서로 피할 때 조심할 점은?",["차 쪽으로 움직일 수 있다","항상 멈춰 선다","신경 쓸 필요 없다"],0,"서로 피하다가 차 쪽으로 오는 사고가 실제로 있었어요."],
+ ["사고가 나면 가장 먼저 할 일은?",["현장을 떠나 출동부터 마친다","정차 → 피해자 확인 → 관제·사업팀 보고","사진만 찍고 나중에 보고"],1,"즉시 정차하고 피해자를 확인한 뒤 바로 보고해요."],
+ ["운전 중 내비·휴대폰 확인은 언제?",["신호 대기 중 잠깐","정차한 뒤에","직진 구간에서"],1,"전방주시 태만이 사고 원인 1순위예요."],
+ ["긴급출동 중에도 꼭 지킬 것은?",["신호·속도 준수","빠른 도착이 최우선","중앙선 넘어 추월"],0,"사고가 나면 출동 자체를 못 해요."],
+ ["사업팀 평가에서 운전성향 '위험' 판정은?",["가점","감점 (주의 −1 · 위험 −2)","영향 없음"],1,"하반기 CS평가안 기준 감점 항목이에요."],
+ ["사업팀 평가에서 차량사고(가해) 1건은?",["−5점","−15점","감점 없음"],1,"차량사고 ZERO 목표 · 가해 건당 −15점이에요."],
+ ["열쇠 분실·보고 누락 같은 기본 미준수는?",["−10점","−1점","주의만 받는다"],0,"기본 미준수는 건당 −10점이에요."],
+ ["고객체감 응답률을 올리는 가장 쉬운 방법은?",["응답 안내 문자를 한 번 더 드리기","고객에게 전화로 점수 부탁","기다린다"],0,"안내 문자 한 번이 응답률을 올려요. 점수 부탁은 안 돼요."],
+ ["25분 초과율을 줄이는 방법으로 맞는 것은?",["출동 지시 후 즉시 출발·경로 미리 확인","신호를 무시하고 달린다","천천히 출발해도 된다"],0,"출발 지연을 줄이는 게 핵심이에요."]
+];
+function qzWeek(){ var t = new Date(kstDate(0)+"T00:00:00Z"), dw = (t.getUTCDay()+6)%7; t.setUTCDate(t.getUTCDate()-dw); return t.toISOString().slice(0,10); }
+function qzSet(){ var w = qzWeek(), n = Math.floor(Date.parse(w+"T00:00:00Z")/604800000), s = (n*3) % QZ.length; return [0,1,2].map(function(k){ return (s+k) % QZ.length; }); }
+function qzMine(){ var w = qzWeek(), nm = myName(), L = axAll().filter(function(r){ return r[1]==='quiz|'+w && r[2]===nm; }); var loc = lsGet('bsr_qz_'+w+'_'+nm);
+  var r = L.length ? String(L.sort(function(a,b){return a[0]-b[0]}).pop()[3]) : loc; if(!r) return null; var p = r.split('|'); return {sc:+p[0]||0, ans:(p[1]||'').split(',').map(Number)}; }
+var QZ_PICK = {};
+function qzView(){
+  var w = qzWeek(), S = qzSet(), mine = qzMine(), nm = myName();
+  var full = axAll().filter(function(r){ return r[1]==='quiz|'+w && String(r[3]).split('|')[0]==='3'; }).map(function(r){return r[2]}).filter(function(n,i,a){return a.indexOf(n)===i;});
+  var h = '<div class="xs-h"><b>🧠 이번 주 안전 퀴즈</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">'+(+w.slice(5,7))+'/'+(+w.slice(8))+'주 · 3문제 · 한 번만 제출할 수 있어요</p>';
+  h += S.map(function(qi,k){ var q = QZ[qi], a = mine ? mine.ans[k] : QZ_PICK[k];
+    return '<div class="qz"><p>'+(k+1)+'. '+esc2(q[0])+'</p>'+q[1].map(function(o,j){ var cls = mine ? (j===q[2]?' ok':j===a?' ng':'') : (a===j?' sel':''); return '<button type="button" class="qz-o'+cls+'" data-qzk="'+k+'" data-qzj="'+j+'"'+(mine?' disabled':'')+'>'+esc2(o)+'</button>'; }).join('')+(mine?'<small>'+esc2(q[3])+'</small>':'')+'</div>'; }).join('');
+  h += mine ? '<div class="qz-r">'+(mine.sc===3?'🎉 만점! 배지 획득':'결과 '+mine.sc+'/3 · 다음 주에 또 도전해요')+'</div>' : '<button type="button" class="qz-go" data-qzgo="1">제출하기</button>';
+  h += '<p class="xs-p">🏅 이번 주 만점: '+(full.length?full.map(esc2).join(', '):'아직 없어요')+'</p>';
+  openSheet(h);
+}
+
+/* ===== 이벤트 ===== */
+document.addEventListener('click', function(e){
+  var t;
+  if((t = e.target.closest('[data-ldfc]'))){ var k = +t.dataset.ldfc; fcInit(myName()); FC.k = k; FC.x = fcDef(PPL.filter(function(x){return x.name===FC.n})[0], k); FC.open = true; var tb = document.querySelector('#tabs [data-tab="ppl"]'); if(tb) tb.click(); setTimeout(function(){ var b = document.querySelector('.fc-pn'); if(b) b.scrollIntoView({behavior:'smooth', block:'start'}); }, 250); return; }
+  if((t = e.target.closest('[data-hdgo]'))){ var i = document.getElementById('hd-tx'), v = i ? i.value.trim() : ''; if(!v){ nrToast('메모를 적어 주세요'); return; } axPush('hand|'+kstDate(0), v.replace(/\s+/g,' ').slice(0,80)); nrToast('🔁 교대 메모를 남겼어요'); render(); return; }
+  if((t = e.target.closest('[data-hddel]'))){ axPush('handdel|'+t.dataset.hddel, '삭제'); render(); return; }
+  if((t = e.target.closest('[data-mddue]'))){ MX_SEL = t.dataset.mddue; mxView(t.dataset.mddue); return; }
+  if(e.target.closest('[data-bdopen]')){ bdView(); return; }
+  if(e.target.closest('[data-qzopen]')){ QZ_PICK = {}; qzView(); return; }
+  if((t = e.target.closest('[data-qzk]'))){ QZ_PICK[+t.dataset.qzk] = +t.dataset.qzj; qzView(); return; }
+  if(e.target.closest('[data-qzgo]')){ var S = qzSet(); if(Object.keys(QZ_PICK).length<3){ nrToast('3문제 모두 골라 주세요'); return; }
+    var ans = [0,1,2].map(function(k){ return QZ_PICK[k]; }), sc = S.filter(function(qi,k){ return QZ[qi][2]===ans[k]; }).length, w = qzWeek();
+    lsSet('bsr_qz_'+w+'_'+myName(), sc+'|'+ans.join(',')); axPush('quiz|'+w, sc+'|'+ans.join(',')); qzView(); if(sc===3 && typeof safeFire==="function") safeFire(); render(); return; }
+});
 
 /* 🎉 MVP 당선 축하 — 뽑힌 직원이 앱을 열면 폭죽 + 당선 메시지, '확인'을 누를 때까지 매번 ('mvpack|월|이름' 기록) */
 var MX_CG = false;
@@ -4959,7 +5144,7 @@ function copyNotice(){
 })();
 
 var GREET_H = -1;
-document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible" && window.state && state.tab==="home") render(); });
+document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible" && window.state && state.tab==="home") renderQuiet(); });
 setInterval(function(){ var h=new Date(Date.now()+9*3600000).getUTCHours(); if(GREET_H!==-1 && h!==GREET_H && window.state && state.tab==="home" && document.visibilityState==="visible") render(); GREET_H=h; }, 600000);
 /* 화면 이동 시 내용 맨 위(탭 바로 아래)로 */
 function goDp(){ var f=function(){ var b=document.querySelector("#view [data-dp]"), el=b?b.parentElement:null, n=document.querySelector("nav.tabs"); if(!el){ goTop(); return; } var y=el.getBoundingClientRect().top+window.pageYOffset-(n?n.offsetHeight:0)-8; window.scrollTo(0, Math.max(0,y)); }; f(); requestAnimationFrame(f); setTimeout(f,120); }
@@ -5206,7 +5391,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
@@ -5341,7 +5526,7 @@ document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contain
 menu.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return; menu.hidden = true;
   var a = b.dataset.vl;
-  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ notiList(); } else if(a==="find"){ findView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
+  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ notiList(); } else if(a==="find"){ findView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
 });
 ov.addEventListener("click", function(e){
   var n = e.target.closest("[data-nm]");
@@ -5634,7 +5819,7 @@ function actsLoad(){
   }).catch(function(){});
 }
 /* 🔔 다발보 조치 알림 — 근무자가 조치를 입력하면 관리자 브리핑 맨 위에 알림 카드 + 앱을 열어 둔 상태면 토스트 (MVP 앱 활용도 항목) */
-function actIsAlm(k){ return !/^(hc|chk|nr|mvp|mvpwin|mvpack|cheer|cheerdel)\|/.test(k); }
+function actIsAlm(k){ return !/^(hc|chk|nr|mvp|mvpwin|mvpack|cheer|cheerdel|hand|handdel|quiz)\|/.test(k); }
 function actNew(){
   if(typeof mgrIs!=="function" || !mgrIs()) return [];
   var me = myName(), kk = 'bsr_actseen_'+me, seen = +lsGet(kk)||0; if(!seen){ seen = Date.now()-86400000; lsSet(kk, String(seen)); }
