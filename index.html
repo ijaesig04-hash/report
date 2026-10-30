@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261030031547">
+<meta name="bsr-ver" content="20261030043909">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3594,7 +3594,8 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
- {id:"2026-10-30c", date:"10/30", title:"새 기능 6가지", tabs:["home"], items:["⏰ 월말 막판 알림 — 월말 3일 전부터 브리핑에 내 미달 지표와 '추가 0건이면 몇 %'","🔁 교대 메모 — 다음 근무자에게 특이사항 한 줄 남기기 (브리핑)","🔥 연속 접속 · 🏅 배지 도감 — 재미용, 평가 미반영","🧠 주간 안전 퀴즈 — 매주 월요일 3문제, 만점자 소개","🏆 관리자: 매달 1~10일 지난달 MVP 확정 알림 · 📊 톡방 지표 요약 복사 메뉴"]},
+ {id:"2026-10-30d", date:"10/30", title:"브리핑 정리", tabs:["home"], items:["월말 막판 알림 · 교대 메모 칸 삭제"]},
+ {id:"2026-10-30c", date:"10/30", title:"새 기능", tabs:["home"], items:["🔥 연속 접속 · 🏅 배지 도감 — 재미용, 평가 미반영","🧠 주간 안전 퀴즈 — 매주 월요일 3문제, 만점자 소개","🏆 관리자: 매달 1~10일 지난달 MVP 확정 알림 · 📊 톡방 지표 요약 복사 메뉴"]},
  {id:"2026-10-30b", date:"10/30", title:"취합건 연동 수정", tabs:["rep"], items:["판넬 리텐션 이번 달 건수를 판넬 앱 서버가 직접 센 값으로 표시 — 근무자 앱의 「이번 달 n건」과 같은 숫자","위험예지는 위험예지 앱이 저장하는 시트를 바로 읽고, 연결이 막힌 폰은 다른 방법으로 다시 연결","'이번 달'을 오늘 날짜 기준으로 계산 · 🔄 지금 다시 불러오기 버튼 추가"]},
  {id:"2026-10-30a", date:"10/30", title:"고객체감 10/30 반영", tabs:["cs"], items:["📞 고객체감 10/30 기준 — 새 발송 8건 추가 (발송 175건 · 응답 55건 · 만족도 9.98)","새 응답: 박정훈(이항우부동산) · 최문혁(창도초) 10점 칭찬"]},
  {id:"2026-10-29l", date:"10/29", title:"깜빡임 수정", tabs:["home"], items:["화면이 간헐적으로 깜빡이던 문제 수정 — 이름 옆 ⭐는 화면을 그릴 때 바로 붙이고, 뒤에서 자료를 받아도 바뀐 게 없으면 다시 그리지 않음","펼쳐 둔 칸이 갑자기 접히던 문제 수정 — 자료가 새로 와도 펼친 상태와 보던 위치 유지"]},
@@ -4011,7 +4012,7 @@ function brief(){
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?'<span class="hm-nm">'+esc2(nm2)+'님,</span>':'')+'<span class="hm-gr'+(greet.replace(/ /g,'').length>10?' long':'')+'">'+greet+' <i class="wv">'+gp[1]+'</i></span></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
   setTimeout(safeAuto, 300);
-  return '<div class="sec">'+hero+vwCard()+cheerCard()+mvpDueCard()+lastCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+funRow()+hcCard()+handCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
+  return '<div class="sec">'+hero+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+funRow()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
 /* 미응답 고객 응답 요청 문자 — 예시 문구는 여기만 수정. {이름}은 앱에서 고른 이름으로 자동 입력(없으면 000) */
