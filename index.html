@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261030044929">
+<meta name="bsr-ver" content="20261030051322">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3594,6 +3594,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-30f", date:"10/30", title:"브리핑 정리", tabs:["home"], items:["브리핑의 '○○님의 지표' 칸 삭제 — 내 지표는 개인별 탭에서 확인"]},
  {id:"2026-10-30e", date:"10/30", title:"표시 오류 수정", tabs:["cmp"], items:["상단 지표 칸에 색 동그라미가 크게 떠 있던 문제 수정 (새 기능의 화면 꾸밈이 겹쳐서 생긴 오류)"]},
  {id:"2026-10-30d", date:"10/30", title:"브리핑 정리", tabs:["home"], items:["월말 막판 알림 · 교대 메모 칸 삭제"]},
  {id:"2026-10-30c", date:"10/30", title:"새 기능", tabs:["home"], items:["🔥 연속 접속 · 🏅 배지 도감 — 재미용, 평가 미반영","🧠 주간 안전 퀴즈 — 매주 월요일 3문제, 만점자 소개","🏆 관리자: 매달 1~10일 지난달 MVP 확정 알림 · 📊 톡방 지표 요약 복사 메뉴"]},
@@ -3951,8 +3952,8 @@ function brief(){
   var nm = myName(), h = '';
   var t = kstDate(0), tm = kstDate(1), w = "일월화수목금토";
   var wd = function(s){ return (+s.slice(5,7))+'/'+(+s.slice(8))+'('+w[new Date(s+"T00:00:00+09:00").getDay()]+')'; };
-  /* 1) 내 화면 */
-  var p = PPL.filter(function(x){return x.name===nm})[0];
+  /* 1) 내 화면 — 브리핑에서는 숨김 (개인별 탭에서 확인) */
+  var p = null;
   if(p){
     var pv = pplPrev(), pp = pv && pv.p[nm];
     var ev = (typeof BEVAL!=="undefined") ? Object.keys(BEVAL).sort().reduce(function(a,k){var r=BEVAL[k].rows[nm];return a+(r?r[4]:0)},0) : null;
