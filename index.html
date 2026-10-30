@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261030060833">
+<meta name="bsr-ver" content="20261030074605">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -581,7 +581,7 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .mgh-d{background:linear-gradient(160deg,rgba(255,255,255,.18),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:1px}
 .mgh-d span{font-size:11.5px;opacity:.85} .mgh-d b{font-size:30px;line-height:1.1;color:#a7f3d0} .mgh-d b small{font-size:13px;color:#fff;margin-left:2px}
 .mgh-d i{font-style:normal;font-size:10.5px;opacity:.75}
-.mgh-mini div{display:flex;flex-direction:column;align-items:center;gap:2px}
+.mgh-mini div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0}
 .mgh-mini b{font-size:14px}
 .mgh-mini em{white-space:nowrap;font-style:normal;font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:999px}
 .mgh-mini em.ok{background:#22c55e33;color:#86efac} .mgh-mini em.ng{background:#ef444433;color:#fca5a5}
@@ -2327,7 +2327,7 @@ function mgHero(N){
       '<div class="cs-side">'+
         '<div class="cs-mini mgh-mini"><div><span>차량사고</span><b class="num">'+mg.acc+'건</b>'+badge(!mg.acc,mg.acc?'발생':'무사고')+'</div>'+
           '<div><span>영상가림</span><b class="num">'+mg.vAct.toFixed(1)+'%</b>'+badge(vOk,vOk?'목표 이내':'목표초과')+'</div>'+
-          '<div><span>기간경과</span><b class="num">'+mg.lpD+'건</b>'+badge(!mg.lpD,mg.lpD?'Looping':'없음')+'</div></div>'+
+          '<div><span style="line-height:1.15"><small style="display:block;font-size:9px;letter-spacing:.3px;opacity:.85">Looping</small>기간경과</span><b class="num">'+mg.lpD+'건</b>'+badge(!mg.lpD,mg.lpD?'Looping':'없음')+'</div></div>'+
         '<div class="mgh-note">전송 '+nf(mg.vSent)+' / 전체 '+nf(mg.vTot)+' · 사업팀 '+mrk(function(b){return b.sent},mg.sent)+'위</div>'+
       '</div></div>'+
   '</div>';
@@ -3598,6 +3598,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-30j", date:"10/30", title:"관리지표 표기", tabs:["mgt"], items:["SAFETY 카드의 '기간경과' 칸 이름을 'Looping 기간경과'로 변경"]},
  {id:"2026-10-30i", date:"10/30", title:"🗺️ 구역 조회 최신판", tabs:["home"], items:["담당구역 조회를 최신 버전(6.7)으로 교체 — 큰길 건물번호 구간 판정·경계 인접 표시 등 개선 사항 반영"]},
  {id:"2026-10-30h", date:"10/30", title:"🗺️ 담당구역 조회", tabs:["home"], items:["브리핑 바로가기 옆 🗺️ 구역 조회 버튼 — 주소·동·건물명을 넣으면 담당 출동차량(26·27·28·127·160호)을 바로 알려줘요","이름표 메뉴에도 '담당구역 출동차량 조회' 추가 · 전체 화면으로 열기 가능"]},
  {id:"2026-10-30g", date:"10/30", title:"월별 평가 화면 구분", tabs:["eval"], items:["하반기 평가(사업팀·지사·종합) 영역에 연보라 바탕과 테두리를 넣어 위쪽 MVP 칸과 구분"]},
