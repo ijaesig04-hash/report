@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261030051632">
+<meta name="bsr-ver" content="20261030055001">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3598,6 +3598,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-30h", date:"10/30", title:"🗺️ 담당구역 조회", tabs:["home"], items:["브리핑 바로가기 옆 🗺️ 구역 조회 버튼 — 주소·동·건물명을 넣으면 담당 출동차량(26·27·28·127·160호)을 바로 알려줘요","이름표 메뉴에도 '담당구역 출동차량 조회' 추가 · 전체 화면으로 열기 가능"]},
  {id:"2026-10-30g", date:"10/30", title:"월별 평가 화면 구분", tabs:["eval"], items:["하반기 평가(사업팀·지사·종합) 영역에 연보라 바탕과 테두리를 넣어 위쪽 MVP 칸과 구분"]},
  {id:"2026-10-30f", date:"10/30", title:"브리핑 정리", tabs:["home"], items:["브리핑의 '○○님의 지표' 칸 삭제 — 내 지표는 개인별 탭에서 확인"]},
  {id:"2026-10-30e", date:"10/30", title:"표시 오류 수정", tabs:["cmp"], items:["상단 지표 칸에 색 동그라미가 크게 떠 있던 문제 수정 (새 기능의 화면 꾸밈이 겹쳐서 생긴 오류)"]},
@@ -4019,7 +4020,7 @@ function brief(){
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?'<span class="hm-nm">'+esc2(nm2)+'님,</span>':'')+'<span class="hm-gr'+(greet.replace(/ /g,'').length>10?' long':'')+'">'+greet+' <i class="wv">'+gp[1]+'</i></span></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
   setTimeout(safeAuto, 300);
-  return '<div class="sec">'+hero+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+funRow()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
+  return '<div class="sec">'+hero+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+funRow()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<span class="pt-bs"><button type="button" class="fd-btn" data-ptopen="1">🗺️ 구역 조회</button><button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></span></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
 /* 미응답 고객 응답 요청 문자 — 예시 문구는 여기만 수정. {이름}은 앱에서 고른 이름으로 자동 입력(없으면 000) */
@@ -5399,7 +5400,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
@@ -5900,5 +5901,21 @@ document.addEventListener("visibilitychange", function(){ if(document.visibility
 })();
 </script>
 <script>BSLP(95);window.addEventListener("load",function(){BSLP(100)});setTimeout(function(){BSLP(100)},4000);</script>
+
+<script>
+/* 🗺️ 담당구역 출동차량 조회 (미니) — 별도 페이지를 작은 창으로 띄움 */
+function ptOpen(){
+  openSheet('<div class="xs-h"><b>🗺️ 담당구역 출동차량 조회</b><button type="button" data-xs="close">✕</button></div>'+
+    '<p class="xs-p" style="margin:0 0 6px">주소·동·건물명을 넣으면 담당 차량(26·27·28·127·160호)을 알려줘요.</p>'+
+    '<iframe class="pt-if" src="patrol.html?mini=1" title="담당구역 조회"></iframe>'+
+    '<a class="pt-full" href="patrol.html" target="_blank" rel="noopener">전체 화면으로 열기 ↗ (구역별 담당 동·경계 도로표)</a>');
+}
+document.addEventListener('click', function(e){ if(e.target.closest('[data-ptopen]')){ var m=document.getElementById('vlmenu'); if(m) m.hidden=true; ptOpen(); } });
+</script>
+<style>
+.pt-bs{display:inline-flex;gap:6px}
+.pt-if{width:100%;height:min(62vh,520px);border:1.5px solid #c7d2fe;border-radius:14px;background:#f3f5f8;display:block}
+.pt-full{display:block;text-align:center;margin:8px 0 2px;font-size:12px;font-weight:700;color:#1f4fd8;text-decoration:none}
+</style>
 
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>

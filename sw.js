@@ -1,4 +1,4 @@
-// 북서울 Report — 빠른 열기 (v7)
+// 북서울 Report — 빠른 열기 (v7.1 · patrol.html 허용)
 // 1) 화면(index.html)은 휴대폰에 저장된 것을 바로 띄우고, 뒤에서 새 버전을 받아 저장본을 바꿔 둠
 // 2) 새 버전이 받아지면 화면 쪽 버전 확인이 자동으로 새로고침 → 항상 최신 유지
 // 3) 인터넷이 끊겨도 마지막 화면 표시
@@ -18,7 +18,7 @@ self.addEventListener("fetch",function(e){
     return;
   }
   if(r.mode==="navigate"){
-    if(/\.html$/i.test(name) && !/^(index|404|risk)\.html$/i.test(name)){ e.respondWith(Response.redirect(home()+u.hash,302)); return; }
+    if(/\.html$/i.test(name) && !/^(index|404|risk|patrol)\.html$/i.test(name)){ e.respondWith(Response.redirect(home()+u.hash,302)); return; }
     if(name!=="" && !/^index\.html$/i.test(name)){ e.respondWith(fetch(r,{cache:"no-store"}).catch(function(){return caches.match(r)})); return; }
     e.respondWith(caches.open(C).then(function(c){
       return c.match(home()).then(function(hit){
