@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261029222153">
+<meta name="bsr-ver" content="20261030011111">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1008,6 +1008,8 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .fc-ph b{font-size:15px;font-weight:900;color:#0e7490}
 .fc-x{border:0;background:#fff;border-radius:999px;padding:4px 10px;font:700 12px "Noto Sans KR",sans-serif;color:#64748b;cursor:pointer}
 @media (prefers-reduced-motion:reduce){.fc-btn{animation:none}}
+.rp-sync{display:block;margin:6px auto 0;border:1px solid #c7d2fe;background:#fff;color:#1f4fd8;border-radius:999px;padding:7px 16px;font:800 12.5px "Noto Sans KR",sans-serif;cursor:pointer}
+
 .ch-w{background:linear-gradient(150deg,#fff7ed,#fdf2f8);border:1.5px solid #f9a8d4;border-radius:18px;padding:12px}
 .ch-h b{font-size:15px;color:#9d174d}
 .ch-h small{display:block;font-size:11px;color:#9f1239;margin:2px 0 8px}
@@ -2133,7 +2135,7 @@ function riskSection(per, ym, prevYm, perLabel){
 }
 function addDays(d,n){var t=new Date(d+"T00:00:00Z");t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10)}
 function viewRep(){
-  var today = PANEL.rows.reduce(function(m,r){return r[0]>m?r[0]:m},""), ym = today.slice(0,7);
+  var today = kstDate(0), ym = today.slice(0,7);
   var prevYm = addDays(ym+"-01",-1).slice(0,7);
   var per = state.rp || "month";
   var inPer = function(d){ return per==="month" ? d.slice(0,7)===ym : per==="prev" ? d.slice(0,7)===prevYm : true; };
@@ -2147,6 +2149,9 @@ function viewRep(){
     if(!by[r[1]]) by[r[1]] = {name:r[1],p:0,s:0};
     by[r[1]].p += r[2]; by[r[1]].s += r[3]; tp += r[2]; ts += r[3];
   });
+  var pm = per==="all" ? null : per==="month" ? ym : prevYm; if(pm) panelStatLoad(pm);
+  var PS = pm && PSTAT[pm];
+  if(PS){ tp=0; ts=0; Object.keys(by).forEach(function(k){ by[k].p=0; by[k].s=0; }); Object.keys(PS.by).forEach(function(n){ if(!by[n]) by[n]={name:n,p:0,s:0}; by[n].p=PS.by[n].p; by[n].s=PS.by[n].s; tp+=PS.by[n].p; ts+=PS.by[n].s; }); }
   var list = Object.keys(by).map(function(k){return by[k]}).sort(function(a,b){return (b.p+b.s)-(a.p+a.s) || b.p-a.p || a.name.localeCompare(b.name,"ko")});
   var active = list.filter(function(x){return x.p+x.s>0}).length;
   var max = Math.max.apply(null, list.map(function(x){return x.p+x.s}).concat([1]));
@@ -2175,7 +2180,7 @@ function viewRep(){
   var rTot = RISK.rows.reduce(function(a,r){return a+(inPer(r[0])?r[2]:0)},0);
   var sw = '<div class="srcsw" role="tablist" aria-label="취합 항목">'+
     '<button type="button" role="tab" class="src src-p" data-rs="panel" aria-selected="'+(rs==="panel")+'">'+
-      '<span class="src-k">PANEL</span><b>판넬 리텐션</b><span class="src-v num">'+(tp+ts)+'<small>건</small></span><span class="src-s">'+perLabel+' · 동기화 '+PANEL.synced.slice(5,16).replace("-","/")+'</span></button>'+
+      '<span class="src-k">PANEL</span><b>판넬 리텐션</b><span class="src-v num">'+(tp+ts)+'<small>건</small></span><span class="src-s">'+perLabel+' · '+(PS?'앱 서버 '+PS.at.slice(11,16):'동기화 '+PANEL.synced.slice(5,16).replace("-","/"))+'</span></button>'+
     '<button type="button" role="tab" class="src src-r" data-rs="risk" aria-selected="'+(rs==="risk")+'">'+
       '<span class="src-k">SAFETY</span><b>위험예지 활동</b><span class="src-v num">'+rTot+'<small>건</small></span><span class="src-s">'+perLabel+' · 동기화 '+RISK.synced.slice(5,16).replace("-","/")+'</span></button>'+
     '</div>';
@@ -2191,7 +2196,7 @@ function viewRep(){
   return sw+
     '<div class="'+(rs==="risk"?"is-risk":"")+'"><div class="chips" role="group" aria-label="기간 선택">'+chips+'</div></div>'+
     '<div class="srcbody '+(rs==="panel"?"is-p":"is-r")+'">'+(rs==="panel" ? panelView : riskSection(per, ym, prevYm, perLabel))+'</div>'+
-    '<p class="note">'+((PANEL.live||RISK.live)?'실시간 연동: 앱을 열 때마다 구글 시트에서 최신 숫자를 불러옵니다.':'구글 시트 연결 전이라 마지막 반영값을 보여줍니다.')+' 판넬은 북서울지사 입력만, 두 항목 모두 테스트 입력은 빼고 집계합니다.</p>';
+    '<p class="note">'+(PS?'판넬 '+perLabel+' 건수는 판넬 앱 서버가 직접 센 값(근무자 화면의 「이번 달 n건」과 같음) · ':'')+((PANEL.live||RISK.live)?'실시간 연동: 앱을 열 때마다 각 앱의 구글 시트에서 최신 숫자를 불러옵니다 ('+(RISK.live?'위험예지 '+RISK.synced.slice(11,16):'위험예지 연결 실패')+').':'⚠️ 지금은 연결이 안 돼 마지막 반영값을 보여줍니다.')+' 판넬은 북서울지사 입력만, 두 항목 모두 테스트 입력은 빼고 집계합니다.</p><button type="button" class="rp-sync" data-rpsync="1">🔄 지금 다시 불러오기</button>';
 }
 function rbs(n){return '<span class="rb sm'+rbc(n)+'">'+n+'</span>'}
 
@@ -3551,6 +3556,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-30b", date:"10/30", title:"취합건 연동 수정", tabs:["rep"], items:["판넬 리텐션 이번 달 건수를 판넬 앱 서버가 직접 센 값으로 표시 — 근무자 앱의 「이번 달 n건」과 같은 숫자","위험예지는 위험예지 앱이 저장하는 시트를 바로 읽고, 연결이 막힌 폰은 다른 방법으로 다시 연결","'이번 달'을 오늘 날짜 기준으로 계산 · 🔄 지금 다시 불러오기 버튼 추가"]},
  {id:"2026-10-30a", date:"10/30", title:"고객체감 10/30 반영", tabs:["cs"], items:["📞 고객체감 10/30 기준 — 새 발송 8건 추가 (발송 175건 · 응답 55건 · 만족도 9.98)","새 응답: 박정훈(이항우부동산) · 최문혁(창도초) 10점 칭찬"]},
  {id:"2026-10-29l", date:"10/29", title:"깜빡임 수정", tabs:["home"], items:["화면이 간헐적으로 깜빡이던 문제 수정 — 이름 옆 ⭐는 화면을 그릴 때 바로 붙이고, 뒤에서 자료를 받아도 바뀐 게 없으면 다시 그리지 않음","펼쳐 둔 칸이 갑자기 접히던 문제 수정 — 자료가 새로 와도 펼친 상태와 보던 위치 유지"]},
  {id:"2026-10-29k", date:"10/29", title:"차량별 탭 정리", tabs:["veh"], items:["차량별 탭의 '지표 이름 설명'과 '월말 예상 달성률 보기' 칸 삭제 — 화면 간단히"]},
@@ -5075,15 +5081,44 @@ function parseRisk(t){
     var k=d+"|"+n; if(!m[k]) m[k]=[d,n,0]; m[k][2]++; });
   return Object.keys(m).sort().map(function(k){return m[k]});
 }
+/* 시트 읽기: CSV(fetch)가 막히면 JSONP(스크립트 태그)로 다시 시도 — 폰 브라우저·보안 설정과 상관없이 연결 */
+function gvJsonp(u){
+  return new Promise(function(ok, no){
+    var cb = '__gv'+Date.now()+Math.floor(Math.random()*1e4), sc = document.createElement('script'), done = false;
+    var fin = function(){ done = true; try{ delete window[cb]; }catch(e){ window[cb] = undefined; } if(sc.parentNode) sc.parentNode.removeChild(sc); };
+    window[cb] = function(res){ fin(); try{
+      var t = res && res.table; if(!t){ no(0); return; }
+      var dv = function(c){ if(!c) return ''; var v = c.v; if(typeof v==='string'){ var m = /^Date\((\d+),(\d+),(\d+)/.exec(v); if(m) return m[1]+'-'+('0'+(+m[2]+1)).slice(-2)+'-'+('0'+m[3]).slice(-2); } return c.f!=null && typeof v!=='number' ? String(c.f) : v==null ? '' : String(v); };
+      var q = function(x){ x = String(x); return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; };
+      var lines = [t.cols.map(function(c){ return q(c.label||c.id||''); }).join(',')].concat(t.rows.map(function(r){ return r.c.map(function(c){ return q(dv(c)); }).join(','); }));
+      ok(lines.join('\n')); }catch(e){ no(e); } };
+    sc.onerror = function(){ if(!done){ fin(); no(0); } };
+    sc.src = u.replace('tqx=out:csv','tqx=out:json;responseHandler:'+cb)+(u.indexOf('headers=')<0?'&headers=1':'');
+    document.head.appendChild(sc); setTimeout(function(){ if(!done){ fin(); no(0); } }, 12000);
+  });
+}
+function getSheet(u){ return getText(u).catch(function(){ return gvJsonp(u); }); }
+var PANEL_API = "https://script.google.com/macros/s/AKfycbyVVBGIG4NEZt8m3tCoZAop2kuuygMIctDmG2XtQE52hAAcx9HkJq75ChQOxB1wda_MNQ/exec", PSTAT = {}, PSTAT_BUSY = {};
+function repRoster(ym){ try{ var r = mxRoster(ym).map(function(x){return x[1]}); if(r.length) return r; }catch(e){} return PPL.map(function(p){return p.name}); }
+/* 판넬 앱 서버가 직접 세는 이번 달 건수 (근무자 화면의 '이번 달 n건'과 같은 값) */
+function panelStatLoad(ym, force){
+  if(!window.fetch || PSTAT_BUSY[ym]) return; if(!force && PSTAT[ym] && Date.now()-PSTAT[ym].t < 120000) return;
+  PSTAT_BUSY[ym] = true; var names = repRoster(ym);
+  Promise.all(names.map(function(n){ return fetch(PANEL_API+'?action=myStat&branch='+encodeURIComponent('북서울지사')+'&name='+encodeURIComponent(n)+'&month='+ym,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){ return j && j.ok ? [n, +j.panel||0, +j.sticker||0, +j.count||0] : null; }).catch(function(){ return null; }); }))
+  .then(function(R){ PSTAT_BUSY[ym] = false; var ok = R.filter(Boolean); if(!ok.length) return; var by = {}; ok.forEach(function(x){ var p=x[1], s2=x[2]; if(!p && !s2 && x[3]) s2 = x[3]; by[x[0]] = {p:p, s:s2}; });
+    var prev = PSTAT[ym] ? JSON.stringify(PSTAT[ym].by) : ''; PSTAT[ym] = {t:Date.now(), at:kstNow(), by:by}; if(prev!==JSON.stringify(by) && window.state && state.tab==="rep") renderQuiet(); });
+}
 function liveSync(){
   if(!window.fetch) return;
-  var now=kstNow(), changed=false;
-  var a=getText(LIVE.panel).then(function(t){ var rows=parsePanel(t); if(rows.length){ PANEL.rows=rows; PANEL.synced=now; PANEL.live=true; changed=true; } }).catch(function(){});
-  var b=getText(LIVE.risk).then(function(t){ var rows=parseRisk(t); if(rows.length){ RISK.rows=rows; RISK.synced=now; RISK.live=true; changed=true; } }).catch(function(){});
-  Promise.all([a,b]).then(function(){ if(changed && state.tab==="rep") render(); });
+  var now=kstNow(), changed=false, ym=kstDate(0).slice(0,7);
+  panelStatLoad(ym);
+  var a=getSheet(LIVE.panel).then(function(t){ var rows=parsePanel(t); if(rows.length){ PANEL.rows=rows; PANEL.synced=now; PANEL.live=true; changed=true; } }).catch(function(){});
+  var b=getSheet(LIVE.risk).then(function(t){ var rows=parseRisk(t); if(rows.length){ RISK.rows=rows; RISK.synced=now; RISK.live=true; changed=true; } }).catch(function(){});
+  Promise.all([a,b]).then(function(){ if(changed && state.tab==="rep") renderQuiet(); });
 }
 liveSync();
 document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible") liveSync(); });
+document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsync]')){ var ym=kstDate(0).slice(0,7); PSTAT={}; PSTAT_BUSY={}; liveSync(); nrToast('🔄 판넬·위험예지 최신 건수를 불러오는 중…'); } });
 </script>
 
 <!-- ===== 접속 기록 (이름 선택 · 구글 시트 기록 · 관리자 PIN) ===== -->
