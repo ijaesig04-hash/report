@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261030051322">
+<meta name="bsr-ver" content="20261030051632">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1008,6 +1008,9 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .fc-ph b{font-size:15px;font-weight:900;color:#0e7490}
 .fc-x{border:0;background:#fff;border-radius:999px;padding:4px 10px;font:700 12px "Noto Sans KR",sans-serif;color:#64748b;cursor:pointer}
 @media (prefers-reduced-motion:reduce){.fc-btn{animation:none}}
+.evbox{display:flex;flex-direction:column;gap:20px;background:linear-gradient(180deg,#eef2ff 0%,#f5f7ff 60%,#f8fafc 100%);border:2px solid #a5b4fc;border-radius:24px;padding:12px 10px 16px;box-shadow:0 6px 18px rgba(67,56,202,.10)}
+.evbox>*{margin-top:0!important;margin-bottom:0!important}
+
 .x6ld{margin-top:10px;background:linear-gradient(135deg,#fff7ed,#fffbeb);border:1.5px solid #fdba74;border-radius:16px;padding:11px 12px}
 .x6ld>b{display:block;font-size:14px;color:#9a3412;margin-bottom:5px}
 .x6ld p{display:flex;gap:8px;align-items:baseline;margin:4px 0;font-size:12.5px;color:#431407}
@@ -3255,10 +3258,11 @@ function viewEvalTeam2(mode){
 function viewEval(){ return cheerWrite()+viewEval0()+cheerBoard(); }
 function viewEval0(){
   var es = state.es || "team";
-  if(es==="branch") return mxHist()+halfBanner()+evalSwitch()+viewEvalBranch();
-  if(es==="team") return mxHist()+halfBanner()+evalSwitch()+viewEvalTeam2("team");
-  if(es==="total") return mxHist()+halfBanner()+evalSwitch()+viewEvalTeam2("total");
-  return mxHist()+halfBanner()+evalSwitch()+viewEvalTeam();
+  var box = function(h){ return mxHist()+'<div class="evbox">'+halfBanner()+evalSwitch()+h+'</div>'; };
+  if(es==="branch") return box(viewEvalBranch());
+  if(es==="team") return box(viewEvalTeam2("team"));
+  if(es==="total") return box(viewEvalTeam2("total"));
+  return box(viewEvalTeam());
 }
 function viewEvalTeam(){
   var rows = EVAL.rows, n = rows.length;
@@ -3594,6 +3598,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-30g", date:"10/30", title:"월별 평가 화면 구분", tabs:["eval"], items:["하반기 평가(사업팀·지사·종합) 영역에 연보라 바탕과 테두리를 넣어 위쪽 MVP 칸과 구분"]},
  {id:"2026-10-30f", date:"10/30", title:"브리핑 정리", tabs:["home"], items:["브리핑의 '○○님의 지표' 칸 삭제 — 내 지표는 개인별 탭에서 확인"]},
  {id:"2026-10-30e", date:"10/30", title:"표시 오류 수정", tabs:["cmp"], items:["상단 지표 칸에 색 동그라미가 크게 떠 있던 문제 수정 (새 기능의 화면 꾸밈이 겹쳐서 생긴 오류)"]},
  {id:"2026-10-30d", date:"10/30", title:"브리핑 정리", tabs:["home"], items:["월말 막판 알림 · 교대 메모 칸 삭제"]},
