@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261031134107">
+<meta name="bsr-ver" content="20261031134610">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3607,6 +3607,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-10-31b", date:"10/31", title:"경조사 알림 문구", tabs:["home"], items:["경조사 알림 카드에 사고 교육용 문구 대신 '예식 안내 · 웨딩 사진 · 오시는 길'과 '결혼 소식 열어보기' 버튼이 나오도록 수정"]},
  {id:"2026-10-31a", date:"10/31", title:"💐 경조사 자료", tabs:["home"], items:["이명섭 프로 결혼(11/1 일 12:30 · 라비니움) 안내 자료 추가 · 웨딩 사진 포함 — 관리자 공지 보내기에서 분류 [경조사] · 자료 첨부로 보낼 수 있어요"]},
  {id:"2026-10-30j", date:"10/30", title:"관리지표 표기", tabs:["mgt"], items:["SAFETY 카드의 '기간경과' 칸 이름을 'Looping 기간경과'로 변경"]},
  {id:"2026-10-30i", date:"10/30", title:"🗺️ 구역 조회 최신판", tabs:["home"], items:["담당구역 조회를 최신 버전(6.7)으로 교체 — 큰길 건물번호 구간 판정·경계 인접 표시 등 개선 사항 반영"]},
@@ -5659,7 +5660,7 @@ var NCAT = [
 ];
 function ncGet(k){ return NCAT.filter(function(c){return c.k===k})[0] || NCAT[NCAT.length-1]; }
 var EDU = {
- "wed-261101": {cat:"경조사", title:"이명섭 프로 결혼 (11/1 일 12:30 · 라비니움)", html:function(){
+ "wed-261101": {cat:"경조사", ic:"💐", sub:"예식 안내 · 웨딩 사진 · 오시는 길 · 주차 안내", btn:"결혼 소식 열어보기", tag:"💐 결혼 소식", title:"이명섭 프로 결혼 (11/1 일 12:30 · 라비니움)", html:function(){
   var dd=Math.round((new Date(2026,10,1)-new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()))/864e5);
   var dl=dd>0?'D-'+dd:dd===0?'D-DAY':'축하해요';
   var Q=encodeURIComponent('라비니움 서울 송파구 천호대로 996');
@@ -5760,9 +5761,9 @@ function notiBanner(){
   var n = NOTI.items.filter(function(x){return !notiAcked(x.id)});
   if(!n.length) return '';
   var x = n[0], p = ncParse(x);
-  var h = '<div class="nt2" style="--nc:'+p.cat.c+'"><div class="nt2-h"><span class="nt2-ic">'+p.cat.ic+'</span><div><span class="nt2-k">'+esc2(p.cat.arr)+'</span><span class="nt2-m">'+esc2(x.by||'')+' · '+notiDate(x.t)+'</span></div></div>'+
-    '<div class="nt2-t">'+esc2(p.title)+'</div>'+(p.body?'<div class="nt2-s">'+esc2(p.body)+'</div>':(p.edu?'<div class="nt2-s">사고 경위 · 현장 사진 · 운전 수칙 · 확인 문제</div>':''))+
-    '<button type="button" class="nt2-go" data-ntv="'+esc2(x.id)+'">'+(p.edu?'교육 자료 열어보기':'내용 보기')+' ›</button>';
+  var h = '<div class="nt2" style="--nc:'+p.cat.c+'"><div class="nt2-h"><span class="nt2-ic">'+((p.edu&&EDU[p.edu].ic)||p.cat.ic)+'</span><div><span class="nt2-k">'+esc2(p.cat.arr)+'</span><span class="nt2-m">'+esc2(x.by||'')+' · '+notiDate(x.t)+'</span></div></div>'+
+    '<div class="nt2-t">'+esc2(p.title)+'</div>'+(p.body?'<div class="nt2-s">'+esc2(p.body)+'</div>':(p.edu?'<div class="nt2-s">'+esc2(EDU[p.edu].sub||'사고 경위 · 현장 사진 · 운전 수칙 · 확인 문제')+'</div>':''))+
+    '<button type="button" class="nt2-go" data-ntv="'+esc2(x.id)+'">'+(p.edu?(EDU[p.edu].btn||'교육 자료 열어보기'):'내용 보기')+' ›</button>';
   if(n.length>1) h += '<div class="nt2-more">'+n.slice(1,4).map(function(y){ var q=ncParse(y); return '<button type="button" class="nt2-r" style="--nc:'+q.cat.c+'" data-ntv="'+esc2(y.id)+'"><i>'+q.cat.ic+' '+q.cat.k+'</i><span>'+esc2(q.title)+'</span><em>›</em></button>'; }).join('')+(n.length>4?'<p class="nt2-m" style="margin:2px 0 0">외 '+(n.length-4)+'건은 이름표 메뉴 › 공지 보기</p>':'')+'</div>';
   return h+'</div>';
 }
@@ -5775,7 +5776,7 @@ function notiList(f){
   if(used.length>1) h += '<div class="ncf"><button type="button" data-ntf="" aria-pressed="'+(!NL_F)+'">전체</button>'+used.map(function(c){return '<button type="button" style="--nc:'+c.c+'" data-ntf="'+c.k+'" aria-pressed="'+(NL_F===c.k)+'">'+c.ic+' '+c.k+'</button>'}).join('')+'</div>';
   h += items.length ? items.map(function(x){ var p = ncParse(x), v = lsGet(notiAckKey(x.id)), ak = NOTI.acks && mgrIs() ? (NOTI.acks[x.id]||[]) : null, all = staffOnly();
       var st = me ? (v ? '<span class="nli-st ok">✓ 확인</span>' : '<span class="nli-st">미확인</span>') : '';
-      return '<button type="button" class="nli" style="--nc:'+p.cat.c+'" data-ntv="'+esc2(x.id)+'"><span class="nli-a"><i>'+p.cat.ic+' '+p.cat.k+'</i><span class="num">'+notiDate(x.t)+'</span>'+(p.edu?' · 📚 교육 자료':'')+st+'</span><b>'+esc2(p.title)+'</b>'+
+      return '<button type="button" class="nli" style="--nc:'+p.cat.c+'" data-ntv="'+esc2(x.id)+'"><span class="nli-a"><i>'+p.cat.ic+' '+p.cat.k+'</i><span class="num">'+notiDate(x.t)+'</span>'+(p.edu?' · '+(EDU[p.edu].tag||'📚 교육 자료'):'')+st+'</span><b>'+esc2(p.title)+'</b>'+
         (ak?'<p>👥 확인 '+all.filter(function(n){return ak.indexOf(n)>=0}).length+'/'+all.length+'명</p>':'')+'</button>'; }).join('') : '<p class="xs-p">아직 공지가 없습니다.</p>';
   openSheet(h);
 }
@@ -5796,12 +5797,12 @@ function notiWrite(msg){
   var all = (window.BSR_ALL||[]).filter(function(n){return CS_MGR.indexOf(n)<0});
   var h = '<div class="xs-h"><b>✏️ 공지 · 교육 보내기</b><button type="button" data-xs="close">✕</button></div>'+
     '<div class="ntw"><label>분류</label><div class="ncw">'+NCAT.map(function(c){return '<button type="button" style="--nc:'+c.c+'" data-ncw="'+c.k+'" aria-pressed="'+(c.k==="업무공지")+'">'+c.ic+' '+c.k+'</button>'}).join('')+'</div>'+
-    '<label for="ntw-e">교육 자료 첨부 (선택)</label><select id="ntw-e"><option value="">첨부 안 함</option>'+Object.keys(EDU).map(function(k){return '<option value="'+k+'">'+esc2(EDU[k].cat+' · '+EDU[k].title)+'</option>'}).join('')+'</select>'+
+    '<label for="ntw-e">자료 첨부 (교육·경조사 · 선택)</label><select id="ntw-e"><option value="">첨부 안 함</option>'+Object.keys(EDU).map(function(k){return '<option value="'+k+'">'+esc2(EDU[k].cat+' · '+EDU[k].title)+'</option>'}).join('')+'</select>'+
     '<label for="ntw-t">제목</label><input id="ntw-t" maxlength="60" placeholder="예) 11월 근무표 변경 안내"><label>내용</label><textarea id="ntw-b" rows="5" maxlength="900" placeholder="직원들에게 전할 내용을 적어주세요 (교육 자료만 보낼 때는 비워도 됩니다)"></textarea>'+
     '<button type="button" class="ntw-go" data-ntpost="1">📢 공지 올리기</button>'+(msg?'<p class="ntw-msg">'+msg+'</p>':'')+'</div>';
   h += '<div class="xs-h" style="margin-top:14px"><b>올린 공지 · 확인 현황</b></div>';
   h += NOTI.items.length ? NOTI.items.map(function(x){ var ak = (NOTI.acks&&NOTI.acks[x.id])||[], miss = all.filter(function(n){return ak.indexOf(n)<0});
-      var pq = ncParse(x); return '<div class="ntw-i"><div><b>'+pq.cat.ic+' '+esc2(pq.title)+'</b><span>'+pq.cat.k+(pq.edu?' · 📚 교육 자료':'')+' · '+notiDate(x.t)+' · 확인 <b class="num">'+all.filter(function(n){return ak.indexOf(n)>=0}).length+'</b>/'+all.length+'명</span></div>'+
+      var pq = ncParse(x); return '<div class="ntw-i"><div><b>'+pq.cat.ic+' '+esc2(pq.title)+'</b><span>'+pq.cat.k+(pq.edu?' · '+(EDU[pq.edu].tag||'📚 교육 자료'):'')+' · '+notiDate(x.t)+' · 확인 <b class="num">'+all.filter(function(n){return ak.indexOf(n)>=0}).length+'</b>/'+all.length+'명</span></div>'+
         (NOTI.acks?'<p>'+(miss.length?'미확인: '+miss.join(', '):'모두 확인 👍')+'</p>':'')+
         '<button type="button" class="ntw-hide" data-nthide="'+esc2(x.id)+'">내리기</button></div>'; }).join('') : '<p class="xs-p">올린 공지가 없습니다.</p>';
   openSheet(h);
