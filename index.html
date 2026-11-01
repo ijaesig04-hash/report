@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261101131205">
+<meta name="bsr-ver" content="20261101132816">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3274,6 +3274,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-01e", date:"11/1", title:"이름 선택 글자 수정", tabs:["home"], items:["이름 선택 화면의 '지사 관리'를 '부서장'으로 변경"]},
  {id:"2026-11-01d", date:"11/1", title:"이름 선택 화면 정리", tabs:["home"], items:["그룹장을 지사장 옆으로 옮기고 '서비스 그룹장 · 서울CS지원'으로 표기"]},
  {id:"2026-11-01c", date:"11/1", title:"위험예지 월 목표 동기화", tabs:["rep"], items:["취합건 연동 › 위험예지 월 목표를 20건 → 10건으로 수정","위험예지 앱에서 월 목표를 바꾸면 이 화면도 앱을 열 때 자동으로 따라가요"]},
  {id:"2026-11-01b", date:"11/1", title:"평가 글자 수정", tabs:["eval"], items:["월별 평가의 '하반기 평균' 표기를 '하반기 누계'로 변경 (사업팀·종합 평가)"]},
@@ -5096,7 +5097,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 <script>
 (function(){
 var LOG_URL = "https://script.google.com/macros/s/AKfycbxh2WI3i7AdlxSxTkxvoO3aQ1v6auL1o2nAjMRsvyYiuqOrUTXqYZnLPj3DIkYVy6ZKhw/exec"; /*LOG_URL*/
-var STAFF = [["지사 관리",["지사장"]],["서비스 관리자",["서비스팀장","최문혁","이재식"]],["26호",["용승우","고혁진","김유건"]],["27호",["주상덕","유영민","김민석"]],["28호",["김태건","김지원","양심영"]],["127호",["박수안","권재원","김민수"]],["160호",["김동현","이명섭","남현준"]]];
+var STAFF = [["부서장",["지사장"]],["서비스 관리자",["서비스팀장","최문혁","이재식"]],["26호",["용승우","고혁진","김유건"]],["27호",["주상덕","유영민","김민석"]],["28호",["김태건","김지원","양심영"]],["127호",["박수안","권재원","김민수"]],["160호",["김동현","이명섭","남현준"]]];
 var ALL = []; STAFF.forEach(function(g){ ALL = ALL.concat(g[1]); });
 var MGRS = ["지사장","서비스팀장","최문혁","이재식"]; window.BSR_MGRS = MGRS;
 var NM_SUB = {"지사장":"지사 총괄 책임자","서비스팀장":"서비스 관리 책임자","최문혁":"선임파트장","김태건":"대포장","김동현":"대포장","주상덕":"대포장","용승우":"대포장","박수안":"대포장","타부서":"보기 전용","그룹장":"서울CS지원","이재식":"파트장 · 앱 개발자"};
@@ -5125,7 +5126,7 @@ function ro(w){ var c=w.charCodeAt(w.length-1)-0xAC00; if(c<0||c>11171) return "
 function pickView(){
   var h = '<div class="vl-hero">'+(me?'<button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button>':'')+'<small>BUKSEOUL REPORT</small><h2>누구신가요? 👋</h2><p>처음 한 번만 선택하면 이 폰에서 기억합니다.</p></div><div class="vl-grid">'+
     '<div class="vl-role"><b>선택한 이름에 따라 보이는 기능이 달라요</b>'+
-    '<p><i>👑 지사 관리</i><span>오늘 할 일 · 공지 쓰기 · 접속 현황 · 💬 응원 코멘트</span></p>'+
+    '<p><i>👑 부서장</i><span>오늘 할 일 · 공지 쓰기 · 접속 현황 · 💬 응원 코멘트</span></p>'+
     '<p><i>⭐ 서비스 관리자</i><span>관리자 기능 + 📱 해피콜 현황</span></p>'+
     '<p><i>🚗 직원</i><span>내 근무·미응답·지표 · 해피콜 제출</span></p>'+
     '<p><i>🎖️ 서비스 그룹장</i><span>서울CS지원 · 지표 보기 · 💬 응원 코멘트</span></p>'+
