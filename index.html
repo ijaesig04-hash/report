@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261101125953">
+<meta name="bsr-ver" content="20261101131205">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3274,6 +3274,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-01d", date:"11/1", title:"이름 선택 화면 정리", tabs:["home"], items:["그룹장을 지사장 옆으로 옮기고 '서비스 그룹장 · 서울CS지원'으로 표기"]},
  {id:"2026-11-01c", date:"11/1", title:"위험예지 월 목표 동기화", tabs:["rep"], items:["취합건 연동 › 위험예지 월 목표를 20건 → 10건으로 수정","위험예지 앱에서 월 목표를 바꾸면 이 화면도 앱을 열 때 자동으로 따라가요"]},
  {id:"2026-11-01b", date:"11/1", title:"평가 글자 수정", tabs:["eval"], items:["월별 평가의 '하반기 평균' 표기를 '하반기 누계'로 변경 (사업팀·종합 평가)"]},
  {id:"2026-11-01a", date:"11/1", title:"💐 경조사 아이콘", tabs:["home"], items:["경조사 공지 아이콘을 내용에 맞게 자동 표시 — 결혼 💐 · 출산 👶 · 생일·잔치 🎂 · 승진·축하 🎉 (분홍) / 부고·조문 🕯️ (회색)","기존 노란 리본 🎗️ 표시 제거"]},
@@ -5098,7 +5099,7 @@ var LOG_URL = "https://script.google.com/macros/s/AKfycbxh2WI3i7AdlxSxTkxvoO3aQ1
 var STAFF = [["지사 관리",["지사장"]],["서비스 관리자",["서비스팀장","최문혁","이재식"]],["26호",["용승우","고혁진","김유건"]],["27호",["주상덕","유영민","김민석"]],["28호",["김태건","김지원","양심영"]],["127호",["박수안","권재원","김민수"]],["160호",["김동현","이명섭","남현준"]]];
 var ALL = []; STAFF.forEach(function(g){ ALL = ALL.concat(g[1]); });
 var MGRS = ["지사장","서비스팀장","최문혁","이재식"]; window.BSR_MGRS = MGRS;
-var NM_SUB = {"지사장":"지사 총괄 책임자","서비스팀장":"서비스 관리 책임자","최문혁":"선임파트장","김태건":"대포장","김동현":"대포장","주상덕":"대포장","용승우":"대포장","박수안":"대포장","타부서":"보기 전용","그룹장":"응원 코멘트","이재식":"파트장 · 앱 개발자"};
+var NM_SUB = {"지사장":"지사 총괄 책임자","서비스팀장":"서비스 관리 책임자","최문혁":"선임파트장","김태건":"대포장","김동현":"대포장","주상덕":"대포장","용승우":"대포장","박수안":"대포장","타부서":"보기 전용","그룹장":"서울CS지원","이재식":"파트장 · 앱 개발자"};
 window.BSR_API = LOG_URL; window.BSR_ALL = ALL;
 function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function s(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
@@ -5106,6 +5107,7 @@ var me = g("bsr_me"); if(me==="관리자"){ me=null; try{ localStorage.removeIte
 var pick = me, sent = {}, hiddenAt = 0, pin = g("bsr_pin")||"";
 window.BSR_PIN = function(){ return MGRS.indexOf(me)>=0 ? pin : ""; };
 var chip = document.getElementById("mechip"), menu = document.getElementById("vlmenu"), ov = document.getElementById("vlov"), box = document.getElementById("vlin");
+function dnm(n){ return n==="그룹장"?"서비스 그룹장":n; }
 function tabName(t){ return (window.TABNAME && TABNAME[t]) || t; }
 function send(what){
   if(!LOG_URL || !me) return;
@@ -5114,7 +5116,7 @@ function send(what){
 }
 function openTag(){ var sa=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true; return sa?"앱 열기(설치)":"앱 열기(주소)"; }
 function logTab(t){ if(sent[t]) return; sent[t]=1; send(tabName(t)); }
-function showChip(){ chip.hidden = false; chip.textContent = me ? me+"님" : "이름 선택"; }
+function showChip(){ chip.hidden = false; chip.textContent = me ? dnm(me)+"님" : "이름 선택"; }
 function close(){ ov.hidden = true; box.innerHTML = ""; document.body.style.overflow = ""; }
 function open(html,pk){ box.innerHTML = html; ov.classList.toggle("pk", !!pk); ov.hidden = false; ov.scrollTop = 0; document.body.style.overflow = "hidden"; }
 function esc(x){ return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]}); }
@@ -5126,13 +5128,13 @@ function pickView(){
     '<p><i>👑 지사 관리</i><span>오늘 할 일 · 공지 쓰기 · 접속 현황 · 💬 응원 코멘트</span></p>'+
     '<p><i>⭐ 서비스 관리자</i><span>관리자 기능 + 📱 해피콜 현황</span></p>'+
     '<p><i>🚗 직원</i><span>내 근무·미응답·지표 · 해피콜 제출</span></p>'+
-    '<p><i>🎖️ 그룹장</i><span>지표 보기 · 💬 응원 코멘트</span></p>'+
+    '<p><i>🎖️ 서비스 그룹장</i><span>서울CS지원 · 지표 보기 · 💬 응원 코멘트</span></p>'+
     '<p><i>👀 타부서</i><span>지표 보기 전용</span></p></div>';
-  STAFF.forEach(function(gr, gi){ if(gi===0) h += '<div class="vl-div vl-sec"><span>🔒 관리자</span></div>'; if(gi===2) h += '<div class="vl-div vl-sec"><span>🚓 차량 근무자</span></div>'; h += '<div class="vl-g">'+gr[0]+'</div>'; gr[1].forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':n==="이재식"?'👨‍💻 ':'')+n+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
+  STAFF.forEach(function(gr, gi){ if(gi===0) h += '<div class="vl-div vl-sec"><span>🔒 관리자</span></div>'; if(gi===2) h += '<div class="vl-div vl-sec"><span>🚓 차량 근무자</span></div>'; h += '<div class="vl-g">'+gr[0]+'</div>'; (gi===0?gr[1].concat(["그룹장"]):gr[1]).forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장"||n==="그룹장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':n==="이재식"?'👨‍💻 ':'')+(n==="그룹장"?'<span style="white-space:nowrap;font-size:13.5px;letter-spacing:-.5px">🎖️서비스 그룹장</span>':n)+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
   var listed = ALL.concat(["그룹장","타부서"]), typed = pick && listed.indexOf(pick)<0 ? pick : "";
-  h += '<div class="vl-g">그 외</div>'+["그룹장","타부서"].map(function(n){ return '<button type="button" class="vl-n'+(n==="그룹장"?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="그룹장"?'🎖️ ':'')+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('')+
+  h += '<div class="vl-g">그 외</div>'+["타부서"].map(function(n){ return '<button type="button" class="vl-n'+(n==="그룹장"?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="그룹장"?'🎖️ ':'')+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('')+
     '<div class="vl-div"><span>목록에 이름이 없으면</span></div><div class="vl-in-row"><label for="vlname">직접 입력</label><input id="vlname" type="text" maxlength="10" autocomplete="off" placeholder="이름을 입력하세요" value="'+esc(typed)+'" aria-label="이름 직접 입력"></div></div>';
-  h += '<button type="button" class="vl-btn" data-vl="start"'+(pick?'':' disabled')+'>'+(pick?esc(pick)+ro(pick)+' 시작하기':'이름을 선택해 주세요')+'</button>';
+  h += '<button type="button" class="vl-btn" data-vl="start"'+(pick?'':' disabled')+'>'+(pick?esc(dnm(pick))+ro(dnm(pick))+' 시작하기':'이름을 선택해 주세요')+'</button>';
   h += '<p class="vl-tip">※ 지표 확인 현황과 화면 선호도 조사를 위해 이름을 선택해 주세요. 더 보기 편한 리포트를 만드는 데 활용됩니다.</p>';
   open(h,1);
 }
@@ -5330,7 +5332,7 @@ ov.addEventListener("input", function(e){
   var v = e.target.value.trim(), b = box.querySelector('[data-vl="start"]');
   box.querySelectorAll('[data-nm]').forEach(function(x){ x.setAttribute("aria-pressed", "false"); });
   pick = v || null;
-  if(b){ b.disabled = !v; b.textContent = v ? v+ro(v)+' 시작하기' : '이름을 선택해 주세요'; }
+  if(b){ b.disabled = !v; b.textContent = v ? dnm(v)+ro(dnm(v))+' 시작하기' : '이름을 선택해 주세요'; }
 });
 ov.addEventListener("keydown", function(e){ if(e.key==="Enter" && e.target.id==="vlpin") loadAdmin(e.target.value.trim()); });
 document.getElementById("tabs").addEventListener("click", function(e){ var b=e.target.closest("[data-tab]"); if(b) logTab(b.dataset.tab); });
