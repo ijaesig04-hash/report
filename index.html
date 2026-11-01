@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261101001258">
+<meta name="bsr-ver" content="20261101004223">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3274,6 +3274,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-01a", date:"11/1", title:"💐 경조사 아이콘", tabs:["home"], items:["경조사 공지 아이콘을 내용에 맞게 자동 표시 — 결혼 💐 · 출산 👶 · 생일·잔치 🎂 · 승진·축하 🎉 (분홍) / 부고·조문 🕯️ (회색)","기존 노란 리본 🎗️ 표시 제거"]},
  {id:"2026-10-31b", date:"10/31", title:"경조사 알림 문구", tabs:["home"], items:["경조사 알림 카드에 사고 교육용 문구 대신 '예식 안내 · 웨딩 사진 · 오시는 길'과 '결혼 소식 열어보기' 버튼이 나오도록 수정"]},
  {id:"2026-10-31a", date:"10/31", title:"💐 경조사 자료", tabs:["home"], items:["이명섭 프로 결혼(11/1 일 12:30 · 라비니움) 안내 자료 추가 · 웨딩 사진 포함 — 관리자 공지 보내기에서 분류 [경조사] · 자료 첨부로 보낼 수 있어요"]},
  {id:"2026-10-30j", date:"10/30", title:"관리지표 표기", tabs:["mgt"], items:["SAFETY 카드의 '기간경과' 칸 이름을 'Looping 기간경과'로 변경"]},
@@ -5414,10 +5415,25 @@ var NCAT = [
  {k:"안전사고", ic:"⛑️", c:"#ea580c", arr:"안전사고 사례 교육 자료가 도착했습니다"},
  {k:"업무공지", ic:"📋", c:"#1f4fd8", arr:"업무 공지가 도착했습니다"},
  {k:"중요이슈", ic:"❗", c:"#7c3aed", arr:"중요 이슈가 도착했습니다"},
- {k:"경조사",   ic:"🎗️", c:"#0f766e", arr:"경조사 소식이 도착했습니다"},
+ {k:"경조사",   ic:"✉️", c:"#0f766e", arr:"경조사 소식이 도착했습니다"},
  {k:"일반",     ic:"📢", c:"#475569", arr:"새 공지가 도착했습니다"}
 ];
 function ncGet(k){ return NCAT.filter(function(c){return c.k===k})[0] || NCAT[NCAT.length-1]; }
+/* 경조사는 내용에 맞는 아이콘: 경사(결혼·출산·생일·승진 등)는 축하 아이콘, 조사(부고 등)는 추모 아이콘 */
+var NC_EVT = [
+ {re:/부고|별세|소천|영면|타계|조문|빈소|장례|발인|명복|상\(喪\)|모친상|부친상|빙부|빙모|조부상|조모상/, ic:"🕯️", c:"#475569", arr:"부고 소식이 전해졌습니다"},
+ {re:/결혼|웨딩|예식|혼례|청첩/, ic:"💐", c:"#db2777", arr:"결혼 소식이 도착했습니다"},
+ {re:/출산|득남|득녀|탄생|돌잔치|첫돌|백일/, ic:"👶", c:"#db2777", arr:"출산 소식이 도착했습니다"},
+ {re:/생일|생신|칠순|팔순|환갑|회갑/, ic:"🎂", c:"#db2777", arr:"축하 소식이 도착했습니다"},
+ {re:/승진|합격|수상|표창|포상|축하/, ic:"🎉", c:"#db2777", arr:"축하 소식이 도착했습니다"},
+ {re:/개업|이사|집들이|입주/, ic:"🎊", c:"#db2777", arr:"축하 소식이 도착했습니다"}
+];
+function ncEvent(cat, title, body){
+  if(!cat || cat.k!=="경조사") return cat;
+  var t = (title||"")+" "+(body||"");
+  for(var i=0;i<NC_EVT.length;i++){ if(NC_EVT[i].re.test(t)) return {k:cat.k, ic:NC_EVT[i].ic, c:NC_EVT[i].c, arr:NC_EVT[i].arr}; }
+  return cat;
+}
 var EDU = {
  "wed-261101": {cat:"경조사", ic:"💐", sub:"예식 안내 · 웨딩 사진 · 오시는 길 · 주차 안내", btn:"결혼 소식 열어보기", tag:"💐 결혼 소식", title:"이명섭 프로 결혼 (11/1 일 12:30 · 라비니움)", html:function(){
   var dd=Math.round((new Date(2026,10,1)-new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()))/864e5);
@@ -5508,6 +5524,7 @@ function ncParse(x){
   if(m && NCAT.some(function(c){return c.k===m[1]})){ cat = ncGet(m[1]); t = t.slice(m[0].length); }
   var b = x.body||"", em = /(?:^|\n)#교육:([\w-]+)\s*$/.exec(b), edu = null;
   if(em){ b = b.slice(0, em.index).replace(/\s+$/,""); if(EDU[em[1]]) edu = em[1]; }
+  cat = ncEvent(cat, t + (edu ? " "+EDU[edu].title : ""), b);
   return {cat:cat, title:t, body:b, edu:edu};
 }
 function staffOnly(){ return (window.BSR_ALL||[]).filter(function(n){return CS_MGR.indexOf(n)<0}); }
