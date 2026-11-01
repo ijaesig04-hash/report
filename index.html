@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261101000642">
+<meta name="bsr-ver" content="20261101001258">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -5252,6 +5252,25 @@ function adminExtra(rows, now, pinFail){
   /* 9 PIN 실패 기록 */
   var pf = (pinFail||[]).slice(0,8);
   out += '<div class="vl-card vlw"><h3>🚫 PIN 실패 기록<small>최근 기록 '+pf.length+'건</small></h3>'+(pf.length?'<div class="vlw-t ng">'+pf.map(function(r){ return '<span>'+kst(r[0]).md+' '+kst(r[0]).hm+' · '+esc(r[1])+'</span>'; }).join('')+'</div>':'<div class="vl-row">실패 기록이 없어요</div>')+'</div>';
+
+  /* 오늘 접속 순서 */
+  var firstT = {};
+  rows.forEach(function(r){ if(kst(r[0]).day!==t.day) return; if(!(r[1] in firstT) || r[0]<firstT[r[1]]) firstT[r[1]]=r[0]; });
+  var order = Object.keys(firstT).sort(function(a,b){ return firstT[a]-firstT[b]; });
+  out = '<div class="vl-card vlw"><h3>🕘 오늘 접속 순서<small>'+t.md+' · '+order.length+'명</small></h3>'+(order.length?'<div class="vlw-t">'+order.map(function(n){ return '<span>'+kst(firstT[n]).hm+' <i>'+esc(n)+'</i></span>'; }).join('')+'</div>':'<div class="vl-row">아직 접속한 사람이 없어요</div>')+'</div>'+out;
+  /* 관리자·타부서·직접 입력 접속 이력 */
+  var EXT = rows.filter(function(r){ var n=r[1]; return n==="지사장" || n==="그룹장" || n==="타부서" || ALL.indexOf(n)<0; });
+  var ec = {}; EXT.forEach(function(r){ ec[r[1]]=(ec[r[1]]||0)+1; });
+  var en = Object.keys(ec).sort(function(a,b){ return ec[b]-ec[a]; });
+  out += '<div class="vl-card vlw"><h3>👀 지사장·그룹장·타부서 접속<small>최근 35일 · '+EXT.length+'건</small></h3>'+
+    (en.length?'<div class="vlw-t"><b>누가 몇 번</b>'+en.map(function(n){ return '<span>'+esc(n)+' <i>'+ec[n]+'회</i></span>'; }).join('')+'</div>'+
+    '<div class="vlw-t"><b>최근 접속</b>'+EXT.slice(0,10).map(function(r){ return '<span>'+kst(r[0]).md+' '+kst(r[0]).hm+' · '+esc(r[1])+'</span>'; }).join('')+'</div>':'<div class="vl-row">기록이 없어요</div>')+'</div>';
+  /* 응원 코멘트 현황 */
+  var CH = (typeof cheerAll==="function") ? cheerAll() : [];
+  var cb = {}; CH.forEach(function(c){ cb[c.by]=(cb[c.by]||0)+1; });
+  out += '<div class="vl-card vlw"><h3>💬 응원 코멘트 현황<small>총 '+CH.length+'건</small></h3>'+
+    (CH.length?'<div class="vlw-t"><b>남긴 사람</b>'+Object.keys(cb).map(function(n){ return '<span>'+esc(n)+' <i>'+cb[n]+'건</i></span>'; }).join('')+'</div>'+
+    '<div class="vlw-t"><b>최근 코멘트</b>'+CH.slice(0,8).map(function(c){ return '<span>'+cheerDate(c.ts)+' '+esc(c.by)+' → '+esc(c.to)+' · '+esc(c.tx.length>22?c.tx.slice(0,22)+'…':c.tx)+'</span>'; }).join('')+'</div>':'<div class="vl-row">아직 남긴 코멘트가 없어요</div>')+'</div>';
   return out;
 }
 function adminView(rows){
