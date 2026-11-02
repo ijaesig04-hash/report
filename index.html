@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261102095313">
+<meta name="bsr-ver" content="20261102112440">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2203,9 +2203,9 @@ function viewRep(){
   var rTot = RISK.rows.reduce(function(a,r){return a+(inPer(r[0])?r[2]:0)},0);
   var sw = '<div class="srcsw" role="tablist" aria-label="취합 항목">'+
     '<button type="button" role="tab" class="src src-p" data-rs="panel" aria-selected="'+(rs==="panel")+'">'+
-      '<span class="src-k">PANEL</span><b>판넬 리텐션</b><span class="src-v num">'+(tp+ts)+'<small>건</small></span><span class="src-s">'+perLabel+' · '+(PS?'앱 서버 '+PS.at.slice(11,16):'동기화 '+PANEL.synced.slice(5,16).replace("-","/"))+'</span></button>'+
+      '<span class="src-k">PANEL</span><b>판넬 리텐션</b><span class="src-v num">'+(tp+ts)+'<small>건</small></span><span class="src-s">'+perLabel+' · '+(PS?'앱 서버 '+PS.at.slice(11,16):syncLbl(PANEL))+'</span></button>'+
     '<button type="button" role="tab" class="src src-r" data-rs="risk" aria-selected="'+(rs==="risk")+'">'+
-      '<span class="src-k">SAFETY</span><b>위험예지 활동</b><span class="src-v num">'+rTot+'<small>건</small></span><span class="src-s">'+perLabel+' · 동기화 '+RISK.synced.slice(5,16).replace("-","/")+'</span></button>'+
+      '<span class="src-k">SAFETY</span><b>위험예지 활동</b><span class="src-v num">'+rTot+'<small>건</small></span><span class="src-s">'+perLabel+' · '+syncLbl(RISK)+'</span></button>'+
     '</div>';
   var panelView = goLink("panel")+'<div class="sec"><div class="tiles3">'+
       '<div class="card tile"><h3>판넬</h3><div class="v" style="color:var(--accent)">'+tp+'<small>건</small></div></div>'+
@@ -3275,6 +3275,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+{id:"2026-11-02f", date:"11/2", title:"PC 웹앱 자동 최신화", tabs:["home","rep"], items:["💻 PC 웹앱도 켜져 있는 동안 3분마다 새 버전을 확인해 자동으로 바뀌어요","📡 위험예지·판넬 자료는 5분마다 다시 불러오고, 연결이 안 되면 '연결 안 됨 · 마지막 시각'으로 표시해요"]},
 {id:"2026-11-02e", date:"11/2", title:"업데이트 알림 뱃지", tabs:["home"], items:["🔔 새 업데이트가 있으면 앱 아이콘에 숫자 뱃지가 붙어요 (앱이 꺼져 있어도 폰이 확인, 지원 폰에서)","앱을 열면 뱃지가 사라지고 새 화면으로 바뀌어요"]},
  {id:"2026-11-02d", date:"11/2", title:"11월 근무표 수정 반영", tabs:["duty"], items:["11월 근무표 변경분 반영(김지원·고혁진·김동현·이명섭)","11/8 김지원·김동현 근무 재수정 반영","🗂️ 근무표 원본 사진도 최신 수정본으로 교체 (사번은 가림)","주간·야간 인원수는 시트 하단과 일치 확인"]},
  {id:"2026-11-02c", date:"11/2", title:"고객체감 건별 내역 수정", tabs:["cs"], items:["11월 기준일에서도 사원별 건별 내역(새 발송·응답)이 보이도록 수정","응답률 변화(직전 기준일 대비)도 10/30과 비교해 표시"]},
@@ -4994,18 +4995,20 @@ function panelStatLoad(ym, force){
     var prev = PSTAT[ym] ? JSON.stringify(PSTAT[ym].by) : ''; PSTAT[ym] = {t:Date.now(), at:kstNow(), by:by}; if(prev!==JSON.stringify(by) && window.state && state.tab==="rep") renderQuiet(); });
 }
 var RISK_API = "https://script.google.com/macros/s/AKfycbygmjwcblQ9W9rF8KPHh9HhHaMuJ6Ys8e13QainA_ktd_0PmTRJs3DeD8eHmldXzvfA/exec";
+function syncLbl(o){ var t=String(o.synced||'').slice(5,16).replace('-','/'); if(o.err) return '연결 안 됨 · 마지막 '+t; return (o.live?'실시간 ':'저장본 ')+t; }
 function liveSync(){
   if(!window.fetch) return;
   var now=kstNow(), changed=false, ym=kstDate(0).slice(0,7);
   panelStatLoad(ym);
-  var a=getSheet(LIVE.panel).then(function(t){ var rows=parsePanel(t); if(rows.length){ PANEL.rows=rows; PANEL.synced=now; PANEL.live=true; changed=true; } }).catch(function(){});
-  var b=getSheet(LIVE.risk).then(function(t){ var rows=parseRisk(t); if(rows.length){ RISK.rows=rows; RISK.synced=now; RISK.live=true; changed=true; } }).catch(function(){});
+  var a=getSheet(LIVE.panel).then(function(t){ var rows=parsePanel(t); if(rows.length){ PANEL.rows=rows; PANEL.synced=now; PANEL.live=true; changed=true; PANEL.err=false; } else { changed=true; PANEL.err=true; } }).catch(function(){ changed=true; PANEL.err=true; });
+  var b=getSheet(LIVE.risk).then(function(t){ var rows=parseRisk(t); if(rows.length){ RISK.rows=rows; RISK.synced=now; RISK.live=true; changed=true; RISK.err=false; } else { changed=true; RISK.err=true; } }).catch(function(){ changed=true; RISK.err=true; });
   /* 월 목표(인당): 위험예지 앱 서버의 값을 그대로 따라감 */
   var c=fetch(RISK_API+"?action=roster&key=PUBLIC_EMPLOYEE_KEY&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ var t=j&&j.ok?+j.target:0; if(t>0 && t<=200 && t!==RISK.target){ RISK.target=t; changed=true; } }).catch(function(){});
   Promise.all([a,b,c]).then(function(){ if(changed && state.tab==="rep") renderQuiet(); });
 }
 liveSync();
 document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible") liveSync(); });
+setInterval(function(){ if(document.visibilityState==="visible") liveSync(); }, 300000);
 document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsync]')){ var ym=kstDate(0).slice(0,7); PSTAT={}; PSTAT_BUSY={}; liveSync(); nrToast('🔄 판넬·위험예지 최신 건수를 불러오는 중…'); } });
 </script>
 
@@ -5400,6 +5403,7 @@ if(!me) pickView(); else { send(openTag()); sent[window.state?state.tab:"cmp"]=1
   window.addEventListener("online", function(){ var b=document.getElementById("offb"); if(b) b.remove(); last=0; check(); });
   if(navigator.onLine===false) offBadge();
   check();
+  setInterval(function(){ if(document.visibilityState==="visible") check(); }, 180000);
   document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible") check(); });
   window.addEventListener("focus", check);
   window.addEventListener("pageshow", function(e){ if(e.persisted) check(); });
