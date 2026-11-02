@@ -1,4 +1,4 @@
-// 북서울 Report — 빠른 열기 (v7.1 · patrol.html 허용)
+// 북서울 Report — 빠른 열기 (v7.2 · patrol.html 허용 · 업데이트 아이콘 뱃지)
 // 1) 화면(index.html)은 휴대폰에 저장된 것을 바로 띄우고, 뒤에서 새 버전을 받아 저장본을 바꿔 둠
 // 2) 새 버전이 받아지면 화면 쪽 버전 확인이 자동으로 새로고침 → 항상 최신 유지
 // 3) 인터넷이 끊겨도 마지막 화면 표시
@@ -31,3 +31,20 @@ self.addEventListener("fetch",function(e){
   }
   e.respondWith(fetch(r,{cache:"no-store"}).then(function(res){ if(res.ok){var cp=res.clone(); caches.open(C).then(function(c){c.put(r,cp)});} return res; }).catch(function(){return caches.match(r,{ignoreSearch:true})}));
 });
+
+/* ===== 업데이트 아이콘 뱃지 =====
+   앱이 꺼져 있어도 폰이 가끔(약 12시간 이상 간격) 깨워서 새 버전이 있는지 확인하고, 있으면 앱 아이콘에 숫자 뱃지를 붙입니다.
+   앱을 열면 페이지 쪽에서 뱃지를 지웁니다. 지원하지 않는 폰에서는 조용히 아무 일도 하지 않습니다. */
+function verOf(html){ var m=/name="bsr-ver" content="([^"]+)"/.exec(html||""); return m?m[1]:""; }
+function checkUpd(){
+  return caches.open(C).then(function(c){ return c.match(home()); }).then(function(hit){
+    if(!hit) return;
+    return hit.text().then(function(old){
+      return fetch(home()+"?t="+Date.now(),{cache:"no-store"}).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
+        var a=verOf(old), b=verOf(t);
+        if(a && b && a!==b && self.registration.setAppBadge) return self.registration.setAppBadge(1);
+      });
+    });
+  }).catch(function(){});
+}
+self.addEventListener("periodicsync",function(e){ if(e.tag==="bsr-upd") e.waitUntil(checkUpd()); });

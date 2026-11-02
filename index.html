@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261102090828">
+<meta name="bsr-ver" content="20261102095313">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3275,6 +3275,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+{id:"2026-11-02e", date:"11/2", title:"업데이트 알림 뱃지", tabs:["home"], items:["🔔 새 업데이트가 있으면 앱 아이콘에 숫자 뱃지가 붙어요 (앱이 꺼져 있어도 폰이 확인, 지원 폰에서)","앱을 열면 뱃지가 사라지고 새 화면으로 바뀌어요"]},
  {id:"2026-11-02d", date:"11/2", title:"11월 근무표 수정 반영", tabs:["duty"], items:["11월 근무표 변경분 반영(김지원·고혁진·김동현·이명섭)","11/8 김지원·김동현 근무 재수정 반영","🗂️ 근무표 원본 사진도 최신 수정본으로 교체 (사번은 가림)","주간·야간 인원수는 시트 하단과 일치 확인"]},
  {id:"2026-11-02c", date:"11/2", title:"고객체감 건별 내역 수정", tabs:["cs"], items:["11월 기준일에서도 사원별 건별 내역(새 발송·응답)이 보이도록 수정","응답률 변화(직전 기준일 대비)도 10/30과 비교해 표시"]},
  {id:"2026-11-02b", date:"11/2", title:"고객체감 11/2 반영", tabs:["cs"], items:["📞 고객체감 11/2 기준 — 새 발송 5건 추가 (발송 180건 · 응답 57건 · 만족도 9.98)","새 응답: 이재식(신**) · 권재원(스타벅스태릉입구DT점) 10점 칭찬"]},
@@ -5372,6 +5373,9 @@ if(!me) pickView(); else { send(openTag()); sent[window.state?state.tab:"cmp"]=1
 /* 자동 최신화 — 주소는 항상 index.html(./) 하나. 앱을 열거나 돌아올 때 서버의 버전 표시(bsr-ver)를 확인해 새 버전이면 바로 새로 엽니다 */
 (function(){
   if(!/^https?:/.test(location.protocol) || !/github\.io$/.test(location.hostname)) return;
+  /* 앱을 열면 아이콘 업데이트 뱃지 지우기 · 백그라운드 업데이트 확인 등록(지원 폰만) */
+  try{ if(navigator.clearAppBadge) navigator.clearAppBadge(); }catch(er){}
+  try{ if(navigator.serviceWorker) navigator.serviceWorker.ready.then(function(reg){ if(reg.periodicSync) return reg.periodicSync.register("bsr-upd",{minInterval:12*60*60*1000}); }).catch(function(){}); }catch(er){}
   var cur = location.pathname.split("/").pop();
   if(cur && !/^index\.html$/i.test(cur)){ location.replace("./"+(location.hash||"")); return; }
   if(/[?&]t=/.test(location.search)){ try{ history.replaceState(null,"","./"+(location.hash||"")); }catch(er){} }
