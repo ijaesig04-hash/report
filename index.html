@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261101132816">
+<meta name="bsr-ver" content="20261102033110">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1894,7 +1894,7 @@ function heatHead(){
 function cells(row,fi){return row.m.map(function(c,i){return '<span class="cell '+lvl(c.r)+(i===fi?' fx':'')+'">'+fr(c.r)+'</span>'}).join("")}
 
 var me;
-var state = {tab:"home", veh:0, met:"all", mg:"video", pf:"all", pp:"", cf:"all", ps:"rank", rp:"month", rs:"panel", ev:"", es:"team", bm:"sum", bp:""};
+var state = {tab:"home", veh:0, met:"all", mg:"video", pf:"all", pp:"", cf:"all", ps:"rank", rp:"month", rs:"panel", ev:"", es:"total", bm:"sum", bp:""};
 
 /* 요약 영역 */
 function renderHero(){
@@ -2792,7 +2792,7 @@ function viewEvalBranch(){
 }
 
 function evalSwitch(){
-  var es = state.es || "team";
+  var es = state.es || "total";
   var L = [["team","사업팀 평가","사업팀 기준 점수표"],["branch","지사 평가","지사 자체 평가"],["total","종합 평가","사업팀 80% + 지사 20"]];
   return '<div class="evsw" role="tablist" aria-label="평가 구분">'+L.map(function(l){
     return '<button type="button" role="tab" data-es="'+l[0]+'" aria-selected="'+(es===l[0])+'"><b>'+l[1]+'</b><small>'+l[2]+'</small></button>';
@@ -2902,7 +2902,7 @@ function evalMonthChips(keys, per, attr, half){ return '<div class="chips" role=
 var TE_MAX = {"불필요출동률":5,"서비스출동 발보율":7,"25분 초과율":3,"고객체감 출동시간":4,"금융사 출동시간":7,"출동료 청구":2,"고객체감":20,"응답률":7,"클레임":10,"VOC 30분내 접촉률":5,"24시간 초과":0,"기한내 처리율":5,"잠재불만 VOC":2,"차량사고":15,"안전사고":10,"가감점":-1};
 function teMax(k, nm){ var m = TEVAL[k] && TEVAL[k].max && TEVAL[k].max[nm]; return m!=null ? m : TE_MAX[nm]; }
 function viewEvalTeam2(mode){
-  var H = halfOf(kstDate(0)), keys = Object.keys(TEVAL).sort().filter(function(k){ return mode!=="total" || BEVAL[k]; }), /* 종합은 지사평가가 들어온 달만 */ per = state.tm && (state.tm==="sum"||TEVAL[state.tm]) ? state.tm : keys[keys.length-1];
+  var H = halfOf(kstDate(0)), keys = Object.keys(TEVAL).sort().filter(function(k){ return mode!=="total" || BEVAL[k]; }), /* 종합은 지사평가가 들어온 달만 */ per = state.tm && (state.tm==="sum"||TEVAL[state.tm]) ? state.tm : (mode==="total" ? "sum" : keys[keys.length-1]);
   var allK = Object.keys(TEVAL).sort(), bK = Object.keys(BEVAL).sort(), lastK = allK[allK.length-1];
   /* 대상: 가장 최근 사업팀 평가 명단 (퇴사·전출자 제외 — 사업팀 누계표와 동일) */
   var names = Object.keys(TEVAL[lastK].rows);
@@ -2945,7 +2945,7 @@ function viewEvalTeam2(mode){
 }
 function viewEval(){ return cheerWrite()+viewEval0()+cheerBoard(); }
 function viewEval0(){
-  var es = state.es || "team";
+  var es = state.es || "total";
   var box = function(h){ return mxHist()+'<div class="evbox">'+halfBanner()+evalSwitch()+h+'</div>'; };
   if(es==="branch") return box(viewEvalBranch());
   if(es==="team") return box(viewEvalTeam2("team"));
@@ -3274,6 +3274,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-02a", date:"11/2", title:"월별 평가 첫 화면", tabs:["eval"], items:["월별 평가 탭을 열면 종합 평가 · 하반기 누계가 먼저 보여요"]},
  {id:"2026-11-01e", date:"11/1", title:"이름 선택 글자 수정", tabs:["home"], items:["이름 선택 화면의 '지사 관리'를 '부서장'으로 변경"]},
  {id:"2026-11-01d", date:"11/1", title:"이름 선택 화면 정리", tabs:["home"], items:["그룹장을 지사장 옆으로 옮기고 '서비스 그룹장 · 서울CS지원'으로 표기"]},
  {id:"2026-11-01c", date:"11/1", title:"위험예지 월 목표 동기화", tabs:["rep"], items:["취합건 연동 › 위험예지 월 목표를 20건 → 10건으로 수정","위험예지 앱에서 월 목표를 바꾸면 이 화면도 앱을 열 때 자동으로 따라가요"]},
