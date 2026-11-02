@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261102065905">
+<meta name="bsr-ver" content="20261102070826">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2602,7 +2602,7 @@ function csSt(sent,resp){ var r=resp/sent*100; return resp===0?["미제출","bad
 function viewCs(){
   var keys = Object.keys(CSD).sort(), cur = state.cd && CSD[state.cd] ? state.cd : keys[keys.length-1], d = CSD[cur];
   var rate = d.resp/d.sent*100;
-  var prevK = keys.filter(function(k){return k<cur && k.slice(0,7)===cur.slice(0,7)}).pop(), pv = prevK?CSD[prevK]:null;
+  var prevK = keys.filter(function(k){return k<cur && String(CSD[k].period||"").slice(0,10)===String(d.period||"").slice(0,10)}).pop(), pv = prevK?CSD[prevK]:null;
   var people = d.p.filter(function(x){return CS_MGR.indexOf(x[0])<0}).map(function(x){ var st=csSt(x[2],x[3]); return {name:x[0],job:x[1],sent:x[2],resp:x[3],rate:x[3]/x[2]*100,sat:x[3]?(x[4]||10):null,st:st[0],cls:st[1]}; });
   var order = ["미제출","개선필요","양호","우수"];
   var jf = state.cj||"서비스", sf = state.cf||"all";
@@ -2640,7 +2640,7 @@ function viewCs(){
   var sChips = [["all","전체"]].concat(order.map(function(k){return [k,k+" "+cntSt[k]]})).map(function(l){
     return '<button type="button" class="chip" data-cf="'+l[0]+'" aria-pressed="'+(sf===l[0])+'">'+l[1]+'</button>'; }).join("");
   var shown = people.filter(function(p){ return (jf==="all"||p.job===jf) && (sf==="all"||p.st===sf); });
-  var hasDet = cur.slice(0,7)==="2026-10", dd = cur.slice(5);
+  var hasDet = cur.slice(0,7)>="2026-10", dd = cur.slice(5);   /* 건별 상세(CSR)는 10/1부터 누적 */
   var rows = shown.map(function(p){
     var open = state.cx===p.name;
     var det = '';
@@ -3275,6 +3275,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-02c", date:"11/2", title:"고객체감 건별 내역 수정", tabs:["cs"], items:["11월 기준일에서도 사원별 건별 내역(새 발송·응답)이 보이도록 수정","응답률 변화(직전 기준일 대비)도 10/30과 비교해 표시"]},
  {id:"2026-11-02b", date:"11/2", title:"고객체감 11/2 반영", tabs:["cs"], items:["📞 고객체감 11/2 기준 — 새 발송 5건 추가 (발송 180건 · 응답 57건 · 만족도 9.98)","새 응답: 이재식(신**) · 권재원(스타벅스태릉입구DT점) 10점 칭찬"]},
  {id:"2026-11-02a", date:"11/2", title:"월별 평가 첫 화면", tabs:["eval"], items:["월별 평가 탭을 열면 종합 평가 · 하반기 누계가 먼저 보여요"]},
  {id:"2026-11-01e", date:"11/1", title:"이름 선택 글자 수정", tabs:["home"], items:["이름 선택 화면의 '지사 관리'를 '부서장'으로 변경"]},
