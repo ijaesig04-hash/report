@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261103021303">
+<meta name="bsr-ver" content="20261103022517">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -4376,7 +4376,7 @@ document.addEventListener("click", function(e){
 });
 
 /* ===== 📲 업데이트 알림 받기 — 앱이 꺼져 있어도 새 업데이트가 반영되면 폰 알림으로 알려 줌 (웹 푸시) ===== */
-var PUSH_URL = "";   /* 구독자 보관함(Apps Script) 주소 — 연결 전에는 비어 있음 */
+var PUSH_URL = "https://script.google.com/macros/s/AKfycbyt-K4hxHqIMqh7bbAcbmKj3p52Fge_UApOc654a9FURic0FhjkWvw0hUR78_OaW9Z8tg/exec";   /* 구독자 보관함(Apps Script) 주소 — 연결 전에는 비어 있음 */
 var PUSH_KEY = "BISelgijsM7N7JBWRaoIkDpOkkH1u2zEBRW2wM2fEwpv6vI7dqGJLPN_FiEg8Jcng7a-ZKEVO3Ls08nHSbS15Zs";
 function pushB64(k){ var p='='.repeat((4-k.length%4)%4), b=(k+p).replace(/-/g,'+').replace(/_/g,'/'), r=atob(b), o=new Uint8Array(r.length); for(var i=0;i<r.length;i++) o[i]=r.charCodeAt(i); return o; }
 function pushSend(sub){
