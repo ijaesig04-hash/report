@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261103004019">
+<meta name="bsr-ver" content="20261103015700">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3277,6 +3277,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+{id:"2026-11-03e", date:"11/3", title:"아이콘 뱃지 점검", tabs:["home"], items:["🔔 이름표 메뉴 → 「아이콘 뱃지 점검」 — 이 폰에서 업데이트 뱃지가 되는지(설치 방식·알림·자동 확인)를 확인하고 시험 뱃지를 띄워 볼 수 있어요"]},
 {id:"2026-11-03d", date:"11/3", title:"다발보 월별 보기", tabs:["alm"], items:["🔁 다발보를 월별로 나눠 보여줘요 — 지금은 11월 건만 먼저 보이고, 위쪽 월 버튼으로 10월 등 지난달을 볼 수 있어요","관리자 할 일·결산 보고서의 다발보 집계도 이번 달 기준으로 바뀌었어요"]},
 {id:"2026-11-03c", date:"11/3", title:"운전성향 11/3 반영", tabs:["drv"], items:["🚗 운전성향 11/3 기준 — 11월 첫 집계 (주의: 유영민 · 김민수 · 김동현)"]},
 {id:"2026-11-03b", date:"11/3", title:"다발보 11/3 반영", tabs:["alm"], items:["🔁 다발보 11/3 기준 — 새 발보 2건 추가 (28호 슈퍼마켓)"]},
@@ -4373,6 +4374,32 @@ document.addEventListener("click", function(e){
     nrCopy(t); return; }
 });
 
+/* ===== 🔔 아이콘 뱃지 점검 — 이 폰에서 업데이트 뱃지가 왜 안 뜨는지 확인 ===== */
+function badgeCheck(){
+  var rows=[], add=function(ok,t,d){ rows.push('<div class="mgc'+(ok?' on':'')+'"><div class="mgc-t"><b>'+(ok?'✅ ':'⚠️ ')+t+'</b><small>'+d+'</small></div></div>'); };
+  var st = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+  add(!!st,'앱으로 설치됨', st?'홈 화면 앱으로 열려 있어요':'브라우저 탭으로 열려 있어요 — 크롬 메뉴 ⋮ → 「앱 설치」(또는 홈 화면에 추가)로 설치한 아이콘으로 열어야 뱃지가 돼요');
+  var sup = ('setAppBadge' in navigator);
+  add(sup,'뱃지 기능 지원', sup?'이 폰 브라우저는 아이콘 뱃지를 지원해요':'이 폰·브라우저는 아이콘 뱃지를 지원하지 않아요 (삼성 인터넷 등)');
+  var np = window.Notification ? Notification.permission : '없음';
+  add(np==="granted",'알림 허용', np==="granted"?'허용됨':'알림을 허용해야 안드로이드가 뱃지를 보여줄 수 있어요 (지금: '+np+')');
+  var done = function(txt, ok){
+    add(ok,'백그라운드 확인', txt);
+    openSheet('<div class="xs-h"><b>🔔 아이콘 뱃지 점검</b><button type="button" data-xs="close">✕</button></div>'+rows.join('')+
+      (sup?'<button type="button" class="mg-b" data-bdgtest="1">🔴 지금 아이콘에 1 띄워 보기 (10초)</button>':'')+
+      (np==="default"?'<button type="button" class="mg-b" data-bdgperm="1">🔔 알림 허용하기</button>':'')+
+      '<p class="note">뱃지는 앱이 꺼져 있을 때 폰이 12시간 이상 간격으로 새 버전을 확인해서 붙여요. 바로 뜨지는 않아요.</p>'); };
+  if(!navigator.serviceWorker){ done('서비스워커를 쓸 수 없어요',false); return; }
+  navigator.serviceWorker.ready.then(function(reg){
+    if(!reg.periodicSync) return done('이 폰은 앱이 꺼져 있을 때의 자동 확인을 지원하지 않아요 — 앱을 열었을 때만 새 버전을 받아요',false);
+    return reg.periodicSync.getTags().then(function(t){ var on=t.indexOf("bsr-upd")>=0; done(on?'등록됨 — 폰이 알아서 확인해요 (보통 하루 1~2번)':'아직 등록 안 됨 — 설치한 앱으로 며칠 쓰면 폰이 허용해요',on); });
+  }).catch(function(){ done('확인하지 못했어요',false); });
+}
+document.addEventListener("click", function(e){
+  if(e.target.closest("[data-bdgtest]")){ try{ navigator.setAppBadge(1).then(function(){ nrToast('🔴 홈 화면 아이콘을 확인하세요 (10초 뒤 지워져요)'); setTimeout(function(){ try{ navigator.clearAppBadge(); }catch(x){} },10000); }).catch(function(){ nrToast('뱃지를 붙이지 못했어요'); }); }catch(x){ nrToast('뱃지를 붙이지 못했어요'); } }
+  else if(e.target.closest("[data-bdgperm]")){ try{ Notification.requestPermission().then(function(){ badgeCheck(); }); }catch(x){} }
+});
+
 /* ===== 🧮 내 점수 계산기 — 사업팀 하반기 배점(CS사원)으로 '올리기 쉬운 항목' 계산 (추정) ===== */
 var CALC_W = [5,7,3,4,null];   /* 불필요·발보율·25분·체감 배점 · 일괄은 사업팀 항목 아님 */
 function calcFor(who){
@@ -5121,7 +5148,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="bdg">🔔 아이콘 뱃지 점검</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
@@ -5345,7 +5372,7 @@ document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contain
 menu.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return; menu.hidden = true;
   var a = b.dataset.vl;
-  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ notiList(); } else if(a==="find"){ findView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
+  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="bdg"){ badgeCheck(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ notiList(); } else if(a==="find"){ findView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
 });
 ov.addEventListener("click", function(e){
   var n = e.target.closest("[data-nm]");
