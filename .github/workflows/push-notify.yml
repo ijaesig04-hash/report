@@ -5,7 +5,7 @@ on:
     paths: [index.html]
   workflow_dispatch:
     inputs:
-      force:1
+      force:
         description: "소식이 같아도 시험 발송(1)"
         default: "0"
 permissions:
