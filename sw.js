@@ -48,3 +48,19 @@ function checkUpd(){
   }).catch(function(){});
 }
 self.addEventListener("periodicsync",function(e){ if(e.tag==="bsr-upd") e.waitUntil(checkUpd()); });
+
+/* ===== 업데이트 푸시 알림 (앱이 꺼져 있어도 서버가 보내는 알림) ===== */
+self.addEventListener("push",function(e){
+  var d={}; try{ d=e.data?e.data.json():{}; }catch(x){}
+  e.waitUntil(Promise.all([
+    self.registration.showNotification(d.title||"북서울 Report 업데이트",{body:d.body||"새 내용이 반영되었어요",tag:d.tag||"bsr-upd",icon:"icon-192.png",badge:"badge-96.png",renotify:true}),
+    self.registration.setAppBadge?self.registration.setAppBadge(1).catch(function(){}):0
+  ]));
+});
+self.addEventListener("notificationclick",function(e){
+  e.notification.close();
+  e.waitUntil(self.clients.matchAll({type:"window",includeUncontrolled:true}).then(function(ws){
+    for(var i=0;i<ws.length;i++){ if(ws[i].focus){ ws[i].navigate&&ws[i].navigate(home()+"?t="+Date.now()); return ws[i].focus(); } }
+    return self.clients.openWindow(home()+"?t="+Date.now());
+  }));
+});

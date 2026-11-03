@@ -1,0 +1,25 @@
+name: 업데이트 알림 보내기
+on:
+  push:
+    branches: [main]
+    paths: [index.html]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "소식이 같아도 시험 발송(1)"
+        default: "0"
+permissions:
+  contents: read
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 2 }
+      - run: pip install pywebpush
+      - run: python3 .github/scripts/push.py
+        env:
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          PUSH_URL: ${{ secrets.PUSH_URL }}
+          PUSH_SECRET: ${{ secrets.PUSH_SECRET }}
+          FORCE: ${{ github.event.inputs.force }}
