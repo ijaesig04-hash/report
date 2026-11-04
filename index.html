@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261104181253">
+<meta name="bsr-ver" content="20261104201653">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -818,6 +818,7 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .nv-ok{background:#e7f7ee;color:#137a3f;border-radius:12px;padding:11px;text-align:center;font-weight:800;font-size:14px}
 .nv-hint{margin:0;font-size:12px;color:#64748b;text-align:center}
 .dh{display:grid;gap:10px}
+.mxst.ldb{display:inline-block;margin-left:5px;font-size:.72em;font-weight:800;line-height:1.5;padding:0 7px;border-radius:999px;vertical-align:middle;white-space:nowrap;letter-spacing:0}.mxst.ldb.sal{background:#fff1e6;color:#9a3412;border:1px solid #fdba8c}.mxst.ldb.tec{background:#e7f8f1;color:#0b5e47;border:1px solid #86d9b9}
 .ntre{display:block;width:100%;margin-top:8px;font:inherit;font-weight:700;font-size:13px;border:1px solid #f5c26b;background:#fff8eb;color:#8a4b00;border-radius:10px;padding:9px;cursor:pointer}
 .hp-c{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}.hp-c button{font:inherit;font-size:12.5px;font-weight:700;border:1px solid #dbe3f3;background:#fff;border-radius:999px;padding:5px 12px;cursor:pointer}.hp-c button[aria-pressed="true"]{background:#16306b;color:#fff;border-color:#16306b}
 .hp-i{border:1px solid #e2e8f0;border-radius:12px;margin:6px 0;background:#fff}.hp-i summary{cursor:pointer;padding:10px 12px;font-weight:700;font-size:14px;list-style:none;display:flex;gap:8px;align-items:center}.hp-i summary::-webkit-details-marker{display:none}
@@ -3382,16 +3383,16 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
- {id:"2026-11-05a", date:"11/5", title:"영업 · 기술 팀장 표시", tabs:["home"], items:["이름 고르기에 최영국 영업팀장 · 박정훈 기술팀장 표시 — 팀장은 공지 확인 집계와 칭찬 순위에서 빠져요"]},
- {id:"2026-11-04i", date:"11/4", title:"도움말 · OJT 진도표 · 공지 다시 알림", tabs:["home"], items:["💡 현장 도움말 — 앱 사용 · 현장 업무(비밀번호 지침 · 출동료 청구 · 조치 입력) · 지표 설명을 검색해서 바로 봐요 (이름표 메뉴)","🎓 OJT 진도표 — OJT 직원별 배울 항목을 본인 · 동승자 · 관리자가 체크하고 진도를 같이 봐요","🔔 관리자 — 공지 미확인자에게만 폰 알림을 다시 보낼 수 있어요"]},
- {id:"2026-11-04h", date:"11/4", title:"칭찬 · 위험 고객처 · 개시 체크 · 고객처 한눈에", tabs:["home"], items:["🎉 칭찬 모아보기 — 전 부서 고객 칭찬을 부서별로 모아 봐요 (영업 · 기술 직원도 칭찬 도착 알림)","⚠️ 불만 위험 고객처 — 발보 반복 · 미조치 · 해피콜 8점 이하 고객처를 위험도 순으로","✅ 개시 방문 체크리스트 — 비밀번호 지침 5개 항목을 체크하고 완료하면 관리자에게 기록","🔍 고객처 한눈에 보기 — 다발보 · 해피콜 · 칭찬 · 조치 내용을 한 번에 (이름표 메뉴)"]},
- {id:"2026-11-04g", date:"11/4", title:"영업 · 기술 부서 함께 쓰기", tabs:["home"], items:["💼🔧 이름 고르기에 영업 · 기술 직원 추가 — 고르면 부서 첫 화면(내 해피콜 발송·응답·만족도 · 건별 결과 · 부서별 비교)이 먼저 열려요","📢 공지 · 교육 보내기에서 보낼 부서(전 부서 · 서비스 · 영업 · 기술)를 고를 수 있고, 확인 현황도 그 부서 인원으로 집계해요"]},
- {id:"2026-11-04f", date:"11/4", title:"알림 숫자 정리", tabs:["home"], items:["📲 폰 알림을 하나씩 지우지 않아도, 앱에서 그 소식이 있는 탭을 열면 해당 알림이 자동으로 지워지고 아이콘 숫자도 줄어들어요"]},
- {id:"2026-11-04e", date:"11/4", title:"공지 확인자 표시", tabs:["home"], items:["📢 관리자 — 공지 확인 현황에 미확인자뿐 아니라 확인한 직원 이름도 함께 표시 (✅ 확인 · ⏳ 미확인)"]},
- {id:"2026-11-04d", date:"11/4", title:"지표 11/4 업데이트", tabs:["cmp","veh","ppl","mgt","alm"], items:["📊 11/4 기준(11월 첫 집계) 지사별·차량별·개인별·관리지표 반영 — 북서울 지사 5개 항목 모두 달성 (불필요 111% · 발보 111% · 25분↑ 102% · 체감 110% · 당사일괄 127%)","⏱️ 25분초과 11.01~11.04 — 초과 2건 / 출동 50건 · 김태건 1건 · 남현준 1건","남현준 개인별 지표 추가 · 근무 전인 김지원·이명섭은 집계 없음"]},
- {id:"2026-11-04c", date:"11/4", title:"🔐 비밀번호 지침 공지 자료", tabs:["home"], items:["영상기기 비밀번호 설정·관리 지침(10/27)과 VOC 처리내용 RISK포인트 안내(11/2)를 한 자료로 정리 — 공지 보내기 → 자료 첨부에서 선택","핵심: 고객이 직접 설정 · 직원 임의 설정 금지 · VOC에 비밀번호 기재·전달 금지 (11/3 이후 발생 건부터 RISK포인트 1등급)"]},
- {id:"2026-11-04b", date:"11/4", title:"운전성향 11/4 반영", tabs:["drv"], items:["🚗 운전성향 11/4 기준 — 주의: 김태건(22건, 하루 평균 7.3) · 김민수(13건, 6.5) · 나머지 양호","유영민·김동현은 양호로 회복 (김지원·이명섭은 근무 전이라 집계 없음)"]},
- {id:"2026-11-04a", date:"11/4", title:"고객체감 11/4 반영", tabs:["cs"], items:["📞 고객체감 11/4 기준 — 새 발송 9건 추가 (발송 197건 · 응답 58건 · 만족도 9.98)","새 응답: 김민수(신한은행노원역) 10점 칭찬"]},
+ {id:"2026-11-05a", only:"이재식", date:"11/5", title:"영업 · 기술 팀장 표시", tabs:["home"], items:["이름 고르기에 최영국 영업팀장 · 박정훈 기술팀장 표시 — 팀장은 공지 확인 집계와 칭찬 순위에서 빠져요"]},
+ {id:"2026-11-04i", only:"이재식", date:"11/4", title:"도움말 · OJT 진도표 · 공지 다시 알림", tabs:["home"], items:["💡 현장 도움말 — 앱 사용 · 현장 업무(비밀번호 지침 · 출동료 청구 · 조치 입력) · 지표 설명을 검색해서 바로 봐요 (이름표 메뉴)","🎓 OJT 진도표 — OJT 직원별 배울 항목을 본인 · 동승자 · 관리자가 체크하고 진도를 같이 봐요","🔔 관리자 — 공지 미확인자에게만 폰 알림을 다시 보낼 수 있어요"]},
+ {id:"2026-11-04h", only:"이재식", date:"11/4", title:"칭찬 · 위험 고객처 · 개시 체크 · 고객처 한눈에", tabs:["home"], items:["🎉 칭찬 모아보기 — 전 부서 고객 칭찬을 부서별로 모아 봐요 (영업 · 기술 직원도 칭찬 도착 알림)","⚠️ 불만 위험 고객처 — 발보 반복 · 미조치 · 해피콜 8점 이하 고객처를 위험도 순으로","✅ 개시 방문 체크리스트 — 비밀번호 지침 5개 항목을 체크하고 완료하면 관리자에게 기록","🔍 고객처 한눈에 보기 — 다발보 · 해피콜 · 칭찬 · 조치 내용을 한 번에 (이름표 메뉴)"]},
+ {id:"2026-11-04g", only:"이재식", date:"11/4", title:"영업 · 기술 부서 함께 쓰기", tabs:["home"], items:["💼🔧 이름 고르기에 영업 · 기술 직원 추가 — 고르면 부서 첫 화면(내 해피콜 발송·응답·만족도 · 건별 결과 · 부서별 비교)이 먼저 열려요","📢 공지 · 교육 보내기에서 보낼 부서(전 부서 · 서비스 · 영업 · 기술)를 고를 수 있고, 확인 현황도 그 부서 인원으로 집계해요"]},
+ {id:"2026-11-04f", only:"이재식", date:"11/4", title:"알림 숫자 정리", tabs:["home"], items:["📲 폰 알림을 하나씩 지우지 않아도, 앱에서 그 소식이 있는 탭을 열면 해당 알림이 자동으로 지워지고 아이콘 숫자도 줄어들어요"]},
+ {id:"2026-11-04e", only:"이재식", date:"11/4", title:"공지 확인자 표시", tabs:["home"], items:["📢 관리자 — 공지 확인 현황에 미확인자뿐 아니라 확인한 직원 이름도 함께 표시 (✅ 확인 · ⏳ 미확인)"]},
+ {id:"2026-11-04d", only:"이재식", date:"11/4", title:"지표 11/4 업데이트", tabs:["cmp","veh","ppl","mgt","alm"], items:["📊 11/4 기준(11월 첫 집계) 지사별·차량별·개인별·관리지표 반영 — 북서울 지사 5개 항목 모두 달성 (불필요 111% · 발보 111% · 25분↑ 102% · 체감 110% · 당사일괄 127%)","⏱️ 25분초과 11.01~11.04 — 초과 2건 / 출동 50건 · 김태건 1건 · 남현준 1건","남현준 개인별 지표 추가 · 근무 전인 김지원·이명섭은 집계 없음"]},
+ {id:"2026-11-04c", only:"이재식", date:"11/4", title:"🔐 비밀번호 지침 공지 자료", tabs:["home"], items:["영상기기 비밀번호 설정·관리 지침(10/27)과 VOC 처리내용 RISK포인트 안내(11/2)를 한 자료로 정리 — 공지 보내기 → 자료 첨부에서 선택","핵심: 고객이 직접 설정 · 직원 임의 설정 금지 · VOC에 비밀번호 기재·전달 금지 (11/3 이후 발생 건부터 RISK포인트 1등급)"]},
+ {id:"2026-11-04b", only:"이재식", date:"11/4", title:"운전성향 11/4 반영", tabs:["drv"], items:["🚗 운전성향 11/4 기준 — 주의: 김태건(22건, 하루 평균 7.3) · 김민수(13건, 6.5) · 나머지 양호","유영민·김동현은 양호로 회복 (김지원·이명섭은 근무 전이라 집계 없음)"]},
+ {id:"2026-11-04a", only:"이재식", date:"11/4", title:"고객체감 11/4 반영", tabs:["cs"], items:["📞 고객체감 11/4 기준 — 새 발송 9건 추가 (발송 197건 · 응답 58건 · 만족도 9.98)","새 응답: 김민수(신한은행노원역) 10점 칭찬"]},
  {id:"2026-11-03g", date:"11/3", title:"10월 마감 지표 반영", tabs:["cmp","veh","ppl","mgt","alm"], items:["📊 10/31 기준 10월 마감 — 지사별·차량별·개인별·관리지표 반영","⏱️ 25분초과 10.01~10.31 — 초과 9건 / 출동 445건 (2.0%) · 김민석 3건 · 박수안 2건 · 남현준·권재원·김동현·유영민 각 1건"]},
 {id:"2026-11-03f", date:"11/3", title:"업데이트 알림 받기", tabs:["home"], items:["📲 이름표 메뉴 → 「업데이트 알림 받기」 — 새 지표가 반영되면 앱이 꺼져 있어도 폰 알림으로 알려 드려요 (설치한 앱에서 한 번만 켜세요)"]},
 {id:"2026-11-03e", date:"11/3", title:"아이콘 뱃지 점검", tabs:["home"], items:["🔔 이름표 메뉴 → 「아이콘 뱃지 점검」 — 이 폰에서 업데이트 뱃지가 되는지(설치 방식·알림·자동 확인)를 확인하고 시험 뱃지를 띄워 볼 수 있어요"]},
@@ -3523,12 +3524,15 @@ var NEWS = [
  {id:"2026-10-19a", date:"10/19", title:"리포트 새 단장", tabs:["duty","drv","cs","cmp","mgt"],
   items:["근무표 탭 신설 (6~11월, 근태 리뷰·OJT)","운전성향 탭 신설 (6~10월 추이)","고객체감 전 부서·날짜별 자료로 확대","지사별·고객체감·관리지표 상단 요약 카드"]}
 ];
+/* only: 표시된 소식은 그 사람만 봄 (이재식 전용 업데이트 내역) */
+var NEWS_ALL = NEWS.slice();
+try{ (function(){ var me = localStorage.getItem("bsr_me")||""; NEWS = NEWS.filter(function(n){ return !n.only || n.only===me; }); })(); }catch(e){ NEWS = NEWS.filter(function(n){ return !n.only; }); }
 /*NEWS_END*/
 var TABNAME = {home:"브리핑",cmp:"지사별",veh:"차량별",ppl:"개인별",eval:"월별 평가",cs:"고객체감",alm:"발보관리",mgt:"관리지표",duty:"근무표",drv:"운전성향",rep:"취합건 연동"};
 /* 자료가 새로 들어오면 업데이트 이력·N 표시를 자동으로 만듦 (직접 적은 이력이 있으면 그것을 우선) */
 (function autoNews(){
   function md(k){ return (+k.slice(5,7))+"/"+(+k.slice(8,10)); }
-  function has(t,d){ return NEWS.some(function(n){ return n.date===d && n.tabs.indexOf(t)>=0; }); }
+  function has(t,d){ return NEWS_ALL.some(function(n){ return n.date===d && n.tabs.indexOf(t)>=0; }); }
   var add = [];
   try{ var ck = Object.keys(CSD).sort().pop(), c = CSD[ck], d1 = md(ck);
     if(!has("cs",d1)) add.push({id:"auto-cs-"+ck, date:d1, title:"고객체감 "+d1+" 반영", tabs:["cs"], items:["고객체감 "+c.period+" 기준 업데이트 (발송 "+c.sent+"건 · 응답 "+c.resp+"건 · 응답률 "+(c.resp/c.sent*100).toFixed(1)+"%)"]}); }catch(e){}
@@ -4084,14 +4088,18 @@ function mxStarMap(){
 function mxStars(n){ var c = mxStarMap()[n]||0; return c ? (c<=3 ? new Array(c+1).join('⭐') : '⭐'+c) : ''; }
 var MX_SQ = false;
 function mxStarFix(){
-  MX_SQ = false; try{ mxCongrats(); }catch(_){} var map = mxStarMap(), names = Object.keys(map); if(!names.length) return;
+  MX_SQ = false; try{ mxCongrats(); }catch(_){} var map = mxStarMap(), LB = {};
+  if(typeof DEPT_LEAD!=="undefined") Object.keys(DEPT_LEAD).forEach(function(k){ LB[DEPT_LEAD[k]] = k; });
+  var names = Object.keys(map).concat(Object.keys(LB).filter(function(n){return !(n in map)})); if(!names.length) return;
   var re = new RegExp('^(?:[👑⭐👨‍💻🏆 ]*)('+names.join('|')+')(님)?$');
   document.querySelectorAll("#view *, #xsheet *, #vlin *, #mechip").forEach(function(el){
     if(/^(OPTION|SELECT|INPUT|TEXTAREA|SCRIPT|STYLE|BUTTON)$/.test(el.tagName) && el.tagName!=="BUTTON" || el.closest("select,option,textarea,.fc-in")) return;   /* 입력칸·선택상자 안에는 별을 넣지 않음 (값이 바뀌어 오작동) */
     if(el.querySelector(':scope > .mxst')) return;
     var t = ''; for(var c=el.firstChild;c;c=c.nextSibling){ if(c.nodeType===3) t += c.nodeValue; } t = t.trim(); if(!t) return;
     var m = t.match(re); if(!m) return;
-    var sp = document.createElement('span'); sp.className = 'mxst'; sp.textContent = mxStars(m[1]); sp.title = 'MVP '+map[m[1]]+'회';
+    var sp = document.createElement('span');
+    if(LB[m[1]]){ if(el.closest('.vl-n')) return; sp.className = 'mxst ldb '+(LB[m[1]]==="영업"?'sal':'tec'); sp.textContent = (LB[m[1]]==="영업"?'💼 ':'🔧 ')+LB[m[1]]+'팀장'+(map[m[1]]?' '+mxStars(m[1]):''); }
+    else { sp.className = 'mxst'; sp.textContent = mxStars(m[1]); sp.title = 'MVP '+map[m[1]]+'회'; }
     var tn = null; for(var c2=el.firstChild;c2;c2=c2.nextSibling){ if(c2.nodeType===3 && c2.nodeValue.indexOf(m[1])>=0) tn = c2; }
     if(tn) el.insertBefore(sp, tn.nextSibling); else el.appendChild(sp);
   });
@@ -5665,7 +5673,7 @@ function adminExtra(rows, now, pinFail){
   var firstT = {};
   rows.forEach(function(r){ if(kst(r[0]).day!==t.day) return; if(!(r[1] in firstT) || r[0]<firstT[r[1]]) firstT[r[1]]=r[0]; });
   var order = Object.keys(firstT).sort(function(a,b){ return firstT[a]-firstT[b]; });
-  out = '<div class="vl-card vlw"><h3>🕘 오늘 접속 순서<small>'+t.md+' · '+order.length+'명</small></h3>'+(order.length?'<div class="vlw-t">'+order.map(function(n){ return '<span>'+kst(firstT[n]).hm+' <i>'+esc(n)+'</i></span>'; }).join('')+'</div>':'<div class="vl-row">아직 접속한 사람이 없어요</div>')+'</div>'+out;
+
   /* 관리자·타부서·직접 입력 접속 이력 */
   var EXT = rows.filter(function(r){ var n=r[1]; return n==="지사장" || n==="그룹장" || n==="타부서" || ALL.indexOf(n)<0; });
   var ec = {}; EXT.forEach(function(r){ ec[r[1]]=(ec[r[1]]||0)+1; });
@@ -5695,7 +5703,6 @@ function adminView(rows){
   var h = '<div class="vl-hero"><button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button><small>ADMIN · '+kst(now).md+' '+kst(now).hm+'</small><h2>🔒 접속 현황</h2><p>직원 '+ALL.length+'명 기준 · 최근 7일</p></div>';
   h += '<div class="vl-k"><div><span>오늘 접속</span><b>'+tCnt+'</b></div><div class="ng"><span>오늘 미접속</span><b>'+miss.length+'</b></div><div><span>최근 7일</span><b>'+Object.keys(wk).length+'</b></div></div>';
   h += vlWeek(rows, now) + vlInstall(rows) + adminExtra(rows, now, pinFail);
-  h += '<div class="vl-card"><h3>오늘 미접속<small>'+kst(now).md+'</small></h3>'+(miss.length?miss.map(function(n){ var l=last[n]; return '<div class="vl-row"><span class="vl-dot off"></span>'+n+'<em>'+(l?'마지막 '+kst(l).md+' '+kst(l).hm:'기록 없음')+'</em></div>'; }).join(''):'<div class="vl-row">모두 접속했습니다 👍</div>')+'</div>';
   var byDay = {}; rows.forEach(function(r){ var d=kst(r[0]).day; (byDay[d]=byDay[d]||[]).push(r); });
   var dKeys = Object.keys(byDay).sort().reverse();
   h += '<div class="vl-card"><h3>접속 기록<small>최근 35일 · 날짜를 누르면 펼침</small></h3>'+(dKeys.length?dKeys.map(function(d,i){ var rs=byDay[d], t0=kst(rs[0][0]), ppl={}; rs.forEach(function(r){ppl[r[1]]=1});

@@ -3,8 +3,13 @@ import json, os, re, subprocess, sys, urllib.parse, urllib.request
 from pywebpush import webpush, WebPushException
 
 def top(html):
-    m = re.search(r'NEWS\s*=\s*\[\s*\{id:"([^"]+)"[^}]*?title:"([^"]*)"', html or '')
-    return (m.group(1), m.group(2)) if m else (None, '')
+    """맨 위 소식 — only:(특정 사람 전용) 소식은 알림에서 제외"""
+    html = html or ''
+    i = html.find('NEWS = ['); j = html.find('/*NEWS_END*/', i)
+    for m in re.finditer(r'\{id:"([^"]+)"(,\s*only:"[^"]*")?[^}]*?title:"([^"]*)"', html[i:j] if i >= 0 else ''):
+        if not m.group(2):
+            return (m.group(1), m.group(3))
+    return (None, '')
 
 def git(*a):
     r = subprocess.run(['git', *a], capture_output=True, text=True)
@@ -13,7 +18,7 @@ def git(*a):
 new = top(open('index.html', encoding='utf-8').read())
 old = top(git('show', 'HEAD~1:index.html'))
 force = os.environ.get('FORCE') == '1'
-if not new[0] or (new[0] == old[0] and not force):
+if not new[0] or ((old[0] and new[0] <= old[0]) and not force):   # 더 새로운 소식일 때만
     print('새 소식 없음 — 알림 안 보냄', new, old); sys.exit(0)
 url, key = os.environ.get('PUSH_URL', ''), os.environ.get('PUSH_SECRET', '')
 if not url or not key:
