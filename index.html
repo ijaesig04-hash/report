@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261104205907">
+<meta name="bsr-ver" content="20261104210540">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -5988,10 +5988,10 @@ function ncParse(x){
 }
 function staffOnly(){ return (window.BSR_ALL||[]).filter(function(n){return CS_MGR.indexOf(n)<0}); }
 /* 공지 대상 — 표시 없음(예전 공지)은 서비스 직원 기준으로 확인 집계, 화면은 모두에게 보임 */
-function notiAud(x){ var tg = ncParse(x).tg; var nl = function(L){ return L.filter(function(n){return !isLead(n)}); };
+function notiAud(x){ var tg = notiTg(x); var nl = function(L){ return L.filter(function(n){return !isLead(n)}); };
   if(tg==="영업"||tg==="기술") return nl(DEPTS[tg]); if(tg==="전체") return staffOnly().concat(nl(DEPTS["영업"]),nl(DEPTS["기술"])); return staffOnly(); }
 /* 공지 부서 — 표시 없는 예전 공지는 경조사 = 전 부서, 그 외(차량사고 · 업무공지 등) = 서비스 */
-function notiTg(x){ var p = ncParse(x); return p.tg || (p.cat.k==="경조사" ? "전체" : "서비스"); }
+function notiTg(x){ var p = ncParse(x); if(p.cat.k==="차량사고") return "서비스"; if(p.cat.k==="경조사") return "전체"; return p.tg || "서비스"; }   /* 차량사고 = 항상 서비스, 경조사 = 항상 전 부서 */
 function notiMine(x){ var tg = notiTg(x); if(tg==="전체" || mgrIs()) return true; return deptOf()===tg; }
 function notiTgTag(x){ var tg = notiTg(x); return '<span class="ntg">→ '+(tg==="전체"?'전 부서':tg)+'</span>'; }
 function ackLine(id){
@@ -6074,7 +6074,8 @@ document.addEventListener("click", function(e){
       .catch(function(){ re.disabled=false; re.textContent = "⚠️ 보내지 못했어요 — 다시 누르기"; });
     return; }
   var ng = e.target.closest("[data-ntg]"); if(ng){ ng.parentNode.querySelectorAll("[data-ntg]").forEach(function(b){ b.setAttribute("aria-pressed", String(b===ng)); }); return; }
-  var nw = e.target.closest("[data-ncw]"); if(nw){ nw.parentNode.querySelectorAll("[data-ncw]").forEach(function(b){ b.setAttribute("aria-pressed", String(b===nw)); }); return; }
+  var nw = e.target.closest("[data-ncw]"); if(nw){ nw.parentNode.querySelectorAll("[data-ncw]").forEach(function(b){ b.setAttribute("aria-pressed", String(b===nw)); });
+    var auto = nw.dataset.ncw==="차량사고" ? "서비스" : nw.dataset.ncw==="경조사" ? "전체" : null; if(auto) document.querySelectorAll("[data-ntg]").forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.ntg===auto)); }); return; }
   var eq = e.target.closest("[data-edq]");
   if(eq){ var qb = eq.closest("[data-edqb]"); if(qb.dataset.done) return; qb.dataset.done = 1; var ans = +qb.dataset.edqb, os = qb.querySelectorAll("[data-edq]");
     if(+eq.dataset.edq===ans){ eq.classList.add("right"); qb.querySelector(".ed-fb").textContent = "정답. "+qb.dataset.edqe; }
