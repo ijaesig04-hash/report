@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261104204913">
+<meta name="bsr-ver" content="20261104205247">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -819,6 +819,8 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .nv-hint{margin:0;font-size:12px;color:#64748b;text-align:center}
 .dh{display:grid;gap:10px}
 html.dept-x [data-vl="open"]{display:none!important}
+.ndt{display:flex;gap:4px;margin:2px 0 10px;border-bottom:2px solid #e2e8f0;overflow-x:auto}.ndt button{font:inherit;font-size:13.5px;font-weight:700;border:0;background:none;color:#64748b;padding:8px 10px;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;cursor:pointer}
+.ndt button[aria-selected="true"]{color:#16306b;border-bottom-color:#1f4fd8}.ndt small{font-size:11px;color:#94a3b8;font-weight:700}
 .mxst.ldb{display:inline-block;margin-left:5px;font-size:.72em;font-weight:800;line-height:1.5;padding:0 7px;border-radius:999px;vertical-align:middle;white-space:nowrap;letter-spacing:0}.mxst.ldb.sal{background:#fff1e6;color:#9a3412;border:1px solid #fdba8c}.mxst.ldb.tec{background:#e7f8f1;color:#0b5e47;border:1px solid #86d9b9}
 .ntre{display:block;width:100%;margin-top:8px;font:inherit;font-weight:700;font-size:13px;border:1px solid #f5c26b;background:#fff8eb;color:#8a4b00;border-radius:10px;padding:9px;cursor:pointer}
 .hp-c{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}.hp-c button{font:inherit;font-size:12.5px;font-weight:700;border:1px solid #dbe3f3;background:#fff;border-radius:999px;padding:5px 12px;cursor:pointer}.hp-c button[aria-pressed="true"]{background:#16306b;color:#fff;border-color:#16306b}
@@ -5988,8 +5990,10 @@ function staffOnly(){ return (window.BSR_ALL||[]).filter(function(n){return CS_M
 /* 공지 대상 — 표시 없음(예전 공지)은 서비스 직원 기준으로 확인 집계, 화면은 모두에게 보임 */
 function notiAud(x){ var tg = ncParse(x).tg; var nl = function(L){ return L.filter(function(n){return !isLead(n)}); };
   if(tg==="영업"||tg==="기술") return nl(DEPTS[tg]); if(tg==="전체") return staffOnly().concat(nl(DEPTS["영업"]),nl(DEPTS["기술"])); return staffOnly(); }
-function notiMine(x){ var tg = ncParse(x).tg; if(!tg || tg==="전체" || mgrIs()) return true; return deptOf()===tg; }
-function notiTgTag(x){ var tg = ncParse(x).tg; return tg && tg!=="전체" ? '<span class="ntg">→ '+tg+'</span>' : (tg==="전체"?'<span class="ntg">→ 전 부서</span>':''); }
+/* 공지 부서 — 표시 없는 예전 공지는 경조사 = 전 부서, 그 외(차량사고 · 업무공지 등) = 서비스 */
+function notiTg(x){ var p = ncParse(x); return p.tg || (p.cat.k==="경조사" ? "전체" : "서비스"); }
+function notiMine(x){ var tg = notiTg(x); if(tg==="전체" || mgrIs()) return true; return deptOf()===tg; }
+function notiTgTag(x){ var tg = notiTg(x); return '<span class="ntg">→ '+(tg==="전체"?'전 부서':tg)+'</span>'; }
 function ackLine(id){
   if(!(NOTI.acks && mgrIs())) return '';
   var x0 = NOTI.items.filter(function(i){return i.id===id})[0], ak = NOTI.acks[id]||[], all = x0 ? notiAud(x0) : staffOnly(), miss = all.filter(function(n){return ak.indexOf(n)<0});
@@ -6006,11 +6010,16 @@ function notiBanner(){
   return h+'</div>';
 }
 var NL_F = "";
+var NL_D = null;
 function notiList(f){
   if(f!==undefined) NL_F = f;
-  var me = myName(), items = NOTI.items.filter(function(x){ return !NL_F || ncParse(x).cat.k===NL_F; });
+  var my = deptOf(), DT = mgrIs() ? ["","전체","서비스","영업","기술"] : [my,"전체"];
+  var cnt = function(k){ return NOTI.items.filter(function(x){ return !k || notiTg(x)===k; }).length; };
+  if(DT.indexOf(NL_D)<0) NL_D = mgrIs() ? "" : (cnt(my) ? my : "전체");
+  var me = myName(), items = NOTI.items.filter(function(x){ return (!NL_D || notiTg(x)===NL_D) && (!NL_F || ncParse(x).cat.k===NL_F); });
   var used = NCAT.filter(function(c){ return NOTI.items.some(function(x){return ncParse(x).cat.k===c.k}); });
   var h = '<div class="xs-h"><b>📢 공지 · 교육</b><button type="button" data-xs="close">✕</button></div>';
+  h += '<div class="ndt" role="tablist">'+DT.map(function(k){ return '<button type="button" role="tab" data-ntd="'+k+'" aria-selected="'+(NL_D===k)+'">'+({"":"모두","전체":"🏢 전체 공지","서비스":"🚗 서비스","영업":"💼 영업","기술":"🔧 기술"})[k]+' <small>'+cnt(k)+'</small></button>'; }).join('')+'</div>';
   if(used.length>1) h += '<div class="ncf"><button type="button" data-ntf="" aria-pressed="'+(!NL_F)+'">전체</button>'+used.map(function(c){return '<button type="button" style="--nc:'+c.c+'" data-ntf="'+c.k+'" aria-pressed="'+(NL_F===c.k)+'">'+c.ic+' '+c.k+'</button>'}).join('')+'</div>';
   h += items.length ? items.map(function(x){ var p = ncParse(x), v = lsGet(notiAckKey(x.id)), ak = NOTI.acks && mgrIs() ? (NOTI.acks[x.id]||[]) : null, all = notiAud(x);
       var st = me ? (v ? '<span class="nli-st ok">✓ 확인</span>' : '<span class="nli-st">미확인</span>') : '';
@@ -6053,6 +6062,7 @@ document.addEventListener("click", function(e){
   var nv = e.target.closest("[data-ntv]"); if(nv){ notiView(nv.dataset.ntv); return; }
   if(e.target.closest("[data-ntl]")){ notiList(); return; }
   var nf = e.target.closest("[data-ntf]"); if(nf){ notiList(nf.dataset.ntf); return; }
+  var nd = e.target.closest("[data-ntd]"); if(nd){ NL_D = nd.dataset.ntd; NL_F = ""; notiList(); return; }
   var re = e.target.closest("[data-ntre]");
   if(re){ var rid = re.dataset.ntre, rx = NOTI.items.filter(function(i){return i.id===rid})[0]; if(!rx) return;
     var rak = (NOTI.acks&&NOTI.acks[rid])||[], rmiss = notiAud(rx).filter(function(n){return rak.indexOf(n)<0}); if(!rmiss.length) return;
