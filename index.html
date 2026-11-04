@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261104033806">
+<meta name="bsr-ver" content="20261104125900">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -817,6 +817,22 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .nv-f{margin-top:18px;border-top:1px solid #e3e9f3;padding-top:14px;display:flex;flex-direction:column;gap:8px}
 .nv-ok{background:#e7f7ee;color:#137a3f;border-radius:12px;padding:11px;text-align:center;font-weight:800;font-size:14px}
 .nv-hint{margin:0;font-size:12px;color:#64748b;text-align:center}
+.dh{display:grid;gap:10px}
+.dh-c{background:#fff;border:1px solid #dbe3f3;border-radius:16px;padding:12px 14px;color:#0f1b33}
+.dh-hero{background:linear-gradient(135deg,#16306b,#1f4fd8);color:#fff;border:0}
+.dh-hero.sal{background:linear-gradient(135deg,#7c2d12,#d9480f)}.dh-hero.tec{background:linear-gradient(135deg,#064e3b,#0b7a5c)}
+.dh-hero small{opacity:.85;font-size:12px}.dh-hero b{display:block;font-size:19px;margin-top:2px}
+.dh-h{font-weight:800;font-size:14.5px;margin:0 0 8px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}.dh-h small{font-weight:500;color:#64748b;font-size:11.5px}
+.dh-k{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.dh-k div{background:#f1f5fc;border-radius:10px;padding:8px 4px;text-align:center}
+.dh-k b{display:block;font-size:18px;font-variant-numeric:tabular-nums}.dh-k span{font-size:11px;color:#64748b}
+.dh-t{width:100%;border-collapse:collapse;font-size:13px}.dh-t td,.dh-t th{padding:6px 4px;border-bottom:1px solid #eef2f8;text-align:right;font-variant-numeric:tabular-nums}.dh-t th{font-size:11.5px;color:#64748b;font-weight:700}
+.dh-t td:first-child,.dh-t th:first-child{text-align:left}.dh-t tr.me td{font-weight:800;color:#1f4fd8}
+.dh-r{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid #eef2f8;font-size:13px}.dh-r:last-child{border-bottom:0}
+.dh-r span{min-width:0}.dh-r small{display:block;color:#64748b;font-size:11.5px}.dh-r em{font-style:normal;font-weight:700;white-space:nowrap}
+.dh-r em.ok{color:#0b7a5c}.dh-r em.no{color:#b45309}
+.dh-b{display:block;width:100%;font:inherit;font-weight:700;font-size:13.5px;border:1px solid #c7d4ee;background:#fff;color:#16306b;border-radius:12px;padding:10px;cursor:pointer}
+.dh-back{font:inherit;font-weight:700;font-size:13px;border:0;background:rgba(255,255,255,.9);color:#16306b;border-radius:10px;padding:8px 12px;margin-bottom:8px;cursor:pointer}
+.ntg{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:6px;background:#eef2fb;color:#16306b;margin-left:4px}
 .nv-st{margin:0;font-size:12.5px;color:#475569;background:#f1f5fc;border-radius:10px;padding:8px 10px;line-height:1.5}
 .ed{margin-top:14px;display:flex;flex-direction:column;gap:16px;color:#1e293b}
 .ed h4{margin:0 0 8px;font-size:14px;font-weight:900;color:#16264a;display:flex;align-items:center;gap:6px}
@@ -2662,6 +2678,9 @@ var CSR = [["박정훈", "기술", "10-08", "", "S/W점검", null, "", "", "기�
 /*CS_END*/
 /* 관리자(파트장)는 평가 대상 제외 — 미응답 알림·사원별 응답·칭찬 게시판·배지에서 뺌 */
 var CS_MGR = ["최문혁","이재식","지사장","서비스팀장"];
+/* 영업 · 기술 부서원 — 고객체감 자료의 직무 기준 (명단 바뀌면 여기만 고치면 됨) */
+var DEPTS = {"영업":["이수열","임영민","정문재","박광춘","최영국"], "기술":["박정훈","김상훈","박광모"]};
+function deptOf(n){ n = n||myName(); for(var k in DEPTS){ if(DEPTS[k].indexOf(n)>=0) return k; } return "서비스"; }
 
 var CS_JOBS = ["서비스","영업","기술","미지정"], CS_JC = {"서비스":"#2563eb","영업":"#ea580c","기술":"#059669","미지정":"#64748b"};
 var CS_RC = ["#2563eb","#ea580c","#10b981","#f59e0b","#ec4899","#8b5cf6"];
@@ -3344,6 +3363,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-04g", date:"11/4", title:"영업 · 기술 부서 함께 쓰기", tabs:["home"], items:["💼🔧 이름 고르기에 영업 · 기술 직원 추가 — 고르면 부서 첫 화면(내 해피콜 발송·응답·만족도 · 건별 결과 · 부서별 비교)이 먼저 열려요","📢 공지 · 교육 보내기에서 보낼 부서(전 부서 · 서비스 · 영업 · 기술)를 고를 수 있고, 확인 현황도 그 부서 인원으로 집계해요"]},
  {id:"2026-11-04f", date:"11/4", title:"알림 숫자 정리", tabs:["home"], items:["📲 폰 알림을 하나씩 지우지 않아도, 앱에서 그 소식이 있는 탭을 열면 해당 알림이 자동으로 지워지고 아이콘 숫자도 줄어들어요"]},
  {id:"2026-11-04e", date:"11/4", title:"공지 확인자 표시", tabs:["home"], items:["📢 관리자 — 공지 확인 현황에 미확인자뿐 아니라 확인한 직원 이름도 함께 표시 (✅ 확인 · ⏳ 미확인)"]},
  {id:"2026-11-04d", date:"11/4", title:"지표 11/4 업데이트", tabs:["cmp","veh","ppl","mgt","alm"], items:["📊 11/4 기준(11월 첫 집계) 지사별·차량별·개인별·관리지표 반영 — 북서울 지사 5개 항목 모두 달성 (불필요 111% · 발보 111% · 25분↑ 102% · 체감 110% · 당사일괄 127%)","⏱️ 25분초과 11.01~11.04 — 초과 2건 / 출동 50건 · 김태건 1건 · 남현준 1건","남현준 개인별 지표 추가 · 근무 전인 김지원·이명섭은 집계 없음"]},
@@ -3706,7 +3726,27 @@ function dutyOn(dstr){
 function kstDate(off){ return new Date(Date.now()+9*3600000+off*86400000).toISOString().slice(0,10); }
 
 /* 오늘의 브리핑 (지사별 탭 맨 위) */
-function viewHome(){ return brief(); }
+function viewHome(){ var d = deptOf(); if(d!=="서비스" && !state.dhs) return deptHome(d); return (d!=="서비스"?'<button type="button" class="dh-back" data-dhs="0">‹ '+d+' 첫 화면으로</button>':'')+brief(); }
+/* ===== 💼🔧 영업 · 기술 첫 화면 — 내 해피콜(고객체감) · 부서 비교 · 부서 공지 ===== */
+function deptHome(d){
+  var me = myName(), k = Object.keys(CSD).sort().pop(), S = CSD[k], rows = CSR.filter(function(r){return r[0]===me});
+  var rs = rows.filter(function(r){return r[5]!=null}), sat = rs.length ? Math.round(rs.reduce(function(a,r){return a+r[5]},0)/rs.length*100)/100 : null;
+  var md = function(x){ return (+x.slice(0,2))+'/'+(+x.slice(3)); };
+  var h = '<div class="dh">';
+  h += '<div class="dh-c dh-hero '+(d==="영업"?'sal':'tec')+'"><small>'+(d==="영업"?'💼':'🔧')+' 북서울지사 '+d+'</small><b>'+esc2(me)+'님, 안녕하세요</b><small>고객체감 '+esc2(S.period.replace('2026.',''))+' 누적 기준</small></div>';
+  h += '<div class="dh-c"><p class="dh-h">📞 내 고객체감 (해피콜) <small>'+d+' 접수분</small></p><div class="dh-k">'+
+    '<div><b>'+rows.length+'</b><span>발송</span></div><div><b>'+rs.length+'</b><span>응답</span></div>'+
+    '<div><b>'+(rows.length?Math.round(rs.length/rows.length*100):0)+'%</b><span>응답률</span></div><div><b>'+(sat==null?'-':sat)+'</b><span>만족도</span></div></div></div>';
+  h += '<div class="dh-c"><p class="dh-h">🏢 지사 부서별 고객체감 <small>발송 · 응답 · 만족도</small></p><table class="dh-t"><tr><th>부서</th><th>발송</th><th>응답</th><th>응답률</th><th>만족도</th></tr>'+
+    S.job.map(function(j){ return '<tr'+(j[0]===d?' class="me"':'')+'><td>'+j[0]+'</td><td>'+j[1]+'</td><td>'+j[2]+'</td><td>'+(j[1]?Math.round(j[2]/j[1]*100):0)+'%</td><td>'+(j[3]==null?'-':j[3])+'</td></tr>'; }).join('')+'</table></div>';
+  var list = rows.slice().sort(function(a,b){return a[2]<b[2]?1:-1}).slice(0,20);
+  h += '<div class="dh-c"><p class="dh-h">🗂️ 내 해피콜 건별 <small>최근 '+list.length+'건'+(rows.length>list.length?' / 전체 '+rows.length+'건':'')+'</small></p>'+
+    (list.length ? list.map(function(r){ return '<div class="dh-r"><span>'+esc2(r[9])+' · '+esc2(r[10])+'<small>'+md(r[2])+' 발송 · '+esc2(r[4])+(r[7]?' · “'+esc2(r[7])+'”':'')+'</small></span>'+
+      (r[5]!=null?'<em class="ok">'+r[5]+'점'+(r[6]?' '+esc2(r[6]):'')+'</em>':'<em class="no">미응답</em>')+'</div>'; }).join('') : '<p class="dh-r" style="border:0">아직 '+esc2(me)+'님 이름으로 발송된 해피콜이 없어요.</p>')+'</div>';
+  h += '<button type="button" class="dh-b" data-dhs="1">📊 지사 서비스 지표 보기 ›</button>';
+  return h+'</div>';
+}
+document.addEventListener("click", function(e){ var b = e.target.closest("[data-dhs]"); if(!b) return; state.dhs = b.dataset.dhs==="1"; render(); window.scrollTo(0,0); });
 /* 지사별 탭 맨 위 — 가로로 넘기는 작은 브리핑 카드 */
 function briefStrip(){
   var nm = myName(), t = kstDate(0), tm = kstDate(1), w="일월화수목금토", C = [];
@@ -5274,6 +5314,7 @@ var LOG_URL = "https://script.google.com/macros/s/AKfycbxh2WI3i7AdlxSxTkxvoO3aQ1
 var STAFF = [["부서장",["지사장"]],["서비스 관리자",["서비스팀장","최문혁","이재식"]],["26호",["용승우","고혁진","김유건"]],["27호",["주상덕","유영민","김민석"]],["28호",["김태건","김지원","양심영"]],["127호",["박수안","권재원","김민수"]],["160호",["김동현","이명섭","남현준"]]];
 var ALL = []; STAFF.forEach(function(g){ ALL = ALL.concat(g[1]); });
 var MGRS = ["지사장","서비스팀장","최문혁","이재식"]; window.BSR_MGRS = MGRS;
+window.BSR_DEPTS = DEPTS;
 var NM_SUB = {"지사장":"지사 총괄 책임자","서비스팀장":"서비스 관리 책임자","최문혁":"선임파트장","김태건":"대포장","김동현":"대포장","주상덕":"대포장","용승우":"대포장","박수안":"대포장","타부서":"보기 전용","그룹장":"서울CS지원","이재식":"파트장 · 앱 개발자"};
 window.BSR_API = LOG_URL; window.BSR_ALL = ALL;
 function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
@@ -5304,9 +5345,12 @@ function pickView(){
     '<p><i>⭐ 서비스 관리자</i><span>관리자 기능 + 📱 해피콜 현황</span></p>'+
     '<p><i>🚗 직원</i><span>내 근무·미응답·지표 · 해피콜 제출</span></p>'+
     '<p><i>🎖️ 서비스 그룹장</i><span>서울CS지원 · 지표 보기 · 💬 응원 코멘트</span></p>'+
+    '<p><i>💼 영업 · 🔧 기술</i><span>내 해피콜 · 부서 공지 · 지표 보기</span></p>'+
     '<p><i>👀 타부서</i><span>지표 보기 전용</span></p></div>';
   STAFF.forEach(function(gr, gi){ if(gi===0) h += '<div class="vl-div vl-sec"><span>🔒 관리자</span></div>'; if(gi===2) h += '<div class="vl-div vl-sec"><span>🚓 차량 근무자</span></div>'; h += '<div class="vl-g">'+gr[0]+'</div>'; (gi===0?gr[1].concat(["그룹장"]):gr[1]).forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장"||n==="그룹장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':n==="이재식"?'👨‍💻 ':'')+(n==="그룹장"?'<span style="white-space:nowrap;font-size:13.5px;letter-spacing:-.5px">🎖️서비스 그룹장</span>':n)+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
-  var listed = ALL.concat(["그룹장","타부서"]), typed = pick && listed.indexOf(pick)<0 ? pick : "";
+  h += '<div class="vl-div vl-sec"><span>💼 영업 · 🔧 기술</span></div>';
+  Object.keys(DEPTS).forEach(function(k){ h += '<div class="vl-g">'+(k==="영업"?'💼 ':'🔧 ')+k+'</div>'+DEPTS[k].map(function(n){ return '<button type="button" class="vl-n" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+n+'<small>'+k+'</small></button>'; }).join(''); });
+  var listed = ALL.concat(["그룹장","타부서"]).concat(DEPTS["영업"]).concat(DEPTS["기술"]), typed = pick && listed.indexOf(pick)<0 ? pick : "";
   h += '<div class="vl-g">그 외</div>'+["타부서"].map(function(n){ return '<button type="button" class="vl-n'+(n==="그룹장"?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="그룹장"?'🎖️ ':'')+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('')+
     '<div class="vl-div"><span>목록에 이름이 없으면</span></div><div class="vl-in-row"><label for="vlname">직접 입력</label><input id="vlname" type="text" maxlength="10" autocomplete="off" placeholder="이름을 입력하세요" value="'+esc(typed)+'" aria-label="이름 직접 입력"></div></div>';
   h += '<button type="button" class="vl-btn" data-vl="start"'+(pick?'':' disabled')+'>'+(pick?esc(dnm(pick))+ro(dnm(pick))+' 시작하기':'이름을 선택해 주세요')+'</button>';
@@ -5580,13 +5624,14 @@ if(!me) pickView(); else { send(openTag()); sent[window.state?state.tab:"cmp"]=1
 /* ===== 📢 공지 (관리자가 앱에서 작성 → 구글 시트 Notice) · ✅ 확인 기록 (Ack) · 다발보 조치 입력 (Act) ===== */
 var NOTI = {items:[], acks:null};
 try{ NOTI.items = JSON.parse(localStorage.getItem("bsr_noti")||"[]"); }catch(e){}
+setTimeout(function(){ try{ NOTI.items = NOTI.items.filter(notiMine); }catch(e){} },0);
 function apiUrl(q){ return BSR_API+(BSR_API.indexOf("?")<0?"?":"&")+q+"&t="+Date.now(); }
 function apiPing(q){ try{ fetch(apiUrl(q),{mode:"no-cors",cache:"no-store",keepalive:true}).catch(function(){ (new Image()).src=apiUrl(q); }); }catch(e){ (new Image()).src=apiUrl(q); } }
 function notiLoad(){
   if(!window.BSR_API) return;
   var pn = BSR_PIN();
   fetch(apiUrl("a=notices"+(pn?"&pin="+encodeURIComponent(pn):"")),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
-    if(!j || !j.ok) return; var same = JSON.stringify([j.items||[], j.acks||null])===JSON.stringify([NOTI.items, NOTI.acks]); NOTI.items = j.items||[]; NOTI.acks = j.acks||null;
+    if(!j || !j.ok) return; var mine = (j.items||[]).filter(notiMine), same = JSON.stringify([mine, j.acks||null])===JSON.stringify([NOTI.items, NOTI.acks]); NOTI.items = mine; NOTI.acks = j.acks||null;
     try{ localStorage.setItem("bsr_noti", JSON.stringify(NOTI.items)); }catch(e){}
     if(!same) renderQuiet();
   }).catch(function(){});
@@ -5739,15 +5784,20 @@ function eduQuiz(Q){ return Q.map(function(q,i){ return '<div data-edqb="'+q[2]+
 function ncParse(x){
   var t = x.title||"", m = /^\[([^\]]{1,8})\]\s*/.exec(t), cat = NCAT[NCAT.length-1];
   if(m && NCAT.some(function(c){return c.k===m[1]})){ cat = ncGet(m[1]); t = t.slice(m[0].length); }
-  var b = x.body||"", em = /(?:^|\n)#교육:([\w-]+)\s*$/.exec(b), edu = null;
+  var b = x.body||"", em = /(?:^|\n)#교육:([\w-]+)\s*$/.exec(b), edu = null, tg = "";
   if(em){ b = b.slice(0, em.index).replace(/\s+$/,""); if(EDU[em[1]]) edu = em[1]; }
+  var tm = /(?:^|\n)#대상:(전체|서비스|영업|기술)\s*$/.exec(b); if(tm){ tg = tm[1]; b = b.slice(0, tm.index).replace(/\s+$/,""); }
   cat = ncEvent(cat, t + (edu ? " "+EDU[edu].title : ""), b);
-  return {cat:cat, title:t, body:b, edu:edu};
+  return {cat:cat, title:t, body:b, edu:edu, tg:tg};
 }
 function staffOnly(){ return (window.BSR_ALL||[]).filter(function(n){return CS_MGR.indexOf(n)<0}); }
+/* 공지 대상 — 표시 없음(예전 공지)은 서비스 직원 기준으로 확인 집계, 화면은 모두에게 보임 */
+function notiAud(x){ var tg = ncParse(x).tg; if(tg==="영업"||tg==="기술") return DEPTS[tg].slice(); if(tg==="전체") return staffOnly().concat(DEPTS["영업"],DEPTS["기술"]); return staffOnly(); }
+function notiMine(x){ var tg = ncParse(x).tg; if(!tg || tg==="전체" || mgrIs()) return true; return deptOf()===tg; }
+function notiTgTag(x){ var tg = ncParse(x).tg; return tg && tg!=="전체" ? '<span class="ntg">→ '+tg+'</span>' : (tg==="전체"?'<span class="ntg">→ 전 부서</span>':''); }
 function ackLine(id){
   if(!(NOTI.acks && mgrIs())) return '';
-  var ak = NOTI.acks[id]||[], all = staffOnly(), miss = all.filter(function(n){return ak.indexOf(n)<0});
+  var x0 = NOTI.items.filter(function(i){return i.id===id})[0], ak = NOTI.acks[id]||[], all = x0 ? notiAud(x0) : staffOnly(), miss = all.filter(function(n){return ak.indexOf(n)<0});
   return '<p class="nv-st">👥 직원 확인 <b class="num">'+(all.length-miss.length)+'</b>/'+all.length+'명'+(miss.length?'':' · 모두 확인 👍')+(all.length-miss.length?'<br>✅ 확인: '+esc2(all.filter(function(n){return ak.indexOf(n)>=0}).join(', ')):'')+(miss.length?'<br>⏳ 미확인: '+esc2(miss.join(', ')):'')+'</p>';
 }
 function notiBanner(){
@@ -5767,9 +5817,9 @@ function notiList(f){
   var used = NCAT.filter(function(c){ return NOTI.items.some(function(x){return ncParse(x).cat.k===c.k}); });
   var h = '<div class="xs-h"><b>📢 공지 · 교육</b><button type="button" data-xs="close">✕</button></div>';
   if(used.length>1) h += '<div class="ncf"><button type="button" data-ntf="" aria-pressed="'+(!NL_F)+'">전체</button>'+used.map(function(c){return '<button type="button" style="--nc:'+c.c+'" data-ntf="'+c.k+'" aria-pressed="'+(NL_F===c.k)+'">'+c.ic+' '+c.k+'</button>'}).join('')+'</div>';
-  h += items.length ? items.map(function(x){ var p = ncParse(x), v = lsGet(notiAckKey(x.id)), ak = NOTI.acks && mgrIs() ? (NOTI.acks[x.id]||[]) : null, all = staffOnly();
+  h += items.length ? items.map(function(x){ var p = ncParse(x), v = lsGet(notiAckKey(x.id)), ak = NOTI.acks && mgrIs() ? (NOTI.acks[x.id]||[]) : null, all = notiAud(x);
       var st = me ? (v ? '<span class="nli-st ok">✓ 확인</span>' : '<span class="nli-st">미확인</span>') : '';
-      return '<button type="button" class="nli" style="--nc:'+p.cat.c+'" data-ntv="'+esc2(x.id)+'"><span class="nli-a"><i>'+p.cat.ic+' '+p.cat.k+'</i><span class="num">'+notiDate(x.t)+'</span>'+(p.edu?' · '+(EDU[p.edu].tag||'📚 교육 자료'):'')+st+'</span><b>'+esc2(p.title)+'</b>'+
+      return '<button type="button" class="nli" style="--nc:'+p.cat.c+'" data-ntv="'+esc2(x.id)+'"><span class="nli-a"><i>'+p.cat.ic+' '+p.cat.k+'</i><span class="num">'+notiDate(x.t)+'</span>'+(p.edu?' · '+(EDU[p.edu].tag||'📚 교육 자료'):'')+(mgrIs()?notiTgTag(x):'')+st+'</span><b>'+esc2(p.title)+'</b>'+
         (ak?'<p>👥 확인 '+all.filter(function(n){return ak.indexOf(n)>=0}).length+'/'+all.length+'명</p>':'')+'</button>'; }).join('') : '<p class="xs-p">아직 공지가 없습니다.</p>';
   openSheet(h);
 }
@@ -5785,17 +5835,18 @@ function notiView(id){
   openSheet(h);
   var o = document.getElementById("xsheet"); if(o) o.scrollTop = 0;
 }
-function ntwPick(){ var b = document.querySelector('.ncw [aria-pressed="true"]'); return b ? b.dataset.ncw : "업무공지"; }
+function ntwPick(){ var b = document.querySelector('.ncw [data-ncw][aria-pressed="true"]'); return b ? b.dataset.ncw : "업무공지"; }
 function notiWrite(msg){
   var all = (window.BSR_ALL||[]).filter(function(n){return CS_MGR.indexOf(n)<0});
   var h = '<div class="xs-h"><b>✏️ 공지 · 교육 보내기</b><button type="button" data-xs="close">✕</button></div>'+
     '<div class="ntw"><label>분류</label><div class="ncw">'+NCAT.map(function(c){return '<button type="button" style="--nc:'+c.c+'" data-ncw="'+c.k+'" aria-pressed="'+(c.k==="업무공지")+'">'+c.ic+' '+c.k+'</button>'}).join('')+'</div>'+
+    '<label>보낼 부서</label><div class="ncw ntg-w">'+["전체","서비스","영업","기술"].map(function(k){return '<button type="button" data-ntg="'+k+'" aria-pressed="'+(k==="전체")+'">'+({"전체":"🏢 전 부서","서비스":"🚗 서비스","영업":"💼 영업","기술":"🔧 기술"})[k]+'</button>'}).join('')+'</div>'+
     '<label for="ntw-e">자료 첨부 (교육·경조사 · 선택)</label><select id="ntw-e"><option value="">첨부 안 함</option>'+Object.keys(EDU).map(function(k){return '<option value="'+k+'">'+esc2(EDU[k].cat+' · '+EDU[k].title)+'</option>'}).join('')+'</select>'+
     '<label for="ntw-t">제목</label><input id="ntw-t" maxlength="60" placeholder="예) 11월 근무표 변경 안내"><label>내용</label><textarea id="ntw-b" rows="5" maxlength="900" placeholder="직원들에게 전할 내용을 적어주세요 (교육 자료만 보낼 때는 비워도 됩니다)"></textarea>'+
     '<button type="button" class="ntw-go" data-ntpost="1">📢 공지 올리기</button>'+(msg?'<p class="ntw-msg">'+msg+'</p>':'')+'</div>';
   h += '<div class="xs-h" style="margin-top:14px"><b>올린 공지 · 확인 현황</b></div>';
-  h += NOTI.items.length ? NOTI.items.map(function(x){ var ak = (NOTI.acks&&NOTI.acks[x.id])||[], miss = all.filter(function(n){return ak.indexOf(n)<0});
-      var pq = ncParse(x); return '<div class="ntw-i"><div><b>'+pq.cat.ic+' '+esc2(pq.title)+'</b><span>'+pq.cat.k+(pq.edu?' · '+(EDU[pq.edu].tag||'📚 교육 자료'):'')+' · '+notiDate(x.t)+' · 확인 <b class="num">'+all.filter(function(n){return ak.indexOf(n)>=0}).length+'</b>/'+all.length+'명</span></div>'+
+  h += NOTI.items.length ? NOTI.items.map(function(x){ var all = notiAud(x), ak = (NOTI.acks&&NOTI.acks[x.id])||[], miss = all.filter(function(n){return ak.indexOf(n)<0});
+      var pq = ncParse(x); return '<div class="ntw-i"><div><b>'+pq.cat.ic+' '+esc2(pq.title)+'</b><span>'+pq.cat.k+(pq.edu?' · '+(EDU[pq.edu].tag||'📚 교육 자료'):'')+' · '+notiDate(x.t)+notiTgTag(x)+' · 확인 <b class="num">'+all.filter(function(n){return ak.indexOf(n)>=0}).length+'</b>/'+all.length+'명</span></div>'+
         (NOTI.acks?'<p>'+(all.length-miss.length?'✅ 확인: '+all.filter(function(n){return ak.indexOf(n)>=0}).join(', ')+'<br>':'')+(miss.length?'⏳ 미확인: '+miss.join(', '):'모두 확인 👍')+'</p>':'')+
         '<button type="button" class="ntw-hide" data-nthide="'+esc2(x.id)+'">내리기</button></div>'; }).join('') : '<p class="xs-p">올린 공지가 없습니다.</p>';
   openSheet(h);
@@ -5806,6 +5857,7 @@ document.addEventListener("click", function(e){
   var nv = e.target.closest("[data-ntv]"); if(nv){ notiView(nv.dataset.ntv); return; }
   if(e.target.closest("[data-ntl]")){ notiList(); return; }
   var nf = e.target.closest("[data-ntf]"); if(nf){ notiList(nf.dataset.ntf); return; }
+  var ng = e.target.closest("[data-ntg]"); if(ng){ ng.parentNode.querySelectorAll("[data-ntg]").forEach(function(b){ b.setAttribute("aria-pressed", String(b===ng)); }); return; }
   var nw = e.target.closest("[data-ncw]"); if(nw){ nw.parentNode.querySelectorAll("[data-ncw]").forEach(function(b){ b.setAttribute("aria-pressed", String(b===nw)); }); return; }
   var eq = e.target.closest("[data-edq]");
   if(eq){ var qb = eq.closest("[data-edqb]"); if(qb.dataset.done) return; qb.dataset.done = 1; var ans = +qb.dataset.edqb, os = qb.querySelectorAll("[data-edq]");
@@ -5815,7 +5867,8 @@ document.addEventListener("click", function(e){
     var t=(document.getElementById("ntw-t")||{}).value||"", b=(document.getElementById("ntw-b")||{}).value||"", ek=(document.getElementById("ntw-e")||{}).value||"", ck=ntwPick();
     if(!t.trim() && ek && EDU[ek]) t = EDU[ek].title;
     if(!t.trim()){ notiWrite("제목을 입력해 주세요."); return; }
-    t = "["+ck+"] "+t.trim().replace(/^\[[^\]]{1,8}\]\s*/,""); b = b.trim()+(ek?(b.trim()?"\n":"")+"#교육:"+ek:"");
+    t = "["+ck+"] "+t.trim().replace(/^\[[^\]]{1,8}\]\s*/,""); var tgb = document.querySelector('[data-ntg][aria-pressed="true"]'), tgv = tgb ? tgb.dataset.ntg : "전체";
+    b = b.trim(); b = b+(b?"\n":"")+"#대상:"+tgv; b = b+(ek?"\n#교육:"+ek:"");
     var btn=e.target.closest("[data-ntpost]"); btn.disabled=true; btn.textContent="올리는 중…";
     fetch(apiUrl("a=post&pin="+encodeURIComponent(BSR_PIN())+"&title="+encodeURIComponent(t.trim())+"&body="+encodeURIComponent(b.trim())+"&by="+encodeURIComponent(myName()||"관리자")),{cache:"no-store"})
       .then(function(r){return r.json()}).then(function(j){ if(j&&j.ok){ NOTI.items.unshift({id:j.id,t:Date.now(),title:t.trim(),body:b.trim(),by:myName()||"관리자"}); notiWrite("✅ 공지를 올렸습니다. 직원들이 앱을 열면 맨 위에 보입니다."); notiLoad(); } else notiWrite("PIN이 맞지 않거나 서버(Apps Script)가 아직 업데이트되지 않았습니다."); })
