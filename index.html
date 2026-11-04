@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261104024602">
+<meta name="bsr-ver" content="20261104033806">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3344,6 +3344,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-04f", date:"11/4", title:"알림 숫자 정리", tabs:["home"], items:["📲 폰 알림을 하나씩 지우지 않아도, 앱에서 그 소식이 있는 탭을 열면 해당 알림이 자동으로 지워지고 아이콘 숫자도 줄어들어요"]},
  {id:"2026-11-04e", date:"11/4", title:"공지 확인자 표시", tabs:["home"], items:["📢 관리자 — 공지 확인 현황에 미확인자뿐 아니라 확인한 직원 이름도 함께 표시 (✅ 확인 · ⏳ 미확인)"]},
  {id:"2026-11-04d", date:"11/4", title:"지표 11/4 업데이트", tabs:["cmp","veh","ppl","mgt","alm"], items:["📊 11/4 기준(11월 첫 집계) 지사별·차량별·개인별·관리지표 반영 — 북서울 지사 5개 항목 모두 달성 (불필요 111% · 발보 111% · 25분↑ 102% · 체감 110% · 당사일괄 127%)","⏱️ 25분초과 11.01~11.04 — 초과 2건 / 출동 50건 · 김태건 1건 · 남현준 1건","남현준 개인별 지표 추가 · 근무 전인 김지원·이명섭은 집계 없음"]},
  {id:"2026-11-04c", date:"11/4", title:"🔐 비밀번호 지침 공지 자료", tabs:["home"], items:["영상기기 비밀번호 설정·관리 지침(10/27)과 VOC 처리내용 RISK포인트 안내(11/2)를 한 자료로 정리 — 공지 보내기 → 자료 첨부에서 선택","핵심: 고객이 직접 설정 · 직원 임의 설정 금지 · VOC에 비밀번호 기재·전달 금지 (11/3 이후 발생 건부터 RISK포인트 1등급)"]},
@@ -3512,6 +3513,19 @@ function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 var NEWS_MEM = {};
 function newsSeen(k){ return NEWS_MEM[k] || lsGet(k); }
 function markSeen(k,v){ NEWS_MEM[k]=v; lsSet(k,v); }
+/* 폰 알림(푸시) 정리 — 앱 안에서 그 소식이 있는 탭을 열거나 소식 배너 [확인]을 누르면 해당 알림을 지움 → 아이콘 숫자도 줄어듦 */
+var NSEEN = (lsGet("bsr_nseen")||"").split(",").filter(Boolean);
+function pushClear(){
+  try{ if(!navigator.serviceWorker) return;
+    navigator.serviceWorker.ready.then(function(reg){ return reg.getNotifications ? reg.getNotifications() : []; }).then(function(ns){
+      var ids = NEWS.map(function(n){return n.id}), left = 0;
+      ns.forEach(function(nt){ if(NSEEN.indexOf(nt.tag)>=0 || ids.indexOf(nt.tag)<0) nt.close(); else left++; });
+      if(!left){ try{ navigator.clearAppBadge && navigator.clearAppBadge(); }catch(x){} }
+    }).catch(function(){});
+  }catch(e){}
+}
+function nseenAdd(ids){ var ch=false; ids.forEach(function(i){ if(i && NSEEN.indexOf(i)<0){ NSEEN.push(i); ch=true; } }); if(!ch) return; NSEEN=NSEEN.slice(-80); lsSet("bsr_nseen",NSEEN.join(",")); pushClear(); }
+document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible") pushClear(); });
 function newsBanner(){
   var n = NEWS[0]; if(!n || newsSeen("bsr_news")===n.id) return "";
   return '<div class="nw"><div class="nw-h"><span class="nw-ic">🔔</span><b>'+n.date+' 업데이트</b><span>'+n.title+'</span><button type="button" class="nw-x" data-nwok="1">확인</button></div>'+
@@ -5002,7 +5016,7 @@ function goTop(){ var f=function(){ var v=document.getElementById("view"), n=doc
 function renderQuiet(){ if(!window.state) return; var y = window.scrollY; render(); if(Math.abs(window.scrollY-y)>2) window.scrollTo(0,y); }
 function render(){
   var v = state.tab==="home" ? przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
-  var nft = newsFor(state.tab); if(nft) markSeen("bsr_tab_"+state.tab, nft.id);
+  var nft = newsFor(state.tab); if(nft) markSeen("bsr_tab_"+state.tab, nft.id); nseenAdd(NEWS.slice(0,40).filter(function(n){return n.tabs.indexOf(state.tab)>=0}).map(function(n){return n.id}));
   var VW0 = document.getElementById("view"), dk = function(d){ var sm = d.querySelector('summary'); return (d.className||'')+'|'+(sm?sm.textContent.replace(/[\d\s▾▴]/g,'').slice(0,24):''); }, op = [];
   VW0.querySelectorAll("details[open]").forEach(function(d){ op.push(dk(d)); });
   VW0.innerHTML = '<div class="wrap" style="gap:20px">'+(window.notiBanner?notiBanner():'')+newsBanner()+staleNote()+v+'</div>';
@@ -5024,7 +5038,7 @@ document.getElementById("view").addEventListener("click",function(e){   var dsw 
   var v = e.target.closest("[data-veh]"), m = e.target.closest("[data-met]"), g = e.target.closest("[data-mg]"),
       pl = e.target.closest("[data-ppl]"), pf = e.target.closest("[data-pf]"), cf = e.target.closest("[data-cf]"), ps = e.target.closest("[data-ps]");
   var rp = e.target.closest("[data-rp]"), rsb = e.target.closest("[data-rs]");
-  if(e.target.closest("[data-nwok]")){ markSeen("bsr_news", NEWS[0].id); render(); }
+  if(e.target.closest("[data-nwok]")){ markSeen("bsr_news", NEWS[0].id); nseenAdd([NEWS[0].id]); render(); }
   else if(e.target.closest("[data-goto]")){ var gq=e.target.closest("[data-goto]"); if(gq.dataset.esGo){ state.es=gq.dataset.esGo; state.tm=""; } var gt=gq.dataset.goto, tb=document.querySelector('#tabs [data-tab="'+gt+'"]'); if(tb){ tb.click(); goTop(); } }
   else if(e.target.closest("[data-cx]")){ var cxn=e.target.closest("[data-cx]").dataset.cx; state.cx = state.cx===cxn?"":cxn; render(); }
   else if(e.target.closest("[data-cd]")){ state.cd = e.target.closest("[data-cd]").dataset.cd; state.cf="all"; render(); }
@@ -5066,7 +5080,7 @@ document.getElementById("hero").addEventListener("click",function(e){
   var b = e.target.closest("[data-date]"); if(!b || b.dataset.date===DATE) return;
   loadDate(b.dataset.date); renderHero(); render();
 });
-loadDate(DATES[0].d);
+loadDate(DATES[0].d); setTimeout(pushClear, 1500);
 renderHero();
 render();
 </script>
