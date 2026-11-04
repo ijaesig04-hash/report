@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261104141840">
+<meta name="bsr-ver" content="20261104181253">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2696,7 +2696,9 @@ var CSR = [["박정훈", "기술", "10-08", "", "S/W점검", null, "", "", "기�
 /* 관리자(파트장)는 평가 대상 제외 — 미응답 알림·사원별 응답·칭찬 게시판·배지에서 뺌 */
 var CS_MGR = ["최문혁","이재식","지사장","서비스팀장"];
 /* 영업 · 기술 부서원 — 고객체감 자료의 직무 기준 (명단 바뀌면 여기만 고치면 됨) */
-var DEPTS = {"영업":["이수열","임영민","정문재","박광춘","최영국"], "기술":["박정훈","김상훈","박광모"]};
+var DEPTS = {"영업":["최영국","이수열","임영민","정문재","박광춘"], "기술":["박정훈","김상훈","박광모"]};
+var DEPT_LEAD = {"영업":"최영국", "기술":"박정훈"};   /* 팀장 — 공지 확인 집계 · 칭찬 순위에서 빠짐 */
+function isLead(n){ for(var k in DEPT_LEAD){ if(DEPT_LEAD[k]===n) return true; } return false; }
 function deptOf(n){ n = n||myName(); for(var k in DEPTS){ if(DEPTS[k].indexOf(n)>=0) return k; } return "서비스"; }
 
 var CS_JOBS = ["서비스","영업","기술","미지정"], CS_JC = {"서비스":"#2563eb","영업":"#ea580c","기술":"#059669","미지정":"#64748b"};
@@ -3380,6 +3382,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-05a", date:"11/5", title:"영업 · 기술 팀장 표시", tabs:["home"], items:["이름 고르기에 최영국 영업팀장 · 박정훈 기술팀장 표시 — 팀장은 공지 확인 집계와 칭찬 순위에서 빠져요"]},
  {id:"2026-11-04i", date:"11/4", title:"도움말 · OJT 진도표 · 공지 다시 알림", tabs:["home"], items:["💡 현장 도움말 — 앱 사용 · 현장 업무(비밀번호 지침 · 출동료 청구 · 조치 입력) · 지표 설명을 검색해서 바로 봐요 (이름표 메뉴)","🎓 OJT 진도표 — OJT 직원별 배울 항목을 본인 · 동승자 · 관리자가 체크하고 진도를 같이 봐요","🔔 관리자 — 공지 미확인자에게만 폰 알림을 다시 보낼 수 있어요"]},
  {id:"2026-11-04h", date:"11/4", title:"칭찬 · 위험 고객처 · 개시 체크 · 고객처 한눈에", tabs:["home"], items:["🎉 칭찬 모아보기 — 전 부서 고객 칭찬을 부서별로 모아 봐요 (영업 · 기술 직원도 칭찬 도착 알림)","⚠️ 불만 위험 고객처 — 발보 반복 · 미조치 · 해피콜 8점 이하 고객처를 위험도 순으로","✅ 개시 방문 체크리스트 — 비밀번호 지침 5개 항목을 체크하고 완료하면 관리자에게 기록","🔍 고객처 한눈에 보기 — 다발보 · 해피콜 · 칭찬 · 조치 내용을 한 번에 (이름표 메뉴)"]},
  {id:"2026-11-04g", date:"11/4", title:"영업 · 기술 부서 함께 쓰기", tabs:["home"], items:["💼🔧 이름 고르기에 영업 · 기술 직원 추가 — 고르면 부서 첫 화면(내 해피콜 발송·응답·만족도 · 건별 결과 · 부서별 비교)이 먼저 열려요","📢 공지 · 교육 보내기에서 보낼 부서(전 부서 · 서비스 · 영업 · 기술)를 고를 수 있고, 확인 현황도 그 부서 인원으로 집계해요"]},
@@ -3754,7 +3757,7 @@ function deptHome(d){
   var rs = rows.filter(function(r){return r[5]!=null}), sat = rs.length ? Math.round(rs.reduce(function(a,r){return a+r[5]},0)/rs.length*100)/100 : null;
   var md = function(x){ return (+x.slice(0,2))+'/'+(+x.slice(3)); };
   var h = '<div class="dh">';
-  h += '<div class="dh-c dh-hero '+(d==="영업"?'sal':'tec')+'"><small>'+(d==="영업"?'💼':'🔧')+' 북서울지사 '+d+'</small><b>'+esc2(me)+'님, 안녕하세요</b><small>고객체감 '+esc2(S.period.replace('2026.',''))+' 누적 기준</small></div>';
+  h += '<div class="dh-c dh-hero '+(d==="영업"?'sal':'tec')+'"><small>'+(d==="영업"?'💼':'🔧')+' 북서울지사 '+d+'</small><b>'+esc2(me)+(isLead(me)?' '+d+'팀장':'')+'님, 안녕하세요</b><small>고객체감 '+esc2(S.period.replace('2026.',''))+' 누적 기준</small></div>';
   h += '<div class="dh-c"><p class="dh-h">📞 내 고객체감 (해피콜) <small>'+d+' 접수분</small></p><div class="dh-k">'+
     '<div><b>'+rows.length+'</b><span>발송</span></div><div><b>'+rs.length+'</b><span>응답</span></div>'+
     '<div><b>'+(rows.length?Math.round(rs.length/rows.length*100):0)+'%</b><span>응답률</span></div><div><b>'+(sat==null?'-':sat)+'</b><span>만족도</span></div></div></div>';
@@ -4540,8 +4543,8 @@ function pushView(){
   openSheet('<div class="xs-h"><b>📲 업데이트 알림 받기</b><button type="button" data-xs="close">✕</button></div>'+
     '<p class="note">새 지표가 반영되면 앱이 꺼져 있어도 폰 알림이 와요.'+(st?'':' <b>홈 화면에 설치한 앱</b>으로 열었을 때 켜세요.')+'</p>'+
     (msg?'<div class="mgc"><div class="mgc-t"><b>⚠️ '+msg+'</b></div></div>':'<button type="button" class="mg-b" data-pushon="1">🔔 알림 켜기</button>')+
-    '<div id="pushres" class="note"></div>'+(mgrIs()&&PUSH_URL?'<div id="pushwho" class="note">알림 켠 직원 불러오는 중…</div>':''));
-  if(mgrIs() && PUSH_URL) fetch(PUSH_URL+"?action=names&pin="+encodeURIComponent(BSR_PIN())+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ var el=document.getElementById("pushwho"); if(!el) return;
+    '<div id="pushres" class="note"></div>'+(mgrIs()&&myName()==="이재식"&&PUSH_URL?'<div id="pushwho" class="note">알림 켠 직원 불러오는 중…</div>':''));
+  if(mgrIs() && myName()==="이재식" && PUSH_URL) fetch(PUSH_URL+"?action=names&pin="+encodeURIComponent(BSR_PIN())+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ var el=document.getElementById("pushwho"); if(!el) return;
     if(!j||!j.ok){ el.textContent = "알림 켠 직원 목록은 보관함 v2 업데이트 후 보여요"; return; }
     var on = j.names||[], staff = staffOnly().concat(DEPTS["영업"],DEPTS["기술"]), off = staff.filter(function(n){return on.indexOf(n)<0});
     el.innerHTML = '<b>🔔 알림 켠 직원 '+on.length+'명</b>: '+esc2(on.join(', ')||'없음')+(off.length?'<br><b>⏳ 아직 안 켠 직원 '+off.length+'명</b>: '+esc2(off.join(', ')):''); }).catch(function(){});
@@ -4716,7 +4719,7 @@ function praiseView(f){
   var D = function(n){ return typeof deptOf==="function" ? deptOf(n) : "서비스"; };
   var all = CSR.filter(function(r){return r[6]==="칭찬"}).sort(function(a,b){ return (a[3]||a[2])<(b[3]||b[2])?1:-1; });
   var L = f ? all.filter(function(r){return D(r[0])===f}) : all;
-  var c = {}; L.forEach(function(r){ if(CS_MGR.indexOf(r[0])<0) c[r[0]]=(c[r[0]]||0)+1; });
+  var c = {}; L.forEach(function(r){ if(CS_MGR.indexOf(r[0])<0 && !isLead(r[0])) c[r[0]]=(c[r[0]]||0)+1; });
   var top = Object.keys(c).sort(function(a,b){return c[b]-c[a] || a.localeCompare(b,"ko")}).slice(0,5);
   var md = function(x){ return (+x.slice(0,2))+'/'+(+x.slice(3)); };
   openSheet('<div class="xs-h"><b>🎉 칭찬 모아보기</b><button type="button" data-xs="close">✕</button></div>'+
@@ -5527,7 +5530,7 @@ function pickView(){
     '<p><i>👀 타부서</i><span>지표 보기 전용</span></p></div>';
   STAFF.forEach(function(gr, gi){ if(gi===0) h += '<div class="vl-div vl-sec"><span>🔒 관리자</span></div>'; if(gi===2) h += '<div class="vl-div vl-sec"><span>🚓 차량 근무자</span></div>'; h += '<div class="vl-g">'+gr[0]+'</div>'; (gi===0?gr[1].concat(["그룹장"]):gr[1]).forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장"||n==="그룹장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':n==="이재식"?'👨‍💻 ':'')+(n==="그룹장"?'<span style="white-space:nowrap;font-size:13.5px;letter-spacing:-.5px">🎖️서비스 그룹장</span>':n)+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
   h += '<div class="vl-div vl-sec"><span>💼 영업 · 🔧 기술</span></div>';
-  Object.keys(DEPTS).forEach(function(k){ h += '<div class="vl-g">'+(k==="영업"?'💼 ':'🔧 ')+k+'</div>'+DEPTS[k].map(function(n){ return '<button type="button" class="vl-n" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+n+'<small>'+k+'</small></button>'; }).join(''); });
+  Object.keys(DEPTS).forEach(function(k){ h += '<div class="vl-g">'+(k==="영업"?'💼 ':'🔧 ')+k+'</div>'+DEPTS[k].map(function(n){ return '<button type="button" class="vl-n" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+n+'<small>'+k+(DEPT_LEAD[k]===n?'팀장':'')+'</small></button>'; }).join(''); });
   var listed = ALL.concat(["그룹장","타부서"]).concat(DEPTS["영업"]).concat(DEPTS["기술"]), typed = pick && listed.indexOf(pick)<0 ? pick : "";
   h += '<div class="vl-g">그 외</div>'+["타부서"].map(function(n){ return '<button type="button" class="vl-n'+(n==="그룹장"?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="그룹장"?'🎖️ ':'')+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('')+
     '<div class="vl-div"><span>목록에 이름이 없으면</span></div><div class="vl-in-row"><label for="vlname">직접 입력</label><input id="vlname" type="text" maxlength="10" autocomplete="off" placeholder="이름을 입력하세요" value="'+esc(typed)+'" aria-label="이름 직접 입력"></div></div>';
@@ -5970,7 +5973,8 @@ function ncParse(x){
 }
 function staffOnly(){ return (window.BSR_ALL||[]).filter(function(n){return CS_MGR.indexOf(n)<0}); }
 /* 공지 대상 — 표시 없음(예전 공지)은 서비스 직원 기준으로 확인 집계, 화면은 모두에게 보임 */
-function notiAud(x){ var tg = ncParse(x).tg; if(tg==="영업"||tg==="기술") return DEPTS[tg].slice(); if(tg==="전체") return staffOnly().concat(DEPTS["영업"],DEPTS["기술"]); return staffOnly(); }
+function notiAud(x){ var tg = ncParse(x).tg; var nl = function(L){ return L.filter(function(n){return !isLead(n)}); };
+  if(tg==="영업"||tg==="기술") return nl(DEPTS[tg]); if(tg==="전체") return staffOnly().concat(nl(DEPTS["영업"]),nl(DEPTS["기술"])); return staffOnly(); }
 function notiMine(x){ var tg = ncParse(x).tg; if(!tg || tg==="전체" || mgrIs()) return true; return deptOf()===tg; }
 function notiTgTag(x){ var tg = ncParse(x).tg; return tg && tg!=="전체" ? '<span class="ntg">→ '+tg+'</span>' : (tg==="전체"?'<span class="ntg">→ 전 부서</span>':''); }
 function ackLine(id){
