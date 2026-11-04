@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261104204321">
+<meta name="bsr-ver" content="20261104204913">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -818,6 +818,7 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .nv-ok{background:#e7f7ee;color:#137a3f;border-radius:12px;padding:11px;text-align:center;font-weight:800;font-size:14px}
 .nv-hint{margin:0;font-size:12px;color:#64748b;text-align:center}
 .dh{display:grid;gap:10px}
+html.dept-x [data-vl="open"]{display:none!important}
 .mxst.ldb{display:inline-block;margin-left:5px;font-size:.72em;font-weight:800;line-height:1.5;padding:0 7px;border-radius:999px;vertical-align:middle;white-space:nowrap;letter-spacing:0}.mxst.ldb.sal{background:#fff1e6;color:#9a3412;border:1px solid #fdba8c}.mxst.ldb.tec{background:#e7f8f1;color:#0b5e47;border:1px solid #86d9b9}
 .ntre{display:block;width:100%;margin-top:8px;font:inherit;font-weight:700;font-size:13px;border:1px solid #f5c26b;background:#fff8eb;color:#8a4b00;border-radius:10px;padding:9px;cursor:pointer}
 .hp-c{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}.hp-c button{font:inherit;font-size:12.5px;font-weight:700;border:1px solid #dbe3f3;background:#fff;border-radius:999px;padding:5px 12px;cursor:pointer}.hp-c button[aria-pressed="true"]{background:#16306b;color:#fff;border-color:#16306b}
@@ -3771,7 +3772,7 @@ function deptHome(d){
   h += '<div class="dh-c"><p class="dh-h">🗂️ 내 해피콜 건별 <small>최근 '+list.length+'건'+(rows.length>list.length?' / 전체 '+rows.length+'건':'')+'</small></p>'+
     (list.length ? list.map(function(r){ return '<div class="dh-r"><span>'+esc2(r[9])+' · '+esc2(r[10])+'<small>'+md(r[2])+' 발송 · '+esc2(r[4])+(r[7]?' · “'+esc2(r[7])+'”':'')+'</small></span>'+
       (r[5]!=null?'<em class="ok">'+r[5]+'점'+(r[6]?' '+esc2(r[6]):'')+'</em>':'<em class="no">미응답</em>')+'</div>'; }).join('') : '<p class="dh-r" style="border:0">아직 '+esc2(me)+'님 이름으로 발송된 해피콜이 없어요.</p>')+'</div>';
-  h += '<div class="dh-q">'+(d==="영업"?'<button type="button" data-xf="risk">⚠️<br>불만 위험<br>고객처</button>':'<button type="button" data-xf="open">✅<br>개시 방문<br>체크</button>')+'<button type="button" data-xf="find">🔍<br>고객처<br>한눈에</button></div><button type="button" class="dh-b" data-xf="help">💡 현장 도움말 ›</button>';
+  h += '<div class="dh-q"'+(d==="영업"?'':' style="grid-template-columns:1fr"')+'>'+(d==="영업"?'<button type="button" data-xf="risk">⚠️<br>불만 위험<br>고객처</button>':'')+'<button type="button" data-xf="find">🔍<br>고객처<br>한눈에</button></div><button type="button" class="dh-b" data-xf="help">💡 현장 도움말 ›</button>';
   h += '<button type="button" class="dh-b" data-dhs="1">📊 지사 서비스 지표 보기 ›</button>';
   return h+'</div>';
 }
@@ -4773,7 +4774,7 @@ function helpView(q, msg){
     '<div class="hp-c"><button type="button" data-hpf="" aria-pressed="'+(!HP_F)+'">전체</button>'+cats.map(function(c){ return '<button type="button" data-hpf="'+c+'" aria-pressed="'+(HP_F===c)+'">'+({"앱":"📱 앱 사용","현장":"🛠️ 현장 업무","지표":"📊 지표","지사":"🏢 지사 추가"})[c]+'</button>'; }).join('')+'</div><div id="hp-r">'+helpRes(V)+'</div>'+
     (mgrIs()?'<div class="xs-h" style="margin-top:14px"><b>✏️ 도움말 추가 (관리자)</b></div><div class="ntw"><input id="hp-nq" maxlength="40" placeholder="질문 (예: 야간 출동 시 차량 키 위치)"><textarea id="hp-na" rows="3" maxlength="250" placeholder="답변"></textarea><button type="button" class="ntw-go" data-hpadd="1">💡 도움말 올리기</button>'+(msg?'<p class="ntw-msg">'+msg+'</p>':'')+'</div>':''));
 }
-function helpRes(V){ return V.length ? V.map(function(h){ var g = h.go ? '<button type="button" class="fd-btn" data-hpgo="'+esc2(h.go[0])+'">'+esc2(h.go[1])+' ›</button>' : '';
+function helpRes(V){ return V.length ? V.map(function(h){ var g = h.go && !(h.go[0]==="open" && deptOf()!=="서비스") ? '<button type="button" class="fd-btn" data-hpgo="'+esc2(h.go[0])+'">'+esc2(h.go[1])+' ›</button>' : '';
     return '<details class="hp-i"><summary>'+esc2(h.q)+'<small>'+({"앱":"앱","현장":"현장","지표":"지표","지사":"지사"})[h.c]+'</small></summary><div class="hp-a">'+esc2(h.a)+(g?'<br>'+g:'')+(h.add?'<br><small style="color:#64748b">✍️ '+esc2(h.by||'')+'</small>'+(mgrIs()?' <button type="button" class="oj-x" data-hpdel="'+esc2(h.id)+'">삭제</button>':''):'')+'</div></details>'; }).join('') : '<p class="xs-p">찾는 내용이 없어요. 관리자에게 물어보면 도움말에 추가해 줄 거예요.</p>'; }
 document.addEventListener("input", function(e){ if(e.target.id!=="hp-q") return; var qq=e.target.value.replace(/\s/g,""), r=document.getElementById("hp-r");
   if(r) r.innerHTML = helpRes(helpItems().filter(function(h){ return (!HP_F || h.c===HP_F) && (!qq || (h.q+h.a).replace(/\s/g,"").indexOf(qq)>=0); })); });
@@ -5245,7 +5246,8 @@ function renderQuiet(){ if(!window.state) return; var y = window.scrollY; render
 /* 영업 · 기술 직원은 고객체감 탭을 브리핑 바로 다음에 (서비스 · 관리자는 원래 순서) */
 function tabOrderFix(){ try{ var cs = document.querySelector('[role=tab][data-tab="cs"]'), hm = document.querySelector('[role=tab][data-tab="home"]'), ev = document.querySelector('[role=tab][data-tab="eval"]'); if(!cs||!hm||!ev) return;
   var d = typeof deptOf==="function" ? deptOf() : "서비스", after = (d==="영업"||d==="기술") ? hm : ev;
-  if(after.nextElementSibling !== cs) after.parentNode.insertBefore(cs, after.nextElementSibling); }catch(e){} }
+  if(after.nextElementSibling !== cs) after.parentNode.insertBefore(cs, after.nextElementSibling);
+  document.documentElement.classList.toggle("dept-x", d==="영업"||d==="기술");   /* 개시 방문 체크리스트는 서비스만 */ }catch(e){} }
 function render(){ tabOrderFix();
   var v = state.tab==="home" ? przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
   var nft = newsFor(state.tab); if(nft) markSeen("bsr_tab_"+state.tab, nft.id); nseenAdd(NEWS.slice(0,40).filter(function(n){return n.tabs.indexOf(state.tab)>=0}).map(function(n){return n.id}));
