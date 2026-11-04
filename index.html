@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261104023509">
+<meta name="bsr-ver" content="20261104024602">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3344,6 +3344,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-04e", date:"11/4", title:"공지 확인자 표시", tabs:["home"], items:["📢 관리자 — 공지 확인 현황에 미확인자뿐 아니라 확인한 직원 이름도 함께 표시 (✅ 확인 · ⏳ 미확인)"]},
  {id:"2026-11-04d", date:"11/4", title:"지표 11/4 업데이트", tabs:["cmp","veh","ppl","mgt","alm"], items:["📊 11/4 기준(11월 첫 집계) 지사별·차량별·개인별·관리지표 반영 — 북서울 지사 5개 항목 모두 달성 (불필요 111% · 발보 111% · 25분↑ 102% · 체감 110% · 당사일괄 127%)","⏱️ 25분초과 11.01~11.04 — 초과 2건 / 출동 50건 · 김태건 1건 · 남현준 1건","남현준 개인별 지표 추가 · 근무 전인 김지원·이명섭은 집계 없음"]},
  {id:"2026-11-04c", date:"11/4", title:"🔐 비밀번호 지침 공지 자료", tabs:["home"], items:["영상기기 비밀번호 설정·관리 지침(10/27)과 VOC 처리내용 RISK포인트 안내(11/2)를 한 자료로 정리 — 공지 보내기 → 자료 첨부에서 선택","핵심: 고객이 직접 설정 · 직원 임의 설정 금지 · VOC에 비밀번호 기재·전달 금지 (11/3 이후 발생 건부터 RISK포인트 1등급)"]},
  {id:"2026-11-04b", date:"11/4", title:"운전성향 11/4 반영", tabs:["drv"], items:["🚗 운전성향 11/4 기준 — 주의: 김태건(22건, 하루 평균 7.3) · 김민수(13건, 6.5) · 나머지 양호","유영민·김동현은 양호로 회복 (김지원·이명섭은 근무 전이라 집계 없음)"]},
@@ -5733,7 +5734,7 @@ function staffOnly(){ return (window.BSR_ALL||[]).filter(function(n){return CS_M
 function ackLine(id){
   if(!(NOTI.acks && mgrIs())) return '';
   var ak = NOTI.acks[id]||[], all = staffOnly(), miss = all.filter(function(n){return ak.indexOf(n)<0});
-  return '<p class="nv-st">👥 직원 확인 <b class="num">'+(all.length-miss.length)+'</b>/'+all.length+'명'+(miss.length?' · 미확인: '+esc2(miss.join(', ')):' · 모두 확인 👍')+'</p>';
+  return '<p class="nv-st">👥 직원 확인 <b class="num">'+(all.length-miss.length)+'</b>/'+all.length+'명'+(miss.length?'':' · 모두 확인 👍')+(all.length-miss.length?'<br>✅ 확인: '+esc2(all.filter(function(n){return ak.indexOf(n)>=0}).join(', ')):'')+(miss.length?'<br>⏳ 미확인: '+esc2(miss.join(', ')):'')+'</p>';
 }
 function notiBanner(){
   var n = NOTI.items.filter(function(x){return !notiAcked(x.id)});
@@ -5781,7 +5782,7 @@ function notiWrite(msg){
   h += '<div class="xs-h" style="margin-top:14px"><b>올린 공지 · 확인 현황</b></div>';
   h += NOTI.items.length ? NOTI.items.map(function(x){ var ak = (NOTI.acks&&NOTI.acks[x.id])||[], miss = all.filter(function(n){return ak.indexOf(n)<0});
       var pq = ncParse(x); return '<div class="ntw-i"><div><b>'+pq.cat.ic+' '+esc2(pq.title)+'</b><span>'+pq.cat.k+(pq.edu?' · '+(EDU[pq.edu].tag||'📚 교육 자료'):'')+' · '+notiDate(x.t)+' · 확인 <b class="num">'+all.filter(function(n){return ak.indexOf(n)>=0}).length+'</b>/'+all.length+'명</span></div>'+
-        (NOTI.acks?'<p>'+(miss.length?'미확인: '+miss.join(', '):'모두 확인 👍')+'</p>':'')+
+        (NOTI.acks?'<p>'+(all.length-miss.length?'✅ 확인: '+all.filter(function(n){return ak.indexOf(n)>=0}).join(', ')+'<br>':'')+(miss.length?'⏳ 미확인: '+miss.join(', '):'모두 확인 👍')+'</p>':'')+
         '<button type="button" class="ntw-hide" data-nthide="'+esc2(x.id)+'">내리기</button></div>'; }).join('') : '<p class="xs-p">올린 공지가 없습니다.</p>';
   openSheet(h);
 }
