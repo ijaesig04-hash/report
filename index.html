@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261104210540">
+<meta name="bsr-ver" content="20261104211407">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -6017,7 +6017,8 @@ function notiList(f){
   var cnt = function(k){ return NOTI.items.filter(function(x){ return !k || notiTg(x)===k; }).length; };
   if(DT.indexOf(NL_D)<0) NL_D = mgrIs() ? "" : (cnt(my) ? my : "전체");
   var me = myName(), items = NOTI.items.filter(function(x){ return (!NL_D || notiTg(x)===NL_D) && (!NL_F || ncParse(x).cat.k===NL_F); });
-  var used = NCAT.filter(function(c){ return NOTI.items.some(function(x){return ncParse(x).cat.k===c.k}); });
+  var used = NCAT.filter(function(c){ return NOTI.items.some(function(x){return (!NL_D || notiTg(x)===NL_D) && ncParse(x).cat.k===c.k}); });   /* 고른 부서 탭에 있는 분류만 */
+  if(NL_F && !used.some(function(c){return c.k===NL_F})){ NL_F = ""; items = NOTI.items.filter(function(x){ return !NL_D || notiTg(x)===NL_D; }); }
   var h = '<div class="xs-h"><b>📢 공지 · 교육</b><button type="button" data-xs="close">✕</button></div>';
   h += '<div class="ndt" role="tablist">'+DT.map(function(k){ return '<button type="button" role="tab" data-ntd="'+k+'" aria-selected="'+(NL_D===k)+'">'+({"":"모두","전체":"🏢 전체 공지","서비스":"🚗 서비스","영업":"💼 영업","기술":"🔧 기술"})[k]+' <small>'+cnt(k)+'</small></button>'; }).join('')+'</div>';
   if(used.length>1) h += '<div class="ncf"><button type="button" data-ntf="" aria-pressed="'+(!NL_F)+'">전체</button>'+used.map(function(c){return '<button type="button" style="--nc:'+c.c+'" data-ntf="'+c.k+'" aria-pressed="'+(NL_F===c.k)+'">'+c.ic+' '+c.k+'</button>'}).join('')+'</div>';
