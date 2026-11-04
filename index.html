@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261104201653">
+<meta name="bsr-ver" content="20261104201925">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -826,7 +826,7 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .oj-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.oj-bar{height:10px;border-radius:99px;background:#e8eef9;overflow:hidden;margin:6px 0 4px}.oj-bar i{display:block;height:100%;background:linear-gradient(90deg,#0b7a5c,#22c39a)}
 .oj-l label{display:flex;gap:10px;align-items:flex-start;border:1px solid #dbe3f3;border-radius:12px;padding:9px 11px;margin:6px 0;font-size:13.5px;cursor:pointer;background:#fff}.oj-l input{width:20px;height:20px;flex:none;accent-color:#0b7a5c}.oj-l label:has(input:checked){background:#ecfdf5;border-color:#86d9b9}
 .oj-l small{display:block;color:#64748b;font-size:11.5px}.oj-x{margin-left:auto;border:0;background:none;color:#94a3b8;font-size:12px;cursor:pointer;flex:none}
-.dh-q{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.dh-q button{font:inherit;font-size:12.5px;font-weight:700;border:1px solid #c7d4ee;background:#fff;color:#16306b;border-radius:12px;padding:10px 4px;cursor:pointer;line-height:1.35}
+.dh-q{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}.dh-q button{font:inherit;font-size:12.5px;font-weight:700;border:1px solid #c7d4ee;background:#fff;color:#16306b;border-radius:12px;padding:10px 4px;cursor:pointer;line-height:1.35}
 .pz-f{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}.pz-f button{font:inherit;font-size:12.5px;font-weight:700;border:1px solid #dbe3f3;background:#fff;border-radius:999px;padding:5px 12px;cursor:pointer}.pz-f button[aria-pressed="true"]{background:#16306b;color:#fff;border-color:#16306b}
 .pz-top{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}.pz-top span{font-size:12px;background:#fff7e6;border:1px solid #f5d48a;color:#7a4b00;border-radius:999px;padding:3px 10px;font-weight:700}
 .pz-i{border:1px solid #f1e3bf;background:#fffcf3;border-radius:12px;padding:9px 11px;margin:6px 0}.pz-i p{margin:0 0 3px;font-size:13.5px;font-weight:600;color:#3b2a00}.pz-i span{font-size:11.5px;color:#64748b}
@@ -3771,7 +3771,7 @@ function deptHome(d){
   h += '<div class="dh-c"><p class="dh-h">🗂️ 내 해피콜 건별 <small>최근 '+list.length+'건'+(rows.length>list.length?' / 전체 '+rows.length+'건':'')+'</small></p>'+
     (list.length ? list.map(function(r){ return '<div class="dh-r"><span>'+esc2(r[9])+' · '+esc2(r[10])+'<small>'+md(r[2])+' 발송 · '+esc2(r[4])+(r[7]?' · “'+esc2(r[7])+'”':'')+'</small></span>'+
       (r[5]!=null?'<em class="ok">'+r[5]+'점'+(r[6]?' '+esc2(r[6]):'')+'</em>':'<em class="no">미응답</em>')+'</div>'; }).join('') : '<p class="dh-r" style="border:0">아직 '+esc2(me)+'님 이름으로 발송된 해피콜이 없어요.</p>')+'</div>';
-  h += '<div class="dh-q">'+(d==="영업"?'<button type="button" data-xf="risk">⚠️<br>불만 위험<br>고객처</button>':'<button type="button" data-xf="open">✅<br>개시 방문<br>체크</button>')+'<button type="button" data-xf="find">🔍<br>고객처<br>한눈에</button><button type="button" data-xf="praise">🎉<br>칭찬<br>모아보기</button></div><button type="button" class="dh-b" data-xf="help">💡 현장 도움말 ›</button>';
+  h += '<div class="dh-q">'+(d==="영업"?'<button type="button" data-xf="risk">⚠️<br>불만 위험<br>고객처</button>':'<button type="button" data-xf="open">✅<br>개시 방문<br>체크</button>')+'<button type="button" data-xf="find">🔍<br>고객처<br>한눈에</button></div><button type="button" class="dh-b" data-xf="help">💡 현장 도움말 ›</button>';
   h += '<button type="button" class="dh-b" data-dhs="1">📊 지사 서비스 지표 보기 ›</button>';
   return h+'</div>';
 }
@@ -4758,7 +4758,7 @@ var HELP = [
  ["지표","고객체감 출동시간 · 당사일괄 총시간","출동 시간(분)이에요. 목표보다 짧을수록 좋아요."],
  ["지표","달성률은 어떻게 계산해요?","시트의 달성률을 그대로 써요. 실적이 목표와 같으면 100%, 목표보다 좋으면 100%를 넘고(최대 200%), 나쁘면 100% 아래예요."],
  ["지표","운전성향 판정","양호 · 주의 · 위험으로 나와요. 사업팀 평가(하반기 CS평가안)에서 주의 −1점, 위험 −2점 감점이에요.",["goto:drv","🚗 운전성향 열기"]],
- ["지표","고객체감(해피콜)","출동 · 방문 뒤 고객에게 문자로 만족도를 물어요. 10점 만점이고, 응답률과 칭찬도 함께 봐요. 내 건은 고객체감 탭이나 부서 첫 화면에서 볼 수 있어요.",["praise","🎉 칭찬 모아보기"]]
+ ["지표","고객체감(해피콜)","출동 · 방문 뒤 고객에게 문자로 만족도를 물어요. 10점 만점이고, 응답률과 칭찬도 함께 봐요. 내 건은 고객체감 탭이나 부서 첫 화면에서 볼 수 있어요."]
 ];
 function actLast(prefix){ var o={}; (typeof ACTS!=="undefined"?ACTS:[]).concat(typeof ACTS_PEND!=="undefined"?ACTS_PEND:[]).forEach(function(r){ if(String(r[1]).indexOf(prefix)!==0) return; if(!o[r[1]] || r[0]>=o[r[1]][0]) o[r[1]]=r; }); return o; }
 var HP_F = "";
@@ -5495,7 +5495,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 한눈에 보기</button><button type="button" data-vl="praise">🎉 칭찬 모아보기</button><button type="button" data-vl="risk">⚠️ 불만 위험 고객처</button><button type="button" data-vl="open">✅ 개시 방문 체크리스트</button><button type="button" data-vl="help">💡 현장 도움말</button><button type="button" data-vl="ojt">🎓 OJT 진도표</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="push">📲 업데이트 알림 받기</button><button type="button" data-vl="bdg">🔔 아이콘 뱃지 점검</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 한눈에 보기</button><button type="button" data-vl="risk">⚠️ 불만 위험 고객처</button><button type="button" data-vl="open">✅ 개시 방문 체크리스트</button><button type="button" data-vl="help">💡 현장 도움말</button><button type="button" data-vl="ojt">🎓 OJT 진도표</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="push">📲 업데이트 알림 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
