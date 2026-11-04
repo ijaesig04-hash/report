@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261104125900">
+<meta name="bsr-ver" content="20261104140038">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -818,6 +818,16 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .nv-ok{background:#e7f7ee;color:#137a3f;border-radius:12px;padding:11px;text-align:center;font-weight:800;font-size:14px}
 .nv-hint{margin:0;font-size:12px;color:#64748b;text-align:center}
 .dh{display:grid;gap:10px}
+.dh-q{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.dh-q button{font:inherit;font-size:12.5px;font-weight:700;border:1px solid #c7d4ee;background:#fff;color:#16306b;border-radius:12px;padding:10px 4px;cursor:pointer;line-height:1.35}
+.pz-f{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}.pz-f button{font:inherit;font-size:12.5px;font-weight:700;border:1px solid #dbe3f3;background:#fff;border-radius:999px;padding:5px 12px;cursor:pointer}.pz-f button[aria-pressed="true"]{background:#16306b;color:#fff;border-color:#16306b}
+.pz-top{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}.pz-top span{font-size:12px;background:#fff7e6;border:1px solid #f5d48a;color:#7a4b00;border-radius:999px;padding:3px 10px;font-weight:700}
+.pz-i{border:1px solid #f1e3bf;background:#fffcf3;border-radius:12px;padding:9px 11px;margin:6px 0}.pz-i p{margin:0 0 3px;font-size:13.5px;font-weight:600;color:#3b2a00}.pz-i span{font-size:11.5px;color:#64748b}
+.rk-i{border:1px solid #e2e8f0;border-radius:12px;padding:9px 11px;margin:6px 0;display:grid;gap:3px}.rk-h{display:flex;justify-content:space-between;gap:8px;align-items:center}.rk-h b{font-size:14px}.rk-l{font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.rk-l.r{background:#fde8e8;color:#b91c1c}.rk-l.o{background:#fff1e0;color:#b45309}.rk-l.y{background:#fef9c3;color:#854d0e}.rk-i small{font-size:12px;color:#475569;line-height:1.5}
+.ck-l{display:grid;gap:6px;margin:6px 0 10px}.ck-l label{display:flex;gap:10px;align-items:flex-start;border:1px solid #dbe3f3;border-radius:12px;padding:10px 11px;font-size:13.5px;line-height:1.45;cursor:pointer;background:#fff}
+.ck-l input{width:20px;height:20px;flex:none;margin-top:1px;accent-color:#0b7a5c}.ck-l label:has(input:checked){background:#ecfdf5;border-color:#86d9b9}.ck-l small{display:block;color:#64748b;font-size:11.5px}
+.ck-in{width:100%;box-sizing:border-box;border:1.5px solid #c7d4ee;border-radius:12px;padding:10px 12px;font:600 14px "Noto Sans KR",sans-serif}
+.fd-k{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}.fd-k span{font-size:11.5px;font-weight:700;background:#f1f5fc;border-radius:999px;padding:2px 9px;color:#16306b}
 .dh-c{background:#fff;border:1px solid #dbe3f3;border-radius:16px;padding:12px 14px;color:#0f1b33}
 .dh-hero{background:linear-gradient(135deg,#16306b,#1f4fd8);color:#fff;border:0}
 .dh-hero.sal{background:linear-gradient(135deg,#7c2d12,#d9480f)}.dh-hero.tec{background:linear-gradient(135deg,#064e3b,#0b7a5c)}
@@ -3363,6 +3373,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-04h", date:"11/4", title:"칭찬 · 위험 고객처 · 개시 체크 · 고객처 한눈에", tabs:["home"], items:["🎉 칭찬 모아보기 — 전 부서 고객 칭찬을 부서별로 모아 봐요 (영업 · 기술 직원도 칭찬 도착 알림)","⚠️ 불만 위험 고객처 — 발보 반복 · 미조치 · 해피콜 8점 이하 고객처를 위험도 순으로","✅ 개시 방문 체크리스트 — 비밀번호 지침 5개 항목을 체크하고 완료하면 관리자에게 기록","🔍 고객처 한눈에 보기 — 다발보 · 해피콜 · 칭찬 · 조치 내용을 한 번에 (이름표 메뉴)"]},
  {id:"2026-11-04g", date:"11/4", title:"영업 · 기술 부서 함께 쓰기", tabs:["home"], items:["💼🔧 이름 고르기에 영업 · 기술 직원 추가 — 고르면 부서 첫 화면(내 해피콜 발송·응답·만족도 · 건별 결과 · 부서별 비교)이 먼저 열려요","📢 공지 · 교육 보내기에서 보낼 부서(전 부서 · 서비스 · 영업 · 기술)를 고를 수 있고, 확인 현황도 그 부서 인원으로 집계해요"]},
  {id:"2026-11-04f", date:"11/4", title:"알림 숫자 정리", tabs:["home"], items:["📲 폰 알림을 하나씩 지우지 않아도, 앱에서 그 소식이 있는 탭을 열면 해당 알림이 자동으로 지워지고 아이콘 숫자도 줄어들어요"]},
  {id:"2026-11-04e", date:"11/4", title:"공지 확인자 표시", tabs:["home"], items:["📢 관리자 — 공지 확인 현황에 미확인자뿐 아니라 확인한 직원 이름도 함께 표시 (✅ 확인 · ⏳ 미확인)"]},
@@ -3743,6 +3754,7 @@ function deptHome(d){
   h += '<div class="dh-c"><p class="dh-h">🗂️ 내 해피콜 건별 <small>최근 '+list.length+'건'+(rows.length>list.length?' / 전체 '+rows.length+'건':'')+'</small></p>'+
     (list.length ? list.map(function(r){ return '<div class="dh-r"><span>'+esc2(r[9])+' · '+esc2(r[10])+'<small>'+md(r[2])+' 발송 · '+esc2(r[4])+(r[7]?' · “'+esc2(r[7])+'”':'')+'</small></span>'+
       (r[5]!=null?'<em class="ok">'+r[5]+'점'+(r[6]?' '+esc2(r[6]):'')+'</em>':'<em class="no">미응답</em>')+'</div>'; }).join('') : '<p class="dh-r" style="border:0">아직 '+esc2(me)+'님 이름으로 발송된 해피콜이 없어요.</p>')+'</div>';
+  h += '<div class="dh-q">'+(d==="영업"?'<button type="button" data-xf="risk">⚠️<br>불만 위험<br>고객처</button>':'<button type="button" data-xf="open">✅<br>개시 방문<br>체크</button>')+'<button type="button" data-xf="find">🔍<br>고객처<br>한눈에</button><button type="button" data-xf="praise">🎉<br>칭찬<br>모아보기</button></div>';
   h += '<button type="button" class="dh-b" data-dhs="1">📊 지사 서비스 지표 보기 ›</button>';
   return h+'</div>';
 }
@@ -4668,19 +4680,86 @@ function findView(q){
   setTimeout(function(){ var i=document.getElementById("fd-q"); if(i){ i.focus(); var v=i.value; i.value=''; i.value=v; } },50);
 }
 function findRes(q){
-  q = (q||'').replace(/\s/g,''); if(q.length<2) return '<p class="xs-p">두 글자 이상 입력하세요. 다발보 이력 · 고객체감(발송·응답·칭찬)을 함께 찾습니다.</p>';
+  q = (q||'').replace(/\s/g,''); if(q.length<2){ var top = riskList().slice(0,5); return '<p class="xs-p">두 글자 이상 입력하세요. 다발보 이력 · 해피콜(발송·응답·칭찬) · 조치 내용을 한 번에 봅니다.</p>'+(top.length?'<p class="xs-p" style="margin-top:10px"><b>⚠️ 요즘 발보가 잦은 곳</b></p>'+top.map(function(x){ return '<button type="button" class="fd-btn" style="margin:3px 4px 0 0" data-fdq="'+esc2(x.place.replace(/\*+$/,''))+'">'+esc2(x.place)+' · '+x.n+'회</button>'; }).join(''):''); }
   var norm=function(s){return String(s||'').replace(/\s/g,'')}, hit=function(n){ var a=norm(n), parts=q.split(''); return a.indexOf(q)>=0 || a.replace(/\*/g,'').indexOf(q.replace(/\*/g,''))>=0; };
   var g = {};
   ALM.multi.rows.forEach(function(r){ if(!hit(r[1])) return; var k=r[1]; (g[k]=g[k]||{al:[],cs:[],car:r[0],ind:r[9]}).al.push(r); });
   CSR.forEach(function(r){ if(!hit(r[9])) return; var k=r[9]; (g[k]=g[k]||{al:[],cs:[],car:'',ind:r[8]}).cs.push(r); });
   var ks = Object.keys(g); if(!ks.length) return '<p class="xs-p">"'+esc2(q)+'"(으)로 찾은 고객처가 없습니다. 고객처명은 일부 가려져 있어 앞부분으로 찾아보세요.</p>';
   return '<p class="xs-p">'+ks.length+'곳 찾음</p>'+ks.slice(0,20).map(function(k){ var x=g[k], ua=x.car?actsFor(x.car+'|'+k):[];
+    var rp = x.cs.filter(function(r){return r[5]!=null}), pz = x.cs.filter(function(r){return r[6]==="칭찬"}).length;
     return '<div class="fd-c"><div class="fd-h"><b>'+esc2(k)+'</b><small>'+esc2(x.ind||'')+(x.car?' · '+x.car+'호':'')+'</small></div>'+
+      '<div class="fd-k">'+(x.al.length?'<span>🔁 발보 '+x.al.length+'회</span>':'')+(x.cs.length?'<span>📞 해피콜 '+x.cs.length+'건 · 응답 '+rp.length+'</span>':'')+(pz?'<span>🎉 칭찬 '+pz+'</span>':'')+'</div>'+
+      ua.filter(function(r){return !r.pend||true}).slice(-3).map(function(r){ return '<div class="fd-s">📝 조치 '+notiDate(r[0])+' · '+esc2(r[2])+' — '+esc2(r[3])+'</div>'; }).join('')+
       (x.al.length?'<div class="fd-s al">🔁 다발보 '+x.al.length+'회 — '+x.al.map(function(r){return (+r[2].slice(0,2))+'/'+(+r[2].slice(3))+' '+r[5]}).join(', ')+(x.al.some(function(r){return r[6]})||ua.length?' · <b class="ok">조치 완료</b>':' · <b class="ng">미조치</b>')+'</div>':'')+
       x.cs.map(function(r){ return '<div class="fd-s cs">💬 '+(+r[2].slice(0,2))+'/'+(+r[2].slice(3))+' 발송 · '+esc2(r[0])+' · '+esc2(r[4])+' — '+(r[3]?'<b class="ok">응답 '+r[5]+'점'+(r[6]?' '+r[6]:'')+'</b>'+(r[7]?' “'+esc2(r[7])+'”':''):'<b class="ng">미응답</b>')+'</div>'; }).join('')+'</div>'; }).join('');
 }
 document.addEventListener("input", function(e){ if(e.target.id==="fd-q"){ var r=document.getElementById("fd-r"); if(r) r.innerHTML=findRes(e.target.value); } });
-document.addEventListener("click", function(e){ if(e.target.closest("[data-find]")) findView(''); });
+document.addEventListener("click", function(e){ if(e.target.closest("[data-find]")) findView(''); var fq=e.target.closest("[data-fdq]"); if(fq) findView(fq.dataset.fdq); });
+
+/* ===== 🎉 칭찬 모아보기 — 전 부서 고객 칭찬 (관리자는 순위 집계에서 제외) ===== */
+function praiseView(f){
+  var D = function(n){ return typeof deptOf==="function" ? deptOf(n) : "서비스"; };
+  var all = CSR.filter(function(r){return r[6]==="칭찬"}).sort(function(a,b){ return (a[3]||a[2])<(b[3]||b[2])?1:-1; });
+  var L = f ? all.filter(function(r){return D(r[0])===f}) : all;
+  var c = {}; L.forEach(function(r){ if(CS_MGR.indexOf(r[0])<0) c[r[0]]=(c[r[0]]||0)+1; });
+  var top = Object.keys(c).sort(function(a,b){return c[b]-c[a] || a.localeCompare(b,"ko")}).slice(0,5);
+  var md = function(x){ return (+x.slice(0,2))+'/'+(+x.slice(3)); };
+  openSheet('<div class="xs-h"><b>🎉 칭찬 모아보기</b><button type="button" data-xs="close">✕</button></div>'+
+    '<p class="xs-p">고객체감(해피콜)에서 고객이 남긴 칭찬이에요 · '+esc2(CSD[Object.keys(CSD).sort().pop()].period.replace("2026.",""))+'</p>'+
+    '<div class="pz-f">'+["","서비스","영업","기술"].map(function(k){ var n = k ? all.filter(function(r){return D(r[0])===k}).length : all.length; return '<button type="button" data-pzf="'+k+'" aria-pressed="'+(k===f)+'">'+(k||'전체')+' '+n+'</button>'; }).join('')+'</div>'+
+    (top.length?'<div class="pz-top">'+top.map(function(n,i){ return '<span>'+(i===0?'🥇 ':'')+esc2(n)+' '+c[n]+'건</span>'; }).join('')+'</div>':'')+
+    (L.length ? L.map(function(r){ return '<div class="pz-i"><p>'+(r[7]?'“'+esc2(r[7])+'”':'⭐ '+r[5]+'점 · 칭찬')+'</p><span>'+esc2(r[0])+' ('+D(r[0])+') · '+md(r[3]||r[2])+' · '+esc2(r[9])+' · '+esc2(r[4])+'</span></div>'; }).join('') : '<p class="xs-p">아직 칭찬이 없어요.</p>'));
+}
+document.addEventListener("click", function(e){ var b=e.target.closest("[data-pzf]"); if(b){ praiseView(b.dataset.pzf); return; }
+  var x=e.target.closest("[data-xf]"); if(!x) return; var k=x.dataset.xf; if(k==="risk") riskView(); else if(k==="open") openCheck(); else if(k==="find") findView(""); else if(k==="praise") praiseView(""); });
+
+/* ===== ⚠️ 불만 위험 고객처 — 다발보 반복 · 미조치 · 낮은 해피콜 점수 ===== */
+function riskList(){
+  var g = {};
+  ALM.multi.rows.forEach(function(r){ var k=r[0]+'|'+r[1], x=g[k]||(g[k]={car:r[0], place:r[1], ind:r[9], n:0, last:'', why:{}, done:false}); x.n++; if(r[2]>x.last) x.last=r[2]; x.why[r[5]]=(x.why[r[5]]||0)+1; if(r[6]) x.done=true; });
+  return Object.keys(g).map(function(k){ var x=g[k]; if(!x.done && typeof actsFor==="function" && actsFor(k).length) x.done=true;
+      x.score = x.n + (x.done?0:2); x.lv = x.score>=5?'r':x.score>=4?'o':'y'; return x; })
+    .sort(function(a,b){ return b.score-a.score || (a.last<b.last?1:-1); });
+}
+function riskView(){
+  var L = riskList(), lo = CSR.filter(function(r){return r[5]!=null && r[5]<=8}), md = function(x){ return (+x.slice(0,2))+'/'+(+x.slice(3)); };
+  var lb = {r:'🔴 높음', o:'🟠 주의', y:'🟡 관찰'};
+  openSheet('<div class="xs-h"><b>⚠️ 불만 위험 고객처</b><button type="button" data-xs="close">✕</button></div>'+
+    '<p class="xs-p">발보가 반복되거나 조치가 안 된 곳, 해피콜 점수가 낮은 곳이에요. 해약 전에 먼저 연락 · 방문할 곳을 고르는 데 쓰세요. (다발보 자료 '+(function(){ var d=ALM.multi.rows.map(function(r){return r[2]}).sort(); return d.length?md(d[0])+' ~ '+md(d[d.length-1]):'-'; })()+' · 미조치는 위험도를 높게 봐요)</p>'+
+    '<div class="xs-h" style="margin-top:8px"><b>📞 해피콜 8점 이하</b></div>'+(lo.length ? lo.map(function(r){ return '<div class="rk-i"><div class="rk-h"><b>'+esc2(r[9])+'</b><span class="rk-l r">'+r[5]+'점</span></div><small>'+esc2(r[0])+' · '+md(r[2])+' 발송'+(r[7]?' · “'+esc2(r[7])+'”':'')+'</small></div>'; }).join('') : '<p class="xs-p">없음 👍 — 응답한 고객은 모두 9~10점이에요.</p>')+
+    '<div class="xs-h" style="margin-top:8px"><b>🔁 발보 반복 고객처 '+L.length+'곳</b></div>'+
+    L.slice(0,30).map(function(x){ var w = Object.keys(x.why).sort(function(a,b){return x.why[b]-x.why[a]}).slice(0,2).join(' · ');
+      return '<div class="rk-i"><div class="rk-h"><b>'+esc2(x.place)+'</b><span class="rk-l '+x.lv+'">'+lb[x.lv]+'</span></div><small>'+x.car+'호 · '+esc2(x.ind||'')+' · 발보 '+x.n+'회 · 마지막 '+md(x.last)+' · '+(x.done?'<b style="color:#0b7a5c">조치 완료</b>':'<b style="color:#b91c1c">미조치</b>')+'<br>원인: '+esc2(w)+'</small>'+
+        '<button type="button" class="fd-btn" style="justify-self:start" data-fdq="'+esc2(x.place.replace(/\*+$/,''))+'">고객처 한눈에 ›</button></div>'; }).join('')+
+    (L.length>30?'<p class="xs-p">외 '+(L.length-30)+'곳</p>':''));
+}
+
+/* ===== ✅ 개시 방문 체크리스트 — 영상기기 비밀번호 지침(10/27) · VOC RISK포인트(11/3~) ===== */
+var OPEN_CK = [
+  ["직접 설정 확인","방문 즉시 고객이 영상기기 비밀번호를 직접 설정했는지 확인"],
+  ["미설정이면 초기화","모두앱 또는 영상기기로 초기화 → 변경 방법 안내 → 고객이 직접 설정"],
+  ["임시 비밀번호 변경","공사 협력사 임시 비밀번호였다면 고객이 직접 바꾸도록 함 (해당 없으면 체크)"],
+  ["주의사항 안내","초기 비밀번호 변경 · 주기적 변경 · 타인 공유 금지"],
+  ["VOC에 비밀번호 안 적음","처리내용에 비밀번호 값 기재 · 고객에게 알려줌 없음 (RISK포인트 1등급)"]
+];
+function openMine(){ var me=myName(); return (typeof ACTS!=="undefined"?ACTS:[]).concat(typeof ACTS_PEND!=="undefined"?ACTS_PEND:[]).filter(function(r){ return /^open\|/.test(r[1]) && (mgrIs() || r[2]===me); }).sort(function(a,b){return b[0]-a[0]}); }
+function openCheck(msg){
+  var L = openMine(), ym = kstDate(0).slice(0,7), mo = L.filter(function(r){ return new Date(r[0]+9*3600000).toISOString().slice(0,7)===ym; });
+  openSheet('<div class="xs-h"><b>✅ 개시 방문 체크리스트</b><button type="button" data-xs="close">✕</button></div>'+
+    '<p class="xs-p">개시 방문 때 하나씩 체크하고 <b>완료</b>를 누르면 관리자에게 기록이 남아요. 고객 이름 · 연락처 · 비밀번호는 적지 마세요.</p>'+
+    '<input id="ck-p" class="ck-in" maxlength="20" placeholder="고객처 (예: ○○약국 · 선택)" autocomplete="off">'+
+    '<div class="ck-l">'+OPEN_CK.map(function(c,i){ return '<label><input type="checkbox" id="ck-'+i+'"><span><b>'+c[0]+'</b><small>'+c[1]+'</small></span></label>'; }).join('')+'</div>'+
+    '<button type="button" class="ntw-go" style="width:100%" data-ckgo="1">✅ 개시 방문 체크 완료</button>'+(msg?'<p class="ntw-msg">'+msg+'</p>':'')+
+    '<div class="xs-h" style="margin-top:14px"><b>'+(mgrIs()?'지사 전체':'내')+' 체크 기록</b><small style="margin-left:6px;color:#64748b">이번 달 '+mo.length+'건</small></div>'+
+    (L.length ? L.slice(0,15).map(function(r){ return '<div class="dh-r"><span>'+esc2(r[3])+'<small>'+notiDate(r[0])+(mgrIs()?' · '+esc2(r[2]):'')+'</small></span><em class="ok">완료</em></div>'; }).join('') : '<p class="xs-p">아직 기록이 없어요.</p>'));
+}
+document.addEventListener("click", function(e){ if(!e.target.closest("[data-ckgo]")) return;
+  var n = OPEN_CK.filter(function(c,i){ var el=document.getElementById("ck-"+i); return el && el.checked; }).length;
+  if(n<OPEN_CK.length){ openCheck("⚠️ 5개 항목을 모두 체크해야 완료할 수 있어요 ("+n+"/5)"); return; }
+  if(!myName()){ openCheck("이름표 메뉴에서 이름을 먼저 골라 주세요."); return; }
+  var pl = ((document.getElementById("ck-p")||{}).value||"").replace(/\d{2,}/g,"").trim().slice(0,20) || "고객처 미입력";
+  axPush("open|"+Date.now(), pl+" · 5/5 체크"); openCheck("✅ 기록했어요. 수고하셨어요!"); });
 
 /* ===== 🔠 글자 크게 ===== */
 /* 화면 배치는 그대로 두고, 작은 글자(14.5px 미만)만 키움 — 칸을 넘치면 원래대로 */
@@ -5306,7 +5385,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 검색</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="push">📲 업데이트 알림 받기</button><button type="button" data-vl="bdg">🔔 아이콘 뱃지 점검</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 한눈에 보기</button><button type="button" data-vl="praise">🎉 칭찬 모아보기</button><button type="button" data-vl="risk">⚠️ 불만 위험 고객처</button><button type="button" data-vl="open">✅ 개시 방문 체크리스트</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="push">📲 업데이트 알림 받기</button><button type="button" data-vl="bdg">🔔 아이콘 뱃지 점검</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
@@ -5534,7 +5613,7 @@ document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contain
 menu.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return; menu.hidden = true;
   var a = b.dataset.vl;
-  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="bdg"){ badgeCheck(); } else if(a==="push"){ pushView(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ notiList(); } else if(a==="find"){ findView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
+  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="bdg"){ badgeCheck(); } else if(a==="push"){ pushView(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ notiList(); } else if(a==="find"){ findView(""); } else if(a==="praise"){ praiseView(""); } else if(a==="risk"){ riskView(); } else if(a==="open"){ openCheck(); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
 });
 ov.addEventListener("click", function(e){
   var n = e.target.closest("[data-nm]");
@@ -5903,7 +5982,7 @@ function actsLoad(){
   }).catch(function(){});
 }
 /* 🔔 다발보 조치 알림 — 근무자가 조치를 입력하면 관리자 브리핑 맨 위에 알림 카드 + 앱을 열어 둔 상태면 토스트 (MVP 앱 활용도 항목) */
-function actIsAlm(k){ return !/^(hc|chk|nr|mvp|mvpwin|mvpack|cheer|cheerdel|hand|handdel|quiz)\|/.test(k); }
+function actIsAlm(k){ return !/^(hc|chk|nr|mvp|mvpwin|mvpack|cheer|cheerdel|hand|handdel|quiz|open)\|/.test(k); }
 function actNew(){
   if(typeof mgrIs!=="function" || !mgrIs()) return [];
   var me = myName(), kk = 'bsr_actseen_'+me, seen = +lsGet(kk)||0; if(!seen){ seen = Date.now()-86400000; lsSet(kk, String(seen)); }
