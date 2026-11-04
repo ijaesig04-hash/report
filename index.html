@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261104205600">
+<meta name="bsr-ver" content="20261104205907">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -4747,7 +4747,7 @@ var HELP = [
  ["앱","앱 설치하기","안드로이드: 크롬으로 주소 열기 → 화면 아래 [설치] (없으면 ⋮ → 앱 설치 / 홈 화면에 추가)\n아이폰: 사파리로 열기 → 공유 → 홈 화면에 추가\n설치 뒤에는 홈 화면의 '북서울 Report' 아이콘으로 열어 주세요."],
  ["앱","업데이트 알림 켜기","이름표 메뉴 → 📲 업데이트 알림 받기 → 🔔 알림 켜기 → 허용\n설치한 앱에서 켜야 해요. 아이폰은 iOS 16.4 이상, 홈 화면 앱에서만 돼요.",["push","📲 알림 켜기 열기"]],
  ["앱","아이콘 숫자(알림)가 안 없어져요","앱을 열고 그 소식이 있는 탭(예: 고객체감)을 한 번 누르면 알림이 지워지고 숫자도 줄어요. 공지 다시 알림은 공지에서 [확인했습니다]를 눌러야 지워져요."],
- ["앱","화면이 예전 그대로예요","이름표 메뉴 → 🔄 최신 버전 받기를 누르세요. 그래도 같으면 앱을 완전히 닫았다가 다시 여세요."],
+ ["앱","화면이 예전 그대로예요","앱을 완전히 닫았다가 다시 여세요. 새 버전은 자동으로 받아져요. 그래도 같으면 관리자에게 말해 주세요."],
  ["앱","이름을 잘못 골랐어요","이름표 메뉴 → 👤 이름 바꾸기"],
  ["앱","글씨가 작아요","이름표 메뉴 → 🔠 글자 크게 / 원래대로"],
  ["현장","영상기기 비밀번호 (개시 방문)","비밀번호는 고객이 직접 설정 · 관리하는 것이 원칙이에요. 직원이 임의로 정하는 것은 절대 금지.\n미설정이면 모두앱 또는 영상기기로 초기화 → 변경 방법 안내 → 고객이 직접 설정.\n임시 비밀번호는 고객에게 알려주지 말고, 설명할 때 꼭 바꾸게 해요.\n주의사항: 초기 비밀번호 변경 · 주기적 변경 · 타인 공유 금지.",["open","✅ 개시 방문 체크리스트"]],
@@ -5503,7 +5503,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 한눈에 보기</button><button type="button" data-vl="risk">⚠️ 불만 위험 고객처</button><button type="button" data-vl="open">✅ 개시 방문 체크리스트</button><button type="button" data-vl="help">💡 현장 도움말</button><button type="button" data-vl="ojt">🎓 OJT 진도표</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="push">📲 업데이트 알림 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 교육 보기</button><button type="button" data-vl="find">🔍 고객처 한눈에 보기</button><button type="button" data-vl="risk">⚠️ 불만 위험 고객처</button><button type="button" data-vl="open">✅ 개시 방문 체크리스트</button><button type="button" data-vl="help">💡 현장 도움말</button><button type="button" data-vl="ojt">🎓 OJT 진도표</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="push">📲 업데이트 알림 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 보내기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button><button type="button" data-vl="fresh" class="vl-adm">🔄 최신 버전 받기</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
