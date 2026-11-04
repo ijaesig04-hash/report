@@ -60,7 +60,8 @@ self.addEventListener("push",function(e){
 self.addEventListener("notificationclick",function(e){
   e.notification.close();
   e.waitUntil(self.clients.matchAll({type:"window",includeUncontrolled:true}).then(function(ws){
-    for(var i=0;i<ws.length;i++){ if(ws[i].focus){ ws[i].navigate&&ws[i].navigate(home()+"?t="+Date.now()); return ws[i].focus(); } }
-    return self.clients.openWindow(home()+"?t="+Date.now());
+    var tg=e.notification.tag||"", u=home()+"?t="+Date.now()+(/^noti-/.test(tg)?"#"+tg:"");
+    for(var i=0;i<ws.length;i++){ if(ws[i].focus){ ws[i].navigate&&ws[i].navigate(u); return ws[i].focus(); } }
+    return self.clients.openWindow(u);
   }));
 });
