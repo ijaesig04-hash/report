@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261105135010">
+<meta name="bsr-ver" content="20261105143518">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -845,7 +845,6 @@ html.dept-x [data-vl="open"]{display:none!important}
 .mn-s{margin:10px 0 2px;font-weight:800;font-size:13.5px;color:#16306b}.mn-t{overflow-x:auto;margin:4px 0}.mn-t table{border-collapse:collapse;width:100%;min-width:300px;font-size:12.5px}.mn-t th,.mn-t td{border:1px solid #e2e8f0;padding:6px 5px;text-align:center}.mn-t th{background:#f1f5fc;font-size:11.5px;color:#475569}.mn-t td:first-child{text-align:left;font-weight:700;white-space:nowrap}
 .ndt{display:flex;gap:4px;margin:2px 0 10px;border-bottom:2px solid #e2e8f0;overflow-x:auto}.ndt button{font:inherit;font-size:13.5px;font-weight:700;border:0;background:none;color:#64748b;padding:8px 10px;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;cursor:pointer}
 .ndt button[aria-selected="true"]{color:#16306b;border-bottom-color:#1f4fd8}.ndt small{font-size:11px;color:#94a3b8;font-weight:700}
-.vl-n.vl-ld{position:relative;color:#5b2a00!important;border-color:#f5c26b!important;background:linear-gradient(135deg,#fffaf0,#ffe9b8)!important}.vl-n.vl-ld[aria-pressed="true"]{box-shadow:0 0 0 3px #f59e0b!important}.vl-li{font-style:normal;margin-right:3px}.vl-ld small{color:#b45309!important;font-weight:800!important}
 .mxst.ldb{display:inline-block;margin-left:5px;font-size:.72em;font-weight:800;line-height:1.5;padding:0 7px;border-radius:999px;vertical-align:middle;white-space:nowrap;letter-spacing:0}.mxst.ldb.sal{background:#fff1e6;color:#9a3412;border:1px solid #fdba8c}.mxst.ldb.tec{background:#e7f8f1;color:#0b5e47;border:1px solid #86d9b9}
 .ntre{display:block;width:100%;margin-top:8px;font:inherit;font-weight:700;font-size:13px;border:1px solid #f5c26b;background:#fff8eb;color:#8a4b00;border-radius:10px;padding:9px;cursor:pointer}
 .hp-c{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}.hp-c button{font:inherit;font-size:12.5px;font-weight:700;border:1px solid #dbe3f3;background:#fff;border-radius:999px;padding:5px 12px;cursor:pointer}.hp-c button[aria-pressed="true"]{background:#16306b;color:#fff;border-color:#16306b}
@@ -5684,7 +5683,7 @@ function pickView(){
     '<p><i>👀 타부서</i><span>지표 보기 전용</span></p></div>';
   STAFF.forEach(function(gr, gi){ if(gi===0) h += '<div class="vl-div vl-sec"><span>🔒 관리자</span></div>'; if(gi===2) h += '<div class="vl-div vl-sec"><span>🚓 차량 근무자</span></div>'; h += '<div class="vl-g">'+gr[0]+'</div>'; (gi===0?gr[1].concat(["그룹장"]):gr[1]).forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장"||n==="그룹장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':n==="이재식"?'👨‍💻 ':'')+(n==="그룹장"?'<span style="white-space:nowrap;font-size:13.5px;letter-spacing:-.5px">🎖️서비스 그룹장</span>':n)+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
   h += '<div class="vl-div vl-sec"><span>💼 영업 · 💻 기술</span></div>';
-  Object.keys(DEPTS).forEach(function(k){ h += '<div class="vl-g">'+(k==="영업"?'💼 ':'💻 ')+k+'</div>'+DEPTS[k].map(function(n){ var ld = DEPT_LEAD[k]===n; return '<button type="button" class="vl-n'+(ld?' vl-ld':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(ld?'<i class="vl-li">'+(k==="영업"?'👔':'🧑‍💻')+'</i>':'')+n+'<small>'+k+(ld?'팀장':'')+'</small></button>'; }).join(''); });
+  Object.keys(DEPTS).forEach(function(k){ h += '<div class="vl-g">'+(k==="영업"?'💼 ':'💻 ')+k+'</div>'+DEPTS[k].map(function(n){ var ld = DEPT_LEAD[k]===n; return '<button type="button" class="vl-n'+(ld?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(ld?(k==="영업"?'👔 ':'🧑‍💻 '):'')+n+'<small>'+k+(ld?'팀장':'')+'</small></button>'; }).join(''); });
   var listed = ALL.concat(["그룹장","타부서"]).concat(DEPTS["영업"]).concat(DEPTS["기술"]), typed = pick && listed.indexOf(pick)<0 ? pick : "";
   h += '<div class="vl-g">그 외</div>'+["타부서"].map(function(n){ return '<button type="button" class="vl-n'+(n==="그룹장"?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="그룹장"?'🎖️ ':'')+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('')+
     '<div class="vl-div"><span>목록에 이름이 없으면</span></div><div class="vl-in-row"><label for="vlname">직접 입력</label><input id="vlname" type="text" maxlength="10" autocomplete="off" placeholder="이름을 입력하세요" value="'+esc(typed)+'" aria-label="이름 직접 입력"></div></div>';
