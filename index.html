@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261105060752">
+<meta name="bsr-ver" content="20261105062159">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -5286,7 +5286,7 @@ setInterval(function(){ var h=new Date(Date.now()+9*3600000).getUTCHours(); if(G
 /* 화면 이동 시 내용 맨 위(탭 바로 아래)로 */
 function goDp(){ var f=function(){ var b=document.querySelector("#view [data-dp]"), el=b?b.parentElement:null, n=document.querySelector("nav.tabs"); if(!el){ goTop(); return; } var y=el.getBoundingClientRect().top+window.pageYOffset-(n?n.offsetHeight:0)-8; window.scrollTo(0, Math.max(0,y)); }; f(); requestAnimationFrame(f); setTimeout(f,120); }
 function goTop(){ var f=function(){ var v=document.getElementById("view"), n=document.querySelector("nav.tabs"); if(!v) return; var y=v.getBoundingClientRect().top+window.pageYOffset-(n?n.offsetHeight:0)-4; window.scrollTo(0, Math.max(0,y)); }; f(); requestAnimationFrame(f); setTimeout(f,120); }
-function renderQuiet(){ if(!window.state) return; var y = window.scrollY; render(); if(Math.abs(window.scrollY-y)>2) window.scrollTo(0,y); }
+function renderQuiet(){ if(!window.state) return; var y = window.scrollY; window._RQ = true; try{ render(); } finally { window._RQ = false; } if(Math.abs(window.scrollY-y)>2) window.scrollTo(0,y); }
 /* 영업 · 기술 직원은 고객체감 탭을 브리핑 바로 다음에 (서비스 · 관리자는 원래 순서) */
 function tabOrderFix(){ try{ if(typeof notiRefilter==="function") notiRefilter(); }catch(_){} try{ var cs = document.querySelector('[role=tab][data-tab="cs"]'), hm = document.querySelector('[role=tab][data-tab="home"]'), ev = document.querySelector('[role=tab][data-tab="eval"]'); if(!cs||!hm||!ev) return;
   var d = typeof deptOf==="function" ? deptOf() : "서비스", after = (d==="영업"||d==="기술") ? hm : ev;
@@ -5297,7 +5297,10 @@ function render(){ tabOrderFix();
   var nft = newsFor(state.tab); if(nft) markSeen("bsr_tab_"+state.tab, nft.id); nseenAdd(NEWS.slice(0,40).filter(function(n){return n.tabs.indexOf(state.tab)>=0}).map(function(n){return n.id}));
   var VW0 = document.getElementById("view"), dk = function(d){ var sm = d.querySelector('summary'); return (d.className||'')+'|'+(sm?sm.textContent.replace(/[\d\s▾▴]/g,'').slice(0,24):''); }, op = [];
   VW0.querySelectorAll("details[open]").forEach(function(d){ op.push(dk(d)); });
-  VW0.innerHTML = '<div class="wrap" style="gap:20px">'+(window.notiBanner?notiBanner():'')+newsBanner()+staleNote()+v+'</div>';
+  var HTML = '<div class="wrap" style="gap:20px">'+(window.notiBanner?notiBanner():'')+newsBanner()+staleNote()+v+'</div>';
+  /* 자동 새로고침(날씨 · 동기화 · 앱 복귀 등)인데 내용이 그대로면 화면을 다시 그리지 않음 → 스크롤 중 깜빡임 방지 */
+  if(window._RQ && VW0._html===HTML){ return; }
+  VW0._html = HTML; VW0.innerHTML = HTML;
   if(op.length) VW0.querySelectorAll("details").forEach(function(d){ if(op.indexOf(dk(d))>=0) d.open = true; });
   if(typeof mxStarFix==="function"){ try{ mxStarFix(); }catch(_){} }
   newsDots();
