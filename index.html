@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261105224655">
+<meta name="bsr-ver" content="20261105225609">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -6302,7 +6302,8 @@ function notiView(id){
 }
 /* 새 공지 · 교육 → 대상 직원 폰에 알림 (보관함 요청 → GitHub이 발송) */
 function notiPush(x){ try{ if(!window.PUSH_URL) return; var names = notiAud(x).filter(function(n){ return n!==myName(); }); if(!names.length) return; var p = ncParse(x);
-  fetch(PUSH_URL+"?action=req&pin="+encodeURIComponent(BSR_PIN())+"&names="+encodeURIComponent(names.join(","))+"&title="+encodeURIComponent(p.cat.k==="교육"?"📚 새 교육 자료":"📢 새 공지 · "+p.cat.k)+"&body="+encodeURIComponent(p.title)+"&tag="+encodeURIComponent("noti-"+x.id)+"&t="+Date.now(),{cache:"no-store"}).catch(function(){}); }catch(e){} }
+  fetch(PUSH_URL+"?action=req&pin="+encodeURIComponent(BSR_PIN())+"&names="+encodeURIComponent(names.join(","))+"&title="+encodeURIComponent(p.cat.k==="교육"?"📚 새 교육 자료":"📢 새 공지 · "+p.cat.k)+"&body="+encodeURIComponent(p.title)+"&tag="+encodeURIComponent("noti-"+x.id)+"&t="+Date.now(),{cache:"no-store"}).then(pushKick).catch(function(){}); }catch(e){} }
+function pushKick(){ try{ fetch(PUSH_URL+"?pin="+encodeURIComponent(BSR_PIN()),{method:"POST",mode:"no-cors",body:"kick"}).catch(function(){}); }catch(e){} }
 function ntwPick(){ var b = document.querySelector('.ncw [data-ncw][aria-pressed="true"]'); return b ? b.dataset.ncw : "업무공지"; }
 var NW_D = "전체", NW_K = "noti";
 function eduTg(k){ var E = EDU[k]||{}; return E.tg || (E.cat==="경조사" ? "전체" : "서비스"); }
@@ -6343,7 +6344,7 @@ document.addEventListener("click", function(e){
     if(!window.PUSH_URL){ nrToast("알림 서버가 연결되지 않았어요"); return; }
     re.disabled = true; re.textContent = "보내는 중…";
     fetch(PUSH_URL+"?action=req&pin="+encodeURIComponent(BSR_PIN())+"&names="+encodeURIComponent(rmiss.join(","))+"&title="+encodeURIComponent("📢 공지 확인 부탁드려요")+"&body="+encodeURIComponent(ncParse(rx).title)+"&tag="+encodeURIComponent("noti-"+rid)+"&t="+Date.now(),{cache:"no-store"})
-      .then(function(r){return r.json()}).then(function(j){ if(j&&j.ok){ re.textContent = "✅ 요청 완료 — 10분 안에 알림을 켠 미확인자에게 가요"; nrToast("🔔 "+rmiss.length+"명에게 다시 알림 요청 · 알림을 켠 사람만 받아요"); }
+      .then(function(r){return r.json()}).then(function(j){ if(j&&j.ok){ pushKick(); re.textContent = "✅ 요청 완료 — 몇 분 안에 알림을 켠 미확인자에게 가요"; nrToast("🔔 "+rmiss.length+"명에게 다시 알림 요청 · 알림을 켠 사람만 받아요"); }
         else { re.disabled=false; re.textContent = "⚠️ 보관함 업데이트(v2)가 필요해요 — 다시 누르기"; } })
       .catch(function(){ re.disabled=false; re.textContent = "⚠️ 보내지 못했어요 — 다시 누르기"; });
     return; }
