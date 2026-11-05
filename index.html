@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261104211407">
+<meta name="bsr-ver" content="20261105015251">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2708,10 +2708,26 @@ function deptOf(n){ n = n||myName(); for(var k in DEPTS){ if(DEPTS[k].indexOf(n)
 var CS_JOBS = ["서비스","영업","기술","미지정"], CS_JC = {"서비스":"#2563eb","영업":"#ea580c","기술":"#059669","미지정":"#64748b"};
 var CS_RC = ["#2563eb","#ea580c","#10b981","#f59e0b","#ec4899","#8b5cf6"];
 function csSt(sent,resp){ var r=resp/sent*100; return resp===0?["미제출","bad"]:r<50?["개선필요","warn"]:r<100?["양호","mid"]:["우수","good"]; }
+/* ===== 고객체감 월별 — 발송일 기준 월로 나눔 (10월부터는 건별 자료 CSR로 자동 집계 → 자료를 추가하면 그 달에 쌓임) ===== */
+function csMonths(){ var o = {}; Object.keys(CSD).forEach(function(k){ if(k<"2026-10") o[k.slice(0,7)]=1; }); CSR.forEach(function(r){ o["2026-"+r[2].slice(0,2)]=1; }); return Object.keys(o).sort(); }
+function csMonthSnap(mk){
+  var mm = mk.slice(5), rows = CSR.filter(function(r){ return r[2].slice(0,2)===mm; }), keys = Object.keys(CSD).sort(), last = keys[keys.length-1];
+  if(!rows.length){ var k = keys.filter(function(x){return x.slice(0,7)===mk}).pop(); var o = JSON.parse(JSON.stringify(CSD[k])); o.asof = k; o.mk = mk; return o; }
+  var ag = function(L){ var a = L.filter(function(r){return r[5]!=null}).map(function(r){return r[5]}); return [L.length, a.length, a.length ? Math.round(a.reduce(function(x,y){return x+y},0)/a.length*100)/100 : null]; };
+  var uniq = function(f){ var u=[]; rows.forEach(function(r){ var v=f(r); if(u.indexOf(v)<0) u.push(v); }); return u; };
+  var jo = ["서비스","영업","기술"].filter(function(j){return rows.some(function(r){return r[1]===j})}).concat(uniq(function(r){return r[1]}).filter(function(j){return ["서비스","영업","기술"].indexOf(j)<0}));
+  var ro = ["영상방문","요청출동","영업","S/W점검"].filter(function(j){return rows.some(function(r){return r[4]===j})}).concat(uniq(function(r){return r[4]}).filter(function(j){return ["영상방문","요청출동","영업","S/W점검"].indexOf(j)<0}));
+  var t = ag(rows), sc = rows.filter(function(r){return r[5]!=null}).map(function(r){return r[5]});
+  var pp = uniq(function(r){return r[0]}).map(function(n){ var L = rows.filter(function(r){return r[0]===n}), a = ag(L), x = [n, L[0][1], a[0], a[1]]; if(a[2]!=null && a[2]!==10) x.push(a[2]); return x; })
+    .sort(function(a,b){ return (b[2]-a[2]) || (b[3]-a[3]); });
+  var y = +mk.slice(0,4), endD = new Date(Date.UTC(y, +mm, 0)).getUTCDate(), asof = last.slice(0,7)===mk ? last : (last.slice(0,7)>mk ? mk+"-"+("0"+endD).slice(-2) : last);
+  return {mk:mk, asof:asof, period:y+"."+mm+".01 ~ "+mm+"."+asof.slice(8), sent:t[0], resp:t[1], sat:t[2]==null?0:t[2], ten:sc.filter(function(v){return v===10}).length, low:sc.filter(function(v){return v<=6}).length, src:"xls",
+    job:jo.map(function(j){ return [j].concat(ag(rows.filter(function(r){return r[1]===j}))); }), route:ro.map(function(j){ return [j].concat(ag(rows.filter(function(r){return r[4]===j}))); }), p:pp};
+}
 function viewCs(){
-  var keys = Object.keys(CSD).sort(), cur = state.cd && CSD[state.cd] ? state.cd : keys[keys.length-1], d = CSD[cur];
+  var MS = csMonths(), cm = state.cm && MS.indexOf(state.cm)>=0 ? state.cm : MS[MS.length-1], d = csMonthSnap(cm), cur = d.asof, mmN = +cm.slice(5), monthDone = cur.slice(0,7)===cm && Object.keys(CSD).sort().pop().slice(0,7)>cm;
   var rate = d.resp/d.sent*100;
-  var prevK = keys.filter(function(k){return k<cur && String(CSD[k].period||"").slice(0,10)===String(d.period||"").slice(0,10)}).pop(), pv = prevK?CSD[prevK]:null;
+  var pv = null;
   var people = d.p.filter(function(x){return CS_MGR.indexOf(x[0])<0}).map(function(x){ var st=csSt(x[2],x[3]); return {name:x[0],job:x[1],sent:x[2],resp:x[3],rate:x[3]/x[2]*100,sat:x[3]?(x[4]||10):null,st:st[0],cls:st[1]}; });
   var order = ["미제출","개선필요","양호","우수"];
   var jf = state.cj||"서비스", sf = state.cf||"all";
@@ -2722,9 +2738,9 @@ function viewCs(){
   var R=34, C=2*Math.PI*R, off=C*(1-Math.min(100,rate)/100);
   var stars=''; for(var q=0;q<5;q++){ var f=Math.max(0,Math.min(1,d.sat/2-q)); stars+='<span class="cs-st"><i style="width:'+(f*100)+'%">★</i>★</span>'; }
   var dl = pv ? rate-(pv.resp/pv.sent*100) : null;
-  var dateChips = keys.slice().reverse().map(function(k){ return '<button type="button" class="chip" data-cd="'+k+'" aria-pressed="'+(k===cur)+'">'+(+k.slice(5,7))+'/'+(+k.slice(8))+'</button>'; }).join("");
+  var dateChips = MS.slice().reverse().map(function(k){ return '<button type="button" class="chip" data-cm="'+k+'" aria-pressed="'+(k===cm)+'">'+(+k.slice(5))+'월</button>'; }).join("");
   /* 추이 */
-  var trend = keys.map(function(k){ var x=CSD[k], r=x.resp/x.sent*100; return '<div class="cst-b'+(k===cur?' on':'')+'"><span class="num">'+r.toFixed(0)+'%</span><div class="cst-c"><i style="height:'+Math.min(100,r)+'%"></i></div><small>'+(+k.slice(5,7))+'/'+(+k.slice(8))+'</small></div>'; }).join("");
+  var trend = MS.map(function(k){ var x=csMonthSnap(k), r=x.sent?x.resp/x.sent*100:0; return '<div class="cst-b'+(k===cm?' on':'')+'"><span class="num">'+r.toFixed(0)+'%</span><div class="cst-c"><i style="height:'+Math.min(100,r)+'%"></i></div><small>'+(+k.slice(5))+'월</small></div>'; }).join("");
   var hero = '<div class="cs-hero">'+
       '<div class="cs-top"><span class="cs-k">CUSTOMER VOICE · 전 부서</span><span class="cs-p">'+d.period+'</span></div>'+
       '<div class="cs-main">'+
@@ -2749,14 +2765,14 @@ function viewCs(){
   var sChips = [["all","전체"]].concat(order.map(function(k){return [k,k+" "+cntSt[k]]})).map(function(l){
     return '<button type="button" class="chip" data-cf="'+l[0]+'" aria-pressed="'+(sf===l[0])+'">'+l[1]+'</button>'; }).join("");
   var shown = people.filter(function(p){ return (jf==="all"||p.job===jf) && (sf==="all"||p.st===sf); });
-  var hasDet = cur.slice(0,7)>="2026-10", dd = cur.slice(5);   /* 건별 상세(CSR)는 10/1부터 누적 */
+  var hasDet = cm>="2026-10", mm2 = cm.slice(5);   /* 건별 상세(CSR)는 10월부터 */
   var rows = shown.map(function(p){
     var open = state.cx===p.name;
     var det = '';
     if(open){
-      if(!hasDet) det = '<div class="cxd"><p class="cx-none">9월 건별 내역은 아직 없습니다. 10월 기준일을 선택하면 볼 수 있습니다.</p></div>';
+      if(!hasDet) det = '<div class="cxd"><p class="cx-none">9월 건별 내역은 아직 없습니다. 10월 이후를 고르면 볼 수 있어요.</p></div>';
       else {
-        var it = CSR.filter(function(r){return r[0]===p.name && r[2]<=dd}).map(function(r){return {r:r, ok:!!(r[3]&&r[3]<=dd)}});
+        var it = CSR.filter(function(r){return r[0]===p.name && r[2].slice(0,2)===mm2}).map(function(r){return {r:r, ok:r[5]!=null}});
         it.sort(function(a,b){ return (a.ok-b.ok) || (a.r[2]<b.r[2]?1:-1); });
         var nOk = it.filter(function(x){return x.ok}).length;
         det = '<div class="cxd"><div class="cx-s"><span>발송 <b class="num">'+it.length+'</b></span><span class="ok">응답 <b class="num">'+nOk+'</b></span><span class="ng">미응답 <b class="num">'+(it.length-nOk)+'</b></span></div>'+
@@ -2764,7 +2780,7 @@ function viewCs(){
             return '<li class="'+(x.ok?'ok':'ng')+'"><span class="cx-i">'+(x.ok?'✓':'✕')+'</span><div class="cx-b"><div class="cx-t"><b class="num">'+(+r[2].slice(0,2))+'/'+(+r[2].slice(3))+'</b><span>'+r[4]+'</span><em>'+r[8]+'</em></div>'+
               '<div class="cx-p"><b>'+r[9]+'</b><span>'+r[10]+'</span><span class="num">'+r[11]+'</span></div>'+
               (x.ok? '<div class="cx-r">'+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' 응답 · <b>'+r[5]+'점</b>'+(r[6]?' · '+r[6]:'')+'</div>'+(r[7]?'<div class="cx-c">“'+r[7]+'”</div>':'') : '<div class="cx-r ng">아직 응답 없음</div>')+
-              '</div></li>'; }).join("")+'</ul>' : '<p class="cx-none">이 기준일까지 엑셀에 있는 발송 건이 없습니다.</p>')+'</div>';
+              '</div></li>'; }).join("")+'</ul>' : '<p class="cx-none">이 달에 엑셀에 있는 발송 건이 없습니다.</p>')+'</div>';
       }
     }
     return '<div class="krow cxrow'+(open?' open':'')+'"><button type="button" class="cx-h" data-cx="'+p.name+'" aria-expanded="'+open+'"><div class="mtop"><span class="mname">'+p.name+' <span class="csjob" style="--jc:'+(CS_JC[p.job]||"#64748b")+'">'+p.job+'</span></span><span class="pl '+p.cls+'">'+p.st+'</span><span class="cx-ar">'+(open?'▲':'▼')+'</span></div>'+
@@ -2772,13 +2788,13 @@ function viewCs(){
       '<div class="msub"><span class="num">응답 '+p.resp+' / 발송 '+p.sent+' · '+p.rate.toFixed(1)+'%</span><span class="num'+(p.sat!=null&&p.sat<=5.5?' neg':'')+'">만족도 '+(p.sat==null?'-':p.sat.toFixed(1))+'</span></div></button>'+det+'</div>';
   }).join("");
   var ls = people.reduce(function(a,p){return a+p.sent},0), gap = d.sent-ls;
-  return '<div class="sec"><h2>고객체감 · 전 부서 <span>기준일 '+(+cur.slice(5,7))+'/'+(+cur.slice(8))+'</span></h2>'+
-    '<div class="chips" role="group" aria-label="기준일">'+dateChips+'</div>'+hero+
-    '<div class="card cst"><div class="cst-h">응답률 추이 <span>9월은 월 누적, 10월은 1일부터 누적</span></div><div class="cst-row">'+trend+'</div></div></div>'+
+  return '<div class="sec"><h2>고객체감 · 전 부서 <span>'+mmN+'월 · '+(monthDone?'마감':(+cur.slice(5,7))+'/'+(+cur.slice(8))+' 기준')+'</span></h2>'+
+    '<div class="chips" role="group" aria-label="월">'+dateChips+'</div>'+hero+
+    '<div class="card cst"><div class="cst-h">월별 응답률 <span>그 달에 발송한 건 기준</span></div><div class="cst-row">'+trend+'</div></div></div>'+
     '<div class="sec"><h2>직무별 <span>응답/발송 · 응답률</span></h2><div class="card csjw">'+jobRows+'</div></div>'+
     '<div class="sec"><h2>접수경로별 <span>비율 · 응답률</span></h2><div class="card csjw"><div class="cs-rbar">'+rBar+'</div>'+rRows+'</div></div>'+
     '<div class="sec"><h2>사원별 응답 <span>이름을 누르면 건별 내역</span></h2>'+
-    (d.src==="xls"?'<div class="tag">'+(+cur.slice(5,7))+'/'+(+cur.slice(8))+' 자료는 엑셀 원본(건별)으로 집계했습니다.'+(cur==="2026-10-19"?' 엑셀에 없는 미지정 일부 건은 빠져 있어 10/16 대시보드 합계와 조금 다릅니다.':'')+'</div>':gap>0?'<div class="tag">시트 화면에서 목록 일부가 잘려 '+gap+'건이 사원 목록에 빠져 있습니다(합계에는 포함).</div>':'')+
+    (cm>="2026-10"?'<div class="tag">'+mmN+'월에 발송한 건만 엑셀 원본(건별)으로 집계했어요. 새 자료가 오면 이 달에 이어서 쌓여요.</div>':gap>0?'<div class="tag">시트 화면에서 목록 일부가 잘려 '+gap+'건이 사원 목록에 빠져 있습니다(합계에는 포함).</div>':'')+
     '<div class="chips" role="group" aria-label="직무">'+jChips+'</div><div class="chips" role="group" aria-label="상태">'+sChips+'</div>'+
     '<div class="card">'+(rows || '<div class="krow">해당하는 사원이 없습니다.</div>')+'</div></div>'+csExtra();
 }
@@ -3386,6 +3402,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-05b", date:"11/5", title:"고객체감 월별 보기", tabs:["cs"], items:["📞 고객체감을 11월 · 10월 · 9월 탭으로 나눠 봐요 — 발송일 기준 그 달 건만 집계 (예: 11/3 발송 = 11월, 10/29 발송 = 10월)","새 자료가 오면 해당 월에 이어서 쌓여요 · 칭찬 게시판도 고른 달 기준"]},
  {id:"2026-11-05a", only:"이재식", date:"11/5", title:"영업 · 기술 팀장 표시", tabs:["home"], items:["이름 고르기에 최영국 영업팀장 · 박정훈 기술팀장 표시 — 팀장은 공지 확인 집계와 칭찬 순위에서 빠져요"]},
  {id:"2026-11-04i", only:"이재식", date:"11/4", title:"도움말 · OJT 진도표 · 공지 다시 알림", tabs:["home"], items:["💡 현장 도움말 — 앱 사용 · 현장 업무(비밀번호 지침 · 출동료 청구 · 조치 입력) · 지표 설명을 검색해서 바로 봐요 (이름표 메뉴)","🎓 OJT 진도표 — OJT 직원별 배울 항목을 본인 · 동승자 · 관리자가 체크하고 진도를 같이 봐요","🔔 관리자 — 공지 미확인자에게만 폰 알림을 다시 보낼 수 있어요"]},
  {id:"2026-11-04h", only:"이재식", date:"11/4", title:"칭찬 · 위험 고객처 · 개시 체크 · 고객처 한눈에", tabs:["home"], items:["🎉 칭찬 모아보기 — 전 부서 고객 칭찬을 부서별로 모아 봐요 (영업 · 기술 직원도 칭찬 도착 알림)","⚠️ 불만 위험 고객처 — 발보 반복 · 미조치 · 해피콜 8점 이하 고객처를 위험도 순으로","✅ 개시 방문 체크리스트 — 비밀번호 지침 5개 항목을 체크하고 완료하면 관리자에게 기록","🔍 고객처 한눈에 보기 — 다발보 · 해피콜 · 칭찬 · 조치 내용을 한 번에 (이름표 메뉴)"]},
@@ -5164,7 +5181,7 @@ document.addEventListener("click", function(e){
 /* 칭찬 게시판 + 미응답 알림 (고객체감 탭) */
 function csExtra(){
   var key = csLatest(), ref = key ? key.slice(5) : "";
-  var pr = CSR.filter(function(r){return r[6]==="칭찬" && CS_MGR.indexOf(r[0])<0});
+  var cmx = state.cm || (typeof csMonths==="function" ? csMonths().pop() : ""), pr = CSR.filter(function(r){return r[6]==="칭찬" && CS_MGR.indexOf(r[0])<0 && (!cmx || cmx<"2026-10" || r[2].slice(0,2)===cmx.slice(5))});
   var cnt = {}; pr.forEach(function(r){cnt[r[0]]=(cnt[r[0]]||0)+1});
   var top = Object.keys(cnt).sort(function(a,b){return cnt[b]-cnt[a] || a.localeCompare(b,"ko")}).slice(0,3);
   var words = pr.filter(function(r){return r[7]}).sort(function(a,b){return a[3]<b[3]?1:-1}).slice(0,6);
@@ -5182,7 +5199,7 @@ function csExtra(){
         return '<div class="nr-r'+(done?' done':'')+'"><span class="num">'+(+r[2].slice(0,2))+'/'+(+r[2].slice(3))+'</span><b>'+r[9]+'</b><em>'+dd+'일째</em><button type="button" class="nr-ck" data-nrck="'+esc2(nrKey(n,r))+'" aria-pressed="'+done+'">'+(done?'✓ 연락함'+(ck.by&&ck.by!==myName()?' · '+esc2(ck.by):''):'연락 체크')+'</button></div>'; }).join('')+
         '<div class="nr-act"><button type="button" class="nr-sh" data-nrsh="'+esc2(n)+'">📤 '+n+'님께 카톡 보내기</button><button type="button" class="nr-cp" data-nrcp="'+esc2(n)+'">📋 복사</button></div></details>'; }).join('')
       : '<div class="krow">미응답 건이 없습니다 👍</div>')+'</div><p class="note">고객에게 응답 안내 문자를 한 번 더 드리면 응답률이 올라갑니다. 계약처는 일부 가려서 표시합니다.</p></div>';
-  var hp = '<div class="sec"><h2>👏 칭찬 게시판 <span>'+key.slice(5).replace('-','/')+' 기준 · 칭찬 '+pr.length+'건</span></h2><div class="card pz">'+
+  var hp = '<div class="sec"><h2>👏 칭찬 게시판 <span>'+(cmx?(+cmx.slice(5))+'월 · ':'')+'칭찬 '+pr.length+'건</span></h2><div class="card pz">'+
     '<div class="pz-top">'+top.map(function(n,i){return '<div class="pz-p r'+(i+1)+'">'+medal(i+1,30)+'<b>'+n+'</b><span class="num">'+cnt[n]+'건</span></div>'}).join('')+'</div>'+
     words.map(function(r){return '<div class="pz-w"><p>“'+esc2(r[7])+'”</p><span>'+r[0]+' · '+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+r[4]+'</span><button type="button" class="przc sm" data-przc="'+esc2(r[0])+'" data-przt="'+esc2(r[7])+'" data-przs="'+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+esc2(r[4])+' · 10점 만점">🖼️ 카드</button></div>'}).join('')+'</div></div>';
   return h+hp;
@@ -5278,6 +5295,7 @@ document.getElementById("view").addEventListener("click",function(e){   var dsw 
   else if(e.target.closest("[data-goto]")){ var gq=e.target.closest("[data-goto]"); if(gq.dataset.esGo){ state.es=gq.dataset.esGo; state.tm=""; } var gt=gq.dataset.goto, tb=document.querySelector('#tabs [data-tab="'+gt+'"]'); if(tb){ tb.click(); goTop(); } }
   else if(e.target.closest("[data-cx]")){ var cxn=e.target.closest("[data-cx]").dataset.cx; state.cx = state.cx===cxn?"":cxn; render(); }
   else if(e.target.closest("[data-cd]")){ state.cd = e.target.closest("[data-cd]").dataset.cd; state.cf="all"; render(); }
+  else if(e.target.closest("[data-cm]")){ state.cm = e.target.closest("[data-cm]").dataset.cm; state.cf="all"; state.cx=null; render(); }
   else if(e.target.closest("[data-cj]")){ state.cj = e.target.closest("[data-cj]").dataset.cj; render(); }
   else if(e.target.closest("[data-brfo]")){ openBriefing(); }
   else if(e.target.closest("[data-sms]")){ showSms(); }
