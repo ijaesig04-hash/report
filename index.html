@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261105221556">
+<meta name="bsr-ver" content="20261105224655">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -6300,6 +6300,9 @@ function notiView(id){
   openSheet(h);
   var o = document.getElementById("xsheet"); if(o) o.scrollTop = 0;
 }
+/* 새 공지 · 교육 → 대상 직원 폰에 알림 (보관함 요청 → GitHub이 발송) */
+function notiPush(x){ try{ if(!window.PUSH_URL) return; var names = notiAud(x).filter(function(n){ return n!==myName(); }); if(!names.length) return; var p = ncParse(x);
+  fetch(PUSH_URL+"?action=req&pin="+encodeURIComponent(BSR_PIN())+"&names="+encodeURIComponent(names.join(","))+"&title="+encodeURIComponent(p.cat.k==="교육"?"📚 새 교육 자료":"📢 새 공지 · "+p.cat.k)+"&body="+encodeURIComponent(p.title)+"&tag="+encodeURIComponent("noti-"+x.id)+"&t="+Date.now(),{cache:"no-store"}).catch(function(){}); }catch(e){} }
 function ntwPick(){ var b = document.querySelector('.ncw [data-ncw][aria-pressed="true"]'); return b ? b.dataset.ncw : "업무공지"; }
 var NW_D = "전체", NW_K = "noti";
 function eduTg(k){ var E = EDU[k]||{}; return E.tg || (E.cat==="경조사" ? "전체" : "서비스"); }
@@ -6360,7 +6363,7 @@ document.addEventListener("click", function(e){
     b = b.trim(); b = b+(b?"\n":"")+"#대상:"+tgv; b = b+(ek?"\n#교육:"+ek:"");
     var btn=e.target.closest("[data-ntpost]"); btn.disabled=true; btn.textContent="올리는 중…";
     fetch(apiUrl("a=post&pin="+encodeURIComponent(BSR_PIN())+"&title="+encodeURIComponent(t.trim())+"&body="+encodeURIComponent(b.trim())+"&by="+encodeURIComponent(myName()||"관리자")),{cache:"no-store"})
-      .then(function(r){return r.json()}).then(function(j){ if(j&&j.ok){ (NOTI.raw=NOTI.raw||[]).unshift({id:j.id,t:Date.now(),title:t.trim(),body:b.trim(),by:myName()||"관리자"}); notiRefilter(); notiWrite(NW_K==="edu"?"✅ 교육 자료를 배포했어요. 📚 교육 탭에 보여요.":"✅ 공지를 올렸습니다. 직원들이 앱을 열면 맨 위에 보입니다."); notiLoad(); } else notiWrite("PIN이 맞지 않거나 서버(Apps Script)가 아직 업데이트되지 않았습니다."); })
+      .then(function(r){return r.json()}).then(function(j){ if(j&&j.ok){ (NOTI.raw=NOTI.raw||[]).unshift({id:j.id,t:Date.now(),title:t.trim(),body:b.trim(),by:myName()||"관리자"}); notiRefilter(); notiPush({id:j.id,title:t.trim(),body:b.trim()}); notiWrite(NW_K==="edu"?"✅ 교육 자료를 배포했어요. 📚 교육 탭에 보여요.":"✅ 공지를 올렸습니다. 직원들이 앱을 열면 맨 위에 보입니다."); notiLoad(); } else notiWrite("PIN이 맞지 않거나 서버(Apps Script)가 아직 업데이트되지 않았습니다."); })
       .catch(function(){ notiWrite("올리지 못했습니다. 구글 Apps Script 업데이트가 필요할 수 있습니다."); });
     return;
   }

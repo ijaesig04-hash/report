@@ -1,7 +1,7 @@
 name: 요청 알림 보내기
 on:
   schedule:
-    - cron: "*/10 * * * *"   # 10분마다 관리자 요청 확인
+    - cron: "*/5 * * * *"   # 5분마다 관리자 요청 확인 (GitHub 사정으로 늦어질 수 있음)
   workflow_dispatch: {}
 permissions:
   contents: read
@@ -11,6 +11,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+      - run: pip install pywebpush
       - run: python3 .github/scripts/push_req.py
         env:
           VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}

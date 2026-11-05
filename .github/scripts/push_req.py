@@ -9,11 +9,16 @@ def call(**q):
 reqs = call(action='reqs').get('reqs') or []
 if not reqs:
     print('요청 없음'); sys.exit(0)
-subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', 'pywebpush'], check=True)
 from pywebpush import webpush, WebPushException
 subs = call(action='list2').get('subs') or []
 dead, done = [], []
+import datetime
+def age_h(r):
+    try: return (datetime.datetime.now(datetime.timezone.utc) - datetime.datetime.fromisoformat(str(r.get('t','')).replace('Z','+00:00'))).total_seconds()/3600
+    except Exception: return 0
 for r in reqs:
+    if age_h(r) > 6:   # 6시간 넘게 밀린 요청은 보내지 않고 정리
+        print('오래된 요청 건너뜀', r.get('id')); done.append(r['id']); continue
     names = set(r.get('names') or [])
     body = json.dumps({'title': r.get('title') or '북서울 Report', 'body': r.get('body') or '', 'tag': r.get('tag') or 'bsr-req'}, ensure_ascii=False)
     n = 0
