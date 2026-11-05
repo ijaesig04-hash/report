@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261105104037">
+<meta name="bsr-ver" content="20261105105447">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1268,6 +1268,8 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .hm-hero b .hm-nm,.hm-hero b .hm-gr{display:block!important;font:inherit!important;color:inherit!important;margin:0!important;opacity:1!important;letter-spacing:inherit!important}.hm-hero b .hm-nm{font-size:.86em!important;opacity:.9!important;margin-bottom:2px!important}.hm-hero b .hm-gr{word-break:keep-all}.hm-hero b .hm-gr.long{font-size:.9em!important}
 .mxc{position:fixed;inset:0;z-index:2147483100;background:radial-gradient(circle at 50% 30%,rgba(29,58,154,.92),rgba(6,13,34,.96));display:flex;align-items:center;justify-content:center;padding:20px}
 .mxc canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.bdg{background:radial-gradient(circle at 50% 30%,rgba(219,39,119,.9),rgba(40,8,40,.95))}.bd-in{background:linear-gradient(160deg,#fff7fb,#ffe4f1)!important;border-color:#db2777!important}.bd-k{background:#ffd1e6!important;color:#9d174d!important}.bd-from{margin:8px 0 0;font-size:13px;font-weight:800;color:#be185d}.bd-ok{background:linear-gradient(135deg,#db2777,#f59e0b)!important;color:#fff!important}
+.bdc{display:flex;align-items:center;gap:12px;border-radius:16px;padding:12px 14px;background:linear-gradient(135deg,#fff1f7,#ffe7d6);border:1px solid #fbcfe8;color:#831843}.bdc.me{background:linear-gradient(135deg,#db2777,#f59e0b);color:#fff;border:0;box-shadow:0 8px 20px rgba(219,39,119,.3)}.bdc-i{font-size:30px;line-height:1}.bdc b{display:block;font-size:14.5px;font-weight:900;line-height:1.35}.bdc small{display:block;font-size:12px;opacity:.85;margin-top:2px}
 .ngate{background:radial-gradient(circle at 50% 30%,rgba(31,79,216,.93),rgba(6,13,34,.96))}.ng-in{background:linear-gradient(160deg,#ffffff,#eef4ff)!important;border-color:#1f4fd8!important}.ng-k{background:#dbe7ff!important;color:#16306b!important}.ng-l{display:grid;gap:6px;margin:10px 0 6px;text-align:left}.ng-l>div{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #dbe3f3;border-radius:12px;padding:8px 10px}.ng-l i{font-style:normal;font-size:20px}.ng-l span{min-width:0}.ng-l b{display:block;font-size:13.5px;color:#0f1b33;line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.ng-l small{font-size:11.5px;color:#64748b}.ng-l p{margin:0;font-size:12px;color:#64748b;text-align:center}.ng-ok{background:linear-gradient(135deg,#1f4fd8,#4f46e5)!important;color:#fff!important}
 .mxc-in{position:relative;z-index:1;width:100%;max-width:360px;background:linear-gradient(160deg,#fffdf4,#fff6d6);border:2px solid #d4a017;border-radius:24px;padding:22px 20px 18px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.45);animation:mxpop .6s cubic-bezier(.2,1.4,.4,1)}
 @keyframes mxpop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
@@ -4494,7 +4496,7 @@ function mxCongrats(){
 var NG_AT = 0;
 function notiGate(){
   try{
-    if(typeof NOTI==="undefined" || typeof notiAcked!=="function" || document.getElementById("ngate") || document.getElementById("mxc")) return;
+    if(typeof NOTI==="undefined" || typeof notiAcked!=="function" || document.getElementById("ngate") || document.getElementById("mxc") || document.getElementById("bday")) return;
     var me = myName(); if(!me || mgrIs() || ["타부서","그룹장"].indexOf(me)>=0) return;
     if(Date.now()-NG_AT < 90000) return;
     var x0 = document.getElementById("xsheet"); if(x0 && !x0.hidden) return;
@@ -4523,6 +4525,31 @@ function paperFall(cv){
     if(el < dur+4000) requestAnimationFrame(step); else ctx.clearRect(0,0,W,H); })();
 }
 document.addEventListener("click", function(e){ var g = e.target.closest("[data-nggo]"); if(!g) return; var id = g.dataset.nggo, o = document.getElementById("ngate"); if(o) o.remove(); document.body.style.overflow = ''; NG_AT = Date.now(); if(typeof notiView==="function") notiView(id); });
+/* ===== 🎂 생일 — 연도별 양력 날짜 (음력 생일은 그 해 양력으로 바꿔 넣음 · 매년 1월에 갱신) ===== */
+var BDAY = {"2026":[["02-23","이재식"],["03-10","양심영"],["03-18","김상훈","음력 1/30"],["03-20","이명섭"],["04-01","권재원"],["04-13","박수안"],["04-15","이수열"],["04-28","최영국","음력 3/12"],
+ ["06-04","원종범"],["06-15","주상덕"],["06-22","임영민"],["06-26","윤기한"],["06-28","유영민"],["07-24","김민석"],["07-29","지사장"],["08-04","정전원"],["09-01","김민수"],["09-07","박광모"],["09-18","고혁진"],
+ ["10-26","김동현"],["10-30","박정훈"],["11-14","박광춘","음력 10/6"],["11-29","김태건"],["11-30","용승우"],["12-11","최문혁"],["12-17","김지원"]]};
+function bdToday(){ var d = kstDate(0), L = BDAY[d.slice(0,4)]||[]; return L.filter(function(b){ return b[0]===d.slice(5); }).map(function(b){ return b[1]; }); }
+function bdNm(n){ return n==="지사장" ? "지사장님" : n+"님"; }
+function bdayCard(){ var T = bdToday(); if(!T.length) return ''; var me = myName(), mine = T.indexOf(me)>=0;
+  return '<div class="bdc'+(mine?' me':'')+'"><span class="bdc-i">🎂</span><div><b>'+(mine?esc2(bdNm(me))+', 생일 축하드려요! 🎉':'오늘은 '+T.map(function(n){return esc2(bdNm(n))}).join(' · ')+' 생일이에요!')+'</b><small>'+(mine?'북서울지사 모두가 진심으로 축하해요 💐':'만나면 따뜻한 축하 한마디 건네 주세요 🎉')+'</small></div></div>'; }
+function bdayGate(){
+  try{
+    var T = bdToday(); if(!T.length || document.getElementById("bday") || document.getElementById("ngate") || document.getElementById("mxc")) return;
+    var me = myName(), mine = T.indexOf(me)>=0, k = "bsr_bd_"+kstDate(0)+"_"+(mine?"me":"all"); if(lsGet(k)) return;
+    var o = document.createElement('div'); o.className = 'mxc bdg'+(mine?' me':''); o.id = 'bday';
+    o.innerHTML = '<canvas id="bdfx"></canvas><div class="mxc-in bd-in" role="dialog" aria-modal="true">'+
+      (mine ? '<div class="mxc-tr">🎂</div><div class="mxc-k bd-k">HAPPY BIRTHDAY</div><h3>'+esc2(bdNm(me))+',<br>생일 진심으로 축하드려요!</h3>'+
+        '<p class="mxc-m">늘 고객과 동료를 위해 애써 주셔서 고맙습니다. 오늘 하루는 누구보다 행복하고 특별한 날 되세요 🎉</p><p class="bd-from">— 북서울지사 가족 모두가 💐</p>'+
+        '<button type="button" class="mxc-ok bd-ok" data-bdok="'+k+'">🥳 고마워요!</button>'
+      : '<div class="mxc-tr">🎉</div><div class="mxc-k bd-k">오늘의 생일</div><h3>'+T.map(function(n){return esc2(bdNm(n))}).join(' · ')+'<br>생일을 축하해요!</h3>'+
+        '<p class="mxc-m">오늘 만나면 따뜻한 축하 한마디 건네 주세요 🎂</p>'+
+        '<button type="button" class="mxc-ok bd-ok" data-bdok="'+k+'">🎉 축하해요!</button>')+'</div>';
+    document.body.appendChild(o); document.body.style.overflow = 'hidden';
+    if(mine) mxFireworks(document.getElementById('bdfx')); else paperFall(document.getElementById('bdfx'));
+  }catch(e){}
+}
+document.addEventListener("click", function(e){ var b = e.target.closest("[data-bdok]"); if(!b) return; lsSet(b.dataset.bdok, "1"); var o = document.getElementById("bday"); if(o) o.remove(); document.body.style.overflow = ''; setTimeout(function(){ if(typeof notiGate==="function") notiGate(); }, 600); });
 function mxFireworks(cv){
   if(!cv || !cv.getContext) return; var ctx = cv.getContext('2d'), W, H, P = [], t0 = Date.now(), dur = 6500, last = 0;
   var rs = function(){ W = cv.width = innerWidth*devicePixelRatio; H = cv.height = innerHeight*devicePixelRatio; }; rs();
@@ -5355,7 +5382,7 @@ function tabOrderFix(){ try{ if(typeof notiRefilter==="function") notiRefilter()
   document.documentElement.classList.toggle("dept-x", d==="영업"||d==="기술");
   document.documentElement.classList.toggle("dept-sal", d==="영업" || (typeof mgrIs==="function" && mgrIs()));   /* 개시 방문 체크리스트는 서비스만 */ }catch(e){} }
 function render(){ tabOrderFix();
-  var v = state.tab==="home" ? przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
+  var v = state.tab==="home" ? bdayCard()+przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
   var nft = newsFor(state.tab); if(nft) markSeen("bsr_tab_"+state.tab, nft.id); nseenAdd(NEWS.slice(0,40).filter(function(n){return n.tabs.indexOf(state.tab)>=0}).map(function(n){return n.id}));
   var VW0 = document.getElementById("view"), dk = function(d){ var sm = d.querySelector('summary'); return (d.className||'')+'|'+(sm?sm.textContent.replace(/[\d\s▾▴]/g,'').slice(0,24):''); }, op = [];
   VW0.querySelectorAll("details[open]").forEach(function(d){ op.push(dk(d)); });
@@ -5365,7 +5392,7 @@ function render(){ tabOrderFix();
   VW0._html = HTML; VW0.innerHTML = HTML;
   if(op.length) VW0.querySelectorAll("details").forEach(function(d){ if(op.indexOf(dk(d))>=0) d.open = true; });
   if(typeof mxStarFix==="function"){ try{ mxStarFix(); }catch(_){} }
-  if(state.tab==="home") setTimeout(notiGate, 1200);
+  if(state.tab==="home"){ setTimeout(bdayGate, 700); setTimeout(notiGate, 1400); }
   newsDots();
   var band = document.getElementById("band"); if(band) band.className = "brandband"+(state.tab==="mgt"?" campus":state.tab==="eval"?" evp":state.tab==="ppl"?" hero2":state.tab==="cs"?" cs":state.tab==="rep"?((state.rs||"panel")==="panel"?" pnl":" rsk"):state.tab==="veh"?" room":state.tab==="cmp"?" cmp":state.tab==="duty"?" duty":state.tab==="drv"?" drv":state.tab==="alm"&&(state.al||"multi")==="multi"?" almm":state.tab==="alm"&&state.al==="fee"?" almf":state.tab==="alm"&&state.al==="over"?" almo":state.tab==="home"?" brfb":"");
   if(state.tab==="duty"){ var on=document.querySelector(".dday.on"); if(on){ try{ var st=document.getElementById("dstrip"); st.scrollLeft = on.offsetLeft - st.clientWidth/2 + on.clientWidth/2; }catch(_){} } }
