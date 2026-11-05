@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261105105447">
+<meta name="bsr-ver" content="20261105114013">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -5663,6 +5663,7 @@ function send(what){
   var q = LOG_URL+(LOG_URL.indexOf("?")<0?"?":"&")+"a=log&name="+encodeURIComponent(me)+"&tab="+encodeURIComponent(what)+"&ua="+encodeURIComponent(navigator.userAgent.slice(0,80))+"&t="+Date.now();
   try{ fetch(q,{mode:"no-cors",cache:"no-store",keepalive:true}).catch(function(){ try{ (new Image()).src=q; }catch(_){} }); }catch(e){ try{ (new Image()).src=q; }catch(_){} }
 }
+window.bsrSend = function(w){ send(w); };
 function openTag(){ var sa=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true; return sa?"앱 열기(설치)":"앱 열기(주소)"; }
 function logTab(t){ if(sent[t]) return; sent[t]=1; send(tabName(t)); }
 function showChip(){ chip.hidden = false; chip.textContent = me ? dnm(me)+"님" : "이름 선택"; }
@@ -5833,10 +5834,21 @@ function adminExtra(rows, now, pinFail){
     '<div class="vlw-t"><b>최근 코멘트</b>'+CH.slice(0,8).map(function(c){ return '<span>'+cheerDate(c.ts)+' '+esc(c.by)+' → '+esc(c.to)+' · '+esc(c.tx.length>22?c.tx.slice(0,22)+'…':c.tx)+'</span>'; }).join('')+'</div>':'<div class="vl-row">아직 남긴 코멘트가 없어요</div>')+'</div>';
   return out;
 }
+function readCard(RD){
+  var g = {}, ord = [];
+  RD.forEach(function(r){ var k = r[2]; if(!g[k]){ g[k] = {}; ord.push(k); } if(!g[k][r[1]] || r[0]>g[k][r[1]]) g[k][r[1]] = r[0]; });
+  return '<div class="vl-card vlw"><h3>📖 매뉴얼 · 공지 열람<small>최근 35일 · 누가 열어 봤는지 (이재식만 보임)</small></h3>'+
+    (ord.length ? ord.map(function(k){ var ns = Object.keys(g[k]).sort(function(a,b){return g[k][b]-g[k][a]});
+      return '<div class="vlw-t"><b>'+esc(k)+' · '+ns.length+'명</b>'+ns.map(function(n){ return '<span>'+esc(n)+' <i>'+kst(g[k][n]).md+' '+kst(g[k][n]).hm+'</i></span>'; }).join('')+'</div>'; }).join('') : '<div class="vl-row">아직 열람 기록이 없어요</div>')+'</div>';
+}
 function adminView(rows){
   rows = rows.filter(function(r){return r && r[0]}).sort(function(a,b){return b[0]-a[0]});
   var pinFail = rows.filter(function(r){return /PIN 실패/.test(r[2]||"")});
   rows = rows.filter(function(r){return !/PIN 실패/.test(r[2]||"")});
+  /* 📖 매뉴얼 · 📢 공지 열람 기록 — 이재식만 보고, 다른 통계에서는 뺌 */
+  var RD = rows.filter(function(r){return /^(📖 매뉴얼|📢 공지|📚 교육):/.test(r[2]||"")});
+  rows = rows.filter(function(r){return !/^(📖 매뉴얼|📢 공지|📚 교육):/.test(r[2]||"")});
+  var rdCard = me==="이재식" ? readCard(RD) : '';
   var now = Date.now(), today = kst(now).day, days = [];
   for(var k=6;k>=0;k--) days.push(kst(now-k*86400000));
   var last = {}, by = {};
@@ -5846,7 +5858,7 @@ function adminView(rows){
   var tCnt = Object.keys(tSet).length, miss = ALL.filter(function(n){return !tSet[n]});
   var h = '<div class="vl-hero"><button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button><small>ADMIN · '+kst(now).md+' '+kst(now).hm+'</small><h2>🔒 접속 현황</h2><p>직원 '+ALL.length+'명 기준 · 최근 7일</p></div>';
   h += '<div class="vl-k"><div><span>오늘 접속</span><b>'+tCnt+'</b></div><div class="ng"><span>오늘 미접속</span><b>'+miss.length+'</b></div><div><span>최근 7일</span><b>'+Object.keys(wk).length+'</b></div></div>';
-  h += vlWeek(rows, now) + vlInstall(rows) + adminExtra(rows, now, pinFail);
+  h += rdCard + vlWeek(rows, now) + vlInstall(rows) + adminExtra(rows, now, pinFail);
   var byDay = {}; rows.forEach(function(r){ var d=kst(r[0]).day; (byDay[d]=byDay[d]||[]).push(r); });
   var dKeys = Object.keys(byDay).sort().reverse();
   h += '<div class="vl-card"><h3>접속 기록<small>최근 35일 · 날짜를 누르면 펼침</small></h3>'+(dKeys.length?dKeys.map(function(d,i){ var rs=byDay[d], t0=kst(rs[0][0]), ppl={}; rs.forEach(function(r){ppl[r[1]]=1});
@@ -6219,7 +6231,9 @@ document.addEventListener("click", function(e){
         var u = URL.createObjectURL(bl), a = document.createElement("a"); a.href = u; a.download = nm; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(u); a.remove(); }, 1500); nrToast("💾 저장했어요 · 다운로드 폴더를 확인하세요"); }).catch(function(){}); }catch(_){}
     return; }
 });
-function manView(id){ var m = (MAN||[]).filter(function(x){return x.id===id})[0]; if(!m){ manTab(); return; }
+var RD_SENT = {};
+function rdLog(what, key){ try{ if(RD_SENT[key]) return; RD_SENT[key] = 1; if(window.bsrSend) window.bsrSend(String(what).slice(0,60)); }catch(e){} }   /* 열람 기록 (접속 현황 · 이재식만) */
+function manView(id){ var m = (MAN||[]).filter(function(x){return x.id===id})[0]; if(!m){ manTab(); return; } rdLog("📖 매뉴얼: "+m.title, "m"+id);
   openSheet('<div class="xs-h"><button type="button" data-ntt="man" style="margin-left:0">‹ 매뉴얼</button><button type="button" data-xs="close">✕</button></div><div class="nv" style="--nc:#16306b"><span class="nv-k">'+m.ic+' 매뉴얼</span><h3>'+esc2(m.title)+'</h3></div><div class="ed">'+m.html+'</div>'); }
 document.addEventListener("click", function(e){
   var t = e.target.closest("[data-ntt]"); if(t){ NL_T = t.dataset.ntt; if(NL_T==="edu") eduTab(); else if(NL_T==="man") manTab(); else notiList(); return; }
@@ -6250,6 +6264,7 @@ function notiList(f){
 function notiView(id){
   var x = NOTI.items.filter(function(i){return i.id===id})[0]; if(!x){ notiList(); return; }
   var p = ncParse(x), v = lsGet(notiAckKey(id)), me = myName();
+  rdLog((p.cat.k==="교육"?"📚 교육: ":"📢 공지: ")+p.title, "n"+id);
   var h = '<div class="xs-h"><button type="button" data-ntl="1" style="margin-left:0">‹ 목록</button><button type="button" data-xs="close">✕</button></div>'+
     '<div class="nv" style="--nc:'+p.cat.c+'"><span class="nv-k">'+p.cat.ic+' '+p.cat.k+'</span><h3>'+esc2(p.title)+'</h3><p class="nv-m">✍️ '+esc2(x.by||'')+' · '+notiDate(x.t)+'</p>'+
     (p.body?'<div class="nv-b">'+esc2(p.body)+'</div>':'')+(p.edu?'<div class="ed">'+EDU[p.edu].html()+'</div>':'')+
