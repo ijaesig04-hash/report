@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261105101046">
+<meta name="bsr-ver" content="20261105102758">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1266,6 +1266,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .hm-hero b .hm-nm,.hm-hero b .hm-gr{display:block!important;font:inherit!important;color:inherit!important;margin:0!important;opacity:1!important;letter-spacing:inherit!important}.hm-hero b .hm-nm{font-size:.86em!important;opacity:.9!important;margin-bottom:2px!important}.hm-hero b .hm-gr{word-break:keep-all}.hm-hero b .hm-gr.long{font-size:.9em!important}
 .mxc{position:fixed;inset:0;z-index:2147483100;background:radial-gradient(circle at 50% 30%,rgba(29,58,154,.92),rgba(6,13,34,.96));display:flex;align-items:center;justify-content:center;padding:20px}
 .mxc canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.ngate{background:radial-gradient(circle at 50% 30%,rgba(31,79,216,.93),rgba(6,13,34,.96))}.ng-in{background:linear-gradient(160deg,#ffffff,#eef4ff)!important;border-color:#1f4fd8!important}.ng-k{background:#dbe7ff!important;color:#16306b!important}.ng-l{display:grid;gap:6px;margin:10px 0 6px;text-align:left}.ng-l>div{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #dbe3f3;border-radius:12px;padding:8px 10px}.ng-l i{font-style:normal;font-size:20px}.ng-l span{min-width:0}.ng-l b{display:block;font-size:13.5px;color:#0f1b33;line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.ng-l small{font-size:11.5px;color:#64748b}.ng-l p{margin:0;font-size:12px;color:#64748b;text-align:center}.ng-ok{background:linear-gradient(135deg,#1f4fd8,#4f46e5)!important;color:#fff!important}
 .mxc-in{position:relative;z-index:1;width:100%;max-width:360px;background:linear-gradient(160deg,#fffdf4,#fff6d6);border:2px solid #d4a017;border-radius:24px;padding:22px 20px 18px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.45);animation:mxpop .6s cubic-bezier(.2,1.4,.4,1)}
 @keyframes mxpop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion: reduce){.mxc-in{animation:none}}
@@ -4486,6 +4487,39 @@ function mxCongrats(){
   document.body.appendChild(o); document.body.style.overflow = 'hidden';
   mxFireworks(document.getElementById('mxfw'));
 }
+/* ===== 📢 안 읽은 공지 알림 — 종이가 떨어지는 화면으로 알리고 [공지 확인]을 눌러야 넘어감 (직원만 · 관리자 제외) ===== */
+var NG_AT = 0;
+function notiGate(){
+  try{
+    if(typeof NOTI==="undefined" || typeof notiAcked!=="function" || document.getElementById("ngate") || document.getElementById("mxc")) return;
+    var me = myName(); if(!me || mgrIs() || ["타부서","그룹장"].indexOf(me)>=0) return;
+    if(Date.now()-NG_AT < 90000) return;
+    var x0 = document.getElementById("xsheet"); if(x0 && !x0.hidden) return;
+    var lim = Date.now()-30*86400000, L = NOTI.items.filter(function(x){ return x.t>lim && !notiAcked(x.id); });
+    if(!L.length) return; NG_AT = Date.now();
+    var o = document.createElement('div'); o.className = 'mxc ngate'; o.id = 'ngate';
+    o.innerHTML = '<canvas id="ngfx"></canvas><div class="mxc-in ng-in" role="dialog" aria-modal="true">'+
+      '<div class="mxc-tr">📢</div><div class="mxc-k ng-k">확인하지 않은 공지 '+L.length+'건</div>'+
+      '<h3>'+esc2(me)+'님, 새 공지가 있어요!</h3>'+
+      '<div class="ng-l">'+L.slice(0,4).map(function(x){ var p = ncParse(x); return '<div><i>'+p.cat.ic+'</i><span><b>'+esc2(p.title)+'</b><small>'+p.cat.k+' · '+notiDate(x.t)+'</small></span></div>'; }).join('')+(L.length>4?'<p>외 '+(L.length-4)+'건</p>':'')+'</div>'+
+      '<p class="mxc-n">공지를 열고 맨 아래 <b>[확인했습니다]</b>를 눌러야 이 알림이 사라져요.</p>'+
+      '<button type="button" class="mxc-ok ng-ok" data-nggo="'+esc2(L[0].id)+'">📢 공지 확인하러 가기</button></div>';
+    document.body.appendChild(o); document.body.style.overflow = 'hidden';
+    paperFall(document.getElementById('ngfx'));
+  }catch(e){}
+}
+function paperFall(cv){
+  if(!cv || !cv.getContext) return; var ctx = cv.getContext('2d'), W, H, P = [], t0 = Date.now(), dur = 7000;
+  var rs = function(){ W = cv.width = innerWidth*devicePixelRatio; H = cv.height = innerHeight*devicePixelRatio; }; rs();
+  if(matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var COL = ['#ffd769','#ff6b6b','#4dabf7','#69db7c','#f783ac','#ffa94d','#ffffff','#b197fc'], d = devicePixelRatio;
+  for(var i=0;i<130;i++) P.push({x:Math.random()*W, y:-Math.random()*H, w:(6+Math.random()*8)*d, h:(9+Math.random()*10)*d, vy:(1.6+Math.random()*2.4)*d, vx:(Math.random()-.5)*1.2*d, r:Math.random()*6.28, vr:(Math.random()-.5)*.2, s:Math.random()*6.28, c:COL[i%COL.length]});
+  (function step(){ if(!document.body.contains(cv)) return; var el = Date.now()-t0; ctx.clearRect(0,0,W,H);
+    P.forEach(function(p){ p.y += p.vy; p.x += p.vx + Math.sin((el/400)+p.s)*0.8*d; p.r += p.vr; if(p.y > H+20 && el < dur){ p.y = -20; p.x = Math.random()*W; }
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.scale(1, Math.abs(Math.cos(el/300+p.s))+.2); ctx.fillStyle = p.c; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore(); });
+    if(el < dur+4000) requestAnimationFrame(step); else ctx.clearRect(0,0,W,H); })();
+}
+document.addEventListener("click", function(e){ var g = e.target.closest("[data-nggo]"); if(!g) return; var id = g.dataset.nggo, o = document.getElementById("ngate"); if(o) o.remove(); document.body.style.overflow = ''; NG_AT = Date.now(); if(typeof notiView==="function") notiView(id); });
 function mxFireworks(cv){
   if(!cv || !cv.getContext) return; var ctx = cv.getContext('2d'), W, H, P = [], t0 = Date.now(), dur = 6500, last = 0;
   var rs = function(){ W = cv.width = innerWidth*devicePixelRatio; H = cv.height = innerHeight*devicePixelRatio; }; rs();
@@ -5305,7 +5339,7 @@ function copyNotice(){
 })();
 
 var GREET_H = -1;
-document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible" && window.state && state.tab==="home") renderQuiet(); });
+document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible" && window.state && state.tab==="home"){ renderQuiet(); setTimeout(notiGate, 800); } });
 setInterval(function(){ var h=new Date(Date.now()+9*3600000).getUTCHours(); if(GREET_H!==-1 && h!==GREET_H && window.state && state.tab==="home" && document.visibilityState==="visible") render(); GREET_H=h; }, 600000);
 /* 화면 이동 시 내용 맨 위(탭 바로 아래)로 */
 function goDp(){ var f=function(){ var b=document.querySelector("#view [data-dp]"), el=b?b.parentElement:null, n=document.querySelector("nav.tabs"); if(!el){ goTop(); return; } var y=el.getBoundingClientRect().top+window.pageYOffset-(n?n.offsetHeight:0)-8; window.scrollTo(0, Math.max(0,y)); }; f(); requestAnimationFrame(f); setTimeout(f,120); }
@@ -5328,6 +5362,7 @@ function render(){ tabOrderFix();
   VW0._html = HTML; VW0.innerHTML = HTML;
   if(op.length) VW0.querySelectorAll("details").forEach(function(d){ if(op.indexOf(dk(d))>=0) d.open = true; });
   if(typeof mxStarFix==="function"){ try{ mxStarFix(); }catch(_){} }
+  if(state.tab==="home") setTimeout(notiGate, 1200);
   newsDots();
   var band = document.getElementById("band"); if(band) band.className = "brandband"+(state.tab==="mgt"?" campus":state.tab==="eval"?" evp":state.tab==="ppl"?" hero2":state.tab==="cs"?" cs":state.tab==="rep"?((state.rs||"panel")==="panel"?" pnl":" rsk"):state.tab==="veh"?" room":state.tab==="cmp"?" cmp":state.tab==="duty"?" duty":state.tab==="drv"?" drv":state.tab==="alm"&&(state.al||"multi")==="multi"?" almm":state.tab==="alm"&&state.al==="fee"?" almf":state.tab==="alm"&&state.al==="over"?" almo":state.tab==="home"?" brfb":"");
   if(state.tab==="duty"){ var on=document.querySelector(".dday.on"); if(on){ try{ var st=document.getElementById("dstrip"); st.scrollLeft = on.offsetLeft - st.clientWidth/2 + on.clientWidth/2; }catch(_){} } }
@@ -5902,7 +5937,7 @@ function notiLoad(){
   fetch(apiUrl("a=notices"+(pn?"&pin="+encodeURIComponent(pn):"")),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
     if(!j || !j.ok) return; var raw = j.items||[], mine = raw.filter(notiMine), same = JSON.stringify([mine, j.acks||null])===JSON.stringify([NOTI.items, NOTI.acks]); NOTI.raw = raw; NOTI.items = mine; NOTI.acks = j.acks||null;
     try{ localStorage.setItem("bsr_noti", JSON.stringify(raw)); }catch(e){}
-    if(!same) renderQuiet();
+    if(!same) renderQuiet(); setTimeout(function(){ if(window.state && state.tab==="home") notiGate(); }, 800);
   }).catch(function(){});
 }
 function notiAckKey(id){ return "bsr_ack_"+(myName()||"")+"_"+id; }
