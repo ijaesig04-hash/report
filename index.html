@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261105143518">
+<meta name="bsr-ver" content="20261105202829">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -5784,7 +5784,7 @@ function adminExtra(rows, now, pinFail){
     var ttl = (typeof ncParse==="function") ? ncParse(x).title : (x.title||"");
     return '<div class="vlw-t'+(miss.length?' ng':'')+'"><b>'+esc(ttl)+' · 확인 '+(staff.length-miss.length)+'/'+staff.length+'</b>'+(miss.length?miss.map(function(n){ return '<span>'+esc(n)+'</span>'; }).join(''):'<span>모두 확인 👍</span>')+'</div>';
   }).join('') : '<div class="vl-row">올린 공지가 없어요</div>';
-  out += '<div class="vl-card vlw"><h3>📢 공지 확인률<small>최근 3개 · 미확인자</small></h3>'+nh+'</div>';
+  /* 공지 확인률 카드 — 삭제 (요청) */
   /* 7 근무일인데 미접속 (근무표 기준, 오늘 + 최근 3일) */
   var WORK = {A:1, AJ:1, B:1, U:1}, seen = {};
   rows.forEach(function(r){ seen[kst(r[0]).day+"|"+r[1]] = 1; });
@@ -5802,9 +5802,7 @@ function adminExtra(rows, now, pinFail){
     }
   });
   var rm = Object.keys(recentMiss).map(function(n){ return n+' ('+recentMiss[n]+'일)'; });
-  out += '<div class="vl-card vlw"><h3>🛡️ 근무일인데 미접속<small>근무표 기준</small></h3>'+
-    '<div class="vlw-t'+(todayMiss.length?' ng':'')+'"><b>오늘 근무 · 아직 미접속</b>'+(todayMiss.length?todayMiss.map(function(x){ return '<span>'+esc(x)+'</span>'; }).join(''):'<span>없음 👍</span>')+'</div>'+
-    '<div class="vlw-t'+(rm.length?' ng':'')+'"><b>최근 3일 근무 중 미접속</b>'+(rm.length?rm.map(function(x){ return '<span>'+esc(x)+'</span>'; }).join(''):'<span>없음 👍</span>')+'</div></div>';
+  /* 근무일인데 미접속 카드 — 삭제 (요청) */
   /* 8 신규 설치 (최근 7일) */
   var first = {};
   rows.forEach(function(r){ var k=r[2]||""; if(k==="앱 열기(설치)"||k==="앱 설치"){ if(!(r[1] in first) || r[0]<first[r[1]]) first[r[1]]=r[0]; } });
