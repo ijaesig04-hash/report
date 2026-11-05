@@ -21,7 +21,7 @@ function doGet(e){
       var r = get_('reqs','[]');
       r.push({id:String(Date.now())+Math.floor(Math.random()*1000), names:String(p.names||'').split(',').filter(String).slice(0,40),
               title:String(p.title||'').slice(0,60), body:String(p.body||'').slice(0,120), tag:String(p.tag||'').slice(0,40), t:new Date().toISOString()});
-      put_('reqs', r.slice(-30)); return out_({ok:true});
+      put_('reqs', r.slice(-30)); kick_(); return out_({ok:true});
     }
     if(p.key!==SECRET) return out_({ok:false});
     if(p.action==='list') return out_({ok:true, subs:Object.keys(m).map(function(k){return m[k].s;})});
@@ -32,3 +32,10 @@ function doGet(e){
     return out_({ok:true, n:Object.keys(m).length});
   } finally { lock.releaseLock(); }
 }
+
+// 요청이 들어오면 GitHub 발송 작업을 바로 실행 (스크립트 속성 GH_TOKEN 필요, 없으면 5분 주기 발송으로 대체)
+function kick_(){ try{ var t=PropertiesService.getScriptProperties().getProperty('GH_TOKEN'); if(!t) return;
+  UrlFetchApp.fetch('https://api.github.com/repos/ijaesig04-hash/report/actions/workflows/push-req.yml/dispatches',
+    {method:'post', contentType:'application/json', muteHttpExceptions:true,
+     headers:{Authorization:'Bearer '+t.trim(), Accept:'application/vnd.github+json'}, payload:JSON.stringify({ref:'main'})});
+  }catch(e){} }
