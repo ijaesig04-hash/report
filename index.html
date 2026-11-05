@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261105114013">
+<meta name="bsr-ver" content="20261105135010">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -845,6 +845,7 @@ html.dept-x [data-vl="open"]{display:none!important}
 .mn-s{margin:10px 0 2px;font-weight:800;font-size:13.5px;color:#16306b}.mn-t{overflow-x:auto;margin:4px 0}.mn-t table{border-collapse:collapse;width:100%;min-width:300px;font-size:12.5px}.mn-t th,.mn-t td{border:1px solid #e2e8f0;padding:6px 5px;text-align:center}.mn-t th{background:#f1f5fc;font-size:11.5px;color:#475569}.mn-t td:first-child{text-align:left;font-weight:700;white-space:nowrap}
 .ndt{display:flex;gap:4px;margin:2px 0 10px;border-bottom:2px solid #e2e8f0;overflow-x:auto}.ndt button{font:inherit;font-size:13.5px;font-weight:700;border:0;background:none;color:#64748b;padding:8px 10px;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;cursor:pointer}
 .ndt button[aria-selected="true"]{color:#16306b;border-bottom-color:#1f4fd8}.ndt small{font-size:11px;color:#94a3b8;font-weight:700}
+.vl-n.vl-ld{position:relative;color:#5b2a00!important;border-color:#f5c26b!important;background:linear-gradient(135deg,#fffaf0,#ffe9b8)!important}.vl-n.vl-ld[aria-pressed="true"]{box-shadow:0 0 0 3px #f59e0b!important}.vl-li{font-style:normal;margin-right:3px}.vl-ld small{color:#b45309!important;font-weight:800!important}
 .mxst.ldb{display:inline-block;margin-left:5px;font-size:.72em;font-weight:800;line-height:1.5;padding:0 7px;border-radius:999px;vertical-align:middle;white-space:nowrap;letter-spacing:0}.mxst.ldb.sal{background:#fff1e6;color:#9a3412;border:1px solid #fdba8c}.mxst.ldb.tec{background:#e7f8f1;color:#0b5e47;border:1px solid #86d9b9}
 .ntre{display:block;width:100%;margin-top:8px;font:inherit;font-weight:700;font-size:13px;border:1px solid #f5c26b;background:#fff8eb;color:#8a4b00;border-radius:10px;padding:9px;cursor:pointer}
 .hp-c{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}.hp-c button{font:inherit;font-size:12.5px;font-weight:700;border:1px solid #dbe3f3;background:#fff;border-radius:999px;padding:5px 12px;cursor:pointer}.hp-c button[aria-pressed="true"]{background:#16306b;color:#fff;border-color:#16306b}
@@ -2744,7 +2745,7 @@ function deptGreet(d){ var k=new Date(Date.now()+9*3600000), t=k.getUTCHours()+k
          ['편안한 저녁 보내세요','🌙','내일 방문 일정도 미리 확인해 보세요'];
   return t<6?['늦게까지 수고 많으세요','🌙','푹 쉬시고 내일 안전하게 시작해요']:
     t<10?['좋은 아침이에요','☀️','오늘 공사 · 점검 일정을 먼저 확인해 보세요']:
-    t<12?['오늘도 힘내세요','🔧','현장 작업은 안전이 먼저예요']:
+    t<12?['오늘도 힘내세요','💻','현장 작업은 안전이 먼저예요']:
     t<13.5?['점심 맛있게 드세요','🍚','오후 작업 전 장비도 한 번 챙겨 보세요']:
     t<17?['오후도 힘내세요','☕','영상기기 비밀번호는 고객이 직접 설정하도록 안내해 주세요']:
     t<19?['오늘도 수고 많으셨어요','🌇','오늘 작업 마무리와 정리 부탁드려요']:
@@ -3456,7 +3457,7 @@ var NEWS = [
  {id:"2026-11-05a", only:"이재식", date:"11/5", title:"영업 · 기술 팀장 표시", tabs:["home"], items:["이름 고르기에 최영국 영업팀장 · 박정훈 기술팀장 표시 — 팀장은 공지 확인 집계와 칭찬 순위에서 빠져요"]},
  {id:"2026-11-04i", only:"이재식", date:"11/4", title:"도움말 · OJT 진도표 · 공지 다시 알림", tabs:["home"], items:["💡 현장 도움말 — 앱 사용 · 현장 업무(비밀번호 지침 · 출동료 청구 · 조치 입력) · 지표 설명을 검색해서 바로 봐요 (이름표 메뉴)","🎓 OJT 진도표 — OJT 직원별 배울 항목을 본인 · 동승자 · 관리자가 체크하고 진도를 같이 봐요","🔔 관리자 — 공지 미확인자에게만 폰 알림을 다시 보낼 수 있어요"]},
  {id:"2026-11-04h", only:"이재식", date:"11/4", title:"칭찬 · 위험 고객처 · 개시 체크 · 고객처 한눈에", tabs:["home"], items:["🎉 칭찬 모아보기 — 전 부서 고객 칭찬을 부서별로 모아 봐요 (영업 · 기술 직원도 칭찬 도착 알림)","⚠️ 불만 위험 고객처 — 발보 반복 · 미조치 · 해피콜 8점 이하 고객처를 위험도 순으로","✅ 개시 방문 체크리스트 — 비밀번호 지침 5개 항목을 체크하고 완료하면 관리자에게 기록","🔍 고객처 한눈에 보기 — 다발보 · 해피콜 · 칭찬 · 조치 내용을 한 번에 (이름표 메뉴)"]},
- {id:"2026-11-04g", only:"이재식", date:"11/4", title:"영업 · 기술 부서 함께 쓰기", tabs:["home"], items:["💼🔧 이름 고르기에 영업 · 기술 직원 추가 — 고르면 부서 첫 화면(내 해피콜 발송·응답·만족도 · 건별 결과 · 부서별 비교)이 먼저 열려요","📢 공지 · 교육 보내기에서 보낼 부서(전 부서 · 서비스 · 영업 · 기술)를 고를 수 있고, 확인 현황도 그 부서 인원으로 집계해요"]},
+ {id:"2026-11-04g", only:"이재식", date:"11/4", title:"영업 · 기술 부서 함께 쓰기", tabs:["home"], items:["💼💻 이름 고르기에 영업 · 기술 직원 추가 — 고르면 부서 첫 화면(내 해피콜 발송·응답·만족도 · 건별 결과 · 부서별 비교)이 먼저 열려요","📢 공지 · 교육 보내기에서 보낼 부서(전 부서 · 서비스 · 영업 · 기술)를 고를 수 있고, 확인 현황도 그 부서 인원으로 집계해요"]},
  {id:"2026-11-04f", only:"이재식", date:"11/4", title:"알림 숫자 정리", tabs:["home"], items:["📲 폰 알림을 하나씩 지우지 않아도, 앱에서 그 소식이 있는 탭을 열면 해당 알림이 자동으로 지워지고 아이콘 숫자도 줄어들어요"]},
  {id:"2026-11-04e", only:"이재식", date:"11/4", title:"공지 확인자 표시", tabs:["home"], items:["📢 관리자 — 공지 확인 현황에 미확인자뿐 아니라 확인한 직원 이름도 함께 표시 (✅ 확인 · ⏳ 미확인)"]},
  {id:"2026-11-04d", only:"이재식", date:"11/4", title:"지표 11/4 업데이트", tabs:["cmp","veh","ppl","mgt","alm"], items:["📊 11/4 기준(11월 첫 집계) 지사별·차량별·개인별·관리지표 반영 — 북서울 지사 5개 항목 모두 달성 (불필요 111% · 발보 111% · 25분↑ 102% · 체감 110% · 당사일괄 127%)","⏱️ 25분초과 11.01~11.04 — 초과 2건 / 출동 50건 · 김태건 1건 · 남현준 1건","남현준 개인별 지표 추가 · 근무 전인 김지원·이명섭은 집계 없음"]},
@@ -3825,13 +3826,13 @@ function kstDate(off){ return new Date(Date.now()+9*3600000+off*86400000).toISOS
 
 /* 오늘의 브리핑 (지사별 탭 맨 위) */
 function viewHome(){ var d = deptOf(); if(d!=="서비스" && !state.dhs) return deptHome(d); return (d!=="서비스"?'<button type="button" class="dh-back" data-dhs="0">‹ '+d+' 첫 화면으로</button>':'')+brief(); }
-/* ===== 💼🔧 영업 · 기술 첫 화면 — 내 해피콜(고객체감) · 부서 비교 · 부서 공지 ===== */
+/* ===== 💼💻 영업 · 기술 첫 화면 — 내 해피콜(고객체감) · 부서 비교 · 부서 공지 ===== */
 function deptHome(d){
   var me = myName(), k = Object.keys(CSD).sort().pop(), S = CSD[k], rows = CSR.filter(function(r){return r[0]===me});
   var rs = rows.filter(function(r){return r[5]!=null}), sat = rs.length ? Math.round(rs.reduce(function(a,r){return a+r[5]},0)/rs.length*100)/100 : null;
   var md = function(x){ return (+x.slice(0,2))+'/'+(+x.slice(3)); };
   var h = '<div class="dh">';
-  var gg = deptGreet(d); h += '<div class="dh-c dh-hero '+(d==="영업"?'sal':'tec')+'"><small>'+(d==="영업"?'💼':'🔧')+' 북서울지사 '+d+' · '+(function(){ var k=new Date(Date.now()+9*3600000); return (k.getUTCMonth()+1)+'/'+k.getUTCDate()+'('+'일월화수목금토'.charAt(k.getUTCDay())+')'; })()+'</small><b>'+esc2(me)+(isLead(me)?' '+d+'팀장':'')+'님, '+gg[0]+' '+gg[1]+'</b><small>'+gg[2]+'</small></div>';
+  var gg = deptGreet(d); h += '<div class="dh-c dh-hero '+(d==="영업"?'sal':'tec')+'"><small>'+(d==="영업"?'💼':'💻')+' 북서울지사 '+d+' · '+(function(){ var k=new Date(Date.now()+9*3600000); return (k.getUTCMonth()+1)+'/'+k.getUTCDate()+'('+'일월화수목금토'.charAt(k.getUTCDay())+')'; })()+'</small><b>'+esc2(me)+(isLead(me)?' '+d+'팀장':'')+'님, '+gg[0]+' '+gg[1]+'</b><small>'+gg[2]+'</small></div>';
   h += '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>';
   h += (typeof wxCard==="function" ? wxCard() : '');
   h += '<details class="dh-c dh-dt"><summary class="dh-h">📞 내 해피콜 <small>발송 '+rows.length+' · 응답 '+rs.length+' ▾</small></summary><p class="dh-sub">'+esc2(S.period.replace('2026.',''))+' 누적</p><div class="dh-k">'+
@@ -4172,7 +4173,7 @@ function mxStarFix(){
     var t = ''; for(var c=el.firstChild;c;c=c.nextSibling){ if(c.nodeType===3) t += c.nodeValue; } t = t.trim(); if(!t) return;
     var m = t.match(re); if(!m) return;
     var sp = document.createElement('span');
-    if(LB[m[1]]){ if(el.closest('.vl-n')) return; sp.className = 'mxst ldb '+(LB[m[1]]==="영업"?'sal':'tec'); sp.textContent = (LB[m[1]]==="영업"?'💼 ':'🔧 ')+LB[m[1]]+'팀장'+(map[m[1]]?' '+mxStars(m[1]):''); }
+    if(LB[m[1]]){ if(el.closest('.vl-n')) return; sp.className = 'mxst ldb '+(LB[m[1]]==="영업"?'sal':'tec'); sp.textContent = (LB[m[1]]==="영업"?'💼 ':'💻 ')+LB[m[1]]+'팀장'+(map[m[1]]?' '+mxStars(m[1]):''); }
     else { sp.className = 'mxst'; sp.textContent = mxStars(m[1]); sp.title = 'MVP '+map[m[1]]+'회'; }
     var tn = null; for(var c2=el.firstChild;c2;c2=c2.nextSibling){ if(c2.nodeType===3 && c2.nodeValue.indexOf(m[1])>=0) tn = c2; }
     if(tn) el.insertBefore(sp, tn.nextSibling); else el.appendChild(sp);
@@ -5679,11 +5680,11 @@ function pickView(){
     '<p><i>⭐ 서비스 관리자</i><span>관리자 기능 + 📱 해피콜 현황</span></p>'+
     '<p><i>🚗 직원</i><span>내 근무·미응답·지표 · 해피콜 제출</span></p>'+
     '<p><i>🎖️ 서비스 그룹장</i><span>서울CS지원 · 지표 보기 · 💬 응원 코멘트</span></p>'+
-    '<p><i>💼 영업 · 🔧 기술</i><span>내 해피콜 · 부서 공지 · 지표 보기</span></p>'+
+    '<p><i>💼 영업 · 💻 기술</i><span>내 해피콜 · 부서 공지 · 지표 보기</span></p>'+
     '<p><i>👀 타부서</i><span>지표 보기 전용</span></p></div>';
   STAFF.forEach(function(gr, gi){ if(gi===0) h += '<div class="vl-div vl-sec"><span>🔒 관리자</span></div>'; if(gi===2) h += '<div class="vl-div vl-sec"><span>🚓 차량 근무자</span></div>'; h += '<div class="vl-g">'+gr[0]+'</div>'; (gi===0?gr[1].concat(["그룹장"]):gr[1]).forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장"||n==="그룹장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':n==="이재식"?'👨‍💻 ':'')+(n==="그룹장"?'<span style="white-space:nowrap;font-size:13.5px;letter-spacing:-.5px">🎖️서비스 그룹장</span>':n)+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
-  h += '<div class="vl-div vl-sec"><span>💼 영업 · 🔧 기술</span></div>';
-  Object.keys(DEPTS).forEach(function(k){ h += '<div class="vl-g">'+(k==="영업"?'💼 ':'🔧 ')+k+'</div>'+DEPTS[k].map(function(n){ return '<button type="button" class="vl-n" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+n+'<small>'+k+(DEPT_LEAD[k]===n?'팀장':'')+'</small></button>'; }).join(''); });
+  h += '<div class="vl-div vl-sec"><span>💼 영업 · 💻 기술</span></div>';
+  Object.keys(DEPTS).forEach(function(k){ h += '<div class="vl-g">'+(k==="영업"?'💼 ':'💻 ')+k+'</div>'+DEPTS[k].map(function(n){ var ld = DEPT_LEAD[k]===n; return '<button type="button" class="vl-n'+(ld?' vl-ld':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(ld?'<i class="vl-li">'+(k==="영업"?'👔':'🧑‍💻')+'</i>':'')+n+'<small>'+k+(ld?'팀장':'')+'</small></button>'; }).join(''); });
   var listed = ALL.concat(["그룹장","타부서"]).concat(DEPTS["영업"]).concat(DEPTS["기술"]), typed = pick && listed.indexOf(pick)<0 ? pick : "";
   h += '<div class="vl-g">그 외</div>'+["타부서"].map(function(n){ return '<button type="button" class="vl-n'+(n==="그룹장"?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="그룹장"?'🎖️ ':'')+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('')+
     '<div class="vl-div"><span>목록에 이름이 없으면</span></div><div class="vl-in-row"><label for="vlname">직접 입력</label><input id="vlname" type="text" maxlength="10" autocomplete="off" placeholder="이름을 입력하세요" value="'+esc(typed)+'" aria-label="이름 직접 입력"></div></div>';
@@ -6253,7 +6254,7 @@ function notiList(f){
   var used = NCAT.filter(function(c){ return NI.some(function(x){return (!NL_D || notiTg(x)===NL_D) && ncParse(x).cat.k===c.k}); });   /* 고른 부서 탭에 있는 분류만 */
   if(NL_F && !used.some(function(c){return c.k===NL_F})){ NL_F = ""; items = NI.filter(function(x){ return !NL_D || notiTg(x)===NL_D; }); }
   var h = '<div class="xs-h"><b>📢 공지 · 교육 · 매뉴얼</b><button type="button" data-xs="close">✕</button></div>'+ntTop("noti");
-  h += '<div class="ndt" role="tablist">'+DT.map(function(k){ return '<button type="button" role="tab" data-ntd="'+k+'" aria-selected="'+(NL_D===k)+'">'+({"":"모두","전체":"🏢 전체 공지","서비스":"🚗 서비스","영업":"💼 영업","기술":"🔧 기술"})[k]+' <small>'+cnt(k)+'</small></button>'; }).join('')+'</div>';
+  h += '<div class="ndt" role="tablist">'+DT.map(function(k){ return '<button type="button" role="tab" data-ntd="'+k+'" aria-selected="'+(NL_D===k)+'">'+({"":"모두","전체":"🏢 전체 공지","서비스":"🚗 서비스","영업":"💼 영업","기술":"💻 기술"})[k]+' <small>'+cnt(k)+'</small></button>'; }).join('')+'</div>';
   if(used.length>1) h += '<div class="ncf"><button type="button" data-ntf="" aria-pressed="'+(!NL_F)+'">전체</button>'+used.map(function(c){return '<button type="button" style="--nc:'+c.c+'" data-ntf="'+c.k+'" aria-pressed="'+(NL_F===c.k)+'">'+c.ic+' '+c.k+'</button>'}).join('')+'</div>';
   h += items.length ? items.map(function(x){ var p = ncParse(x), v = lsGet(notiAckKey(x.id)), ak = NOTI.acks && mgrIs() ? (NOTI.acks[x.id]||[]) : null, all = notiAud(x);
       var st = me ? (v ? '<span class="nli-st ok">✓ 확인</span>' : '<span class="nli-st">미확인</span>') : '';
@@ -6278,7 +6279,7 @@ function ntwPick(){ var b = document.querySelector('.ncw [data-ncw][aria-pressed
 var NW_D = "전체", NW_K = "noti";
 function eduTg(k){ var E = EDU[k]||{}; return E.tg || (E.cat==="경조사" ? "전체" : "서비스"); }
 function notiWrite(msg){
-  var DL = {"전체":"🏢 전 부서","서비스":"🚗 서비스","영업":"💼 영업","기술":"🔧 기술"};
+  var DL = {"전체":"🏢 전 부서","서비스":"🚗 서비스","영업":"💼 영업","기술":"💻 기술"};
   var ED = NW_K==="edu", sn = ED ? 0 : 1;
   var h = '<div class="xs-h"><b>✏️ 공지 · 교육 올리기</b><button type="button" data-xs="close">✕</button></div>'+
     '<div class="ntt" role="tablist" style="grid-template-columns:1fr 1fr"><button type="button" role="tab" data-nwk="noti" aria-selected="'+!ED+'">📢 공지 올리기</button><button type="button" role="tab" data-nwk="edu" aria-selected="'+ED+'">📚 교육 배포</button></div><div class="ntw">'+
