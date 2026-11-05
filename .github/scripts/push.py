@@ -2,13 +2,25 @@
 import json, os, re, subprocess, sys, urllib.parse, urllib.request
 from pywebpush import webpush, WebPushException
 
-def top(html):
-    """맨 위 소식 — only:(특정 사람 전용) 소식은 알림에서 제외"""
+DATA_TABS = {"cmp", "veh", "ppl", "mgt", "eval", "cs", "alm", "drv", "duty"}   # 지표 · 자료 탭
+
+def entries(html):
+    """NEWS 항목 목록 [(id, title, tabs, only)] — 위(최신)부터"""
     html = html or ''
     i = html.find('NEWS = ['); j = html.find('/*NEWS_END*/', i)
-    for m in re.finditer(r'\{id:"([^"]+)"(,\s*only:"[^"]*")?[^}]*?title:"([^"]*)"', html[i:j] if i >= 0 else ''):
-        if not m.group(2):
-            return (m.group(1), m.group(3))
+    seg = html[i:j] if i >= 0 else ''
+    out = []
+    for m in re.finditer(r'\{id:"([^"]+)"(,\s*only:"[^"]*")?[^}]*?title:"([^"]*)"\s*,\s*tabs:\[([^\]]*)\]', seg):
+        tabs = set(re.findall(r'"([^"]+)"', m.group(4)))
+        if 'nopush' in m.group(0): tabs = set()   # 기능 소식 표시 → 알림 제외
+        out.append((m.group(1), m.group(3), tabs, bool(m.group(2))))
+    return out
+
+def top(html):
+    """알림 대상: 공개 소식 중 지표 · 자료 업데이트(데이터 탭)만 — 기능 · 화면 변경은 알림 안 보냄"""
+    for e in entries(html):
+        if not e[3] and (e[2] & DATA_TABS):
+            return (e[0], e[1])
     return (None, '')
 
 def git(*a):
