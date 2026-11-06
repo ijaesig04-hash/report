@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261105235608">
+<meta name="bsr-ver" content="20261106092530">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -4532,7 +4532,7 @@ document.addEventListener("click", function(e){ var g = e.target.closest("[data-
 /* ===== 🎂 생일 — 연도별 양력 날짜 (음력 생일은 그 해 양력으로 바꿔 넣음 · 매년 1월에 갱신) ===== */
 var BDAY = {"2026":[["02-23","이재식"],["03-10","양심영"],["03-18","김상훈","음력 1/30"],["03-20","이명섭"],["04-01","권재원"],["04-13","박수안"],["04-15","이수열"],["04-28","최영국","음력 3/12"],
  ["06-04","원종범"],["06-15","주상덕"],["06-22","임영민"],["06-26","윤기한"],["06-28","유영민"],["07-24","김민석"],["07-29","지사장"],["08-04","정전원"],["09-01","김민수"],["09-07","박광모"],["09-18","고혁진"],
- ["10-26","김동현"],["10-30","박정훈"],["11-14","박광춘","음력 10/6"],["11-29","김태건"],["11-30","용승우"],["12-11","최문혁"],["12-17","김지원"]]};
+ ["10-26","김동현"],["10-30","박정훈"],["11-10","김유건"],["11-14","박광춘","음력 10/6"],["11-29","김태건"],["11-30","용승우"],["12-11","최문혁"],["12-17","김지원"]]};
 function bdToday(){ var d = kstDate(0), L = BDAY[d.slice(0,4)]||[]; return L.filter(function(b){ return b[0]===d.slice(5); }).map(function(b){ return b[1]; }); }
 function bdNm(n){ return n==="지사장" ? "지사장님" : n+"님"; }
 function bdayCard(){ var T = bdToday(); if(!T.length) return ''; var me = myName(), mine = T.indexOf(me)>=0;
