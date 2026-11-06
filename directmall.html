@@ -883,11 +883,17 @@ function render(){
   syncSubject();
   const f=$('pv'),doc=f.contentDocument;
   doc.open();doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>html,body{margin:0;padding:0;}</style></head><body>'+buildEmail()+'</body></html>');doc.close();
-  const fit=()=>{try{const el=doc.body.firstElementChild;f.style.height=Math.max(300,el?Math.ceil(el.getBoundingClientRect().height):600)+'px';}catch(e){}};
+  /* 휴대폰처럼 화면이 좁으면 메일 전체를 화면 폭에 맞춰 줄여서 보여줌 (PC는 그대로) */
+  const fit=()=>{try{const el=doc.body.firstElementChild;if(!el)return;
+    doc.body.style.transform='';doc.body.style.width='';
+    const natW=Math.max(el.scrollWidth,doc.documentElement.scrollWidth),avail=f.clientWidth||natW,sc=natW>avail?avail/natW:1;
+    if(sc<1){doc.body.style.width=natW+'px';doc.body.style.transformOrigin='0 0';doc.body.style.transform='scale('+sc+')';doc.documentElement.style.overflow='hidden';}
+    f.style.height=Math.max(300,Math.ceil(Math.max(el.offsetHeight,doc.body.scrollHeight)*sc))+'px';}catch(e){}};
   fit();setTimeout(fit,80);setTimeout(fit,500);
   doc.querySelectorAll('img').forEach(i=>i.addEventListener('load',fit));
 }
 const renderSoon=()=>{clearTimeout(rT);rT=setTimeout(render,150);};
+let rzT;window.addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if(mode==='mail')render();},200);});
 
 /* ───────── 복사 · 저장 ───────── */
 let tT;function toast(t){const e=$('toast');e.textContent=t;e.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>e.classList.remove('show'),2800);}
