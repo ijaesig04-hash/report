@@ -4,6 +4,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>에스원 홍보 스튜디오</title>
 <meta name="theme-color" content="#0a1a3a">
+<meta name="color-scheme" content="light only">
+<style>:root{color-scheme:light only}</style>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="에스원 홍보">
@@ -25,11 +27,11 @@
   --font:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',system-ui,sans-serif;
   --shadow:0 4px 18px rgba(10,26,58,.07);
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+@media (prefers-color-scheme: dark){:root[data-never-dark]{
   --bg:#0d121c; --panel:#161d2b; --soft:#1c2536; --fg:#e8ecf3; --mute:#97a1b5; --line:#2a3447;
   --blue:#6c9bff; --blue-soft:#1d2a47; --ok:#4cc985; --ok-soft:#163626; --warn:#f0b04a; --warn-soft:#3a2c12; --info:#6c9bff; --info-soft:#1d2a47; --idle:#97a1b5; --idle-soft:#232c3c;
   --shadow:0 4px 18px rgba(0,0,0,.35); color-scheme:dark}}
-:root[data-theme="dark"]{
+:root[data-never-dark2]{
   --bg:#0d121c; --panel:#161d2b; --soft:#1c2536; --fg:#e8ecf3; --mute:#97a1b5; --line:#2a3447;
   --blue:#6c9bff; --blue-soft:#1d2a47; --ok:#4cc985; --ok-soft:#163626; --warn:#f0b04a; --warn-soft:#3a2c12; --info:#6c9bff; --info-soft:#1d2a47; --idle:#97a1b5; --idle-soft:#232c3c;
   --shadow:0 4px 18px rgba(0,0,0,.35); color-scheme:dark}

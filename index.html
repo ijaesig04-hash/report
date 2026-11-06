@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261106150612">
+<meta name="bsr-ver" content="20261106151428">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -826,7 +826,13 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .dh-prod em{font-style:normal;font-size:11.5px;font-weight:800;color:#1f5fd8}
 .dh-prod:active{transform:scale(.99)}
 html.dept-x [data-vl="open"]{display:none!important}
-html:not(.dept-x) [data-vl="prod"],html:not(.dept-x) .dh-prod{display:none!important}
+html:not(.prod-on) .dh-prod{display:none!important}
+.sal-h{display:flex;align-items:center;gap:12px;padding:16px 18px;border-radius:18px;color:#fff;background:linear-gradient(120deg,#0f2a6b,#1b4fd6);margin-bottom:12px}
+.sal-h b{font-size:18px;display:block}.sal-h small{font-size:12px;opacity:.85}
+.sal-g{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.sal-c{display:flex;flex-direction:column;gap:4px;text-decoration:none;color:#14213d;background:#fff;border:1px solid #dfe6f3;border-radius:16px;padding:14px;box-shadow:0 4px 14px rgba(20,33,61,.06);text-align:left;font:inherit;cursor:pointer}
+.sal-c i{font-style:normal;font-size:24px}.sal-c b{font-size:14.5px}.sal-c small{font-size:11.5px;color:#5b6880;line-height:1.4}
+.sal-c:active{transform:scale(.98)}
 
 .ntt{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:#eef2fb;border-radius:12px;padding:4px;margin:2px 0 10px}.ntt button{font:inherit;font-size:14px;font-weight:800;border:0;background:none;color:#475569;border-radius:9px;padding:9px 4px;cursor:pointer}.ntt button[aria-selected="true"]{background:#fff;color:#16306b;box-shadow:0 1px 4px rgba(15,27,51,.12)}
 .mn-lock{display:flex;flex-direction:column;align-items:stretch;gap:10px;text-align:center;padding:20px 4px 8px;box-sizing:border-box;width:100%}.mn-lock b{font-size:16px}.mn-lock p{margin:0;color:#64748b;font-size:13px;line-height:1.5}
@@ -1862,6 +1868,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
   <section class="hero" id="hero"></section>
   <nav class="tabs" aria-label="화면 선택"><div role="tablist" id="tabs">
     <button type="button" role="tab" data-tab="home" aria-selected="true">브리핑</button>
+    <button type="button" role="tab" data-tab="sal" aria-selected="false" hidden>💼 영업</button>
     <button type="button" role="tab" data-tab="cmp" aria-selected="false">지사별</button>
     <button type="button" role="tab" data-tab="veh" aria-selected="false">차량별</button>
     <button type="button" role="tab" data-tab="ppl" aria-selected="false">개인별</button>
@@ -2748,6 +2755,14 @@ var CS_MGR = ["최문혁","이재식","지사장","서비스팀장"];
 var DEPTS = {"영업":["최영국","이수열","임영민","정문재","박광춘"], "기술":["박정훈","김상훈","박광모"]};
 var SALES_URL = "https://jhsim2545.github.io/DailySales/User.html";
 var PROD_URL = "directmall.html#kakao";   /* 에스원 상품 추천 대시보드 */
+function viewSal(){
+  var c = function(href,ic,t,sub,attr){ return '<a class="sal-c" href="'+href+'" target="_blank" rel="noopener"'+(attr||'')+'><i>'+ic+'</i><b>'+t+'</b><small>'+sub+'</small></a>'; };
+  return '<div class="sec"><div class="sal-h"><span style="font-size:30px">💼</span><span><b>영업 메뉴</b><small>영업에 필요한 메뉴를 한곳에 모았어요</small></span></div>'+
+    '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>'+
+    '<div class="sal-g">'+c("directmall.html#kakao","💬","카톡으로 상품 홍보","카톡 메시지 · 카드 이미지 만들기")+c("directmall.html","✉️","메일로 상품 홍보","홍보 메일 16종 디자인")+
+    c("https://s1directmall.co.kr/","🛒","에스원 다이렉트몰","상품 · 가격 바로 보기")+'<button type="button" class="sal-c" data-goto="cs"><i>📞</i><b>내 고객체감</b><small>해피콜 발송 · 응답 · 만족도</small></button></div>'+
+    '<p class="note">💡 고객이 다이렉트몰에서 구매할 때 담당자 사원번호를 입력하면 10% 추가 할인이 돼요.</p></div>';
+}
 function prodLink(){ return '<a class="dh-prod" href="'+PROD_URL+'" target="_blank" rel="noopener"><i>🛡️</i><span>에스원 상품 추천</span><em>열기 ›</em></a>'; }   /* 지사 영업일보 (지사장님 운영 · 로그인 필요) */
 var DEPT_LEAD = {"영업":"최영국", "기술":"박정훈"};   /* 팀장 — 공지 확인 집계 · 칭찬 순위에서 빠짐 */
 function isLead(n){ for(var k in DEPT_LEAD){ if(DEPT_LEAD[k]===n) return true; } return false; }
@@ -5436,9 +5451,13 @@ function tabOrderFix(){ try{ if(typeof notiRefilter==="function") notiRefilter()
   var d = typeof deptOf==="function" ? deptOf() : "서비스", after = (d==="영업"||d==="기술") ? hm : ev;
   if(after.nextElementSibling !== cs) after.parentNode.insertBefore(cs, after.nextElementSibling);
   document.documentElement.classList.toggle("dept-x", d==="영업"||d==="기술");
+  /* 에스원 상품 추천(브리핑): 서비스 직원만 숨김 — 지사장 · 이재식 · 영업 · 기술 · 타부서/직접 입력 이름은 보임 */
+  var mn = typeof myName==="function" ? myName() : ""; document.documentElement.classList.toggle("prod-on", d==="영업"||d==="기술"||["지사장","이재식","타부서","그룹장"].indexOf(mn)>=0||(window.BSR_ALL||[]).indexOf(mn)<0);
+  /* 영업 탭: 영업 부서만 */
+  var st = document.querySelector('[role=tab][data-tab="sal"]'); if(st){ st.hidden = d!=="영업"; if(st.parentNode.children[1]!==st) hm.parentNode.insertBefore(st, hm.nextElementSibling); if(st.hidden && state.tab==="sal"){ state.tab="home"; document.querySelectorAll("#tabs button").forEach(function(x){x.setAttribute("aria-selected", x.dataset.tab==="home")}); } }
   document.documentElement.classList.toggle("dept-sal", d==="영업" || (typeof mgrIs==="function" && mgrIs()));   /* 개시 방문 체크리스트는 서비스만 */ }catch(e){} }
 function render(){ tabOrderFix();
-  var v = state.tab==="home" ? bdayCard()+przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
+  var v = state.tab==="home" ? bdayCard()+przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="sal" ? viewSal() : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
   var nft = newsFor(state.tab); if(nft) markSeen("bsr_tab_"+state.tab, nft.id); nseenAdd(NEWS.slice(0,40).filter(function(n){return n.tabs.indexOf(state.tab)>=0}).map(function(n){return n.id}));
   var VW0 = document.getElementById("view"), dk = function(d){ var sm = d.querySelector('summary'); return (d.className||'')+'|'+(sm?sm.textContent.replace(/[\d\s▾▴]/g,'').slice(0,24):''); }, op = [];
   VW0.querySelectorAll("details[open]").forEach(function(d){ op.push(dk(d)); });
