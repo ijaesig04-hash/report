@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261106152542">
+<meta name="bsr-ver" content="20261106153332">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2758,6 +2758,7 @@ var PROD_URL = "directmall.html?v=3#kakao";   /* 에스원 상품 추천 대시�
 function viewSal(){
   var c = function(href,ic,t,sub,attr){ return '<a class="sal-c" href="'+href+'" target="_blank" rel="noopener"'+(attr||'')+'><i>'+ic+'</i><b>'+t+'</b><small>'+sub+'</small></a>'; };
   return '<div class="sec"><div class="sal-h"><span style="font-size:30px">💼</span><span><b>영업 메뉴</b><small>영업에 필요한 메뉴를 한곳에 모았어요</small></span></div>'+
+    '<p style="margin:-4px 2px 10px;font-size:11.5px;color:#7a8499">🔒 이 탭은 영업 · 기술 · 관리자 · 타부서로 접속했을 때만 보여요</p>'+
     '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>'+
     '<div class="sal-g">'+c("directmall.html?v=3#kakao","💬","카톡으로 상품 홍보","카톡 메시지 · 카드 이미지 만들기")+c("directmall.html?v=3","✉️","메일로 상품 홍보","홍보 메일 16종 디자인")+
     c("https://s1directmall.co.kr/","🛒","에스원 다이렉트몰","상품 · 가격 바로 보기")+'<button type="button" class="sal-c" data-goto="cs"><i>📞</i><b>내 고객체감</b><small>해피콜 발송 · 응답 · 만족도</small></button></div>'+
@@ -5453,8 +5454,9 @@ function tabOrderFix(){ try{ if(typeof notiRefilter==="function") notiRefilter()
   document.documentElement.classList.toggle("dept-x", d==="영업"||d==="기술");
   /* 에스원 상품 추천(브리핑): 서비스 직원만 숨김 — 지사장 · 이재식 · 영업 · 기술 · 타부서/직접 입력 이름은 보임 */
   var mn = typeof myName==="function" ? myName() : ""; document.documentElement.classList.toggle("prod-on", d==="영업"||d==="기술"||["지사장","이재식","타부서","그룹장"].indexOf(mn)>=0||(window.BSR_ALL||[]).indexOf(mn)<0);
-  /* 영업 탭: 영업 부서만 */
-  var st = document.querySelector('[role=tab][data-tab="sal"]'); if(st){ st.hidden = d!=="영업"; if(st.parentNode.children[1]!==st) hm.parentNode.insertBefore(st, hm.nextElementSibling); if(st.hidden && state.tab==="sal"){ state.tab="home"; document.querySelectorAll("#tabs button").forEach(function(x){x.setAttribute("aria-selected", x.dataset.tab==="home")}); } }
+  /* 영업 탭: 서비스 직원만 숨김 — 영업 · 기술 · 관리자(지사장 · 서비스팀장 · 최문혁 · 이재식) · 타부서/직접 입력 이름은 보임 */
+  var salOn = d==="영업"||d==="기술"||(window.BSR_MGRS||[]).indexOf(mn)>=0||["타부서","그룹장"].indexOf(mn)>=0||(window.BSR_ALL||[]).indexOf(mn)<0;
+  var st = document.querySelector('[role=tab][data-tab="sal"]'); if(st){ st.hidden = !salOn; if(st.parentNode.children[1]!==st) hm.parentNode.insertBefore(st, hm.nextElementSibling); if(st.hidden && state.tab==="sal"){ state.tab="home"; document.querySelectorAll("#tabs button").forEach(function(x){x.setAttribute("aria-selected", x.dataset.tab==="home")}); } }
   document.documentElement.classList.toggle("dept-sal", d==="영업" || (typeof mgrIs==="function" && mgrIs()));   /* 개시 방문 체크리스트는 서비스만 */ }catch(e){} }
 function render(){ tabOrderFix();
   var v = state.tab==="home" ? bdayCard()+przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="sal" ? viewSal() : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
