@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261106153332">
+<meta name="bsr-ver" content="20261106155643">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -5456,7 +5456,7 @@ function tabOrderFix(){ try{ if(typeof notiRefilter==="function") notiRefilter()
   var mn = typeof myName==="function" ? myName() : ""; document.documentElement.classList.toggle("prod-on", d==="영업"||d==="기술"||["지사장","이재식","타부서","그룹장"].indexOf(mn)>=0||(window.BSR_ALL||[]).indexOf(mn)<0);
   /* 영업 탭: 서비스 직원만 숨김 — 영업 · 기술 · 관리자(지사장 · 서비스팀장 · 최문혁 · 이재식) · 타부서/직접 입력 이름은 보임 */
   var salOn = d==="영업"||d==="기술"||(window.BSR_MGRS||[]).indexOf(mn)>=0||["타부서","그룹장"].indexOf(mn)>=0||(window.BSR_ALL||[]).indexOf(mn)<0;
-  var st = document.querySelector('[role=tab][data-tab="sal"]'); if(st){ st.hidden = !salOn; if(st.parentNode.children[1]!==st) hm.parentNode.insertBefore(st, hm.nextElementSibling); if(st.hidden && state.tab==="sal"){ state.tab="home"; document.querySelectorAll("#tabs button").forEach(function(x){x.setAttribute("aria-selected", x.dataset.tab==="home")}); } }
+  var st = document.querySelector('[role=tab][data-tab="sal"]'); if(st){ st.hidden = !salOn; /* 관리자는 맨 끝, 그 외(영업 · 기술 · 타부서)는 브리핑 바로 옆 */ if((window.BSR_MGRS||[]).indexOf(mn)>=0 && d==='서비스'){ if(st.parentNode.lastElementChild!==st) st.parentNode.appendChild(st); } else if(st.parentNode.children[1]!==st) hm.parentNode.insertBefore(st, hm.nextElementSibling); if(st.hidden && state.tab==="sal"){ state.tab="home"; document.querySelectorAll("#tabs button").forEach(function(x){x.setAttribute("aria-selected", x.dataset.tab==="home")}); } }
   document.documentElement.classList.toggle("dept-sal", d==="영업" || (typeof mgrIs==="function" && mgrIs()));   /* 개시 방문 체크리스트는 서비스만 */ }catch(e){} }
 function render(){ tabOrderFix();
   var v = state.tab==="home" ? bdayCard()+przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="sal" ? viewSal() : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
