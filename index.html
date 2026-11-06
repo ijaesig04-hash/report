@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261106094502">
+<meta name="bsr-ver" content="20261106111856">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2241,6 +2241,8 @@ function viewRep(){
   });
   var pm = per==="all" ? null : per==="month" ? ym : prevYm; if(pm) panelStatLoad(pm);
   var PS = pm && PSTAT[pm];
+  /* 서버가 0건인데 시트에는 기록이 있으면 서버 값을 쓰지 않음 (서버 데이터 시트가 바뀐 경우 대비) */
+  if(PS){ var psum=0; Object.keys(PS.by).forEach(function(n){ psum+=PS.by[n].p+PS.by[n].s; }); if(!psum && tp+ts>0) PS=null; }
   if(PS){ tp=0; ts=0; Object.keys(by).forEach(function(k){ by[k].p=0; by[k].s=0; }); Object.keys(PS.by).forEach(function(n){ if(!by[n]) by[n]={name:n,p:0,s:0}; by[n].p=PS.by[n].p; by[n].s=PS.by[n].s; tp+=PS.by[n].p; ts+=PS.by[n].s; }); }
   var list = Object.keys(by).map(function(k){return by[k]}).sort(function(a,b){return (b.p+b.s)-(a.p+a.s) || b.p-a.p || a.name.localeCompare(b.name,"ko")});
   var active = list.filter(function(x){return x.p+x.s>0}).length;
@@ -5547,8 +5549,10 @@ function repRoster(ym){ try{ var r = mxRoster(ym).map(function(x){return x[1]});
 function panelStatLoad(ym, force){
   if(!window.fetch || PSTAT_BUSY[ym]) return; if(!force && PSTAT[ym] && Date.now()-PSTAT[ym].t < 120000) return;
   PSTAT_BUSY[ym] = true; var names = repRoster(ym);
-  Promise.all(names.map(function(n){ return fetch(PANEL_API+'?action=myStat&branch='+encodeURIComponent('북서울지사')+'&name='+encodeURIComponent(n)+'&month='+ym,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){ return j && j.ok ? [n, +j.panel||0, +j.sticker||0, +j.count||0] : null; }).catch(function(){ return null; }); }))
-  .then(function(R){ PSTAT_BUSY[ym] = false; var ok = R.filter(Boolean); if(!ok.length) return; var by = {}; ok.forEach(function(x){ var p=x[1], s2=x[2]; if(!p && !s2 && x[3]) s2 = x[3]; by[x[0]] = {p:p, s:s2}; });
+  /* 판넬 서버에 한꺼번에 몰리면 서버가 데이터 시트를 새로 만드는 문제가 있어(11/3) 한 명씩 차례로 조회 */
+  var R = [];
+  names.reduce(function(pr,n){ return pr.then(function(){ return fetch(PANEL_API+'?action=myStat&branch='+encodeURIComponent('북서울지사')+'&name='+encodeURIComponent(n)+'&month='+ym,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){ R.push(j && j.ok ? [n, +j.panel||0, +j.sticker||0, +j.count||0] : null); }).catch(function(){ R.push(null); }); }); }, Promise.resolve())
+  .then(function(){ PSTAT_BUSY[ym] = false; var ok = R.filter(Boolean); if(!ok.length) return; var by = {}; ok.forEach(function(x){ var p=x[1], s2=x[2]; if(!p && !s2 && x[3]) s2 = x[3]; by[x[0]] = {p:p, s:s2}; });
     var prev = PSTAT[ym] ? JSON.stringify(PSTAT[ym].by) : ''; PSTAT[ym] = {t:Date.now(), at:kstNow(), by:by}; if(prev!==JSON.stringify(by) && window.state && state.tab==="rep") renderQuiet(); });
 }
 var RISK_API = "https://script.google.com/macros/s/AKfycbygmjwcblQ9W9rF8KPHh9HhHaMuJ6Ys8e13QainA_ktd_0PmTRJs3DeD8eHmldXzvfA/exec";
