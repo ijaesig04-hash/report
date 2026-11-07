@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108024409">
+<meta name="bsr-ver" content="20261108030227">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2818,12 +2818,12 @@ var CS_MGR = ["최문혁","이재식","지사장","서비스팀장"];
 /* 영업 · 기술 부서원 — 고객체감 자료의 직무 기준 (명단 바뀌면 여기만 고치면 됨) */
 var DEPTS = {"영업":["최영국","이수열","임영민","정문재","박광춘"], "기술":["박정훈","김상훈","박광모"]};
 var SALES_URL = "https://jhsim2545.github.io/DailySales/User.html";
-var PROD_URL = "directmall.html?v=24#kakao";   /* 에스원 상품 추천 대시보드 */
+var PROD_URL = "directmall.html?v=25#kakao";   /* 에스원 상품 추천 대시보드 */
 function viewSal(){
   var c = function(href,ic,t,sub,attr){ return '<a class="sal-c" href="'+href+'" target="_blank" rel="noopener"'+(attr||'')+'><i>'+ic+'</i><b>'+t+'</b><small>'+sub+'</small></a>'; };
   return '<div class="sec"><div class="sal-h"><span style="font-size:30px">💼</span><span><b>영업 메뉴</b><small>영업에 필요한 메뉴를 한곳에 모았어요</small></span></div>'+
     '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>'+
-    '<div class="sal-g">'+c("directmall.html?v=24#kakao","💬","카톡으로 상품 홍보","카드 20종 · 버튼 하나로 바로 보내기")+c("directmall.html?v=24","✉️","메일로 상품 홍보","메일형 20종 + 카드형 20종")+
+    '<div class="sal-g">'+c("directmall.html?v=25#kakao","💬","카톡으로 상품 홍보","카드 20종 · 버튼 하나로 바로 보내기")+c("directmall.html?v=25","✉️","메일로 상품 홍보","메일형 20종 + 카드형 20종")+
     c("https://s1directmall.co.kr/","🛒","에스원 다이렉트몰","상품 · 가격 바로 보기")+'<button type="button" class="sal-c" data-goto="cs"><i>📞</i><b>내 고객체감</b><small>해피콜 발송 · 응답 · 만족도</small></button></div>'+
     '<div class="sal-tip"><span style="font-size:22px">🎁</span><span>고객이 다이렉트몰에서 구매할 때 담당자 <b>사원번호</b>를 입력하면 <b>10% 추가 할인</b>이 돼요</span></div></div>';
 }
@@ -3580,6 +3580,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-08x", date:"11/8", title:"상품 추천 어디서 열어도 링크 카드로", tabs:["home"], items:["💬 내려받은 파일 등 어디서 열어도 📤 카톡 보내기는 에스원 사이트로 넘어가 링크 카드(누르면 다이렉트몰)로 보내져요"]},
  {id:"2026-11-08w", date:"11/8", title:"상품 추천 화면 뒤로가기", tabs:["home"], items:["🛡️ 에스원 상품 추천 화면 왼쪽 위 ‹ 리포트 버튼으로 리포트에 바로 돌아가요"]},
  {id:"2026-11-08v", date:"11/8", title:"영업 탭 · 상품 추천 모두에게 공개", tabs:["home"], items:["💼 영업 탭과 🛡️ 에스원 상품 추천을 서비스 직원 포함 모두가 볼 수 있어요","🍁 탭을 옮길 때 계절 꾸미기가 스르륵 사라지게 다듬었어요"]},
  {id:"2026-11-08u", date:"11/8", title:"카톡 말투 · 미리보기 함께 접기", tabs:["home"], items:["💬 메시지 말투와 메시지 미리보기를 한 번에 접어 두고, 누르면 펼쳐져요"]},

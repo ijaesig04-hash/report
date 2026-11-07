@@ -44,6 +44,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .back{flex:none;display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;font:inherit;font-size:24px;line-height:1;font-weight:700;padding:6px 12px 8px 9px;border-radius:12px;cursor:pointer}
 .back span{font-size:13px;margin-left:2px}
 .back:active{transform:scale(.96)}
+.hand{position:fixed;inset:0;z-index:40;background:rgba(10,26,58,.55);display:grid;place-items:end center;padding:16px 14px calc(18px + env(safe-area-inset-bottom,0px))}
+.hand-in{width:100%;max-width:520px;background:var(--panel);color:var(--fg);border-radius:18px;padding:18px;display:grid;gap:8px;box-shadow:0 -8px 30px rgba(0,0,0,.25)}
+.hand-in b{font-size:16px}.hand-in span{font-size:13px;color:var(--mute);line-height:1.6}.hand-in .btn{padding:15px;font-size:16px}
+.hand-x{border:0;background:transparent;color:var(--mute);font:inherit;font-size:13px;padding:6px;cursor:pointer}
 @media(max-width:520px){.top-in{flex-wrap:nowrap}.back{padding:6px 10px 8px 8px}.back span{display:none}.ttl h1{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lg{padding:4px 8px}.lg b{font-size:14px}.top-in .tabs{display:none}}
 @media(max-width:520px){.top-in{flex-wrap:wrap}.top-in>.tabs{display:flex;order:9}.ttl{flex:1}}
 .lg{background:var(--brand);color:#fff;padding:5px 10px;border-radius:3px;text-align:center;line-height:1.1;flex:none}
@@ -1782,8 +1786,17 @@ async function shareKakaoLink(){
   const view=base+'?img='+encodeURIComponent(fullUrl),mall={mobileWebUrl:MALL,webUrl:MALL};
   await K.Share.sendDefault({objectType:'feed',content:{title:'👆 카드를 누르면 크게 볼 수 있어요',imageUrl:thumbUrl,imageWidth:thumb.width,imageHeight:thumb.height,link:{mobileWebUrl:view,webUrl:view}},buttons:[{title:'다이렉트몰 바로가기',link:mall}]});
 }
+/* 카카오에 등록된 주소(GitHub 사이트)가 아닌 곳(내려받은 파일 등)에서 열면,
+   고른 카드·말투·내 정보를 담아 등록된 주소로 넘겨서 거기서 링크 카드로 보냄 */
+const KAKAO_HOME='https://ijaesig04-hash.github.io/report/directmall.html';
+const onKakaoHost=()=>location.hostname==='ijaesig04-hash.github.io';
+function kakaoHandoff(){
+  const r=raw(),q=new URLSearchParams({send:'1',k:kTheme,t:kTone,sg:seg,ss:season,n:r.name,p:r.phone,e:r.emp,b:r.branch,po:r.position,c:r.cust,m:r.msg});
+  location.href=KAKAO_HOME+'?'+q.toString()+'#kakao';
+}
 async function shareKakao(){
   if(!check())return;
+  if(kakaoKey()&&!onKakaoHost()){toast('카카오 링크 카드로 보내려고 에스원 사이트로 넘어가요…');setTimeout(kakaoHandoff,500);return;}
   if(kakaoKey()){
     toast('카드를 올리는 중이에요…');
     try{await shareKakaoLink();toast('카톡에서 받을 사람을 고르세요 · 카드는 크게 보기, 버튼은 다이렉트몰'+(await autoRecord('카톡')));return;}
@@ -1889,6 +1902,19 @@ $('repEdit').onclick=()=>{repCollapse(false);$('name').focus();};
 $('repDone').onclick=()=>{if(!repOk()){check();return;}saveRep();repCollapse(true);toast('내 정보를 저장했어요');};
 theme='deal';document.querySelectorAll('#themes .th').forEach(e=>e.setAttribute('aria-pressed',e.dataset.t==='deal'));
 showTab(fromHash());
+/* 다른 곳에서 넘겨받은 경우: 내용 채우고 '카톡으로 보내기' 한 번만 누르면 되게 */
+(function(){let q;try{q=new URLSearchParams(location.search);}catch(e){return;} if(q.get('send')!=='1')return;
+  const set=(id,v)=>{if(v!=null&&v!==''&&$(id))$(id).value=v;};
+  set('name',q.get('n'));set('phone',q.get('p'));set('emp',q.get('e'));set('branch',q.get('b'));set('position',q.get('po'));set('customer',q.get('c'));set('msg',q.get('m'));
+  if($('phone').value)$('phone').value=fmtPhone($('phone').value);
+  if(q.get('n')&&q.get('e'))saveRep(); if(typeof repOk==='function'&&repOk())repCollapse(true);
+  if(q.get('sg'))setSeg(q.get('sg')); if(q.get('ss')&&SEASONS.some(x=>x.id===q.get('ss'))){season=q.get('ss');$('season').value=season;}
+  if(q.get('k')&&KTHEMES.some(t=>t.id===q.get('k')))setKTheme(q.get('k')); if(q.get('t')&&KTONES.some(t=>t[0]===q.get('t'))){kTone=q.get('t');kMark();}
+  try{history.replaceState(null,'',location.pathname+'#kakao');}catch(e){}
+  showTab('kakao');
+  const o=document.createElement('div');o.className='hand';o.innerHTML='<div class="hand-in"><b>카톡으로 보낼 준비가 됐어요</b><span>고른 카드 그대로 링크 카드로 보내요 · 카드 아래 버튼을 누르면 다이렉트몰로 가요</span><button type="button" class="btn b-kakao" id="handGo">📤 카톡으로 보내기</button><button type="button" class="hand-x" id="handX">닫기</button></div>';
+  document.body.appendChild(o);$('handGo').onclick=()=>{o.remove();shareKakao();};$('handX').onclick=()=>o.remove();
+})();
 
 /* ───────── 공유 기록 (db) ───────── */
 const STATUS=['발송','반응','상담','구매','보류'];
