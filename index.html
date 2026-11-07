@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108014612">
+<meta name="bsr-ver" content="20261108015101">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3529,6 +3529,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-08o", date:"11/8", title:"🌧️ 날씨 연동 비·눈 효과", tabs:["home"], items:["🌧️❄️ 북서울에 지금 비나 눈이 오면 앱을 열 때 화면에 비·눈이 내리고 '빗길·빙판길 안전운전' 안내가 떠요"]},
  {id:"2026-11-08n", date:"11/8", title:"축하 폭죽 버튼 수정", tabs:["home"], items:["🎆 무사고 축하 카드의 「축하 폭죽」 버튼을 누르면 폭죽이 터져요"]},
  {id:"2026-11-08m", date:"11/8", title:"카톡 카드 자연스럽게 넓히기", tabs:["home"], items:["💬 카톡 카드 양옆을 억지로 늘리지 않고, 배경과 사진을 넓게 다시 그려서 보내요"]},
  {id:"2026-11-08l", date:"11/8", title:"카톡 카드 크게 보기 오류 수정", tabs:["home"], items:["💬 카드를 눌렀을 때 그림이 안 나오던 문제를 고쳤어요"]},
@@ -4063,7 +4064,7 @@ function brief(){
              ['야간 근무 힘내세요','🌙','늦은 시간까지 정말 고생 많으세요']; })(), greet = gp[0];
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small><b>'+(nm2?'<span class="hm-nm">'+esc2(nm2)+'님,</span>':'')+'<span class="hm-gr'+(greet.replace(/ /g,'').length>10?' long':'')+'">'+greet+' <i class="wv">'+gp[1]+'</i></span></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
-  setTimeout(safeAuto, 300);
+  setTimeout(safeAuto, 300); setTimeout(wxAuto, 900);
   var salesA = '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + prodLink();
   return '<div class="sec">'+hero+salesA+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+funRow()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<span class="pt-bs"><button type="button" class="fd-btn" data-ptopen="1">🗺️ 구역 조회</button><button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></span></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
@@ -4363,6 +4364,46 @@ function safeAuto(){
   var S = safeInfo(); S.forEach(function(x){ if(!x.hit) return; var key='bsr_sf_'+x.k+'_'+x.d; if(lsGet(key)) return; try{ localStorage.setItem(key,'1'); }catch(e){} setTimeout(safeFire, 600); });
 }
 document.addEventListener('click', function(e){ if(e.target.closest('[data-sffw]')) safeFire(); });
+
+/* ===== 🌧️❄️ 날씨 연동 — 지금 비·눈이 오면 앱을 열 때 화면에 비·눈이 내림 (Open-Meteo 무료 · 키 없음)
+   위치는 아래 날씨 카드와 같은 WX_LOC(관할 중심 좌표)를 씀. 미리보기: 주소 끝에 ?wx=rain 또는 ?wx=snow ===== */
+var WX_DONE = false;
+function wxKind(c){ c=+c; if([71,73,75,77,85,86].indexOf(c)>=0) return 'snow'; if((c>=51&&c<=67)||(c>=80&&c<=82)||c>=95) return 'rain'; return ''; }
+function wxFall(kind, label){
+  if(document.getElementById('wxfx')) return;
+  var o = document.createElement('div'); o.id='wxfx';
+  o.style.cssText='position:fixed;inset:0;z-index:110;pointer-events:none;transition:opacity 1s';
+  o.innerHTML='<canvas style="width:100%;height:100%;display:block"></canvas>'+(label?'<div style="position:absolute;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:rgba(10,26,58,.88);color:#fff;font:800 13.5px \'Noto Sans KR\',sans-serif;padding:9px 16px;border-radius:999px;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.25)">'+label+'</div>':'');
+  document.body.appendChild(o);
+  var cv=o.querySelector('canvas'), x=cv.getContext('2d'), dpr=devicePixelRatio||1, W=cv.width=innerWidth*dpr, H=cv.height=innerHeight*dpr, P=[], t0=Date.now(), dur=8000, snow=kind==='snow';
+  var N = snow ? 110 : 160;
+  for(var i=0;i<N;i++) P.push({x:Math.random()*W, y:Math.random()*H-H, s:snow?(1.5+Math.random()*3.5)*dpr:(10+Math.random()*16)*dpr, v:snow?(0.6+Math.random()*1.4)*dpr:(9+Math.random()*7)*dpr, w:Math.random()*6.28});
+  (function step(){
+    if(!o.isConnected) return; var el=Date.now()-t0; x.clearRect(0,0,W,H);
+    x.strokeStyle='rgba(174,203,250,.75)'; x.lineWidth=1.4*dpr; x.fillStyle='rgba(255,255,255,.92)';
+    P.forEach(function(p){
+      if(snow){ p.w+=0.03; p.x+=Math.sin(p.w)*0.8*dpr; p.y+=p.v; x.beginPath(); x.arc(p.x,p.y,p.s,0,7); x.fill(); }
+      else { p.x-=p.v*0.18; p.y+=p.v; x.beginPath(); x.moveTo(p.x,p.y); x.lineTo(p.x+p.s*0.18,p.y-p.s); x.stroke(); }
+      if(p.y>H+10 && el<dur-1500){ p.y=-10; p.x=Math.random()*W*1.1; }
+    });
+    if(el>dur-1000) o.style.opacity='0';
+    if(el<dur) requestAnimationFrame(step); else o.remove();
+  })();
+}
+function wxAuto(){
+  if(WX_DONE) return; WX_DONE = true;
+  if(matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var q = (location.search.match(/[?&]wx=(rain|snow)/)||[])[1];
+  if(q){ wxFall(q, q==='snow'?'❄️ 미리보기 · 눈 오는 날':'🌧️ 미리보기 · 비 오는 날'); return; }
+  try{
+    fetch('https://api.open-meteo.com/v1/forecast?latitude='+WX_LOC.lat+'&longitude='+WX_LOC.lon+'&current=weather_code,temperature_2m&timezone=Asia%2FSeoul',{cache:'no-store'})
+      .then(function(r){ return r.json(); })
+      .then(function(j){ var c=j&&j.current; if(!c) return; var k=wxKind(c.weather_code); if(!k) return;
+        var t = (c.temperature_2m!=null? ' '+Math.round(c.temperature_2m)+'℃':'');
+        wxFall(k, k==='snow' ? '❄️ 지금 '+WX_LOC.name+'에 눈이 와요'+t+' · 빙판길 안전운전' : '🌧️ 지금 '+WX_LOC.name+'에 비가 와요'+t+' · 빗길 안전운전'); })
+      .catch(function(){});
+  }catch(e){}
+}
 
 /* ===== 💬 응원 코멘트 — 지사장·서비스팀장·그룹장이 평가 상위자에게 응원 한마디 ('cheer|대상' · 메모=내용) ===== */
 var CHEER_BY = ["지사장","서비스팀장","그룹장"];
