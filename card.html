@@ -24,8 +24,11 @@ img{display:block;width:100%;height:auto;border-radius:10px;background:#fff}
 (function(){
   var box=document.getElementById('box'),u='';
   try{u=new URLSearchParams(location.search).get('img')||'';}catch(e){}
-  var ok=false;try{var p=new URL(u);ok=p.protocol==='https:'&&/(^|\.)kakaocdn\.net$/.test(p.hostname);}catch(e){}
-  if(!ok){box.innerHTML='<div class="err">카드를 불러올 수 없어요.<br>아래 버튼으로 다이렉트몰에 들어가 보세요.</div>';return;}
+  /* 카카오가 http 주소로 줄 때도 있어서 https로 바꿔서 불러옴 (카카오 그림 서버 주소만 허용) */
+  var ok=false,why='';
+  if(!u)why='no-img';
+  else{try{var p=new URL(u);if(p.protocol==='http:')p.protocol='https:';ok=p.protocol==='https:'&&/(^|\.)(kakaocdn\.net|daumcdn\.net)$/.test(p.hostname);if(ok)u=p.href;else why=p.hostname;}catch(e){why='bad-url';}}
+  if(!ok){box.innerHTML='<div class="err">카드를 불러올 수 없어요.<br>아래 버튼으로 다이렉트몰에 들어가 보세요.<br><small style="opacity:.5">('+why+')</small></div>';return;}
   var im=new Image();im.alt='에스원 다이렉트몰 안내 카드';im.src=u;
   im.onerror=function(){box.innerHTML='<div class="err">카드 보관 기간이 지났어요.<br>아래 버튼으로 다이렉트몰에 들어가 보세요.</div>';};
   box.appendChild(im);

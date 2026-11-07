@@ -1759,7 +1759,7 @@ function kakaoFrame(){
 }
 async function shareKakaoLink(){
   const K=await loadKakao();if(!K.isInitialized())K.init(kakaoKey());
-  const up=async cv=>{const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9));return (await K.Share.uploadImage({file:[new File([blob],'card.jpg',{type:'image/jpeg'})]})).infos.original.url;};
+  const up=async cv=>{const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9));return String((await K.Share.uploadImage({file:[new File([blob],'card.jpg',{type:'image/jpeg'})]})).infos.original.url).replace(/^http:\/\//,'https://');};
   const thumb=kakaoFrame(),full=cardCanvas();
   const thumbUrl=await up(thumb),fullUrl=await up(full);
   /* 카드를 누르면 큰 그림 보기 화면(card.html) · 다이렉트몰은 아래 버튼으로만 */
