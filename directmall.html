@@ -1733,11 +1733,11 @@ function loadKakao(){
 }
 /* 카톡 링크 카드는 세로가 가로의 4/3배를 넘으면 잘림 → 카드 전체를 3:4 틀 안에 줄여 넣음 (잘림 없음) */
 function kakaoFrame(card){
-  const W=1200,H=1600,pad=44,o=document.createElement('canvas');o.width=W;o.height=H;const x=o.getContext('2d');
+  const W=1200,H=1600,pad=12,o=document.createElement('canvas');o.width=W;o.height=H;const x=o.getContext('2d');
   const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#0a1a3a');g.addColorStop(1,'#1b4fd6');x.fillStyle=g;x.fillRect(0,0,W,H);
   x.fillStyle='rgba(255,255,255,.06)';x.beginPath();x.arc(W*.9,H*.1,320,0,7);x.fill();x.beginPath();x.arc(W*.08,H*.92,360,0,7);x.fill();
   const sc=Math.min((W-pad*2)/card.width,(H-pad*2)/card.height),w=card.width*sc,h=card.height*sc,X=(W-w)/2,Y=(H-h)/2;
-  x.save();x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=30;x.shadowOffsetY=10;x.fillStyle='#fff';x.fillRect(X,Y,w,h);x.restore();
+  x.save();x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=14;x.fillStyle='#fff';x.fillRect(X,Y,w,h);x.restore();
   x.imageSmoothingQuality='high';x.drawImage(card,X,Y,w,h);
   if(X>150){x.save();x.translate(X/2,H/2);x.rotate(-Math.PI/2);x.font=`bold 30px ${KF}`;x.fillStyle='rgba(255,255,255,.75)';x.textAlign='center';x.fillText('S-1 DIRECT MALL',0,10);x.restore();
     x.save();x.translate(W-X/2,H/2);x.rotate(Math.PI/2);x.font=`bold 30px ${KF}`;x.fillStyle='rgba(255,255,255,.75)';x.textAlign='center';x.fillText('👆 누르면 다이렉트몰로',0,10);x.restore();}
@@ -1748,7 +1748,7 @@ async function shareKakaoLink(){
   const cv=kakaoFrame(cardCanvas()),blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9));
   const up=await K.Share.uploadImage({file:[new File([blob],'card.jpg',{type:'image/jpeg'})]});
   const d=kdata(),link={mobileWebUrl:MALL,webUrl:MALL};
-  await K.Share.sendDefault({objectType:'feed',content:{title:'에스원 다이렉트몰',description:`사원번호 ${d.emp} 입력 시 10% 추가 할인 · ${d.who}`,imageUrl:up.infos.original.url,imageWidth:cv.width,imageHeight:cv.height,link},buttons:[{title:'다이렉트몰 바로가기',link}]});
+  await K.Share.sendDefault({objectType:'feed',content:{title:'👆 카드를 누르면 다이렉트몰로 가요',imageUrl:up.infos.original.url,imageWidth:cv.width,imageHeight:cv.height,link},buttons:[{title:'다이렉트몰 바로가기',link}]});
 }
 async function shareKakao(){
   if(!check())return;
