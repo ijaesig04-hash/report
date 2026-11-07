@@ -908,7 +908,7 @@ A. 결제할 때 담당자 사원번호 ${emp}를 입력하시면 10% 추가 할
 
 🛒 ${MALL}
 ${who} ☎ ${ph}`;
-  default: return `[에스원 다이렉트몰] ${d.to}, ${d.hook}
+  default: return `[에스원 다이렉트몰]${d.basic?'':' '+d.to+', '+d.hook}
 
 안녕하세요, ${who}입니다.
 ${d.bodyText}
@@ -1378,26 +1378,26 @@ function kSlogan(d){const [c,x]=kctx(),W=1080,NV='#12347a',YEL='#ffd400';const g
   Y+=170;Y=kdisc(x,Y)+30;Y=krep(x,d,Y,{shadow:1});return kcrop(c,Y+72);}
 
 const KTHEMES=[
- {id:'blue',   n:'① 클래식 블루',    w:'기본 · 깔끔하게',  c:['#0a1a3a','#1b4fd6','#eef1f6','#ffd400'],tone:'formal',  f:kBlue},
- {id:'coupon', n:'② 할인 쿠폰',      w:'⭐ 10% 혜택 강조', c:['#c8001f','#ff4d6d','#ffffff','#1b4fd6'],tone:'benefit', f:kCoupon},
- {id:'steps',  n:'③ 구매 3단계',     w:'처음 사는 고객',   c:['#eef4ff','#1b4fd6','#ffffff','#e5002d'],tone:'qna',p:1, f:kSteps},
+ {id:'minimal',n:'① 미니멀 명함',    w:'VIP·대표님',       c:['#ffffff','#b8954a','#1a1f2b','#e5002d'],tone:'formal',  f:kMinimal},
+ {id:'boarding',n:'② 안심 탑승권',   w:'재미·이벤트',      c:['#0a1a3a','#ffffff','#e5002d','#1b4fd6'],tone:'benefit', f:kBoarding},
+ {id:'news',   n:'③ 안심일보',       w:'신문 호외',        c:['#f4efe3','#1a1a1a','#c8102e','#ffffff'],tone:'formal',p:1,f:kNews},
  {id:'check',  n:'④ 안심 체크리스트',w:'필요성 일깨우기',  c:['#0a1a3a','#f4f7fc','#4fb3ff','#e5002d'],tone:'check',   f:kCheck},
- {id:'menu',   n:'⑤ 상품 메뉴판',    w:'상품 한눈에',      c:['#faf7f0','#3b7bf6','#7b61f5','#f2546a'],tone:'formal',  f:kMenu},
- {id:'night',  n:'⑥ 나이트 시큐리티',w:'매장·사업장',      c:['#05070d','#e5002d','#4fb3ff','#ffffff'],tone:'short',p:1,f:kNight},
- {id:'toon',   n:'⑦ 안심 배달',      w:'가정·가족 고객',   c:['#fff5e9','#ff8a3d','#0a1a3a','#ffd400'],tone:'friendly',p:1,f:kToon},
- {id:'sign',   n:'⑧ 지사 현판',      w:'우리 지역 고객',   c:['#1b4fd6','#c9ced8','#ffffff','#e5002d'],tone:'formal',p:1,f:kSign},
- {id:'minimal',n:'⑨ 미니멀 명함',    w:'VIP·대표님',       c:['#ffffff','#b8954a','#1a1f2b','#e5002d'],tone:'formal',  f:kMinimal},
- {id:'news',   n:'⑩ 안심일보',       w:'신문 호외',        c:['#f4efe3','#1a1a1a','#c8102e','#ffffff'],tone:'formal',p:1,f:kNews},
- {id:'control',n:'⑪ 스마트 관제',    w:'법인·사무실',      c:['#050b1a','#0d1b3d','#4fb3ff','#ffffff'],tone:'short',p:1,f:kControl},
- {id:'boarding',n:'⑫ 안심 탑승권',   w:'재미·이벤트',      c:['#0a1a3a','#ffffff','#e5002d','#1b4fd6'],tone:'benefit', f:kBoarding},
- {id:'calendar',n:'⑬ 오늘의 달력',   w:'할 일 메모',       c:['#e5002d','#ffffff','#ffe873','#0a1a3a'],tone:'check',   f:kCalendar},
- {id:'letter', n:'⑭ 손편지',         w:'감사 인사',        c:['#efe4cf','#fffdf7','#2a3550','#e5002d'],tone:'friendly',f:kLetter},
+ {id:'calendar',n:'⑤ 오늘의 달력',   w:'할 일 메모',       c:['#e5002d','#ffffff','#ffe873','#0a1a3a'],tone:'check',   f:kCalendar},
+ {id:'sign',   n:'⑥ 지사 현판',      w:'우리 지역 고객',   c:['#1b4fd6','#c9ced8','#ffffff','#e5002d'],tone:'formal',p:1,f:kSign},
+ {id:'field',  n:'⑦ 현장 매니저',    w:'🆕 가까운 담당자', c:['#ffffff','#8ccf3a','#0a1a3a','#1b4fd6'],tone:'friendly',p:1,f:kField},
+ {id:'steps',  n:'⑧ 구매 3단계',     w:'처음 사는 고객',   c:['#eef4ff','#1b4fd6','#ffffff','#e5002d'],tone:'qna',p:1, f:kSteps},
+ {id:'magazine',n:'⑨ 매거진 커버',   w:'🆕 고급스럽게',    c:['#0a1a3a','#e5002d','#ffffff','#9fbaf0'],tone:'short',p:1,f:kMagazine},
+ {id:'slogan', n:'⑩ 손글씨 슬로건',  w:'🆕 밝고 친근하게', c:['#cfe8ff','#12347a','#ffd400','#ffffff'],tone:'friendly',p:1,f:kSlogan},
+ {id:'consult',n:'⑪ 1:1 보안 컨설팅',w:'🆕 상담 유도',     c:['#4fb3ff','#1b4fd6','#0a1a3a','#ffffff'],tone:'formal',p:1,f:kConsult},
+ {id:'blue',   n:'⑫ 클래식 블루',    w:'기본 · 깔끔하게',  c:['#0a1a3a','#1b4fd6','#eef1f6','#ffd400'],tone:'formal',  f:kBlue},
+ {id:'coupon', n:'⑬ 할인 쿠폰',      w:'⭐ 10% 혜택 강조', c:['#c8001f','#ff4d6d','#ffffff','#1b4fd6'],tone:'benefit', f:kCoupon},
+ {id:'toon',   n:'⑭ 안심 배달',      w:'가정·가족 고객',   c:['#fff5e9','#ff8a3d','#0a1a3a','#ffd400'],tone:'friendly',p:1,f:kToon},
  {id:'promise',n:'⑮ 안심 약속',      w:'🆕 신뢰·첫 인사',  c:['#0a1a3a','#1b4fd6','#ffd400','#ffffff'],tone:'formal',p:1,f:kPromise},
- {id:'consult',n:'⑯ 1:1 보안 컨설팅',w:'🆕 상담 유도',     c:['#4fb3ff','#1b4fd6','#0a1a3a','#ffffff'],tone:'formal',p:1,f:kConsult},
+ {id:'night',  n:'⑯ 나이트 시큐리티',w:'매장·사업장',      c:['#05070d','#e5002d','#4fb3ff','#ffffff'],tone:'short',p:1,f:kNight},
  {id:'tablet', n:'⑰ 태블릿 상담',    w:'🆕 상품 한 화면',  c:['#eef4ff','#0b2a6b','#ffd400','#1a1f2b'],tone:'qna',p:1, f:kTablet},
- {id:'field',  n:'⑱ 현장 매니저',    w:'🆕 가까운 담당자', c:['#ffffff','#8ccf3a','#0a1a3a','#1b4fd6'],tone:'friendly',p:1,f:kField},
- {id:'magazine',n:'⑲ 매거진 커버',   w:'🆕 고급스럽게',    c:['#0a1a3a','#e5002d','#ffffff','#9fbaf0'],tone:'short',p:1,f:kMagazine},
- {id:'slogan', n:'⑳ 손글씨 슬로건',  w:'🆕 밝고 친근하게', c:['#cfe8ff','#12347a','#ffd400','#ffffff'],tone:'friendly',p:1,f:kSlogan},
+ {id:'control',n:'⑱ 스마트 관제',    w:'법인·사무실',      c:['#050b1a','#0d1b3d','#4fb3ff','#ffffff'],tone:'short',p:1,f:kControl},
+ {id:'letter', n:'⑲ 손편지',         w:'감사 인사',        c:['#efe4cf','#fffdf7','#2a3550','#e5002d'],tone:'friendly',f:kLetter},
+ {id:'menu',   n:'⑳ 상품 메뉴판',    w:'상품 한눈에',      c:['#faf7f0','#3b7bf6','#7b61f5','#f2546a'],tone:'formal',  f:kMenu},
 ];
 const KTHEMES_OLD={bubble:'카톡 대화',notify:'알림 도착',lime:'출동 임팩트'};
 if(!KTHEMES.some(t=>t.id===kTheme))kTheme='blue';
