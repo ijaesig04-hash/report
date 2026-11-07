@@ -254,8 +254,8 @@ table.t td.n,table.t th.n{text-align:right}
    </section>
    <div class="tip" id="tipMail">
     <b>📮 이렇게 보내면 효과적이에요</b><br>
-    • 처음 연락 → ① 자주 묻는 질문 · 상품 안내 → ② 추천 세트<br>
-    • 짧게 → ③ 3초 요약 · 가격 안내 → ④ 이번 주 특가<br>
+    • 가격 안내 → ① 이번 주 특가 · 첫 인사 → ② 더 안전한 내일<br>
+    • 상품 고르기 → ⑤ 1분 맞춤 진단 · 궁금증 → 자주 묻는 질문<br>
     • 모든 메일 하단에 <b>사원번호 10% 추가할인</b> 안내가 들어가요<br>
     • 고객이 구매 때 사원번호를 입력하면 누구 추천인지 확인돼요
    </div>
@@ -275,7 +275,7 @@ table.t td.n,table.t th.n{text-align:right}
   </div>
   <div class="panel" style="min-width:0" id="mailPanel">
    <div class="phead"><h2><span class="step">4</span>디자인 선택</h2><small>⭐ 추천 · 📷 사진 포함</small></div>
-   <div class="seg mgrp" id="mgrp" style="grid-template-columns:1fr 1fr;margin-bottom:12px"><button type="button" data-g="mail" aria-pressed="true">✉️ 메일형 16종</button><button type="button" data-g="card" aria-pressed="false">🎴 카드형 20종</button></div>
+   <div class="seg mgrp" id="mgrp" style="grid-template-columns:1fr 1fr;margin-bottom:12px"><button type="button" data-g="mail" aria-pressed="true">✉️ 메일형 20종</button><button type="button" data-g="card" aria-pressed="false">🎴 카드형 20종</button></div>
    <p class="hint" id="mgrpHint" hidden style="margin:-4px 0 10px">카톡 카드 디자인으로 메일을 만들어요 · <b>📤 메일 앱으로 보내기</b>를 누르면 카드가 첨부돼서 Gmail·네이버에서도 잘 보여요 (본문 복사는 아웃룩용)</p>
    <div class="themes" id="themes"></div>
    <div class="subj"><span>제목</span><b id="subjPv"></b></div>
@@ -411,24 +411,28 @@ const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const F="font-family:'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif;";
 
 const THEMES=[
- {id:'faq',    n:'① 자주 묻는 질문',p:0,w:'⭐ 첫 연락·궁금증 해결',c:['#eef3fb','#0a1a3a','#e5002d','#ffffff']},
- {id:'bundle', n:'② 추천 세트',p:0,w:'⭐ 상품 소개',c:['#f4f1fb','#7b61f5','#3b7bf6','#f2546a']},
- {id:'quick',  n:'③ 3초 요약',p:0,w:'⭐ 모바일·짧게',c:['#ffffff','#e5002d','#1a1f2b','#f1f4fa']},
- {id:'deal',   n:'④ 이번 주 특가',p:1,w:'가격 안내',c:['#e5002d','#ffffff','#deeff7','#1b4fd6']},
- {id:'tips',   n:'⑤ 생활 안전 팁',p:0,w:'가정·가족 고객',c:['#eaf6f1','#12894a','#ffffff','#1a1f2b']},
- {id:'campus', n:'⑥ 토탈 시큐리티',p:1,w:'법인·통합 보안',c:['#eceef2','#1a1f2b','#e5002d','#1b4fd6']},
- {id:'hero',   n:'⑦ 히어로 포스터',p:1,w:'첫 인사',c:['#4fb3ff','#0a1a3a','#e5002d','#b9e62b']},
- {id:'timeline',n:'⑧ 안심 하루',p:0,w:'생활 속 활용',c:['#0a1a3a','#ffffff','#1b4fd6','#e5002d']},
- {id:'seasonal',n:'⑨ 계절 인사',p:0,w:'안부 인사',c:['#f3efe9','#b4532a','#ffffff','#1a1f2b']},
- {id:'lime',   n:'⑩ 출동 유니폼',p:0,w:'강한 임팩트',c:['#b9e62b','#0a1a3a','#e5002d','#ffffff']},
- {id:'minimal',n:'⑪ 미니멀 프리미엄',p:0,w:'VIP·대표님',c:['#ffffff','#1a1f2b','#e5002d','#f2f3f6']},
- {id:'card',   n:'⑫ 비즈니스 명함',p:0,w:'명함 대신 인사',c:['#0a1a3a','#c8a45a','#ffffff','#e5002d']},
- {id:'checklist',n:'⑬ 안심 체크리스트',p:0,w:'필요성 일깨우기',c:['#0a1a3a','#4fb3ff','#ffffff','#e5002d']},
- {id:'key',    n:'⑭ 보안 키카드',p:0,w:'젊은 사장님',c:['#070d1d','#1b4fd6','#b9e62b','#e8c46a']},
- {id:'chat',   n:'⑮ 메신저 대화',p:0,w:'친근한 재연락',c:['#dbe8f7','#0a1a3a','#ffffff','#e5002d']},
- {id:'newsletter',n:'⑯ 월간 안심 레터',p:0,w:'정기 안부',c:['#e9edf2','#0a1a3a','#1b4fd6','#e5002d']},
+ {id:'deal',   n:'① 이번 주 특가',p:1,w:'가격 안내',c:['#e5002d','#ffffff','#deeff7','#1b4fd6']},
+ {id:'tomorrow',n:'② 더 안전한 내일',p:1,w:'🆕 ⭐ 첫 인사',c:['#1b4fd6','#4fb3ff','#ffd400','#0a1a3a']},
+ {id:'partner', n:'③ 비즈니스 파트너',p:1,w:'🆕 법인·사장님',c:['#123d9a','#ffffff','#ffd400','#0a1a3a']},
+ {id:'fieldmgr',n:'④ 현장 담당 매니저',p:1,w:'🆕 가까운 담당자',c:['#eef5e6','#8ccf3a','#0a1a3a','#1b4fd6']},
+ {id:'quiz',    n:'⑤ 1분 맞춤 진단',p:0,w:'🆕 상품 고르기',c:['#fff7e6','#d9731f','#1b4fd6','#ffffff']},
+ {id:'lime',   n:'⑥ 출동 유니폼',p:0,w:'강한 임팩트',c:['#b9e62b','#0a1a3a','#e5002d','#ffffff']},
+ {id:'chat',   n:'⑦ 메신저 대화',p:0,w:'친근한 재연락',c:['#dbe8f7','#0a1a3a','#ffffff','#e5002d']},
+ {id:'minimal',n:'⑧ 미니멀 프리미엄',p:0,w:'VIP·대표님',c:['#ffffff','#1a1f2b','#e5002d','#f2f3f6']},
+ {id:'tips',   n:'⑨ 생활 안전 팁',p:0,w:'가정·가족 고객',c:['#eaf6f1','#12894a','#ffffff','#1a1f2b']},
+ {id:'seasonal',n:'⑩ 계절 인사',p:0,w:'안부 인사',c:['#f3efe9','#b4532a','#ffffff','#1a1f2b']},
+ {id:'timeline',n:'⑪ 안심 하루',p:0,w:'생활 속 활용',c:['#0a1a3a','#ffffff','#1b4fd6','#e5002d']},
+ {id:'key',    n:'⑫ 보안 키카드',p:0,w:'젊은 사장님',c:['#070d1d','#1b4fd6','#b9e62b','#e8c46a']},
+ {id:'faq',    n:'⑬ 자주 묻는 질문',p:0,w:'⭐ 첫 연락·궁금증 해결',c:['#eef3fb','#0a1a3a','#e5002d','#ffffff']},
+ {id:'newsletter',n:'⑭ 월간 안심 레터',p:0,w:'정기 안부',c:['#e9edf2','#0a1a3a','#1b4fd6','#e5002d']},
+ {id:'hero',   n:'⑮ 히어로 포스터',p:1,w:'첫 인사',c:['#4fb3ff','#0a1a3a','#e5002d','#b9e62b']},
+ {id:'bundle', n:'⑯ 추천 세트',p:0,w:'⭐ 상품 소개',c:['#f4f1fb','#7b61f5','#3b7bf6','#f2546a']},
+ {id:'campus', n:'⑰ 토탈 시큐리티',p:1,w:'법인·통합 보안',c:['#eceef2','#1a1f2b','#e5002d','#1b4fd6']},
+ {id:'quick',  n:'⑱ 3초 요약',p:0,w:'⭐ 모바일·짧게',c:['#ffffff','#e5002d','#1a1f2b','#f1f4fa']},
+ {id:'card',   n:'⑲ 비즈니스 명함',p:0,w:'명함 대신 인사',c:['#0a1a3a','#c8a45a','#ffffff','#e5002d']},
+ {id:'checklist',n:'⑳ 안심 체크리스트',p:0,w:'필요성 일깨우기',c:['#0a1a3a','#4fb3ff','#ffffff','#e5002d']},
 ];
-let theme='faq', noImg=false;
+let theme='deal', noImg=false;
 
 function fmtPhone(v){const d=v.replace(/\D/g,'').slice(0,11);if(d.length<4)return d;if(d.length<8)return d.slice(0,3)+'-'+d.slice(3);if(d.length===10)return d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6);return d.slice(0,3)+'-'+d.slice(3,7)+'-'+d.slice(7);}
 
@@ -962,7 +966,65 @@ ${sec('✉️','담당자 한마디',mP(defMsg(d)))}
 <tr><td align="center" style="padding:26px 32px 8px;">${btn('다이렉트몰 바로가기 →',C.navy,'#fff')}</td></tr>
 <tr><td style="padding:22px 32px 32px;">${sigLight(d,C.navy)}</td></tr>`)+foot());}
 
-const BUILD={faq:bFaq,bundle:bBundle,deal:bDeal,tips:bTips,timeline:bTimeline,seasonal:bSeasonal,checklist:bChecklist,newsletter:bNewsletter,consult:bConsult,night:bNight,toon:bToon,catalog:bCatalog,quick:bQuick,campus:bCampus,hero:bHero,control:bControl,branch:bBranch,lime:bLime,minimal:bMinimal,card:bCard,pass:bPass,key:bKey,chat:bChat,letter:bLetter};
+/* ───────── 사진 메일 3종 + 맞춤 진단 ───────── */
+const mPhoto=(k,alt)=>noImg?'':`<tr><td><img src="${MAILIMG+k}.jpg" width="600" alt="${alt}" style="display:block;width:100%;max-width:600px;height:auto;border:0;"></td></tr>`;
+
+/* ② 더 안전한 내일 (사진 s1a) */
+function bTomorrow(d){
+ const tiles=SEG[seg].icons.slice(0,5);
+ return outer('#dfeaf8',mCard(`
+${mPhoto('s1a','에스원이 만드는 더 안전한 내일')}
+<tr><td bgcolor="${C.blue}" style="background:${C.blue};background-image:linear-gradient(120deg,#0f3aa8,#1b4fd6 60%,#4fb3ff);padding:28px 32px;${F}">
+ <div style="font-size:12px;letter-spacing:3px;color:#cfe0ff;font-weight:bold;">SECURITY FOR A BETTER TOMORROW</div>
+ <div style="font-size:27px;font-weight:900;color:#fff;line-height:1.35;margin-top:8px;">에스원이 만드는<br><span style="color:#ffd400;">더 안전한 내일!</span></div></td></tr>
+<tr><td style="padding:26px 32px 4px;">${mP(defMsg(d))}</td></tr>
+<tr><td style="padding:20px 24px 0;">${T(`width="100%" bgcolor="#0a1a3a" style="background:#0a1a3a;border-radius:16px;border-collapse:separate;"`,`<tr><td colspan="5" style="padding:16px 18px 4px;${F}font-size:13px;font-weight:bold;color:${C.sky};">첨단 보안이 만드는 새로운 가치</td></tr><tr>${tiles.map(([i,t])=>`<td width="20%" align="center" valign="top" style="padding:10px 4px 18px;">${T('width="100%"',`<tr><td align="center" style="border:1.5px solid #3a6fd6;border-radius:12px;padding:12px 2px;${F}"><div style="font-size:22px;">${i}</div><div style="font-size:11px;font-weight:bold;color:#e8efff;margin-top:6px;">${t}</div></td></tr>`)}</td>`).join('')}</tr>`)}</td></tr>
+<tr><td align="center" style="padding:26px 32px 8px;">${btn('에스원 다이렉트몰 바로가기 →',C.red,'#fff')}</td></tr>
+<tr><td style="padding:22px 32px 32px;">${sigLight(d,C.blue)}</td></tr>`)+foot());}
+
+/* ③ 비즈니스 파트너 (사진 s1b) */
+function bPartner(d){
+ const vals=[['🤝','신뢰받는 기업'],['🛡️','안전한 사회'],['👥','함께하는 미래']];
+ return outer('#e7eef8',mCard(`
+${mPhoto('s1b','고객의 더 안전한 내일을 에스원이 만들어갑니다')}
+<tr><td bgcolor="#123d9a" style="background:#123d9a;padding:0;">${T('width="100%"',`<tr>${vals.map(([i,t],k)=>`<td width="33%" align="center" style="padding:14px 4px;${k?'border-left:1px solid #3a63c0;':''}${F}font-size:13px;font-weight:bold;color:#fff;">${i} ${t}</td>`).join('')}</tr>`)}</td></tr>
+<tr><td style="padding:30px 32px 4px;"><div style="${F}font-size:12px;letter-spacing:2px;font-weight:bold;color:${C.blue};">YOUR BUSINESS PARTNER</div>${mH(`고객의 더 안전한 내일을<br><span style="color:${C.blue};">에스원</span>이 만들어갑니다`)}${mP(defMsg(d))}</td></tr>
+<tr><td style="padding:16px 26px 0;">${SEG[seg].chips.map(t=>`<span style="display:inline-block;margin:4px;padding:8px 14px;border-radius:8px;background:#eef3fc;border:1px solid #cfdcf5;${F}font-size:13px;font-weight:bold;color:${C.navy};">${t}</span>`).join('')}</td></tr>
+<tr><td style="padding:22px 32px 0;">${T(`width="100%" style="border-left:4px solid #ffd400;"`,`<tr><td style="padding:6px 16px;${F}font-size:16px;font-weight:bold;font-style:italic;color:${C.navy};line-height:1.6;">"에스원과 함께, 비즈니스의 가치를 높이십시오!"</td></tr>`)}</td></tr>
+<tr><td align="center" style="padding:26px 32px 8px;">${btn('다이렉트몰에서 상품 보기 →','#123d9a','#fff',{r:8})}</td></tr>
+<tr><td style="padding:22px 32px 32px;">${sigLight(d,'#123d9a')}</td></tr>`)+foot());}
+
+/* ④ 현장 담당 매니저 (사진 s1c) */
+function bFieldMgr(d){
+ const L=prods();
+ return outer('#eef5e6',mCard(`
+${mPhoto('s1c','고객의 오늘도 에스원이 지킵니다')}
+<tr><td style="padding:30px 32px 4px;">${mH(`${d.to}의 오늘도<br>에스원이 지킵니다`,C.navy,27)}<div style="width:120px;height:5px;background:#8ccf3a;margin-top:12px;border-radius:3px;font-size:0;">&nbsp;</div>${mP('보안 그 이상의 가치, 에스원이 만들어갑니다.<br>'+defMsg(d))}</td></tr>
+<tr><td style="padding:20px 26px 0;">${T(`width="100%" bgcolor="#0a1a3a" style="background:#0a1a3a;background-image:linear-gradient(120deg,#0a1a3a,#1b4fd6);border-radius:16px;border-collapse:separate;"`,L.map((p,i)=>`<tr>
+  <td width="64" align="center" style="padding:14px 0 14px 16px;${i?'border-top:1px solid #2a4a8a;':''}">${T('',`<tr><td width="44" height="44" align="center" style="border:2px solid #ffffff;border-radius:50%;font-size:20px;">${p.ic}</td></tr>`)}</td>
+  <td style="padding:14px 18px 14px 10px;${i?'border-top:1px solid #2a4a8a;':''}${F}"><div style="font-size:15px;font-weight:bold;color:#fff;">${p.cat}</div><div style="font-size:12px;color:#b9c8e6;margin-top:3px;">${p.items.join(' · ')}</div></td>
+  <td align="right" style="padding:14px 18px 14px 0;${i?'border-top:1px solid #2a4a8a;':''}"><a href="${CAT(p.n)}" target="_blank" style="${F}font-size:12px;font-weight:bold;color:#b9e62b;text-decoration:none;white-space:nowrap;">보기 ›</a></td></tr>`).join(''))}</td></tr>
+<tr><td style="padding:22px 32px 0;${F}font-size:17px;font-style:italic;font-weight:bold;color:${C.navy};text-align:right;">에스원과 함께, 더 안전한 내일을 만듭니다 <span style="color:${C.blue};font-size:22px;">S-1</span></td></tr>
+<tr><td align="center" style="padding:24px 32px 8px;">${btn('다이렉트몰 바로가기 →','#5aa02c','#fff')}</td></tr>
+<tr><td style="padding:22px 32px 32px;">${sigLight(d,'#5aa02c')}</td></tr>`)+foot());}
+
+/* ⑤ 1분 맞춤 진단 */
+function bQuiz(d){
+ const Q=seg==='biz'?[['매장을 비우는 시간이 길다','상업용 도어락',47],['현금·중요 서류를 보관한다','이지스 금고',48],['손님이 많이 드나든다','소화기 · 구급함',48],['AED를 갖추고 있다','AED 패드 · 배터리',49]]
+  :seg==='home'?[['택배를 자주 받는다','AI도어캠',46],['집을 자주 비운다','AI홈카메라',46],['귀중품·중요 서류가 있다','안전금고',46],['아이·어르신과 함께 산다','구급함 · 소화기',48]]
+  :[['택배를 자주 받는다','AI도어캠',46],['집이나 매장을 자주 비운다','AI홈카메라',46],['매장을 운영한다','상업용 도어락',47],['귀중품·현금을 보관한다','안전금고 · 이지스 금고',48]];
+ return outer('#fff7e6',mCard(`
+<tr><td style="padding:30px 32px 0;">${logo(.8)}</td></tr>
+<tr><td style="padding:22px 32px 4px;"><div style="${F}font-size:12px;letter-spacing:2px;font-weight:bold;color:#d9731f;">1 MINUTE CHECK</div>${mH('나에게 맞는 보안 상품,<br>1분 맞춤 진단 🔍')}${mP(`아래에서 <b>"그렇다"</b>에 해당하는 항목을 찾아보세요.<br>${defMsg(d)}`)}</td></tr>
+<tr><td style="padding:20px 26px 0;">${T('width="100%"',Q.map(([q,a,n],i)=>`<tr><td style="padding:0 0 12px;">${T(`width="100%" style="border:1.5px solid #f3d9b5;border-radius:14px;border-collapse:separate;"`,`<tr>
+  <td width="40" align="center" bgcolor="#fff1db" style="background:#fff1db;border-radius:14px 0 0 14px;${F}font-size:16px;font-weight:900;color:#d9731f;">${i+1}</td>
+  <td style="padding:14px 14px;${F}"><div style="font-size:14px;color:${C.ink};">${q}</div><div style="font-size:15px;font-weight:bold;color:${C.blue};margin-top:4px;">👉 ${a}</div></td>
+  <td align="right" style="padding:14px 16px 14px 0;"><a href="${CAT(n)}" target="_blank" style="${F}font-size:12px;font-weight:bold;color:#d9731f;text-decoration:none;white-space:nowrap;">보기 ›</a></td></tr>`)}</td></tr>`).join(''))}</td></tr>
+<tr><td style="padding:8px 32px 0;${F}font-size:13px;color:#4a5262;line-height:1.7;">잘 모르겠다면 편하게 물어보세요. 담당 <b>${d.name}</b> 매니저가 딱 맞는 상품을 골라드릴게요. 📞 <b>${d.phone}</b></td></tr>
+<tr><td align="center" style="padding:24px 32px 8px;">${btn('다이렉트몰 바로가기 →','#d9731f','#fff')}</td></tr>
+<tr><td style="padding:22px 32px 32px;">${sigLight(d,'#d9731f')}</td></tr>`)+foot());}
+
+const BUILD={tomorrow:bTomorrow,partner:bPartner,fieldmgr:bFieldMgr,quiz:bQuiz,faq:bFaq,bundle:bBundle,deal:bDeal,tips:bTips,timeline:bTimeline,seasonal:bSeasonal,checklist:bChecklist,newsletter:bNewsletter,consult:bConsult,night:bNight,toon:bToon,catalog:bCatalog,quick:bQuick,campus:bCampus,hero:bHero,control:bControl,branch:bBranch,lime:bLime,minimal:bMinimal,card:bCard,pass:bPass,key:bKey,chat:bChat,letter:bLetter};
 /* 🎴 카드형 메일 — 카톡 카드 이미지를 메일 본문에 넣음 */
 let kcMailCache={k:'',url:''};
 function kcardMailImg(id){
@@ -1745,7 +1807,7 @@ const repOk=()=>$('name').value.trim()&&$('phone').value.trim()&&digits($('emp')
 if(repOk())repCollapse(true);
 $('repEdit').onclick=()=>{repCollapse(false);$('name').focus();};
 $('repDone').onclick=()=>{if(!repOk()){check();return;}saveRep();repCollapse(true);toast('내 정보를 저장했어요');};
-theme='faq';document.querySelectorAll('#themes .th').forEach(e=>e.setAttribute('aria-pressed',e.dataset.t==='faq'));
+theme='deal';document.querySelectorAll('#themes .th').forEach(e=>e.setAttribute('aria-pressed',e.dataset.t==='deal'));
 showTab(fromHash());
 
 /* ───────── 공유 기록 (db) ───────── */
