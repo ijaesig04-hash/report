@@ -17,6 +17,8 @@
 | `patrol.html` | 구역별 담당차량(출동차량) 조회 |
 | `risk.html` | 작업전 위험예지활동 보고 |
 | `directmall.html` | 에스원 홍보메일·카톡 스튜디오 (다이렉트몰 상품 홍보, 브리핑의 「에스원 상품 추천」 메뉴) |
+| `tools/screen_check.js` | 휴대폰 크기(390px) 화면 점검 — 탭마다 캡처하고 오류·화면 넘침을 찾음 |
+| `.claude/skills/` | 반영 작업 순서·체크리스트(스킬) |
 | `sw.js` | 빠른 열기·오프라인용 서비스워커. **새 html 페이지를 추가하면 navigate 허용 목록 정규식에 추가해야 함** |
 | `manifest.json`, `icon-*.png` | 앱 설치 정보·아이콘 |
 | `404.html`, `report-1023x.html` | 옛 주소 → 최신 화면으로 이동 |
@@ -26,7 +28,8 @@
 - 지표 반영할 때마다 `index.html`의 `<meta name="bsr-ver">` 값을 갱신한다 (휴대폰 화면 자동 새로고침 기준)
 - `check.py`는 `index.html` 안의 데이터 형식(예: `{d:"YYYY-MM-DD", br:`, `"YYYY-MM-DD":{"period"`, `var DRIVE`)을 읽는다. 데이터 형식을 바꾸면 `check.py`도 함께 고친다
 - 커밋 메시지는 한국어로, 무엇을 반영했는지 짧게 적는다 (예: "고객체감 10/30 반영 (발송 175, 응답 55)")
-- 지표·근무표·운전성향 반영 작업에는 `bukseoul-report-update` 스킬이 있으면 그것을 따른다
+- 지표·근무표·운전성향 반영 작업에는 저장소의 `.claude/skills/bukseoul-report-update/SKILL.md` 스킬을 따른다 (claude.ai에 올린 예전 버전보다 우선)
+- 반영 후 push 전에 `node tools/screen_check.js index.html <폴더>`로 휴대폰 크기 화면 점검(탭별 캡처·오류 확인)을 한다
 - **근무표를 고칠 때는 표(DUTY)와 함께 🗂️ 원본 사진(`DUTY_IMG`)도 항상 같은 날 최신 사진으로 교체한다** (사번 칸은 흰색으로 가림). 표만 바꾸고 원본을 빼먹지 않기
 - 폰 푸시 알림은 **지표 · 자료 업데이트 소식만** 보낸다 (`push.py`: tabs에 cmp·veh·ppl·mgt·eval·cs·alm·drv·duty가 있는 공개 소식). 기능 · 화면 변경 소식은 tabs를 ["home"]으로 두거나 `nopush:1`을 title 앞에 넣는다
 - 회사 내부 자료이므로 페이지는 `noindex` 유지, 개인정보는 필요한 범위만 표시한다
