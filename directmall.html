@@ -109,6 +109,9 @@ textarea{height:70px;resize:vertical}
 .kgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
 @media(max-width:700px){.kgrid{grid-template-columns:minmax(0,1fr)}}
 .kchat{background:#b2c7da;border-radius:14px;padding:16px;min-width:0}
+.kfold{min-width:0}.kfold summary{cursor:pointer;list-style:none;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px}
+.kfold summary::-webkit-details-marker{display:none}.kfold summary::after{content:"▾";margin-left:auto;color:var(--mute);transition:transform .2s}.kfold[open] summary::after{transform:rotate(180deg)}
+.kfold summary small{font-weight:400;color:var(--mute);font-size:12px}.kfold[open] summary small{display:none}.kfold[open] summary{margin-bottom:10px}
 .kname{font-size:12px;color:#3a4a5c;margin-bottom:6px}
 .kbubble{background:#fff;color:#1a1f2b;border-radius:4px 14px 14px 14px;padding:12px 14px;white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.6;max-width:100%}
 .klink{margin-top:6px;background:#fff;border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;font-size:13px;color:#1a1f2b;max-width:80%}
@@ -268,7 +271,7 @@ table.t td.n,table.t th.n{text-align:right}
    <div class="ktones" id="ktones"></div>
    <div class="klab">미리보기 <small>메시지 복사 → 카톡 대화방에 붙여넣기</small></div>
    <div class="kgrid">
-    <div class="kchat"><div class="kname" id="kName">담당 매니저</div><div class="kbubble" id="kText"></div><div class="klink"><b>에스원다이렉트몰</b><span>s1directmall.co.kr</span></div></div>
+    <details class="kfold"><summary>💬 카톡 메시지 미리보기 <small>눌러서 펼치기</small></summary><div class="kchat"><div class="kname" id="kName">담당 매니저</div><div class="kbubble" id="kText"></div><div class="klink"><b>에스원다이렉트몰</b><span>s1directmall.co.kr</span></div></div></details>
     <div class="kcard"><a href="https://s1directmall.co.kr/" target="_blank" rel="noopener" title="다이렉트몰 열기"><img id="kCardImg" alt="카톡용 홍보 카드 이미지 (누르면 다이렉트몰)"></a><p class="hint">미리보기예요 · 카톡으로 받은 카드를 누르면 다이렉트몰로 이동해요</p></div>
    </div>
    <details class="tip" style="margin-top:14px" id="kKeyBox"><summary style="cursor:pointer;font-weight:700;color:var(--fg)">⚙️ 카드 누르면 다이렉트몰로 — 카카오 공유 설정 <span id="kKeyState"></span></summary>
