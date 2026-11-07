@@ -271,7 +271,10 @@ table.t td.n,table.t th.n{text-align:right}
     <div class="kchat"><div class="kname" id="kName">담당 매니저</div><div class="kbubble" id="kText"></div><div class="klink"><b>에스원다이렉트몰</b><span>s1directmall.co.kr</span></div></div>
     <div class="kcard"><img id="kCardImg" alt="카톡용 홍보 카드 이미지"><p class="hint">휴대폰에서는 이미지를 <b>길게 눌러 저장</b>해도 돼요</p></div>
    </div>
-   <div class="tip" style="margin-top:14px"><b>📱 카톡으로 보내는 순서</b><br>① <b>📤 카톡으로 바로 보내기</b> → 공유창에서 <b>카카오톡</b> → 고객 대화방 선택 → 전송<br>② 카드만 가고 글이 빠졌다면 → 대화창을 <b>길게 눌러 붙여넣기</b> (메시지는 자동으로 복사돼 있어요)<br>③ 고객이 링크나 QR로 들어가 구매할 때 <b>사원번호</b>를 입력하면 10% 추가 할인</div>
+   <details class="tip" style="margin-top:14px" id="kKeyBox"><summary style="cursor:pointer;font-weight:700;color:var(--fg)">⚙️ 카드 누르면 다이렉트몰로 — 카카오 공유 설정 <span id="kKeyState"></span></summary>
+    <div style="margin-top:8px">카카오디벨로퍼스 앱의 <b>JavaScript 키</b>를 넣으면 📤 버튼이 <b>카드 한 장</b>으로 보내지고, 받은 사람이 카드를 누르면 다이렉트몰로 이동해요.</div>
+    <div class="row" style="margin-top:8px"><input type="text" id="kKey" placeholder="JavaScript 키 붙여넣기" autocomplete="off"><button type="button" class="mini" id="kKeySave">저장</button></div></details>
+   <div class="tip" style="margin-top:10px"><b>📱 카톡으로 보내는 순서</b><br>① <b>📤 카톡으로 바로 보내기</b> → 공유창에서 <b>카카오톡</b> → 고객 대화방 선택 → 전송<br>② 카드만 가고 글이 빠졌다면 → 대화창을 <b>길게 눌러 붙여넣기</b> (메시지는 자동으로 복사돼 있어요)<br>③ 고객이 링크나 QR로 들어가 구매할 때 <b>사원번호</b>를 입력하면 10% 추가 할인</div>
   </div>
   <div class="panel" style="min-width:0" id="mailPanel">
    <div class="phead"><h2><span class="step">4</span>디자인 선택</h2><small>⭐ 추천 · 📷 사진 포함</small></div>
@@ -1715,8 +1718,33 @@ async function saveCard(){
   try{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();toast('카드 이미지를 저장했어요'+(await autoRecord('카톡')));}catch(e){toast('미리보기 이미지를 길게 눌러 저장하세요');}
 }
 /* 카드 이미지 + 메시지를 휴대폰 공유창으로 한 번에 → 카카오톡 선택 */
+/* ── 카카오톡 공식 공유: 카드 한 장 + 누르면 다이렉트몰로 이동 ──
+   필요: 카카오디벨로퍼스 앱의 JavaScript 키 (아래 KAKAO_KEY 또는 화면의 ⚙️ 설정에 입력) */
+const KAKAO_KEY='';
+const kakaoKey=()=>{try{return (localStorage.getItem('s1kakao.key')||KAKAO_KEY).trim();}catch(e){return KAKAO_KEY;}};
+let kSdk=null;
+function loadKakao(){
+  if(window.Kakao&&window.Kakao.Share)return Promise.resolve(window.Kakao);
+  if(kSdk)return kSdk;
+  kSdk=new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://t1.kakaocdn.net/kakao_js_sdk/2.8.2/kakao.min.js';
+    s.integrity='sha384-zt/G7/KfaRQ9dT/QIkS0ujMtzouJqzuSJcXVQu50x0rl/+mD1dc70AeOejVbMD9E';s.crossOrigin='anonymous';
+    s.onload=()=>window.Kakao?res(window.Kakao):rej(new Error('sdk'));s.onerror=()=>{kSdk=null;rej(new Error('sdk'));};document.head.appendChild(s);});
+  return kSdk;
+}
+async function shareKakaoLink(){
+  const K=await loadKakao();if(!K.isInitialized())K.init(kakaoKey());
+  const cv=cardCanvas(),blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9));
+  const up=await K.Share.uploadImage({file:[new File([blob],'card.jpg',{type:'image/jpeg'})]});
+  const d=kdata(),link={mobileWebUrl:MALL,webUrl:MALL};
+  await K.Share.sendDefault({objectType:'feed',content:{title:'에스원 다이렉트몰',description:`사원번호 ${d.emp} 입력 시 10% 추가 할인 · ${d.who}`,imageUrl:up.infos.original.url,imageWidth:cv.width,imageHeight:cv.height,link},buttons:[{title:'다이렉트몰 바로가기',link}]});
+}
 async function shareKakao(){
   if(!check())return;
+  if(kakaoKey()){
+    toast('카드를 올리는 중이에요…');
+    try{await shareKakaoLink();toast('카톡에서 받을 사람을 고르세요 · 카드를 누르면 다이렉트몰로 가요'+(await autoRecord('카톡')));return;}
+    catch(e){console.log('kakao share',e);toast('카카오 공유가 안 돼서 일반 공유로 보낼게요');}
+  }
   const text=kakaoText();
   copyText(text); // 카톡이 글을 빼고 이미지만 받는 경우 대비해 메시지도 함께 복사
   const fn='에스원다이렉트몰_'+(raw().name||'카드')+'.png';
@@ -1789,7 +1817,11 @@ $('subject').addEventListener('input',()=>{subjDirty=true;$('subjPv').textConten
 $('subjReset').onclick=()=>{subjDirty=false;syncSubject();toast('자동 제목으로 되돌렸어요');};
 $('noimg').onchange=e=>{noImg=e.target.checked;render();};
 $('bCopy').onclick=copyRich;$('mShare').onclick=shareMail;$('bSubj').onclick=copySubject;$('bCode').onclick=copyCode;$('bDown').onclick=downloadHtml;
-$('kCopy').onclick=copyKakao;$('kShare').onclick=shareKakao;$('kImg').onclick=saveCard;
+$('kCopy').onclick=copyKakao;
+function kKeyUI(){const k=kakaoKey();$('kKeyState').textContent=k?'✅ 사용 중':'(미설정)';try{$('kKey').value=localStorage.getItem('s1kakao.key')||'';}catch(e){}
+  const sub=document.querySelector('#kShare small');if(sub)sub.textContent=k?'카드 한 장 · 누르면 다이렉트몰로 이동':'카드 이미지 + 메시지 한 번에';}
+$('kKeySave').onclick=()=>{try{const v=$('kKey').value.trim();if(v)localStorage.setItem('s1kakao.key',v);else localStorage.removeItem('s1kakao.key');}catch(e){}kKeyUI();toast(kakaoKey()?'카카오 공유를 켰어요':'카카오 공유 설정을 지웠어요');};
+kKeyUI();$('kShare').onclick=shareKakao;$('kImg').onclick=saveCard;
 function showTab(which){
   const dash=which==='dash';mode=which==='kakao'?'kakao':'mail';
   $('v-make').hidden=dash;$('v-dash').hidden=!dash;
