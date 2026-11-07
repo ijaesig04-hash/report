@@ -1188,11 +1188,22 @@ function kchips(x,chips,Y,o={}){
   return cy+58;
 }
 /* 노란 추가할인 띠 */
-function kdisc(x,Y,o={}){const X=72,w=936;x.fillStyle=o.bg||'#ffd400';rr(x,X,Y,w,120,24);x.fill();
+let KCOMPACT=false;
+function kdisc(x,Y,o={}){if(KCOMPACT)return Y-30;const X=72,w=936;x.fillStyle=o.bg||'#ffd400';rr(x,X,Y,w,120,24);x.fill();
   x.fillStyle=o.pill||'#0a1a3a';rr(x,X+28,Y+34,190,52,26);x.fill();ktext(x,'추가할인 혜택',X+123,Y+70,26,o.pillFg||'#ffd400',{a:'center'});
   ktext(x,'구매 시 사원번호 입력하면',X+242,Y+56,32,o.fg||'#1a1f2b');ktext(x,'10% 추가 할인!',X+242,Y+98,32,o.hi||'#e5002d');return Y+120;}
 /* 담당자 · 사원번호 · QR 패널 */
-function krep(x,d,Y,o={}){const X=72,w=936,h=300;
+/* 카톡 전송용 한 칸: 할인 안내 + 사원번호 + QR */
+function krepCompact(x,d,Y,o={}){const X=72,w=936,h=210;
+  x.save();kshadow(x,!!o.shadow);x.fillStyle=o.bg||'#fff';rr(x,X,Y,w,h,24);x.fill();x.restore();
+  if(o.border){x.strokeStyle=o.border;x.lineWidth=o.bw||3;rr(x,X,Y,w,h,24);x.stroke();}
+  x.fillStyle='#ffd400';rr(x,X+28,Y+26,190,46,23);x.fill();ktext(x,'추가할인 혜택',X+123,Y+58,24,'#0a1a3a',{a:'center'});
+  ktext(x,'10% 추가 할인',X+234,Y+60,30,'#e5002d');
+  const lw=ktext(x,'사원번호 ',X+28,Y+134,30,o.mute||'#6b7488');ktext(x,d.emp,X+28+lw,Y+136,52,o.num||'#1b4fd6',{ls:1});
+  const f=kfit(x,d.who+' · '+d.phone,w-28-200-40,24,18,1,'normal');klines(x,f.lines,X+28,Y+182,f.size,0,o.mute||'#6b7488',{w:'normal'});
+  x.fillStyle='#fff';rr(x,X+w-196,Y+18,174,174,10);x.fill();x.drawImage(kqr(),X+w-192,Y+22,166,166);
+  return Y+h;}
+function krep(x,d,Y,o={}){if(KCOMPACT)return krepCompact(x,d,Y,o);const X=72,w=936,h=300;
   x.save();kshadow(x,!!o.shadow);x.fillStyle=o.bg||'#fff';rr(x,X,Y,w,h,24);x.fill();x.restore();
   if(o.border){x.strokeStyle=o.border;x.lineWidth=o.bw||3;rr(x,X,Y,w,h,24);x.stroke();}
   const f=kfit(x,d.who,w-32-236-60,34,24,1);klines(x,f.lines,X+32,Y+70,f.size,0,o.fg||'#1a1f2b');
@@ -1479,6 +1490,7 @@ function kCalendar(d){const [c,x]=kctx(),W=1080,t=nowK(),NV='#0a1a3a',RED='#e500
     if(dd===t.D){x.fillStyle=RED;x.beginPath();x.arc(cx2,cy2-10,34,0,7);x.fill();}
     ktext(x,String(dd),cx2,cy2,28,dd===t.D?'#fff':col===0?RED:'#3a4256',{a:'center',w:dd===t.D?'bold':'normal'});}
   Y=cy+H+50;
+  if(KCOMPACT){Y=krep(x,d,Y,{shadow:1});return kcrop(c,Y+72);}
   const todo=['다이렉트몰 접속하기 (QR 한 번)',`${d.chips[0]} · ${d.chips[1]} 둘러보기`,`결제 때 사원번호 ${d.emp} 입력`,'10% 추가 할인 받기 🎁'];
   const sh=110+todo.length*66;x.save();x.translate(W/2,Y+sh/2);x.rotate(-0.012);x.translate(-W/2,-(Y+sh/2));kshadow(x,1,.12);x.fillStyle='#ffe873';x.fillRect(100,Y,880,sh);kshadow(x,0);
   x.fillStyle='rgba(255,255,255,.5)';x.fillRect(W/2-90,Y-18,180,40);
@@ -1598,7 +1610,7 @@ function kProdHero(d,o){const [c,x]=kctx(),W=1080,BL='#1b4fd6',RED='#e5002d';x.f
   klogo(x,72,64);ktext(x,'S-1 DIRECT MALL',1008,128,26,BL,{a:'right',ls:3});
   kfont(x,28);const bw=x.measureText('🎉 출시 기념 할인 진행 중').width+56;x.fillStyle=RED;rr(x,72,240,bw,60,30);x.fill();ktext(x,'🎉 출시 기념 할인 진행 중',100,281,28,'#fff');
   ktext(x,o.title,72,410,100,'#111');ktext(x,o.sub,72,484,40,BL);
-  let Y=520;kfitImg(x,o.img,140,Y,800,o.ih);Y+=o.ih+40;
+  let Y=520;const ih=KCOMPACT?Math.round(o.ih*.62):o.ih;kfitImg(x,o.img,140,Y,800,ih);Y+=ih+40;
   x.save();kshadow(x,1,.12);x.fillStyle='#fff';rr(x,72,Y,936,300,32);x.fill();x.restore();
   const ow=ktext(x,kwon(o.was),112,Y+80,36,'#9aa1ae',{w:'normal'});x.fillStyle='#9aa1ae';x.fillRect(112,Y+68,ow,3);ktext(x,'→',112+ow+20,Y+80,36,'#9aa1ae',{w:'normal'});
   const pw=ktext(x,kwon(o.now),112,Y+176,84,'#111');ktext(x,`${o.pct}%`,112+pw+24,Y+176,64,RED);
@@ -1616,10 +1628,10 @@ function kAED(d){const [c,x]=kctx(),W=1080,OR='#ff6a13';x.fillStyle='#f6f7f9';x.
   klogo(x,72,64,{bg:'#fff',fg:'#e5002d',sub:'#e5002d'});ktext(x,'❤️ AED',1008,128,30,'#fff',{a:'right'});
   ktext(x,'AED 소모품 · 액세서리',72,300,64,'#fff');ktext(x,'자동심장충격기, 언제든 쓸 수 있게 미리 챙기세요',72,364,30,'#ffe3d6',{w:'normal'});
   const items=[['pad1','AED 패드','메디아나 전용',62370],['pad2','AED 패드','씨유메디칼 전용',79200],['bag1','AED 보관가방','니혼코덴 전용',19800],['bag2','AED 보관가방','씨유메디칼 전용',59400],['bat1','AED 배터리','니혼코덴 전용',308880],['bat2','AED 배터리','메디아나 전용',183150]];
-  const tw=(936-24)/2,th=420;let Y=480;
+  const tw=(936-24)/2,th=KCOMPACT?330:420,ih=KCOMPACT?140:220;let Y=480;
   items.forEach(([k,n,s,p],i)=>{const X=72+(i%2)*(tw+24),ty=Y+Math.floor(i/2)*(th+24);
     x.save();kshadow(x,1,.08);x.fillStyle='#fff';rr(x,X,ty,tw,th,24);x.fill();x.restore();
-    kfitImg(x,k,X+40,ty+24,tw-80,220);ktext(x,n,X+28,ty+300,32,'#111');ktext(x,s,X+28,ty+342,26,'#6b7488',{w:'normal'});ktext(x,kwon(p),X+28,ty+396,38,'#1b8fd6');});
+    kfitImg(x,k,X+40,ty+20,tw-80,ih);const b=ty+ih+80;ktext(x,n,X+28,b,32,'#111');ktext(x,s,X+28,b+42,26,'#6b7488',{w:'normal'});ktext(x,kwon(p),X+28,b+96,38,'#1b8fd6');});
   Y+=3*(th+24)+10;ktext(x,`※ ${nowK().M}/${nowK().D} 다이렉트몰 기준 가격 · 사용 중인 AED 제조사에 맞춰 고르세요`,72,Y,22,'#6b7488',{w:'normal'});Y+=40;
   Y=kdisc(x,Y)+30;Y=krep(x,d,Y,{shadow:1});return kcrop(c,Y+72);}
 
@@ -1732,20 +1744,22 @@ function loadKakao(){
   return kSdk;
 }
 /* 카톡 링크 카드는 세로가 가로의 4/3배를 넘으면 잘림 → 카드 전체를 3:4 틀 안에 줄여 넣음 (잘림 없음) */
-function kakaoFrame(card){
-  const W=1200,H=1600,pad=12,o=document.createElement('canvas');o.width=W;o.height=H;const x=o.getContext('2d');
-  const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#0a1a3a');g.addColorStop(1,'#1b4fd6');x.fillStyle=g;x.fillRect(0,0,W,H);
-  x.fillStyle='rgba(255,255,255,.06)';x.beginPath();x.arc(W*.9,H*.1,320,0,7);x.fill();x.beginPath();x.arc(W*.08,H*.92,360,0,7);x.fill();
-  const sc=Math.min((W-pad*2)/card.width,(H-pad*2)/card.height),w=card.width*sc,h=card.height*sc,X=(W-w)/2,Y=(H-h)/2;
-  x.save();x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=14;x.fillStyle='#fff';x.fillRect(X,Y,w,h);x.restore();
+function kakaoFrame(){
+  KCOMPACT=true;let card;try{card=cardCanvas();}finally{KCOMPACT=false;}
+  const W=1200,H=1600,o=document.createElement('canvas');o.width=W;o.height=H;const x=o.getContext('2d');
+  const sc=Math.min(W/card.width,H/card.height),w=Math.round(card.width*sc),h=Math.round(card.height*sc),X=Math.floor((W-w)/2),Y=Math.floor((H-h)/2);
+  x.fillStyle='#0a1a3a';x.fillRect(0,0,W,H);
+  /* 남는 곳은 카드 가장자리 색을 늘려 채움 → 여백 없이 이어져 보임 */
+  x.save();x.filter='blur(10px)';
+  if(X>0){x.drawImage(card,0,0,3,card.height,-20,Y,X+24,h);x.drawImage(card,card.width-3,0,3,card.height,X+w-4,Y,W-X-w+24,h);}
+  if(Y>0){x.drawImage(card,0,0,card.width,3,-20,-20,W+40,Y+24);x.drawImage(card,0,card.height-3,card.width,3,-20,Y+h-4,W+40,H-Y-h+24);}
+  x.restore();
   x.imageSmoothingQuality='high';x.drawImage(card,X,Y,w,h);
-  if(X>150){x.save();x.translate(X/2,H/2);x.rotate(-Math.PI/2);x.font=`bold 30px ${KF}`;x.fillStyle='rgba(255,255,255,.75)';x.textAlign='center';x.fillText('S-1 DIRECT MALL',0,10);x.restore();
-    x.save();x.translate(W-X/2,H/2);x.rotate(Math.PI/2);x.font=`bold 30px ${KF}`;x.fillStyle='rgba(255,255,255,.75)';x.textAlign='center';x.fillText('👆 누르면 다이렉트몰로',0,10);x.restore();}
   return o;
 }
 async function shareKakaoLink(){
   const K=await loadKakao();if(!K.isInitialized())K.init(kakaoKey());
-  const cv=kakaoFrame(cardCanvas()),blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9));
+  const cv=kakaoFrame(),blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9));
   const up=await K.Share.uploadImage({file:[new File([blob],'card.jpg',{type:'image/jpeg'})]});
   const d=kdata(),link={mobileWebUrl:MALL,webUrl:MALL};
   await K.Share.sendDefault({objectType:'feed',content:{title:'👆 카드를 누르면 다이렉트몰로 가요',imageUrl:up.infos.original.url,imageWidth:cv.width,imageHeight:cv.height,link},buttons:[{title:'다이렉트몰 바로가기',link}]});
