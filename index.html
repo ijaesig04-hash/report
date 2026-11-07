@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108022800">
+<meta name="bsr-ver" content="20261108023035">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2818,13 +2818,13 @@ var CS_MGR = ["최문혁","이재식","지사장","서비스팀장"];
 /* 영업 · 기술 부서원 — 고객체감 자료의 직무 기준 (명단 바뀌면 여기만 고치면 됨) */
 var DEPTS = {"영업":["최영국","이수열","임영민","정문재","박광춘"], "기술":["박정훈","김상훈","박광모"]};
 var SALES_URL = "https://jhsim2545.github.io/DailySales/User.html";
-var PROD_URL = "directmall.html?v=22#kakao";   /* 에스원 상품 추천 대시보드 */
+var PROD_URL = "directmall.html?v=23#kakao";   /* 에스원 상품 추천 대시보드 */
 function viewSal(){
   var c = function(href,ic,t,sub,attr){ return '<a class="sal-c" href="'+href+'" target="_blank" rel="noopener"'+(attr||'')+'><i>'+ic+'</i><b>'+t+'</b><small>'+sub+'</small></a>'; };
   return '<div class="sec"><div class="sal-h"><span style="font-size:30px">💼</span><span><b>영업 메뉴</b><small>영업에 필요한 메뉴를 한곳에 모았어요</small></span></div>'+
     '<p style="margin:-4px 2px 10px;font-size:11.5px;color:#7a8499">🔒 이 탭은 영업 · 기술 · 관리자 · 타부서로 접속했을 때만 보여요</p>'+
     '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>'+
-    '<div class="sal-g">'+c("directmall.html?v=22#kakao","💬","카톡으로 상품 홍보","카드 20종 · 버튼 하나로 바로 보내기")+c("directmall.html?v=22","✉️","메일로 상품 홍보","메일형 20종 + 카드형 20종")+
+    '<div class="sal-g">'+c("directmall.html?v=23#kakao","💬","카톡으로 상품 홍보","카드 20종 · 버튼 하나로 바로 보내기")+c("directmall.html?v=23","✉️","메일로 상품 홍보","메일형 20종 + 카드형 20종")+
     c("https://s1directmall.co.kr/","🛒","에스원 다이렉트몰","상품 · 가격 바로 보기")+'<button type="button" class="sal-c" data-goto="cs"><i>📞</i><b>내 고객체감</b><small>해피콜 발송 · 응답 · 만족도</small></button></div>'+
     '<div class="sal-tip"><span style="font-size:22px">🎁</span><span>고객이 다이렉트몰에서 구매할 때 담당자 <b>사원번호</b>를 입력하면 <b>10% 추가 할인</b>이 돼요</span></div></div>';
 }
@@ -3581,6 +3581,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-08u", date:"11/8", title:"카톡 말투 · 미리보기 함께 접기", tabs:["home"], items:["💬 메시지 말투와 메시지 미리보기를 한 번에 접어 두고, 누르면 펼쳐져요"]},
  {id:"2026-11-08t", date:"11/8", title:"카톡 메시지 미리보기 접기", tabs:["home"], items:["💬 카톡 보내기 화면의 메시지 미리보기를 접어 두고, 누르면 펼쳐져요"]},
  {id:"2026-11-08s", date:"11/8", title:"🍁 계절 꾸미기 다듬기", tabs:["home"], items:["🎄 크리스마스는 12/1~12/25 · 11월은 단풍이 떨어지는 가을 테마","설 연날리기 · 추석 보름달과 토끼 · 어린이날 풍선 · 여름 돌고래 · 할로윈 박쥐 · 새해 불꽃 — 테마마다 장면 하나가 자연스럽게 움직여요"]},
  {id:"2026-11-08r", date:"11/8", title:"🎅 산타 썰매 비행", tabs:["home"], items:["🦌🦌🛷 루돌프가 끄는 썰매에 산타가 타고 하늘을 날아가요 · 눈사람은 트리 옆에"]},
