@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108014133">
+<meta name="bsr-ver" content="20261108014612">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3529,6 +3529,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-08n", date:"11/8", title:"축하 폭죽 버튼 수정", tabs:["home"], items:["🎆 무사고 축하 카드의 「축하 폭죽」 버튼을 누르면 폭죽이 터져요"]},
  {id:"2026-11-08m", date:"11/8", title:"카톡 카드 자연스럽게 넓히기", tabs:["home"], items:["💬 카톡 카드 양옆을 억지로 늘리지 않고, 배경과 사진을 넓게 다시 그려서 보내요"]},
  {id:"2026-11-08l", date:"11/8", title:"카톡 카드 크게 보기 오류 수정", tabs:["home"], items:["💬 카드를 눌렀을 때 그림이 안 나오던 문제를 고쳤어요"]},
  {id:"2026-11-08k", date:"11/8", title:"카톡 카드 크게 보기", tabs:["home"], items:["💬 받은 분이 카드를 누르면 크게 확대해서 볼 수 있고, 다이렉트몰은 아래 버튼으로 들어가요"]},
@@ -4660,7 +4661,7 @@ function mxFireworks(cv){
   var boom = function(){ var x = W*(0.15+Math.random()*0.7), y = H*(0.12+Math.random()*0.35), c = COL[Math.floor(Math.random()*COL.length)], n = 46;
     for(var i=0;i<n;i++){ var a = Math.PI*2*i/n, v = (2+Math.random()*3.2)*devicePixelRatio; P.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c:Math.random()<.25?'#fff':c,r:(1.6+Math.random()*1.6)*devicePixelRatio}); } };
   var conf = function(){ for(var i=0;i<6;i++) P.push({x:Math.random()*W,y:-10,vx:(Math.random()-.5)*2,vy:(1.5+Math.random()*2)*devicePixelRatio,l:1.6,c:COL[Math.floor(Math.random()*COL.length)],r:3*devicePixelRatio,sq:1,rot:Math.random()*6}); };
-  (function step(){ var el = Date.now()-t0; if(!document.getElementById('mxfw')) return;
+  (function step(){ var el = Date.now()-t0; if(!cv.isConnected) return; /* MVP·무사고 폭죽 모두: 그리는 판이 화면에 있는 동안 계속 */
     ctx.clearRect(0,0,W,H);
     if(el < dur){ if(el-last > 420){ boom(); last = el; } if(Math.random()<.6) conf(); }
     P.forEach(function(p){ p.x+=p.vx; p.y+=p.vy; p.vy+=0.045*devicePixelRatio; p.vx*=0.985; p.l-=p.sq?0.004:0.012; ctx.globalAlpha=Math.max(0,Math.min(1,p.l)); ctx.fillStyle=p.c;
