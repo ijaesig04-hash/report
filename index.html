@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108023035">
+<meta name="bsr-ver" content="20261108024014">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -820,10 +820,10 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .dh{display:grid;gap:10px}
 .dh-dt summary{list-style:none;cursor:pointer;margin:0!important}.dh-dt summary::-webkit-details-marker{display:none}.dh-dt[open] summary{margin-bottom:8px!important}.dh-dt[open] summary small{opacity:.6}.dh-sub{margin:0 0 6px;font-size:11.5px;color:#64748b}
 .dh-sales{display:flex;align-items:center;gap:12px;text-decoration:none;box-sizing:border-box;width:100%;padding:12px 14px;border-radius:16px;color:#fff;background:linear-gradient(120deg,#4f46e5 0%,#7c3aed 55%,#c026d3 100%);box-shadow:0 6px 18px rgba(124,58,237,.28);margin:10px 0}.dh-sales i{font-style:normal;flex:none;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:21px}.dh-sales span{flex:1;min-width:0;display:grid;gap:1px;text-align:left}.dh-sales b{font-size:15.5px;font-weight:800;letter-spacing:-.01em}.dh-sales small{font-size:11.5px;opacity:.85;font-weight:500}.dh-sales em{font-style:normal;flex:none;font-size:12.5px;font-weight:800;background:#fff;color:#6d28d9;border-radius:999px;padding:6px 12px}.dh-sales:active{transform:scale(.99)}
-.dh-prod{display:flex;align-items:center;gap:10px;text-decoration:none;box-sizing:border-box;width:100%;padding:8px 12px;border-radius:12px;margin:-2px 0 10px;background:#eef6ff;border:1px solid #cfe2ff;color:#14325f}
-.dh-prod i{font-style:normal;font-size:17px}
+.dh-prod{display:flex;align-items:center;gap:10px;text-decoration:none;box-sizing:border-box;width:100%;padding:8px 12px;border-radius:12px;margin:-2px 0 10px;background:linear-gradient(105deg,#fff2f4 0%,#f4f1ff 55%,#eaf3ff 100%);border:1px solid #f2cdd5;border-left:4px solid #e5002d;color:#14325f;box-shadow:0 2px 8px rgba(229,0,45,.08)}
+.dh-prod i{font-style:normal;font-size:15px;display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:#fff;box-shadow:0 1px 3px rgba(20,50,95,.15)}
 .dh-prod span{flex:1;font-size:13.5px;font-weight:700}
-.dh-prod em{font-style:normal;font-size:11.5px;font-weight:800;color:#1f5fd8}
+.dh-prod em{font-style:normal;font-size:11.5px;font-weight:800;color:#fff;background:#e5002d;border-radius:999px;padding:3px 9px}
 .dh-prod:active{transform:scale(.99)}
 html.dept-x [data-vl="open"]{display:none!important}
 html:not(.prod-on) .dh-prod{display:none!important}
@@ -1237,7 +1237,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .sf-fw{border:0;background:#b45309;color:#fff;border-radius:999px;padding:7px 14px;font:800 12.5px "Noto Sans KR",sans-serif;cursor:pointer}
 .sf-ov{position:fixed;inset:0;z-index:120;pointer-events:auto}
 .sfx-chip{display:inline-block;margin:6px 0 2px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);color:#fff;font:800 12.5px "Noto Sans KR",sans-serif;padding:5px 11px;border-radius:999px;cursor:pointer}
-#sfx{position:fixed;inset:0;z-index:100;pointer-events:none;overflow:hidden}
+#sfx{position:fixed;inset:0;z-index:100;pointer-events:none;overflow:hidden;transition:opacity .9s ease}
 #sfx .sfx-a{position:absolute;left:0;top:0;opacity:0;will-change:transform}
 #sfx .sfx-a i{font-style:normal;display:inline-block}
 #sfx .sfx-shadow{filter:drop-shadow(0 3px 4px rgba(0,0,0,.28))}
@@ -2822,13 +2822,12 @@ var PROD_URL = "directmall.html?v=23#kakao";   /* 에스원 상품 추천 대시
 function viewSal(){
   var c = function(href,ic,t,sub,attr){ return '<a class="sal-c" href="'+href+'" target="_blank" rel="noopener"'+(attr||'')+'><i>'+ic+'</i><b>'+t+'</b><small>'+sub+'</small></a>'; };
   return '<div class="sec"><div class="sal-h"><span style="font-size:30px">💼</span><span><b>영업 메뉴</b><small>영업에 필요한 메뉴를 한곳에 모았어요</small></span></div>'+
-    '<p style="margin:-4px 2px 10px;font-size:11.5px;color:#7a8499">🔒 이 탭은 영업 · 기술 · 관리자 · 타부서로 접속했을 때만 보여요</p>'+
     '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>'+
     '<div class="sal-g">'+c("directmall.html?v=23#kakao","💬","카톡으로 상품 홍보","카드 20종 · 버튼 하나로 바로 보내기")+c("directmall.html?v=23","✉️","메일로 상품 홍보","메일형 20종 + 카드형 20종")+
     c("https://s1directmall.co.kr/","🛒","에스원 다이렉트몰","상품 · 가격 바로 보기")+'<button type="button" class="sal-c" data-goto="cs"><i>📞</i><b>내 고객체감</b><small>해피콜 발송 · 응답 · 만족도</small></button></div>'+
     '<div class="sal-tip"><span style="font-size:22px">🎁</span><span>고객이 다이렉트몰에서 구매할 때 담당자 <b>사원번호</b>를 입력하면 <b>10% 추가 할인</b>이 돼요</span></div></div>';
 }
-function prodLink(){ return '<a class="dh-prod" href="'+PROD_URL+'" target="_blank" rel="noopener"><i>🛡️</i><span>에스원 상품 추천</span><em>열기 ›</em></a>'; }   /* 지사 영업일보 (지사장님 운영 · 로그인 필요) */
+function prodLink(){ return '<a class="dh-prod" href="'+PROD_URL+'" target="_blank" rel="noopener"><i>🛡️</i><span>에스원 상품 추천 <small style="font-weight:600;color:#8a5a66;font-size:11px">카톡 · 메일 홍보</small></span><em>열기 ›</em></a>'; }   /* 지사 영업일보 (지사장님 운영 · 로그인 필요) */
 var DEPT_LEAD = {"영업":"최영국", "기술":"박정훈"};   /* 팀장 — 공지 확인 집계 · 칭찬 순위에서 빠짐 */
 function isLead(n){ for(var k in DEPT_LEAD){ if(DEPT_LEAD[k]===n) return true; } return false; }
 /* 부서별 브리핑 인사 — [인사, 아이콘, 한마디] (시간대별) */
@@ -3581,6 +3580,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-08v", date:"11/8", title:"영업 탭 · 상품 추천 모두에게 공개", tabs:["home"], items:["💼 영업 탭과 🛡️ 에스원 상품 추천을 서비스 직원 포함 모두가 볼 수 있어요","🍁 탭을 옮길 때 계절 꾸미기가 스르륵 사라지게 다듬었어요"]},
  {id:"2026-11-08u", date:"11/8", title:"카톡 말투 · 미리보기 함께 접기", tabs:["home"], items:["💬 메시지 말투와 메시지 미리보기를 한 번에 접어 두고, 누르면 펼쳐져요"]},
  {id:"2026-11-08t", date:"11/8", title:"카톡 메시지 미리보기 접기", tabs:["home"], items:["💬 카톡 보내기 화면의 메시지 미리보기를 접어 두고, 누르면 펼쳐져요"]},
  {id:"2026-11-08s", date:"11/8", title:"🍁 계절 꾸미기 다듬기", tabs:["home"], items:["🎄 크리스마스는 12/1~12/25 · 11월은 단풍이 떨어지는 가을 테마","설 연날리기 · 추석 보름달과 토끼 · 어린이날 풍선 · 여름 돌고래 · 할로윈 박쥐 · 새해 불꽃 — 테마마다 장면 하나가 자연스럽게 움직여요"]},
@@ -4630,12 +4630,14 @@ function sfxTick(){
   var r=sfxTheme(), home=(typeof state!=="undefined" && state.tab==="home"), red=matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(!r || sfxOff(r.t) || red){ if(SFX_EL){ SFX_EL.remove(); SFX_EL=null; SFX_ID=""; } return; }
   if(!SFX_EL || SFX_ID!==r.t.id) sfxBuild(r);
-  SFX_EL.style.display = home && !document.querySelector(".mxc") ? "" : "none";
+  var want = home && !document.querySelector(".mxc");   /* 탭을 옮기면 스르륵 사라지고, 돌아오면 스르륵 나타남 */
+  if(want){ if(SFX_EL.style.display==="none"){ SFX_EL.style.opacity="0"; SFX_EL.style.display=""; requestAnimationFrame(function(){ if(SFX_EL) SFX_EL.style.opacity="1"; }); } else if(SFX_EL.style.opacity==="0"&&!SFX_EL._fading) SFX_EL.style.opacity="1"; clearTimeout(SFX_EL._hideT); SFX_EL._fading=false; }
+  else if(SFX_EL.style.display!=="none" && !SFX_EL._fading){ SFX_EL._fading=true; SFX_EL.style.opacity="0"; var el=SFX_EL; el._hideT=setTimeout(function(){ el.style.display="none"; el._fading=false; }, 900); }
 }
 document.addEventListener("click", function(e){ var c=e.target.closest("[data-sfx]"); if(!c) return; var r=sfxTheme(); if(!r) return;
   try{ if(sfxOff(r.t)) localStorage.removeItem(sfxOffKey(r.t)); else localStorage.setItem(sfxOffKey(r.t),"1"); }catch(_){}
   sfxTick(); if(typeof nrToast==="function") nrToast(sfxOff(r.t)?"꾸미기를 껐어요 (다시 누르면 켜져요)":"꾸미기를 켰어요"); if(typeof render==="function") render(); });
-setInterval(sfxTick, 700); setTimeout(sfxTick, 300);
+setInterval(sfxTick, 250); setTimeout(sfxTick, 300);
 
 /* ===== 💬 응원 코멘트 — 지사장·서비스팀장·그룹장이 평가 상위자에게 응원 한마디 ('cheer|대상' · 메모=내용) ===== */
 var CHEER_BY = ["지사장","서비스팀장","그룹장"];
@@ -5756,11 +5758,10 @@ function tabOrderFix(){ try{ if(typeof notiRefilter==="function") notiRefilter()
   var d = typeof deptOf==="function" ? deptOf() : "서비스", after = (d==="영업"||d==="기술") ? hm : ev;
   if(after.nextElementSibling !== cs) after.parentNode.insertBefore(cs, after.nextElementSibling);
   document.documentElement.classList.toggle("dept-x", d==="영업"||d==="기술");
-  /* 에스원 상품 추천(브리핑): 서비스 직원만 숨김 — 지사장 · 이재식 · 영업 · 기술 · 타부서/직접 입력 이름은 보임 */
-  var mn = typeof myName==="function" ? myName() : ""; document.documentElement.classList.toggle("prod-on", d==="영업"||d==="기술"||["지사장","이재식","타부서","그룹장"].indexOf(mn)>=0||(window.BSR_ALL||[]).indexOf(mn)<0);
-  /* 영업 탭: 서비스 직원만 숨김 — 영업 · 기술 · 관리자(지사장 · 서비스팀장 · 최문혁 · 이재식) · 타부서/직접 입력 이름은 보임 */
-  var salOn = d==="영업"||d==="기술"||(window.BSR_MGRS||[]).indexOf(mn)>=0||["타부서","그룹장"].indexOf(mn)>=0||(window.BSR_ALL||[]).indexOf(mn)<0;
-  var st = document.querySelector('[role=tab][data-tab="sal"]'); if(st){ st.hidden = !salOn; /* 관리자는 맨 끝, 그 외(영업 · 기술 · 타부서)는 브리핑 바로 옆 */ if((window.BSR_MGRS||[]).indexOf(mn)>=0 && d==='서비스'){ if(st.parentNode.lastElementChild!==st) st.parentNode.appendChild(st); } else if(st.parentNode.children[1]!==st) hm.parentNode.insertBefore(st, hm.nextElementSibling); if(st.hidden && state.tab==="sal"){ state.tab="home"; document.querySelectorAll("#tabs button").forEach(function(x){x.setAttribute("aria-selected", x.dataset.tab==="home")}); } }
+  /* 에스원 상품 추천(브리핑) · 영업 탭: 서비스 직원 포함 모두에게 보임 (11/8) */
+  var mn = typeof myName==="function" ? myName() : ""; document.documentElement.classList.toggle("prod-on", true);
+  var salOn = true;
+  var st = document.querySelector('[role=tab][data-tab="sal"]'); if(st){ st.hidden = !salOn; /* 서비스 직원 · 관리자는 맨 끝, 영업 · 기술 · 타부서는 브리핑 바로 옆 */ if(d==='서비스'){ if(st.parentNode.lastElementChild!==st) st.parentNode.appendChild(st); } else if(st.parentNode.children[1]!==st) hm.parentNode.insertBefore(st, hm.nextElementSibling); if(st.hidden && state.tab==="sal"){ state.tab="home"; document.querySelectorAll("#tabs button").forEach(function(x){x.setAttribute("aria-selected", x.dataset.tab==="home")}); } }
   document.documentElement.classList.toggle("dept-sal", d==="영업" || (typeof mgrIs==="function" && mgrIs()));   /* 개시 방문 체크리스트는 서비스만 */ }catch(e){} }
 function render(){ tabOrderFix();
   var v = state.tab==="home" ? bdayCard()+przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="sal" ? viewSal() : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
