@@ -1720,7 +1720,7 @@ async function saveCard(){
 /* 카드 이미지 + 메시지를 휴대폰 공유창으로 한 번에 → 카카오톡 선택 */
 /* ── 카카오톡 공식 공유: 카드 한 장 + 누르면 다이렉트몰로 이동 ──
    필요: 카카오디벨로퍼스 앱의 JavaScript 키 (아래 KAKAO_KEY 또는 화면의 ⚙️ 설정에 입력) */
-const KAKAO_KEY='';
+const KAKAO_KEY='b55fc8ad4c40142746251a944fcde16b'; /* 카카오디벨로퍼스 앱 1641410 「에스원 다이렉트몰 홍보」 JavaScript 키 (공개용 · 등록 도메인에서만 동작) */
 const kakaoKey=()=>{try{return (localStorage.getItem('s1kakao.key')||KAKAO_KEY).trim();}catch(e){return KAKAO_KEY;}};
 let kSdk=null;
 function loadKakao(){
