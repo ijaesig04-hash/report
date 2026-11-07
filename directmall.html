@@ -41,6 +41,11 @@ body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:14px
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy)}
 .top{background:var(--navy);color:#fff;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
 .top-in{max-width:1320px;margin:0 auto;padding-block:14px 0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+.back{flex:none;display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;font:inherit;font-size:24px;line-height:1;font-weight:700;padding:6px 12px 8px 9px;border-radius:12px;cursor:pointer}
+.back span{font-size:13px;margin-left:2px}
+.back:active{transform:scale(.96)}
+@media(max-width:520px){.top-in{flex-wrap:nowrap}.back{padding:6px 10px 8px 8px}.back span{display:none}.ttl h1{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lg{padding:4px 8px}.lg b{font-size:14px}.top-in .tabs{display:none}}
+@media(max-width:520px){.top-in{flex-wrap:wrap}.top-in>.tabs{display:flex;order:9}.ttl{flex:1}}
 .lg{background:var(--brand);color:#fff;padding:5px 10px;border-radius:3px;text-align:center;line-height:1.1;flex:none}
 .lg small{display:block;font-size:9px;opacity:.9}.lg b{font-size:16px}
 .ttl h1{margin:0;font-size:18px;text-wrap:balance}
@@ -188,10 +193,12 @@ table.t td.n,table.t th.n{text-align:right}
 .note{background:var(--warn-soft);color:var(--warn);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.6}
 .muted{color:var(--mute)}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+@media(max-width:520px){.top-in .ttl h1{font-size:15px;text-wrap:nowrap;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 </style>
 
 <header class="top">
   <div class="top-in">
+    <button type="button" class="back" id="backBtn" aria-label="리포트로 돌아가기">‹<span>리포트</span></button>
     <div class="lg"><small>언제나 안심</small><b>에스원</b></div>
     <div class="ttl"><h1>에스원 홍보메일 스튜디오</h1><p>다이렉트몰 홍보 메일 · 카톡 만들기</p></div>
     <button type="button" class="inst-open" id="instOpen" aria-label="휴대폰에 설치">📲 <span class="long">휴대폰에 </span>설치</button>
@@ -1855,6 +1862,10 @@ $('subjReset').onclick=()=>{subjDirty=false;syncSubject();toast('자동 제목�
 $('noimg').onchange=e=>{noImg=e.target.checked;render();};
 $('bCopy').onclick=copyRich;$('mShare').onclick=shareMail;$('bSubj').onclick=copySubject;$('bCode').onclick=copyCode;$('bDown').onclick=downloadHtml;
 $('kCopy').onclick=copyKakao;
+/* 뒤로가기: 리포트에서 들어왔으면 이전 화면으로, 새 창으로 열렸으면 리포트 첫 화면으로 */
+$('backBtn').onclick=()=>{let same=false;try{same=!!document.referrer&&new URL(document.referrer).origin===location.origin;}catch(e){}
+  if(same&&history.length>1){history.back();return;}
+  location.href=/github\.io$/.test(location.hostname)?new URL('./',location.href).href:'https://ijaesig04-hash.github.io/report/';};
 function kKeyUI(){const k=kakaoKey();$('kKeyState').textContent=k?'✅ 사용 중':'(미설정)';try{$('kKey').value=localStorage.getItem('s1kakao.key')||'';}catch(e){}
   const sub=document.querySelector('#kShare small');if(sub)sub.textContent=k?'카드 한 장 · 카드는 크게 보기 · 버튼은 다이렉트몰':'카드 이미지 + 메시지 한 번에';}
 $('kKeySave').onclick=()=>{try{const v=$('kKey').value.trim();if(v)localStorage.setItem('s1kakao.key',v);else localStorage.removeItem('s1kakao.key');}catch(e){}kKeyUI();toast(kakaoKey()?'카카오 공유를 켰어요':'카카오 공유 설정을 지웠어요');};
