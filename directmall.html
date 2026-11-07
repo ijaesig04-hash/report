@@ -234,7 +234,8 @@ table.t td.n,table.t th.n{text-align:right}
        <button type="button" class="btn b-navy" id="bSubj">🏷️ 제목 복사</button>
        <button type="button" class="btn b-red" id="bCopy">📋 본문 복사 → 메일에 붙여넣기</button>
      </div>
-     <label class="chk" style="margin-top:10px"><input type="checkbox" id="noimg"><span><b>사진 빼고 보내기</b><small>Gmail·네이버 등 모든 메일 호환</small></span></label>
+     <div class="btns" id="mShareWrap" hidden style="margin-top:10px"><button type="button" class="btn b-kakao" id="mShare" style="padding:14px">📤 메일 앱으로 보내기<small style="display:block;font-size:12px;font-weight:400;margin-top:2px">카드를 첨부해서 Gmail·네이버·아웃룩 어디서나 보여요</small></button></div>
+     <label class="chk" style="margin-top:10px"><input type="checkbox" id="noimg"><span><b>사진 빼고 보내기</b><small>글·QR만 · 메일이 아주 가벼워져요</small></span></label>
      <div class="btns" style="margin-top:10px;grid-template-columns:1fr 1fr">
        <button type="button" class="btn b-soft" id="bDown">⬇️ HTML 저장</button>
        <button type="button" class="btn b-soft" id="bCode">&lt;/&gt; 코드 복사</button>
@@ -275,7 +276,7 @@ table.t td.n,table.t th.n{text-align:right}
   <div class="panel" style="min-width:0" id="mailPanel">
    <div class="phead"><h2><span class="step">4</span>디자인 선택</h2><small>⭐ 추천 · 📷 사진 포함</small></div>
    <div class="seg mgrp" id="mgrp" style="grid-template-columns:1fr 1fr;margin-bottom:12px"><button type="button" data-g="mail" aria-pressed="true">✉️ 메일형 16종</button><button type="button" data-g="card" aria-pressed="false">🎴 카드형 20종</button></div>
-   <p class="hint" id="mgrpHint" hidden style="margin:-4px 0 10px">카톡 카드 디자인을 그대로 메일에 넣어요 · 카드가 사진으로 들어가니 <b>아웃룩</b>으로 보내면 가장 잘 보여요</p>
+   <p class="hint" id="mgrpHint" hidden style="margin:-4px 0 10px">카톡 카드 디자인으로 메일을 만들어요 · <b>📤 메일 앱으로 보내기</b>를 누르면 카드가 첨부돼서 Gmail·네이버에서도 잘 보여요 (본문 복사는 아웃룩용)</p>
    <div class="themes" id="themes"></div>
    <div class="subj"><span>제목</span><b id="subjPv"></b></div>
    <iframe id="pv" title="메일 미리보기"></iframe>
@@ -438,7 +439,10 @@ const btn=(text,bg,color,o={})=>T('',`<tr><td align="center" bgcolor="${bg}" sty
 const foot=(c=C.mute)=>discount()+`<div style="${F}font-size:11px;color:${c};text-align:center;padding-top:16px;line-height:1.6;">본 메일은 에스원 담당 영업사원이 고객님께 보내드리는 안내 메일입니다.<br><a href="${MALL}" style="color:${c};">s1directmall.co.kr</a></div>`;
 const logo=(sz=1)=>T('',`<tr><td bgcolor="${C.red}" align="center" style="background:${C.red};padding:${6*sz}px ${12*sz}px;${F}"><div style="font-size:${9*sz}px;color:#ffe3e8;">언제나 안심</div><div style="font-size:${17*sz}px;font-weight:900;color:#ffffff;line-height:1.15;">에스원</div></td></tr>`);
 const icons=(arr,fg,bg,border)=>`<tr>${arr.map(([i,t])=>`<td align="center" valign="top" style="padding:4px;">${T('',`<tr><td width="54" height="54" align="center" valign="middle" bgcolor="${bg}" style="background:${bg};border:1.5px solid ${border};border-radius:50%;font-size:22px;">${i}</td></tr>`)}<div style="${F}font-size:12px;font-weight:bold;color:${fg};margin-top:7px;">${t}</div></td>`).join('')}</tr>`;
-const img=(src,w=600,r='')=>noImg?'':`<img src="${src}" width="${w}" alt="에스원" style="display:block;width:100%;max-width:${w}px;height:auto;border:0;${r}">`;
+/* 메일 사진은 GitHub 사이트에 올린 파일 주소로 넣음 → Gmail·네이버에서도 보임 */
+const MAILIMG=(()=>{try{if(/^https?:/.test(location.href)&&/github\.io$/.test(location.hostname))return new URL('mail-img/',location.href).href;}catch(e){}return 'https://ijaesig04-hash.github.io/report/mail-img/';})();
+const mailSrc=src=>{for(const k in IMG)if(IMG[k]===src)return MAILIMG+k+'.jpg';return src;};
+const img=(src,w=600,r='')=>noImg?'':`<img src="${mailSrc(src)}" width="${w}" alt="에스원" style="display:block;width:100%;max-width:${w}px;height:auto;border:0;${r}">`;
 const defMsg=d=>d.msg||`안녕하세요, 에스원 ${d.name}입니다.<br>${SEG[seg].line}<br>${d.to}의 안전을 위한 상품을 이제 <b>에스원 다이렉트몰</b>에서 편리하게 만나보세요.`;
 
 /* ① 히어로 포스터 */
@@ -799,7 +803,7 @@ const repLine=(d)=>['에스원',d.branch,d.name,d.position].filter(Boolean).join
 /* ───────── 하단 추가할인 문구 (모든 디자인 공통) ───────── */
 function discount(){
   const d=CUR;if(!d)return '';
-  const code=noImg?qrTable(MALL):`<img src="${qrPng(MALL)}" width="92" height="92" alt="다이렉트몰 QR" style="display:block;width:92px;height:92px;border:0;">`;
+  const code=qrTable(MALL);
   return `<div style="height:20px;font-size:0;line-height:0;">&nbsp;</div>`+T(`width="100%" style="border-collapse:separate;border-radius:14px;overflow:hidden;"`,`
   <tr><td bgcolor="#ffd400" style="background:#ffd400;padding:14px 18px;${F}">${T('',`<tr>
    <td valign="middle" bgcolor="#0a1a3a" style="background:#0a1a3a;border-radius:20px;padding:6px 14px;${F}font-size:13px;font-weight:bold;color:#ffd400;white-space:nowrap;">추가할인 혜택</td>
@@ -826,7 +830,7 @@ function qrTable(url){
 const DARK=['control','night','key','lime'];
 function qr(){
  const dark=DARK.includes(theme), tc=dark?'#ffffff':C.navy, sc=dark?'#a9b4cc':C.mute, bd=dark?'#2a3a62':C.line;
- const code=noImg?qrTable(MALL):`<img src="${qrPng(MALL)}" width="110" height="110" alt="다이렉트몰 QR" style="display:block;width:110px;height:110px;border:0;">`;
+ const code=qrTable(MALL);
  return `<div style="height:18px;font-size:0;line-height:0;">&nbsp;</div>`+T(`style="border:1px solid ${bd};border-radius:12px;"`,`<tr>
   <td valign="middle" style="padding:8px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="background:#ffffff;border-radius:8px;"><tr><td style="padding:4px;">${code}</td></tr></table></td>
   <td valign="middle" style="padding:8px 16px 8px 6px;${F}text-align:left;">
@@ -1549,6 +1553,21 @@ async function fallbackShare(blob,fn){
   try{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();}catch(e){}
   toast('이 화면에선 바로 공유가 안 돼요. 이미지 저장 + 메시지 복사를 해뒀어요');
 }
+/* 🎴 카드형 메일: 카드 이미지를 첨부해서 메일 앱으로 공유 (Gmail·네이버·아웃룩 앱 모두 보임) */
+async function shareMail(){
+  if(!check())return;
+  const id=theme.slice(2),t=KTHEMES.find(v=>v.id===id)||KTHEMES[0];
+  const subj=$('subject').value;const keep=kTone;kTone='formal';let body=kakaoText();kTone=keep;
+  body=body.replace(/^\[에스원 다이렉트몰\][^\n]*\n+/,'');
+  copyText(body);
+  const blob=await new Promise(res=>t.f(kdata()).toBlob(res,'image/jpeg',.9));
+  const file=new File([blob],'에스원다이렉트몰_'+t.n.slice(2).replace(/\s/g,'')+'.jpg',{type:'image/jpeg'});
+  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],title:subj,text:body});toast('메일 앱에서 받는 사람만 넣고 보내세요'+(await autoRecord('메일')));}
+    catch(e){if(e&&e.name!=='AbortError'){fallbackShare(blob,file.name);}}
+    return;}
+  fallbackShare(blob,file.name);
+}
 async function copySubject(){const ok=await copyText($('subject').value,$('subject'));toast(ok?'제목을 복사했어요':'제목 칸을 선택해 두었어요. Ctrl+C 하세요');}
 async function copyCode(){if(!check())return;const ok=await copyText(buildEmail());if(ok)toast('HTML 코드를 복사했어요'+(await autoRecord('메일')));else toast('복사가 막혀 있어요. HTML 저장을 이용해 주세요');}
 async function downloadHtml(){
@@ -1570,7 +1589,7 @@ $('themes').innerHTML=THEMES.map(t=>`<button type="button" class="th" data-g="ma
  +KTHEMES.map(t=>`<button type="button" class="th" data-g="card" data-t="k_${t.id}" aria-pressed="false" hidden><div class="sw">${t.c.map(c=>`<i style="background:${c}"></i>`).join('')}</div><b>${t.n} 📷</b><span>${t.w}</span></button>`).join('');
 function setMGrp(g){document.querySelectorAll('#mgrp button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.g===g));document.querySelectorAll('#themes .th').forEach(e=>e.hidden=e.dataset.g!==g);$('mgrpHint').hidden=g!=='card';}
 document.querySelectorAll('#mgrp button').forEach(b=>b.onclick=()=>{setMGrp(b.dataset.g);const cur=document.querySelector(`#themes .th[data-t="${theme}"]`);if(!cur||cur.dataset.g!==b.dataset.g){const first=document.querySelector(`#themes .th[data-g="${b.dataset.g}"]`);if(first)setTheme(first.dataset.t);}});
-function setTheme(t){theme=t;document.querySelectorAll('#themes .th').forEach(e=>e.setAttribute('aria-pressed',e.dataset.t===t));render();}
+function setTheme(t){theme=t;$('mShareWrap').hidden=!String(t).startsWith('k_');document.querySelectorAll('#themes .th').forEach(e=>e.setAttribute('aria-pressed',e.dataset.t===t));render();}
 document.querySelectorAll('#themes .th').forEach(e=>e.onclick=()=>setTheme(e.dataset.t));
 function setSeg(v){seg=v;document.querySelectorAll('#segs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===v));}
 document.querySelectorAll('#segs button').forEach(b=>b.onclick=()=>{setSeg(b.dataset.v);render();});
@@ -1583,7 +1602,7 @@ $('emp').addEventListener('input',e=>{const v=digits(e.target.value);if(v!==e.ta
 $('subject').addEventListener('input',()=>{subjDirty=true;$('subjPv').textContent=$('subject').value;});
 $('subjReset').onclick=()=>{subjDirty=false;syncSubject();toast('자동 제목으로 되돌렸어요');};
 $('noimg').onchange=e=>{noImg=e.target.checked;render();};
-$('bCopy').onclick=copyRich;$('bSubj').onclick=copySubject;$('bCode').onclick=copyCode;$('bDown').onclick=downloadHtml;
+$('bCopy').onclick=copyRich;$('mShare').onclick=shareMail;$('bSubj').onclick=copySubject;$('bCode').onclick=copyCode;$('bDown').onclick=downloadHtml;
 $('kCopy').onclick=copyKakao;$('kShare').onclick=shareKakao;$('kImg').onclick=saveCard;
 function showTab(which){
   const dash=which==='dash';mode=which==='kakao'?'kakao':'mail';
