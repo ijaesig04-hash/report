@@ -273,7 +273,9 @@ table.t td.n,table.t th.n{text-align:right}
    <div class="tip" style="margin-top:14px"><b>📱 카톡으로 보내는 순서</b><br>① <b>📤 카톡으로 바로 보내기</b> → 공유창에서 <b>카카오톡</b> → 고객 대화방 선택 → 전송<br>② 카드만 가고 글이 빠졌다면 → 대화창을 <b>길게 눌러 붙여넣기</b> (메시지는 자동으로 복사돼 있어요)<br>③ 고객이 링크나 QR로 들어가 구매할 때 <b>사원번호</b>를 입력하면 10% 추가 할인</div>
   </div>
   <div class="panel" style="min-width:0" id="mailPanel">
-   <div class="phead"><h2><span class="step">4</span>디자인 선택 (16종)</h2><small>⭐ 추천 · 📷 사진 포함</small></div>
+   <div class="phead"><h2><span class="step">4</span>디자인 선택</h2><small>⭐ 추천 · 📷 사진 포함</small></div>
+   <div class="seg mgrp" id="mgrp" style="grid-template-columns:1fr 1fr;margin-bottom:12px"><button type="button" data-g="mail" aria-pressed="true">✉️ 메일형 16종</button><button type="button" data-g="card" aria-pressed="false">🎴 카드형 20종</button></div>
+   <p class="hint" id="mgrpHint" hidden style="margin:-4px 0 10px">카톡 카드 디자인을 그대로 메일에 넣어요 · 카드가 사진으로 들어가니 <b>아웃룩</b>으로 보내면 가장 잘 보여요</p>
    <div class="themes" id="themes"></div>
    <div class="subj"><span>제목</span><b id="subjPv"></b></div>
    <iframe id="pv" title="메일 미리보기"></iframe>
@@ -778,7 +780,7 @@ const SEASONS=[
  {id:'family', n:'가족 · 응급 대비',   seg:'home',hook:()=>'우리 가족 안전사고, 미리 대비하세요', msg:'갑작스러운 안전사고, 미리 준비하면 든든합니다.<br>우리 집에 꼭 필요한 <b>구급함</b>과 <b>AI홈카메라</b>를 만나보세요.'},
 ];
 const SEASON_NAME=Object.fromEntries(SEASONS.map(s=>[s.id,s.n]));
-const THEME_NAME=()=>Object.fromEntries(THEMES.map(t=>[t.id,t.n.slice(2)]));
+const THEME_NAME=()=>Object.fromEntries(THEMES.map(t=>[t.id,t.n.slice(2)]).concat((typeof KTHEMES!=='undefined'?KTHEMES:[]).map(t=>['k_'+t.id,'카드형 · '+t.n.slice(2)])));
 const digits=v=>String(v||'').replace(/\D/g,'');
 
 function raw(){return{name:$('name').value.trim(),phone:$('phone').value.trim(),emp:digits($('emp').value),branch:$('branch').value.trim(),position:$('position').value.trim(),cust:$('customer').value.trim(),msg:$('msg').value.trim()};}
@@ -833,7 +835,24 @@ function qr(){
   </td></tr>`);
 }
 const BUILD={consult:bConsult,night:bNight,toon:bToon,catalog:bCatalog,quick:bQuick,campus:bCampus,hero:bHero,control:bControl,branch:bBranch,lime:bLime,minimal:bMinimal,card:bCard,pass:bPass,key:bKey,chat:bChat,letter:bLetter};
-function buildEmail(){CUR=data();return BUILD[theme](CUR);}
+/* 🎴 카드형 메일 — 카톡 카드 이미지를 메일 본문에 넣음 */
+let kcMailCache={k:'',url:''};
+function kcardMailImg(id){
+  const key=id+'|'+JSON.stringify(raw())+seg+season;
+  if(kcMailCache.k===key)return kcMailCache.url;
+  const t=KTHEMES.find(v=>v.id===id)||KTHEMES[0],cv=t.f(kdata()),w=600,h=Math.round(cv.height*w/cv.width),o=document.createElement('canvas');o.width=w;o.height=h;
+  const x=o.getContext('2d');x.imageSmoothingQuality='high';x.drawImage(cv,0,0,w,h);
+  kcMailCache={k:key,url:o.toDataURL('image/jpeg',.88)};return kcMailCache.url;
+}
+function bKCard(d){
+  const id=theme.slice(2),t=KTHEMES.find(v=>v.id===id)||KTHEMES[0];
+  const pic=noImg?'':`<tr><td><a href="${MALL}" target="_blank"><img src="${kcardMailImg(id)}" width="600" alt="에스원 다이렉트몰 ${t.n.slice(2)}" style="display:block;width:100%;max-width:600px;height:auto;border:0;"></a></td></tr>`;
+  const lite=`<div style="${F}font-size:11px;color:${C.mute};text-align:center;padding-top:16px;line-height:1.6;">본 메일은 에스원 담당 영업사원이 고객님께 보내드리는 안내 메일입니다.<br><a href="${MALL}" style="color:${C.mute};">s1directmall.co.kr</a></div>`;
+  return outer('#eef1f6',T(`width="100%" bgcolor="#ffffff" style="background:#ffffff;border-radius:18px;overflow:hidden;"`,`${pic}
+<tr><td style="padding:28px 32px 6px;${F}"><div style="font-size:16px;font-weight:bold;color:${C.navy};">${d.to}께,</div><div style="font-size:14px;color:#4a5262;line-height:1.9;margin-top:10px;">${defMsg(d)}</div></td></tr>
+<tr><td align="center" style="padding:24px 32px 30px;">${btn('에스원 다이렉트몰 바로가기 →',C.red,'#fff')}</td></tr>`)+(noImg?foot():lite));
+}
+function buildEmail(){CUR=data();return theme.startsWith('k_')?bKCard(CUR):BUILD[theme](CUR);}
 
 /* ───────── 카톡 메시지 · 카드 이미지 (디자인 12종 · 말투 6종) ───────── */
 const plain=h=>h.replace(/<br\s*\/?>/g,'\n').replace(/<[^>]+>/g,'');
@@ -1547,7 +1566,10 @@ function loadRep(){try{const v=JSON.parse(localStorage.getItem(KEY)||'{}');['nam
 function saveRep(){try{localStorage.setItem(KEY,JSON.stringify({name:$('name').value,phone:$('phone').value,emp:$('emp').value,branch:$('branch').value,position:$('position').value}));}catch(e){}}
 
 /* ───────── 화면 연결 ───────── */
-$('themes').innerHTML=THEMES.map(t=>`<button type="button" class="th" data-t="${t.id}" aria-pressed="false"><div class="sw">${t.c.map(c=>`<i style="background:${c}"></i>`).join('')}</div><b>${t.n}${t.p?' 📷':''}</b><span>${t.w}</span></button>`).join('');
+$('themes').innerHTML=THEMES.map(t=>`<button type="button" class="th" data-g="mail" data-t="${t.id}" aria-pressed="false"><div class="sw">${t.c.map(c=>`<i style="background:${c}"></i>`).join('')}</div><b>${t.n}${t.p?' 📷':''}</b><span>${t.w}</span></button>`).join('')
+ +KTHEMES.map(t=>`<button type="button" class="th" data-g="card" data-t="k_${t.id}" aria-pressed="false" hidden><div class="sw">${t.c.map(c=>`<i style="background:${c}"></i>`).join('')}</div><b>${t.n} 📷</b><span>${t.w}</span></button>`).join('');
+function setMGrp(g){document.querySelectorAll('#mgrp button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.g===g));document.querySelectorAll('#themes .th').forEach(e=>e.hidden=e.dataset.g!==g);$('mgrpHint').hidden=g!=='card';}
+document.querySelectorAll('#mgrp button').forEach(b=>b.onclick=()=>{setMGrp(b.dataset.g);const cur=document.querySelector(`#themes .th[data-t="${theme}"]`);if(!cur||cur.dataset.g!==b.dataset.g){const first=document.querySelector(`#themes .th[data-g="${b.dataset.g}"]`);if(first)setTheme(first.dataset.t);}});
 function setTheme(t){theme=t;document.querySelectorAll('#themes .th').forEach(e=>e.setAttribute('aria-pressed',e.dataset.t===t));render();}
 document.querySelectorAll('#themes .th').forEach(e=>e.onclick=()=>setTheme(e.dataset.t));
 function setSeg(v){seg=v;document.querySelectorAll('#segs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===v));}
