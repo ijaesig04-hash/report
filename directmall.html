@@ -115,6 +115,13 @@ textarea{height:70px;resize:vertical}
 .klink span{color:#7c8699;font-size:12px}
 .kcard img{width:100%;max-width:100%;border-radius:12px;display:block;box-shadow:var(--shadow);background:var(--soft)}
 .kcard .hint{text-align:center;margin-top:8px}
+.kthemes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:16px}
+@media(max-width:700px){.kthemes{display:flex;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 8px;-webkit-overflow-scrolling:touch}.kthemes .th{flex:0 0 136px;scroll-snap-align:start}}
+.klab{font-size:13px;font-weight:700;margin:0 0 8px;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.klab small{font-weight:400;color:var(--mute);font-size:12px}
+.ktones{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.ktones button{border:1px solid var(--line);background:var(--soft);color:var(--fg);font:inherit;font-size:13px;font-weight:700;padding:8px 12px;border-radius:18px;cursor:pointer}
+.ktones button[aria-pressed="true"]{background:#fee500;color:#191600;border-color:#e6cf00}
 .repsum{display:flex;align-items:center;gap:10px;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px 12px 12px 14px}
 .repsum>div{flex:1}.repsum b{display:block;font-size:15px}.repsum small{color:var(--mute);font-size:12px}.repsum .mini{padding:8px 12px}
 .inst-open{margin-left:auto;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:7px 12px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
@@ -235,8 +242,11 @@ table.t td.n,table.t th.n{text-align:right}
     </div>
     <div id="kakaoSend" hidden>
      <div class="btns">
-       <button type="button" class="btn b-kakao" id="kCopy">💬 카톡 메시지 복사</button>
-       <button type="button" class="btn b-navy" id="kImg">🖼️ 카드 이미지 저장</button>
+       <button type="button" class="btn b-kakao" id="kShare" style="padding:15px;font-size:15px">📤 카톡으로 바로 보내기<small style="display:block;font-size:12px;font-weight:400;margin-top:2px">카드 이미지 + 메시지 한 번에</small></button>
+       <div class="btns" style="grid-template-columns:1fr 1fr">
+        <button type="button" class="btn b-soft" id="kCopy">💬 메시지만 복사</button>
+        <button type="button" class="btn b-soft" id="kImg">🖼️ 이미지만 저장</button>
+       </div>
      </div>
     </div>
     
@@ -251,12 +261,16 @@ table.t td.n,table.t th.n{text-align:right}
   </div>
 
   <div class="panel" style="min-width:0" id="kakaoPanel" hidden>
-   <div class="phead"><h2><span class="step">4</span>카톡 미리보기</h2><small>메시지 복사 → 카톡 대화방에 붙여넣기</small></div>
+   <div class="phead"><h2><span class="step">4</span>카드 디자인 (17종)</h2><button type="button" class="mini" id="kRand" style="padding:7px 12px">🎲 아무거나</button></div>
+   <div class="kthemes" id="kthemes"></div>
+   <div class="klab">메시지 말투 <small>디자인을 고르면 어울리는 말투로 바뀌어요 · 따로 바꿔도 돼요</small></div>
+   <div class="ktones" id="ktones"></div>
+   <div class="klab">미리보기 <small>메시지 복사 → 카톡 대화방에 붙여넣기</small></div>
    <div class="kgrid">
     <div class="kchat"><div class="kname" id="kName">담당 매니저</div><div class="kbubble" id="kText"></div><div class="klink"><b>에스원다이렉트몰</b><span>s1directmall.co.kr</span></div></div>
     <div class="kcard"><img id="kCardImg" alt="카톡용 홍보 카드 이미지"><p class="hint">휴대폰에서는 이미지를 <b>길게 눌러 저장</b>해도 돼요</p></div>
    </div>
-   <div class="tip" style="margin-top:14px"><b>📱 카톡으로 보내는 순서</b><br>① <b>카톡 메시지 복사</b> → 고객 대화방에 붙여넣기 (링크 미리보기가 자동으로 붙어요)<br>② <b>카드 이미지 저장</b> → 대화방 ＋ → 앨범에서 이미지 보내기<br>③ 고객이 링크나 QR로 들어가 구매할 때 <b>사원번호</b>를 입력하면 10% 추가 할인</div>
+   <div class="tip" style="margin-top:14px"><b>📱 카톡으로 보내는 순서</b><br>① <b>📤 카톡으로 바로 보내기</b> → 공유창에서 <b>카카오톡</b> → 고객 대화방 선택 → 전송<br>② 카드만 가고 글이 빠졌다면 → 대화창을 <b>길게 눌러 붙여넣기</b> (메시지는 자동으로 복사돼 있어요)<br>③ 고객이 링크나 QR로 들어가 구매할 때 <b>사원번호</b>를 입력하면 10% 추가 할인</div>
   </div>
   <div class="panel" style="min-width:0" id="mailPanel">
    <div class="phead"><h2><span class="step">4</span>디자인 선택 (16종)</h2><small>⭐ 추천 · 📷 사진 포함</small></div>
@@ -821,61 +835,502 @@ function qr(){
 const BUILD={consult:bConsult,night:bNight,toon:bToon,catalog:bCatalog,quick:bQuick,campus:bCampus,hero:bHero,control:bControl,branch:bBranch,lime:bLime,minimal:bMinimal,card:bCard,pass:bPass,key:bKey,chat:bChat,letter:bLetter};
 function buildEmail(){CUR=data();return BUILD[theme](CUR);}
 
-/* ───────── 카톡 메시지 · 카드 이미지 ───────── */
+/* ───────── 카톡 메시지 · 카드 이미지 (디자인 12종 · 말투 6종) ───────── */
 const plain=h=>h.replace(/<br\s*\/?>/g,'\n').replace(/<[^>]+>/g,'');
+let kTheme='blue', kTone='formal';
+try{const v=JSON.parse(localStorage.getItem('s1kakao.style')||'{}');if(v.t)kTheme=v.t;if(v.tone)kTone=v.tone;}catch(e){}
+const saveKStyle=()=>{try{localStorage.setItem('s1kakao.style',JSON.stringify({t:kTheme,tone:kTone}));}catch(e){}};
+
+function kdata(){
+  const r=raw(),s=SEASONS.find(v=>v.id===season);
+  const bodyText=r.msg||(s.msg?plain(s.msg):`${SEG[seg].line}\n보안 상품을 이제 에스원 다이렉트몰에서 편리하게 만나보세요.`);
+  return {r,s,to:toName(r.cust),who:['에스원',r.branch,r.name||'담당자',r.position].filter(Boolean).join(' '),
+    name:r.name||'담당자',emp:r.emp||'00000000',phone:r.phone||'010-0000-0000',branch:r.branch,basic:s.id==='basic',
+    hook:s.hook(r),chips:SEG[seg].chips,bodyText,body:bodyText.replace(/\n/g,' ')};
+}
+
+/* ── 메시지 말투 ── */
+const KTONES=[['formal','🙇 정중하게'],['short','⚡ 짧고 굵게'],['friendly','😊 친근하게'],['benefit','🎁 혜택 강조'],['check','✅ 체크리스트'],['qna','❓ Q&A']];
 function kakaoText(){
-  const r=raw(),s=SEASONS.find(x=>x.id===season),who=['에스원',r.branch,r.name||'○○○',r.position].filter(Boolean).join(' ');
-  const body=r.msg||(s.msg?plain(s.msg):`${SEG[seg].line}\n보안 상품을 이제 에스원 다이렉트몰에서 편리하게 만나보세요.`);
-  return `[에스원 다이렉트몰] ${toName(r.cust)}, ${s.hook(r)}
+  const d=kdata(),r=d.r,emp=r.emp||'(사원번호)',who=['에스원',r.branch,r.name||'○○○',r.position].filter(Boolean).join(' '),ph=r.phone||'010-0000-0000';
+  const own=r.msg?r.msg+'\n\n':'';
+  const place=seg==='biz'?'우리 매장':seg==='home'?'우리 집':'우리 집·매장';
+  switch(kTone){
+  case 'short': return `[에스원 다이렉트몰]
+${d.to}, ${d.hook}
+
+${own}✔ ${SEG[seg].chat} 온라인 구매
+✔ 사원번호 ${emp} 입력 시 10% 추가 할인
+
+👉 ${MALL}
+${who} ☎ ${ph}`;
+  case 'friendly': return `${d.to}~ 안녕하세요! 😊
+${who}입니다.
+
+${d.bodyText}
+
+요즘은 에스원 보안 상품도 온라인으로 편하게 살 수 있어요 🛒
+👉 ${MALL}
+
+그리고 꿀팁 하나! 🍯
+결제할 때 제 사원번호 ${emp} 넣으시면 10% 더 할인돼요 🎁
+
+궁금한 건 언제든 편하게 연락 주세요 📞 ${ph}`;
+  case 'benefit': return `🎁 ${d.to}께만 드리는 추가 할인 안내
+
+━━━━━━━━━━━━━━
+  사원번호  ${emp}
+  입력 시 10% 추가 할인!
+━━━━━━━━━━━━━━
+
+${d.bodyText}
+
+🛒 바로가기 ${MALL}
+📞 ${who} ${ph}`;
+  case 'check': return `[에스원] ${place} 안심 체크리스트 ✅
+
+${own}${d.chips.map(c=>'☐ '+c).join('\n')}
+
+하나라도 비어 있다면?
+에스원 다이렉트몰에서 바로 준비하세요!
+👉 ${MALL}
+
+🎁 사원번호 ${emp} 입력 시 10% 추가 할인
+${who} ☎ ${ph}`;
+  case 'qna': return `${own}Q. 에스원 보안 상품, 온라인으로도 살 수 있나요?
+A. 네! 에스원 다이렉트몰에서 바로 구매하실 수 있어요.
+
+Q. 어떤 상품이 있나요?
+A. ${SEG[seg].line} 준비돼 있어요.
+
+Q. 더 저렴하게 사는 방법은요?
+A. 결제할 때 담당자 사원번호 ${emp}를 입력하시면 10% 추가 할인!
+
+🛒 ${MALL}
+${who} ☎ ${ph}`;
+  default: return `[에스원 다이렉트몰] ${d.to}, ${d.hook}
 
 안녕하세요, ${who}입니다.
-${body}
+${d.bodyText}
 
 🛒 다이렉트몰 바로가기
 ${MALL}
 
 🎁 추가할인 혜택
 구매 시 담당자 사원번호를 입력하시면 10% 추가 할인이 됩니다!
-▶ 사원번호 : ${r.emp||'(사원번호)'} (${r.name||'담당자'})
+▶ 사원번호 : ${emp} (${r.name||'담당자'})
 
-📞 문의 ${r.phone||'010-0000-0000'}`;
+📞 문의 ${ph}`;
+  }
 }
+
+/* ── 캔버스 공통 부품 ── */
 function wrapText(x,text,maxW){const out=[];let line='';for(const ch of text){const t=line+ch;if(x.measureText(t).width>maxW&&line){out.push(line);line=ch;}else line=t;}if(line)out.push(line);return out;}
 function rr(x,X,Y,W,H,R){x.beginPath();x.moveTo(X+R,Y);x.arcTo(X+W,Y,X+W,Y+H,R);x.arcTo(X+W,Y+H,X,Y+H,R);x.arcTo(X,Y+H,X,Y,R);x.arcTo(X,Y,X+W,Y,R);x.closePath();}
-function cardCanvas(){
-  const r=raw(),s=SEASONS.find(x=>x.id===season),W=1080,H=1700,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
-  const FF="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif";
-  const g=x.createLinearGradient(0,0,W,520);g.addColorStop(0,'#0a1a3a');g.addColorStop(1,'#1b4fd6');x.fillStyle=g;x.fillRect(0,0,W,560);
-  x.fillStyle='#eef1f6';x.fillRect(0,560,W,H-560);
-  x.fillStyle='#e5002d';x.fillRect(72,72,150,104);x.fillStyle='#ffe3e8';x.font=`20px ${FF}`;x.textAlign='center';x.fillText('언제나 안심',147,108);
-  x.fillStyle='#fff';x.font=`bold 40px ${FF}`;x.fillText('에스원',147,156);x.textAlign='left';
-  x.fillStyle='#9fbaf0';x.font=`bold 26px ${FF}`;x.fillText('S-1 DIRECT MALL',250,134);
-  x.fillStyle='#fff';x.font=`bold 66px ${FF}`;
-  const head=s.id==='basic'?['보안 상품,','이제 온라인으로 만나세요']:wrapText(x,s.hook(r),W-144).slice(0,2);
-  head.forEach((t,i)=>x.fillText(t,72,300+i*84));
-  x.font=`30px ${FF}`;x.fillStyle='#cfe0ff';x.fillText(`${toName(r.cust)}께 ${['에스원',r.branch,r.name,r.position].filter(Boolean).join(' ')}이 보냅니다`.slice(0,40),72,480);
-  // 상품 칩
-  x.font=`bold 30px ${FF}`;let cx=72,cy=610;
-  SEG[seg].chips.forEach(t=>{const w=x.measureText(t).width+52;if(cx+w>W-72){cx=72;cy+=74;}x.fillStyle='#ffffff';rr(x,cx,cy,w,58,29);x.fill();x.fillStyle='#0a1a3a';x.fillText(t,cx+26,cy+40);cx+=w+14;});
-  const qy=cy+100-300-30;
-  // 할인 띠
-  const dy=qy+330;x.fillStyle='#ffd400';rr(x,72,dy,W-144,120,24);x.fill();
-  x.fillStyle='#0a1a3a';rr(x,100,dy+34,190,52,26);x.fill();x.fillStyle='#ffd400';x.font=`bold 26px ${FF}`;x.fillText('추가할인 혜택',118,dy+70);
-  x.fillStyle='#1a1f2b';x.font=`bold 32px ${FF}`;x.fillText('구매 시 사원번호 입력하면',314,dy+56);
-  x.fillStyle='#e5002d';x.fillText('10% 추가 할인!',314,dy+98);
-  // 담당자
-  const py=dy+150,ph=300;x.fillStyle='#fff';rr(x,72,py,W-144,ph,24);x.fill();
-  x.fillStyle='#1a1f2b';x.font=`bold 34px ${FF}`;x.fillText(['에스원',r.branch,r.name||'담당자',r.position].filter(Boolean).join(' '),104,py+70);
-  x.font=`bold 30px ${FF}`;x.fillStyle='#6b7488';x.fillText('사원번호',104,py+140);x.fillStyle='#1b4fd6';x.font=`bold 56px ${FF}`;x.fillText(r.emp||'00000000',104,py+205);
-  x.fillStyle='#6b7488';x.font=`28px ${FF}`;x.fillText('📞 '+(r.phone||''),104,py+260);
-  x.drawImage(qrCanvas(MALL,8,2),W-104-236,py+20,236,236);x.fillStyle='#0a1a3a';x.font=`bold 24px ${FF}`;x.textAlign='center';x.fillText('QR 바로 접속',W-104-118,py+284);x.textAlign='left';
-  const out=document.createElement('canvas');out.width=W;out.height=py+ph+72;out.getContext('2d').drawImage(c,0,0);return out;
+const KF="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif";
+const KIMG={};
+['night','sign','toon','consult','campus','hero2'].forEach(k=>{try{const i=new Image();i.onload=()=>{if(mode==='kakao')renderSoon();};i.src=IMG[k];KIMG[k]=i;}catch(e){}});
+let kQR=null;const kqr=()=>kQR||(kQR=qrCanvas(MALL,8,2));
+function kctx(){const c=document.createElement('canvas');c.width=1080;c.height=3000;const x=c.getContext('2d');x.textAlign='left';x.textBaseline='alphabetic';return [c,x];}
+function kcrop(c,h){const o=document.createElement('canvas');o.width=c.width;o.height=Math.ceil(h);o.getContext('2d').drawImage(c,0,0);return o;}
+function kfont(x,sz,w='bold'){x.font=`${w} ${sz}px ${KF}`;}
+function ktext(x,t,X,Y,sz,col,o={}){kfont(x,sz,o.w||'bold');x.fillStyle=col;x.textAlign=o.a||'left';if(o.ls)x.letterSpacing=o.ls+'px';x.fillText(t,X,Y);if(o.ls)x.letterSpacing='0px';x.textAlign='left';return x.measureText(t).width;}
+function kwrap(x,text,maxW){
+  const out=[];
+  String(text).split('\n').forEach(par=>{
+    let line='';
+    par.split(' ').forEach(w=>{
+      const t=line?line+' '+w:w;
+      if(x.measureText(t).width<=maxW){line=t;return;}
+      if(line){out.push(line);line='';}
+      if(x.measureText(w).width<=maxW){line=w;return;}
+      for(const ch of w){if(x.measureText(line+ch).width>maxW&&line){out.push(line);line=ch;}else line+=ch;}
+    });
+    out.push(line);
+  });
+  return out;
 }
+function kfit(x,text,maxW,size,min,maxLines,w='bold'){
+  for(let s=size;s>=min;s-=2){kfont(x,s,w);const L=kwrap(x,text,maxW);if(L.length<=maxLines)return{lines:L,size:s};}
+  kfont(x,min,w);return{lines:kwrap(x,text,maxW).slice(0,maxLines),size:min};
+}
+/* 줄 묶음 그리기 → 마지막 줄 기준선 Y 반환 */
+function klines(x,lines,X,Y,size,lh,col,o={}){kfont(x,size,o.w||'bold');x.fillStyle=col;x.textAlign=o.a||'left';lines.forEach((t,i)=>x.fillText(t,X,Y+i*lh));x.textAlign='left';return Y+(lines.length-1)*lh;}
+function kimg(x,key,X,Y,W,H,R=0,fy=.5){
+  const im=KIMG[key];x.save();if(R){rr(x,X,Y,W,H,R);x.clip();}
+  if(im&&im.complete&&im.naturalWidth){const s=Math.max(W/im.naturalWidth,H/im.naturalHeight),sw=W/s,sh=H/s;x.drawImage(im,(im.naturalWidth-sw)/2,(im.naturalHeight-sh)*fy,sw,sh,X,Y,W,H);}
+  else{x.fillStyle='#22324f';x.fillRect(X,Y,W,H);}
+  x.restore();
+}
+function klogo(x,X,Y,o={}){const s=o.s||1;x.fillStyle=o.bg||'#e5002d';x.fillRect(X,Y,150*s,104*s);
+  ktext(x,'언제나 안심',X+75*s,Y+36*s,20*s,o.sub||'#ffe3e8',{a:'center',w:'normal'});ktext(x,'에스원',X+75*s,Y+84*s,40*s,o.fg||'#fff',{a:'center'});}
+function kshadow(x,on,a=.14){if(on){x.shadowColor=`rgba(10,26,58,${a})`;x.shadowBlur=28;x.shadowOffsetY=8;}else{x.shadowColor='transparent';x.shadowBlur=0;x.shadowOffsetY=0;}}
+function kchips(x,chips,Y,o={}){
+  kfont(x,30);let cx=72,cy=Y;
+  chips.forEach(t=>{kfont(x,30);const w=x.measureText(t).width+52;if(cx+w>1008){cx=72;cy+=74;}
+    if(o.fill!==null){x.fillStyle=o.fill||'#fff';rr(x,cx,cy,w,58,29);x.fill();}
+    if(o.stroke){x.strokeStyle=o.stroke;x.lineWidth=2.5;rr(x,cx,cy,w,58,29);x.stroke();}
+    kfont(x,30);x.fillStyle=o.fg||'#0a1a3a';x.textAlign='left';x.fillText(t,cx+26,cy+40);cx+=w+14;});
+  return cy+58;
+}
+/* 노란 추가할인 띠 */
+function kdisc(x,Y,o={}){const X=72,w=936;x.fillStyle=o.bg||'#ffd400';rr(x,X,Y,w,120,24);x.fill();
+  x.fillStyle=o.pill||'#0a1a3a';rr(x,X+28,Y+34,190,52,26);x.fill();ktext(x,'추가할인 혜택',X+123,Y+70,26,o.pillFg||'#ffd400',{a:'center'});
+  ktext(x,'구매 시 사원번호 입력하면',X+242,Y+56,32,o.fg||'#1a1f2b');ktext(x,'10% 추가 할인!',X+242,Y+98,32,o.hi||'#e5002d');return Y+120;}
+/* 담당자 · 사원번호 · QR 패널 */
+function krep(x,d,Y,o={}){const X=72,w=936,h=300;
+  x.save();kshadow(x,!!o.shadow);x.fillStyle=o.bg||'#fff';rr(x,X,Y,w,h,24);x.fill();x.restore();
+  if(o.border){x.strokeStyle=o.border;x.lineWidth=o.bw||3;rr(x,X,Y,w,h,24);x.stroke();}
+  const f=kfit(x,d.who,w-32-236-60,34,24,1);klines(x,f.lines,X+32,Y+70,f.size,0,o.fg||'#1a1f2b');
+  ktext(x,'사원번호',X+32,Y+140,30,o.mute||'#6b7488');
+  ktext(x,d.emp,X+32,Y+205,56,o.num||'#1b4fd6',{ls:1});
+  ktext(x,'📞 '+d.phone,X+32,Y+260,28,o.mute||'#6b7488',{w:'normal'});
+  x.fillStyle='#fff';rr(x,X+w-268,Y+20,236,236,12);x.fill();x.drawImage(kqr(),X+w-268,Y+20,236,236);
+  ktext(x,'QR 바로 접속',X+w-150,Y+284,24,o.qr||'#0a1a3a',{a:'center'});
+  if(o.tag){x.fillStyle=o.tagBg||'#e5002d';rr(x,X+w-268-160,Y+104,140,44,22);x.fill();ktext(x,o.tag,X+w-268-90,Y+135,22,'#fff',{a:'center'});}
+  return Y+h;
+}
+const khead=(d,basicText)=>d.basic?basicText:d.hook;
+const nowK=()=>{const n=new Date();return{n,wd:'일월화수목금토'[n.getDay()],M:n.getMonth()+1,D:n.getDate(),hm:`${n.getHours()}:${String(n.getMinutes()).padStart(2,'0')}`,ampm:`${n.getHours()<12?'오전':'오후'} ${(n.getHours()%12)||12}:${String(n.getMinutes()).padStart(2,'0')}`};};
+
+/* ① 클래식 블루 */
+function kBlue(d){const [c,x]=kctx(),W=1080;
+  const g=x.createLinearGradient(0,0,W,520);g.addColorStop(0,'#0a1a3a');g.addColorStop(1,'#1b4fd6');x.fillStyle=g;x.fillRect(0,0,W,560);
+  x.fillStyle='#eef1f6';x.fillRect(0,560,W,c.height);
+  klogo(x,72,72);ktext(x,'S-1 DIRECT MALL',250,134,26,'#9fbaf0');
+  const f=kfit(x,khead(d,'보안 상품,\n이제 온라인으로 만나세요'),W-144,66,46,2);klines(x,f.lines,72,300,f.size,84,'#fff');
+  const s=kfit(x,`${d.to}께 ${d.who}이 보냅니다`,W-144,30,22,1,'normal');klines(x,s.lines,72,480,s.size,0,'#cfe0ff',{w:'normal'});
+  let Y=kchips(x,d.chips,610)+42;Y=kdisc(x,Y)+30;Y=krep(x,d,Y);return kcrop(c,Y+72);}
+
+/* ② 할인 쿠폰 */
+function kCoupon(d){const [c,x]=kctx(),W=1080;
+  const g=x.createLinearGradient(0,0,W,1800);g.addColorStop(0,'#c8001f');g.addColorStop(1,'#ff4d6d');x.fillStyle=g;x.fillRect(0,0,W,c.height);
+  x.fillStyle='rgba(255,255,255,.07)';x.beginPath();x.arc(980,120,260,0,7);x.fill();
+  klogo(x,72,72,{bg:'#fff',fg:'#e5002d',sub:'#e5002d'});ktext(x,'S-1 DIRECT MALL · COUPON',250,134,26,'#ffd0d8',{ls:2});
+  ktext(x,`${d.to}께만 드리는 특별 혜택`,72,262,32,'#ffe3e8',{w:'normal'});
+  const f=kfit(x,khead(d,'추가 할인 쿠폰이\n도착했어요 🎁'),W-144,64,44,2);let Y=klines(x,f.lines,72,350,f.size,f.size*1.25,'#fff')+70;
+  const ty=Y,th=560;x.save();x.shadowColor='rgba(80,0,10,.35)';x.shadowBlur=36;x.shadowOffsetY=14;x.fillStyle='#fff';rr(x,72,ty,936,th,36);x.fill();x.restore();
+  ktext(x,'DISCOUNT COUPON',W/2,ty+72,24,'#e5002d',{a:'center',ls:8});
+  ktext(x,'10%',W/2,ty+272,210,'#e5002d',{a:'center'});
+  ktext(x,'추가 할인',W/2,ty+346,48,'#0a1a3a',{a:'center'});
+  x.fillStyle=g;[72,1008].forEach(cx=>{x.beginPath();x.arc(cx,ty+400,30,0,7);x.fill();});
+  x.strokeStyle='#f0c2ca';x.lineWidth=4;x.setLineDash([14,12]);x.beginPath();x.moveTo(124,ty+400);x.lineTo(956,ty+400);x.stroke();x.setLineDash([]);
+  ktext(x,'결제할 때 담당자 사원번호 입력',W/2,ty+456,28,'#7c8699',{a:'center',w:'normal'});
+  ktext(x,d.emp,W/2,ty+526,60,'#1b4fd6',{a:'center',ls:4});
+  Y=ty+th+50;Y=kchips(x,d.chips,Y,{fill:'rgba(255,255,255,.16)',fg:'#fff'})+40;
+  x.fillStyle='#fff';rr(x,72,Y,936,264,24);x.fill();x.drawImage(kqr(),96,Y+24,216,216);
+  const tx=348,tw=636;ktext(x,'QR 찍고 바로 쇼핑',tx,Y+76,36,'#0a1a3a');ktext(x,'s1directmall.co.kr',tx,Y+124,28,'#1b4fd6',{w:'normal'});
+  const w2=kfit(x,d.who,tw,28,20,1);klines(x,w2.lines,tx,Y+184,w2.size,0,'#1a1f2b');ktext(x,'📞 '+d.phone,tx,Y+228,28,'#6b7488',{w:'normal'});
+  return kcrop(c,Y+264+72);}
+
+/* ③ 카톡 대화 */
+function kBubble(d){const [c,x]=kctx(),W=1080,t=nowK();
+  x.fillStyle='#b2c7da';x.fillRect(0,0,W,c.height);x.fillStyle='#a6bcd0';x.fillRect(0,0,W,150);
+  ktext(x,'‹',40,104,70,'#1a1f2b',{w:'normal'});
+  const tt=kfit(x,`${d.name} 매니저`,760,38,28,1);klines(x,tt.lines,104,80,tt.size,0,'#1a1f2b');
+  ktext(x,'에스원 다이렉트몰 담당',104,124,24,'#4a5a6c',{w:'normal'});ktext(x,'☰',1010,100,40,'#1a1f2b',{a:'right',w:'normal'});
+  const ds=`${t.n.getFullYear()}년 ${t.M}월 ${t.D}일 ${t.wd}요일`;kfont(x,24,'normal');const dw=x.measureText(ds).width+52;
+  x.fillStyle='rgba(0,0,0,.12)';rr(x,(W-dw)/2,190,dw,48,24);x.fill();ktext(x,ds,W/2,223,24,'#fff',{a:'center',w:'normal'});
+  let Y=280,last=null;const PX=156,MAXW=640,FS=34,LH=50;
+  const place=(side,bw,bh)=>{
+    if(side!==last){if(last)Y+=30;if(side==='L'){x.fillStyle='#e5002d';rr(x,36,Y,100,100,36);x.fill();ktext(x,'에스원',86,Y+60,25,'#fff',{a:'center'});ktext(x,d.name,PX,Y+28,26,'#3a4a5c',{w:'normal'});Y+=44;}}
+    else Y+=14;
+    const bx=side==='L'?PX:W-40-bw;last=side;return bx;};
+  const stamp=(side,bx,bw,bh)=>{if(side==='L')ktext(x,t.ampm,bx+bw+12,Y+bh-6,22,'#55657a',{w:'normal'});else ktext(x,t.ampm,bx-12,Y+bh-6,22,'#55657a',{a:'right',w:'normal'});};
+  const bubble=(side,text,ts)=>{kfont(x,FS,'normal');const L=kwrap(x,text,MAXW),tw=Math.max(...L.map(s=>x.measureText(s).width)),bw=tw+56,bh=L.length*LH+24;
+    const bx=place(side,bw,bh);x.fillStyle=side==='L'?'#fff':'#fee500';rr(x,bx,Y,bw,bh,26);x.fill();klines(x,L,bx+28,Y+48,FS,LH,'#1a1f2b',{w:'normal'});if(ts)stamp(side,bx,bw,bh);Y+=bh;};
+  bubble('L',`안녕하세요 ${d.to} 😊\n${d.who}입니다!`);
+  bubble('L',d.basic&&!d.r.msg?'에스원 보안 상품을 이제 온라인 다이렉트몰에서 바로 구매하실 수 있어요 🛒':d.bodyText,1);
+  bubble('R','어떤 상품이 있어요?',1);
+  bubble('L',`${d.chips.join(' · ')} 등 다양하게 준비돼 있어요 👍`,1);
+  bubble('R','할인도 되나요? 👀',1);
+  {const bw=640,bh=330,bx=place('L',bw,bh);x.save();rr(x,bx,Y,bw,bh,26);x.clip();x.fillStyle='#fff';x.fillRect(bx,Y,bw,bh);x.fillStyle='#ffd400';x.fillRect(bx,Y,bw,78);x.restore();
+    ktext(x,'🎁 추가할인 혜택',bx+30,Y+52,32,'#1a1f2b');ktext(x,'결제할 때 담당자 사원번호',bx+30,Y+134,30,'#4a5262',{w:'normal'});
+    ktext(x,d.emp,bx+30,Y+212,62,'#1b4fd6',{ls:2});const w1=ktext(x,'입력하시면 ',bx+30,Y+286,32,'#1a1f2b',{w:'normal'});ktext(x,'10% 추가 할인!',bx+30+w1,Y+286,34,'#e5002d');Y+=bh;}
+  {const bw=640,bh=290,bx=place('L',bw,bh);x.fillStyle='#fff';rr(x,bx,Y,bw,bh,26);x.fill();x.drawImage(kqr(),bx+24,Y+25,240,240);
+    const tx=bx+290;ktext(x,'S-1 DIRECT MALL',tx,Y+66,22,'#1b4fd6',{ls:2});ktext(x,'에스원 다이렉트몰',tx,Y+116,34,'#1a1f2b');
+    ktext(x,'s1directmall.co.kr',tx,Y+160,25,'#7c8699',{w:'normal'});ktext(x,'📷 QR 찍고 바로 접속',tx,Y+212,26,'#0a1a3a');ktext(x,'📞 '+d.phone,tx,Y+256,25,'#7c8699',{w:'normal'});stamp('L',bx,bw,bh);Y+=bh;}
+  return kcrop(c,Y+60);}
+
+/* ④ 알림 도착 */
+function kNotify(d){const [c,x]=kctx(),W=1080,t=nowK();
+  const g=x.createLinearGradient(0,0,W*.7,2000);g.addColorStop(0,'#0a1a3a');g.addColorStop(.5,'#1b4fd6');g.addColorStop(1,'#7b61f5');x.fillStyle=g;x.fillRect(0,0,W,c.height);
+  x.fillStyle='rgba(255,255,255,.06)';x.beginPath();x.arc(920,300,330,0,7);x.fill();x.beginPath();x.arc(120,1300,400,0,7);x.fill();
+  ktext(x,`${t.M}월 ${t.D}일 ${t.wd}요일`,W/2,170,36,'rgba(255,255,255,.88)',{a:'center',w:'normal'});
+  ktext(x,t.hm,W/2,350,180,'#fff',{a:'center'});
+  let Y=440;
+  const icon=(X,Yy,bg,txt,fg,sz)=>{x.fillStyle=bg;rr(x,X,Yy,64,64,16);x.fill();ktext(x,txt,X+32,Yy+32+sz*.36,sz,fg,{a:'center'});};
+  const note=(ic,app,title,body)=>{const X=56,w=968,tx=X+36,tw=w-72;
+    kfont(x,36);const TL=kwrap(x,title,tw).slice(0,2);kfont(x,30,'normal');const BL=kwrap(x,body,tw).slice(0,3);
+    const ty=Y+150,by=ty+(TL.length-1)*50+52,h=by+(BL.length-1)*44+38-Y;
+    x.fillStyle='rgba(255,255,255,.92)';rr(x,X,Y,w,h,36);x.fill();
+    icon(tx,Y+30,...ic);ktext(x,app,tx+84,Y+72,26,'#4a5262');ktext(x,'지금',X+w-36,Y+72,24,'#8a93a6',{a:'right',w:'normal'});
+    klines(x,TL,tx,ty,36,50,'#111827');klines(x,BL,tx,by,30,44,'#374151',{w:'normal'});Y+=h+22;};
+  note(['#e5002d','S1','#fff',26],'S-1 다이렉트몰',khead(d,`${d.to}, 에스원 보안 상품을 온라인에서 만나보세요`),d.body);
+  note(['#ffd400','🎁','#000',32],'추가할인 쿠폰함','추가 할인 쿠폰이 도착했어요',`결제할 때 사원번호 ${d.emp}를 입력하시면 10% 추가 할인이 적용돼요`);
+  note(['#1b4fd6',(d.name||'담').slice(0,1),'#fff',30],'담당 매니저',d.who,`궁금한 점은 언제든 편하게 연락 주세요 📞 ${d.phone}`);
+  Y+=10;x.fillStyle='rgba(255,255,255,.96)';rr(x,56,Y,968,300,36);x.fill();x.drawImage(kqr(),86,Y+30,240,240);
+  ktext(x,'QR 찍고 바로 접속',362,Y+96,40,'#0a1a3a');ktext(x,'s1directmall.co.kr',362,Y+146,28,'#1b4fd6',{w:'normal'});
+  ktext(x,'사원번호 '+d.emp,362,Y+206,30,'#1a1f2b');ktext(x,'입력 시 10% 추가 할인',362,Y+252,30,'#e5002d');
+  Y+=350;x.fillStyle='rgba(255,255,255,.75)';rr(x,(W-320)/2,Y,320,10,5);x.fill();return kcrop(c,Y+56);}
+
+/* ⑤ 구매 3단계 */
+function kSteps(d){const [c,x]=kctx(),W=1080;x.fillStyle='#eef4ff';x.fillRect(0,0,W,c.height);
+  kimg(x,'consult',0,0,W,620);
+  x.fillStyle='#fff';rr(x,0,560,W,c.height,56);x.fill();
+  ktext(x,'HOW TO BUY',72,660,26,'#1b4fd6',{ls:6});
+  const f=kfit(x,khead(d,'이렇게 사시면\n10% 더 저렴해요'),936,62,44,3);let Y=klines(x,f.lines,72,750,f.size,f.size*1.28,'#0a1a3a')+56;
+  const steps=[['QR 찍거나 링크 누르기','에스원 다이렉트몰 접속 (s1directmall.co.kr)'],['필요한 상품 담기',d.chips.slice(0,3).join(' · ')+' 등'],['결제할 때 사원번호 입력',`${d.emp} 입력하면 10% 추가 할인 🎁`]];
+  steps.forEach(([t,s],i)=>{const cy=Y+i*150;
+    if(i<2){x.strokeStyle='#bcd0f5';x.lineWidth=4;x.setLineDash([10,10]);x.beginPath();x.moveTo(116,cy+96);x.lineTo(116,cy+150);x.stroke();x.setLineDash([]);}
+    x.fillStyle=i===2?'#e5002d':'#1b4fd6';x.beginPath();x.arc(116,cy+44,44,0,7);x.fill();ktext(x,String(i+1),116,cy+60,44,'#fff',{a:'center'});
+    ktext(x,t,190,cy+38,38,'#0a1a3a');const ww=i===2?'bold':'normal',ff=kfit(x,s,818,28,20,1,ww);klines(x,ff.lines,190,cy+84,ff.size,0,i===2?'#e5002d':'#6b7488',{w:ww});});
+  Y+=460;Y=kdisc(x,Y)+30;Y=krep(x,d,Y,{bg:'#eef4ff'});return kcrop(c,Y+72);}
+
+/* ⑥ 안심 체크리스트 */
+function kCheck(d){const [c,x]=kctx(),W=1080;x.fillStyle='#f4f7fc';x.fillRect(0,0,W,c.height);
+  const place=seg==='biz'?'우리 매장':seg==='home'?'우리 집':'우리 집·매장';
+  let sub=null;if(!d.basic){sub=kfit(x,d.hook,936,32,24,2,'normal');}
+  const Hh=sub?520+(sub.lines.length-1)*44+70:520;
+  x.fillStyle='#0a1a3a';x.fillRect(0,0,W,Hh);x.fillStyle='rgba(79,179,255,.10)';x.beginPath();x.arc(960,80,280,0,7);x.fill();
+  klogo(x,72,64);ktext(x,'SAFETY CHECKLIST',250,128,24,'#4fb3ff',{ls:4});
+  ktext(x,place,72,300,68,'#fff');ktext(x,'안심 체크리스트 ✅',72,388,68,'#fff');
+  if(sub)klines(x,sub.lines,72,470,sub.size,44,'#cfe0ff',{w:'normal'});
+  const rows=d.chips,cy=Hh-60,ch=40+rows.length*100+10;
+  x.save();kshadow(x,1);x.fillStyle='#fff';rr(x,72,cy,936,ch,28);x.fill();x.restore();
+  rows.forEach((t,i)=>{const ry=cy+30+i*100;
+    x.strokeStyle='#c3cee3';x.lineWidth=4;rr(x,112,ry+24,48,48,10);x.stroke();
+    const f=kfit(x,t,560,36,26,1);klines(x,f.lines,190,ry+62,f.size,0,'#1a1f2b');
+    ktext(x,'준비됐나요?',968,ry+60,26,'#9aa3b5',{a:'right',w:'normal'});
+    if(i<rows.length-1){x.fillStyle='#eef1f6';x.fillRect(112,ry+98,856,2);}});
+  let Y=cy+ch+36;x.fillStyle='#e9f0ff';rr(x,72,Y,936,140,24);x.fill();
+  ktext(x,'하나라도 비어 있다면?',104,Y+58,30,'#1b4fd6');const f2=kfit(x,'👉 에스원 다이렉트몰에서 바로 준비하세요!',872,32,24,1);klines(x,f2.lines,104,Y+108,f2.size,0,'#0a1a3a');
+  Y+=176;Y=kdisc(x,Y)+30;Y=krep(x,d,Y,{shadow:1});return kcrop(c,Y+72);}
+
+/* ⑦ 상품 메뉴판 */
+function kMenu(d){const [c,x]=kctx(),W=1080;x.fillStyle='#faf7f0';x.fillRect(0,0,W,c.height);
+  klogo(x,72,64);ktext(x,'S-1 DIRECT MALL MENU',1008,128,24,'#b8954a',{a:'right',ls:3});
+  const f=kfit(x,khead(d,'에스원 다이렉트몰\n오늘의 안심 메뉴'),936,64,44,2);let Y=klines(x,f.lines,72,290,f.size,f.size*1.25,'#0a1a3a')+44;
+  x.fillStyle='#d9cfb8';for(let i=72;i<1008;i+=18)x.fillRect(i,Y,9,3);Y+=40;
+  const L=prods(),gap=24,tw=(936-gap)/2;
+  for(let i=0;i<L.length;i+=2){const pair=L[i+1]?[L[i],L[i+1]]:[L[i]],full=pair.length===1;
+    const rowH=96+30+Math.max(...pair.map(p=>p.items.length))*52+14;
+    pair.forEach((p,j)=>{const X=72+j*(tw+gap),w=full?936:tw;
+      x.save();kshadow(x,1,.08);x.fillStyle=p.tint;rr(x,X,Y,w,rowH,24);x.fill();x.restore();
+      x.save();rr(x,X,Y,w,rowH,24);x.clip();const gg=x.createLinearGradient(X,0,X+w,0);gg.addColorStop(0,p.col);gg.addColorStop(1,p.col2);x.fillStyle=gg;x.fillRect(X,Y,w,96);x.restore();
+      ktext(x,p.sub,X+26,Y+36,18,'rgba(255,255,255,.85)',{ls:3});ktext(x,`${p.ic} ${p.cat}`,X+26,Y+76,32,'#fff');
+      p.items.forEach((it,k)=>{const iy=Y+96+30+k*52+20;ktext(x,'✔',X+26,iy,26,p.col);const ff=kfit(x,it,w-90,28,20,1,'normal');klines(x,ff.lines,X+66,iy,ff.size,0,'#2b3242',{w:'normal'});});
+      x.strokeStyle=p.bd;x.lineWidth=3;rr(x,X,Y,w,rowH,24);x.stroke();});
+    Y+=rowH+gap;}
+  ktext(x,'가격·상세 정보는 다이렉트몰에서 확인하세요 →',W/2,Y+26,26,'#8a7f68',{a:'center',w:'normal'});Y+=66;
+  Y=kdisc(x,Y)+30;Y=krep(x,d,Y,{border:'#e8e1d3'});return kcrop(c,Y+72);}
+
+/* ⑧ 나이트 시큐리티 */
+function kNight(d){const [c,x]=kctx(),W=1080;x.fillStyle='#05070d';x.fillRect(0,0,W,c.height);
+  kimg(x,'night',0,0,W,600);const gr=x.createLinearGradient(0,300,0,600);gr.addColorStop(0,'rgba(5,7,13,0)');gr.addColorStop(1,'#05070d');x.fillStyle=gr;x.fillRect(0,300,W,302);
+  klogo(x,72,64);ktext(x,'● SECURITY 24/7',1008,124,24,'#ff5470',{a:'right',ls:3});
+  x.fillStyle='#e5002d';x.fillRect(72,600,64,8);
+  const f=kfit(x,khead(d,'불 꺼진 뒤에도,\n에스원은 깨어 있습니다'),936,64,44,3);let Y=klines(x,f.lines,72,690,f.size,f.size*1.3,'#fff')+60;
+  kfont(x,30,'normal');const B=kwrap(x,d.body,936).slice(0,3);Y=klines(x,B,72,Y,30,46,'#a9b4cc',{w:'normal'})+44;
+  Y=kchips(x,d.chips,Y,{fill:null,stroke:'#3a4a6a',fg:'#e8ecf3'})+44;
+  Y=kdisc(x,Y,{bg:'#e5002d',pill:'#fff',pillFg:'#e5002d',fg:'#fff',hi:'#ffe14d'})+30;
+  Y=krep(x,d,Y,{bg:'#111a2e',fg:'#fff',mute:'#8f9bb5',num:'#4fb3ff',qr:'#cfd8ea',border:'#22304d',bw:2});return kcrop(c,Y+72);}
+
+/* ⑨ 출동 임팩트 */
+function kLime(d){const [c,x]=kctx(),W=1080;
+  let f;if(d.basic){f={lines:['에스원이','출동합니다!'],size:120};}else{f=kfit(x,d.hook,936,84,54,3);}
+  const lh=f.size*1.1,hEnd=330+(f.lines.length-1)*lh,Htop=hEnd+130;
+  x.fillStyle='#0a1a3a';x.fillRect(0,0,W,c.height);x.fillStyle='#b9e62b';x.fillRect(0,0,W,Htop);
+  klogo(x,72,72);ktext(x,'🚨 EMERGENCY READY',1008,134,26,'#0a1a3a',{a:'right'});
+  klines(x,f.lines,72,330,f.size,lh,'#0a1a3a');ktext(x,`${d.to}의 안전을 향해, 지금 바로.`,72,hEnd+72,34,'#0a1a3a');
+  let Y=Htop+56;const bw=(936-40)/3;
+  [['ON','온라인 쇼핑'],['10%','추가 할인'],['1:1','전담 매니저']].forEach(([k,t],i)=>{const X=72+i*(bw+20);x.strokeStyle='#b9e62b';x.lineWidth=3;rr(x,X,Y,bw,170,24);x.stroke();
+    ktext(x,k,X+bw/2,Y+90,64,'#b9e62b',{a:'center'});ktext(x,t,X+bw/2,Y+140,28,'#fff',{a:'center',w:'normal'});});
+  Y+=210;Y=kdisc(x,Y,{bg:'#b9e62b',pill:'#0a1a3a',pillFg:'#b9e62b',fg:'#0a1a3a',hi:'#e5002d'})+30;
+  Y=krep(x,d,Y,{tag:'ID · 출동 담당'});return kcrop(c,Y+72);}
+
+/* ⑩ 안심 배달 */
+function kToon(d){const [c,x]=kctx(),W=1080;x.fillStyle='#fff5e9';x.fillRect(0,0,W,c.height);
+  klogo(x,72,64);ktext(x,'🚗 안심 배달 중',1008,128,28,'#ff8a3d',{a:'right'});
+  x.save();kshadow(x,1,.12);x.fillStyle='#fff';rr(x,72,210,936,560,36);x.fill();x.restore();kimg(x,'toon',72,210,936,560,36,.55);
+  const f=kfit(x,khead(d,`${d.to}께\n안심을 배달해 드려요`),936,62,44,3);let Y=klines(x,f.lines,72,880,f.size,f.size*1.28,'#0a1a3a')+56;
+  kfont(x,30,'normal');const B=kwrap(x,d.body,936).slice(0,3);Y=klines(x,B,72,Y,30,46,'#5b5146',{w:'normal'})+40;
+  Y=kchips(x,d.chips,Y,{fill:'#fff',stroke:'#ffb27a',fg:'#c2410c'})+40;
+  Y=kdisc(x,Y)+30;Y=krep(x,d,Y,{border:'#ffd2b0'});return kcrop(c,Y+72);}
+
+/* ⑪ 지사 현판 */
+function kSign(d){const [c,x]=kctx(),W=1080;x.fillStyle='#fff';x.fillRect(0,0,W,c.height);
+  kimg(x,'sign',0,0,W,620);
+  const g=x.createLinearGradient(0,0,W,0);g.addColorStop(0,'#0f3aa8');g.addColorStop(1,'#1b4fd6');x.fillStyle=g;x.fillRect(0,620,W,90);
+  const s=kfit(x,`📍 에스원 ${d.branch?d.branch+' ':''}${d.name}입니다`,936,32,24,1);klines(x,s.lines,72,678,s.size,0,'#fff');
+  const f=kfit(x,khead(d,`가까운 곳에서,\n늘 ${d.to} 곁에`),936,64,44,3);let Y=klines(x,f.lines,72,820,f.size,f.size*1.28,'#0a1a3a')+56;
+  kfont(x,30,'normal');const B=kwrap(x,d.body,936).slice(0,3);Y=klines(x,B,72,Y,30,46,'#4a5262',{w:'normal'})+44;
+  const bw=(936-40)/3;[['🏢','지역 밀착','가까운 지사에서'],['🛒','온라인몰','언제든 편하게'],['🤝','전담 관리','1:1 맞춤 상담']].forEach(([ic,t,sb],i)=>{const X=72+i*(bw+20);
+    x.strokeStyle='#e3e7ef';x.lineWidth=2;x.strokeRect(X,Y,bw,180);x.fillStyle='#1b4fd6';x.fillRect(X,Y,bw,6);
+    ktext(x,ic,X+24,Y+66,40,'#000',{w:'normal'});ktext(x,t,X+24,Y+118,30,'#0a1a3a');ktext(x,sb,X+24,Y+156,24,'#7c8699',{w:'normal'});});
+  Y+=220;Y=kdisc(x,Y)+30;Y=krep(x,d,Y,{bg:'#f4f6f9',border:'#c9ced8',bw:6});return kcrop(c,Y+72);}
+
+/* ⑫ 미니멀 명함 */
+function kMinimal(d){const [c,x]=kctx(),W=1080,G='#b8954a';x.fillStyle='#fff';x.fillRect(0,0,W,c.height);
+  ktext(x,'S-1 DIRECT MALL',W/2,150,24,G,{a:'center',ls:10});klogo(x,W/2-60,186,{s:.8});
+  const f=kfit(x,khead(d,'안전을 고르는\n가장 편한 방법'),860,62,42,3);let Y=klines(x,f.lines,W/2,400,f.size,f.size*1.3,'#1a1f2b',{a:'center'})+48;
+  x.fillStyle='#e5002d';x.fillRect(W/2-24,Y,48,5);Y+=70;
+  kfont(x,30,'normal');const B=kwrap(x,d.body,820).slice(0,3);Y=klines(x,B,W/2,Y,30,48,'#5a6170',{a:'center',w:'normal'})+50;
+  kfont(x,26,'normal');const CL=kwrap(x,d.chips.join('  ·  '),860);Y=klines(x,CL,W/2,Y,26,40,'#9aa1ae',{a:'center',w:'normal'})+70;
+  x.fillStyle=G;x.fillRect(W/2-150,Y,300,2);Y+=70;
+  ktext(x,'YOUR SECURITY PARTNER',W/2,Y,22,G,{a:'center',ls:6});Y+=84;
+  ktext(x,d.name,W/2,Y,64,'#1a1f2b',{a:'center'});Y+=50;
+  const tl=['에스원',d.branch,d.r.position].filter(Boolean).join(' ');ktext(x,tl,W/2,Y,28,'#7c8699',{a:'center',w:'normal'});Y+=80;
+  ktext(x,'사원번호',W/2,Y,24,G,{a:'center',ls:4});Y+=66;ktext(x,d.emp,W/2,Y,56,'#1a1f2b',{a:'center',ls:6});Y+=50;
+  x.strokeStyle='#e3e7ef';x.lineWidth=2;rr(x,W/2-130,Y,260,260,16);x.stroke();x.drawImage(kqr(),W/2-118,Y+12,236,236);Y+=300;
+  ktext(x,'QR 바로 접속  ·  📞 '+d.phone,W/2,Y,26,'#5a6170',{a:'center',w:'normal'});Y+=60;
+  kfont(x,30);const a='구매 시 사원번호 입력하면 ',b='10% 추가 할인',wa=x.measureText(a).width,wb=x.measureText(b).width,sx=W/2-(wa+wb)/2;
+  x.fillStyle='#faf6ee';rr(x,96,Y,888,90,45);x.fill();ktext(x,a,sx,Y+57,30,'#1a1f2b');ktext(x,b,sx+wa,Y+57,30,'#e5002d');Y+=90+90;
+  x.strokeStyle=G;x.lineWidth=2;x.strokeRect(36,36,W-72,Y-72);x.lineWidth=1;x.strokeRect(48,48,W-96,Y-96);
+  return kcrop(c,Y);}
+
+const KSERIF="'Noto Serif KR','Nanum Myeongjo','Batang','AppleMyungjo',serif";
+function ktextS(x,t,X,Y,sz,col,o={}){x.font=`${o.w||'bold'} ${sz}px ${KSERIF}`;x.fillStyle=col;x.textAlign=o.a||'left';x.fillText(t,X,Y);x.textAlign='left';return x.measureText(t).width;}
+function kwrapS(x,text,maxW,sz,w='normal'){x.font=`${w} ${sz}px ${KSERIF}`;return kwrap(x,text,maxW);}
+
+/* ⑬ 안심일보 (신문 호외) */
+function kNews(d){const [c,x]=kctx(),W=1080,t=nowK(),INK='#1a1a1a',RED='#c8102e';x.fillStyle='#f4efe3';x.fillRect(0,0,W,c.height);
+  x.fillStyle=INK;x.fillRect(60,70,960,6);x.fillRect(60,82,960,2);
+  ktextS(x,'에스원 안심일보',W/2,196,92,INK,{a:'center',w:'900'});
+  x.fillRect(60,230,960,2);ktext(x,`${t.n.getFullYear()}년 ${t.M}월 ${t.D}일 ${t.wd}요일  ·  S-1 DIRECT MALL 특별판  ·  ${d.branch||'에스원'} 발행`,W/2,268,22,'#555',{a:'center',w:'normal'});x.fillRect(60,288,960,6);x.fillRect(60,300,960,2);
+  x.fillStyle=RED;rr(x,72,346,110,60,6);x.fill();ktext(x,'호 외',127,388,32,'#fff',{a:'center'});
+  ktext(x,'단독',200,388,28,RED);
+  const hl=d.basic?'"에스원 보안 상품, 이제 온라인에서 바로 산다"':`"${d.hook}"`;
+  let L=null,sz=70;for(;sz>=46;sz-=4){L=kwrapS(x,hl,936,sz,'900');if(L.length<=3)break;}
+  let Y=480;L.forEach((s,i)=>ktextS(x,s,72,Y+i*sz*1.22,sz,INK,{w:'900'}));Y+=(L.length-1)*sz*1.22+60;
+  const B=kwrapS(x,d.body,936,30).slice(0,3);B.forEach((s,i)=>ktextS(x,s,72,Y+i*46,30,'#3a3a3a',{w:'normal'}));Y+=(B.length-1)*46+40;
+  x.fillStyle=INK;x.fillRect(72,Y,936,2);Y+=34;
+  const cw=440,ph=320;x.save();x.filter='grayscale(1) contrast(1.08)';kimg(x,'campus',72,Y,cw,ph);x.restore();x.strokeStyle=INK;x.lineWidth=2;x.strokeRect(72,Y,cw,ph);
+  ktext(x,'▲ 에스원 보안 상품을 이제 다이렉트몰에서',72,Y+ph+38,22,'#555',{w:'normal'});
+  const rx=72+cw+40;x.fillStyle='#bbb';x.fillRect(rx-20,Y,1,ph+50);
+  ktextS(x,'■ 판매 품목',rx,Y+34,30,INK);d.chips.slice(0,6).forEach((s,i)=>ktext(x,'· '+s,rx,Y+82+i*40,26,'#333',{w:'normal'}));
+  let ry=Y+82+Math.min(6,d.chips.length)*40+24;ktextS(x,'■ 할인 소식',rx,ry,30,RED);ktext(x,'사원번호 입력 시',rx,ry+44,26,'#333',{w:'normal'});ktext(x,'10% 추가 할인',rx,ry+84,30,RED);
+  Y=Math.max(Y+ph+80,ry+120);x.fillStyle=INK;x.fillRect(72,Y,936,2);Y+=36;
+  Y=krep(x,d,Y,{bg:'#fbf8f0',border:INK,bw:3,num:RED,mute:'#555'});return kcrop(c,Y+72);}
+
+/* ⑭ 스마트 관제 */
+function kControl(d){const [c,x]=kctx(),W=1080,SKY='#4fb3ff';x.fillStyle='#050b1a';x.fillRect(0,0,W,c.height);
+  x.strokeStyle='rgba(79,179,255,.07)';x.lineWidth=1;for(let i=0;i<W;i+=60){x.beginPath();x.moveTo(i,0);x.lineTo(i,c.height);x.stroke();}for(let j=0;j<c.height;j+=60){x.beginPath();x.moveTo(0,j);x.lineTo(W,j);x.stroke();}
+  ktext(x,'S-1 CONTROL CENTER',72,90,26,SKY,{ls:5});ktext(x,'● LIVE',1008,90,26,'#ff5470',{a:'right',ls:3});
+  kimg(x,'hero2',72,130,936,520,28,.25);x.strokeStyle='#1d3566';x.lineWidth=3;rr(x,72,130,936,520,28);x.stroke();
+  [[72,130],[1008,130],[72,650],[1008,650]].forEach(([a,b],i)=>{x.strokeStyle=SKY;x.lineWidth=5;x.beginPath();const sx=i%2?-1:1,sy=i>1?-1:1;x.moveTo(a,b+sy*50);x.lineTo(a,b);x.lineTo(a+sx*50,b);x.stroke();});
+  const f=kfit(x,khead(d,'스마트한 보안,\n더 강력한 안심'),936,64,44,3);let Y=klines(x,f.lines,72,760,f.size,f.size*1.28,'#fff')+50;
+  kfont(x,30,'normal');const B=kwrap(x,d.body,936).slice(0,3);Y=klines(x,B,72,Y,30,46,'#a9b8d8',{w:'normal'})+44;
+  ktext(x,'📋 오늘의 브리핑',72,Y,28,SKY);Y+=24;
+  const rows=[['담당 매니저',d.who,'#fff'],['핫라인',d.phone,SKY],['온라인몰','s1directmall.co.kr','#fff'],['상태','● 상담 가능','#3ee08b']];
+  x.fillStyle='#0d1b3d';rr(x,72,Y,936,rows.length*76,18);x.fill();x.strokeStyle='#1d3566';x.lineWidth=2;rr(x,72,Y,936,rows.length*76,18);x.stroke();
+  rows.forEach(([k,v,col],i)=>{const ry=Y+i*76;if(i)x.fillStyle='#1d3566',x.fillRect(72,ry,936,2);ktext(x,k,104,ry+48,24,'#7f95c2',{w:'normal'});const ff=kfit(x,v,680,30,22,1);klines(x,ff.lines,300,ry+49,ff.size,0,col);});
+  Y+=rows.length*76+40;
+  Y=kdisc(x,Y,{bg:SKY,pill:'#04122e',pillFg:SKY,fg:'#04122e',hi:'#fff'})+30;
+  Y=krep(x,d,Y,{bg:'#0a1530',fg:'#fff',mute:'#8f9bb5',num:SKY,qr:'#cfd8ea',border:'#1d3566',bw:2});return kcrop(c,Y+72);}
+
+/* ⑮ 안심 탑승권 */
+function kBoarding(d){const [c,x]=kctx(),W=1080,t=nowK(),NV='#122a5c',RED='#e5002d';
+  const g=x.createLinearGradient(0,0,0,2200);g.addColorStop(0,'#0a1a3a');g.addColorStop(1,'#1b4fd6');x.fillStyle=g;x.fillRect(0,0,W,c.height);
+  klogo(x,72,64);ktext(x,'BOARDING PASS',1008,112,28,'#9fbaf0',{a:'right',ls:6});ktext(x,'안심 탑승권',1008,150,26,'#fff',{a:'right'});
+  const f=kfit(x,khead(d,'안심행 탑승을\n환영합니다 ✈'),936,64,44,3);let Y=klines(x,f.lines,72,290,f.size,f.size*1.25,'#fff')+70;
+  const ty=Y,H1=560,H2=300;x.save();x.shadowColor='rgba(0,0,0,.3)';x.shadowBlur=36;x.shadowOffsetY=14;x.fillStyle='#fff';rr(x,72,ty,936,H1+H2,32);x.fill();x.restore();
+  x.save();rr(x,72,ty,936,H1+H2,32);x.clip();x.fillStyle=RED;x.fillRect(72,ty,936,70);x.restore();
+  ktext(x,'S-1 AIR  ·  에스원 다이렉트몰',104,ty+46,24,'#fff',{ls:2});ktext(x,'ECONOMY → 안심',976,ty+46,22,'#ffe3e8',{a:'right'});
+  ktext(x,'FROM',104,ty+130,22,'#7c8699',{ls:3});ktext(x,'걱정',104,ty+230,96,NV);
+  ktext(x,'TO',976,ty+130,22,'#7c8699',{a:'right',ls:3});ktext(x,'안심',976,ty+230,96,RED,{a:'right'});
+  x.strokeStyle='#c9d3e6';x.lineWidth=3;x.setLineDash([8,10]);x.beginPath();x.moveTo(370,ty+196);x.lineTo(710,ty+196);x.stroke();x.setLineDash([]);ktext(x,'✈',W/2,ty+214,56,NV,{a:'center',w:'normal'});
+  const fld=(k,v,X,Yy,col=NV,sz=34)=>{ktext(x,k,X,Yy,20,'#7c8699',{ls:2});const ff=kfit(x,v,280,sz,20,1);klines(x,ff.lines,X,Yy+46,ff.size,0,col);};
+  fld('PASSENGER',d.to,104,ty+310);fld('FLIGHT','S1 DIRECT',420,ty+310);fld('DATE',`${t.M}월 ${t.D}일`,736,ty+310);
+  fld('GATE','ONLINE',104,ty+430);fld('SEAT · 사원번호',d.emp,420,ty+430,'#1b4fd6',40);fld('CLASS','10% 추가할인',736,ty+430,RED);
+  x.fillStyle=g;[72,1008].forEach(cx=>{x.beginPath();x.arc(cx,ty+H1,30,0,7);x.fill();});
+  x.strokeStyle='#d5dbe6';x.lineWidth=4;x.setLineDash([14,12]);x.beginPath();x.moveTo(124,ty+H1);x.lineTo(956,ty+H1);x.stroke();x.setLineDash([]);
+  const sy=ty+H1;x.drawImage(kqr(),104,sy+32,236,236);
+  ktext(x,'QR 찍고 탑승하기',372,sy+86,36,NV);ktext(x,'s1directmall.co.kr',372,sy+132,26,'#1b4fd6',{w:'normal'});
+  const ww=kfit(x,d.who,600,28,20,1);klines(x,ww.lines,372,sy+190,ww.size,0,'#1a1f2b');ktext(x,'📞 '+d.phone,372,sy+236,26,'#6b7488',{w:'normal'});
+  Y=ty+H1+H2+44;Y=kchips(x,d.chips,Y,{fill:'rgba(255,255,255,.14)',fg:'#fff'});return kcrop(c,Y+72);}
+
+/* ⑯ 오늘의 달력 */
+function kCalendar(d){const [c,x]=kctx(),W=1080,t=nowK(),NV='#0a1a3a',RED='#e5002d';x.fillStyle='#f3f6fb';x.fillRect(0,0,W,c.height);
+  klogo(x,72,64);ktext(x,'S-1 DIRECT MALL',250,128,26,'#1b4fd6');
+  const f=kfit(x,khead(d,'안심 준비하기\n딱 좋은 날이에요 📅'),936,60,42,3);let Y=klines(x,f.lines,72,280,f.size,f.size*1.25,NV)+60;
+  const cy=Y,y0=t.n.getFullYear(),m0=t.n.getMonth(),first=new Date(y0,m0,1).getDay(),days=new Date(y0,m0+1,0).getDate(),rows=Math.ceil((first+days)/7),gh=rows*86+70,H=140+300+gh+30;
+  x.save();kshadow(x,1);x.fillStyle='#fff';rr(x,72,cy,936,H,32);x.fill();x.restore();
+  x.save();rr(x,72,cy,936,H,32);x.clip();x.fillStyle=RED;x.fillRect(72,cy,936,140);x.restore();
+  [300,780].forEach(hx=>{x.fillStyle='#f3f6fb';x.beginPath();x.arc(hx,cy+8,22,0,7);x.fill();x.strokeStyle='#8a94a8';x.lineWidth=6;x.beginPath();x.arc(hx,cy-14,26,Math.PI*.15,Math.PI*.85);x.stroke();});
+  ktext(x,`${y0}년 ${t.M}월`,W/2,cy+104,48,'#fff',{a:'center'});
+  ktext(x,String(t.D),W/2,cy+380,230,NV,{a:'center'});ktext(x,`${t.wd}요일 · TODAY`,W/2,cy+432,30,'#7c8699',{a:'center',ls:3});
+  const gx=72+(936-7*120)/2,gy=cy+500;'일월화수목금토'.split('').forEach((s,i)=>ktext(x,s,gx+i*120+60,gy,24,i===0?RED:i===6?'#1b4fd6':'#7c8699',{a:'center'}));
+  for(let dd=1;dd<=days;dd++){const k=first+dd-1,col=k%7,row=Math.floor(k/7),cx2=gx+col*120+60,cy2=gy+50+row*86;
+    if(dd===t.D){x.fillStyle=RED;x.beginPath();x.arc(cx2,cy2-10,34,0,7);x.fill();}
+    ktext(x,String(dd),cx2,cy2,28,dd===t.D?'#fff':col===0?RED:'#3a4256',{a:'center',w:dd===t.D?'bold':'normal'});}
+  Y=cy+H+50;
+  const todo=['다이렉트몰 접속하기 (QR 한 번)',`${d.chips[0]} · ${d.chips[1]} 둘러보기`,`결제 때 사원번호 ${d.emp} 입력`,'10% 추가 할인 받기 🎁'];
+  const sh=110+todo.length*66;x.save();x.translate(W/2,Y+sh/2);x.rotate(-0.012);x.translate(-W/2,-(Y+sh/2));kshadow(x,1,.12);x.fillStyle='#ffe873';x.fillRect(100,Y,880,sh);kshadow(x,0);
+  x.fillStyle='rgba(255,255,255,.5)';x.fillRect(W/2-90,Y-18,180,40);
+  ktext(x,'📌 오늘의 할 일',140,Y+70,34,'#4a3b00');todo.forEach((s,i)=>{const yy=Y+136+i*66;x.strokeStyle='#4a3b00';x.lineWidth=3;x.strokeRect(140,yy-30,34,34);ktext(x,'✓',144,yy,32,RED);const ff=kfit(x,s,740,30,22,1);klines(x,ff.lines,196,yy,ff.size,0,'#2a2200');});x.restore();
+  Y+=sh+50;Y=krep(x,d,Y,{shadow:1});return kcrop(c,Y+72);}
+
+/* ⑰ 손편지 */
+function kLetter(d){const [c,x]=kctx(),W=1080,INK='#2a3550';x.fillStyle='#efe4cf';x.fillRect(0,0,W,c.height);
+  const r=d.r,lines=[];
+  const push=(s,o={})=>kwrapS(x,s,740,36).forEach(v=>lines.push([v,o]));
+  push(`${d.to}께,`,{b:1});lines.push(['',{}]);
+  push('안녕하세요, '+d.who+'입니다.');
+  push(r.msg||(d.basic?'늘 믿고 맡겨 주셔서 진심으로 감사드립니다.':d.body));
+  lines.push(['',{}]);
+  push('요즘은 에스원 보안 상품을 다이렉트몰에서 바로 구매하실 수 있어요.');
+  push(`결제하실 때 제 사원번호 ${d.emp}를 넣어 주시면 10% 더 할인돼요.`,{red:1});
+  lines.push(['',{}]);push('앞으로도 가까이에서 안전을 지키겠습니다.');lines.push(['',{}]);
+  push(`— ${d.name} 드림`,{right:1,b:1});
+  const LH=66,py=110,ph=150+lines.length*LH+60;
+  x.save();kshadow(x,1,.18);x.fillStyle='#fffdf7';x.fillRect(72,py,936,ph);x.restore();
+  for(let yy=py+150;yy<py+ph-30;yy+=LH){x.fillStyle='#d6e4f5';x.fillRect(96,yy,888,2);}
+  x.fillStyle='#f3b4bd';x.fillRect(176,py,2,ph);
+  x.save();x.translate(900,py+96);x.rotate(.12);x.strokeStyle='#e5002d';x.lineWidth=5;x.beginPath();x.arc(0,0,64,0,7);x.stroke();x.lineWidth=2;x.beginPath();x.arc(0,0,54,0,7);x.stroke();
+  ktext(x,'에스원',0,8,28,'#e5002d',{a:'center'});ktext(x,'S-1',0,-24,16,'#e5002d',{a:'center'});ktext(x,'안심',0,38,18,'#e5002d',{a:'center'});x.restore();
+  ktextS(x,'안심 편지',200,py+100,44,INK,{w:'900'});
+  lines.forEach(([s,o],i)=>{const yy=py+150+(i+1)*LH-14;ktextS(x,s,o.right?960:200,yy,36,o.red?'#c8102e':INK,{a:o.right?'right':'left',w:o.b||o.red?'bold':'normal'});});
+  let Y=py+ph+50;Y=kdisc(x,Y)+30;Y=krep(x,d,Y,{bg:'#fffdf7',border:'#e0d3b8'});return kcrop(c,Y+72);}
+
+const KTHEMES=[
+ {id:'blue',   n:'① 클래식 블루',  w:'기본 · 깔끔하게',  c:['#0a1a3a','#1b4fd6','#eef1f6','#ffd400'],tone:'formal',  f:kBlue},
+ {id:'coupon', n:'② 할인 쿠폰',    w:'⭐ 10% 혜택 강조', c:['#c8001f','#ff4d6d','#ffffff','#1b4fd6'],tone:'benefit', f:kCoupon},
+ {id:'bubble', n:'③ 카톡 대화',    w:'⭐ 친근한 첫 연락', c:['#b2c7da','#ffffff','#fee500','#e5002d'],tone:'friendly',f:kBubble},
+ {id:'notify', n:'④ 알림 도착',    w:'⭐ 눈에 확 띄게',  c:['#0a1a3a','#1b4fd6','#7b61f5','#ffffff'],tone:'short',   f:kNotify},
+ {id:'steps',  n:'⑤ 구매 3단계',   w:'처음 사는 고객',   c:['#eef4ff','#1b4fd6','#ffffff','#e5002d'],tone:'qna',p:1, f:kSteps},
+ {id:'check',  n:'⑥ 안심 체크리스트',w:'필요성 일깨우기',c:['#0a1a3a','#f4f7fc','#4fb3ff','#e5002d'],tone:'check',   f:kCheck},
+ {id:'menu',   n:'⑦ 상품 메뉴판',  w:'상품 한눈에',      c:['#faf7f0','#3b7bf6','#7b61f5','#f2546a'],tone:'formal',  f:kMenu},
+ {id:'night',  n:'⑧ 나이트 시큐리티',w:'매장·사업장',   c:['#05070d','#e5002d','#4fb3ff','#ffffff'],tone:'short',p:1,f:kNight},
+ {id:'lime',   n:'⑨ 출동 임팩트',  w:'강렬하게',         c:['#b9e62b','#0a1a3a','#e5002d','#ffffff'],tone:'short',   f:kLime},
+ {id:'toon',   n:'⑩ 안심 배달',    w:'가정·가족 고객',   c:['#fff5e9','#ff8a3d','#0a1a3a','#ffd400'],tone:'friendly',p:1,f:kToon},
+ {id:'sign',   n:'⑪ 지사 현판',    w:'우리 지역 고객',   c:['#1b4fd6','#c9ced8','#ffffff','#e5002d'],tone:'formal',p:1,f:kSign},
+ {id:'minimal',n:'⑫ 미니멀 명함',  w:'VIP·대표님',       c:['#ffffff','#b8954a','#1a1f2b','#e5002d'],tone:'formal',  f:kMinimal},
+ {id:'news',   n:'⑬ 안심일보',     w:'🆕 신문 호외',       c:['#f4efe3','#1a1a1a','#c8102e','#ffffff'],tone:'formal',p:1,f:kNews},
+ {id:'control',n:'⑭ 스마트 관제',  w:'🆕 법인·사무실',     c:['#050b1a','#0d1b3d','#4fb3ff','#ffffff'],tone:'short',p:1,f:kControl},
+ {id:'boarding',n:'⑮ 안심 탑승권', w:'🆕 재미·이벤트',     c:['#0a1a3a','#ffffff','#e5002d','#1b4fd6'],tone:'benefit', f:kBoarding},
+ {id:'calendar',n:'⑯ 오늘의 달력', w:'🆕 할 일 메모',      c:['#e5002d','#ffffff','#ffe873','#0a1a3a'],tone:'check',   f:kCalendar},
+ {id:'letter', n:'⑰ 손편지',       w:'🆕 감사 인사',       c:['#efe4cf','#fffdf7','#2a3550','#e5002d'],tone:'friendly',f:kLetter},
+];
+if(!KTHEMES.some(t=>t.id===kTheme))kTheme='blue';
+if(!KTONES.some(t=>t[0]===kTone))kTone='formal';
+const KTHEME_NAME=()=>Object.fromEntries(KTHEMES.map(t=>['kakao_'+t.id,'카톡 · '+t.n.slice(2)]));
+let kBlob=null;
+function cardCanvas(){const t=KTHEMES.find(v=>v.id===kTheme)||KTHEMES[0];return t.f(kdata());}
 function renderKakao(){
   $('kText').textContent=kakaoText();
   const r=raw();$('kName').textContent=[r.name||'담당 매니저',r.position].filter(Boolean).join(' ');
-  try{$('kCardImg').src=cardCanvas().toDataURL('image/png');}catch(e){}
+  try{const cv=cardCanvas();$('kCardImg').src=cv.toDataURL('image/png');kBlob=null;cv.toBlob(b=>{kBlob=b;},'image/png');}catch(e){}
 }
+/* 디자인 · 말투 선택 */
+$('kthemes').innerHTML=KTHEMES.map(t=>`<button type="button" class="th" data-k="${t.id}" aria-pressed="false"><div class="sw">${t.c.map(c=>`<i style="background:${c}"></i>`).join('')}</div><b>${t.n}${t.p?' 📷':''}</b><span>${t.w}</span></button>`).join('');
+$('ktones').innerHTML=KTONES.map(([id,n])=>`<button type="button" data-tone="${id}" aria-pressed="false">${n}</button>`).join('');
+function kMark(){document.querySelectorAll('#kthemes .th').forEach(e=>e.setAttribute('aria-pressed',e.dataset.k===kTheme));document.querySelectorAll('#ktones button').forEach(e=>e.setAttribute('aria-pressed',e.dataset.tone===kTone));}
+function setKTheme(id,scroll){kTheme=id;const t=KTHEMES.find(v=>v.id===id);if(t)kTone=t.tone;kMark();saveKStyle();if(scroll){const el=document.querySelector(`#kthemes [data-k="${id}"]`);if(el&&el.scrollIntoView)el.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});}render();}
+document.querySelectorAll('#kthemes .th').forEach(e=>e.onclick=()=>setKTheme(e.dataset.k));
+document.querySelectorAll('#ktones button').forEach(e=>e.onclick=()=>{kTone=e.dataset.tone;kMark();saveKStyle();render();});
+$('kRand').onclick=()=>{const L=KTHEMES.filter(t=>t.id!==kTheme),t=L[Math.floor(Math.random()*L.length)];setKTheme(t.id,1);const others=KTONES.map(v=>v[0]);if(Math.random()<.5){kTone=others[Math.floor(Math.random()*others.length)];kMark();saveKStyle();render();}toast('🎲 '+t.n.slice(2)+' · '+KTONES.find(v=>v[0]===kTone)[1].slice(2));};
+kMark();
 
 /* ───────── 미리보기 ───────── */
 function syncSubject(){if(!subjDirty)$('subject').value=autoSubject();$('subjPv').textContent=$('subject').value;}
@@ -924,9 +1379,34 @@ async function copyKakao(){
 async function saveCard(){
   if(!check())return;
   const blob=await new Promise(res=>cardCanvas().toBlob(res,'image/png'));
-  const dl=await useCap('downloads');const fn='에스원다이렉트몰_'+(raw().name||'카드')+'.png';
+  const dl=await useCap('downloads');const fn='에스원다이렉트몰_'+((KTHEMES.find(v=>v.id===kTheme)||{n:'  카드'}).n.slice(2).replace(/\s/g,''))+'_'+(raw().name||'카드')+'.png';
   if(dl){try{await dl.save({filename:fn,data:blob});toast('카드 이미지를 저장했어요'+(await autoRecord('카톡')));}catch(e){if(e&&e.code!=='declined')toast('저장이 안 되면 미리보기 이미지를 길게 눌러 저장하세요');}return;}
   try{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();toast('카드 이미지를 저장했어요'+(await autoRecord('카톡')));}catch(e){toast('미리보기 이미지를 길게 눌러 저장하세요');}
+}
+/* 카드 이미지 + 메시지를 휴대폰 공유창으로 한 번에 → 카카오톡 선택 */
+async function shareKakao(){
+  if(!check())return;
+  const text=kakaoText();
+  copyText(text); // 카톡이 글을 빼고 이미지만 받는 경우 대비해 메시지도 함께 복사
+  const fn='에스원다이렉트몰_'+(raw().name||'카드')+'.png';
+  let blob=kBlob;
+  if(!blob)blob=await new Promise(res=>cardCanvas().toBlob(res,'image/png'));
+  const file=new File([blob],fn,{type:'image/png'});
+  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+    try{
+      await navigator.share({files:[file],text,title:'에스원 다이렉트몰'});
+      toast('보냈어요! 글이 안 보이면 대화창을 길게 눌러 붙여넣기'+(await autoRecord('카톡')));
+    }catch(e){
+      if(e&&e.name==='AbortError')return;
+      fallbackShare(blob,fn);
+    }
+    return;
+  }
+  fallbackShare(blob,fn);
+}
+async function fallbackShare(blob,fn){
+  try{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();}catch(e){}
+  toast('이 화면에선 바로 공유가 안 돼요. 이미지 저장 + 메시지 복사를 해뒀어요');
 }
 async function copySubject(){const ok=await copyText($('subject').value,$('subject'));toast(ok?'제목을 복사했어요':'제목 칸을 선택해 두었어요. Ctrl+C 하세요');}
 async function copyCode(){if(!check())return;const ok=await copyText(buildEmail());if(ok)toast('HTML 코드를 복사했어요'+(await autoRecord('메일')));else toast('복사가 막혀 있어요. HTML 저장을 이용해 주세요');}
@@ -946,8 +1426,8 @@ function saveRep(){try{localStorage.setItem(KEY,JSON.stringify({name:$('name').v
 
 /* ───────── 화면 연결 ───────── */
 $('themes').innerHTML=THEMES.map(t=>`<button type="button" class="th" data-t="${t.id}" aria-pressed="false"><div class="sw">${t.c.map(c=>`<i style="background:${c}"></i>`).join('')}</div><b>${t.n}${t.p?' 📷':''}</b><span>${t.w}</span></button>`).join('');
-function setTheme(t){theme=t;document.querySelectorAll('.th').forEach(e=>e.setAttribute('aria-pressed',e.dataset.t===t));render();}
-document.querySelectorAll('.th').forEach(e=>e.onclick=()=>setTheme(e.dataset.t));
+function setTheme(t){theme=t;document.querySelectorAll('#themes .th').forEach(e=>e.setAttribute('aria-pressed',e.dataset.t===t));render();}
+document.querySelectorAll('#themes .th').forEach(e=>e.onclick=()=>setTheme(e.dataset.t));
 function setSeg(v){seg=v;document.querySelectorAll('#segs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===v));}
 document.querySelectorAll('#segs button').forEach(b=>b.onclick=()=>{setSeg(b.dataset.v);render();});
 $('season').innerHTML=SEASONS.map(s=>`<option value="${s.id}">${s.n}</option>`).join('');
@@ -960,7 +1440,7 @@ $('subject').addEventListener('input',()=>{subjDirty=true;$('subjPv').textConten
 $('subjReset').onclick=()=>{subjDirty=false;syncSubject();toast('자동 제목으로 되돌렸어요');};
 $('noimg').onchange=e=>{noImg=e.target.checked;render();};
 $('bCopy').onclick=copyRich;$('bSubj').onclick=copySubject;$('bCode').onclick=copyCode;$('bDown').onclick=downloadHtml;
-$('kCopy').onclick=copyKakao;$('kImg').onclick=saveCard;
+$('kCopy').onclick=copyKakao;$('kShare').onclick=shareKakao;$('kImg').onclick=saveCard;
 function showTab(which){
   const dash=which==='dash';mode=which==='kakao'?'kakao':'mail';
   $('v-make').hidden=dash;$('v-dash').hidden=!dash;
@@ -978,7 +1458,7 @@ const repOk=()=>$('name').value.trim()&&$('phone').value.trim()&&digits($('emp')
 if(repOk())repCollapse(true);
 $('repEdit').onclick=()=>{repCollapse(false);$('name').focus();};
 $('repDone').onclick=()=>{if(!repOk()){check();return;}saveRep();repCollapse(true);toast('내 정보를 저장했어요');};
-theme='consult';document.querySelectorAll('.th').forEach(e=>e.setAttribute('aria-pressed',e.dataset.t==='consult'));
+theme='consult';document.querySelectorAll('#themes .th').forEach(e=>e.setAttribute('aria-pressed',e.dataset.t==='consult'));
 showTab(fromHash());
 
 /* ───────── 공유 기록 (db) ───────── */
@@ -1005,7 +1485,7 @@ async function initDb(){
 /* 복사·저장할 때 자동 기록. 같은 고객·채널을 3분 안에 다시 복사하면 새로 쌓지 않고 갱신 */
 async function autoRecord(channel){
   if(!DB||!canWrite)return '';
-  const r=raw(),rec={ts:Date.now(),date:today(),rep:r.name,empNo:r.emp,branch:r.branch,position:r.position,customer:r.cust||'(미입력)',seg,season,theme:channel==='카톡'?'kakao':theme,channel,subject:channel==='메일'?$('subject').value:'',status:'발송',memo:''};
+  const r=raw(),rec={ts:Date.now(),date:today(),rep:r.name,empNo:r.emp,branch:r.branch,position:r.position,customer:r.cust||'(미입력)',seg,season,theme:channel==='카톡'?'kakao_'+kTheme:theme,channel,subject:channel==='메일'?$('subject').value:'',status:'발송',memo:''};
   try{
     if(lastRec&&lastRec.key===[channel,rec.customer,rec.empNo].join('|')&&Date.now()-lastRec.at<180000){
       await DB.collection('sends').doc(lastRec.id).update({ts:rec.ts,theme:rec.theme,season,seg,subject:rec.subject});lastRec.at=Date.now();return ' · 발송 기록 갱신';}
@@ -1085,7 +1565,7 @@ function renderDash(){
   const gr=Object.entries(g).sort((a,b)=>b[1].amt-a[1].amt||b[1].n-a[1].n),mx=Math.max(1,...gr.map(([,x])=>x.amt));
   $('repTbl').innerHTML=gr.length?`<table class="t"><thead><tr><th>영업사원 (사번)</th><th class="n">발송</th><th class="n">반응</th><th class="n">상담</th><th class="n">구매</th><th class="n">구매 금액</th><th style="width:18%"></th></tr></thead><tbody>${gr.map(([kk,x])=>`<tr><td><b>${esc(RO[kk]?RO[kk].name:kk)}</b>${RO[kk]?` <span class="muted">${esc(kk)}</span>`:''}</td><td class="n">${x.n}</td><td class="n">${x.a}</td><td class="n">${x.b}</td><td class="n"><b>${x.o}</b></td><td class="n">${x.amt?won(x.amt)+'원':'–'}</td><td><div class="meter"><i style="width:${x.amt/mx*100}%;background:var(--ok)"></i></div></td></tr>`).join('')}</tbody></table>`:`<div class="empty">기간 안에 기록이 없어요</div>`;
   // 디자인·시즌
-  const tn={...THEME_NAME(),kakao:'카톡 메시지'},cntBy=f=>{const o={};L.forEach(r=>{const kk=f(r);o[kk]=(o[kk]||0)+1;});return Object.entries(o).sort((a,b)=>b[1]-a[1]);};
+  const tn={...THEME_NAME(),kakao:'카톡 메시지',...KTHEME_NAME()},cntBy=f=>{const o={};L.forEach(r=>{const kk=f(r);o[kk]=(o[kk]||0)+1;});return Object.entries(o).sort((a,b)=>b[1]-a[1]);};
   const hb=(arr,c)=>{const m=Math.max(1,...arr.map(x=>x[1]));return arr.map(([kk,v])=>`<div class="hbar"><span>${esc(kk)}</span><div class="meter"><i style="width:${v/m*100}%;background:${c}"></i></div><b>${v}</b></div>`).join('');};
   $('mix').innerHTML=N?`<div class="hint" style="font-weight:700;margin-bottom:4px">디자인 (상위 6)</div>${hb(cntBy(r=>tn[r.theme]||r.theme).slice(0,6),'var(--blue)')}<div class="hint" style="font-weight:700;margin:14px 0 4px">시즌 메시지</div>${hb(cntBy(r=>SEASON_NAME[r.season]||r.season),'var(--brand)')}`:`<div class="empty">기간 안에 발송 기록이 없어요</div>`;
   // 구매 목록
@@ -1110,7 +1590,7 @@ $('list').addEventListener('click',delHandler);$('orderTbl').addEventListener('c
 ['fPeriod','fRep','fSeg'].forEach(k=>$(k).onchange=renderDash);$('fQ').oninput=renderDash;
 $('bCsv').onclick=async()=>{
   const L=filtered(),O=fOrders();if(!L.length&&!O.length){toast('내보낼 기록이 없어요');return;}
-  const tn={...THEME_NAME(),kakao:'카톡 메시지'},q=v=>'"'+String(v??'').replace(/"/g,'""')+'"',RO=roster();
+  const tn={...THEME_NAME(),kakao:'카톡 메시지',...KTHEME_NAME()},q=v=>'"'+String(v??'').replace(/"/g,'""')+'"',RO=roster();
   const csv='﻿'+['구분,날짜,채널,영업사원,사원번호,고객/주문자,유형,디자인·상품,시즌,상태,금액,메모',
     ...L.map(r=>['발송',r.date,r.channel||'메일',r.rep,r.empNo,r.customer,SEG_NAME[r.seg],tn[r.theme]||r.theme,SEASON_NAME[r.season],r.status,'',r.memo].map(q).join(',')),
     ...O.map(o=>['구매',o.date,'',RO[o.empNo]?.name||'',o.empNo,o.buyer,'',o.item,'','',o.amount,o.orderNo?'주문 '+o.orderNo:''].map(q).join(','))].join('\r\n');
