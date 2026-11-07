@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108020540">
+<meta name="bsr-ver" content="20261108021104">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1238,6 +1238,21 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .sf-ov{position:fixed;inset:0;z-index:120;pointer-events:auto}
 .sfx-chip{display:inline-block;margin:6px 0 2px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);color:#fff;font:800 12.5px "Noto Sans KR",sans-serif;padding:5px 11px;border-radius:999px;cursor:pointer}
 #sfx{position:fixed;inset:0;z-index:100;pointer-events:none;overflow:hidden}
+.sfx-p{position:absolute;left:0;top:0;opacity:0;will-change:transform;filter:drop-shadow(0 3px 4px rgba(0,0,0,.28))}
+.sfx-p.flip .sfx-train{transform:scaleX(-1)}
+.sfx-train{display:flex;align-items:flex-end;white-space:nowrap}
+.sfx-deer{font-style:normal;font-size:36px;margin-right:-6px;display:inline-block;animation:sfxGallop .42s ease-in-out infinite alternate}
+.sfx-rein{display:inline-block;width:30px;height:2px;background:#e8c46a;margin:0 -8px 22px -10px;border-radius:2px;transform:rotate(-10deg);box-shadow:0 0 3px rgba(232,196,106,.7)}
+.sfx-sled{position:relative;display:inline-block;width:74px;height:43px;line-height:1}
+.sfx-sv{position:absolute;left:0;bottom:0;display:block}
+.sfx-sled i{font-style:normal}
+.sfx-rider{position:absolute;left:30px;top:-22px;font-size:32px;font-style:normal;animation:sfxBob .7s ease-in-out infinite alternate}
+.sfx-spark{position:absolute;font-size:12px;pointer-events:none;animation:sfxSpark 1.3s ease-out forwards}
+#sfx .sfx-g{position:absolute;left:8px;bottom:56px;font-size:42px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.3));transform-origin:50% 100%;animation:sfxSway 2.4s ease-in-out infinite alternate}
+@keyframes sfxGallop{from{translate:0 0;rotate:-4deg}to{translate:0 -4px;rotate:4deg}}
+@keyframes sfxSpark{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(14px) scale(.4)}}
+@keyframes sfxSway{from{rotate:-4deg}to{rotate:4deg}}
+
 #sfx .sfx-w{position:absolute;left:0;font-size:34px;animation:sfxWalk linear infinite;will-change:transform;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
 #sfx .sfx-w.rev{animation-name:sfxWalkR}
 #sfx .sfx-w.rev i{transform:scaleX(-1)}
@@ -3544,6 +3559,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-08r", date:"11/8", title:"🎅 산타 썰매 비행", tabs:["home"], items:["🦌🦌🛷 루돌프가 끄는 썰매에 산타가 타고 하늘을 날아가요 · 눈사람은 트리 옆에"]},
  {id:"2026-11-08q", date:"11/8", title:"🎄 계절 · 명절 꾸미기", tabs:["home"], items:["🎅 크리스마스까지 브리핑 화면에 산타 · 루돌프 · 눈사람이 돌아다녀요","설 · 추석 · 어린이날 · 어버이날 · 새해 · 봄 · 여름 · 할로윈도 날짜에 맞춰 자동으로 바뀌어요 · 브리핑 맨 위 문구를 누르면 끄고 켤 수 있어요"]},
  {id:"2026-11-08p", date:"11/8", title:"비·눈 효과 그칠 때까지", tabs:["home"], items:["🌧️❄️ 비·눈이 그칠 때까지 계속 내려요 (15분마다 날씨 확인) · 오른쪽 아래 '효과 끄기'로 오늘만 끌 수 있어요"]},
  {id:"2026-11-08o", date:"11/8", title:"🌧️ 날씨 연동 비·눈 효과", tabs:["home"], items:["🌧️❄️ 북서울에 지금 비나 눈이 오면 앱을 열 때 화면에 비·눈이 내리고 '빗길·빙판길 안전운전' 안내가 떠요"]},
@@ -4452,7 +4468,7 @@ var SFX_THEMES = [
  {id:"children", from:"05-01", to:"05-05", target:"05-05", walk:["🧸","🚂","🤖","🐣"], fall:["🎈","🎈","⭐"], rise:1, corner:"🎠", chip:function(d){ return d>0?"🎈 어린이날까지 D-"+d:"🎈 행복한 어린이날 보내세요"; }},
  {id:"parents",  from:"05-06", to:"05-08", target:"05-08", walk:["💐","🌷"], fall:["🌸","💗"], corner:"💐", chip:function(d){ return d>0?"💐 어버이날까지 D-"+d:"💐 부모님께 감사 인사 전해요"; }},
  {id:"newyear",  from:"12-26", to:"01-07", walk:["🎉","🎊","{Z}"], fall:["✨","🎊","⭐"], corner:"🎆", chip:function(){ var n=new Date(), y=n.getMonth()===11?n.getFullYear()+1:n.getFullYear(); return "🎆 "+y+" "+SFX_ZODIAC[y%12].split(" ")[1]+"띠 해 · 새해 복 많이 받으세요"; }},
- {id:"xmas",     from:"11-01", to:"12-25", target:"12-25", walk:["🎅","🦌","⛄","🦌","🛷"], fall:["❄️","✨","❄️"], corner:"🎄", chip:function(d){ return d>0?"🎄 크리스마스까지 D-"+d:"🎄 메리 크리스마스!"; }},
+ {id:"xmas",     from:"11-01", to:"12-25", target:"12-25", walk:[], parade:{deer:"🦌", n:2, sled:"🛷", rider:"🎅"}, ground:"⛄", fall:["❄️","❄️","✨"], corner:"🎄", chip:function(d){ return d>0?"🎄 크리스마스까지 D-"+d:"🎄 메리 크리스마스!"; }},
  {id:"halloween",from:"10-25", to:"10-31", target:"10-31", walk:["🎃","👻","🦇","🧙"], fall:["🦇","🍬"], corner:"🎃", chip:function(d){ return d>0?"🎃 할로윈까지 D-"+d:"🎃 해피 할로윈!"; }},
  {id:"spring",   from:"03-25", to:"04-15", walk:["🐝","🦋","🐥"], fall:["🌸","🌸","🌸"], corner:"🌸", chip:function(){ return "🌸 봄이 왔어요 · 꽃길만 걸어요"; }},
  {id:"summer",   from:"07-15", to:"08-20", walk:["🦀","🐢","🏄","🐬"], fall:["💧","☀️"], corner:"🍉", chip:function(){ return "🍉 무더위 조심 · 물 자주 드세요"; }}
@@ -4483,7 +4499,37 @@ function sfxBuild(r){
   for(var k=0;k<12;k++){ var dur2=7+Math.random()*7, e2=t.fall[k%t.fall.length];
     h+='<span class="sfx-f'+(t.rise?' up':'')+'" style="left:'+(Math.random()*96).toFixed(1)+'%;animation-duration:'+dur2.toFixed(1)+'s;animation-delay:-'+(Math.random()*dur2).toFixed(1)+'s;font-size:'+(14+Math.random()*12).toFixed(0)+'px">'+e2+'</span>'; }
   h+='<span class="sfx-c">'+t.corner+'</span>';
+  if(t.ground) h+='<span class="sfx-g">'+t.ground+'</span>';
+  if(t.parade){ var pr=t.parade, deer=''; for(var j=0;j<pr.n;j++) deer+='<i class="sfx-deer" style="animation-delay:-'+(j*0.18)+'s">'+pr.deer+'</i>';
+    h+='<div class="sfx-p'+(SFX_FLIP?' flip':'')+'"><span class="sfx-train">'+deer+'<b class="sfx-rein"></b><span class="sfx-sled"><i class="sfx-rider">'+pr.rider+'</i><svg class="sfx-sv" viewBox="0 0 80 46" width="74" height="43" aria-hidden="true"><path d="M14 14 Q12 6 20 6 L66 6 Q74 6 74 16 L74 30 Q74 34 70 34 L22 34 Q16 34 14 26 Z" fill="#d6283b"/><path d="M18 12 L70 12" stroke="#f6d36b" stroke-width="2.5"/><path d="M6 40 Q2 40 3 35 Q4 30 9 31 M9 31 Q6 34 9 36 L72 36" fill="none" stroke="#e8c46a" stroke-width="3" stroke-linecap="round"/><path d="M26 34 L26 40 M60 34 L60 40" stroke="#e8c46a" stroke-width="3"/><path d="M8 40 L74 40" stroke="#e8c46a" stroke-width="3" stroke-linecap="round"/></svg></span></span></div>'; }
   o.innerHTML=h; document.body.appendChild(o); SFX_EL=o;
+  if(t.parade) sfxParade(o.querySelector('.sfx-p'));
+}
+/* 썰매 행렬: 오른쪽 → 왼쪽으로 하늘을 물결치듯 날아감 · 지나간 자리에 반짝이 · 한 번 지나가면 잠깐 쉬었다 다시
+   (루돌프가 뒤로 걷는 것처럼 보이면 SFX_FLIP을 true로) */
+var SFX_FLIP = false;
+function sfxParade(el){
+  var start=0, dur=15000, rest=0, base=0, amp=0, lastSpark=0;
+  var newRun=function(now){ start=now+rest; dur=13000+Math.random()*5000; base=innerHeight*(0.12+Math.random()*0.2); amp=18+Math.random()*22; rest=4000+Math.random()*5000; };
+  newRun(performance.now()); start=performance.now()+1200;
+  (function step(now){
+    if(!el.isConnected) return;
+    if(el.offsetParent!==null || getComputedStyle(SFX_EL).display!=='none'){
+      var k=(now-start)/dur;
+      if(k<0||k>1){ el.style.opacity='0'; if(k>1) newRun(now); }
+      else{
+        var w=el.offsetWidth||200, W=innerWidth, dir=SFX_FLIP?1:-1;
+        var x = dir<0 ? W+40-(W+w+80)*k : -w-40+(W+w+80)*k;
+        var e=k*Math.PI*2*1.4, y = base + Math.sin(e)*amp - Math.sin(k*Math.PI)*innerHeight*0.06;
+        var slope = Math.cos(e)*amp*0.06; 
+        el.style.opacity = String(Math.min(1, k*8, (1-k)*8));
+        el.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) rotate('+(dir<0?-slope:slope).toFixed(2)+'deg)';
+        if(now-lastSpark>110){ lastSpark=now; var sp=document.createElement('span'); sp.className='sfx-spark'; sp.textContent=Math.random()<.5?'✨':'⭐';
+          sp.style.left=(x+(dir<0?w-10:10)).toFixed(0)+'px'; sp.style.top=(y+26+Math.random()*16).toFixed(0)+'px'; SFX_EL.appendChild(sp); setTimeout(function(){ sp.remove(); },1300); }
+      }
+    }
+    requestAnimationFrame(step);
+  })(performance.now());
 }
 function sfxTick(){
   var r=sfxTheme(), home=(typeof state!=="undefined" && state.tab==="home"), red=matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
