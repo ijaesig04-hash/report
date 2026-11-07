@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=6,user-scalable=yes">
+<meta name="robots" content="noindex,nofollow">
+<title>에스원 다이렉트몰 안내 카드</title>
+<style>
+html,body{margin:0;background:#0a1a3a;color:#fff;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:12px 12px 110px}
+.hint{text-align:center;font-size:13px;color:#9fb3d9;margin:4px 0 10px}
+img{display:block;width:100%;height:auto;border-radius:10px;background:#fff}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(10,26,58,.96)}
+.bar a{display:block;max-width:692px;margin:0 auto;text-align:center;background:#e5002d;color:#fff;text-decoration:none;font-weight:700;font-size:17px;padding:16px;border-radius:12px}
+.err{text-align:center;padding:60px 20px;color:#cfd8ea;line-height:1.7}
+</style></head>
+<body>
+<div class="wrap">
+ <p class="hint">👆 두 손가락으로 벌리면 크게 볼 수 있어요</p>
+ <div id="box"></div>
+</div>
+<div class="bar"><a href="https://s1directmall.co.kr/" rel="noopener">🛒 에스원 다이렉트몰 바로가기</a></div>
+<script>
+/* 카톡으로 받은 안내 카드를 크게 보여주는 화면. 카카오에 올린 그림 주소만 보여줌 */
+(function(){
+  var box=document.getElementById('box'),u='';
+  try{u=new URLSearchParams(location.search).get('img')||'';}catch(e){}
+  var ok=false;try{var p=new URL(u);ok=p.protocol==='https:'&&/(^|\.)kakaocdn\.net$/.test(p.hostname);}catch(e){}
+  if(!ok){box.innerHTML='<div class="err">카드를 불러올 수 없어요.<br>아래 버튼으로 다이렉트몰에 들어가 보세요.</div>';return;}
+  var im=new Image();im.alt='에스원 다이렉트몰 안내 카드';im.src=u;
+  im.onerror=function(){box.innerHTML='<div class="err">카드 보관 기간이 지났어요.<br>아래 버튼으로 다이렉트몰에 들어가 보세요.</div>';};
+  box.appendChild(im);
+})();
+</script>
+</body></html>

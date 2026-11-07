@@ -1759,16 +1759,19 @@ function kakaoFrame(){
 }
 async function shareKakaoLink(){
   const K=await loadKakao();if(!K.isInitialized())K.init(kakaoKey());
-  const cv=kakaoFrame(),blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9));
-  const up=await K.Share.uploadImage({file:[new File([blob],'card.jpg',{type:'image/jpeg'})]});
-  const d=kdata(),link={mobileWebUrl:MALL,webUrl:MALL};
-  await K.Share.sendDefault({objectType:'feed',content:{title:'👆 카드를 누르면 다이렉트몰로 가요',imageUrl:up.infos.original.url,imageWidth:cv.width,imageHeight:cv.height,link},buttons:[{title:'다이렉트몰 바로가기',link}]});
+  const up=async cv=>{const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9));return (await K.Share.uploadImage({file:[new File([blob],'card.jpg',{type:'image/jpeg'})]})).infos.original.url;};
+  const thumb=kakaoFrame(),full=cardCanvas();
+  const thumbUrl=await up(thumb),fullUrl=await up(full);
+  /* 카드를 누르면 큰 그림 보기 화면(card.html) · 다이렉트몰은 아래 버튼으로만 */
+  const base=/github\.io$/.test(location.hostname)?new URL('card.html',location.href).href:'https://ijaesig04-hash.github.io/report/card.html';
+  const view=base+'?img='+encodeURIComponent(fullUrl),mall={mobileWebUrl:MALL,webUrl:MALL};
+  await K.Share.sendDefault({objectType:'feed',content:{title:'👆 카드를 누르면 크게 볼 수 있어요',imageUrl:thumbUrl,imageWidth:thumb.width,imageHeight:thumb.height,link:{mobileWebUrl:view,webUrl:view}},buttons:[{title:'다이렉트몰 바로가기',link:mall}]});
 }
 async function shareKakao(){
   if(!check())return;
   if(kakaoKey()){
     toast('카드를 올리는 중이에요…');
-    try{await shareKakaoLink();toast('카톡에서 받을 사람을 고르세요 · 카드를 누르면 다이렉트몰로 가요'+(await autoRecord('카톡')));return;}
+    try{await shareKakaoLink();toast('카톡에서 받을 사람을 고르세요 · 카드는 크게 보기, 버튼은 다이렉트몰'+(await autoRecord('카톡')));return;}
     catch(e){console.log('kakao share',e);toast('카카오 공유가 안 돼서 일반 공유로 보낼게요');}
   }
   const text=kakaoText();
@@ -1845,7 +1848,7 @@ $('noimg').onchange=e=>{noImg=e.target.checked;render();};
 $('bCopy').onclick=copyRich;$('mShare').onclick=shareMail;$('bSubj').onclick=copySubject;$('bCode').onclick=copyCode;$('bDown').onclick=downloadHtml;
 $('kCopy').onclick=copyKakao;
 function kKeyUI(){const k=kakaoKey();$('kKeyState').textContent=k?'✅ 사용 중':'(미설정)';try{$('kKey').value=localStorage.getItem('s1kakao.key')||'';}catch(e){}
-  const sub=document.querySelector('#kShare small');if(sub)sub.textContent=k?'카드 한 장 · 누르면 다이렉트몰로 이동':'카드 이미지 + 메시지 한 번에';}
+  const sub=document.querySelector('#kShare small');if(sub)sub.textContent=k?'카드 한 장 · 카드는 크게 보기 · 버튼은 다이렉트몰':'카드 이미지 + 메시지 한 번에';}
 $('kKeySave').onclick=()=>{try{const v=$('kKey').value.trim();if(v)localStorage.setItem('s1kakao.key',v);else localStorage.removeItem('s1kakao.key');}catch(e){}kKeyUI();toast(kakaoKey()?'카카오 공유를 켰어요':'카카오 공유 설정을 지웠어요');};
 kKeyUI();$('kShare').onclick=shareKakao;$('kImg').onclick=saveCard;
 function showTab(which){
