@@ -254,8 +254,8 @@ table.t td.n,table.t th.n{text-align:right}
    </section>
    <div class="tip" id="tipMail">
     <b>📮 이렇게 보내면 효과적이에요</b><br>
-    • 처음 연락 → ① 1:1 맞춤 상담 · 상품 안내 → ② 상품 카탈로그<br>
-    • 짧게 → ③ 3초 요약 · 📷 사진 디자인은 아웃룩 권장<br>
+    • 처음 연락 → ① 자주 묻는 질문 · 상품 안내 → ② 추천 세트<br>
+    • 짧게 → ③ 3초 요약 · 가격 안내 → ④ 이번 주 특가<br>
     • 모든 메일 하단에 <b>사원번호 10% 추가할인</b> 안내가 들어가요<br>
     • 고객이 구매 때 사원번호를 입력하면 누구 추천인지 확인돼요
    </div>
@@ -411,24 +411,24 @@ const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const F="font-family:'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif;";
 
 const THEMES=[
- {id:'consult',n:'① 1:1 맞춤 상담',p:1,w:'⭐ 첫 연락·상담 유도',c:['#e8f1fa','#0a1a3a','#e5002d','#b9e62b']},
- {id:'catalog',n:'② 상품 카탈로그',p:0,w:'⭐ 상품 소개',c:['#0a1a3a','#b9e62b','#ffffff','#1b4fd6']},
+ {id:'faq',    n:'① 자주 묻는 질문',p:0,w:'⭐ 첫 연락·궁금증 해결',c:['#eef3fb','#0a1a3a','#e5002d','#ffffff']},
+ {id:'bundle', n:'② 추천 세트',p:0,w:'⭐ 상품 소개',c:['#f4f1fb','#7b61f5','#3b7bf6','#f2546a']},
  {id:'quick',  n:'③ 3초 요약',p:0,w:'⭐ 모바일·짧게',c:['#ffffff','#e5002d','#1a1f2b','#f1f4fa']},
- {id:'night',  n:'④ 나이트 드라이브',p:1,w:'매장·사업장',c:['#000000','#e5002d','#1b4fd6','#ffffff']},
- {id:'toon',   n:'⑤ 안심 배달',p:1,w:'가정·가족 고객',c:['#fff5e9','#ff8a3d','#0a1a3a','#e8f3ff']},
+ {id:'deal',   n:'④ 이번 주 특가',p:1,w:'가격 안내',c:['#e5002d','#ffffff','#deeff7','#1b4fd6']},
+ {id:'tips',   n:'⑤ 생활 안전 팁',p:0,w:'가정·가족 고객',c:['#eaf6f1','#12894a','#ffffff','#1a1f2b']},
  {id:'campus', n:'⑥ 토탈 시큐리티',p:1,w:'법인·통합 보안',c:['#eceef2','#1a1f2b','#e5002d','#1b4fd6']},
  {id:'hero',   n:'⑦ 히어로 포스터',p:1,w:'첫 인사',c:['#4fb3ff','#0a1a3a','#e5002d','#b9e62b']},
- {id:'control',n:'⑧ 스마트 관제',p:1,w:'법인·사무실',c:['#050b1a','#122a5c','#4fb3ff','#ffffff']},
- {id:'branch', n:'⑨ 지사 현판',p:1,w:'우리 지역 고객',c:['#1b4fd6','#c9ced8','#ffffff','#e5002d']},
+ {id:'timeline',n:'⑧ 안심 하루',p:0,w:'생활 속 활용',c:['#0a1a3a','#ffffff','#1b4fd6','#e5002d']},
+ {id:'seasonal',n:'⑨ 계절 인사',p:0,w:'안부 인사',c:['#f3efe9','#b4532a','#ffffff','#1a1f2b']},
  {id:'lime',   n:'⑩ 출동 유니폼',p:0,w:'강한 임팩트',c:['#b9e62b','#0a1a3a','#e5002d','#ffffff']},
  {id:'minimal',n:'⑪ 미니멀 프리미엄',p:0,w:'VIP·대표님',c:['#ffffff','#1a1f2b','#e5002d','#f2f3f6']},
  {id:'card',   n:'⑫ 비즈니스 명함',p:0,w:'명함 대신 인사',c:['#0a1a3a','#c8a45a','#ffffff','#e5002d']},
- {id:'pass',   n:'⑬ 안심 탑승권',p:0,w:'재미·이벤트',c:['#122a5c','#ffffff','#e5002d','#4fb3ff']},
+ {id:'checklist',n:'⑬ 안심 체크리스트',p:0,w:'필요성 일깨우기',c:['#0a1a3a','#4fb3ff','#ffffff','#e5002d']},
  {id:'key',    n:'⑭ 보안 키카드',p:0,w:'젊은 사장님',c:['#070d1d','#1b4fd6','#b9e62b','#e8c46a']},
  {id:'chat',   n:'⑮ 메신저 대화',p:0,w:'친근한 재연락',c:['#dbe8f7','#0a1a3a','#ffffff','#e5002d']},
- {id:'letter', n:'⑯ 편지봉투',p:0,w:'격식 있는 안내',c:['#faf7f0','#e5002d','#0a1a3a','#c9ced8']},
+ {id:'newsletter',n:'⑯ 월간 안심 레터',p:0,w:'정기 안부',c:['#e9edf2','#0a1a3a','#1b4fd6','#e5002d']},
 ];
-let theme='consult', noImg=false;
+let theme='faq', noImg=false;
 
 function fmtPhone(v){const d=v.replace(/\D/g,'').slice(0,11);if(d.length<4)return d;if(d.length<8)return d.slice(0,3)+'-'+d.slice(3);if(d.length===10)return d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6);return d.slice(0,3)+'-'+d.slice(3,7)+'-'+d.slice(7);}
 
@@ -784,7 +784,8 @@ const SEASONS=[
  {id:'family', n:'가족 · 응급 대비',   seg:'home',hook:()=>'우리 가족 안전사고, 미리 대비하세요', msg:'갑작스러운 안전사고, 미리 준비하면 든든합니다.<br>우리 집에 꼭 필요한 <b>구급함</b>과 <b>AI홈카메라</b>를 만나보세요.'},
 ];
 const SEASON_NAME=Object.fromEntries(SEASONS.map(s=>[s.id,s.n]));
-const THEME_NAME=()=>Object.fromEntries(THEMES.map(t=>[t.id,t.n.slice(2)]).concat((typeof KTHEMES!=='undefined'?KTHEMES:[]).map(t=>['k_'+t.id,'카드형 · '+t.n.slice(2)])));
+const MAIL_OLD={consult:'1:1 맞춤 상담',catalog:'상품 카탈로그',night:'나이트 드라이브',toon:'안심 배달',control:'스마트 관제',branch:'지사 현판',pass:'안심 탑승권',letter:'편지봉투'};
+const THEME_NAME=()=>Object.fromEntries(Object.entries(MAIL_OLD).concat(THEMES.map(t=>[t.id,t.n.slice(2)])).concat((typeof KTHEMES!=='undefined'?KTHEMES:[]).map(t=>['k_'+t.id,'카드형 · '+t.n.slice(2)])));
 const digits=v=>String(v||'').replace(/\D/g,'');
 
 function raw(){return{name:$('name').value.trim(),phone:$('phone').value.trim(),emp:digits($('emp').value),branch:$('branch').value.trim(),position:$('position').value.trim(),cust:$('customer').value.trim(),msg:$('msg').value.trim()};}
@@ -827,7 +828,7 @@ function qrTable(url){
    return `<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>`+runs.map(([v,k])=>`<td width="${k*px}" height="${px}" bgcolor="${v?'#000000':'#ffffff'}" style="width:${k*px}px;height:${px}px;background:${v?'#000000':'#ffffff'};font-size:0;line-height:0;mso-line-height-rule:exactly;">&nbsp;</td>`).join('')+`</tr></table>`;
   }).join('')+`</td></tr></table>`;
 }
-const DARK=['control','night','key','lime'];
+const DARK=['key','lime'];
 function qr(){
  const dark=DARK.includes(theme), tc=dark?'#ffffff':C.navy, sc=dark?'#a9b4cc':C.mute, bd=dark?'#2a3a62':C.line;
  const code=qrTable(MALL);
@@ -838,7 +839,130 @@ function qr(){
    <div style="font-size:12px;color:${sc};line-height:1.6;margin-top:4px;">휴대폰 카메라로 스캔하면<br>다이렉트몰로 이동합니다</div>
   </td></tr>`);
 }
-const BUILD={consult:bConsult,night:bNight,toon:bToon,catalog:bCatalog,quick:bQuick,campus:bCampus,hero:bHero,control:bControl,branch:bBranch,lime:bLime,minimal:bMinimal,card:bCard,pass:bPass,key:bKey,chat:bChat,letter:bLetter};
+/* ───────── 새 메일 디자인 8종 (카드형과 겹치지 않게) ───────── */
+const mToday=()=>{const n=new Date();return (n.getMonth()+1)+'/'+n.getDate();};
+const mH=(t,c=C.ink,sz=26)=>`<div style="${F}font-size:${sz}px;font-weight:900;color:${c};line-height:1.35;">${t}</div>`;
+const mP=(t,c='#4a5262')=>`<div style="${F}font-size:14px;color:${c};line-height:1.9;margin-top:12px;">${t}</div>`;
+const mCard=(inner,o={})=>T(`width="100%" bgcolor="${o.bg||'#ffffff'}" style="background:${o.bg||'#ffffff'};border-radius:18px;overflow:hidden;${o.st||''}"`,inner);
+const mEmp=d=>`결제할 때 담당자 사원번호 <b style="color:${C.blue};">${d.emp}</b>를 입력하시면 <b style="color:${C.red};">10% 추가 할인</b>돼요.`;
+
+/* ① 자주 묻는 질문 */
+function bFaq(d){
+ const qa=[['에스원 보안 상품을 온라인에서 살 수 있나요?','네! 에스원 다이렉트몰(s1directmall.co.kr)에서 바로 구매하실 수 있어요.'],
+  ['어떤 상품이 있나요?',SEG[seg].line+' 준비돼 있어요.'],['더 저렴하게 사는 방법이 있나요?',mEmp(d)],
+  ['설치나 사용이 궁금하면요?',`담당 ${d.name}에게 편하게 연락 주세요. 📞 <b>${d.phone}</b>`]];
+ const row=([q,a])=>`<tr><td style="padding:0 0 14px;">${T(`width="100%" style="border:1px solid #dfe6f2;border-radius:14px;border-collapse:separate;"`,`
+  <tr><td width="38" valign="top" style="padding:16px 0 4px 16px;">${T('',`<tr><td width="28" height="28" align="center" bgcolor="${C.navy}" style="background:${C.navy};border-radius:50%;${F}font-size:14px;font-weight:bold;color:#fff;">Q</td></tr>`)}</td>
+   <td style="padding:20px 18px 4px 8px;${F}font-size:15px;font-weight:bold;color:${C.ink};">${q}</td></tr>
+  <tr><td width="38" valign="top" style="padding:6px 0 16px 16px;">${T('',`<tr><td width="28" height="28" align="center" bgcolor="${C.red}" style="background:${C.red};border-radius:50%;${F}font-size:14px;font-weight:bold;color:#fff;">A</td></tr>`)}</td>
+   <td style="padding:10px 18px 16px 8px;${F}font-size:14px;color:#4a5262;line-height:1.8;">${a}</td></tr>`)}</td></tr>`;
+ return outer('#eef3fb',mCard(`
+<tr><td style="padding:30px 32px 0;">${logo(.8)}</td></tr>
+<tr><td style="padding:22px 32px 4px;">${mH('궁금한 점,<br>미리 답해드려요 💬',C.navy)}${mP(defMsg(d))}</td></tr>
+<tr><td style="padding:22px 28px 4px;">${T('width="100%"',qa.map(row).join(''))}</td></tr>
+<tr><td align="center" style="padding:14px 32px 8px;">${btn('다이렉트몰에서 직접 보기 →',C.red,'#fff')}</td></tr>
+<tr><td style="padding:22px 32px 32px;">${sigLight(d,C.navy)}</td></tr>`)+foot());}
+
+/* ② 추천 세트 */
+function bBundle(d){
+ const H=[['🏠 우리 집 안심 세트','#3b7bf6',['AI홈카메라','AI도어캠','안전금고'],'택배·방문객 확인부터 귀중품 보관까지',46],['⛑️ 가족 응급 세트','#f2546a',['구급함','소화기'],'갑작스러운 사고에 미리 대비해요',48]];
+ const B=[['🏪 매장 오픈 세트','#7b61f5',['상업용 도어락','이지스 금고','소화기'],'출입·현금·화재 대비를 한 번에',47],['❤️ AED 관리 세트','#17b3a0',['AED 패드·배터리','AED 보관가방'],'언제든 쓸 수 있게 미리 챙기기',49]];
+ const sets=seg==='home'?H:seg==='biz'?B:[H[0],B[0],H[1]];
+ const box=([t,col,items,sub,n])=>`<tr><td style="padding:0 0 14px;">${T(`width="100%" style="border:2px solid ${col};border-radius:16px;border-collapse:separate;overflow:hidden;"`,`
+  <tr><td bgcolor="${col}" style="background:${col};padding:12px 18px;${F}font-size:16px;font-weight:bold;color:#fff;">${t}</td></tr>
+  <tr><td style="padding:16px 18px 6px;${F}font-size:15px;font-weight:bold;color:${C.ink};">${items.join(` <span style="color:${col};">＋</span> `)}</td></tr>
+  <tr><td style="padding:0 18px 14px;${F}font-size:13px;color:${C.mute};">${sub} &nbsp;<a href="${CAT(n)}" target="_blank" style="color:${col};font-weight:bold;text-decoration:none;">세트 상품 보기 ›</a></td></tr>`)}</td></tr>`;
+ return outer('#f4f1fb',mCard(`
+<tr><td style="padding:30px 32px 0;">${logo(.8)}</td></tr>
+<tr><td style="padding:22px 32px 4px;"><div style="${F}font-size:12px;font-weight:bold;letter-spacing:2px;color:#7b61f5;">RECOMMENDED SET</div>${mH(`${d.to}께 추천하는<br>안심 세트 🎁`)}${mP(defMsg(d))}</td></tr>
+<tr><td style="padding:22px 28px 4px;">${T('width="100%"',sets.map(box).join(''))}</td></tr>
+<tr><td align="center" style="padding:12px 32px 8px;">${btn('다이렉트몰 바로가기 →','#7b61f5','#fff')}</td></tr>
+<tr><td style="padding:22px 32px 32px;">${sigLight(d,'#7b61f5')}</td></tr>`)+foot());}
+
+/* ④ 이번 주 특가 (상품 사진) */
+function bDeal(d){
+ const P=[['cam','AI 홈카메라','움직임을 따라가는 AI',130000,98000,25],['door','AI 도어캠','낯선 방문객부터 택배까지',469000,339000,28]];
+ const col=([k,n,s,was,now,pct])=>`<td width="50%" valign="top" style="padding:6px;">${T(`width="100%" bgcolor="#ffffff" style="background:#ffffff;border:1px solid #e3e7ef;border-radius:14px;border-collapse:separate;"`,`
+  <tr><td align="center" bgcolor="${k==='cam'?'#deeff7':'#f5f5f5'}" style="background:${k==='cam'?'#deeff7':'#f5f5f5'};padding:14px;border-radius:14px 14px 0 0;">${noImg?`<div style="${F}font-size:40px;">${k==='cam'?'📹':'🚪'}</div>`:`<img src="${MAILIMG+k}.jpg" width="150" alt="${n}" style="display:block;width:150px;max-width:100%;height:auto;border:0;">`}</td></tr>
+  <tr><td style="padding:14px 14px 4px;${F}"><div style="font-size:16px;font-weight:bold;color:${C.ink};">${n}</div><div style="font-size:12px;color:${C.mute};margin-top:2px;">${s}</div>
+   <div style="font-size:12px;color:#9aa1ae;text-decoration:line-through;margin-top:10px;">${was.toLocaleString('ko-KR')}원</div>
+   <div style="font-size:20px;font-weight:900;color:${C.ink};">${now.toLocaleString('ko-KR')}원 <span style="color:${C.red};font-size:16px;">${pct}%</span></div></td></tr>
+  <tr><td style="padding:10px 14px 16px;">${btn('구매하러 가기',C.blue,'#fff',{href:CAT(46),pad:'10px 18px',size:13,r:8})}</td></tr>`)}</td>`;
+ return outer('#f2f4f8',mCard(`
+<tr><td bgcolor="${C.red}" style="background:${C.red};padding:12px 28px;${F}font-size:13px;font-weight:bold;letter-spacing:2px;color:#fff;">🎉 WEEKLY DEAL · 출시 기념 특가</td></tr>
+<tr><td style="padding:26px 32px 4px;">${logo(.75)}<div style="height:16px;font-size:0;">&nbsp;</div>${mH('이번 주,<br>다이렉트몰 특가 소식 🛒')}${mP(defMsg(d))}</td></tr>
+<tr><td style="padding:18px 22px 0;">${T('width="100%"',`<tr>${P.map(col).join('')}</tr>`)}</td></tr>
+<tr><td style="padding:8px 32px 0;${F}font-size:11px;color:${C.mute};">※ ${mToday()} 다이렉트몰 기준 가격이며 바뀔 수 있어요 · ${mEmp(d)}</td></tr>
+<tr><td style="padding:22px 32px 32px;">${sigLight(d,C.red)}</td></tr>`)+foot());}
+
+/* ⑤ 생활 안전 팁 */
+function bTips(d){
+ const home=[['🚪','현관 앞 택배는 바로 챙기기','오래 두면 분실 위험이 커져요. AI도어캠으로 도착을 바로 확인하세요.'],['🧯','소화기는 눈에 띄는 곳에','주방 가까이에 두고 사용법을 가족과 함께 익혀 두세요.'],['🔐','중요 서류·귀중품은 한곳에','화재·도난에 대비해 안전금고에 보관하면 든든해요.']];
+ const biz=[['🔑','마감 후 출입 관리','상업용 도어락으로 출입을 관리하세요.'],['🧯','소화기 비치·점검','출입구 근처에 두고 압력 게이지를 확인하세요.'],['❤️','AED 소모품 점검','패드·배터리 사용 기한을 미리 확인하세요.']];
+ const L=seg==='biz'?biz:seg==='home'?home:[home[0],home[1],biz[2]];
+ return outer('#eaf6f1',mCard(`
+<tr><td style="padding:30px 32px 0;">${logo(.8)}</td></tr>
+<tr><td style="padding:22px 32px 4px;"><div style="${F}font-size:12px;font-weight:bold;letter-spacing:2px;color:#12894a;">SAFETY TIPS</div>${mH('알아두면 든든한<br>생활 안전 팁 3')}${mP(defMsg(d))}</td></tr>
+<tr><td style="padding:20px 32px 0;">${T('width="100%"',L.map(([ic,t,s],i)=>`<tr><td width="64" valign="top" style="padding:14px 0;border-top:1px solid #e3efe8;${F}font-size:30px;font-weight:900;color:#12894a;">0${i+1}</td>
+  <td valign="top" style="padding:16px 0;border-top:1px solid #e3efe8;${F}"><div style="font-size:16px;font-weight:bold;color:${C.ink};">${ic} ${t}</div><div style="font-size:13px;color:#4a5262;line-height:1.7;margin-top:4px;">${s}</div></td></tr>`).join(''))}</td></tr>
+<tr><td align="center" style="padding:24px 32px 8px;">${btn('필요한 상품 보러가기 →','#12894a','#fff')}</td></tr>
+<tr><td style="padding:22px 32px 32px;">${sigLight(d,'#12894a')}</td></tr>`)+foot());}
+
+/* ⑧ 안심 하루 (타임라인) */
+function bTimeline(d){
+ const home=[['07:30','🚪','출근길','도어락으로 문단속 끝'],['12:00','📦','택배 도착','AI도어캠으로 스마트폰에서 확인'],['15:00','📹','아이 하교','AI홈카메라로 집 안 확인'],['22:00','🔐','하루 마무리','귀중품은 안전금고에']];
+ const biz=[['09:00','🔑','매장 오픈','상업용 도어락으로 출입 관리'],['13:00','🧯','점심 시간','소화기 위치 한 번 더 확인'],['18:00','❤️','손님 많은 시간','AED 소모품 미리 점검'],['22:00','🔐','마감','매출금은 이지스 금고에']];
+ const L=seg==='biz'?biz:home;
+ return outer('#0a1a3a',mCard(`
+<tr><td style="padding:30px 32px 0;">${logo(.8)}</td></tr>
+<tr><td style="padding:22px 32px 4px;">${mH(`에스원과 함께하는<br>${seg==='biz'?'매장의':'우리 집'} 안심 하루 ⏰`,C.navy)}${mP(defMsg(d))}</td></tr>
+<tr><td style="padding:22px 32px 0;">${T('width="100%"',L.map(([tm,ic,t,s],i)=>`<tr><td width="66" valign="top" style="padding:0 0 18px;${F}font-size:15px;font-weight:900;color:${C.blue};">${tm}</td>
+  <td width="18" valign="top" style="padding:3px 0 0;">${T('',`<tr><td width="12" height="12" bgcolor="${i===L.length-1?C.red:C.blue}" style="background:${i===L.length-1?C.red:C.blue};border-radius:50%;font-size:0;">&nbsp;</td></tr>`)}</td>
+  <td valign="top" style="padding:0 0 18px 10px;border-left:2px solid #dbe6ff;${F}"><div style="font-size:15px;font-weight:bold;color:${C.ink};">${ic} ${t}</div><div style="font-size:13px;color:#4a5262;margin-top:3px;">${s}</div></td></tr>`).join(''))}</td></tr>
+<tr><td align="center" style="padding:18px 32px 8px;">${btn('다이렉트몰 바로가기 →',C.blue,'#fff')}</td></tr>
+<tr><td style="padding:22px 32px 32px;">${sigLight(d,C.blue)}</td></tr>`)+foot('#8fa6d4'));}
+
+/* ⑨ 계절 인사 */
+function bSeasonal(d){
+ const m=new Date().getMonth()+1;
+ const S=m===12||m<=2?['❄️ ⛄ ❄️','따뜻하고 안전한<br>겨울 보내세요','#e8f0fb','#1b4fd6','WINTER GREETING']:m<=5?['🌸 🌱 🌸','새봄, 안심도<br>새롭게 시작하세요','#fdf0f4','#e0457b','SPRING GREETING']:m<=8?['☀️ 🌊 ☀️','시원하고 안전한<br>여름 되세요','#e6f7fb','#0f9bb8','SUMMER GREETING']:m<=10?['🍁 🌾 🍁','풍성하고 든든한<br>가을 되세요','#fdf3e7','#d9731f','AUTUMN GREETING']:['🍂 ❄️ 🍂','따뜻한 겨울 준비,<br>안전하게 시작하세요','#f3efe9','#b4532a','LATE AUTUMN GREETING'];
+ const [em,h,bg,ac,tag]=S;
+ return outer(bg,mCard(`
+<tr><td align="center" style="padding:34px 32px 0;">${logo(.8)}</td></tr>
+<tr><td align="center" style="padding:26px 32px 0;${F}"><div style="font-size:12px;font-weight:bold;letter-spacing:3px;color:${ac};">${tag}</div><div style="font-size:38px;margin-top:12px;">${em}</div></td></tr>
+<tr><td align="center" style="padding:14px 36px 4px;text-align:center;">${mH(h,C.ink,28)}<div style="${F}font-size:14px;color:#4a5262;line-height:1.9;margin-top:14px;">${defMsg(d)}</div></td></tr>
+<tr><td align="center" style="padding:20px 26px 0;">${SEG[seg].chips.map(t=>`<span style="display:inline-block;margin:4px;padding:7px 13px;border-radius:20px;border:1.5px solid ${ac};${F}font-size:13px;font-weight:bold;color:${ac};">${t}</span>`).join('')}</td></tr>
+<tr><td align="center" style="padding:26px 32px 8px;">${btn('다이렉트몰 둘러보기 →',ac,'#fff')}</td></tr>
+<tr><td style="padding:22px 32px 32px;">${sigLight(d,ac)}</td></tr>`)+foot());}
+
+/* ⑬ 안심 체크리스트 */
+function bChecklist(d){
+ const place=seg==='biz'?'우리 매장':seg==='home'?'우리 집':'우리 집·매장';
+ return outer('#eef1f6',mCard(`
+<tr><td bgcolor="${C.navy}" style="background:${C.navy};padding:30px 32px 26px;">${logo(.8)}<div style="height:18px;font-size:0;">&nbsp;</div><div style="${F}font-size:12px;font-weight:bold;letter-spacing:3px;color:${C.sky};">SAFETY CHECKLIST</div>${mH(`${place}<br>안심 체크리스트 ✅`,'#ffffff',28)}</td></tr>
+<tr><td style="padding:22px 32px 0;">${mP(defMsg(d))}</td></tr>
+<tr><td style="padding:18px 28px 0;">${T(`width="100%" style="border:1px solid #e3e7ef;border-radius:14px;border-collapse:separate;"`,SEG[seg].chips.map((t,i,a)=>`<tr>
+  <td width="44" style="padding:14px 0 14px 18px;${i<a.length-1?'border-bottom:1px solid #eef1f6;':''}">${T('',`<tr><td width="22" height="22" style="border:2.5px solid #c3cee3;border-radius:5px;font-size:0;">&nbsp;</td></tr>`)}</td>
+  <td style="padding:14px 6px;${i<a.length-1?'border-bottom:1px solid #eef1f6;':''}${F}font-size:15px;font-weight:bold;color:${C.ink};">${t}</td>
+  <td align="right" style="padding:14px 18px 14px 0;${i<a.length-1?'border-bottom:1px solid #eef1f6;':''}${F}font-size:12px;color:#9aa3b5;">준비됐나요?</td></tr>`).join(''))}</td></tr>
+<tr><td style="padding:16px 28px 0;">${T(`width="100%" bgcolor="#e9f0ff" style="background:#e9f0ff;border-radius:12px;"`,`<tr><td style="padding:16px 20px;${F}font-size:14px;color:${C.navy};line-height:1.7;"><b style="color:${C.blue};">하나라도 비어 있다면?</b><br>👉 에스원 다이렉트몰에서 바로 준비하세요!</td></tr>`)}</td></tr>
+<tr><td align="center" style="padding:24px 32px 8px;">${btn('다이렉트몰 바로가기 →',C.red,'#fff')}</td></tr>
+<tr><td style="padding:22px 32px 32px;">${sigLight(d,C.navy)}</td></tr>`)+foot());}
+
+/* ⑯ 월간 안심 레터 */
+function bNewsletter(d){
+ const n=new Date(),M=n.getMonth()+1,s=SEASONS.find(x=>x.id===season);
+ const tip=s&&s.msg?s.msg:(seg==='biz'?'영업 마감 후에는 출입문 잠금과 금고 보관을 한 번 더 확인하세요. 작은 습관이 큰 사고를 막아요.':'건조한 계절에는 화재 위험이 커져요. 소화기 위치를 가족 모두 알아 두세요.');
+ const sec=(ic,t,inner)=>`<tr><td style="padding:22px 32px 0;"><div style="${F}font-size:13px;font-weight:bold;letter-spacing:1px;color:${C.blue};border-bottom:2px solid ${C.navy};padding-bottom:8px;">${ic} ${t}</div>${inner}</td></tr>`;
+ return outer('#e9edf2',mCard(`
+<tr><td bgcolor="${C.navy}" style="background:${C.navy};padding:28px 32px;">${T('width="100%"',`<tr><td style="${F}"><div style="font-size:11px;letter-spacing:3px;color:${C.sky};font-weight:bold;">S-1 SAFETY LETTER</div><div style="font-size:30px;font-weight:900;color:#fff;margin-top:6px;">${M}월의 안심 레터</div><div style="font-size:12px;color:#9fb3d9;margin-top:4px;">Vol.${M} · ${d.branch||'에스원'} ${d.name}</div></td><td align="right" valign="top">${logo(.7)}</td></tr>`)}</td></tr>
+${sec('💡','이달의 안심 팁',mP(tip))}
+${sec('🛒','추천 상품',`<div style="${F}font-size:14px;color:#4a5262;line-height:2;margin-top:10px;">${SEG[seg].chips.map(t=>`<span style="color:${C.red};">●</span> ${t}`).join(' &nbsp; ')}</div>`)}
+${sec('✉️','담당자 한마디',mP(defMsg(d)))}
+<tr><td align="center" style="padding:26px 32px 8px;">${btn('다이렉트몰 바로가기 →',C.navy,'#fff')}</td></tr>
+<tr><td style="padding:22px 32px 32px;">${sigLight(d,C.navy)}</td></tr>`)+foot());}
+
+const BUILD={faq:bFaq,bundle:bBundle,deal:bDeal,tips:bTips,timeline:bTimeline,seasonal:bSeasonal,checklist:bChecklist,newsletter:bNewsletter,consult:bConsult,night:bNight,toon:bToon,catalog:bCatalog,quick:bQuick,campus:bCampus,hero:bHero,control:bControl,branch:bBranch,lime:bLime,minimal:bMinimal,card:bCard,pass:bPass,key:bKey,chat:bChat,letter:bLetter};
 /* 🎴 카드형 메일 — 카톡 카드 이미지를 메일 본문에 넣음 */
 let kcMailCache={k:'',url:''};
 function kcardMailImg(id){
@@ -1621,7 +1745,7 @@ const repOk=()=>$('name').value.trim()&&$('phone').value.trim()&&digits($('emp')
 if(repOk())repCollapse(true);
 $('repEdit').onclick=()=>{repCollapse(false);$('name').focus();};
 $('repDone').onclick=()=>{if(!repOk()){check();return;}saveRep();repCollapse(true);toast('내 정보를 저장했어요');};
-theme='consult';document.querySelectorAll('#themes .th').forEach(e=>e.setAttribute('aria-pressed',e.dataset.t==='consult'));
+theme='faq';document.querySelectorAll('#themes .th').forEach(e=>e.setAttribute('aria-pressed',e.dataset.t==='faq'));
 showTab(fromHash());
 
 /* ───────── 공유 기록 (db) ───────── */
