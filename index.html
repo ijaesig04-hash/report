@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108015101">
+<meta name="bsr-ver" content="20261108015723">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3529,6 +3529,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-08p", date:"11/8", title:"비·눈 효과 그칠 때까지", tabs:["home"], items:["🌧️❄️ 비·눈이 그칠 때까지 계속 내려요 (15분마다 날씨 확인) · 오른쪽 아래 '효과 끄기'로 오늘만 끌 수 있어요"]},
  {id:"2026-11-08o", date:"11/8", title:"🌧️ 날씨 연동 비·눈 효과", tabs:["home"], items:["🌧️❄️ 북서울에 지금 비나 눈이 오면 앱을 열 때 화면에 비·눈이 내리고 '빗길·빙판길 안전운전' 안내가 떠요"]},
  {id:"2026-11-08n", date:"11/8", title:"축하 폭죽 버튼 수정", tabs:["home"], items:["🎆 무사고 축하 카드의 「축하 폭죽」 버튼을 누르면 폭죽이 터져요"]},
  {id:"2026-11-08m", date:"11/8", title:"카톡 카드 자연스럽게 넓히기", tabs:["home"], items:["💬 카톡 카드 양옆을 억지로 늘리지 않고, 배경과 사진을 넓게 다시 그려서 보내요"]},
@@ -4367,42 +4368,60 @@ document.addEventListener('click', function(e){ if(e.target.closest('[data-sffw]
 
 /* ===== 🌧️❄️ 날씨 연동 — 지금 비·눈이 오면 앱을 열 때 화면에 비·눈이 내림 (Open-Meteo 무료 · 키 없음)
    위치는 아래 날씨 카드와 같은 WX_LOC(관할 중심 좌표)를 씀. 미리보기: 주소 끝에 ?wx=rain 또는 ?wx=snow ===== */
-var WX_DONE = false;
+var WX_DONE = false, WX_LAST = 0, WX_TIMER = null;
 function wxKind(c){ c=+c; if([71,73,75,77,85,86].indexOf(c)>=0) return 'snow'; if((c>=51&&c<=67)||(c>=80&&c<=82)||c>=95) return 'rain'; return ''; }
+function wxToday(){ var d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function wxOff(){ try{ return localStorage.getItem('bsr_wxoff')===wxToday(); }catch(e){ return false; } }
+function wxStop(){ var o=document.getElementById('wxfx'); if(!o) return; o.style.opacity='0'; setTimeout(function(){ if(o.parentNode) o.remove(); }, 1100); }
+/* 비·눈 효과 — 그칠 때까지 계속 (처음 6초는 많이, 그 뒤엔 가볍게) · 오른쪽 아래 버튼으로 오늘 끄기 */
 function wxFall(kind, label){
-  if(document.getElementById('wxfx')) return;
-  var o = document.createElement('div'); o.id='wxfx';
+  var cur=document.getElementById('wxfx'); if(cur){ if(cur.getAttribute('data-k')===kind) return; cur.remove(); }
+  var o = document.createElement('div'); o.id='wxfx'; o.setAttribute('data-k',kind);
   o.style.cssText='position:fixed;inset:0;z-index:110;pointer-events:none;transition:opacity 1s';
-  o.innerHTML='<canvas style="width:100%;height:100%;display:block"></canvas>'+(label?'<div style="position:absolute;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:rgba(10,26,58,.88);color:#fff;font:800 13.5px \'Noto Sans KR\',sans-serif;padding:9px 16px;border-radius:999px;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.25)">'+label+'</div>':'');
+  var F="font:800 13px 'Noto Sans KR',sans-serif;";
+  o.innerHTML='<canvas style="width:100%;height:100%;display:block"></canvas>'
+   +(label?'<div class="wx-lb" style="position:absolute;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:rgba(10,26,58,.88);color:#fff;'+F+'padding:9px 16px;border-radius:999px;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.25);transition:opacity .8s">'+label+'</div>':'')
+   +'<button type="button" class="wx-x" style="position:absolute;right:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));pointer-events:auto;border:0;background:rgba(10,26,58,.72);color:#fff;'+F+'padding:8px 12px;border-radius:999px;cursor:pointer">'+(kind==='snow'?'❄️':'🌧️')+' 효과 끄기</button>';
   document.body.appendChild(o);
-  var cv=o.querySelector('canvas'), x=cv.getContext('2d'), dpr=devicePixelRatio||1, W=cv.width=innerWidth*dpr, H=cv.height=innerHeight*dpr, P=[], t0=Date.now(), dur=8000, snow=kind==='snow';
-  var N = snow ? 110 : 160;
-  for(var i=0;i<N;i++) P.push({x:Math.random()*W, y:Math.random()*H-H, s:snow?(1.5+Math.random()*3.5)*dpr:(10+Math.random()*16)*dpr, v:snow?(0.6+Math.random()*1.4)*dpr:(9+Math.random()*7)*dpr, w:Math.random()*6.28});
+  o.querySelector('.wx-x').onclick=function(){ try{ localStorage.setItem('bsr_wxoff', wxToday()); }catch(e){} wxStop(); if(typeof nrToast==="function") nrToast('오늘은 비·눈 효과를 껐어요'); };
+  var cv=o.querySelector('canvas'), x=cv.getContext('2d'), dpr=devicePixelRatio||1, W, H, P=[], t0=Date.now(), snow=kind==='snow';
+  var rs=function(){ W=cv.width=innerWidth*dpr; H=cv.height=innerHeight*dpr; }; rs(); addEventListener('resize', rs);
+  var mk=function(top){ return {x:Math.random()*W*1.1, y:top?-10:Math.random()*H, s:snow?(1.5+Math.random()*3.5)*dpr:(10+Math.random()*16)*dpr, v:snow?(0.6+Math.random()*1.4)*dpr:(9+Math.random()*7)*dpr, w:Math.random()*6.28}; };
+  var FULL = snow?110:160, LIGHT = snow?45:60;
+  for(var i=0;i<FULL;i++) P.push(mk(false));
   (function step(){
-    if(!o.isConnected) return; var el=Date.now()-t0; x.clearRect(0,0,W,H);
-    x.strokeStyle='rgba(174,203,250,.75)'; x.lineWidth=1.4*dpr; x.fillStyle='rgba(255,255,255,.92)';
-    P.forEach(function(p){
+    if(!o.isConnected){ removeEventListener('resize', rs); return; }
+    var el=Date.now()-t0, want = el<6000 ? FULL : LIGHT;
+    if(el>6000){ var lb=o.querySelector('.wx-lb'); if(lb) lb.style.opacity='0'; }
+    x.clearRect(0,0,W,H); x.strokeStyle='rgba(174,203,250,.7)'; x.lineWidth=1.4*dpr; x.fillStyle='rgba(255,255,255,.9)';
+    for(var i=P.length-1;i>=0;i--){ var p=P[i];
       if(snow){ p.w+=0.03; p.x+=Math.sin(p.w)*0.8*dpr; p.y+=p.v; x.beginPath(); x.arc(p.x,p.y,p.s,0,7); x.fill(); }
       else { p.x-=p.v*0.18; p.y+=p.v; x.beginPath(); x.moveTo(p.x,p.y); x.lineTo(p.x+p.s*0.18,p.y-p.s); x.stroke(); }
-      if(p.y>H+10 && el<dur-1500){ p.y=-10; p.x=Math.random()*W*1.1; }
-    });
-    if(el>dur-1000) o.style.opacity='0';
-    if(el<dur) requestAnimationFrame(step); else o.remove();
+      if(p.y>H+10){ if(P.length>want) P.splice(i,1); else P[i]=mk(true); } }
+    requestAnimationFrame(step);
   })();
+}
+function wxCheck(){
+  WX_LAST = Date.now();
+  if(wxOff()) { wxStop(); return; }
+  try{
+    fetch('https://api.open-meteo.com/v1/forecast?latitude='+WX_LOC.lat+'&longitude='+WX_LOC.lon+'&current=weather_code,temperature_2m&timezone=Asia%2FSeoul',{cache:'no-store'})
+      .then(function(r){ return r.json(); })
+      .then(function(j){ var c=j&&j.current; if(!c) return; var k=wxKind(c.weather_code);
+        if(!k){ wxStop(); return; }
+        var t = (c.temperature_2m!=null? ' '+Math.round(c.temperature_2m)+'℃':'');
+        wxFall(k, k==='snow' ? '❄️ 지금 '+WX_LOC.name+'에 눈이 와요'+t+' · 빙판길 안전운전' : '🌧️ 지금 '+WX_LOC.name+'에 비가 와요'+t+' · 빗길 안전운전'); })
+      .catch(function(){});
+  }catch(e){}
 }
 function wxAuto(){
   if(WX_DONE) return; WX_DONE = true;
   if(matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   var q = (location.search.match(/[?&]wx=(rain|snow)/)||[])[1];
   if(q){ wxFall(q, q==='snow'?'❄️ 미리보기 · 눈 오는 날':'🌧️ 미리보기 · 비 오는 날'); return; }
-  try{
-    fetch('https://api.open-meteo.com/v1/forecast?latitude='+WX_LOC.lat+'&longitude='+WX_LOC.lon+'&current=weather_code,temperature_2m&timezone=Asia%2FSeoul',{cache:'no-store'})
-      .then(function(r){ return r.json(); })
-      .then(function(j){ var c=j&&j.current; if(!c) return; var k=wxKind(c.weather_code); if(!k) return;
-        var t = (c.temperature_2m!=null? ' '+Math.round(c.temperature_2m)+'℃':'');
-        wxFall(k, k==='snow' ? '❄️ 지금 '+WX_LOC.name+'에 눈이 와요'+t+' · 빙판길 안전운전' : '🌧️ 지금 '+WX_LOC.name+'에 비가 와요'+t+' · 빗길 안전운전'); })
-      .catch(function(){});
-  }catch(e){}
+  wxCheck();
+  WX_TIMER = setInterval(function(){ if(!document.hidden) wxCheck(); }, 15*60*1000);   /* 15분마다 날씨 다시 확인 → 그치면 사라짐 */
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden && Date.now()-WX_LAST > 10*60*1000) wxCheck(); });
 }
 
 /* ===== 💬 응원 코멘트 — 지사장·서비스팀장·그룹장이 평가 상위자에게 응원 한마디 ('cheer|대상' · 메모=내용) ===== */
