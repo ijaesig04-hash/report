@@ -19,7 +19,9 @@
 | `directmall.html` | 에스원 홍보메일·카톡 스튜디오 (다이렉트몰 상품 홍보, 브리핑의 「에스원 상품 추천」 메뉴) |
 | `tools/screen_check.js` | 휴대폰 크기(390px) 화면 점검 — 탭마다 캡처하고 오류·화면 넘침을 찾음 |
 | `.claude/skills/` | 반영 작업 순서·체크리스트(스킬) |
-| `.claude/settings.json` | 이 저장소에서 쓰는 플러그인: frontend-design(화면 디자인) · claude-code-setup(설정 추천) |
+| `tools/verify.py` | 반영 검사 — bsr-ver 갱신·NEWS 새 소식·근무표 원본 사진 교체·스크립트 문법·스타일 괄호 확인 |
+| `.claude/settings.json` | 플러그인(frontend-design · claude-code-setup), 자주 쓰는 명령 미리 허용, 자동 검사 장치(훅) 설정 |
+| `.claude/hooks/` | 자동 검사 장치: 커밋 직전 `verify.py` 실행(실패 시 커밋 막음) · 1.5MB 넘는 파일 통째 읽기 막기 |
 | `sw.js` | 빠른 열기·오프라인용 서비스워커. **새 html 페이지를 추가하면 navigate 허용 목록 정규식에 추가해야 함** |
 | `manifest.json`, `icon-*.png` | 앱 설치 정보·아이콘 |
 | `404.html`, `report-1023x.html` | 옛 주소 → 최신 화면으로 이동 |
@@ -32,6 +34,7 @@
 - 지표·근무표·운전성향 반영 작업에는 저장소의 `.claude/skills/bukseoul-report-update/SKILL.md` 스킬을 따른다
   - claude.ai 계정에 올린 **예전 스킬(`anthropic-skills:bukseoul-report-update`)은 쓰지 않는다** — 수동 업로드·파일 이름 바꾸기 안내 등 옛 방식이라 지금과 맞지 않음
 - 반영 후 push 전에 `node tools/screen_check.js index.html <폴더>`로 휴대폰 크기 화면 점검(탭별 캡처·오류 확인)을 한다
+- 커밋하면 `tools/verify.py`가 자동으로 돌아 검사한다. 막히면 알려준 문제를 고치고 다시 커밋한다 (검사를 끄거나 건너뛰지 않기)
 - **근무표를 고칠 때는 표(DUTY)와 함께 🗂️ 원본 사진(`DUTY_IMG`)도 항상 같은 날 최신 사진으로 교체한다** (사번 칸은 흰색으로 가림). 표만 바꾸고 원본을 빼먹지 않기
 - 폰 푸시 알림은 **지표 · 자료 업데이트 소식만** 보낸다 (`push.py`: tabs에 cmp·veh·ppl·mgt·eval·cs·alm·drv·duty가 있는 공개 소식). 기능 · 화면 변경 소식은 tabs를 ["home"]으로 두거나 `nopush:1`을 title 앞에 넣는다
 - 회사 내부 자료이므로 페이지는 `noindex` 유지, 개인정보는 필요한 범위만 표시한다
