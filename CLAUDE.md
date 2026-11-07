@@ -28,7 +28,8 @@
 - 지표 반영할 때마다 `index.html`의 `<meta name="bsr-ver">` 값을 갱신한다 (휴대폰 화면 자동 새로고침 기준)
 - `check.py`는 `index.html` 안의 데이터 형식(예: `{d:"YYYY-MM-DD", br:`, `"YYYY-MM-DD":{"period"`, `var DRIVE`)을 읽는다. 데이터 형식을 바꾸면 `check.py`도 함께 고친다
 - 커밋 메시지는 한국어로, 무엇을 반영했는지 짧게 적는다 (예: "고객체감 10/30 반영 (발송 175, 응답 55)")
-- 지표·근무표·운전성향 반영 작업에는 저장소의 `.claude/skills/bukseoul-report-update/SKILL.md` 스킬을 따른다 (claude.ai에 올린 예전 버전보다 우선)
+- 지표·근무표·운전성향 반영 작업에는 저장소의 `.claude/skills/bukseoul-report-update/SKILL.md` 스킬을 따른다
+  - claude.ai 계정에 올린 **예전 스킬(`anthropic-skills:bukseoul-report-update`)은 쓰지 않는다** — 수동 업로드·파일 이름 바꾸기 안내 등 옛 방식이라 지금과 맞지 않음
 - 반영 후 push 전에 `node tools/screen_check.js index.html <폴더>`로 휴대폰 크기 화면 점검(탭별 캡처·오류 확인)을 한다
 - **근무표를 고칠 때는 표(DUTY)와 함께 🗂️ 원본 사진(`DUTY_IMG`)도 항상 같은 날 최신 사진으로 교체한다** (사번 칸은 흰색으로 가림). 표만 바꾸고 원본을 빼먹지 않기
 - 폰 푸시 알림은 **지표 · 자료 업데이트 소식만** 보낸다 (`push.py`: tabs에 cmp·veh·ppl·mgt·eval·cs·alm·drv·duty가 있는 공개 소식). 기능 · 화면 변경 소식은 tabs를 ["home"]으로 두거나 `nopush:1`을 title 앞에 넣는다
