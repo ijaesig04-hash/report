@@ -19,6 +19,7 @@
 | `directmall.html` | 에스원 홍보메일·카톡 스튜디오 (다이렉트몰 상품 홍보, 브리핑의 「에스원 상품 추천」 메뉴) |
 | `tools/screen_check.js` | 휴대폰 크기(390px) 화면 점검 — 탭마다 캡처하고 오류·화면 넘침을 찾음 |
 | `.claude/skills/` | 반영 작업 순서·체크리스트(스킬) |
+| `.claude/settings.json` | 이 저장소에서 쓰는 플러그인: frontend-design(화면 디자인) · claude-code-setup(설정 추천) |
 | `sw.js` | 빠른 열기·오프라인용 서비스워커. **새 html 페이지를 추가하면 navigate 허용 목록 정규식에 추가해야 함** |
 | `manifest.json`, `icon-*.png` | 앱 설치 정보·아이콘 |
 | `404.html`, `report-1023x.html` | 옛 주소 → 최신 화면으로 이동 |
