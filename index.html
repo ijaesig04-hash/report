@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108122500">
+<meta name="bsr-ver" content="20261108133500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -803,9 +803,13 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .ncw{display:flex;flex-wrap:wrap;gap:6px}
 .ntw select{border:1px solid #cbd5e1;border-radius:10px;padding:10px;font:500 14px "Noto Sans KR",sans-serif;width:100%;background:#fff;color:#14213a}
 .nli{--nc:#1f4fd8;display:block;width:100%;text-align:left;border:0;border-top:1px solid #e3e9f3;background:none;padding:11px 0;cursor:pointer;font-family:"Noto Sans KR",sans-serif;color:#14213a}
-.nli-a{display:flex;align-items:center;gap:6px;font-size:11.5px;color:#64748b}
+.nli-a{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:11.5px;color:#64748b;line-height:1.3}
+.nli-a>*{white-space:nowrap}
+.nli-a .nli-t{color:#64748b}.nli-a .nli-t::before{content:"·";margin-right:8px;color:#cbd5e1}
+.nli-r{margin-left:auto;display:inline-flex;align-items:center;gap:6px}
+.nli-r .ntg{margin-left:0}
 .nli-a i{font-style:normal;font-weight:800;color:var(--nc)}
-.nli-a .nli-st{margin-left:auto;font-weight:700;border-radius:999px;padding:2px 8px;background:#fff1e6;color:#c2410c}
+.nli-a .nli-st{font-weight:700;border-radius:999px;padding:2px 8px;background:#fff1e6;color:#c2410c}
 .nli-a .nli-st.ok{background:#e7f7ee;color:#137a3f}
 .nli b{display:block;font-size:14.5px;margin-top:3px;line-height:1.4}
 .nli p{margin:4px 0 0;font-size:12px;color:#475569;background:#f1f5fc;border-radius:8px;padding:5px 8px}
@@ -6617,14 +6621,14 @@ function evtArch(){ return EVT_ARCH.filter(function(a){ return EDU[a.edu] && evt
 function evtArchView(id){ var a = evtArch().filter(function(x){return x.id===id})[0]; if(!a){ eduTab(); return; } var E = EDU[a.edu];
   openSheet('<div class="xs-h"><button type="button" data-ntt="edu" style="margin-left:0">‹ 경조사</button><button type="button" data-xs="close">✕</button></div><div class="nv" style="--nc:#db2777"><span class="nv-k">'+(E.ic||"💐")+' 경조사 · 지난 소식</span><h3>'+esc2(a.title)+'</h3></div><div class="ed">'+E.html()+'</div>'); }
 document.addEventListener("click", function(e){ var t = e.target.closest("[data-eva]"); if(t) evtArchView(t.dataset.eva); });
-function evtArchHtml(){ var A = evtArch(); return A.length ? '<p class="xs-p" style="margin-top:14px">🗂️ 지난 경조사 <small>(공지일 한 달 뒤 자동 삭제)</small></p>'+A.map(function(a){ var E = EDU[a.edu]; return '<button type="button" class="nli" style="--nc:#db2777" data-eva="'+a.id+'"><span class="nli-a"><i>'+(E.ic||"💐")+' 경조사</i><span class="num">'+a.d.slice(5).replace("-","/")+'</span> · 지난 소식</span><b>'+esc2(a.title)+'</b>'+(E.sub?'<small style="display:block;color:#64748b;font-size:12px;margin-top:2px">'+esc2(E.sub)+'</small>':'')+'</button>'; }).join('') : ''; }
+function evtArchHtml(){ var A = evtArch(); return A.length ? '<p class="xs-p" style="margin-top:14px">🗂️ 지난 경조사 <small>(공지일 한 달 뒤 자동 삭제)</small></p>'+A.map(function(a){ var E = EDU[a.edu]; return '<button type="button" class="nli" style="--nc:#db2777" data-eva="'+a.id+'"><span class="nli-a"><i>'+(E.ic||"💐")+' 경조사</i><span class="num">'+a.d.slice(5).replace("-","/")+'</span><span class="nli-t">지난 소식</span></span><b>'+esc2(a.title)+'</b>'+(E.sub?'<small style="display:block;color:#64748b;font-size:12px;margin-top:2px">'+esc2(E.sub)+'</small>':'')+'</button>'; }).join('') : ''; }
 function eduTab(){   /* 💐 경조사 탭 (교육 자료는 📢 공지 탭에 함께 보여요) */
   var me = myName(), L = NOTI.items.filter(function(x){ return isEvtK(x) && evtLive(x.t); });
   openSheet('<div class="xs-h"><b>📢 공지 · 경조사 · 매뉴얼</b><button type="button" data-xs="close">✕</button></div>'+ntTop("edu")+
     '<p class="xs-p">지사 식구들의 기쁜 일 · 슬픈 일 소식을 모아 봐요. 공지일 한 달 뒤 자동으로 사라져요.</p>'+
     (L.length ? L.map(function(x){ var p = ncParse(x), v = lsGet(notiAckKey(x.id)), ak = NOTI.acks && mgrIs() ? (NOTI.acks[x.id]||[]) : null, all = notiAud(x);
       var st = me ? (v ? '<span class="nli-st ok">✓ 확인</span>' : '<span class="nli-st">미확인</span>') : '';
-      return '<button type="button" class="nli" style="--nc:'+p.cat.c+'" data-ntv="'+esc2(x.id)+'"><span class="nli-a"><i>'+p.cat.ic+' 경조사</i><span class="num">'+notiDate(x.t)+'</span>'+(mgrIs()?notiTgTag(x):'')+st+'</span><b>'+esc2(p.title)+'</b>'+
+      return '<button type="button" class="nli" style="--nc:'+p.cat.c+'" data-ntv="'+esc2(x.id)+'"><span class="nli-a"><i>'+p.cat.ic+' 경조사</i><span class="num">'+notiDate(x.t)+'</span><span class="nli-r">'+(mgrIs()?notiTgTag(x):'')+st+'</span></span><b>'+esc2(p.title)+'</b>'+
         (ak?'<p>👥 확인 '+all.filter(function(n){return ak.indexOf(n)>=0}).length+'/'+all.length+'명</p>':'')+'</button>'; }).join('')+evtArchHtml()
      : evtArch().length ? evtArchHtml() : '<div class="mn-lock"><b>💐 아직 경조사 소식이 없어요</b><p>관리자가 공지 올리기에서 분류를 💐 경조사로 올리면 여기에 모여요.</p></div>'));
 }
@@ -6647,7 +6651,7 @@ function manTab(msg){
     openSheet(head+'<div class="mn-lock"><b>🔒 매뉴얼은 PIN이 필요해요</b><p>한 번 입력하면 이 폰에서는 다음부터 자동으로 열려요.</p><input id="man-pin" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="PIN 4자리"><button type="button" class="ntw-go" data-manpin="1">열기</button>'+(msg?'<p class="ntw-msg">'+msg+'</p>':'')+'</div>'); return; }
   var d = deptOf(), L = MAN.filter(function(m){ return m.dept==="전체" || d==="서비스" || mgrIs() ? (m.dept==="전체" || d==="서비스" || mgrIs()) : false; });
   openSheet(head+'<p class="xs-p">업무 매뉴얼 · 기준표예요. 회사 내부 자료라 밖으로 공유하지 마세요.</p>'+
-    L.map(function(m){ return '<button type="button" class="nli" style="--nc:#16306b" data-man="'+m.id+'"><span class="nli-a"><i>'+m.ic+' 매뉴얼</i>'+(m.dept==="서비스"?' · 🚗 서비스':' · 🏢 전 부서')+'</span><b>'+esc2(m.title)+'</b><small style="display:block;color:#64748b;font-size:12px;margin-top:2px">'+esc2(m.sub)+'</small></button>'; }).join('')+
+    L.map(function(m){ return '<button type="button" class="nli" style="--nc:#16306b" data-man="'+m.id+'"><span class="nli-a"><i>'+m.ic+' 매뉴얼</i><span class="nli-t">'+(m.dept==="서비스"?'🚗 서비스':'🏢 전 부서')+'</span></span><b>'+esc2(m.title)+'</b><small style="display:block;color:#64748b;font-size:12px;margin-top:2px">'+esc2(m.sub)+'</small></button>'; }).join('')+
     '<button type="button" class="ntw-hide" style="margin-top:12px" data-manlock="1">🔒 이 폰에서 매뉴얼 잠그기</button>');
 }
 /* 🔍 원본 크게 보기 · 💾 저장 — 매뉴얼 · 교육 자료 사진 공통 */
@@ -6693,7 +6697,7 @@ function notiList(f){
   if(used.length>1) h += '<div class="ncf"><button type="button" data-ntf="" aria-pressed="'+(!NL_F)+'">전체</button>'+used.map(function(c){return '<button type="button" style="--nc:'+c.c+'" data-ntf="'+c.k+'" aria-pressed="'+(NL_F===c.k)+'">'+c.ic+' '+c.k+'</button>'}).join('')+'</div>';
   h += items.length ? items.map(function(x){ var p = ncParse(x), v = lsGet(notiAckKey(x.id)), ak = NOTI.acks && mgrIs() ? (NOTI.acks[x.id]||[]) : null, all = notiAud(x);
       var st = me ? (v ? '<span class="nli-st ok">✓ 확인</span>' : '<span class="nli-st">미확인</span>') : '';
-      return '<button type="button" class="nli" style="--nc:'+p.cat.c+'" data-ntv="'+esc2(x.id)+'"><span class="nli-a"><i>'+p.cat.ic+' '+p.cat.k+'</i><span class="num">'+notiDate(x.t)+'</span>'+(p.edu?' · '+(EDU[p.edu].tag||'📚 교육 자료'):'')+(mgrIs()?notiTgTag(x):'')+st+'</span><b>'+esc2(p.title)+'</b>'+
+      return '<button type="button" class="nli" style="--nc:'+p.cat.c+'" data-ntv="'+esc2(x.id)+'"><span class="nli-a"><i>'+p.cat.ic+' '+p.cat.k+'</i><span class="num">'+notiDate(x.t)+'</span>'+(p.edu?'<span class="nli-t">'+(EDU[p.edu].tag||'📚 교육 자료')+'</span>':'')+'<span class="nli-r">'+(mgrIs()?notiTgTag(x):'')+st+'</span></span><b>'+esc2(p.title)+'</b>'+
         (ak?'<p>👥 확인 '+all.filter(function(n){return ak.indexOf(n)>=0}).length+'/'+all.length+'명</p>':'')+'</button>'; }).join('') : '<p class="xs-p">아직 공지가 없습니다.</p>';
   openSheet(h);
 }
