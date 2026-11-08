@@ -244,17 +244,17 @@ table.t td.n,table.t th.n{text-align:right}
     <div id="mailSend">
      <div class="fld"><label for="subject">메일 제목 <small>(자동 생성 · 수정 가능)</small></label>
        <div class="row"><input type="text" id="subject"><button type="button" class="mini" id="subjReset" title="자동 제목으로 되돌리기" aria-label="자동 제목으로 되돌리기">↺</button></div></div>
-     <div class="btns" style="margin-top:12px">
-       <button type="button" class="btn b-navy" id="bSubj">🏷️ 제목 복사</button>
-       <button type="button" class="btn b-red" id="bCopy">📋 본문 복사 → 메일에 붙여넣기</button>
-     </div>
-     <div class="btns" style="margin-top:10px"><button type="button" class="btn b-red" id="mSend" style="padding:15px;font-size:16px">✉️ 디자인 그대로 메일 발송<small style="display:block;font-size:12px;font-weight:400;margin-top:2px">받는 사람 메일만 적으면 위 미리보기 모습 그대로 도착 (네이버·Gmail 모두)</small></button></div>
-     <div class="btns" id="mShareWrap" style="margin-top:10px"><button type="button" class="btn b-kakao" id="mShare" style="padding:14px">📤 메일 앱으로 보내기<small style="display:block;font-size:12px;font-weight:400;margin-top:2px">메일 디자인을 사진으로 첨부 · 네이버·Gmail·아웃룩 어디서나 보여요</small></button></div>
+     <button type="button" class="btn b-red" id="bCopy" style="margin-top:12px;padding:17px;font-size:17px;width:100%">📋 본문 복사 → 메일에 붙여넣기<small style="display:block;font-size:12px;font-weight:400;margin-top:3px">카드 디자인째로 복사 · 회사 메일 본문에 길게 눌러 붙여넣기</small></button>
+     <button type="button" class="btn b-navy" id="bSubj" style="margin-top:8px;width:100%">🏷️ 제목 복사</button>
      <label class="chk" style="margin-top:10px"><input type="checkbox" id="noimg"><span><b>사진 빼고 보내기</b><small>글·QR만 · 메일이 아주 가벼워져요</small></span></label>
-     <div class="btns" style="margin-top:10px;grid-template-columns:1fr 1fr">
+     <details class="kfold" style="margin-top:12px"><summary>📦 다른 방법 <small>붙여넣기가 안 되는 메일 앱일 때</small></summary>
+      <div class="btns"><button type="button" class="btn b-soft" id="mSend" style="padding:14px">✉️ 디자인 그대로 메일 발송<small style="display:block;font-size:12px;font-weight:400;margin-top:2px">받는 사람 메일만 적으면 내 Gmail로 발송</small></button></div>
+      <div class="btns" id="mShareWrap" style="margin-top:8px"><button type="button" class="btn b-soft" id="mShare" style="padding:14px">📤 메일 앱으로 보내기<small style="display:block;font-size:12px;font-weight:400;margin-top:2px">디자인을 사진으로 첨부 (네이버 메일 앱용)</small></button></div>
+      <div class="btns" style="margin-top:8px;grid-template-columns:1fr 1fr">
        <button type="button" class="btn b-soft" id="bDown">⬇️ HTML 저장</button>
        <button type="button" class="btn b-soft" id="bCode">&lt;/&gt; 코드 복사</button>
-     </div>
+      </div>
+     </details>
     </div>
     <div id="kakaoSend" hidden>
      <div class="btns">
@@ -1753,7 +1753,7 @@ async function copyRich(){
   catch(e){try{const doc=$('pv').contentDocument,r=doc.createRange();r.selectNodeContents(doc.body);const s=doc.getSelection();s.removeAllRanges();s.addRange(r);ok=doc.execCommand('copy');s.removeAllRanges();}catch(_){}}
   if(!ok){toast('복사가 막혀 있어요. 미리보기를 드래그해 직접 복사해 주세요');return;}
   const saved=await autoRecord('메일');
-  toast('본문을 복사했어요. 메일에 붙여넣으세요 · 네이버 메일 앱은 글만 들어가니 📤 메일 앱으로 보내기를 쓰세요'+saved);
+  toast('본문을 복사했어요. 메일에 붙여넣으세요'+saved);
 }
 async function copyKakao(){
   if(!check())return;const ok=await copyText(kakaoText());
