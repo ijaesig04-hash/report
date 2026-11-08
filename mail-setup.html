@@ -4,21 +4,21 @@ main{max-width:560px;margin:0 auto;padding:18px 16px 40px}h1{font-size:20px;marg
 ol{padding-left:22px}li{margin:10px 0}b{color:#0a1a3a}.tip{font-size:13px;color:#5a6478}
 button{width:100%;padding:15px;border:0;border-radius:12px;background:#e60012;color:#fff;font:inherit;font-weight:700;font-size:16px;margin:10px 0}
 a.go{display:block;text-align:center;padding:14px;border-radius:12px;background:#0a1a3a;color:#fff;text-decoration:none;font-weight:700}
-pre{background:#fff;border:1px solid #d6dbe6;border-radius:10px;padding:10px;font-size:11px;max-height:160px;overflow:auto;white-space:pre-wrap}</style></head><body><main>
+pre{background:#fff;border:1px solid #d6dbe6;border-radius:10px;padding:10px;font-size:11px;max-height:220px;user-select:all;-webkit-user-select:all;overflow:auto;white-space:pre-wrap}</style></head><body><main>
 <h1>✉️ 디자인 그대로 메일 발송 · 처음 1번 설정</h1>
 <p class="tip">내 구글(Gmail) 계정으로 메일을 대신 보내 주는 작은 프로그램을 만드는 과정이에요. 한 번만 하면 끝나요.</p>
 <button id="cp">① 코드 복사</button>
 <a class="go" href="https://script.google.com/home/projects/create" target="_blank" rel="noopener">② 구글 Apps Script 새 프로젝트 열기</a>
 <ol>
 <li>크롬 오른쪽 위 <b>⋮ → 데스크톱 사이트</b>를 켜요 (휴대폰 화면에서는 메뉴가 안 보여요).</li>
-<li>열린 편집 화면의 글을 <b>전부 지우고</b> 복사한 코드를 <b>붙여넣기</b> → 위쪽 <b>💾 저장</b>.</li>
+<li>열린 편집 화면의 글을 <b>전부 지우고</b> 복사한 코드를 <b>붙여넣기</b>. 첫 줄이 <b>/* 에스원 다이렉트몰 홍보메일</b> 로 시작하는지 확인 → 위쪽 <b>💾 저장</b> (‘저장되지 않은 변경사항’ 글자가 사라져야 해요).</li>
 <li>오른쪽 위 파란 <b>배포 → 새 배포</b> → 톱니바퀴 ⚙️ 에서 <b>웹 앱</b> 선택.</li>
 <li><b>다음 사용자 인증 정보로 실행: 나</b> · <b>액세스 권한: 모든 사용자</b> → <b>배포</b>.</li>
 <li><b>액세스 승인</b> → 내 구글 계정 선택 → <b>고급 → (안전하지 않음)으로 이동</b> → <b>허용</b>. (내가 만든 프로그램이라 뜨는 안내예요)</li>
 <li>나오는 <b>웹 앱 URL</b> (https://script.google.com/macros/s/…/exec) 을 <b>복사</b>해서 홍보 스튜디오 발송 창의 주소 칸에 붙여넣으면 끝.</li>
 </ol>
 <p class="tip">· 메일은 내 Gmail 주소로 나가고, 보내는 사람 이름은 스튜디오에 입력한 이름으로 보여요.<br>· 무료 Gmail은 하루 100통까지 보낼 수 있어요.</p>
-<pre id="code">/* 에스원 다이렉트몰 홍보메일 — 디자인 그대로 발송 (구글 Apps Script 웹 앱)
+<p class="tip">↓ 복사가 안 되면 아래 칸을 한 번 누르면 전체 선택돼요 → <b>복사</b></p><pre id="code" onclick="var r=document.createRange();r.selectNodeContents(this);var g=getSelection();g.removeAllRanges();g.addRange(r);">/* 에스원 다이렉트몰 홍보메일 — 디자인 그대로 발송 (구글 Apps Script 웹 앱)
    배포: 배포 → 새 배포 → 유형 &#x27;웹 앱&#x27; → 실행: 나 / 액세스: 모든 사용자 */
 const KEY = &#x27;s1-bukseoul-mail&#x27;;
 function doPost(e) {
