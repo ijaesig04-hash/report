@@ -1868,33 +1868,39 @@ async function mailImage(){
     return await new Promise(r=>cv.toBlob(r,'image/jpeg',.88));
   }finally{fr.remove();}
 }
+/* 📤 메일 앱으로 보내기 — 사진만 공유(네이버 메일 앱은 사진+글을 같이 넘기면 사진을 버림) · 본문 글은 자동 복사 → 붙여넣기 */
 async function shareMail(){
   if(!check())return;
-  const subj=$('subject').value;
-  if(!theme.startsWith('k_')){
-    const body=mailPlain();copyText(body);toast('메일 디자인을 사진으로 만드는 중이에요…');
-    let blob;try{blob=await mailImage();}catch(e){toast('사진 만들기가 안 돼서 글만 보낼게요');}
-    const files=blob?[new File([blob],'에스원다이렉트몰_안내.jpg',{type:'image/jpeg'})]:[];
-    if(navigator.share&&(!files.length||(navigator.canShare&&navigator.canShare({files})))){
-      try{await navigator.share(files.length?{files,title:subj,text:body}:{title:subj,text:body});toast('메일 앱에서 받는 사람만 넣고 보내세요'+(await autoRecord('메일')));}
-      catch(e){if(e&&e.name!=='AbortError'&&blob)fallbackShare(blob,'에스원다이렉트몰_안내.jpg');}
-      return;}
-    if(blob)fallbackShare(blob,'에스원다이렉트몰_안내.jpg');return;
-  }
-  const id=theme.slice(2),t=KTHEMES.find(v=>v.id===id)||KTHEMES[0];
-  const keep=kTone;kTone='formal';let body=kakaoText();kTone=keep;
-  body=body.replace(/^\[에스원 다이렉트몰\][^\n]*\n+/,'');
-  /* 첨부된 카드는 눌러도 접속이 안 되므로, 본문 맨 위·맨 아래에 바로가기 주소를 눈에 띄게 (메일 앱이 자동으로 링크로 바꿔줌) */
-  body='👉 에스원 다이렉트몰 바로가기 (누르면 바로 접속)\n'+MALL+'\n\n🎁 결제할 때 사원번호 '+(raw().emp||'')+' 입력하면 10% 추가 할인\n━━━━━━━━━━━━━━\n\n'+body+'\n\n━━━━━━━━━━━━━━\n👉 다이렉트몰 바로가기: '+MALL+'\n📎 첨부한 카드 이미지에 상품 안내가 담겨 있어요';
+  const subj=$('subject').value,body=mailPlain(),isCard=theme.startsWith('k_');
+  toast(isCard?'카드를 준비하는 중이에요…':'메일 디자인을 사진으로 만드는 중이에요…');
+  let blob=null,name='에스원다이렉트몰_안내.jpg';
+  try{
+    if(isCard){const t=KTHEMES.find(v=>v.id===theme.slice(2))||KTHEMES[0];blob=await new Promise(r=>t.f(kdata()).toBlob(r,'image/jpeg',.9));name='에스원다이렉트몰_'+t.n.slice(2).replace(/\s/g,'')+'.jpg';}
+    else blob=await mailImage();
+  }catch(e){}
+  const file=blob?new File([blob],name,{type:'image/jpeg'}):null;
+  /* 사진 만드는 사이 '누르기' 권한이 끝나므로, 안내 창에서 한 번 더 눌러 보냄 */
+  const o=document.createElement('div');o.className='hand';
+  o.innerHTML='<div class="hand-in"><b>📤 메일 앱으로 보내기</b>'
+   +'<span><b>①</b> 아래 <b>보내기</b> → 네이버 · Gmail · 아웃룩 메일 앱 선택 → 디자인 사진이 <b>첨부</b>돼요<br><b>②</b> 메일 <b>본문</b>을 길게 눌러 <b>붙여넣기</b> (다이렉트몰 링크가 든 글이 복사돼 있어요)<br><b>③</b> 제목이 비어 있으면 아래 <b>제목 복사</b>를 눌러 제목 칸에 붙여넣기</span>'
+   +'<button type="button" class="btn b-kakao" id="mGo">📤 보내기 (사진 첨부)</button>'
+   +'<div class="btns" style="grid-template-columns:1fr 1fr"><button type="button" class="btn b-soft" id="mBody">📋 본문 다시 복사</button><button type="button" class="btn b-soft" id="mSubj">🏷️ 제목 복사</button></div>'
+   +'<button type="button" class="hand-x" id="mX">닫기</button></div>';
+  document.body.appendChild(o);
   copyText(body);
-  const blob=await new Promise(res=>t.f(kdata()).toBlob(res,'image/jpeg',.9));
-  const file=new File([blob],'에스원다이렉트몰_'+t.n.slice(2).replace(/\s/g,'')+'.jpg',{type:'image/jpeg'});
-  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({files:[file],title:subj,text:body});toast('메일 앱에서 받는 사람만 넣고 보내세요'+(await autoRecord('메일')));}
-    catch(e){if(e&&e.name!=='AbortError'){fallbackShare(blob,file.name);}}
-    return;}
-  fallbackShare(blob,file.name);
+  $('mX').onclick=()=>o.remove();
+  $('mBody').onclick=async()=>{await copyText(body);toast('본문을 복사했어요 · 메일 본문에 붙여넣으세요');};
+  $('mSubj').onclick=async()=>{await copyText(subj);toast('제목을 복사했어요 · 제목 칸에 붙여넣으세요');};
+  $('mGo').onclick=async()=>{
+    await copyText(body);
+    if(file&&navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file],title:subj});toast('본문 칸을 길게 눌러 붙여넣으세요'+(await autoRecord('메일')));}
+      catch(e){if(e&&e.name!=='AbortError')fallbackShare(blob,name);}
+    }else if(blob){fallbackShare(blob,name);}
+    else toast('사진을 만들지 못했어요. 본문 복사로 보내 주세요');
+  };
 }
+
 async function copySubject(){const ok=await copyText($('subject').value,$('subject'));toast(ok?'제목을 복사했어요':'제목 칸을 선택해 두었어요. Ctrl+C 하세요');}
 async function copyCode(){if(!check())return;const ok=await copyText(buildEmail());if(ok)toast('HTML 코드를 복사했어요'+(await autoRecord('메일')));else toast('복사가 막혀 있어요. HTML 저장을 이용해 주세요');}
 async function downloadHtml(){
