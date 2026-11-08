@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108180000">
+<meta name="bsr-ver" content="20261108184500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1908,9 +1908,10 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 
 /* 지사 평가 */
 .bmrow{grid-column:2/-1;display:flex;gap:4px}
-.bm{flex:1;display:flex;align-items:baseline;justify-content:center;gap:4px;padding:3px 0;border-radius:7px;font-size:12px}
-.bm small{font-size:10px;color:var(--muted)}
-.bm b{font-size:13px}
+.bm{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:4px 0 5px;border-radius:7px;font-size:12px;text-align:center}
+.bm small{font-size:10px;line-height:1.1;color:var(--muted);white-space:nowrap}
+.bm b{font-size:13px;line-height:1.15;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bmrow{gap:3px}
 .bm.good{background:var(--good-soft);color:var(--good)} .bm.ac{background:var(--accent-soft);color:var(--accent)}
 .bm.warn{background:var(--warn-soft);color:var(--warn)} .bm.bad{background:var(--bad-soft);color:var(--bad)}
 .bm.cur{box-shadow:inset 0 0 0 1.5px currentColor}
@@ -3586,6 +3587,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-08zh", date:"11/8", title:"월별 평가 칸 정렬", tabs:["eval"], items:["월별 점수 칸이 두 줄로 쪼개지던 것을 고쳤어요 — 월은 위, 점수는 아래로 가지런히"]},
  {id:"2026-11-08zg", date:"11/8", title:"상품 추천 열기", tabs:["home"], items:["이름표 메뉴에서 에스원 상품 추천을 열어도 앱 화면 그대로(주소창 없이) 열려요"]},
  {id:"2026-11-08zf", date:"11/8", title:"🎄 모든 꾸미기에 내려앉기", tabs:["home"], items:["크리스마스 눈·봄 꽃잎·추석 낙엽 등 모든 계절 꾸미기가 카드 위에 내려앉았다가 날아가거나 녹아요"]},
  {id:"2026-11-08ze", date:"11/8", title:"❄️ 눈 쌓임 · 🍁 낙엽 내려앉기", tabs:["home"], items:["눈 오는 날 카드·글자 윗면에 눈이 쌓였다 녹아요","가을엔 낙엽이 카드 위에 내려앉았다가 바람에 날려 가요"]},
