@@ -1903,7 +1903,7 @@ async function shareMail(){
 }
 
 /* ✉️ 디자인 그대로 발송 — 구글 Apps Script 웹 앱(tools/mailsend.gs)이 HTML 메일로 보냄 */
-const SEND_URL='';const SEND_KEY='s1-bukseoul-mail';
+const SEND_URL='https://script.google.com/macros/s/AKfycby82roPKcC09UUDkva6FbUhZzJfavmQl4BIuKAkBqQ1oY3Nc3zVlGzjKYJqLLxVXTS1vQ/exec';const SEND_KEY='s1-bukseoul-mail';
 const sendUrl=()=>{try{return (localStorage.getItem('s1mail.sendurl')||SEND_URL).trim();}catch(e){return SEND_URL;}};
 function sendSetup(after){
   const o=document.createElement('div');o.className='hand';
