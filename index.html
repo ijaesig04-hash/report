@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108110000">
+<meta name="bsr-ver" content="20261108110500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -6564,7 +6564,8 @@ function staffOnly(){ return (window.BSR_ALL||[]).filter(function(n){return CS_M
 function notiAud(x){ var tg = notiTg(x); var nl = function(L){ return L.filter(function(n){return !isLead(n)}); };
   if(tg==="영업"||tg==="기술") return nl(DEPTS[tg]); if(tg==="전체") return staffOnly().concat(nl(DEPTS["영업"]),nl(DEPTS["기술"])); return staffOnly(); }
 /* 공지 부서 — 표시 없는 예전 공지는 경조사 = 전 부서, 그 외(차량사고 · 업무공지 등) = 서비스 */
-function notiTg(x){ var p = ncParse(x); if(p.cat.k==="차량사고") return "서비스"; if(p.cat.k==="경조사") return "전체"; return p.tg || "서비스"; }   /* 차량사고 = 항상 서비스, 경조사 = 항상 전 부서 */
+var NOTI_ALL = /SMAT|자격증|영상기기 비밀번호/;   /* 서버 글은 그대로 두고 앱에서 전 부서 공지로 바꿔 보여줌 */
+function notiTg(x){ var p = ncParse(x); if(p.cat.k==="차량사고") return "서비스"; if(p.cat.k==="경조사" || NOTI_ALL.test(p.title)) return "전체"; return p.tg || "서비스"; }   /* 차량사고 = 항상 서비스, 경조사 = 항상 전 부서 */
 function notiMine(x){ var tg = notiTg(x); if(tg==="전체" || mgrIs()) return true; return deptOf()===tg; }
 function notiTgTag(x){ var tg = notiTg(x); return '<span class="ntg">→ '+(tg==="전체"?'전 부서':tg)+'</span>'; }
 function ackLine(id){
