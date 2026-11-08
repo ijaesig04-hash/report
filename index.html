@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108134000">
+<meta name="bsr-ver" content="20261108144500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3585,6 +3585,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-08zd", date:"11/8", title:"🌧️ 빗방울 튀기·흘러내리기", tabs:["home"], items:["비 오는 날 카드·글자 윗면에 빗방울이 부딪혀 튀고, 일부는 줄줄 흘러내려요"]},
  {id:"2026-11-08zc", date:"11/8", title:"공지 · 경조사 · 매뉴얼", tabs:["home"], items:["💐 공지 메뉴의 📚 교육 탭이 💐 경조사 탭으로 바뀌었어요 · 교육 자료는 📢 공지 탭에 함께 보여요"]},
  {id:"2026-11-08zb", date:"11/8", title:"디자인 그대로 메일 발송", tabs:["home"], items:["✉️ 상품 추천 → 메일에 「디자인 그대로 메일 발송」 추가 · 받는 사람 메일만 적으면 디자인 그대로 도착"]},
  {id:"2026-11-08za", date:"11/8", title:"메일 앱 보내기 사진 첨부 수정", tabs:["home"], items:["✉️ 「메일 앱으로 보내기」가 사진만 넘겨서 네이버 메일에도 디자인 사진이 첨부돼요 · 본문은 붙여넣기"]},
@@ -4457,7 +4458,9 @@ function wxFall(kind, label){
   var cv=o.querySelector('canvas'), x=cv.getContext('2d'), dpr=devicePixelRatio||1, W, H, P=[], t0=Date.now(), snow=kind==='snow';
   var rs=function(){ W=cv.width=innerWidth*dpr; H=cv.height=innerHeight*dpr; }; rs(); addEventListener('resize', rs);
   var mk=function(top){ return {x:Math.random()*W*1.1, y:top?-10:Math.random()*H, s:snow?(1.5+Math.random()*3.5)*dpr:(10+Math.random()*16)*dpr, v:snow?(0.6+Math.random()*1.4)*dpr:(9+Math.random()*7)*dpr, w:Math.random()*6.28}; };
-  var FULL = snow?110:160, LIGHT = snow?45:60;
+  var FULL = snow?110:160, LIGHT = snow?45:60, R=[], SP=[], RN=[], lastR=0, lastRun=0;
+  /* 🌧️ 비가 카드·글자 윗면에 부딪혀 튀고(물방울 파문), 일부는 줄줄 흘러내려요 */
+  var scanR=function(){ R=[]; var q=document.querySelectorAll('#xsheet .nli,#xsheet .xs-h,#view .sec,#view .nli,#view h2,#view .chip,#view .ch-i,#view .mx,#view .dh'); for(var i=0;i<q.length&&R.length<60;i++){ var b=q[i].getBoundingClientRect(); if(b.width>70&&b.height>18&&b.bottom>0&&b.top<innerHeight&&b.top>20) R.push([b.left*dpr,b.top*dpr,b.width*dpr,b.height*dpr]); } };
   for(var i=0;i<FULL;i++) P.push(mk(false));
   (function step(){
     if(!o.isConnected){ removeEventListener('resize', rs); return; }
@@ -4468,6 +4471,20 @@ function wxFall(kind, label){
       if(snow){ p.w+=0.03; p.x+=Math.sin(p.w)*0.8*dpr; p.y+=p.v; x.beginPath(); x.arc(p.x,p.y,p.s,0,7); x.fill(); }
       else { p.x-=p.v*0.18; p.y+=p.v; x.beginPath(); x.moveTo(p.x,p.y); x.lineTo(p.x+p.s*0.18,p.y-p.s); x.stroke(); }
       if(p.y>H+10){ if(P.length>want) P.splice(i,1); else P[i]=mk(true); } }
+    if(!snow){
+      var nw=Date.now(); if(nw-lastR>900){ lastR=nw; scanR(); }
+      if(R.length && SP.length<26){ for(var k=0;k<(el<6000?3:1);k++){ var r=R[(Math.random()*R.length)|0]; SP.push({x:r[0]+Math.random()*r[2], y:r[1], a:0}); } }
+      if(R.length && RN.length<9 && nw-lastRun>(el<6000?350:800)){ lastRun=nw; var r2=R[(Math.random()*R.length)|0], sx=r2[0]+r2[2]*(0.08+Math.random()*0.84); RN.push({x:sx,y:r2[1]+Math.random()*Math.min(r2[3],26*dpr),y0:0,v:0.5*dpr,max:(36+Math.random()*80)*dpr,a:1}); RN[RN.length-1].y0=RN[RN.length-1].y; }
+      for(var a=SP.length-1;a>=0;a--){ var sp=SP[a]; sp.a++; var f=sp.a/16; if(f>=1){ SP.splice(a,1); continue; }
+        x.strokeStyle='rgba(205,225,255,'+(0.75*(1-f))+')'; x.lineWidth=1.2*dpr; x.beginPath(); x.ellipse(sp.x,sp.y,(2+f*8)*dpr,(0.8+f*2.6)*dpr,0,0,6.3); x.stroke();
+        x.fillStyle='rgba(215,232,255,'+(0.8*(1-f))+')'; for(var d=-1;d<=1;d+=2){ x.beginPath(); x.arc(sp.x+d*f*9*dpr, sp.y-Math.sin(f*3.14)*8*dpr, 1.1*dpr, 0, 6.3); x.fill(); } }
+      for(var b2=RN.length-1;b2>=0;b2--){ var rn=RN[b2]; var run=rn.y-rn.y0;
+        if(run<rn.max){ rn.v=Math.min(rn.v+0.045*dpr,1.7*dpr); rn.y+=rn.v; rn.x+=Math.sin(rn.y/(9*dpr))*0.25*dpr; } else rn.a-=0.03;
+        if(rn.a<=0){ RN.splice(b2,1); continue; }
+        var g=x.createLinearGradient(rn.x,rn.y0,rn.x,rn.y); g.addColorStop(0,'rgba(190,215,250,0)'); g.addColorStop(1,'rgba(205,225,255,'+(0.55*rn.a)+')');
+        x.strokeStyle=g; x.lineWidth=1.6*dpr; x.beginPath(); x.moveTo(rn.x,rn.y0); x.lineTo(rn.x,rn.y); x.stroke();
+        x.fillStyle='rgba(225,238,255,'+(0.9*rn.a)+')'; x.beginPath(); x.ellipse(rn.x,rn.y,1.9*dpr,2.6*dpr,0,0,6.3); x.fill(); }
+    }
     requestAnimationFrame(step);
   })();
 }
