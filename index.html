@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108110500">
+<meta name="bsr-ver" content="20261108111500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1152,6 +1152,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .ch-h b{font-size:15px;color:#9d174d}
 .ch-h small{display:block;font-size:11px;color:#9f1239;margin:2px 0 8px}
 .ch-cs{flex-wrap:wrap;margin-bottom:6px}
+.ch-tp{display:grid;gap:6px;margin-bottom:8px}.ch-tp button{text-align:left;border:1px solid #fbcfe8;background:#fff;border-radius:12px;padding:9px 11px;font:500 13px/1.5 "Noto Sans KR",sans-serif;color:#831843;cursor:pointer}.ch-tp button[aria-pressed="true"]{background:#fdf2f8;border-color:#db2777;box-shadow:0 0 0 1px #db2777}
 .ch-sel{width:100%;border:1px solid #fbcfe8;border-radius:10px;padding:7px;font:600 13px "Noto Sans KR",sans-serif;margin-bottom:6px;background:#fff}
 #ch-tx{width:100%;box-sizing:border-box;border:1px solid #fbcfe8;border-radius:12px;padding:9px;font:500 14px "Noto Sans KR",sans-serif;resize:vertical;background:#fff}
 .ch-go{width:100%;margin-top:6px;border:0;border-radius:12px;padding:10px;background:linear-gradient(90deg,#db2777,#f97316);color:#fff;font:800 14px "Noto Sans KR",sans-serif;cursor:pointer}
@@ -4657,21 +4658,38 @@ function cheerAll(){
 }
 function cheerWho(n){ return n==="지사장"?"지사장님":n==="서비스팀장"?"서비스팀장님":n==="그룹장"?"그룹장님":n+"님"; }
 function cheerDate(t){ var d=new Date(t+9*3600000); return (d.getUTCMonth()+1)+'/'+d.getUTCDate(); }
+/* 응원 대상 = 지난달(확정된 달) MVP 순위 — 이번 달은 진행 중이라 제외 */
+function cheerMonth(){ var d = new Date(Date.now()+9*3600000); d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth()-1); return d.toISOString().slice(0,7); }
 function cheerTop(){
-  var m = kstDate(0).slice(0,7), R = null; try{ R = mxCalc(m); }catch(e){}
-  if(!R || !R.L.length || !R.L[0].t){ var ms = mxMonths(); for(var i=ms.length-2;i>=0 && (!R || !R.L.length || !R.L[0].t);i--){ try{ R = mxCalc(ms[i]); }catch(e){} } }
-  return R ? R.L.map(function(x,i){ return {n:x.n, car:x.car, rk:i+1, t:x.t}; }) : [];
+  var m = cheerMonth(), R = null, W = null; try{ R = mxCalc(m); }catch(e){} try{ W = mxWin(m); }catch(e){}
+  var L = R && R.L.length ? R.L.map(function(x){ return {n:x.n, car:x.car, t:x.t}; }) : [];
+  if(W && W.n){   /* 확정된 MVP 순위가 있으면 그 순서를 따름 (1위 = 확정 MVP) */
+    var ord = [W.n].concat(W.top.map(function(q){return q[0]})).filter(function(n,i,a){ return n && a.indexOf(n)===i; });
+    L.sort(function(a,b){ var ia = ord.indexOf(a.n), ib = ord.indexOf(b.n); return (ia<0?999:ia)-(ib<0?999:ib); });
+    if(!L.some(function(x){return x.n===W.n})) L.unshift({n:W.n, car:W.car, t:W.t});
+  }
+  return L.map(function(x,i){ x.rk = i+1; return x; });
 }
+function cheerTpl(n, rk){ var mo = +cheerMonth().slice(5), p = n+' 프로';
+  return [
+    rk===1 ? p+', '+mo+'월 MVP 축하해요! 덕분에 지사가 든든합니다. 정말 수고 많았어요 👍' : p+', '+mo+'월 '+rk+'위 축하해요! 덕분에 지사가 든든합니다. 정말 수고 많았어요 👍',
+    p+', 늘 고객을 먼저 생각하는 모습 고맙습니다. 이번 달도 응원할게요 💪',
+    p+', '+mo+'월 좋은 성과 고마워요! 안전운전하면서 이번 달도 힘내세요 🙌'
+  ]; }
 /* 쓰는 사람 화면 (월별 평가 탭 맨 위) */
 function cheerWrite(){
   if(!cheerCan()) return '';
-  var T = cheerTop(), sel = state.chT || (T[0] && T[0].n) || '';
+  var T = cheerTop(), sel = state.chT || (T[0] && T[0].n) || '', mo = +cheerMonth().slice(5);
+  if(!T.length) return '';
+  var me = T.filter(function(x){return x.n===sel})[0] || T[0], tp = cheerTpl(sel, me.rk), ti = state.chTp||0, tx = state.chTx!=null ? state.chTx : tp[ti];
   var chips = T.slice(0,5).map(function(x){ return '<button type="button" class="chip ch-c" data-cht="'+esc2(x.n)+'" aria-pressed="'+(x.n===sel)+'">'+(x.rk===1?'🥇':x.rk===2?'🥈':x.rk===3?'🥉':x.rk+'위 ')+esc2(x.n)+'</button>'; }).join('');
   var rest = T.slice(5).map(function(x){ return '<option value="'+esc2(x.n)+'"'+(x.n===sel?' selected':'')+'>'+x.rk+'위 '+esc2(x.n)+'</option>'; }).join('');
-  return '<div class="sec ch-w"><div class="ch-h"><b>💬 응원 한마디 남기기</b><small>'+cheerWho(myName())+' · 이달 MVP 순위 상위자</small></div>'+
+  return '<div class="sec ch-w"><div class="ch-h"><b>💬 응원 한마디 남기기</b><small>'+cheerWho(myName())+' · '+mo+'월 MVP 순위 상위자</small></div>'+
     '<div class="chips ch-cs">'+chips+'</div>'+(rest?'<select class="ch-sel" data-chsel="1" aria-label="다른 직원"><option value="">다른 직원 고르기</option>'+rest+'</select>':'')+
-    '<textarea id="ch-tx" maxlength="120" rows="2" placeholder="'+esc2(sel)+'님에게 응원 한마디 (예: 이번 달 정말 잘했어요! 계속 힘내세요)"></textarea>'+
-    '<button type="button" class="ch-go" data-chgo="1">💌 '+esc2(sel)+'님에게 보내기</button><p class="ch-n">보낸 응원은 받는 직원 브리핑과 응원 보드에 이름과 함께 보여요.</p></div>';
+    '<p class="ch-n" style="margin:8px 2px 4px">✍️ 멘트 고르기 <small>(눌러서 넣고, 아래에서 고쳐 쓸 수 있어요)</small></p>'+
+    '<div class="ch-tp">'+tp.map(function(t,i){ return '<button type="button" data-chtp="'+i+'" aria-pressed="'+(state.chTx==null&&i===ti)+'">'+esc2(t)+'</button>'; }).join('')+'</div>'+
+    '<textarea id="ch-tx" maxlength="120" rows="3" placeholder="'+esc2(sel)+' 프로에게 응원 한마디">'+esc2(tx)+'</textarea>'+
+    '<button type="button" class="ch-go" data-chgo="1">💌 '+esc2(sel)+' 프로에게 보내기</button><p class="ch-n">보낸 응원은 받는 직원 브리핑과 응원 보드에 이름과 함께 보여요.</p></div>';
 }
 /* 응원 보드 (월별 평가 탭 · 모두에게 보임) */
 function cheerBoard(){
@@ -4688,16 +4706,18 @@ function cheerCard(){
   return A.slice(0,2).map(function(c){ return '<div class="ch-card"><div class="ch-ic">💌</div><div><small>'+cheerWho(c.by)+'이 응원을 남겼어요 · '+cheerDate(c.ts)+'</small><p>“'+esc2(c.tx)+'”</p><button type="button" data-chok="'+c.ts+'">고맙습니다 👍</button></div></div>'; }).join('');
 }
 document.addEventListener('click', function(e){
-  var t = e.target.closest('[data-cht]'); if(t){ state.chT = t.dataset.cht; render(); return; }
+  var t = e.target.closest('[data-cht]'); if(t){ state.chT = t.dataset.cht; state.chTx = null; render(); return; }
+  var tq = e.target.closest('[data-chtp]'); if(tq){ state.chTp = +tq.dataset.chtp; state.chTx = null; var ta = document.getElementById('ch-tx'); if(ta){ ta.value = tq.textContent; } document.querySelectorAll('[data-chtp]').forEach(function(b){ b.setAttribute('aria-pressed', b===tq); }); return; }
   if(e.target.closest('[data-chgo]')){
     var tx = ((document.getElementById('ch-tx')||{}).value||'').trim(), to = state.chT || (cheerTop()[0]||{}).n;
     if(!tx){ nrToast('응원 내용을 적어 주세요'); return; } if(!to) return;
     var nr = [Date.now(), 'cheer|'+to, myName(), tx.replace(/\s+/g,' ').slice(0,120)]; nr.sent = Date.now(); ACTS_PEND.push(nr); actsSavePend(); actSend(nr);
-    nrToast('💌 '+to+'님에게 응원을 보냈어요'); render(); setTimeout(actsLoad, 4000); return; }
+    nrToast('💌 '+to+' 프로에게 응원을 보냈어요'); state.chTx = null; render(); setTimeout(actsLoad, 4000); return; }
   var d = e.target.closest('[data-chdel]'); if(d){ var nr2 = [Date.now(), 'cheerdel|'+d.dataset.chdel, myName(), '삭제']; nr2.sent = Date.now(); ACTS_PEND.push(nr2); actsSavePend(); actSend(nr2); render(); setTimeout(actsLoad, 4000); return; }
   var k = e.target.closest('[data-chok]'); if(k){ try{ localStorage.setItem('bsr_ch_ok_'+k.dataset.chok,'1'); }catch(er){} render(); return; }
 });
-document.addEventListener('change', function(e){ if(e.target.dataset && e.target.dataset.chsel && e.target.value){ state.chT = e.target.value; render(); } });
+document.addEventListener('change', function(e){ if(e.target.dataset && e.target.dataset.chsel && e.target.value){ state.chT = e.target.value; state.chTx = null; render(); } });
+document.addEventListener('input', function(e){ if(e.target.id==='ch-tx') state.chTx = e.target.value; });
 var VW = {rows:null, busy:false};
 function vwCard(){
   if(myName()!=="이재식" || !(window.BSR_PIN && BSR_PIN()) || !window.BSR_API) return '';
