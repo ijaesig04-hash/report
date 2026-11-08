@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108105500">
+<meta name="bsr-ver" content="20261108110000">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -6588,17 +6588,18 @@ var NL_D = "전체", NL_T = "noti";
 function ntTop(k){ return '<div class="ntt" role="tablist">'+[["noti","📢 공지"],["edu","💐 경조사"],["man","📖 매뉴얼"]].map(function(t){ return '<button type="button" role="tab" data-ntt="'+t[0]+'" aria-selected="'+(t[0]===k)+'">'+t[1]+(t[0]==="man"&&!manOpen()?' 🔒':'')+'</button>'; }).join('')+'</div>'; }
 /* 💐 지난 경조사 이력 — 공지·알림 없이 경조사 탭에만 보이고 until 날짜가 지나면 자동으로 사라짐 */
 var EVT_ARCH = [
- {id:"arch-wed-261101", d:"2026-11-01", until:"2026-12-01", edu:"wed-261101", title:"이명섭 프로 결혼 (11/1 일 12:30 · 라비니움)"}
+ {id:"arch-wed-261101", d:"2026-10-31", edu:"wed-261101", title:"이명섭 프로 결혼 (11/1 일 12:30 · 라비니움)"}
 ];
-function evtArch(){ var td = kstDate(0); return EVT_ARCH.filter(function(a){ return td < a.until && EDU[a.edu]; }); }
+function evtLive(t){ var d = new Date(t); d.setMonth(d.getMonth()+1); return Date.now() < d.getTime(); }   /* 경조사는 공지일 한 달 뒤 자동 삭제 */
+function evtArch(){ return EVT_ARCH.filter(function(a){ return EDU[a.edu] && evtLive(new Date(a.d+"T00:00:00+09:00").getTime()); }); }
 function evtArchView(id){ var a = evtArch().filter(function(x){return x.id===id})[0]; if(!a){ eduTab(); return; } var E = EDU[a.edu];
   openSheet('<div class="xs-h"><button type="button" data-ntt="edu" style="margin-left:0">‹ 경조사</button><button type="button" data-xs="close">✕</button></div><div class="nv" style="--nc:#db2777"><span class="nv-k">'+(E.ic||"💐")+' 경조사 · 지난 소식</span><h3>'+esc2(a.title)+'</h3></div><div class="ed">'+E.html()+'</div>'); }
 document.addEventListener("click", function(e){ var t = e.target.closest("[data-eva]"); if(t) evtArchView(t.dataset.eva); });
-function evtArchHtml(){ var A = evtArch(); return A.length ? '<p class="xs-p" style="margin-top:14px">🗂️ 지난 경조사 <small>(한 달 뒤 자동 정리)</small></p>'+A.map(function(a){ var E = EDU[a.edu]; return '<button type="button" class="nli" style="--nc:#db2777" data-eva="'+a.id+'"><span class="nli-a"><i>'+(E.ic||"💐")+' 경조사</i><span class="num">'+a.d.slice(5).replace("-","/")+'</span> · 지난 소식</span><b>'+esc2(a.title)+'</b>'+(E.sub?'<small style="display:block;color:#64748b;font-size:12px;margin-top:2px">'+esc2(E.sub)+'</small>':'')+'</button>'; }).join('') : ''; }
+function evtArchHtml(){ var A = evtArch(); return A.length ? '<p class="xs-p" style="margin-top:14px">🗂️ 지난 경조사 <small>(공지일 한 달 뒤 자동 삭제)</small></p>'+A.map(function(a){ var E = EDU[a.edu]; return '<button type="button" class="nli" style="--nc:#db2777" data-eva="'+a.id+'"><span class="nli-a"><i>'+(E.ic||"💐")+' 경조사</i><span class="num">'+a.d.slice(5).replace("-","/")+'</span> · 지난 소식</span><b>'+esc2(a.title)+'</b>'+(E.sub?'<small style="display:block;color:#64748b;font-size:12px;margin-top:2px">'+esc2(E.sub)+'</small>':'')+'</button>'; }).join('') : ''; }
 function eduTab(){   /* 💐 경조사 탭 (교육 자료는 📢 공지 탭에 함께 보여요) */
-  var me = myName(), L = NOTI.items.filter(isEvtK);
+  var me = myName(), L = NOTI.items.filter(function(x){ return isEvtK(x) && evtLive(x.t); });
   openSheet('<div class="xs-h"><b>📢 공지 · 경조사 · 매뉴얼</b><button type="button" data-xs="close">✕</button></div>'+ntTop("edu")+
-    '<p class="xs-p">지사 식구들의 기쁜 일 · 슬픈 일 소식을 모아 봐요.</p>'+
+    '<p class="xs-p">지사 식구들의 기쁜 일 · 슬픈 일 소식을 모아 봐요. 공지일 한 달 뒤 자동으로 사라져요.</p>'+
     (L.length ? L.map(function(x){ var p = ncParse(x), v = lsGet(notiAckKey(x.id)), ak = NOTI.acks && mgrIs() ? (NOTI.acks[x.id]||[]) : null, all = notiAud(x);
       var st = me ? (v ? '<span class="nli-st ok">✓ 확인</span>' : '<span class="nli-st">미확인</span>') : '';
       return '<button type="button" class="nli" style="--nc:'+p.cat.c+'" data-ntv="'+esc2(x.id)+'"><span class="nli-a"><i>'+p.cat.ic+' 경조사</i><span class="num">'+notiDate(x.t)+'</span>'+(mgrIs()?notiTgTag(x):'')+st+'</span><b>'+esc2(p.title)+'</b>'+
