@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108144500">
+<meta name="bsr-ver" content="20261108145500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1255,6 +1255,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 #sfx .sfx-kite{opacity:1;font-size:46px}
 #sfx .sfx-line{position:absolute;inset:0;width:100%;height:100%}
 #sfx .sfx-line path{fill:none;stroke:rgba(255,255,255,.75);stroke-width:1.3}
+#sfx .sfx-lf{font-size:20px}
 #sfx .sfx-hop{font-size:38px;transform-origin:50% 100%}
 #sfx .sfx-bunch{width:70px;height:150px}
 #sfx .sfx-bunch i{position:absolute;font-size:40px}
@@ -3585,6 +3586,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-08ze", date:"11/8", title:"❄️ 눈 쌓임 · 🍁 낙엽 내려앉기", tabs:["home"], items:["눈 오는 날 카드·글자 윗면에 눈이 쌓였다 녹아요","가을엔 낙엽이 카드 위에 내려앉았다가 바람에 날려 가요"]},
  {id:"2026-11-08zd", date:"11/8", title:"🌧️ 빗방울 튀기·흘러내리기", tabs:["home"], items:["비 오는 날 카드·글자 윗면에 빗방울이 부딪혀 튀고, 일부는 줄줄 흘러내려요"]},
  {id:"2026-11-08zc", date:"11/8", title:"공지 · 경조사 · 매뉴얼", tabs:["home"], items:["💐 공지 메뉴의 📚 교육 탭이 💐 경조사 탭으로 바뀌었어요 · 교육 자료는 📢 공지 탭에 함께 보여요"]},
  {id:"2026-11-08zb", date:"11/8", title:"디자인 그대로 메일 발송", tabs:["home"], items:["✉️ 상품 추천 → 메일에 「디자인 그대로 메일 발송」 추가 · 받는 사람 메일만 적으면 디자인 그대로 도착"]},
@@ -4458,7 +4460,7 @@ function wxFall(kind, label){
   var cv=o.querySelector('canvas'), x=cv.getContext('2d'), dpr=devicePixelRatio||1, W, H, P=[], t0=Date.now(), snow=kind==='snow';
   var rs=function(){ W=cv.width=innerWidth*dpr; H=cv.height=innerHeight*dpr; }; rs(); addEventListener('resize', rs);
   var mk=function(top){ return {x:Math.random()*W*1.1, y:top?-10:Math.random()*H, s:snow?(1.5+Math.random()*3.5)*dpr:(10+Math.random()*16)*dpr, v:snow?(0.6+Math.random()*1.4)*dpr:(9+Math.random()*7)*dpr, w:Math.random()*6.28}; };
-  var FULL = snow?110:160, LIGHT = snow?45:60, R=[], SP=[], RN=[], lastR=0, lastRun=0;
+  var FULL = snow?110:160, LIGHT = snow?45:60, R=[], SP=[], RN=[], SN=[], lastR=0, lastRun=0;
   /* 🌧️ 비가 카드·글자 윗면에 부딪혀 튀고(물방울 파문), 일부는 줄줄 흘러내려요 */
   var scanR=function(){ R=[]; var q=document.querySelectorAll('#xsheet .nli,#xsheet .xs-h,#view .sec,#view .nli,#view h2,#view .chip,#view .ch-i,#view .mx,#view .dh'); for(var i=0;i<q.length&&R.length<60;i++){ var b=q[i].getBoundingClientRect(); if(b.width>70&&b.height>18&&b.bottom>0&&b.top<innerHeight&&b.top>20) R.push([b.left*dpr,b.top*dpr,b.width*dpr,b.height*dpr]); } };
   for(var i=0;i<FULL;i++) P.push(mk(false));
@@ -4471,8 +4473,14 @@ function wxFall(kind, label){
       if(snow){ p.w+=0.03; p.x+=Math.sin(p.w)*0.8*dpr; p.y+=p.v; x.beginPath(); x.arc(p.x,p.y,p.s,0,7); x.fill(); }
       else { p.x-=p.v*0.18; p.y+=p.v; x.beginPath(); x.moveTo(p.x,p.y); x.lineTo(p.x+p.s*0.18,p.y-p.s); x.stroke(); }
       if(p.y>H+10){ if(P.length>want) P.splice(i,1); else P[i]=mk(true); } }
-    if(!snow){
-      var nw=Date.now(); if(nw-lastR>900){ lastR=nw; scanR(); }
+    var nw=Date.now(); if(nw-lastR>900){ lastR=nw; scanR(); }
+    if(snow){   /* ❄️ 카드·글자 윗면에 눈이 조금씩 쌓였다가 서서히 녹아요 */
+      if(R.length && SN.length<42 && Math.random()<(el<6000?0.3:0.16)){ var rs0=R[(Math.random()*R.length)|0]; SN.push({x:rs0[0]+Math.random()*rs0[2], y:rs0[1], a:0, m:(2.6+Math.random()*3.6)*dpr}); }
+      for(var q=SN.length-1;q>=0;q--){ var sn=SN[q]; sn.a++; var kk=sn.a/460; if(kk>=1){ SN.splice(q,1); continue; }
+        var gr=Math.min(1,sn.a/70), al=kk>0.72?(1-kk)/0.28:1, rx=sn.m*1.8*gr, ry=sn.m*0.85*gr;
+        x.fillStyle='rgba(246,250,255,'+(0.95*al)+')'; x.beginPath(); x.ellipse(sn.x,sn.y+0.5*dpr,rx,ry,0,Math.PI,2*Math.PI); x.closePath(); x.fill();
+        x.fillStyle='rgba(255,255,255,'+(0.9*al)+')'; x.beginPath(); x.ellipse(sn.x-rx*0.35,sn.y-ry*0.55,rx*0.35,ry*0.3,0,0,6.3); x.fill(); }
+    } else {
       if(R.length && SP.length<26){ for(var k=0;k<(el<6000?3:1);k++){ var r=R[(Math.random()*R.length)|0]; SP.push({x:r[0]+Math.random()*r[2], y:r[1], a:0}); } }
       if(R.length && RN.length<9 && nw-lastRun>(el<6000?350:800)){ lastRun=nw; var r2=R[(Math.random()*R.length)|0], sx=r2[0]+r2[2]*(0.08+Math.random()*0.84); RN.push({x:sx,y:r2[1]+Math.random()*Math.min(r2[3],26*dpr),y0:0,v:0.5*dpr,max:(36+Math.random()*80)*dpr,a:1}); RN[RN.length-1].y0=RN[RN.length-1].y; }
       for(var a=SP.length-1;a>=0;a--){ var sp=SP[a]; sp.a++; var f=sp.a/16; if(f>=1){ SP.splice(a,1); continue; }
@@ -4577,6 +4585,21 @@ var SFX_STAR = {
     el.style.opacity=Math.min(1,k*8,(1-k)*8); el.style.transform="translate("+x.toFixed(1)+"px,"+y.toFixed(1)+"px) rotate("+(-Math.cos(e)*1.3).toFixed(2)+"deg)";
     if(now-last>110){ last=now; sfxSpark(x+w-12, y+28+Math.random()*14); } };
  },
+ /* 🍁 가을: 낙엽이 카드·글자 윗면에 사뿐히 내려앉아 잠시 쉬다가 바람에 날려 가요 */
+ land:function(){
+  var L=[], last=0, rects=[], lastScan=0;
+  var scan=function(){ rects=[]; var q=document.querySelectorAll('#view .sec,#view .nli,#view h2,#view .ch-i,#view .mx,#view .dh,#xsheet .nli'); for(var i=0;i<q.length&&rects.length<50;i++){ var b=q[i].getBoundingClientRect(); if(b.width>70&&b.height>18&&b.top>70&&b.top<innerHeight-70) rects.push(b); } };
+  return function(now,W,H){
+    if(now-lastScan>1000){ lastScan=now; scan(); }
+    if(rects.length && L.length<4 && now-last>2400){ last=now; var r=rects[(Math.random()*rects.length)|0];
+      L.push({el:sfxEl('<i>'+(Math.random()<.5?'🍁':'🍂')+'</i>','sfx-lf sfx-shadow'), x:r.left+r.width*(0.1+Math.random()*0.8), top:r.top, t0:now, fall:sfxRand(1900,2800), rest:sfxRand(2600,5200), dir:Math.random()<.5?-1:1, rot:sfxRand(-25,25)}); }
+    for(var i=L.length-1;i>=0;i--){ var l=L[i], e=now-l.t0, x, y, rt, op=1;
+      if(e<l.fall){ var k=e/l.fall; x=l.x+Math.sin(k*Math.PI*3)*18*(1-k); y=l.top-110+96*(k*k*0.4+k*0.6); rt=l.rot+Math.sin(k*Math.PI*3)*26; op=Math.min(1,k*6); }
+      else if(e<l.fall+l.rest){ var w=(e-l.fall)/700; x=l.x; y=l.top-14; rt=l.rot+Math.sin(w*2)*Math.exp(-w*0.6)*5; }
+      else { var d=(e-l.fall-l.rest)/1500; if(d>=1){ l.el.remove(); L.splice(i,1); continue; } x=l.x+l.dir*d*d*140; y=l.top-14-Math.sin(d*Math.PI)*22+d*d*60; rt=l.rot+l.dir*d*220; op=1-d*d; }
+      l.el.style.opacity=op.toFixed(2); l.el.style.transform="translate("+(x-10).toFixed(1)+"px,"+(y-10).toFixed(1)+"px) rotate("+rt.toFixed(1)+"deg)"; }
+  };
+ },
  /* 🪁 설날 연: 바람에 흔들리며 하늘에 떠 있고, 실이 화면 오른쪽 아래로 이어짐 */
  kite:function(){
   var svg=document.createElementNS("http://www.w3.org/2000/svg","svg"); svg.setAttribute("class","sfx-line"); var pth=document.createElementNS("http://www.w3.org/2000/svg","path"); svg.appendChild(pth); SFX_EL.appendChild(svg);
@@ -4650,6 +4673,7 @@ function sfxBuild(r){
   (t.corners||[]).forEach(function(c){ h+='<span class="sfx-k '+c.pos+'"><i>'+c.e.replace("{Z}",sfxZ().e)+'</i></span>'; });
   o.innerHTML=h;
   if(t.star && SFX_STAR[t.star.type]) SFX_ACT.push(SFX_STAR[t.star.type](t.star));
+  if(t.id==="autumn") SFX_ACT.push(SFX_STAR.land());
   var id=SFX_ID;
   (function loop(now){ if(!SFX_EL || SFX_ID!==id || !SFX_EL.isConnected) return;
     if(SFX_EL.style.display!=="none"){ var W=innerWidth, H=innerHeight; SFX_ACT.forEach(function(f){ f(now,W,H); }); }
