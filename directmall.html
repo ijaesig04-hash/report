@@ -248,6 +248,7 @@ table.t td.n,table.t th.n{text-align:right}
        <button type="button" class="btn b-navy" id="bSubj">🏷️ 제목 복사</button>
        <button type="button" class="btn b-red" id="bCopy">📋 본문 복사 → 메일에 붙여넣기</button>
      </div>
+     <div class="btns" style="margin-top:10px"><button type="button" class="btn b-red" id="mSend" style="padding:15px;font-size:16px">✉️ 디자인 그대로 메일 발송<small style="display:block;font-size:12px;font-weight:400;margin-top:2px">받는 사람 메일만 적으면 위 미리보기 모습 그대로 도착 (네이버·Gmail 모두)</small></button></div>
      <div class="btns" id="mShareWrap" style="margin-top:10px"><button type="button" class="btn b-kakao" id="mShare" style="padding:14px">📤 메일 앱으로 보내기<small style="display:block;font-size:12px;font-weight:400;margin-top:2px">메일 디자인을 사진으로 첨부 · 네이버·Gmail·아웃룩 어디서나 보여요</small></button></div>
      <label class="chk" style="margin-top:10px"><input type="checkbox" id="noimg"><span><b>사진 빼고 보내기</b><small>글·QR만 · 메일이 아주 가벼워져요</small></span></label>
      <div class="btns" style="margin-top:10px;grid-template-columns:1fr 1fr">
@@ -1901,6 +1902,51 @@ async function shareMail(){
   };
 }
 
+/* ✉️ 디자인 그대로 발송 — 구글 Apps Script 웹 앱(tools/mailsend.gs)이 HTML 메일로 보냄 */
+const SEND_URL='';const SEND_KEY='s1-bukseoul-mail';
+const sendUrl=()=>{try{return (localStorage.getItem('s1mail.sendurl')||SEND_URL).trim();}catch(e){return SEND_URL;}};
+function sendSetup(after){
+  const o=document.createElement('div');o.className='hand';
+  o.innerHTML='<div class="hand-in"><b>✉️ 처음 1번 설정</b><span>내 Gmail로 디자인 메일을 보내 주는 주소가 필요해요.<br><b>①</b> 아래 <b>설정 방법 열기</b>에서 순서대로 만든 뒤<br><b>②</b> 나온 <b>웹 앱 URL</b>을 붙여넣고 저장</span>'
+   +'<a class="btn b-navy" href="mail-setup.html" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">📖 설정 방법 열기</a>'
+   +'<input type="text" id="suUrl" inputmode="url" placeholder="https://script.google.com/macros/s/…/exec" value="'+esc(sendUrl())+'">'
+   +'<button type="button" class="btn b-red" id="suOk">저장</button><button type="button" class="hand-x" id="suX">닫기</button></div>';
+  document.body.appendChild(o);
+  $('suX').onclick=()=>o.remove();
+  $('suOk').onclick=()=>{const v=$('suUrl').value.trim();
+    if(!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec/.test(v)){toast('https://script.google.com/macros/s/…/exec 주소를 붙여넣어 주세요');return;}
+    try{localStorage.setItem('s1mail.sendurl',v);}catch(e){}o.remove();toast('저장했어요');if(after)after();};
+}
+function sendMail(){
+  if(!check())return;
+  if(!sendUrl()){sendSetup(sendMail);return;}
+  let rt='';try{rt=localStorage.getItem('s1mail.reply')||'';}catch(e){}
+  const o=document.createElement('div');o.className='hand';
+  o.innerHTML='<div class="hand-in"><b>✉️ 디자인 그대로 메일 발송</b>'
+   +'<label style="font-size:13px">받는 사람 메일 <small>(여러 명은 쉼표로)</small><input type="text" id="sdTo" inputmode="email" autocomplete="email" placeholder="customer@naver.com"></label>'
+   +'<label style="font-size:13px">제목<input type="text" id="sdSubj"></label>'
+   +'<label style="font-size:13px">회신 받을 내 메일 <small>(선택 · 고객이 답장하면 여기로)</small><input type="text" id="sdRe" inputmode="email" placeholder="jaesig.lee@samsung.com"></label>'
+   +'<button type="button" class="btn b-red" id="sdGo">✉️ 발송</button>'
+   +'<div style="display:flex;justify-content:space-between"><button type="button" class="hand-x" id="sdSet">⚙️ 발송 주소 설정</button><button type="button" class="hand-x" id="sdX">닫기</button></div></div>';
+  document.body.appendChild(o);
+  $('sdSubj').value=$('subject').value;$('sdRe').value=rt;$('sdTo').focus();
+  $('sdX').onclick=()=>o.remove();
+  $('sdSet').onclick=()=>{o.remove();sendSetup(sendMail);};
+  $('sdGo').onclick=async()=>{
+    const to=$('sdTo').value.trim(),re=$('sdRe').value.trim(),go=$('sdGo');
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+/.test(to)){toast('받는 사람 메일 주소를 확인해 주세요');$('sdTo').focus();return;}
+    try{localStorage.setItem('s1mail.reply',re);}catch(e){}
+    go.disabled=true;go.textContent='보내는 중…';
+    try{
+      const imgs=[];let html=buildEmail().replace(/src="data:image\/[a-z]+;base64,([^"]+)"/g,(m,b)=>{imgs.push(b);return 'src="cid:img'+(imgs.length-1)+'"';});
+      html='<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;">'+html+'</body></html>';
+      const r=await fetch(sendUrl(),{method:'POST',body:JSON.stringify({key:SEND_KEY,to,subject:$('sdSubj').value,html,text:mailPlain(),imgs,replyTo:re,name:(raw().name||'')+' (에스원'+(raw().branch?' '+raw().branch:'')+')'})});
+      const j=await r.json();
+      if(j.ok){o.remove();toast('✅ 보냈어요 · 오늘 '+j.left+'통 더 보낼 수 있어요'+(await autoRecord('메일')));}
+      else{go.disabled=false;go.textContent='✉️ 다시 발송';toast(j.err==='to'?'받는 사람 메일 주소를 확인해 주세요':j.err==='key'?'발송 주소 설정을 다시 확인해 주세요':'발송 실패: '+String(j.err).slice(0,60));}
+    }catch(e){go.disabled=false;go.textContent='✉️ 다시 발송';toast('발송 주소에 연결하지 못했어요 · ⚙️ 발송 주소 설정을 확인해 주세요');}
+  };
+}
 async function copySubject(){const ok=await copyText($('subject').value,$('subject'));toast(ok?'제목을 복사했어요':'제목 칸을 선택해 두었어요. Ctrl+C 하세요');}
 async function copyCode(){if(!check())return;const ok=await copyText(buildEmail());if(ok)toast('HTML 코드를 복사했어요'+(await autoRecord('메일')));else toast('복사가 막혀 있어요. HTML 저장을 이용해 주세요');}
 async function downloadHtml(){
@@ -1935,7 +1981,7 @@ $('emp').addEventListener('input',e=>{const v=digits(e.target.value);if(v!==e.ta
 $('subject').addEventListener('input',()=>{subjDirty=true;$('subjPv').textContent=$('subject').value;});
 $('subjReset').onclick=()=>{subjDirty=false;syncSubject();toast('자동 제목으로 되돌렸어요');};
 $('noimg').onchange=e=>{noImg=e.target.checked;render();};
-$('bCopy').onclick=copyRich;$('mShare').onclick=shareMail;$('bSubj').onclick=copySubject;$('bCode').onclick=copyCode;$('bDown').onclick=downloadHtml;
+$('bCopy').onclick=copyRich;$('mShare').onclick=shareMail;$('mSend').onclick=sendMail;$('bSubj').onclick=copySubject;$('bCode').onclick=copyCode;$('bDown').onclick=downloadHtml;
 $('kCopy').onclick=copyKakao;
 /* 뒤로가기: 리포트에서 들어왔으면 이전 화면으로, 새 창으로 열렸으면 리포트 첫 화면으로 */
 $('backBtn').onclick=()=>{let same=false;try{same=!!document.referrer&&new URL(document.referrer).origin===location.origin;}catch(e){}
