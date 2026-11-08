@@ -1830,6 +1830,8 @@ async function shareMail(){
   const id=theme.slice(2),t=KTHEMES.find(v=>v.id===id)||KTHEMES[0];
   const subj=$('subject').value;const keep=kTone;kTone='formal';let body=kakaoText();kTone=keep;
   body=body.replace(/^\[에스원 다이렉트몰\][^\n]*\n+/,'');
+  /* 첨부된 카드는 눌러도 접속이 안 되므로, 본문 맨 위·맨 아래에 바로가기 주소를 눈에 띄게 (메일 앱이 자동으로 링크로 바꿔줌) */
+  body='👉 에스원 다이렉트몰 바로가기 (누르면 바로 접속)\n'+MALL+'\n\n🎁 결제할 때 사원번호 '+(raw().emp||'')+' 입력하면 10% 추가 할인\n━━━━━━━━━━━━━━\n\n'+body+'\n\n━━━━━━━━━━━━━━\n👉 다이렉트몰 바로가기: '+MALL+'\n📎 첨부한 카드 이미지에 상품 안내가 담겨 있어요';
   copyText(body);
   const blob=await new Promise(res=>t.f(kdata()).toBlob(res,'image/jpeg',.9));
   const file=new File([blob],'에스원다이렉트몰_'+t.n.slice(2).replace(/\s/g,'')+'.jpg',{type:'image/jpeg'});
