@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261108111500">
+<meta name="bsr-ver" content="20261108122500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -4437,6 +4437,7 @@ var WX_DONE = false, WX_LAST = 0, WX_TIMER = null;
 function wxKind(c){ c=+c; if([71,73,75,77,85,86].indexOf(c)>=0) return 'snow'; if((c>=51&&c<=67)||(c>=80&&c<=82)||c>=95) return 'rain'; return ''; }
 function wxToday(){ var d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
 function wxOff(){ try{ return localStorage.getItem('bsr_wxoff')===wxToday(); }catch(e){ return false; } }
+var WX_WET = false;
 function wxStop(){ var o=document.getElementById('wxfx'); if(!o) return; o.style.opacity='0'; setTimeout(function(){ if(o.parentNode) o.remove(); }, 1100); }
 /* 비·눈 효과 — 그칠 때까지 계속 (처음 6초는 많이, 그 뒤엔 가볍게) · 오른쪽 아래 버튼으로 오늘 끄기 */
 function wxFall(kind, label){
@@ -4468,12 +4469,12 @@ function wxFall(kind, label){
 }
 function wxCheck(){
   WX_LAST = Date.now();
-  if(wxOff()) { wxStop(); return; }
   try{
     fetch('https://api.open-meteo.com/v1/forecast?latitude='+WX_LOC.lat+'&longitude='+WX_LOC.lon+'&current=weather_code,temperature_2m&timezone=Asia%2FSeoul',{cache:'no-store'})
       .then(function(r){ return r.json(); })
       .then(function(j){ var c=j&&j.current; if(!c) return; var k=wxKind(c.weather_code);
-        if(!k){ wxStop(); return; }
+        WX_WET = !!k;   /* 비·눈 오는 동안엔 계절 꾸미기(낙엽 등) 숨김 */
+        if(!k || wxOff()){ wxStop(); return; }
         var t = (c.temperature_2m!=null? ' '+Math.round(c.temperature_2m)+'℃':'');
         wxFall(k, k==='snow' ? '❄️ 지금 '+WX_LOC.name+'에 눈이 와요'+t+' · 빙판길 안전운전' : '🌧️ 지금 '+WX_LOC.name+'에 비가 와요'+t+' · 빗길 안전운전'); })
       .catch(function(){});
@@ -4638,7 +4639,7 @@ function sfxTick(){
   var r=sfxTheme(), home=(typeof state!=="undefined" && state.tab==="home"), red=matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(!r || sfxOff(r.t) || red){ if(SFX_EL){ SFX_EL.remove(); SFX_EL=null; SFX_ID=""; } return; }
   if(!SFX_EL || SFX_ID!==r.t.id) sfxBuild(r);
-  var want = home && !document.querySelector(".mxc");   /* 탭을 옮기면 스르륵 사라지고, 돌아오면 스르륵 나타남 */
+  var want = home && !document.querySelector(".mxc") && !WX_WET && !document.getElementById('wxfx');   /* 비·눈 올 때는 낙엽 효과 없음 */   /* 탭을 옮기면 스르륵 사라지고, 돌아오면 스르륵 나타남 */
   if(want){ if(SFX_EL.style.display==="none"){ SFX_EL.style.opacity="0"; SFX_EL.style.display=""; requestAnimationFrame(function(){ if(SFX_EL) SFX_EL.style.opacity="1"; }); } else if(SFX_EL.style.opacity==="0"&&!SFX_EL._fading) SFX_EL.style.opacity="1"; clearTimeout(SFX_EL._hideT); SFX_EL._fading=false; }
   else if(SFX_EL.style.display!=="none" && !SFX_EL._fading){ SFX_EL._fading=true; SFX_EL.style.opacity="0"; var el=SFX_EL; el._hideT=setTimeout(function(){ el.style.display="none"; el._fading=false; }, 900); }
 }
