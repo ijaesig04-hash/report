@@ -38,6 +38,12 @@
 .side>.sec input[type=text],.side>.sec input[type=tel],.side>.sec textarea,.side>.sec select{background:#fff}
 .side>.sec .seg{background:#fff;border:1px solid color-mix(in srgb,var(--sc) 25%,#fff)}
 body[data-mode="mail"] #kFoldBox{display:none}
+body[data-mode="kakao"] .side>.sec:nth-of-type(3){display:none}
+#kakaoPanel .step{background:#e5b800;color:#3b1e1e;box-shadow:0 0 0 3px rgba(229,184,0,.22)}
+.ksend{margin-top:16px;padding:14px;border:1px solid #f0d37a;border-left:5px solid #e5b800;border-radius:14px;background:linear-gradient(135deg,#fff8d1,#fff)}
+.ksend h2{margin:0 0 12px;display:flex;align-items:center;gap:8px;font-size:17px}
+.kgp+.kgp{margin-top:14px;padding-top:12px;border-top:1px dashed #e6d9a0}
+.kgl{font-weight:800;font-size:14px;margin-bottom:8px}.kgl small{font-weight:400;color:var(--mute);font-size:12px;margin-left:4px}
 body[data-mode="mail"] #mailPanel{border-top:5px solid #1b4fd6;background:linear-gradient(180deg,#f4f8ff,#fff 160px)}
 body[data-mode="kakao"] #kakaoPanel{border-top:5px solid #fee500;background:linear-gradient(180deg,#fffbe0,#fff 160px)}
 body[data-mode="mail"] .side>.sec:nth-of-type(3){--sc:#1b4fd6;--st:#edf3ff}
@@ -268,11 +274,6 @@ table.t td.n,table.t th.n{text-align:right}
     <div class="fld"><label for="season">시즌 메시지</label><select id="season"></select></div>
     <div class="fld"><label for="msg">한마디 메시지 <small>(직접 쓰면 우선 적용)</small></label><textarea id="msg" placeholder="비워두면 시즌·디자인별 기본 인사말"></textarea></div>
    </section>
-   <div id="kFoldBox">
-   <details class="kfold" style="margin:0 0 14px"><summary>💬 메시지 말투 · 메시지 미리보기 <small>눌러서 펼치기</small></summary><div class="klab">메시지 말투 <small>디자인을 고르면 어울리는 말투로 바뀌어요 · 따로 바꿔도 돼요</small></div>
-   <div class="ktones" id="ktones"></div>
-   <div class="klab">미리보기 <small>메시지 복사 → 카톡 대화방에 붙여넣기</small></div><div class="kchat"><div class="kname" id="kName">담당 매니저</div><div class="kbubble" id="kText"></div><div class="klink"><b>에스원다이렉트몰</b><span>s1directmall.co.kr</span></div></div></details>
-   </div>
    <section class="sec">
     <h2><span class="step">3</span>보내기</h2>
     <div id="mailSend">
@@ -290,16 +291,6 @@ table.t td.n,table.t th.n{text-align:right}
       </div>
      </details>
     </div>
-    <div id="kakaoSend" hidden>
-     <div class="btns">
-       <button type="button" class="btn b-kakao" id="kShare" style="padding:15px;font-size:15px">📤 카톡으로 바로 보내기<small style="display:block;font-size:12px;font-weight:400;margin-top:2px">카드 이미지 + 메시지 한 번에</small></button>
-       <div class="btns" style="grid-template-columns:1fr 1fr">
-        <button type="button" class="btn b-soft" id="kCopy">💬 메시지만 복사</button>
-        <button type="button" class="btn b-soft" id="kImg">🖼️ 이미지만 저장</button>
-       </div>
-     </div>
-    </div>
-    
    </section>
    <div class="tip" id="tipMail">
     <b>📮 이렇게 보내면 효과적이에요</b><br>
@@ -311,14 +302,30 @@ table.t td.n,table.t th.n{text-align:right}
   </div>
 
   <div class="panel" style="min-width:0" id="kakaoPanel" hidden>
-   <div class="phead"><h2><span class="step">4</span>카드 디자인 (20종)</h2><button type="button" class="mini" id="kRand" style="padding:7px 12px">🎲 아무거나</button></div>
+   <div class="phead"><h2><span class="step">3</span>카드 디자인 (20종)</h2><button type="button" class="mini" id="kRand" style="padding:7px 12px">🎲 아무거나</button></div>
    <div class="kthemes" id="kthemes"></div>
    <div class="kgrid" style="grid-template-columns:minmax(0,1fr)"><div class="kcard"><a href="https://s1directmall.co.kr/" target="_blank" rel="noopener" title="다이렉트몰 열기"><img id="kCardImg" alt="카톡용 홍보 카드 이미지 (누르면 다이렉트몰)"></a><p class="hint">미리보기예요 · 카톡으로 받은 카드를 누르면 다이렉트몰로 이동해요</p></div>
    </div>
+   <div id="kFoldBox">
+   <details class="kfold" style="margin:14px 0 14px"><summary>💬 메시지 말투 · 메시지 미리보기 <small>눌러서 펼치기</small></summary><div class="klab">메시지 말투 <small>디자인을 고르면 어울리는 말투로 바뀌어요 · 따로 바꿔도 돼요</small></div>
+   <div class="ktones" id="ktones"></div>
+   <div class="klab">미리보기 <small>메시지 복사 → 카톡 대화방에 붙여넣기</small></div><div class="kchat"><div class="kname" id="kName">담당 매니저</div><div class="kbubble" id="kText"></div><div class="klink"><b>에스원다이렉트몰</b><span>s1directmall.co.kr</span></div></div></details>
+   </div>
+   <section class="ksend" id="kakaoSend">
+    <h2><span class="step">4</span>보내기</h2>
+    <div class="kgp">
+     <div class="kgl">🖼️ 카드로 보내기 <small>주로 쓰는 방법</small></div>
+     <button type="button" class="btn b-kakao" id="kShare" style="padding:16px;font-size:16px;width:100%">📤 카드 + 메시지 보내기<small style="display:block;font-size:12px;font-weight:400;margin-top:2px">위에서 고른 카드 한 장과 메시지를 한 번에</small></button>
+    </div>
+    <div class="kgp">
+     <div class="kgl">💬 메시지만 보내기 <small>카드 없이 글만</small></div>
+     <button type="button" class="btn b-soft" id="kCopy" style="padding:14px;width:100%">💬 메시지 복사<small style="display:block;font-size:12px;font-weight:400;margin-top:2px">복사한 뒤 카톡 대화방에 붙여넣기</small></button>
+    </div>
+   </section>
    <details class="tip" style="margin-top:14px" id="kKeyBox"><summary style="cursor:pointer;font-weight:700;color:var(--fg)">⚙️ 카드 누르면 다이렉트몰로 — 카카오 공유 설정 <span id="kKeyState"></span></summary>
     <div style="margin-top:8px">카카오디벨로퍼스 앱의 <b>JavaScript 키</b>를 넣으면 📤 버튼이 <b>카드 한 장</b>으로 보내지고, 받은 사람이 카드를 누르면 다이렉트몰로 이동해요.</div>
     <div class="row" style="margin-top:8px"><input type="text" id="kKey" placeholder="JavaScript 키 붙여넣기" autocomplete="off"><button type="button" class="mini" id="kKeySave">저장</button></div></details>
-   <div class="tip" style="margin-top:10px"><b>📱 카톡으로 보내는 순서</b><br>① <b>📤 카톡으로 바로 보내기</b> → 공유창에서 <b>카카오톡</b> → 고객 대화방 선택 → 전송<br>② 카드만 가고 글이 빠졌다면 → 대화창을 <b>길게 눌러 붙여넣기</b> (메시지는 자동으로 복사돼 있어요)<br>③ 고객이 링크나 QR로 들어가 구매할 때 <b>사원번호</b>를 입력하면 10% 추가 할인</div>
+   <div class="tip" style="margin-top:10px"><b>📱 카톡으로 보내는 순서</b><br>① <b>📤 카드 + 메시지 보내기</b> → 공유창에서 <b>카카오톡</b> → 고객 대화방 선택 → 전송<br>② 카드만 가고 글이 빠졌다면 → 대화창을 <b>길게 눌러 붙여넣기</b> (메시지는 자동으로 복사돼 있어요)<br>③ 고객이 링크나 QR로 들어가 구매할 때 <b>사원번호</b>를 입력하면 10% 추가 할인</div>
   </div>
   <div class="panel" style="min-width:0" id="mailPanel">
    <div class="phead"><h2><span class="step">4</span>디자인 선택</h2><small>⭐ 추천 · 📷 사진 포함</small></div>
@@ -2021,7 +2028,7 @@ $('backBtn').onclick=()=>{let same=false;try{same=!!document.referrer&&new URL(d
 function kKeyUI(){const k=kakaoKey();$('kKeyState').textContent=k?'✅ 사용 중':'(미설정)';try{$('kKey').value=localStorage.getItem('s1kakao.key')||'';}catch(e){}
   const sub=document.querySelector('#kShare small');if(sub)sub.textContent=k?'카드 한 장 · 카드는 크게 보기 · 버튼은 다이렉트몰':'카드 이미지 + 메시지 한 번에';}
 $('kKeySave').onclick=()=>{try{const v=$('kKey').value.trim();if(v)localStorage.setItem('s1kakao.key',v);else localStorage.removeItem('s1kakao.key');}catch(e){}kKeyUI();toast(kakaoKey()?'카카오 공유를 켰어요':'카카오 공유 설정을 지웠어요');};
-kKeyUI();$('kShare').onclick=shareKakao;$('kImg').onclick=saveCard;
+kKeyUI();$('kShare').onclick=shareKakao;
 function showTab(which){
   const dash=which==='dash';mode=which==='kakao'?'kakao':'mail';document.body.dataset.mode=dash?'dash':mode;
   $('v-make').hidden=dash;$('v-dash').hidden=!dash;
