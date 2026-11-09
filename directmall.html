@@ -37,6 +37,7 @@
 .side>.sec .repsum{background:#fff;border-color:color-mix(in srgb,var(--sc) 30%,#fff)}
 .side>.sec input[type=text],.side>.sec input[type=tel],.side>.sec textarea,.side>.sec select{background:#fff}
 .side>.sec .seg{background:#fff;border:1px solid color-mix(in srgb,var(--sc) 25%,#fff)}
+body[data-mode="mail"] #kFoldBox{display:none}
 body[data-mode="mail"] #mailPanel{border-top:5px solid #1b4fd6;background:linear-gradient(180deg,#f4f8ff,#fff 160px)}
 body[data-mode="kakao"] #kakaoPanel{border-top:5px solid #fee500;background:linear-gradient(180deg,#fffbe0,#fff 160px)}
 body[data-mode="mail"] .side>.sec:nth-of-type(3){--sc:#1b4fd6;--st:#edf3ff}
@@ -267,6 +268,11 @@ table.t td.n,table.t th.n{text-align:right}
     <div class="fld"><label for="season">시즌 메시지</label><select id="season"></select></div>
     <div class="fld"><label for="msg">한마디 메시지 <small>(직접 쓰면 우선 적용)</small></label><textarea id="msg" placeholder="비워두면 시즌·디자인별 기본 인사말"></textarea></div>
    </section>
+   <div id="kFoldBox">
+   <details class="kfold" style="margin:0 0 14px"><summary>💬 메시지 말투 · 메시지 미리보기 <small>눌러서 펼치기</small></summary><div class="klab">메시지 말투 <small>디자인을 고르면 어울리는 말투로 바뀌어요 · 따로 바꿔도 돼요</small></div>
+   <div class="ktones" id="ktones"></div>
+   <div class="klab">미리보기 <small>메시지 복사 → 카톡 대화방에 붙여넣기</small></div><div class="kchat"><div class="kname" id="kName">담당 매니저</div><div class="kbubble" id="kText"></div><div class="klink"><b>에스원다이렉트몰</b><span>s1directmall.co.kr</span></div></div></details>
+   </div>
    <section class="sec">
     <h2><span class="step">3</span>보내기</h2>
     <div id="mailSend">
@@ -307,9 +313,6 @@ table.t td.n,table.t th.n{text-align:right}
   <div class="panel" style="min-width:0" id="kakaoPanel" hidden>
    <div class="phead"><h2><span class="step">4</span>카드 디자인 (20종)</h2><button type="button" class="mini" id="kRand" style="padding:7px 12px">🎲 아무거나</button></div>
    <div class="kthemes" id="kthemes"></div>
-   <details class="kfold" style="margin-bottom:14px"><summary>💬 메시지 말투 · 메시지 미리보기 <small>눌러서 펼치기</small></summary><div class="klab">메시지 말투 <small>디자인을 고르면 어울리는 말투로 바뀌어요 · 따로 바꿔도 돼요</small></div>
-   <div class="ktones" id="ktones"></div>
-   <div class="klab">미리보기 <small>메시지 복사 → 카톡 대화방에 붙여넣기</small></div><div class="kchat"><div class="kname" id="kName">담당 매니저</div><div class="kbubble" id="kText"></div><div class="klink"><b>에스원다이렉트몰</b><span>s1directmall.co.kr</span></div></div></details>
    <div class="kgrid" style="grid-template-columns:minmax(0,1fr)"><div class="kcard"><a href="https://s1directmall.co.kr/" target="_blank" rel="noopener" title="다이렉트몰 열기"><img id="kCardImg" alt="카톡용 홍보 카드 이미지 (누르면 다이렉트몰)"></a><p class="hint">미리보기예요 · 카톡으로 받은 카드를 누르면 다이렉트몰로 이동해요</p></div>
    </div>
    <details class="tip" style="margin-top:14px" id="kKeyBox"><summary style="cursor:pointer;font-weight:700;color:var(--fg)">⚙️ 카드 누르면 다이렉트몰로 — 카카오 공유 설정 <span id="kKeyState"></span></summary>
