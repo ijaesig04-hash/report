@@ -12,12 +12,16 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261109133000">
+<meta name="bsr-ver" content="20261109220000">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
 <meta name="supported-color-schemes" content="light">
 <style>
+.xs-n .num,.nh-k{white-space:nowrap}
+
+.nh-f{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 8px}.nh-f button{border:1px solid var(--line,#d8dfec);background:#fff;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:700;color:#334}.nh-f button.on{background:#1b4fd6;border-color:#1b4fd6;color:#fff}.nh-f small{opacity:.7;font-weight:400}.nh-k{display:inline-block;margin:0 6px;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:700}.nh-k.d{background:#e3f6ea;color:#0b7a3c}.nh-k.f{background:#eceffa;color:#4254a6}
+
 html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}img,svg,canvas,a{-webkit-touch-callout:none;-webkit-user-drag:none}input,textarea,select,[contenteditable],[contenteditable] *{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 
 #bsl{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:radial-gradient(120% 80% at 50% 0%,#1f4fd8 0%,#0b1736 60%,#060d22 100%);color:#fff;font-family:"Noto Sans KR",system-ui,sans-serif;transition:opacity .45s ease,visibility .45s;color-scheme:only light}
@@ -3591,6 +3595,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-09d", date:"11/9", title:"nopush:사용 안내 · 이력 구분 · 월말 요약 문구", tabs:["home"], items:["📖 이름 버튼 → 「사용 안내」 — 처음 쓰는 분을 위한 한 장 안내(안내문 복사 가능)","📜 업데이트 이력을 📊 지표·자료 / 🛠️ 기능·화면으로 나눠 보기 (폰 알림은 지표·자료만)","🧾 월말 결산 보고서에 「요약 문구 복사」 추가 — 카톡·메일용 요약이 한 번에 만들어져요","오래된 소식(2주 전)은 이력에서 정리했어요"]},
  {id:"2026-11-09c", date:"11/9", title:"nopush:화면 길게 눌러도 복사·검색 메뉴가 뜨지 않게 수정", tabs:["home"], items:["글자를 길게 눌렀을 때 뜨던 복사·웹 검색 메뉴를 없앴어요 (입력칸은 그대로 선택 가능)"]},
  {id:"2026-11-09b", date:"11/9", title:"고객체감 11/9 업데이트", tabs:["cs"], items:["📞 고객체감 11/9 기준 — 발송 222건 · 응답 69건 · 만족도 9.97"]},
  {id:"2026-11-09a", date:"11/9", title:"운전성향 11/9 업데이트", tabs:["drv"], items:["🚗 운전성향 11/9 기준 반영 — 김태건 주의, 그 외 양호"]},
@@ -3721,71 +3726,12 @@ var NEWS = [
  {id:"2026-10-26c", date:"10/26", title:"월별 평가 순서", tabs:["eval"], items:["월별 평가 탭 — 이달의 MVP를 맨 위로, 하반기 평가 안내는 그 아래로"]},
  {id:"2026-10-26b", date:"10/26", title:"MVP 당선 축하", tabs:["home"], items:["🎉 MVP로 뽑힌 직원이 앱을 열면 폭죽과 당선 축하 메시지 — '감사합니다'를 누를 때까지 매번 표시"]},
  {id:"2026-10-26a", date:"10/26", title:"월별 평가 · MVP 이력", tabs:["eval"], items:["🏆 월별 평가 탭 맨 위에 이달의 MVP 이력 (6월~11월) · 누적 횟수","📘 선정 기준·취지 펼쳐 보기 — 고과 미반영 · 동기부여 목적"]},
- {id:"2026-10-25o", date:"10/25", title:"MVP 6~9월 기준", tabs:["home"], items:["🏆 6~9월 MVP는 지사평가 자료로 계산 (개인별 지표는 10월 신설) · 9월은 자료 반영 후 계산"]},
- {id:"2026-10-25n", date:"10/25", title:"MVP 별", tabs:["home"], items:["⭐ MVP로 확정된 횟수만큼 이름 옆에 별 표시 (1번 ⭐ · 2번 ⭐⭐) — 근무 현황·근무표·개인별·이름 선택 등 앱 전체"]},
- {id:"2026-10-25m", date:"10/25", title:"MVP 오류 수정", tabs:["home"], items:["🏆 지표 자료가 없는 달(9월)은 MVP 확정 버튼을 막고, 0점 결과는 브리핑에 띄우지 않게 수정"]},
- {id:"2026-10-25l", date:"10/25", title:"관리자 메뉴 보안", tabs:["home"], items:["🔒 관리자 PIN을 넣었던 폰이라도 직원 이름으로 바꾸면 관리자 메뉴·기능이 보이지 않게 수정"]},
- {id:"2026-10-25k", date:"10/25", title:"MVP 하반기 전체", tabs:["home"], items:["🏆 이달의 MVP 관리자 화면 — 하반기 6월~이번 달까지 월별로 보기 · 확정한 달은 🏆 표시","6월은 사업팀 평가 출동지표, 10월부터는 개인별 지표 · 가감점은 지사평가 기준"]},
- {id:"2026-10-25j", date:"10/25", title:"관리자 메뉴 구분", tabs:["home"], items:["이름표 메뉴 — '🔒 관리자 메뉴' 칸을 따로 나눠 노란색으로 표시","직원 화면에서는 관리자 메뉴가 아예 안 보이게 수정"]},
- {id:"2026-10-25i", date:"10/25", title:"🏆 이달의 MVP", tabs:["home"], items:["매월 MVP를 뽑아 브리핑 맨 위에 게시 — 고과 미반영 · 동기부여·인지도 목적","선정 기준: 개인별 지표 40 + 지사 기여도 25(소개 5·인상 3) + 가감점 ±15 + 앱 활용도 20","관리자 메뉴 '🏆 이달의 MVP' — 순위 확인 · 소개·인상 입력 · 확정·게시"]},
- {id:"2026-10-25h", date:"10/25", title:"공지 분류 · 교육 자료", tabs:["home"], items:["📚 공지 분류 — 차량사고·안전사고·업무공지·중요이슈·경조사·일반","브리핑 맨 위에 '○○ 자료가 도착했습니다' 카드 → 눌러서 내용 확인 후 '확인했습니다'","관리자 공지 보내기 — 분류 선택 · 교육 자료(경위·사진·수칙·확인 문제) 첨부","🚗 교차로 좌회전 추돌 사고사례 교육 자료 추가"]},
- {id:"2026-10-25g", date:"10/25", title:"메뉴 정리", tabs:["home"], items:["이름표 메뉴에서 '오늘의 브리핑' 삭제 — 브리핑은 맨 앞 탭으로 바로 보기"]},
- {id:"2026-10-25f", date:"10/25", title:"날씨 칸 정리", tabs:["home"], items:["🌤️ 날씨 '내일' 장 삭제 — 내일 날씨는 주간 날씨에서 확인 (5장으로 정리)"]},
- {id:"2026-10-25e", date:"10/25", title:"가로 보기 잘림 수정", tabs:["duty"], items:["↻ 가로 보기 — 월 근무표·원본이 위아래 잘리지 않게 화면에 맞춰 표시 (🔍 확대로 크게)"]},
- {id:"2026-10-25d", date:"10/25", title:"근무표 가로 보기", tabs:["duty"], items:["↻ 근무표 탭 '가로 보기' 버튼 — 폰 자동회전이 꺼져 있어도 월 근무표·원본을 가로로 크게","앱 설치본도 폰을 돌리면 가로 화면 허용"]},
- {id:"2026-10-25c", date:"10/25", title:"날짜별 근무 정돈", tabs:["duty"], items:["📅 근무표 탭 날짜별 근무 — 크기 축소 · 주간(하늘)·야간(보라)·휴무(회색) 색 구분"]},
- {id:"2026-10-25b", date:"10/25", title:"11월 근무표 원본", tabs:["duty"], items:["🗂️ 11월 근무 계획표 원본 추가 (사번 가림) · 앱 근무표와 대조 확인 완료"]},
- {id:"2026-10-25a", date:"10/25", title:"근무표 원본 보기", tabs:["duty"], items:["🗂️ 근무표 탭 — '원본 보기'를 누르면 10월 근무 계획표 원본 캡처 (사번은 가림)"]},
- {id:"2026-10-24o", date:"10/24", title:"해피콜 할 일 · 날씨 보완", tabs:["home"], items:["✅ 관리자 오늘 할 일에 해피콜 미제출 인원 포함 (서비스 관리자)","🌙 야간 근무자 — 오늘 밤 근무 날씨(18~07시) 한 줄 안내","🚨 날씨 칸에 '기상청 특보 확인' 바로가기","날씨를 못 불러오면 안내와 '다시 시도' 버튼"]},
- {id:"2026-10-24n", date:"10/24", title:"날씨 순서", tabs:["home"], items:["🌤️ 날씨 칸 — 지금 날씨가 첫 장, 날씨 한마디(주의 안내)가 두 번째 장"]},
- {id:"2026-10-24m", date:"10/24", title:"맑은 날 날씨 한마디", tabs:["home"], items:["😊 특이 날씨가 없는 날에도 날씨 칸 첫 장에 '오늘 날씨 한마디' — 날씨·기온·시간대에 맞는 안내 (날마다 문구 바뀜)"]},
- {id:"2026-10-24l", date:"10/24", title:"날씨 기준 · 주간 날씨", tabs:["home"], items:["🌤️ 날씨 기준 — 북서울지사 관할(강북·도봉·노원) 중심","📅 날씨 슬라이드에 주간 날씨(7일) 추가 — 최고/최저 · 강수확률"]},
- {id:"2026-10-24k", date:"10/24", title:"브리핑 정돈", tabs:["home"], items:["🌤️ 날씨 칸 크기 축소","관리자 오늘 할 일 · 직원 화면 미리보기 · 바로가기 칸 간격 정리"]},
- {id:"2026-10-24j", date:"10/24", title:"오늘 날씨 · 해피콜 접기", tabs:["home"], items:["🌤️ 브리핑에 오늘 날씨 — 지금·시간별·내일·미세먼지를 옆으로 넘겨 보기","⚠️ 비·눈·한파·폭염·강풍·안개·미세먼지 등 특이 날씨는 맨 앞에 안내 문구로","📱 해피콜 발송 현황 — 눌러서 접기/펼치기"]},
- {id:"2026-10-24i", date:"10/24", title:"공지 보기 정리", tabs:["home"], items:["📢 공지 보기 — '작성자'와 '내 확인 여부'를 따로 표시 (✓ ○○님 확인 완료)","안 본 공지는 목록에서 바로 확인하기","관리자 — 직원 확인 인원·미확인자 표시"]},
- {id:"2026-10-24h", date:"10/24", title:"글자 크게 · 공지", tabs:["home"], items:["🔠 글자 크게 — 화면 배치는 그대로, 작은 글자만 키워 깔끔하게","📢 공지 — 한 폰에서 이름을 바꿔도 새 이름으로 공지가 보이게"]},
- {id:"2026-10-24g", date:"10/24", title:"이름별 기능 안내", tabs:["home"], items:["📱 해피콜 발송 현황 — 서비스 관리자(서비스팀장·파트장)만 보기","이름 선택 화면에 이름별로 보이는 기능 안내 추가"]},
- {id:"2026-10-24f", date:"10/24", title:"직책 표시", tabs:["home"], items:["최문혁 — 선임파트장","차량별 대포장 표시 (용승우·주상덕·김태건·박수안·김동현)"]},
- {id:"2026-10-24e", date:"10/24", title:"이름 선택 표시", tabs:["home"], items:["'파트장' 묶음 이름을 '서비스 관리자'로 변경","최문혁·이재식 이름 아래 '파트장' 직책 표시","이재식 — 👨‍💻 앱 개발자 표시"]},
- {id:"2026-10-24d", date:"10/24", title:"이름 선택 화면 정리", tabs:["home"], items:["👑 지사장 · ⭐ 서비스팀장 추가 — 파트장과 같은 관리자 권한","서비스팀장은 파트장 줄 맨 왼쪽으로","'관리자' 항목 삭제 — 관리자로 들어왔던 폰은 이름을 다시 선택"]},
- {id:"2026-10-24c", date:"10/24", title:"해피콜 발송 체크", tabs:["home"], items:["📱 해피콜 발송 체크 — 근무 중엔 작게 표시, 퇴근 3시간 전부터 펼쳐서 표시 · 체크하면 숨김 (근무자에게만)","파트장 화면 — 주간·야간 근무자별 제출 현황 · 미제출자 안내 복사"]},
- {id:"2026-10-24b", date:"10/24", title:"화면 정리", tabs:["home"], items:["브리핑 정리 — 이번 주 요약·D-day, 내 미응답·지표·운전성향은 '더 보기'로","모든 탭 제목·카드·버튼·접기 메뉴 모양 통일","관리자 오늘 할 일 — 루핑 건·전일 특이사항·건강체크 확인 추가"]},
- {id:"2026-10-24a", date:"10/24", title:"계산기 · 칭찬 카드 외", tabs:["home","cs"], items:["🧮 내 점수 계산기 — 사업팀 배점으로 '점수 올리기 쉬운 항목 TOP3' (브리핑 › 내 할 일)","🖼️ 칭찬 카드 — 고객 칭찬을 이미지로 저장·공유","🔍 고객처 검색 — 다발보 이력·고객체감 응답·칭찬을 한 번에","🔠 글자 크게 (이름표 메뉴) · 📋 주간 보고 문구 (관리자)"]},
- {id:"2026-10-23j", date:"10/23", title:"사업팀 평가 6월 · 종합 평가", tabs:["eval","home"], items:["월별 평가 › 사업팀 평가 6월 반영 (7월은 사업팀 확정 후 반영)","종합 평가 = 사업팀 총점 × 80% + 지사 평가(20점) — 월별·하반기 평균 순위"]},
- {id:"2026-10-23i", date:"10/23", title:"관리자 할 일", tabs:["home"], items:["✅ 관리자 오늘 할 일 — 루핑·전일 특이사항·건강체크 확인 · 공지 미확인 · 다발보 미조치","📴 인터넷이 끊기면 '오프라인 · 저장본' 표시"]},
- {id:"2026-10-23h", date:"10/23", title:"빠른 열기 · 칭찬 알림 외", tabs:["home","ppl","cs"], items:["⚡ 빠른 열기 — 저장된 화면을 바로 띄우고 뒤에서 최신화 (데이터 절약)","🎉 내 고객 칭찬이 들어오면 브리핑 맨 위에 알림","미응답 '연락 체크'가 모든 폰에 공유 (누가 연락했는지 표시)","개인별 상세 — 코멘트·가점·월말 예상은 눌러서 펼치기"] },
- {id:"2026-10-23g", date:"10/23", title:"앱 설치 버튼", tabs:["home"], items:["주소로 열면 아래에 '📲 앱 설치' 띠 표시 — 누르면 설치(아이폰·삼성 인터넷은 설치 방법 안내)","카톡에서 링크를 누르면 크롬·사파리로 자동 이동"]},
- {id:"2026-10-23f", date:"10/23", title:"공지 · 내 할 일 · 결산 보고서", tabs:["home","alm","veh","ppl"], items:["📢 공지 — 관리자가 앱에서 공지 작성 → 앱 맨 위에 표시, '확인했어요'로 읽음 현황 확인","👤 내 할 일 — 브리핑에 이번 주 근무 · 내 미응답 · 내 월말 예상 · 운전성향 추이 (파트장은 직원 화면 미리보기)","✍️ 다발보 조치 입력 — 고객처별로 조치 내용을 앱에서 바로 저장","🧾 월말 결산 보고서(메뉴) · 📈 차량·개인 상세에 기준일별 추이 그래프"]},
- {id:"2026-10-23e", date:"10/23", title:"월말 예상 · 결산 자동화 · 11월 근무표", tabs:["veh","ppl","duty","home"], items:["차량별·개인별 — 📈 월말 예상 달성률(추세 참고용) · 미달 위험 항목 표시","월말 결산 자동화 — 말일 자료가 들어오면 가점·집중개선 항목 '확정' 표시, D-day는 다음 달로 자동 전환","11월 근무표 반영 (근무 계획표 11/1~11/30)"]},
- {id:"2026-10-23d", date:"10/23", title:"미응답 알림 공유 기능", tabs:["cs"], items:["미응답 알림 — 단톡방 전체 알림 보내기 · 근무자별 카톡 보내기(목록+문자 예시) · 고객별 연락 체크","관리자(최문혁·이재식)는 평가 대상 제외 — 미응답 알림·사원별 응답·칭찬 게시판·배지에서 뺌"]},
- {id:"2026-10-23c", date:"10/23", title:"고객체감 10/23 반영", tabs:["cs"], items:["고객체감 10/1~10/23 기준 업데이트 (발송 151건 · 응답 47건 · 응답률 31.1%)","김상훈 2건 신규 응답(10점·칭찬) · 10/23 신규 발송 9건"]},
- {id:"2026-10-23b", date:"10/23", title:"운전성향 10/23 반영", tabs:["drv"], items:["운전성향 10/23 기준 업데이트 — 양호 14명 · 주의 0 · 위험 1명(용승우 GPS 소명 예정)","모범: 김유건 · 남현준 · 김동현"]},
- {id:"2026-10-23a", date:"10/23", title:"화면 새 단장", tabs:["home","cmp","veh"], items:["앱을 열면 브리핑 탭이 첫 화면","브리핑 — 새 색상 · 근무 현황 '내일' 보기 수정 · 바로가기 10개로 확대","지사별 — 지표 카드에 색 입힘","차량별 — 지표 이름 설명은 눌러서 펼치기"]},
- {id:"2026-10-22c", date:"10/22", title:"브리핑 탭 신설", tabs:["home"], items:["맨 앞 '브리핑' 탭 — 내 지표 · 오늘/내일 근무 · 이번 주 요약 · 월말 D-day · 바로가기"]},
- {id:"2026-10-22b", date:"10/22", title:"새 기능 대거 추가", tabs:["cmp","ppl","cs","alm"], items:["오늘의 브리핑 — 내 지표 · 오늘/내일 근무 · 이번 주 요약 · 월말 D-day (지사별 탭 맨 위)","개인별 배지(🏆📨👏🛡️)와 지난 기준일 대비 변화","고객체감 칭찬 게시판 · 미응답 알림","다발보 재발 표시 · 이름표 메뉴에 업데이트 이력 · 한 장 요약(PDF)"]},
- {id:"2026-10-22a", date:"10/22", title:"고객체감 10/22 반영", tabs:["cs"], items:["고객체감 10/1~10/22 기준 업데이트 (발송 142건 · 응답 45건)"]},
- {id:"2026-10-21i", date:"10/21", title:"판넬 취합 앱 업데이트", tabs:["rep"], items:["판넬 취합 앱 — 갤러리 불러오기 기능 업데이트 (취합건 연동 탭에서 바로 열기)"]},
- {id:"2026-10-21h", date:"10/21", title:"25분초과 현황 반영", tabs:["alm"], items:["발보관리 › 25분초과: 10/1~10/19 출동 281건 중 25분 초과 7건(2.5%) · 차량별 · 개인별 현황"]},
- {id:"2026-10-21g", date:"10/21", title:"출동료청구 현황 반영", tabs:["alm"], items:["발보관리 › 출동료청구: 10월 지사별 청구 현황(북서울 평가 청구율 111.1%) · 청구 내역 3건 · 청구 기준"]},
- {id:"2026-10-21f", date:"10/21", title:"다발보 현황 반영", tabs:["alm"], items:["발보관리 › 다발보: 9/29~10/21 고객처 39곳 · 발보 83건 (차량별 · 사유별 · 고객처별 조치 현황)"]},
- {id:"2026-10-21e", date:"10/21", title:"발보관리 탭 신설", tabs:["alm"], items:["발보관리 탭 추가 — 다발보 · 출동료청구 · 25분초과"]},
- {id:"2026-10-21d", date:"10/21", title:"고객체감 10/21 반영", tabs:["cs"], items:["고객체감 10/1~10/21 엑셀 원본 기준 업데이트 (발송 134건 · 응답 44건)","공사품질(미지정) 건 포함"]},
- {id:"2026-10-21c", date:"10/21", title:"운전성향 10/21 반영", tabs:["drv"], items:["운전성향 10/21 기준 업데이트 — 김민수 주의→양호, 위험 1명(용승우 GPS 소명 예정)"]},
- {id:"2026-10-21a", date:"10/21", title:"차량 집중개선 가점 신설", tabs:["veh"], items:["전월 말일 기준 북서울 지사별 지표 중 최저 항목 1개 선정 → 익월 차량별로 그 항목 100% 달성 시 차량 +2점","차량별 탭에 설명·예상 항목(🎯)·차량별 현황 표시"]},
- {id:"2026-10-20b", date:"10/20", title:"고객체감 10/20 반영", tabs:["cs"], items:["고객체감 10/1~10/20 엑셀 원본 기준 업데이트 (발송 105건 · 응답 37건)"]},
- {id:"2026-10-20a", date:"10/20", title:"운전성향 10/20 반영", tabs:["drv"], items:["운전성향 10/20 기준 업데이트"]},
- {id:"2026-10-19f", date:"10/19", title:"근무표 기간별 보기", tabs:["duty"], items:["근무표를 주간·월간·3개월·전체로 나눠 보기 추가","주간: 요일별 주간·야간 인원 / 3개월·전체: 사람별 월 근무·휴가 비교"]},
- {id:"2026-10-19e", date:"10/19", title:"지사별 순위표 추가", tabs:["cmp"], items:["지사별 탭 종합 히트맵 아래에 18개 지사 순위표(메달·지표 5개 상태) 추가"]},
- {id:"2026-10-19d", date:"10/19", title:"운전성향 소명 코멘트", tabs:["drv"], items:["용승우 위험 판정 — GPS 오작동, 사업팀 소명 예정 코멘트 추가"]},
- {id:"2026-10-19c", date:"10/19", title:"서비스 지표 10/19 반영", tabs:["cmp","veh","ppl","mgt"], items:["지사별·차량별·개인별·관리지표 10/19 기준 업데이트","지표 코멘트(💬) 표시 추가"]},
- {id:"2026-10-19b", date:"10/19", title:"고객체감 건별 내역", tabs:["cs"], items:["고객체감 사원 이름을 누르면 발송 건별 응답 ✓ / 미응답 ✕ 확인 (계약처·고객·연락처 일부 표시)","10/19 기준 자료 추가 (10월 1~19일 엑셀 원본)"]},
- {id:"2026-10-19a", date:"10/19", title:"리포트 새 단장", tabs:["duty","drv","cs","cmp","mgt"],
-  items:["근무표 탭 신설 (6~11월, 근태 리뷰·OJT)","운전성향 탭 신설 (6~10월 추이)","고객체감 전 부서·날짜별 자료로 확대","지사별·고객체감·관리지표 상단 요약 카드"]}
 ];
 /* only: 표시된 소식은 그 사람만 봄 (이재식 전용 업데이트 내역) */
 var NEWS_ALL = NEWS.slice();
 try{ (function(){ var me = localStorage.getItem("bsr_me")||""; NEWS = NEWS.filter(function(n){ return !n.only || n.only===me; }); })(); }catch(e){ NEWS = NEWS.filter(function(n){ return !n.only; }); }
 /*NEWS_END*/
+NEWS.forEach(function(n){ n.title = String(n.title).replace(/^nopush:\s*/,""); });
 var TABNAME = {home:"브리핑",cmp:"지사별",veh:"차량별",ppl:"개인별",eval:"월별 평가",cs:"고객체감",alm:"발보관리",mgt:"관리지표",duty:"근무표",drv:"운전성향",rep:"취합건 연동"};
 /* 자료가 새로 들어오면 업데이트 이력·N 표시를 자동으로 만듦 (직접 적은 이력이 있으면 그것을 우선) */
 (function autoNews(){
@@ -4182,7 +4128,7 @@ function showMonthReport(){
   Object.keys(g).forEach(function(k){ if(typeof actsFor==="function" && actsFor(k).length) g[k].done=true; });
   var gk = Object.keys(g), nd = gk.filter(function(k){return g[k].done}).length;
   var nrd = nrData();
-  var h = '<div class="xs-h noprint"><b>🧾 '+e.m+'월 '+(fin?'결산':'중간')+' 보고서</b><span><button type="button" data-xs="print">PDF 저장 · 인쇄</button><button type="button" data-xs="close">✕</button></span></div>'+
+  var h = '<div class="xs-h noprint"><b>🧾 '+e.m+'월 '+(fin?'결산':'중간')+' 보고서</b><span><button type="button" data-mrcopy="1">📋 요약 문구 복사</button><button type="button" data-xs="print">PDF 저장 · 인쇄</button><button type="button" data-xs="close">✕</button></span></div>'+
     '<div class="op"><div class="op-t"><b>북서울지사 서비스 '+e.m+'월 '+(fin?'결산 보고 (확정)':'중간 보고')+'</b><span>지표 기준일 '+SD.br+(fin?' · 월말 확정':' · 판정 '+e.lbl+' 예정')+' · 작성 '+t+'</span></div>'+
     '<h4>① 지사 지표 (사업팀 '+BR.length+'곳 중)</h4><table><tr><th>지표</th><th>목표</th><th>실적</th><th>달성률</th><th>순위</th></tr>'+
       me.m.map(function(c,i){return '<tr><td>'+M[i].name+'</td><td>'+c.t.toFixed(1)+'</td><td>'+fa(c.a)+'</td><td class="'+lvl(c.r)+'">'+fr(c.r)+'</td><td>'+rank(i,c.r)+'위</td></tr>'}).join('')+'</table>'+
@@ -4198,10 +4144,34 @@ function showMonthReport(){
       (cs?'<tr><td>고객체감 ('+md(ck)+')</td><td>발송 '+cs.sent+' · 응답 '+cs.resp+' · 응답률 '+(cs.resp/cs.sent*100).toFixed(1)+'% · 만족도 '+cs.sat+' · 미응답(3일↑) '+nrd.old.length+'건</td></tr>':'')+
       (pk.length?'<tr><td>칭찬 TOP3</td><td>'+pk.map(function(n){return n+' '+pc[n]+'건'}).join(', ')+'</td></tr>':'')+
       '<tr><td>운전성향 ('+md(dk)+')</td><td>양호 '+dl.filter(function(r){return r[3]==="양호"}).length+' · 주의 '+dl.filter(function(r){return r[3]==="주의"}).length+' · 위험 '+dl.filter(function(r){return r[3]==="위험"}).length+(dl.filter(function(r){return r[3]==="위험"}).length?' ('+dl.filter(function(r){return r[3]==="위험"}).map(function(r){return r[0]}).join(', ')+')':'')+'</td></tr>'+
+      (function(){ var mv=[]; try{ mv=cheerTop().slice(0,3); }catch(x){} return mv.length ? '<tr><td>MVP 순위 ('+(+cheerMonth().slice(5,7))+'월)</td><td>'+mv.map(function(x){return x.rk+'위 '+x.n}).join(' · ')+'</td></tr>' : ''; })()+
       '<tr><td>다발보 ('+almPeriodOf(almCurM())+')</td><td>고객처 '+gk.length+'곳 · 조치 완료 '+nd+'곳 · 미조치 '+(gk.length-nd)+'곳</td></tr>'+
     '</table><p class="op-f">※ 관리자(파트장)는 개인 평가 대상에서 제외 · 계약처·고객 정보는 일부 가림</p></div>';
   openSheet(h);
 }
+
+function monthText(){
+  var e = dataME(), fin = isFinal(), ck = csLatest(), cs = CSD[ck];
+  var full = PPL.filter(function(p){return p.ok===5}), vfull = VEH.filter(function(v){return okc(v)===5});
+  var dk = Object.keys(DRIVE.snaps).sort().pop(), dl = DRIVE.snaps[dk]||[];
+  var cnt = function(k){ return dl.filter(function(r){return r[3]===k}).length; };
+  var mv = []; try{ mv = cheerTop().slice(0,3); }catch(x){}
+  var L = ['📊 북서울지사 서비스 '+e.m+'월 '+(fin?'결산 (확정)':'중간 보고')+' · 지표 기준일 '+SD.br, ''];
+  L.push('■ 지사 지표 (사업팀 '+BR.length+'곳 중)');
+  me.m.forEach(function(c,i){ L.push('- '+M[i].name+' '+fr(c.r)+' ('+rank(i,c.r)+'위)'); });
+  L.push('', '■ 가점 '+(fin?'확정':'현황'));
+  L.push('- 개인 +'+BONUS+'점: '+(full.length?full.map(function(p){return p.name}).join(', '):'없음'));
+  L.push('- 차량 +'+BONUS_V+'점: '+(vfull.length?vfull.map(function(v){return v.no+'호'}).join(', '):'없음'));
+  if(cs){ L.push('', '■ 고객체감 ('+md(ck)+')', '- 발송 '+cs.sent+'건 · 응답 '+cs.resp+'건 · 응답률 '+(cs.resp/cs.sent*100).toFixed(1)+'% · 만족도 '+cs.sat); }
+  L.push('', '■ 운전성향 ('+md(dk)+')', '- 양호 '+cnt("양호")+' · 주의 '+cnt("주의")+' · 위험 '+cnt("위험"));
+  if(mv.length){ var mm = cheerMonth(); L.push('', '■ '+(+mm.slice(5,7))+'월 MVP 순위', '- '+mv.map(function(x){return x.rk+'위 '+x.n}).join(' · ')); }
+  return L.join('\n');
+}
+document.addEventListener("click", function(e){
+  if(!e.target.closest("[data-mrcopy]")) return;
+  var b = e.target.closest("[data-mrcopy]"), t = monthText(), ok = function(){ b.textContent = "✅ 복사됐어요"; }, ng = function(){ openSheet('<div class="xs-h"><b>📋 요약 문구</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">아래 글을 길게 눌러 복사하세요.</p><pre class="xs-pre">'+esc2(t)+'</pre>'); };
+  try{ navigator.clipboard.writeText(t).then(ok, ng); }catch(x){ ng(); }
+});
 /* ===== 📈 기준일별 추이 그래프 (차량·개인 상세) ===== */
 function trendCard(kind, key){
   var ds = DATES.filter(function(x){return x.veh && (kind==="veh" || x.ppl)}).map(function(x){return x.d}).sort();
@@ -5337,6 +5307,32 @@ function praiseView(f){
 document.addEventListener("click", function(e){ var b=e.target.closest("[data-pzf]"); if(b){ praiseView(b.dataset.pzf); return; }
   var x=e.target.closest("[data-xf]"); if(!x) return; var k=x.dataset.xf; if(k==="risk") riskView(); else if(k==="open") openCheck(); else if(k==="find") findView(""); else if(k==="praise") praiseView(""); else if(k==="help") helpView(""); });
 
+
+/* ===== 📖 사용 안내 — 처음 쓰는 직원용 한 장 안내 ===== */
+var GUIDE_URL = "https://ijaesig04-hash.github.io/report/";
+var GUIDE = [
+ ["📲","앱처럼 설치하기","안드로이드: 크롬으로 주소를 열고 ⋮ → 「앱 설치」(또는 홈 화면에 추가)\n아이폰: 사파리로 열고 공유 → 「홈 화면에 추가」\n설치한 아이콘으로 열면 주소창 없이 앱처럼 열려요."],
+ ["👤","처음 한 번 — 이름 고르기","처음 열면 「누구신가요?」 화면이 나와요. 내 이름을 고르고 시작하면 돼요.\n나중에 바꾸려면 오른쪽 위 이름 버튼 → 「이름 바꾸기」."],
+ ["🏠","화면 위 탭으로 이동","브리핑 — 오늘 꼭 볼 것 · 공지 · 내 할 일\n지사별 — 사업팀 지사끼리 비교\n차량별 · 개인별 — 차량·개인 달성 현황과 순위\n월별 평가 — 월별 점수 순위 (이름을 누르면 월별 항목 점수)\n고객체감 — 해피콜 발송·응답·만족도\n발보관리 · 관리지표 · 근무표 · 운전성향 · 취합건 연동"],
+ ["🔔","새 소식 알림","설치한 앱에서 이름 버튼 → 「업데이트 알림 받기」 → 알림 켜기 → 허용.\n새 지표·자료가 반영될 때만 알림이 와요. 기능 소식은 「업데이트 이력」에서 볼 수 있어요."],
+ ["🛡️","고객께 상품 보내기","이름 버튼 → 「에스원 상품 추천」. 카톡 보내기 / 메일 만들기에서 카드를 고르고 보내요.\n내 이름·연락처·사원번호가 자동으로 들어가고, 고객이 구매할 때 사원번호를 입력하면 10% 추가 할인이에요."],
+ ["📢","공지 · 경조사","이름 버튼 → 「공지 · 경조사 · 매뉴얼 보기」에서 지난 공지와 경조사를 다시 볼 수 있어요."],
+ ["💡","막힐 때","이름 버튼 → 「현장 도움말」에서 검색하세요. 화면이 옛날 것 같으면 앱을 완전히 닫았다 다시 열어요."]
+];
+function guideText(){
+  return '📖 북서울 서비스 Report 사용 안내\n\n'+GUIDE.map(function(g){ return g[0]+' '+g[1]+'\n'+g[2]; }).join('\n\n')+'\n\n👉 바로가기: '+GUIDE_URL;
+}
+function guideView(){
+  openSheet('<div class="xs-h noprint"><b>📖 사용 안내</b><span><button type="button" data-xs="print">PDF 저장 · 인쇄</button><button type="button" data-xs="close">✕</button></span></div>'+
+    '<p class="note">처음 쓰는 분을 위한 한 장 안내예요.</p>'+
+    GUIDE.map(function(g){ return '<div class="xs-n"><div><b>'+g[0]+' '+g[1]+'</b></div><p class="xs-p" style="white-space:pre-line;margin:6px 0 0">'+esc2(g[2])+'</p></div>'; }).join('')+
+    '<button type="button" class="mg-b noprint" data-gdcopy="1">📋 안내문 복사 (직원에게 보내기)</button><div id="gdres" class="note noprint"></div>');
+}
+document.addEventListener("click", function(e){
+  if(!e.target.closest("[data-gdcopy]")) return;
+  var t = guideText(), say = function(m){ var el=document.getElementById("gdres"); if(el) el.textContent=m; };
+  try{ navigator.clipboard.writeText(t).then(function(){ say("✅ 복사됐어요. 카톡·메일에 붙여넣으세요."); }, function(){ say("복사하지 못했어요."); }); }catch(x){ say("복사하지 못했어요."); }
+});
 /* ===== 💡 현장 도움말 — 기본 항목 + 관리자가 앱에서 추가 (help|) ===== */
 var HELP = [
  ["앱","앱 설치하기","안드로이드: 크롬으로 주소 열기 → 화면 아래 [설치] (없으면 ⋮ → 앱 설치 / 홈 화면에 추가)\n아이폰: 사파리로 열기 → 공유 → 홈 화면에 추가\n설치 뒤에는 홈 화면의 '북서울 Report' 아이콘으로 열어 주세요."],
@@ -5791,10 +5787,21 @@ function openSheet(html){
       if(e.target.closest("[data-xs=print]")) window.print(); }); }
   o.innerHTML = '<div class="xs-in">'+html+'</div>'; o.hidden=false; document.body.style.overflow="hidden";
 }
-function showHistory(){
+var NH_DATA = {cmp:1,veh:1,ppl:1,mgt:1,eval:1,cs:1,alm:1,drv:1,duty:1}, NH_F = "", NH_N = 20;
+function nhKind(n){ return (n.tabs||[]).some(function(t){return NH_DATA[t]}) ? "data" : "func"; }
+function showHistory(f, more){
+  if(f!=null) NH_F = f; NH_N = more ? NH_N+20 : 20;
+  var L = NEWS.filter(function(n){ return !NH_F || nhKind(n)===NH_F; }), V = L.slice(0, NH_N);
+  var cnt = function(k){ return NEWS.filter(function(n){ return !k || nhKind(n)===k; }).length; };
   openSheet('<div class="xs-h"><b>📜 업데이트 이력</b><button type="button" data-xs="close">✕</button></div>'+
-    NEWS.map(function(n){return '<div class="xs-n"><div><span class="num">'+n.date+'</span><b>'+n.title+'</b></div><ul>'+n.items.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul></div>'}).join(''));
+    '<div class="nh-f">'+[["","전체"],["data","📊 지표·자료"],["func","🛠️ 기능·화면"]].map(function(c){ return '<button type="button" class="'+(NH_F===c[0]?'on':'')+'" data-nhf="'+c[0]+'">'+c[1]+' <small>'+cnt(c[0])+'</small></button>'; }).join('')+'</div>'+
+    '<p class="note">📊 지표·자료 소식만 폰 알림으로 와요 · 🛠️ 기능·화면 소식은 앱 안에서만 보여요 (최근 2주)</p>'+
+    V.map(function(n){ var d = nhKind(n)==="data";
+      return '<div class="xs-n"><div><span class="num">'+n.date+'</span><span class="nh-k '+(d?'d':'f')+'">'+(d?'지표·자료':'기능·화면')+'</span><b>'+n.title+'</b></div><ul>'+n.items.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul></div>'; }).join('')+
+    (L.length>V.length?'<button type="button" class="mg-b" data-nhmore="1">이전 소식 더 보기 ('+(L.length-V.length)+'건 남음)</button>':'')+
+    (L.length?'':'<p class="note">해당하는 소식이 없어요.</p>'));
 }
+document.addEventListener("click", function(e){ var b=e.target.closest("[data-nhf]"); if(b){ showHistory(b.dataset.nhf); return; } if(e.target.closest("[data-nhmore]")) showHistory(null,1); });
 function showOnePage(){
   var t = kstDate(0), ck = csLatest(), cs = CSD[ck];
   var mg0 = (typeof MGN!=="undefined") ? MGN.filter(function(b){return b.name===MY})[0] : null;
@@ -6110,7 +6117,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-vl="find">🔍 고객처 한눈에 보기</button><button type="button" data-vl="risk">⚠️ 불만 위험 고객처</button><button type="button" data-vl="open">✅ 개시 방문 체크리스트</button><button type="button" data-vl="help">💡 현장 도움말</button><button type="button" data-vl="ojt">🎓 OJT 진도표</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="push">📲 업데이트 알림 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button><button type="button" data-vl="fresh" class="vl-adm">🔄 최신 버전 받기</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="guide">📖 사용 안내 (처음이라면)</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-vl="find">🔍 고객처 한눈에 보기</button><button type="button" data-vl="risk">⚠️ 불만 위험 고객처</button><button type="button" data-vl="open">✅ 개시 방문 체크리스트</button><button type="button" data-vl="help">💡 현장 도움말</button><button type="button" data-vl="ojt">🎓 OJT 진도표</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="push">📲 업데이트 알림 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button><button type="button" data-vl="fresh" class="vl-adm">🔄 최신 버전 받기</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
@@ -6347,7 +6354,7 @@ document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contain
 menu.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return; menu.hidden = true;
   var a = b.dataset.vl;
-  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="bdg"){ badgeCheck(); } else if(a==="push"){ pushView(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ NL_T==="edu" ? eduTab() : NL_T==="man" ? manTab() : notiList(); } else if(a==="sales"){ window.open(SALES_URL, "_blank"); } else if(a==="prod"){ location.href = PROD_URL; }   /* 같은 앱 화면에서 열기(주소창 없음) · 상품 추천의 ‹ 버튼으로 돌아옴 */ else if(a==="find"){ findView(""); } else if(a==="praise"){ praiseView(""); } else if(a==="risk"){ riskView(); } else if(a==="open"){ openCheck(); } else if(a==="help"){ helpView(""); } else if(a==="ojt"){ ojtView(); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
+  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory("",0); } else if(a==="guide"){ guideView(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="bdg"){ badgeCheck(); } else if(a==="push"){ pushView(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ NL_T==="edu" ? eduTab() : NL_T==="man" ? manTab() : notiList(); } else if(a==="sales"){ window.open(SALES_URL, "_blank"); } else if(a==="prod"){ location.href = PROD_URL; }   /* 같은 앱 화면에서 열기(주소창 없음) · 상품 추천의 ‹ 버튼으로 돌아옴 */ else if(a==="find"){ findView(""); } else if(a==="praise"){ praiseView(""); } else if(a==="risk"){ riskView(); } else if(a==="open"){ openCheck(); } else if(a==="help"){ helpView(""); } else if(a==="ojt"){ ojtView(); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
 });
 ov.addEventListener("click", function(e){
   var n = e.target.closest("[data-nm]");
