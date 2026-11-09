@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261110084500">
+<meta name="bsr-ver" content="20261110090000">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1273,6 +1273,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 @keyframes sfxRocket{from{transform:translateY(var(--rise));opacity:.2}to{transform:translateY(0);opacity:1}}
 #sfx .sfx-spark{position:absolute;font-size:12px;animation:sfxSpark 1.3s ease-out forwards}
 #sfx .sfx-f{position:absolute;top:-34px;animation:sfxFall linear infinite}
+#sfx .sfx-f:not(.up){opacity:.45;transform-origin:center;filter:blur(.6px)}#sfx .sfx-f:not(.up) i{font-size:11px!important}
 #sfx .sfx-f i{font-style:normal;display:inline-block;opacity:.85;animation:sfxSway ease-in-out infinite alternate}
 #sfx .sfx-f.up{top:auto;bottom:-40px;animation-name:sfxRise}
 #sfx .sfx-k{position:absolute;filter:drop-shadow(0 3px 5px rgba(0,0,0,.3))}
@@ -3595,7 +3596,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
- {id:"2026-11-10b", date:"11/10", title:"nopush:🍁 낙엽이 더 실감나게", tabs:["home"], items:["낙엽이 카드·제목·숫자 위에 통통 튀며 내려앉고, 겹겹이 쌓였다가 바람이 불면 한꺼번에 날아가요","탁 맞고 튕겨 나가거나, 윗면을 미끄러지다 모서리에서 굴러떨어지기도 해요","스크롤하면 앉은 잎도 카드와 같이 움직여요"]},
+ {id:"2026-11-10c", date:"11/10", title:"nopush:🍁 낙엽이 카드에 부딪혀요", tabs:["home"], items:["낙엽이 카드·제목·숫자 위에 통통 튀며 내려앉고, 겹겹이 쌓였다가 바람이 불면 한꺼번에 날아가요","탁 맞고 튕겨 나가거나, 윗면을 미끄러지다 모서리에서 굴러떨어지기도 해요","스크롤하면 앉은 잎도 카드와 같이 움직여요"]},
  {id:"2026-11-10a", date:"11/10", title:"nopush:담당구역 조회 전체화면", tabs:["home"], items:["🗺️ 담당구역 출동차량 조회가 처음부터 전체 화면으로, 주소창 없이 열려요 (왼쪽 위 ‹ 리포트로 돌아와요)"]},
  {id:"2026-11-09g", date:"11/9", title:"nopush:홍보 스튜디오 주소창 없이 열기", tabs:["home"], items:["💬 영업 탭에서 홍보 스튜디오를 열 때 위쪽 주소창 없이 앱 화면 그대로 열려요"]},
  {id:"2026-11-09e", date:"11/9", title:"nopush:영업 탭에 담당구역 출동차량 조회", tabs:["home"], items:["🗺️ 영업 탭에서 바로 담당구역 출동차량을 조회할 수 있어요"]},
@@ -4572,66 +4573,55 @@ var SFX_STAR = {
  },
  /* 🍁❄️🌸 떨어지는 것들(낙엽·눈·꽃잎)이 카드·글자 윗면에 내려앉아요 — 낙엽·꽃잎은 쉬다가 바람에 날리고, 눈·반짝이는 녹아 없어지고, 하트는 위로 떠올라요 */
  land:function(fall){
-  /* 떨어지는 것이 카드 윗면·제목·큰 숫자 위에 실제로 '맞고' 반응:
-     ① 내려앉아 통통 튀다 자리 잡고 → 옆 잎과 겹겹이 쌓임 → 바람이 불면 한꺼번에 날아감
-     ② 탁 맞고 튕겨 나가 카드 옆으로 떨어짐   ③ 윗면을 미끄러지다 모서리에서 굴러떨어짐
-     카드를 스크롤해도 잎이 카드에 붙어 같이 움직임 */
-  var L=[], last=0, T=[], lastScan=0, E=fall.e, gustAt=performance.now()+sfxRand(9000,15000), gustDir=1;
-  var SEL='#view .sec,#view .nli,#view h2,#view .ch-i,#view .mx,#view .dh,#view .num,#view .chip,#xsheet .nli';
-  var scan=function(){ T=[]; var q=document.querySelectorAll(SEL);
-    for(var i=0;i<q.length&&T.length<70;i++){ var b=q[i].getBoundingClientRect(), txt=q[i].classList.contains('num')||q[i].tagName==='H2';
-      if((txt?b.width>24:b.width>70)&&b.height>14&&b.top>80&&b.top<innerHeight-60) T.push({el:q[i],txt:txt}); } };
-  var box=function(l,cache){ var b=cache.get(l.tg); if(!b){ b=l.tg.isConnected?l.tg.getBoundingClientRect():null; cache.set(l.tg,b); } return b; };
-  var surf=function(b,l){ return b.top+(l.txt?2:0); };   /* 글자는 글자 윗부분, 카드는 윗 테두리 */
+  /* 하늘에서 떨어지는 잎(눈·꽃잎)이 실제로 카드·버튼·제목에 '부딪혀' 반응:
+     ① 맞고 통통 튀다 그 자리에 앉음 → 옆 잎과 겹겹이 쌓임 → 돌풍에 한꺼번에 날아감
+     ② 탁 맞고 튕겨 나가 계속 떨어짐   ③ 윗면을 미끄러지다 모서리에서 굴러떨어짐
+     카드에 앉은 잎은 스크롤해도 카드에 붙어 같이 움직여요 */
+  var L=[], last=0, EL=[], R=[], lastEl=0, lastR=0, E=fall.e, gustAt=performance.now()+sfxRand(9000,15000), soft=/❄|✨/;
+  var pickEls=function(){ EL=[]; var q=document.querySelectorAll('#view *,#xsheet .nli');
+    for(var i=0;i<q.length&&EL.length<160;i++){ var e=q[i], b=e.getBoundingClientRect(); if(b.bottom<0||b.top>innerHeight*2.5||b.width<30||b.height<14) continue;
+      var tg=e.tagName, txt=e.classList.contains('num')||tg==='H2'||tg==='H3';
+      if(txt){ EL.push({el:e,txt:1}); continue; }
+      if(b.width<110||b.height>320) continue; var c=getComputedStyle(e);
+      if(parseFloat(c.borderTopLeftRadius)>5&&(c.backgroundColor!=='rgba(0, 0, 0, 0)'||c.backgroundImage!=='none'||parseFloat(c.borderTopWidth)>0)) EL.push({el:e,txt:0}); } };
+  var rects=function(){ R=[]; for(var i=0;i<EL.length;i++){ var b=EL[i].el.getBoundingClientRect(); if(b.bottom>60&&b.top<innerHeight) R.push({el:EL[i].el,txt:EL[i].txt,l:b.left+4,r:b.right-4,t:b.top+(EL[i].txt?3:0),w:b.width}); } };
+  var add=function(now,W){ var em=E[(Math.random()*E.length)|0];
+    L.push({el:sfxEl('<i>'+em+'</i>','sfx-lf sfx-shadow'), melt:soft.test(em), ph:'free', x:(Math.random()<.85?sfxRand(W*.12,W*.88):sfxRand(10,W-10)), y:-30, vx:0, vy:sfxRand(45,75),
+      sw:sfxRand(0,6.28), swa:sfxRand(14,30), swf:sfxRand(1.4,2.4), rot:sfxRand(-40,40), vr:sfxRand(-60,60), sz:sfxRand(.85,1.2), t0:now, tl:now, dir:Math.random()<.5?-1:1, stack:0, rest:sfxRand(5000,10000), skip:Math.random()<.08}); };
   return function(now,W,H){
-    if(now-lastScan>900){ lastScan=now; scan(); }
-    var soft=/❄|✨/;
-    if(T.length && L.length<10 && now-last>sfxRand(900,1700)){ last=now;
-      var t=T[(Math.random()*T.length)|0], em=E[(Math.random()*E.length)|0], melt=soft.test(em), r=Math.random(), b=t.el.getBoundingClientRect();
-      var kind=fall.up?'rise':melt?'settle':(r<.55?'settle':r<.82?'bounce':'slide');
-      L.push({el:sfxEl('<i>'+em+'</i>','sfx-lf sfx-shadow'), tg:t.el, txt:t.txt, kind:kind, melt:melt, ph:'fall',
-        fx:0.08+Math.random()*0.84, t0:now, dur:sfxRand(1700,2600), rest:sfxRand(4500,9000), dir:Math.random()<.5?-1:1,
-        rot:sfxRand(-40,40), sz:sfxRand(.8,1.15), stack:0, w:b.width});
-    }
-    /* 가끔 부는 바람: 쉬고 있는 잎을 같은 방향으로 한꺼번에 날림 */
-    if(now>gustAt){ gustAt=now+sfxRand(12000,20000); gustDir=Math.random()<.5?-1:1; var n=0;
-      L.forEach(function(l){ if(l.ph==='rest'&&!l.melt&&Math.random()<.8){ l.ph='blow'; l.t1=now+n*90; l.dir=gustDir; n++; } }); }
+    if(now-lastEl>2500){ lastEl=now; pickEls(); }
+    if(now-lastR>200){ lastR=now; rects(); }
+    if(fall.up){ /* 하트 등은 떠오르기만 */ return; }
+    if(L.length<18 && now-last>sfxRand(450,850)){ last=now; add(now,W); }
+    if(now>gustAt){ gustAt=now+sfxRand(12000,20000); var gd=Math.random()<.5?-1:1, n=0;
+      L.forEach(function(l){ if((l.ph==='rest'||l.ph==='hit')&&!l.melt&&Math.random()<.85){ l.ph='blow'; l.t1=now+n*80; l.dir=gd; n++; } }); }
     var cache=new Map();
-    for(var i=L.length-1;i>=0;i--){ var l=L[i], b=box(l,cache), x, y, rt=l.rot, op=1, sc=l.sz;
-      if(!b && l.ph!=='drop'&&l.ph!=='blow'&&l.ph!=='rise'){ l.ph='drop'; l.t1=now; l.bx=l.lx||W/2; l.by=l.ly||H/2; }
-      var gx=b?b.left+b.width*l.fx:0, gy=b?surf(b,l)-9*l.sz:0;
-      if(l.kind==='rise'){ var u=(now-l.t0)/2800; if(u>=1){ l.el.remove(); L.splice(i,1); continue; }
-        x=gx+Math.sin(u*Math.PI*2)*10; y=gy-u*96; rt=Math.sin(u*Math.PI*2)*10; op=Math.min(1,u*5)*(1-u*u); }
-      else if(l.ph==='fall'){ var k=(now-l.t0)/l.dur;
-        if(k>=1){ l.t1=now;
-          if(l.kind==='settle'){ l.ph='hit';
-            /* 쌓기: 같은 카드에 먼저 앉은 잎과 가까우면 그 위에 포개짐 */
-            L.forEach(function(o){ if(o!==l&&o.tg===l.tg&&(o.ph==='rest'||o.ph==='hit')&&Math.abs(o.fx-l.fx)*l.w<16) l.stack=Math.max(l.stack,o.stack+1); });
-            if(l.stack>3){ l.ph='slip'; } }
-          else if(l.kind==='bounce'){ l.ph='bounce'; l.bx=gx; l.by=gy; if(typeof sfxSpark==='function'&&Math.random()<.4) sfxSpark(gx,gy+6); }
-          else { l.ph='slide'; l.dir=l.fx<.5?-1:1; } }
-        k=Math.min(k,1); var sw=Math.sin(k*Math.PI*3.2)*20*(1-k*.7);
-        x=gx+sw; y=gy-130*(1-k*k*0.35-k*0.65); rt=l.rot+Math.sin(k*Math.PI*3.2)*30; op=Math.min(1,k*5); }
-      else if(l.ph==='hit'){ var e=(now-l.t1)/650;   /* 통! 하고 작게 두 번 튀다 납작하게 자리잡음 */
-        var hop=Math.abs(Math.sin(e*Math.PI*2))*Math.exp(-e*3.2)*9; x=gx; y=gy-hop-l.stack*5; rt=l.rot*(1-Math.min(1,e))+ (l.dir*12)*Math.min(1,e);
-        if(e>=1){ l.ph='rest'; l.t1=now; l.rot=l.dir*12; } }
-      else if(l.ph==='rest'){ var e2=now-l.t1; x=gx+l.stack*l.dir*3; y=gy-l.stack*5;
-        rt=l.rot+Math.sin(e2/520+l.fx*9)*2.5;   /* 살랑살랑 */
-        if(e2>l.rest){ l.t1=now; l.ph=l.melt?'melt':(Math.random()<.5?'blow':'slide'); if(l.ph==='slide') l.dir=l.fx<.5?-1:1; } }
-      else if(l.ph==='melt'){ var d=(now-l.t1)/1800; if(d>=1){ l.el.remove(); L.splice(i,1); continue; } x=gx; y=gy-l.stack*5+d*4; op=1-d; sc=l.sz*(1-d*.5); }
-      else if(l.ph==='slide'||l.ph==='slip'){   /* 윗면을 미끄러져 모서리로 → 굴러떨어짐 */
-        var d2=(now-l.t1)/1000, edge=l.dir<0?0:1, dist=(edge-l.fx)*l.w, p=Math.min(1,d2*d2*.9);
-        x=gx+dist*p; y=gy-(l.ph==='slip'?l.stack*5*(1-p):0); rt=l.rot+l.dir*p*140;
-        if(p>=1){ l.ph='drop'; l.t1=now; l.bx=x; l.by=y; l.vx=l.dir*sfxRand(30,70); } }
-      else if(l.ph==='bounce'){   /* 탁 맞고 튕겨 나감 → 카드 밖으로 떨어짐 */
-        var d3=(now-l.t1)/900; x=l.bx+l.dir*d3*70; y=l.by-Math.sin(Math.min(1,d3)*Math.PI)*26+Math.max(0,d3-.5)*d3*90; rt=l.rot+l.dir*d3*360;
-        if(d3>=1){ l.ph='drop'; l.t1=now; l.bx=x; l.by=y; l.vx=l.dir*60; } }
-      else if(l.ph==='drop'){ var d4=(now-l.t1)/1600; if(d4>=1){ l.el.remove(); L.splice(i,1); continue; }
-        x=l.bx+(l.vx||0)*d4+Math.sin(d4*Math.PI*3)*12; y=l.by+d4*d4*220+d4*40; rt=l.rot+d4*200*(l.dir||1); op=1-d4*d4; }
-      else if(l.ph==='blow'){ if(now<l.t1){ x=gx+l.stack*l.dir*3; y=gy-l.stack*5; } else { var d5=(now-l.t1)/1500; if(d5>=1){ l.el.remove(); L.splice(i,1); continue; }
-        var sx=l.lx0!==undefined?l.lx0:(l.lx0=gx), sy=l.ly0!==undefined?l.ly0:(l.ly0=gy-l.stack*5);
-        x=sx+l.dir*d5*d5*170; y=sy-Math.sin(d5*Math.PI)*34+d5*d5*50; rt=l.rot+l.dir*d5*300; op=1-d5*d5; } }
-      l.lx=x; l.ly=y;
+    for(var i=L.length-1;i>=0;i--){ var l=L[i], dt=Math.min(.05,(now-l.tl)/1000); l.tl=now; var op=1, sc=l.sz, x, y, rt;
+      var B=null; if(l.tg){ B=cache.get(l.tg); if(B===undefined){ B=l.tg.isConnected?l.tg.getBoundingClientRect():null; cache.set(l.tg,B); }
+        if(!B&&l.ph!=='free'){ l.ph='free'; l.tg=null; l.vy=40; } }
+      var gx=B?B.left+l.ox:0, gy=B?B.top+(l.txt?3:0)-9*l.sz:0;
+      if(l.ph==='free'){   /* 하늘에서 살랑살랑 떨어지는 중 → 카드 윗면을 지나면 부딪힘 */
+        var py=l.y; l.vy=Math.min(l.vy+dt*40,95); l.y+=l.vy*dt; l.x+=l.vx*dt; l.vx*=Math.pow(.4,dt);
+        var swx=Math.sin((now-l.t0)/1000*l.swf+l.sw)*l.swa; l.rot+=l.vr*dt; x=l.x+swx; y=l.y; rt=l.rot+swx;
+        op=Math.min(1,(now-l.t0)/500);
+        if(!l.skip && py>20) for(var j=0;j<R.length;j++){ var q=R[j]; if(py+9<=q.t && l.y+9>=q.t && x>=q.l && x<=q.r && !(l.ign===q.el)){
+          l.tg=q.el; l.txt=q.txt; l.ox=x-(q.l-4); l.w=q.w; l.t1=now; var r=Math.random();
+          if(l.melt||r<.68){ l.ph='hit'; l.stack=0; L.forEach(function(o){ if(o!==l&&o.tg===l.tg&&(o.ph==='rest'||o.ph==='hit')&&Math.abs(o.ox-l.ox)<18) l.stack=Math.max(l.stack,o.stack+1); });
+            if(l.stack>3){ l.ph='slide'; l.dir=l.ox<l.w/2?-1:1; } }
+          else if(r<.88){ l.ph='free'; l.ign=q.el; l.y=q.t-9; l.vy=-sfxRand(55,85); l.vx=(Math.random()<.5?-1:1)*sfxRand(50,90); l.vr=l.vx*4; l.tg=null; }   /* 탁! 튕겨 나감 */
+          else { l.ph='slide'; l.dir=l.ox<l.w/2?-1:1; }
+          break; } }
+        if(l.y>H+30||l.x<-40||l.x>W+40){ l.el.remove(); L.splice(i,1); continue; } }
+      else if(l.ph==='hit'){ var e=(now-l.t1)/700, hop=Math.abs(Math.sin(e*Math.PI*2))*Math.exp(-e*3)*10;
+        x=gx; y=gy-hop-l.stack*5; rt=l.rot*(1-Math.min(1,e))+l.dir*12*Math.min(1,e); if(e>=1){ l.ph='rest'; l.t1=now; l.rot=l.dir*12; } }
+      else if(l.ph==='rest'){ var e2=now-l.t1; x=gx+l.stack*l.dir*3; y=gy-l.stack*5; rt=l.rot+Math.sin(e2/520+l.ox)*2.5;
+        if(l.melt){ var m=Math.max(0,(e2-l.rest)/1800); if(m>=1){ l.el.remove(); L.splice(i,1); continue; } op=1-m; sc=l.sz*(1-m*.5); y+=m*4; }
+        else if(e2>l.rest){ l.t1=now; l.ph=Math.random()<.5?'blow':'slide'; if(l.ph==='slide') l.dir=l.ox<l.w/2?-1:1; } }
+      else if(l.ph==='slide'){ var d=(now-l.t1)/1000, p=Math.min(1,d*d*.9), dist=(l.dir<0?-l.ox:l.w-l.ox);
+        x=gx+dist*p; y=gy-l.stack*5*(1-p); rt=l.rot+l.dir*p*150;
+        if(p>=1){ l.ph='free'; l.ign=l.tg; l.tg=null; l.x=x; l.y=y; l.vy=10; l.vx=l.dir*sfxRand(25,55); l.vr=l.dir*180; l.swa=4; } }
+      else if(l.ph==='blow'){ if(now<l.t1){ x=gx+l.stack*l.dir*3; y=gy-l.stack*5; rt=l.rot; }
+        else { l.ph='free'; l.ign=l.tg; l.tg=null; l.x=gx; l.y=gy-l.stack*5; l.vy=-sfxRand(40,80); l.vx=l.dir*sfxRand(140,220); l.vr=l.dir*300; l.skip=true; x=l.x; y=l.y; rt=l.rot; } }
       l.el.style.opacity=op.toFixed(2); l.el.style.transform="translate("+(x-10).toFixed(1)+"px,"+(y-10).toFixed(1)+"px) rotate("+rt.toFixed(1)+"deg) scale("+sc.toFixed(2)+")"; }
   };
  },
@@ -4703,7 +4693,7 @@ function sfxBuild(r){
   if(SFX_EL) SFX_EL.remove(); SFX_ID=r.t.id; SFX_ACT=[];
   var t=r.t, o=document.createElement("div"); o.id="sfx"; o.setAttribute("aria-hidden","true"); document.body.appendChild(o); SFX_EL=o;
   var h="";
-  if(t.fall){ for(var k=0;k<t.fall.n;k++){ var dur=sfxRand(9,15), e=t.fall.e[k%t.fall.e.length];
+  if(t.fall){ for(var k=0;k<(t.fall.up?t.fall.n:3);k++){ var dur=sfxRand(9,15), e=t.fall.e[k%t.fall.e.length];
     h+='<span class="sfx-f'+(t.fall.up?' up':'')+'" style="left:'+sfxRand(0,96).toFixed(1)+'%;animation-duration:'+dur.toFixed(1)+'s;animation-delay:-'+sfxRand(0,dur).toFixed(1)+'s"><i style="font-size:'+sfxRand(13,22).toFixed(0)+'px;animation-duration:'+sfxRand(2.4,4.2).toFixed(1)+'s">'+e+'</i></span>'; } }
   (t.corners||[]).forEach(function(c){ h+='<span class="sfx-k '+c.pos+'"><i>'+c.e.replace("{Z}",sfxZ().e)+'</i></span>'; });
   o.innerHTML=h;
