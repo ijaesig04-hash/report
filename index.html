@@ -12,12 +12,14 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261109124800">
+<meta name="bsr-ver" content="20261109133000">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
 <meta name="supported-color-schemes" content="light">
 <style>
+html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}img,svg,canvas,a{-webkit-touch-callout:none;-webkit-user-drag:none}input,textarea,select,[contenteditable],[contenteditable] *{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+
 #bsl{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:radial-gradient(120% 80% at 50% 0%,#1f4fd8 0%,#0b1736 60%,#060d22 100%);color:#fff;font-family:"Noto Sans KR",system-ui,sans-serif;transition:opacity .45s ease,visibility .45s;color-scheme:only light}
 #bsl.done{opacity:0;visibility:hidden}
 #bsl .r{position:relative;width:156px;height:156px}
@@ -3589,6 +3591,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-09c", date:"11/9", title:"nopush:화면 길게 눌러도 복사·검색 메뉴가 뜨지 않게 수정", tabs:["home"], items:["글자를 길게 눌렀을 때 뜨던 복사·웹 검색 메뉴를 없앴어요 (입력칸은 그대로 선택 가능)"]},
  {id:"2026-11-09b", date:"11/9", title:"고객체감 11/9 업데이트", tabs:["cs"], items:["📞 고객체감 11/9 기준 — 발송 222건 · 응답 69건 · 만족도 9.97"]},
  {id:"2026-11-09a", date:"11/9", title:"운전성향 11/9 업데이트", tabs:["drv"], items:["🚗 운전성향 11/9 기준 반영 — 김태건 주의, 그 외 양호"]},
  {id:"2026-11-08zh", date:"11/8", title:"월별 평가 칸 정렬", tabs:["eval"], items:["월별 점수 칸이 두 줄로 쪼개지던 것을 고쳤어요 — 월은 위, 점수는 아래로 가지런히"]},
