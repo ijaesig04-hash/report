@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261109235900">
+<meta name="bsr-ver" content="20261110082000">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3595,6 +3595,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-10a", date:"11/10", title:"nopush:담당구역 조회 전체화면", tabs:["home"], items:["🗺️ 담당구역 출동차량 조회가 처음부터 전체 화면으로, 주소창 없이 열려요 (왼쪽 위 ‹ 리포트로 돌아와요)"]},
  {id:"2026-11-09g", date:"11/9", title:"nopush:홍보 스튜디오 주소창 없이 열기", tabs:["home"], items:["💬 영업 탭에서 홍보 스튜디오를 열 때 위쪽 주소창 없이 앱 화면 그대로 열려요"]},
  {id:"2026-11-09e", date:"11/9", title:"nopush:영업 탭에 담당구역 출동차량 조회", tabs:["home"], items:["🗺️ 영업 탭에서 바로 담당구역 출동차량을 조회할 수 있어요"]},
  {id:"2026-11-09d", date:"11/9", title:"nopush:사용 안내 · 이력 구분 · 월말 요약 문구", tabs:["home"], items:["📖 이름 버튼 → 「사용 안내」 — 처음 쓰는 분을 위한 한 장 안내(안내문 복사 가능)","📜 업데이트 이력을 📊 지표·자료 / 🛠️ 기능·화면으로 나눠 보기 (폰 알림은 지표·자료만)","🧾 월말 결산 보고서에 「요약 문구 복사」 추가 — 카톡·메일용 요약이 한 번에 만들어져요","오래된 소식(2주 전)은 이력에서 정리했어요"]},
@@ -6967,12 +6968,7 @@ document.addEventListener("visibilitychange", function(){ if(document.visibility
 
 <script>
 /* 🗺️ 담당구역 출동차량 조회 (미니) — 별도 페이지를 작은 창으로 띄움 */
-function ptOpen(){
-  openSheet('<div class="xs-h"><b>🗺️ 담당구역 출동차량 조회</b><button type="button" data-xs="close">✕</button></div>'+
-    '<p class="xs-p" style="margin:0 0 6px">주소·동·건물명을 넣으면 담당 차량(26·27·28·127·160호)을 알려줘요.</p>'+
-    '<iframe class="pt-if" src="patrol.html?mini=1" title="담당구역 조회"></iframe>'+
-    '<a class="pt-full" href="patrol.html" target="_blank" rel="noopener">전체 화면으로 열기 ↗ (구역별 담당 동·경계 도로표)</a>');
-}
+function ptOpen(){ location.href="patrol.html?from=report"; }
 document.addEventListener('click', function(e){ if(e.target.closest('[data-ptopen]')){ var m=document.getElementById('vlmenu'); if(m) m.hidden=true; ptOpen(); } });
 </script>
 <style>
