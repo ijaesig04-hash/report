@@ -16,7 +16,7 @@
 | `index.html` | 메인 리포트 (지사·차량·개인 서비스 지표, 고객체감, 운전성향, 근무표, 브리핑 등). 데이터·이미지가 파일 안에 함께 들어 있어 약 7MB |
 | `patrol.html` | 구역별 담당차량(출동차량) 조회 |
 | `risk.html` | 작업전 위험예지활동 보고 |
-| `directmall.html` | 에스원 홍보메일·카톡 스튜디오 (다이렉트몰 상품 홍보, 브리핑의 「에스원 상품 추천」 메뉴) |
+| `directmall.html` | **새 주소로 넘기는 안내 페이지.** 홍보 스튜디오 본체는 별도 저장소 `ijaesig04-hash/directmall`(https://ijaesig04-hash.github.io/directmall/)의 `index.html`에 있음. 홍보 화면을 고칠 땐 그 저장소를 고치고, 리포트 메뉴(PROD_URL)는 새 주소를 가리킴 |
 | `tools/screen_check.js` | 휴대폰 크기(390px) 화면 점검 — 탭마다 캡처하고 오류·화면 넘침을 찾음 |
 | `.claude/skills/` | 반영 작업 순서·체크리스트(스킬), 화면 점검·다듬기 스킬(impeccable) |
 | `docs/다른프로젝트용_디자인스킬.md` | 다른 프로젝트용 디자인 스킬 보관함 (Taste · Awesome Design) — **이 리포트에는 쓰지 않음** |
