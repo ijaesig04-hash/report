@@ -1,7 +1,19 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
-<title>에스원 상품 추천 · 홍보 스튜디오</title>
-<meta http-equiv="refresh" content="0;url=https://ijaesig04-hash.github.io/directmall/">
-<style>html,body{margin:0;height:100%;background:#0a1a3a;color:#fff;font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif}.b{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;box-sizing:border-box}a{background:#fee500;color:#191600;text-decoration:none;font-weight:700;padding:14px 24px;border-radius:12px}</style></head>
-<body><div class="b"><p>홍보 스튜디오가 새 주소로 옮겨졌어요</p><a href="https://ijaesig04-hash.github.io/directmall/">바로 열기</a></div>
-<script>location.replace('https://ijaesig04-hash.github.io/directmall/'+location.hash);</script></body></html>
+<title>에스원 홍보 스튜디오</title>
+<style>html,body{margin:0;height:100%;background:#0a1a3a}</style></head>
+<body>
+<script>
+/* 북서울 Report 앱 안에서 홍보 스튜디오를 주소창 없이 열기 위한 연결 페이지.
+   실제 내용은 directmall 저장소(/directmall/index.html)를 그대로 불러와 이 자리에 띄움 → 홍보몰만 고치면 여기도 자동 반영.
+   (Report 앱 범위는 /report/ 라서, /directmall/ 로 바로 이동하면 크롬 주소창이 생김) */
+(function(){
+  var SITE="https://ijaesig04-hash.github.io/directmall/";
+  function go(){ location.replace(SITE+location.hash); }
+  fetch(SITE+"index.html?v="+Date.now(),{cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw 0; return r.text(); })
+    .then(function(h){ document.open(); document.write(h); document.close(); })
+    .catch(go);
+})();
+</script>
+</body></html>

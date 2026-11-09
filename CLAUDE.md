@@ -16,7 +16,7 @@
 | `index.html` | 메인 리포트 (지사·차량·개인 서비스 지표, 고객체감, 운전성향, 근무표, 브리핑 등). 데이터·이미지가 파일 안에 함께 들어 있어 약 7MB |
 | `patrol.html` | 구역별 담당차량(출동차량) 조회 |
 | `risk.html` | 작업전 위험예지활동 보고 |
-| `directmall.html` | **새 주소로 넘기는 안내 페이지.** 홍보 스튜디오 본체는 별도 저장소 `ijaesig04-hash/directmall`(https://ijaesig04-hash.github.io/directmall/)의 `index.html`에 있음. 홍보 화면을 고칠 땐 그 저장소를 고치고, 리포트 메뉴(PROD_URL)는 새 주소를 가리킴 |
+| `directmall.html` | **앱 안 연결 페이지.** 홍보 스튜디오 본체는 별도 저장소 `ijaesig04-hash/directmall`의 `index.html`. 이 파일은 그 본체를 fetch해서 그 자리에 띄움(주소는 /report/ 그대로 → Report 앱 범위 안이라 크롬 주소창이 안 생김). 리포트 메뉴(PROD_URL·영업 탭)는 반드시 이 `directmall.html`을 가리킬 것 — /directmall/ 주소로 직접 연결하면 앱 범위 밖이라 주소창이 뜸. fetch에 `?t=` 붙이지 말 것(sw.js가 index 캐시로 착각) |
 | `tools/screen_check.js` | 휴대폰 크기(390px) 화면 점검 — 탭마다 캡처하고 오류·화면 넘침을 찾음 |
 | `.claude/skills/` | 반영 작업 순서·체크리스트(스킬), 화면 점검·다듬기 스킬(impeccable) |
 | `docs/다른프로젝트용_디자인스킬.md` | 다른 프로젝트용 디자인 스킬 보관함 (Taste · Awesome Design) — **이 리포트에는 쓰지 않음** |
