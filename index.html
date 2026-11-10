@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261110224000">
+<meta name="bsr-ver" content="20261110225500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -6196,7 +6196,8 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-k span{font-size:11px;opacity:.8;display:block}.vl-k b{font-size:26px}
 .vl-k .ng{background:linear-gradient(160deg,#7f1d1d,#b91c1c)}
 .vl-card{margin:12px 16px;background:#fff;border-radius:16px;border:1px solid #e3e9f3;padding:14px}
-.vl-card h3{margin:0 0 6px;font-size:15px}.vl-card h3 small{font-weight:500;color:#5b6880;font-size:11.5px;margin-left:4px}
+.vl-card h3{margin:0 0 6px;font-size:15px}
+.vl-card.fd{padding:0}.vl-card.fd>h3{margin:0;padding:14px 38px 14px 14px;cursor:pointer;position:relative}.vl-card.fd>h3::after{content:"▾";position:absolute;right:14px;top:14px;color:#94a3b8;transition:transform .2s}.vl-card.fd.op>h3::after{transform:rotate(180deg)}.vl-card.fd>:not(h3){display:none}.vl-card.fd.op>:not(h3){display:revert}.vl-card.fd.op{padding:0 14px 14px}.vl-card.fd.op>h3{margin:0 -14px;}.vl-card h3 small{font-weight:500;color:#5b6880;font-size:11.5px;margin-left:4px}
 .vl-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-top:1px solid #eef2f8;font-size:14px}
 .vl-row:first-of-type{border-top:0}
 .vl-dot{width:9px;height:9px;border-radius:50%;background:#22c55e;flex:none}.vl-dot.off{background:#ef4444}
@@ -6259,7 +6260,9 @@ function openTag(){ var sa=(window.matchMedia&&matchMedia("(display-mode: standa
 function logTab(t){ if(sent[t]) return; sent[t]=1; send(tabName(t)); }
 function showChip(){ chip.hidden = false; chip.textContent = me ? dnm(me)+"님" : "이름 선택"; }
 function close(){ ov.hidden = true; box.innerHTML = ""; document.body.style.overflow = ""; }
-function open(html,pk){ box.innerHTML = html; ov.classList.toggle("pk", !!pk); ov.hidden = false; ov.scrollTop = 0; document.body.style.overflow = "hidden"; }
+function vlFold(){ box.querySelectorAll(".vl-card").forEach(function(c){ if(c.querySelector(":scope>h3")) c.classList.add("fd"); }); }
+box.addEventListener("click", function(e){ var h=e.target.closest(".vl-card.fd>h3"); if(h) h.parentNode.classList.toggle("op"); });
+function open(html,pk){ box.innerHTML = html; vlFold(); ov.classList.toggle("pk", !!pk); ov.hidden = false; ov.scrollTop = 0; document.body.style.overflow = "hidden"; }
 function esc(x){ return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]}); }
 
 function ro(w){ var c=w.charCodeAt(w.length-1)-0xAC00; if(c<0||c>11171) return "로"; var j=c%28; return (j===0||j===8)?"로":"으로"; }
@@ -6348,7 +6351,6 @@ function adminExtra(rows, now, pinFail){
   var hr = []; for(var i=0;i<24;i++) hr.push(0);
   rows.forEach(function(r){ var h=+kst(r[0]).hm.slice(0,2); if(h>=0&&h<24) hr[h]++; });
   var mx = Math.max.apply(null, hr.concat([1]));
-  out += '<div class="vl-card"><h3>⏰ 시간대별 접속<small>최근 35일</small></h3><div class="x6h">'+hr.map(function(c,i){ return '<div class="x6c"><i style="height:'+Math.max(2,Math.round(c/mx*100))+'%"></i><span>'+(i%3===0?i:'')+'</span></div>'; }).join('')+'</div></div>';
   /* 2 순위 · 3 마지막 접속 */
   var cnt = {}, last = {};
   rows.forEach(function(r){ cnt[r[1]]=(cnt[r[1]]||0)+1; if(!(r[1] in last) || r[0]>last[r[1]]) last[r[1]]=r[0]; });
