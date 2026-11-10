@@ -97,7 +97,15 @@ var back = $("#back"), app = $("#app"), dock = $("#dock");
 $("#me").textContent = ME;
 
 /* ───────── 도우미 ───────── */
-function api(body){
+/* 구글 AI가 잠깐 몰려 '사용량이 많다'고 하면 자동으로 최대 3번까지 다시 시도 */
+function api(body,n){
+  n=n||0;
+  return api1(body).catch(function(e){
+    if(n<2&&/high demand|overload|unavailable|503|429|quota|rate/i.test(e&&e.message||"")){ return new Promise(function(r){ setTimeout(r,2500*(n+1)); }).then(function(){ return api(body,n+1); }); }
+    throw e;
+  });
+}
+function api1(body){
   var ac=new AbortController(), tm=setTimeout(function(){ ac.abort(); },45000);
   return fetch(RP_API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body),signal:ac.signal}).then(function(r){return r.json();}).then(function(j){ clearTimeout(tm); if(!j||!j.ok) throw new Error((j&&j.err)||"오류"); return j; })
   .catch(function(e){ clearTimeout(tm); throw new Error(e&&e.name==="AbortError"?"45초 안에 답이 오지 않았어요":(e&&e.message)||"연결 오류"); });

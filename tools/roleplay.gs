@@ -41,6 +41,7 @@ function gemini(sys, contents, maxTok) {
   }
   let r = call(true);
   if (r.getResponseCode() === 400) r = call(false);   // 이 모델이 생각 설정을 안 받으면 설정 없이 다시
+  for (let k = 0; k < 2 && [429, 500, 503].indexOf(r.getResponseCode()) >= 0; k++) { Utilities.sleep(1500 * (k + 1)); r = call(false); }   // 구글 AI가 몰릴 때 잠깐 쉬었다 다시   // 이 모델이 생각 설정을 안 받으면 설정 없이 다시
   const j = JSON.parse(r.getContentText());
   if (r.getResponseCode() !== 200) throw new Error((j.error && j.error.message) || ('HTTP ' + r.getResponseCode()));
   const c = j.candidates && j.candidates[0];
