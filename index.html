@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261111091500">
+<meta name="bsr-ver" content="20261111095000">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -4049,6 +4049,7 @@ function deptHome(d){
   var gg = deptGreet(d); h += '<div class="dh-c dh-hero '+(d==="영업"?'sal':'tec')+'"><small>'+(d==="영업"?'💼':'💻')+' 북서울지사 '+d+' · '+(function(){ var k=new Date(Date.now()+9*3600000); return (k.getUTCMonth()+1)+'/'+k.getUTCDate()+'('+'일월화수목금토'.charAt(k.getUTCDay())+')'; })()+'</small><b>'+esc2(me)+(isLead(me)?' '+d+'팀장':'')+'님, '+gg[0]+' '+gg[1]+'</b><small>'+gg[2]+'</small></div>';
   h += '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + prodLink();
   h += (typeof wxCard==="function" ? wxCard() : '');
+  h += rpMini();
   h += '<details class="dh-c dh-dt"><summary class="dh-h">📞 내 해피콜 <small>발송 '+rows.length+' · 응답 '+rs.length+' ▾</small></summary><p class="dh-sub">'+esc2(S.period.replace('2026.',''))+' 누적</p><div class="dh-k">'+
     '<div><b>'+rows.length+'</b><span>발송</span></div><div><b>'+rs.length+'</b><span>응답</span></div>'+
     '<div><b>'+(rows.length?Math.round(rs.length/rows.length*100):0)+'%</b><span>응답률</span></div><div><b>'+(sat==null?'-':sat)+'</b><span>만족도</span></div></div></details>';
@@ -4177,7 +4178,7 @@ function brief(){
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
   setTimeout(safeAuto, 300); setTimeout(wxAuto, 900);
   var salesA = '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + prodLink();
-  return '<div class="sec">'+hero+salesA+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+funRow()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<span class="pt-bs"><button type="button" class="fd-btn" data-ptopen="1">🗺️ 구역 조회</button><button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></span></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
+  return '<div class="sec">'+hero+salesA+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+funRow()+rpMini()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<span class="pt-bs"><button type="button" class="fd-btn" data-ptopen="1">🗺️ 구역 조회</button><button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></span></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
 /* 미응답 고객 응답 요청 문자 — 예시 문구는 여기만 수정. {이름}은 앱에서 고른 이름으로 자동 입력(없으면 000) */
@@ -4970,9 +4971,10 @@ function funRow(){
   stMark(); var st = stStreak(), B = bdList(), got = B.filter(function(b){return b[2]}).length, q = qzMine();
   var bi = B.filter(function(b){return b[2]}).slice(0,4).map(function(b){return b[0]}).join('');
   return '<div class="fr"><button type="button" class="fr-c fr-b" data-bdopen="1"><span class="fr-i">🔥</span><b>🔥 연속 <em class="num">'+st+'일</em> 접속</b><small>배지 '+got+'/'+B.length+(bi?' '+bi:'')+'</small><i>›</i></button>'+
-    '<button type="button" class="fr-c fr-q'+(q?' done':'')+'" data-qzopen="1"><span class="fr-i">🧠</span><b>🧠 안전 퀴즈</b><small>'+(q?'이번 주 완료 '+q.sc+'/3'+(q.sc===3?' 🎉':''):'이번 주 3문제')+'</small><i>›</i></button></div>'+
-    '<button type="button" class="rp-mini" data-rpopen="1"><span>🎧</span><b>AI 응대 연습</b><small>AI 고객과 말로 연습하고 점수 받기</small><i>›</i></button>';
+    '<button type="button" class="fr-c fr-q'+(q?' done':'')+'" data-qzopen="1"><span class="fr-i">🧠</span><b>🧠 안전 퀴즈</b><small>'+(q?'이번 주 완료 '+q.sc+'/3'+(q.sc===3?' 🎉':''):'이번 주 3문제')+'</small><i>›</i></button></div>';
 }
+/* AI 응대 연습 작은 카드 — 이름·부서와 상관없이 모두에게 보임 (funRow와 별개) */
+function rpMini(){ return '<button type="button" class="rp-mini" data-rpopen="1"><span>🎧</span><b>AI 응대 연습</b><small>AI 고객과 말로 연습하고 점수 받기</small><i>›</i></button>'; }
 function bdView(){
   var B = bdList(), st = stStreak();
   openSheet('<div class="xs-h"><b>🏅 배지 도감</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">🔥 <b>'+st+'일</b> 연속 접속 중 · 모은 배지 <b>'+B.filter(function(b){return b[2]}).length+'</b>/'+B.length+'</p><div class="bd-g">'+
