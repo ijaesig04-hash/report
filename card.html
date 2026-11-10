@@ -18,10 +18,13 @@ img{display:block;width:100%;height:auto;border-radius:10px;background:#fff}
  <p class="hint">👆 두 손가락으로 벌리면 크게 볼 수 있어요</p>
  <div id="box"></div>
 </div>
-<div class="bar"><a href="https://s1directmall.co.kr/" rel="noopener">🛒 에스원 다이렉트몰 바로가기</a></div>
+<div class="bar"><a id="go" href="https://s1directmall.co.kr/" rel="noopener">🛒 에스원 다이렉트몰 바로가기</a></div>
 <script>
 /* 카톡으로 받은 안내 카드를 크게 보여주는 화면. 카카오에 올린 그림 주소만 보여줌 */
 (function(){
+  /* 상품 카드면 해당 상품 화면으로 연결 (다이렉트몰 주소만 허용) */
+  try{var g=new URLSearchParams(location.search).get('go')||'',q=new URL(g);
+    if(q.protocol==='https:'&&/^(m\.)?s1directmall\.co\.kr$/.test(q.hostname))document.getElementById('go').href=q.href;}catch(e){}
   var box=document.getElementById('box'),u='';
   try{u=new URLSearchParams(location.search).get('img')||'';}catch(e){}
   /* 카카오가 http 주소로 줄 때도 있어서 https로 바꿔서 불러옴 (카카오 그림 서버 주소만 허용) */
