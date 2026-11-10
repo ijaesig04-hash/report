@@ -26,7 +26,7 @@ function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setM
 function gemini(sys, contents, maxTok) {
   const key = P.getProperty('GEMINI_KEY');
   if (!key) throw new Error('GEMINI_KEY 없음');
-  const model = P.getProperty('MODEL') || 'gemini-2.5-flash';
+  const model = P.getProperty('MODEL') || 'gemini-3.8-flash';
   const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + key;
   const body = { systemInstruction: { parts: [{ text: sys }] }, contents: contents,
     generationConfig: { temperature: 0.8, maxOutputTokens: maxTok || 1200, responseMimeType: 'application/json' } };
