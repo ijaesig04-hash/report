@@ -21,7 +21,7 @@ function doGet(e) {
   }
   if (p.action === 'test') {   // 브라우저에서 주소 뒤에 ?action=test 를 붙여 열면 AI 연결·속도를 점검
     const t0 = Date.now();
-    try { const r = chat({ sc: { persona: '시험 통화' }, level: '중', hist: [{ r: 'c', t: '여보세요?' }, { r: 's', t: '안녕하세요, 에스원입니다.' }] }); return out({ ok: true, ms: Date.now() - t0, model: P.getProperty('ANTHROPIC_KEY') ? (P.getProperty('CLAUDE_MODEL') || 'claude-haiku-5-5') : (P.getProperty('MODEL') || 'gemini-3.8-flash'), r: r }); }
+    try { const r = chat({ sc: { persona: '시험 통화' }, level: '중', hist: [{ r: 'c', t: '여보세요?' }, { r: 's', t: '안녕하세요, 에스원입니다.' }] }); return out({ ok: true, ms: Date.now() - t0, model: P.getProperty('ANTHROPIC_KEY') ? (P.getProperty('CLAUDE_MODEL') || 'claude-haiku-5-5') : LAST_MODEL, r: r }); }
     catch (err) { return out({ ok: false, ms: Date.now() - t0, err: String(err) }); }
   }
   return out({ ok: true, ready: !!P.getProperty('GEMINI_KEY') });
@@ -56,27 +56,56 @@ function claude(sys, contents, maxTok) {
   if (i < 0 || e < i) throw new Error('AI가 빈 답을 줬어요');
   return JSON.parse(t.slice(i, e + 1));
 }
+/* 무료 키는 모델마다 하루 한도가 따로 있음 → 한 모델이 막히면(한도 초과·없는 모델) 다른 모델로 자동으로 넘어감 */
+function modelList(key) {
+  const c = CacheService.getScriptCache(), hit = c.get('models');
+  if (hit) return JSON.parse(hit);
+  let list = [];
+  try {
+    const r = UrlFetchApp.fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=200&key=' + key, { muteHttpExceptions: true });
+    list = (JSON.parse(r.getContentText()).models || []).filter(function (m) {
+      return (m.supportedGenerationMethods || []).indexOf('generateContent') >= 0 && /flash/.test(m.name) && !/image|tts|audio|live|embed|robot|computer/.test(m.name);
+    }).map(function (m) { return m.name.replace('models/', ''); });
+    list.sort(function (x, y) { const lx = /lite/.test(x) ? 0 : 1, ly = /lite/.test(y) ? 0 : 1; return lx - ly || (x < y ? 1 : -1); });   // 가벼운(lite) 모델 먼저, 그다음 최신순
+  } catch (e) {}
+  if (list.length) c.put('models', JSON.stringify(list), 21600);
+  return list;
+}
 function geminiCall(sys, contents, maxTok) {
   const key = P.getProperty('GEMINI_KEY');
   if (!key) throw new Error('GEMINI_KEY 없음');
-  const model = P.getProperty('MODEL') || 'gemini-3.8-flash';
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + key;
-  function call(withThink) {
-    const cfg = { temperature: 0.8, maxOutputTokens: Math.max(maxTok || 1200, 2048), responseMimeType: 'application/json' };
-    if (withThink) cfg.thinkingConfig = { thinkingLevel: 'low' };   // 생각 시간을 줄여 빨리 답하게
-    const body = { systemInstruction: { parts: [{ text: sys }] }, contents: contents, generationConfig: cfg };
-    return UrlFetchApp.fetch(url, { method: 'post', contentType: 'application/json', payload: JSON.stringify(body), muteHttpExceptions: true });
+  const c = CacheService.getScriptCache(), tryList = [];
+  [c.get('okModel'), P.getProperty('MODEL')].concat(modelList(key)).forEach(function (m) { if (m && tryList.indexOf(m) < 0) tryList.push(m); });
+  if (!tryList.length) tryList.push('gemini-3.8-flash');
+  let lastErr = '';
+  for (let i = 0; i < tryList.length && i < 8; i++) {
+    const model = tryList[i], url = 'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + key;
+    const call = function (withThink) {
+      const cfg = { temperature: 0.8, maxOutputTokens: Math.max(maxTok || 1200, 2048), responseMimeType: 'application/json' };
+      if (withThink) cfg.thinkingConfig = { thinkingLevel: 'low' };
+      return UrlFetchApp.fetch(url, { method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+        payload: JSON.stringify({ systemInstruction: { parts: [{ text: sys }] }, contents: contents, generationConfig: cfg }) });
+    };
+    let r = call(true);
+    if (r.getResponseCode() === 400) r = call(false);
+    const code = r.getResponseCode();
+    if (code === 200) {
+      try {
+        const j = JSON.parse(r.getContentText()), cd = j.candidates && j.candidates[0];
+        const t = cd && cd.content && cd.content.parts ? cd.content.parts.map(function (x) { return x.text || ''; }).join('') : '';
+        const a = t.indexOf('{'), b = t.lastIndexOf('}');
+        if (a >= 0 && b > a) { c.put('okModel', model, 21600); LAST_MODEL = model; return JSON.parse(t.slice(a, b + 1)); }
+        lastErr = model + ': 빈 답';
+      } catch (e) { lastErr = model + ': ' + e; }
+    } else {
+      let msg = ''; try { msg = JSON.parse(r.getContentText()).error.message; } catch (e) {}
+      lastErr = model + ' (' + code + '): ' + String(msg).slice(0, 160);
+      if (c.get('okModel') === model) c.remove('okModel');
+    }
   }
-  let r = call(true);
-  if (r.getResponseCode() === 400) r = call(false);   // 이 모델이 생각 설정을 안 받으면 설정 없이 다시
-  for (let k = 0; k < 2 && [429, 500, 503].indexOf(r.getResponseCode()) >= 0; k++) { Utilities.sleep(1500 * (k + 1)); r = call(false); }   // 구글 AI가 몰릴 때 잠깐 쉬었다 다시   // 이 모델이 생각 설정을 안 받으면 설정 없이 다시
-  const j = JSON.parse(r.getContentText());
-  if (r.getResponseCode() !== 200) throw new Error((j.error && j.error.message) || ('HTTP ' + r.getResponseCode()));
-  const c = j.candidates && j.candidates[0];
-  const t = c && c.content && c.content.parts ? c.content.parts.map(function (x) { return x.text || ''; }).join('') : '';
-  if (!t) throw new Error('AI가 빈 답을 줬어요 (' + (c && c.finishReason || '?') + ')');
-  return JSON.parse(t);
+  throw new Error('쓸 수 있는 무료 모델이 없어요 — ' + lastErr);
 }
+let LAST_MODEL = '';
 
 const LV = { '하': '말투는 비교적 차분하고 설명을 잘 들어 줍니다.', '중': '불만이 꽤 있고 말을 자주 끊지만, 납득되면 누그러집니다.', '상': '매우 화가 나 있고 쉽게 풀리지 않으며, 형식적인 답이나 변명에는 더 화를 냅니다.' };
 

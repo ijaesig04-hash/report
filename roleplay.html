@@ -101,14 +101,14 @@ $("#me").textContent = ME;
 function api(body,n){
   n=n||0;
   return api1(body).catch(function(e){
-    if(n<2&&/high demand|overload|unavailable|503|429|quota|rate/i.test(e&&e.message||"")){ return new Promise(function(r){ setTimeout(r,2500*(n+1)); }).then(function(){ return api(body,n+1); }); }
+    if(n<1&&/high demand|overload|unavailable|503/i.test(e&&e.message||"")){ return new Promise(function(r){ setTimeout(r,2500*(n+1)); }).then(function(){ return api(body,n+1); }); }
     throw e;
   });
 }
 function api1(body){
-  var ac=new AbortController(), tm=setTimeout(function(){ ac.abort(); },45000);
+  var ac=new AbortController(), tm=setTimeout(function(){ ac.abort(); },40000);
   return fetch(RP_API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body),signal:ac.signal}).then(function(r){return r.json();}).then(function(j){ clearTimeout(tm); if(!j||!j.ok) throw new Error((j&&j.err)||"오류"); return j; })
-  .catch(function(e){ clearTimeout(tm); throw new Error(e&&e.name==="AbortError"?"45초 안에 답이 오지 않았어요":(e&&e.message)||"연결 오류"); });
+  .catch(function(e){ clearTimeout(tm); throw new Error(e&&e.name==="AbortError"?"40초 안에 답이 오지 않았어요":(e&&e.message)||"연결 오류"); });
 }
 function lastKey(sc){ return "rp_last_"+ME+"_"+sc.id; }
 function getLast(sc){ try{ return JSON.parse(localStorage.getItem(lastKey(sc))||"null"); }catch(e){ return null; } }
@@ -137,7 +137,7 @@ function home(){
 /* ───────── 2. 음성 대화 ───────── */
 var rec=null, recOn=false;
 function start(sc){
-  S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false;
+  S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false; S.fb=false; S.fbTold=false;
   $("#ttl").textContent=sc.ic+" "+sc.title;
   app.innerHTML='<div class="bar"><span class="pill">난이도 '+S.lv+'</span><span class="pill" id="sp" role="button">🔊 소리 켬</span></div><div class="chat" id="chat"></div>';
   $("#sp").onclick=function(){ S.voice=!S.voice; $("#sp").textContent=S.voice?"🔊 소리 켬":"🔇 소리 끔"; if(!S.voice) stopSpeak(); };
@@ -178,7 +178,11 @@ function send(t){
   p.then(function(j){
     clearInterval(iv); ty.remove(); S.hist.push({r:"c",t:j.customer}); addB("c",j.customer); if(j.tip) addTip(j.tip); speak(j.customer);
     if(j.end||S.turns>=8){ S.end=true; var d=document.createElement("div"); d.className="tip"; d.textContent="통화가 마무리됐어요. 아래 '마무리하고 점수 받기'를 눌러 주세요."; $("#chat").appendChild(d); scrollEnd(); }
-  }).catch(function(e){ clearInterval(iv); ty.remove(); S.turns--; S.hist.pop(); alert("AI 고객이 응답하지 못했어요. 잠시 뒤 다시 보내 주세요.\n("+(e.message||e)+")"); })
+  }).catch(function(e){ clearInterval(iv); ty.remove();
+    /* AI가 답을 못 하면 멈추지 않고 연습용 대사로 이어 감 */
+    S.fb=true; var j=demoChat(t); if(!S.fbTold){ S.fbTold=true; var d=document.createElement("div"); d.className="tip"; d.textContent="⚠️ AI가 지금 답하지 못해 연습용 대사로 이어 가요 ("+String(e.message||e).slice(0,60)+")"; $("#chat").appendChild(d); }
+    S.hist.push({r:"c",t:j.customer}); addB("c",j.customer); if(j.tip) addTip(j.tip); speak(j.customer);
+    if(j.end||S.turns>=8){ S.end=true; } })
   .then(function(){ S.busy=false; });
 }
 /* 데모 모드 */
@@ -203,13 +207,13 @@ function finish(){
   stopSpeak(); try{ rec&&rec.stop(); }catch(e){}
   dock.classList.add("hidden"); app.innerHTML='<div class="card"><h2>AI 코치가 평가하는 중…</h2><p class="sub">10초쯤 걸려요.</p></div>';
   var p = RP_API ? api({act:"eval",name:ME,sc:{id:S.sc.id,title:S.sc.title},level:S.lv,hist:S.hist,turns:S.turns}) : Promise.resolve(demoEval());
-  p.then(showEval).catch(function(e){ app.innerHTML='<div class="card"><h2>평가를 받지 못했어요</h2><p class="sub">'+esc(e.message||e)+'</p><button class="btn red block" id="rt">다시 시도</button><button class="btn ghost block" id="hm">처음으로</button></div>'; $("#rt").onclick=finish; $("#hm").onclick=home; });
+  p.catch(function(e){ var j=demoEval(); j.fail=String(e.message||e).slice(0,80); return j; }).then(showEval).catch(function(e){ app.innerHTML='<div class="card"><h2>평가를 받지 못했어요</h2><p class="sub">'+esc(e.message||e)+'</p><button class="btn red block" id="rt">다시 시도</button><button class="btn ghost block" id="hm">처음으로</button></div>'; $("#rt").onclick=finish; $("#hm").onclick=home; });
 }
 function showEval(j){
   var prev = j.prev!=null ? j.prev : (getLast(S.sc)||{}).t;
   var dl = (prev!=null) ? j.total-prev : null;
   setLast(S.sc,j.total);
-  var h = (j.demo?'<div class="demo">🧪 데모 채점이에요. AI가 연결되면 대화 내용을 실제로 읽고 평가해요.</div>':'')+
+  var h = (j.demo?'<div class="demo">🧪 '+(j.fail?'AI가 지금 평가하지 못해 간단 채점으로 보여 드려요. 기록에는 저장되지 않아요. ('+esc(j.fail)+')':'데모 채점이에요. AI가 연결되면 대화 내용을 실제로 읽고 평가해요.')+'</div>':'')+
    '<div class="card"><div class="sub">'+esc(S.sc.title)+' · 난이도 '+S.lv+'</div><div class="big">'+j.total+'<small>점</small>'+(dl!=null?'<span class="delta '+(dl>=0?'up':'dn')+'">'+(dl>=0?'▲ ':'▼ ')+Math.abs(dl)+' (지난번 '+prev+')</span>':'')+'</div>'+
    CATS.map(function(c){ var v=j.scores[c]||0; return '<div class="it'+(v<60?' lo':'')+'"><div><span>'+c+'</span><span>'+v+'점</span></div><u><i style="width:'+v+'%"></i></u></div>'; }).join("")+'</div>'+
    '<div class="card"><h2>👍 잘한 점</h2><ul class="l">'+(j.good||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul></div>'+
