@@ -52,7 +52,7 @@ if old and "var NEWS" in new:
     old_ids = set(re.findall(r'\{id:"([^"]+)"', block(old, "var NEWS = [", "];")))
     if changed and (not top or top.group(1) in old_ids):
         errs.append("%s 자료가 바뀌었는데 NEWS 맨 위에 새 소식이 없습니다" % "·".join(changed))
-    elif top and old_ids and top.group(1) <= max(old_ids):
+    elif top and old_ids and top.group(1) not in old_ids and top.group(1) <= max(old_ids):   # 새 소식을 넣었을 때만 순서 검사 (화면만 고친 커밋은 소식 없이 가능)
         errs.append("NEWS 맨 위 id(%s)가 기존 id보다 커야 푸시가 나갑니다" % top.group(1))
     # ③ 근무표 ↔ 원본 사진
     if "근무표" in changed:

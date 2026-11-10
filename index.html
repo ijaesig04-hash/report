@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261110223500">
+<meta name="bsr-ver" content="20261110224000">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -6447,7 +6447,7 @@ function adminView(rows){
   var tCnt = Object.keys(tSet).length, miss = ALL.filter(function(n){return !tSet[n]});
   var h = '<div class="vl-hero"><button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button><small>ADMIN · '+kst(now).md+' '+kst(now).hm+'</small><h2>🔒 접속 현황</h2><p>직원 '+ALL.length+'명 기준 · 최근 7일</p></div>';
   h += '<div class="vl-k"><div><span>오늘 접속</span><b>'+tCnt+'</b></div><div class="ng"><span>오늘 미접속</span><b>'+miss.length+'</b></div><div><span>최근 7일</span><b>'+Object.keys(wk).length+'</b></div></div>';
-  h += rdCard + vlWeek(rows, now) + vlInstall(rows) + adminExtra(rows, now, pinFail);
+  h += rdCard + (me==="이재식"&&window.PUSH_URL?'<div class="vl-card" id="vlpush"><h3>🔔 알림 받는 직원<small>불러오는 중…</small></h3></div>':'') + vlWeek(rows, now) + vlInstall(rows) + adminExtra(rows, now, pinFail);
   var byDay = {}; rows.forEach(function(r){ var d=kst(r[0]).day; (byDay[d]=byDay[d]||[]).push(r); });
   var dKeys = Object.keys(byDay).sort().reverse();
   h += '<div class="vl-card"><h3>접속 기록<small>최근 35일 · 날짜를 누르면 펼침</small></h3>'+(dKeys.length?dKeys.map(function(d,i){ var rs=byDay[d], t0=kst(rs[0][0]), ppl={}; rs.forEach(function(r){ppl[r[1]]=1});
@@ -6461,6 +6461,22 @@ function adminView(rows){
     ALL.concat(Object.keys(last).filter(function(n){return ALL.indexOf(n)<0})).map(function(n){ return '<tr><td>'+esc(n)+'</td>'+days.map(function(d){ var y=by[d.day]&&by[d.day][n]; return '<td class="'+(y?'y':'n')+'">'+(y?'✓':'·')+'</td>'; }).join('')+'</tr>'; }).join('')+'</table></div>';
   h += '<button type="button" class="vl-btn sub" data-vl="reload">새로고침</button>';
   open(h);
+  if(me==="이재식" && window.PUSH_URL) vlPushWho();
+}
+window.vlPushWho = vlPushWho;
+/* 🔔 알림 받는 직원 — 이재식만 (접속 현황 안). 알림을 켠 폰이 등록된 직원 = 받음, 없으면 못 받음 */
+function vlPushWho(){
+  fetch(PUSH_URL+"?action=names&pin="+encodeURIComponent(BSR_PIN())+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
+    var el=document.getElementById("vlpush"); if(!el) return;
+    if(!j||!j.ok){ el.innerHTML='<h3>🔔 알림 받는 직원</h3><div class="vl-row">목록을 불러오지 못했어요.</div>'; return; }
+    var on=j.names||[], G=[["관리자",(typeof CS_MGR!=="undefined"?CS_MGR:[]).filter(function(n){return (window.BSR_ALL||[]).indexOf(n)>=0})],["서비스",staffOnly()],["영업",DEPTS["영업"]||[]],["기술",DEPTS["기술"]||[]]], tot=0, yes=0;
+    var body=G.map(function(g){ var L=g[1], y=L.filter(function(n){return on.indexOf(n)>=0}), n=L.filter(function(x){return on.indexOf(x)<0}); tot+=L.length; yes+=y.length;
+      return '<details class="vl-day"'+(g[0]==="서비스"?' open':'')+'><summary><b>'+g[0]+'</b><span>받음 '+y.length+' · 못 받음 '+n.length+'</span></summary>'+
+        y.map(function(x){ return '<div class="vl-row"><span class="vl-dot"></span>'+esc(x)+'<em>🔔 받음</em></div>'; }).join('')+
+        n.map(function(x){ return '<div class="vl-row"><span class="vl-dot off"></span>'+esc(x)+'<em>못 받음</em></div>'; }).join('')+'</details>'; }).join('');
+    el.innerHTML='<h3>🔔 알림 받는 직원<small>'+yes+' / '+tot+'명</small></h3>'+body+
+      '<p class="note" style="margin:8px 2px 0">못 받는 직원은 설치한 앱에서 이름 버튼 → 「업데이트 알림 받기」를 켜야 해요. 폰을 바꾸거나 앱을 지우면 받음으로 보여도 실제로는 안 갈 수 있어요.</p>';
+  }).catch(function(){ var el=document.getElementById("vlpush"); if(el) el.innerHTML='<h3>🔔 알림 받는 직원</h3><div class="vl-row">목록을 불러오지 못했어요.</div>'; });
 }
 chip.addEventListener("click", function(e){ e.stopPropagation(); var adm = MGRS.indexOf(me)>=0;   /* 관리자 메뉴는 관리자 이름을 고른 경우에만 (PIN이 저장된 폰이라도 직원 이름이면 숨김) */ menu.querySelectorAll(".vl-adm").forEach(function(x){ x.hidden = !adm; }); menu.hidden = !menu.hidden; });
 document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contains(e.target)) menu.hidden = true; });
