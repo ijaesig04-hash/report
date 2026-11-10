@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#14275C">
+<title>AI 응대 연습 · 북서울 Report</title>
+<style>
+:root{--navy:#14275C;--red:#E4002B;--ink:#16203a;--mute:#5d6879;--line:#dde3ee;--bg:#f2f4f9;--ok:#1d7a4c;--warn:#b4620a}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;-webkit-tap-highlight-color:transparent}
+button{font:inherit;cursor:pointer}
+.top{position:sticky;top:0;z-index:5;background:var(--navy);color:#fff;padding:max(12px,env(safe-area-inset-top)) 14px 12px;display:flex;align-items:center;gap:10px}
+.top b{font-size:17px;flex:1}
+.back{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:10px;width:40px;height:36px;font-size:20px}
+.me{font-size:12px;opacity:.85}
+main{max-width:560px;margin:0 auto;padding:14px 14px 90px}
+.demo{background:#fff4dc;border:1px solid #f0d49a;color:#7a4b00;border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+h2{font-size:17px;margin:2px 0 4px}
+.sub{color:var(--mute);font-size:13px;margin:0 0 10px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:6px 0 4px}
+.seg button{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 0;font-weight:700;color:var(--mute)}
+.seg button[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
+.sc{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px}
+.sc:active{background:#f3f6fd}
+.sc i{font-style:normal;font-size:30px}
+.sc b{display:block;font-size:16px}.sc span{font-size:13px;color:var(--mute)}
+.tag{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:8px;padding:1px 8px;margin-left:6px;vertical-align:1px}
+.tag.상{background:var(--red)}.tag.중{background:#e08a00}.tag.하{background:#2b8a5a}
+.last{font-size:12px;color:var(--mute);margin-top:2px}
+/* 대화 */
+.bar{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.pill{background:#fff;border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700}
+.chat{display:flex;flex-direction:column;gap:10px;padding-bottom:6px}
+.b{max-width:86%;padding:11px 14px;border-radius:18px;font-size:16px;line-height:1.55;word-break:keep-all}
+.b.c{background:#fff;border:1px solid var(--line);border-top-left-radius:6px;align-self:flex-start}
+.b.c::before{content:'😠 고객';display:block;font-size:11px;font-weight:700;color:var(--red);margin-bottom:2px}
+.b.s{background:var(--navy);color:#fff;border-top-right-radius:6px;align-self:flex-end}
+.tip{align-self:center;background:#fff4dc;border:1px solid #f0d49a;color:#7a4b00;font-size:13px;border-radius:12px;padding:6px 12px}
+.typing{align-self:flex-start;color:var(--mute);font-size:13px}
+.dock{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px max(10px,env(safe-area-inset-bottom))}
+.dock .in{max-width:560px;margin:0 auto}
+.row{display:flex;gap:8px}
+.row input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;font:inherit;font-size:16px}
+.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:700;background:var(--navy);color:#fff}
+.btn.red{background:var(--red)}.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+.btn.block{display:block;width:100%;margin-top:8px}
+.mic{width:100%;margin-bottom:8px;padding:16px;font-size:17px;border-radius:14px;border:0;background:var(--red);color:#fff;font-weight:700}
+.mic.on{background:#8a0019;animation:pl 1s infinite}
+@keyframes pl{50%{opacity:.7}}
+@media(prefers-reduced-motion:reduce){.mic.on{animation:none}}
+.warn{font-size:12px;color:var(--mute);text-align:center;margin-top:6px}
+/* 평가 */
+.big{font-size:54px;font-weight:900;color:var(--navy);line-height:1}
+.big small{font-size:20px;color:var(--mute);font-weight:700}
+.delta{font-weight:700;margin-left:8px}.delta.up{color:var(--ok)}.delta.dn{color:var(--red)}
+.it{margin:10px 0}.it div{display:flex;justify-content:space-between;font-size:14px;font-weight:700}
+.it u{display:block;height:9px;border-radius:5px;background:#e8ecf5;margin-top:4px;text-decoration:none;overflow:hidden}
+.it u i{display:block;height:100%;background:var(--navy);border-radius:5px}
+.it.lo u i{background:var(--red)}
+ul.l{margin:6px 0 0;padding-left:20px}ul.l li{margin:5px 0}
+.ex{background:#eef3ff;border-radius:12px;padding:10px 12px;margin-top:8px;font-size:15px}
+/* 현황 */
+.k3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
+.k3 div{background:#f3f6fd;border-radius:12px;padding:10px 6px;text-align:center}
+.k3 span{display:block;font-size:11px;color:var(--mute)}.k3 b{font-size:22px;color:var(--navy)}
+.chip{display:inline-block;background:#fdecef;color:#a30020;border-radius:14px;padding:2px 10px;margin:3px 4px 0 0;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:7px 4px;border-bottom:1px solid var(--line);text-align:left}
+th{font-size:12px;color:var(--mute)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="top"><button class="back" id="back" aria-label="뒤로">‹</button><b id="ttl">🎧 AI 응대 연습</b><span class="me" id="me"></span></div>
+<main id="app"></main>
+<div class="dock hidden" id="dock"></div>
+<script>
+/* AI 서버(Apps Script) 주소 — 연결 전에는 비어 있고, 비어 있으면 '데모 모드'(미리 정해 둔 대답·간단 채점)로 동작 */
+var RP_API = "";
+var PUSH_URL = "https://script.google.com/macros/s/AKfycbyt-K4hxHqIMqh7bbAcbmKj3p52Fge_UApOc654a9FURic0FhjkWvw0hUR78_OaW9Z8tg/exec";
+var MGR = ["이재식","최문혁"];
+/* 연습 상황 — 여기만 고치면 목록이 바뀜 (persona: AI 고객 설정 / open: 고객의 첫마디 / demo: 데모 모드 고객 대사) */
+var SCEN = [
+ {id:"false-alarm",ic:"🌙",title:"오경보로 새벽에 깬 고객",lv:"상",persona:"새벽 3시에 경보가 울려 출동 요원이 다녀갔는데 실제로는 오경보였다. 아이가 놀라 깼고, 이런 일이 이번이 세 번째라 몹시 화가 나 있다. 원인 설명과 재발 방지 대책, 그리고 성의 있는 사과를 원한다.",open:"지금이 새벽 3시예요. 또 오경보라니, 이번이 벌써 세 번째라고요! 애까지 놀라서 깼는데 대체 어떻게 된 거예요?",demo:["세 번째인데 매번 사과만 하시면 끝인가요? 원인이 뭐예요?","그럼 앞으로 안 울린다는 보장은 있어요?","언제 와서 점검해 주시는데요? 또 기다리라고 하시는 건 아니죠?"]},
+ {id:"cancel",ic:"✋",title:"해지하겠다는 고객",lv:"상",persona:"이사 계획과 월 이용료 부담 때문에 해지를 요구한다. 사실은 출동 속도와 응대에 작은 불만이 쌓여 있다. 해지를 막으려는 형식적인 설득에는 반발하지만, 불만을 들어주고 현실적인 대안(요금제 조정·이전 설치)을 주면 마음이 흔들린다.",open:"저 이번 달까지만 쓰고 해지할 거예요. 요금도 부담되고, 솔직히 별로 도움이 된다는 생각도 안 들어서요.",demo:["다른 데는 더 싸던데, 굳이 계속 써야 할 이유가 뭐예요?","요금을 낮춰 주는 건 가능해요? 구체적으로 얼마나요?","위약금은 안 나오는 거죠? 일단 알겠는데 좀 더 생각해 볼게요."]},
+ {id:"delay",ic:"🚨",title:"출동 지연 항의",lv:"중",persona:"경보가 울려서 신고했는데 출동 요원이 도착하기까지 30분 넘게 걸렸다. 그동안 불안했고 약속된 시간(통상 15분 안팎)보다 훨씬 늦었다고 생각해 항의한다. 지연 이유와 앞으로의 약속, 그리고 사과를 듣고 싶다.",open:"출동한다더니 30분이 넘어서야 도착했어요. 그동안 얼마나 불안했는지 아세요? 이게 보안회사가 할 일이에요?",demo:["왜 이렇게 늦은 건지 이유부터 말씀해 주세요.","그럼 다음에도 이럴 수 있다는 거예요?","보상이나 조치가 있나요? 아니면 그냥 죄송하다만 하시는 거예요?"]},
+ {id:"senior",ic:"👵",title:"어르신 장비 사용법 문의",lv:"하",persona:"70대 어르신 고객. 방범 장비(해제 버튼·비밀번호)를 자꾸 잘못 눌러 경보가 울릴까 봐 불안하다. 말이 느리고 용어가 어려우면 못 알아듣는다. 쉬운 말로 천천히, 한 번에 한 가지씩 설명해 주기를 바란다.",open:"여보세요… 내가 그 기계를 자꾸 잘못 눌러서요. 집에 들어오면 뭘 먼저 눌러야 하는지 모르겠어요.",demo:["뭐라고요? 좀 더 천천히, 쉽게 말해 줘요.","그럼 그 버튼은 어디에 있는 거예요?","아이구, 알겠어요. 근데 또 까먹으면 어떡해요?"]}
+];
+var CATS = ["공감·사과","원인 설명","해결책 제시","해지 방어"];
+var ME = ""; try{ ME = localStorage.getItem("bsr_me")||""; if(ME==="관리자") ME=""; }catch(e){}
+var $ = function(s){ return document.querySelector(s); };
+var esc = function(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); };
+var S = {sc:null,lv:"중",hist:[],turns:0,busy:false,voice:true,end:false};
+var back = $("#back"), app = $("#app"), dock = $("#dock");
+$("#me").textContent = ME;
+
+/* ───────── 도우미 ───────── */
+function api(body){
+  return fetch(RP_API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(j){ if(!j||!j.ok) throw new Error((j&&j.err)||"오류"); return j; });
+}
+function lastKey(sc){ return "rp_last_"+ME+"_"+sc.id; }
+function getLast(sc){ try{ return JSON.parse(localStorage.getItem(lastKey(sc))||"null"); }catch(e){ return null; } }
+function setLast(sc,total){ try{ localStorage.setItem(lastKey(sc),JSON.stringify({t:total,d:Date.now()})); }catch(e){} }
+function speak(t){
+  if(!S.voice||!window.speechSynthesis) return;
+  try{ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(t); u.lang="ko-KR"; u.rate=1.02; speechSynthesis.speak(u); }catch(e){}
+}
+function stopSpeak(){ try{ window.speechSynthesis&&speechSynthesis.cancel(); }catch(e){} }
+
+/* ───────── 1. 상황 선택 ───────── */
+function home(){
+  stopSpeak(); S.end=false; dock.classList.add("hidden"); $("#ttl").textContent="🎧 AI 응대 연습";
+  if(!ME){ app.innerHTML='<div class="card"><h2>이름을 먼저 골라 주세요</h2><p class="sub">북서울 Report 첫 화면에서 이름을 고른 뒤 다시 들어오면 돼요.</p><button class="btn red block" id="gor">리포트로 돌아가기</button></div>'; $("#gor").onclick=goReport; return; }
+  var h = RP_API ? "" : '<div class="demo">🧪 <b>데모 모드</b> — AI 연결 전이라 미리 정해 둔 고객 대사와 간단 채점으로 동작해요. 흐름을 미리 써 볼 수 있어요.</div>';
+  h += '<div class="card"><h2>어떤 상황을 연습할까요?</h2><p class="sub">AI가 까다로운 고객이 되어 말을 걸어요. 소리로 대답해 보세요. 모두 가상 상황이라 <b>실제 고객 이름·번호는 말하지 않아도 돼요.</b></p>'+
+    '<b style="font-size:13px">난이도</b><div class="seg" id="lv">'+["하","중","상"].map(function(l){return '<button type="button" data-l="'+l+'" aria-pressed="'+(S.lv===l)+'">'+l+'</button>';}).join("")+'</div></div>';
+  h += SCEN.map(function(c,i){ var l=getLast(c); return '<button type="button" class="sc" data-i="'+i+'"><i>'+c.ic+'</i><div><b>'+esc(c.title)+'<span class="tag '+c.lv+'">추천 '+c.lv+'</span></b><span>'+(l?'지난 점수 '+l.t+'점':'아직 연습 전')+'</span></div></button>'; }).join("");
+  if(MGR.indexOf(ME)>=0) h += '<button type="button" class="btn ghost block" id="adm">🔒 파트장 현황 보기</button>';
+  app.innerHTML=h;
+  app.querySelectorAll("#lv button").forEach(function(b){ b.onclick=function(){ S.lv=b.dataset.l; app.querySelectorAll("#lv button").forEach(function(x){x.setAttribute("aria-pressed",x===b);}); }; });
+  app.querySelectorAll(".sc").forEach(function(b){ b.onclick=function(){ start(SCEN[+b.dataset.i]); }; });
+  var a=$("#adm"); if(a) a.onclick=admin;
+}
+
+/* ───────── 2. 음성 대화 ───────── */
+var rec=null, recOn=false;
+function start(sc){
+  S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false;
+  $("#ttl").textContent=sc.ic+" "+sc.title;
+  app.innerHTML='<div class="bar"><span class="pill">난이도 '+S.lv+'</span><span class="pill" id="sp" role="button">🔊 소리 켬</span></div><div class="chat" id="chat"></div>';
+  $("#sp").onclick=function(){ S.voice=!S.voice; $("#sp").textContent=S.voice?"🔊 소리 켬":"🔇 소리 끔"; if(!S.voice) stopSpeak(); };
+  addB("c",sc.open); speak(sc.open); drawDock();
+}
+function addB(r,t){ var d=document.createElement("div"); d.className="b "+r; d.textContent=t; $("#chat").appendChild(d); scrollEnd(); }
+function addTip(t){ var d=document.createElement("div"); d.className="tip"; d.textContent="💡 코치 팁 · "+t; $("#chat").appendChild(d); scrollEnd(); }
+function scrollEnd(){ window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"}); }
+function drawDock(){
+  dock.classList.remove("hidden");
+  var SR = window.SpeechRecognition||window.webkitSpeechRecognition;
+  dock.innerHTML='<div class="in">'+(SR?'<button type="button" class="mic" id="mic">🎤 눌러서 말하기</button>':'')+
+    '<div class="row"><input id="tx" placeholder="'+(SR?'말이 안 되면 여기에 입력':'여기에 답변을 입력')+'" enterkeyhint="send"><button type="button" class="btn" id="go">보내기</button></div>'+
+    '<div class="row" style="margin-top:8px"><button type="button" class="btn ghost" id="fin" style="flex:1">마무리하고 점수 받기</button></div></div>';
+  $("#go").onclick=function(){ send($("#tx").value); };
+  $("#tx").addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); send($("#tx").value); } });
+  $("#fin").onclick=finish;
+  var m=$("#mic"); if(m) m.onclick=function(){ toggleMic(SR,m); };
+}
+function toggleMic(SR,btn){
+  if(S.busy) return;
+  if(recOn&&rec){ try{rec.stop();}catch(e){} return; }
+  stopSpeak();
+  try{
+    rec=new SR(); rec.lang="ko-KR"; rec.interimResults=true; rec.continuous=false; var got="";
+    rec.onstart=function(){ recOn=true; btn.classList.add("on"); btn.textContent="🔴 듣는 중… (다 말하면 한 번 더 누르기)"; };
+    rec.onresult=function(e){ got=""; for(var i=0;i<e.results.length;i++) got+=e.results[i][0].transcript; $("#tx").value=got; };
+    rec.onerror=function(e){ recOn=false; btn.classList.remove("on"); btn.textContent="🎤 눌러서 말하기"; if(e.error==="not-allowed") alert("마이크 사용을 허용해야 말로 대답할 수 있어요. 지금은 글자로 입력해 주세요."); };
+    rec.onend=function(){ recOn=false; btn.classList.remove("on"); btn.textContent="🎤 눌러서 말하기"; if(got.trim()) send(got); };
+    rec.start();
+  }catch(e){ alert("이 기기에서는 음성 입력을 쓸 수 없어요. 글자로 입력해 주세요."); }
+}
+function send(t){
+  t=String(t||"").trim(); if(!t||S.busy||S.end) return;
+  $("#tx").value=""; S.busy=true; S.turns++; S.hist.push({r:"s",t:t}); addB("s",t);
+  var ty=document.createElement("div"); ty.className="typing"; ty.textContent="고객이 말하는 중…"; $("#chat").appendChild(ty); scrollEnd();
+  var p = RP_API ? api({act:"chat",sc:{id:S.sc.id,title:S.sc.title,persona:S.sc.persona},level:S.lv,hist:S.hist}) : Promise.resolve(demoChat(t));
+  p.then(function(j){
+    ty.remove(); S.hist.push({r:"c",t:j.customer}); addB("c",j.customer); if(j.tip) addTip(j.tip); speak(j.customer);
+    if(j.end||S.turns>=8){ S.end=true; var d=document.createElement("div"); d.className="tip"; d.textContent="통화가 마무리됐어요. 아래 '마무리하고 점수 받기'를 눌러 주세요."; $("#chat").appendChild(d); scrollEnd(); }
+  }).catch(function(e){ ty.remove(); S.turns--; S.hist.pop(); alert("AI 고객이 응답하지 못했어요. 잠시 뒤 다시 보내 주세요.\n("+(e.message||e)+")"); })
+  .then(function(){ S.busy=false; });
+}
+/* 데모 모드 */
+function demoChat(t){
+  var L=S.sc.demo, i=Math.min(S.turns-1,L.length-1), tip="";
+  if(!/죄송|불편|걱정|놀라|송구/.test(t)&&S.turns===1) tip="먼저 불편을 받아 주고 사과해 보세요";
+  else if(/모르|어쩔 수|규정상|안 돼/.test(t)) tip="'모른다·안 된다'보다 할 수 있는 일을 말해 보세요";
+  return {customer:L[i],tip:tip,end:S.turns>=L.length+1};
+}
+function demoEval(){
+  var s=S.hist.filter(function(m){return m.r==="s";}).map(function(m){return m.t;}).join(" ");
+  var re=[/죄송|불편|걱정|놀라|송구|마음/,/원인|때문|점검|확인해|이유|오작동|센서/,/출동|방문|조치|안내|교체|보상|바로|오늘|내일|약속/,/도움|유지|혜택|조정|할인|다시|이전|대안|계속/];
+  var sc=re.map(function(r){ var n=(s.match(new RegExp(r.source,"g"))||[]).length; return Math.min(90,35+n*14+(s.length>60?6:0)); });
+  var o={}; CATS.forEach(function(c,i){ o[c]=s.length<8?30:sc[i]; });
+  var tot=Math.round(CATS.reduce(function(a,c){return a+o[c];},0)/4);
+  return {ok:true,total:tot,scores:o,good:["끝까지 대화를 이어 갔어요","답변을 직접 말로 해 봤어요"],improve:["감정을 먼저 받아 주는 한마디를 더해 보세요","'언제까지 무엇을 하겠다'를 구체적으로 말해 보세요"],example:"불편을 드려 정말 죄송합니다. 원인을 바로 확인하고, 오늘 안에 기사가 방문해 조치해 드리겠습니다.",prev:null,demo:true};
+}
+
+/* ───────── 3. 평가 ───────── */
+function finish(){
+  if(S.busy) return; if(S.turns<1){ alert("먼저 고객에게 한 번 이상 대답해 보세요."); return; }
+  stopSpeak(); try{ rec&&rec.stop(); }catch(e){}
+  dock.classList.add("hidden"); app.innerHTML='<div class="card"><h2>AI 코치가 평가하는 중…</h2><p class="sub">10초쯤 걸려요.</p></div>';
+  var p = RP_API ? api({act:"eval",name:ME,sc:{id:S.sc.id,title:S.sc.title},level:S.lv,hist:S.hist,turns:S.turns}) : Promise.resolve(demoEval());
+  p.then(showEval).catch(function(e){ app.innerHTML='<div class="card"><h2>평가를 받지 못했어요</h2><p class="sub">'+esc(e.message||e)+'</p><button class="btn red block" id="rt">다시 시도</button><button class="btn ghost block" id="hm">처음으로</button></div>'; $("#rt").onclick=finish; $("#hm").onclick=home; });
+}
+function showEval(j){
+  var prev = j.prev!=null ? j.prev : (getLast(S.sc)||{}).t;
+  var dl = (prev!=null) ? j.total-prev : null;
+  setLast(S.sc,j.total);
+  var h = (j.demo?'<div class="demo">🧪 데모 채점이에요. AI가 연결되면 대화 내용을 실제로 읽고 평가해요.</div>':'')+
+   '<div class="card"><div class="sub">'+esc(S.sc.title)+' · 난이도 '+S.lv+'</div><div class="big">'+j.total+'<small>점</small>'+(dl!=null?'<span class="delta '+(dl>=0?'up':'dn')+'">'+(dl>=0?'▲ ':'▼ ')+Math.abs(dl)+' (지난번 '+prev+')</span>':'')+'</div>'+
+   CATS.map(function(c){ var v=j.scores[c]||0; return '<div class="it'+(v<60?' lo':'')+'"><div><span>'+c+'</span><span>'+v+'점</span></div><u><i style="width:'+v+'%"></i></u></div>'; }).join("")+'</div>'+
+   '<div class="card"><h2>👍 잘한 점</h2><ul class="l">'+(j.good||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul></div>'+
+   '<div class="card"><h2>🔧 이렇게 해 보세요</h2><ul class="l">'+(j.improve||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>'+(j.example?'<div class="ex">💬 <b>이렇게 말해 보세요</b><br>'+esc(j.example)+'</div>':'')+'</div>'+
+   '<button class="btn red block" id="again">같은 상황 다시 연습</button><button class="btn ghost block" id="hm">다른 상황 고르기</button>';
+  app.innerHTML=h; window.scrollTo(0,0);
+  $("#again").onclick=function(){ start(S.sc); }; $("#hm").onclick=home;
+}
+
+/* ───────── 4. 파트장 현황 ───────── */
+function admin(){
+  var pin=""; try{ pin=sessionStorage.getItem("rp_pin")||""; }catch(e){}
+  if(!RP_API){ app.innerHTML='<div class="card"><h2>🔒 파트장 현황</h2><p class="sub">AI 서버가 연결되면 월별 참여 인원·평균 점수·약한 상황·미참여자가 여기에 자동으로 모여요.</p><button class="btn ghost block" id="hm">돌아가기</button></div>'; $("#hm").onclick=home; return; }
+  if(!pin){ pin=prompt("파트장 현황 비밀번호를 입력하세요"); if(!pin) return; }
+  app.innerHTML='<div class="card"><h2>불러오는 중…</h2></div>';
+  Promise.all([
+    fetch(RP_API+"?action=rows&pin="+encodeURIComponent(pin)+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}),
+    fetch(PUSH_URL+"?action=names&pin="+encodeURIComponent(pin)+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).catch(function(){return null;})
+  ]).then(function(a){
+    if(!a[0]||!a[0].ok){ try{sessionStorage.removeItem("rp_pin");}catch(e){} throw new Error(a[0]&&a[0].err==="pin"?"비밀번호가 맞지 않아요":"불러오지 못했어요"); }
+    try{ sessionStorage.setItem("rp_pin",pin); }catch(e){}
+    drawAdmin(a[0].rows||[], a[1]&&a[1].names||[]);
+  }).catch(function(e){ app.innerHTML='<div class="card"><h2>🔒 파트장 현황</h2><p class="sub">'+esc(e.message||e)+'</p><button class="btn red block" id="rt">다시 시도</button><button class="btn ghost block" id="hm">돌아가기</button></div>'; $("#rt").onclick=admin; $("#hm").onclick=home; });
+}
+function ym(t){ var d=new Date(t+9*36e5); return d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0"); }
+function drawAdmin(rows,names){
+  var staff=names.filter(function(n){return MGR.indexOf(n)<0;});
+  var cur=ym(Date.now()), by={};
+  rows.forEach(function(r){ var m=ym(r.t); (by[m]=by[m]||[]).push(r); });
+  var now=by[cur]||[], who={}; now.forEach(function(r){who[r.name]=1;});
+  var part=Object.keys(who).length, avg=now.length?Math.round(now.reduce(function(a,r){return a+r.total;},0)/now.length):0;
+  var miss=staff.filter(function(n){return !who[n];});
+  var sa={}; now.forEach(function(r){ (sa[r.sc]=sa[r.sc]||[]).push(r.total); });
+  var wk=null; Object.keys(sa).forEach(function(k){ var v=sa[k].reduce(function(a,b){return a+b;},0)/sa[k].length; if(!wk||v<wk.v) wk={k:k,v:Math.round(v)}; });
+  var wt=wk?(SCEN.filter(function(c){return c.id===wk.k;})[0]||{title:wk.k}).title:"-";
+  var ms=Object.keys(by).sort().slice(-4);
+  var h='<div class="card"><h2>🔒 파트장 현황 <small style="font-weight:400;color:var(--mute)">'+cur+'</small></h2>'+
+   '<div class="k3"><div><span>이번 달 참여</span><b>'+part+(staff.length?'/'+staff.length:'')+'</b></div><div><span>평균 점수</span><b>'+(now.length?avg:"-")+'</b></div><div><span>연습 횟수</span><b>'+now.length+'</b></div></div>'+
+   '<p class="sub" style="margin:8px 0 0">가장 약한 상황: <b>'+esc(wt)+'</b>'+(wk?' (평균 '+wk.v+'점)':'')+'</p></div>'+
+   '<div class="card"><h2>월별 평균 점수 변화</h2>'+(ms.length?'<table><tr><th>월</th><th>참여</th><th>횟수</th><th>평균</th></tr>'+ms.map(function(m){ var r=by[m],p={}; r.forEach(function(x){p[x.name]=1;}); return '<tr><td>'+m+'</td><td>'+Object.keys(p).length+'명</td><td>'+r.length+'</td><td><b>'+Math.round(r.reduce(function(a,x){return a+x.total;},0)/r.length)+'</b></td></tr>'; }).join("")+'</table>':'<p class="sub">아직 기록이 없어요.</p>')+'</div>'+
+   '<div class="card"><h2>이번 달 미참여 '+(staff.length?miss.length+'명':'')+'</h2>'+(staff.length?(miss.length?miss.map(function(n){return '<span class="chip">'+esc(n)+'</span>';}).join(""):'<p class="sub">모두 참여했어요 👏</p>'):'<p class="sub">직원 명단을 불러오지 못했어요.</p>')+'</div>'+
+   '<button class="btn ghost block" id="hm">돌아가기</button>';
+  app.innerHTML=h; $("#hm").onclick=home;
+}
+
+/* ───────── 시작 ───────── */
+function goReport(){ stopSpeak(); location.href="./"; }
+back.onclick=function(){ if(S.sc&&dock&&!dock.classList.contains("hidden")){ if(!confirm("연습을 멈추고 나갈까요? (점수는 저장되지 않아요)")) return; } if($("#ttl").textContent.indexOf("AI 응대 연습")>=0) goReport(); else home(); };
+home();
+</script>
+</body>
+</html>

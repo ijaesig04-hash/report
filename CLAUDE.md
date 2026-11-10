@@ -17,6 +17,7 @@
 | `patrol.html` | 구역별 담당차량(출동차량) 조회 |
 | `risk.html` | 작업전 위험예지활동 보고 |
 | `directmall.html` | **앱 안 연결 페이지.** 홍보 스튜디오 본체는 별도 저장소 `ijaesig04-hash/directmall`의 `index.html`. 이 파일은 그 본체를 fetch해서 그 자리에 띄움(주소는 /report/ 그대로 → Report 앱 범위 안이라 크롬 주소창이 안 생김). 리포트 메뉴(PROD_URL·영업 탭)는 반드시 이 `directmall.html`을 가리킬 것 — /directmall/ 주소로 직접 연결하면 앱 범위 밖이라 주소창이 뜸. fetch에 `?t=` 붙이지 말 것(sw.js가 index 캐시로 착각) |
+| `roleplay.html` | **AI 응대 연습** — AI가 까다로운 고객 역을 맡고 직원이 음성으로 응대 연습 → 점수·피드백, 파트장 현황. 상단 `RP_API`가 비어 있으면 데모 모드. AI 서버 코드는 `tools/roleplay.gs`(Apps Script, Gemini), 처음 설정 안내는 `roleplay-setup.html`. 응대 상황은 `SCEN` 배열 |
 | `tools/screen_check.js` | 휴대폰 크기(390px) 화면 점검 — 탭마다 캡처하고 오류·화면 넘침을 찾음 |
 | `.claude/skills/` | 반영 작업 순서·체크리스트(스킬), 화면 점검·다듬기 스킬(impeccable) |
 | `docs/다른프로젝트용_디자인스킬.md` | 다른 프로젝트용 디자인 스킬 보관함 (Taste · Awesome Design) — **이 리포트에는 쓰지 않음** |
