@@ -1,6 +1,6 @@
 /* AI 고객응대 연습 — 북서울 Report (구글 Apps Script 웹 앱)
    하는 일: ① AI 고객 역할 대답 ② 연습 후 점수·피드백 ③ 연습 기록을 구글 시트에 저장 ④ 파트장 현황용 기록 내려주기
-   필요한 설정(프로젝트 설정 → 스크립트 속성):  GEMINI_KEY = 구글 AI 스튜디오 키  /  ADMIN_PIN = 파트장 현황 비밀번호
+   필요한 설정(프로젝트 설정 → 스크립트 속성):  ANTHROPIC_KEY = Claude API 키 (또는 GEMINI_KEY = 구글 AI 스튜디오 키)  /  ADMIN_PIN = 파트장 현황 비밀번호
    배포: 배포 → 새 배포 → 유형 '웹 앱' → 실행: 나 / 액세스: 모든 사용자 */
 const P = PropertiesService.getScriptProperties();
 const HEAD = ['시각', '이름', '상황', '난이도', '총점', '공감·사과', '원인 설명', '해결책 제시', '해지 방어', '말한 횟수'];
@@ -21,14 +21,42 @@ function doGet(e) {
   }
   if (p.action === 'test') {   // 브라우저에서 주소 뒤에 ?action=test 를 붙여 열면 AI 연결·속도를 점검
     const t0 = Date.now();
-    try { const r = chat({ sc: { persona: '시험 통화' }, level: '중', hist: [{ r: 'c', t: '여보세요?' }, { r: 's', t: '안녕하세요, 에스원입니다.' }] }); return out({ ok: true, ms: Date.now() - t0, model: P.getProperty('MODEL') || 'gemini-3.8-flash', r: r }); }
+    try { const r = chat({ sc: { persona: '시험 통화' }, level: '중', hist: [{ r: 'c', t: '여보세요?' }, { r: 's', t: '안녕하세요, 에스원입니다.' }] }); return out({ ok: true, ms: Date.now() - t0, model: P.getProperty('ANTHROPIC_KEY') ? (P.getProperty('CLAUDE_MODEL') || 'claude-haiku-5-5') : (P.getProperty('MODEL') || 'gemini-3.8-flash'), r: r }); }
     catch (err) { return out({ ok: false, ms: Date.now() - t0, err: String(err) }); }
   }
   return out({ ok: true, ready: !!P.getProperty('GEMINI_KEY') });
 }
 function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 
+/* AI 부르기: ANTHROPIC_KEY 속성이 있으면 Claude, 없으면 Gemini */
 function gemini(sys, contents, maxTok) {
+  if (P.getProperty('ANTHROPIC_KEY')) return claude(sys, contents, maxTok);
+  return geminiCall(sys, contents, maxTok);
+}
+function claude(sys, contents, maxTok) {
+  const model = P.getProperty('CLAUDE_MODEL') || 'claude-haiku-5-5';
+  const msgs = [];
+  contents.forEach(function (c) {
+    const role = c.role === 'model' ? 'assistant' : 'user', text = c.parts.map(function (x) { return x.text || ''; }).join('');
+    if (msgs.length && msgs[msgs.length - 1].role === role) msgs[msgs.length - 1].content += '\n' + text;
+    else msgs.push({ role: role, content: text });
+  });
+  const body = { model: model, max_tokens: Math.max(maxTok || 1000, 1000), system: sys + '\n\n반드시 JSON 한 덩어리만 출력하세요. 설명·코드블록 금지.', messages: msgs };
+  let r;
+  for (let k = 0; k < 3; k++) {
+    r = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', { method: 'post', contentType: 'application/json',
+      headers: { 'x-api-key': P.getProperty('ANTHROPIC_KEY'), 'anthropic-version': '2023-06-01' }, payload: JSON.stringify(body), muteHttpExceptions: true });
+    if ([429, 500, 502, 503, 529].indexOf(r.getResponseCode()) < 0) break;
+    Utilities.sleep(1500 * (k + 1));
+  }
+  const j = JSON.parse(r.getContentText());
+  if (r.getResponseCode() !== 200) throw new Error((j.error && j.error.message) || ('HTTP ' + r.getResponseCode()));
+  const t = (j.content || []).map(function (x) { return x.text || ''; }).join('');
+  const i = t.indexOf('{'), e = t.lastIndexOf('}');
+  if (i < 0 || e < i) throw new Error('AI가 빈 답을 줬어요');
+  return JSON.parse(t.slice(i, e + 1));
+}
+function geminiCall(sys, contents, maxTok) {
   const key = P.getProperty('GEMINI_KEY');
   if (!key) throw new Error('GEMINI_KEY 없음');
   const model = P.getProperty('MODEL') || 'gemini-3.8-flash';
