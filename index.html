@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261110225500">
+<meta name="bsr-ver" content="20261111002500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -6449,12 +6449,15 @@ function adminView(rows){
   var tCnt = Object.keys(tSet).length, miss = ALL.filter(function(n){return !tSet[n]});
   var h = '<div class="vl-hero"><button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button><small>ADMIN · '+kst(now).md+' '+kst(now).hm+'</small><h2>🔒 접속 현황</h2><p>직원 '+ALL.length+'명 기준 · 최근 7일</p></div>';
   h += '<div class="vl-k"><div><span>오늘 접속</span><b>'+tCnt+'</b></div><div class="ng"><span>오늘 미접속</span><b>'+miss.length+'</b></div><div><span>최근 7일</span><b>'+Object.keys(wk).length+'</b></div></div>';
-  h += rdCard + (me==="이재식"&&window.PUSH_URL?'<div class="vl-card" id="vlpush"><h3>🔔 알림 받는 직원<small>불러오는 중…</small></h3></div>':'') + vlWeek(rows, now) + vlInstall(rows) + adminExtra(rows, now, pinFail);
+  var midA = rdCard + (me==="이재식"&&window.PUSH_URL?'<div class="vl-card" id="vlpush"><h3>🔔 알림 받는 직원<small>불러오는 중…</small></h3></div>':'') + vlWeek(rows, now) + vlInstall(rows) + ''; var midB = adminExtra(rows, now, pinFail);
   var byDay = {}; rows.forEach(function(r){ var d=kst(r[0]).day; (byDay[d]=byDay[d]||[]).push(r); });
   var dKeys = Object.keys(byDay).sort().reverse();
-  h += '<div class="vl-card"><h3>접속 기록<small>최근 35일 · 날짜를 누르면 펼침</small></h3>'+(dKeys.length?dKeys.map(function(d,i){ var rs=byDay[d], t0=kst(rs[0][0]), ppl={}; rs.forEach(function(r){ppl[r[1]]=1});
+  var logCard = '<div class="vl-card"><h3>접속 기록<small>최근 35일 · 날짜를 누르면 펼침</small></h3>'+(dKeys.length?dKeys.map(function(d,i){ var rs=byDay[d], t0=kst(rs[0][0]), ppl={}; rs.forEach(function(r){ppl[r[1]]=1});
       return '<details class="vl-day"'+(i===0?' open':'')+'><summary><b>'+t0.md+' ('+t0.wd+')'+(d===today?' 오늘':'')+'</b><span>'+Object.keys(ppl).length+'명 · '+rs.length+'건</span></summary>'+
         rs.map(function(r){ var t=kst(r[0]); return '<div class="vl-row"><span class="vl-dot"></span>'+esc(r[1])+' <i>'+esc(r[2]||'')+'</i><em>'+t.hm+'</em></div>'; }).join('')+'</details>'; }).join(''):'<div class="vl-row">아직 기록이 없습니다.</div>')+'</div>';
+  var mk = '<div class="vl-card vlw"><h3>👀', mi = midB.indexOf(mk);
+  var extB = mi>=0 ? midB.slice(mi) : '', midB2 = mi>=0 ? midB.slice(0,mi) : midB;
+  h += extB + logCard + midA + midB2;
   var mx = Math.max.apply(null, days.map(function(d){return Object.keys(by[d.day]||{}).length}).concat([1]));
   var un7 = ALL.filter(function(n){return !wk[n]});
   h += '<div class="vl-card"><h3>최근 7일 미접속<small>'+un7.length+'명</small></h3>'+(un7.length?un7.map(function(n){ var l=last[n]; return '<div class="vl-row"><span class="vl-dot off"></span>'+n+'<em>'+(l?'마지막 '+kst(l).md:'기록 없음')+'</em></div>'; }).join(''):'<div class="vl-row">모두 한 번 이상 접속했습니다 👍</div>')+'</div>';
