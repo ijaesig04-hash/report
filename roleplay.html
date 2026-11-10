@@ -173,12 +173,12 @@ function toggleMic(SR,btn){
 function send(t){
   t=String(t||"").trim(); if(!t||S.busy||S.end) return;
   $("#tx").value=""; S.busy=true; S.turns++; S.hist.push({r:"s",t:t}); addB("s",t);
-  var ty=document.createElement("div"); ty.className="typing"; ty.textContent="고객이 말하는 중…"; $("#chat").appendChild(ty); scrollEnd();
+  var ty=document.createElement("div"); ty.className="typing"; var t0=Date.now(); ty.textContent="고객이 말하는 중…"; $("#chat").appendChild(ty); scrollEnd(); var iv=setInterval(function(){ ty.textContent="고객이 말하는 중… "+Math.round((Date.now()-t0)/1000)+"초"+((Date.now()-t0)>12000?" (AI가 오래 걸리고 있어요)":""); },1000);
   var p = RP_API ? api({act:"chat",sc:{id:S.sc.id,title:S.sc.title,persona:S.sc.persona},level:S.lv,hist:S.hist}) : Promise.resolve(demoChat(t));
   p.then(function(j){
-    ty.remove(); S.hist.push({r:"c",t:j.customer}); addB("c",j.customer); if(j.tip) addTip(j.tip); speak(j.customer);
+    clearInterval(iv); ty.remove(); S.hist.push({r:"c",t:j.customer}); addB("c",j.customer); if(j.tip) addTip(j.tip); speak(j.customer);
     if(j.end||S.turns>=8){ S.end=true; var d=document.createElement("div"); d.className="tip"; d.textContent="통화가 마무리됐어요. 아래 '마무리하고 점수 받기'를 눌러 주세요."; $("#chat").appendChild(d); scrollEnd(); }
-  }).catch(function(e){ ty.remove(); S.turns--; S.hist.pop(); alert("AI 고객이 응답하지 못했어요. 잠시 뒤 다시 보내 주세요.\n("+(e.message||e)+")"); })
+  }).catch(function(e){ clearInterval(iv); ty.remove(); S.turns--; S.hist.pop(); alert("AI 고객이 응답하지 못했어요. 잠시 뒤 다시 보내 주세요.\n("+(e.message||e)+")"); })
   .then(function(){ S.busy=false; });
 }
 /* 데모 모드 */
