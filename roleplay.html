@@ -98,7 +98,9 @@ $("#me").textContent = ME;
 
 /* ───────── 도우미 ───────── */
 function api(body){
-  return fetch(RP_API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(j){ if(!j||!j.ok) throw new Error((j&&j.err)||"오류"); return j; });
+  var ac=new AbortController(), tm=setTimeout(function(){ ac.abort(); },45000);
+  return fetch(RP_API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body),signal:ac.signal}).then(function(r){return r.json();}).then(function(j){ clearTimeout(tm); if(!j||!j.ok) throw new Error((j&&j.err)||"오류"); return j; })
+  .catch(function(e){ clearTimeout(tm); throw new Error(e&&e.name==="AbortError"?"45초 안에 답이 오지 않았어요":(e&&e.message)||"연결 오류"); });
 }
 function lastKey(sc){ return "rp_last_"+ME+"_"+sc.id; }
 function getLast(sc){ try{ return JSON.parse(localStorage.getItem(lastKey(sc))||"null"); }catch(e){ return null; } }

@@ -19,6 +19,11 @@ function doGet(e) {
     if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
     return out({ ok: true, rows: rows(600) });
   }
+  if (p.action === 'test') {   // 브라우저에서 주소 뒤에 ?action=test 를 붙여 열면 AI 연결·속도를 점검
+    const t0 = Date.now();
+    try { const r = chat({ sc: { persona: '시험 통화' }, level: '중', hist: [{ r: 'c', t: '여보세요?' }, { r: 's', t: '안녕하세요, 에스원입니다.' }] }); return out({ ok: true, ms: Date.now() - t0, model: P.getProperty('MODEL') || 'gemini-3.8-flash', r: r }); }
+    catch (err) { return out({ ok: false, ms: Date.now() - t0, err: String(err) }); }
+  }
   return out({ ok: true, ready: !!P.getProperty('GEMINI_KEY') });
 }
 function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
@@ -28,12 +33,19 @@ function gemini(sys, contents, maxTok) {
   if (!key) throw new Error('GEMINI_KEY 없음');
   const model = P.getProperty('MODEL') || 'gemini-3.8-flash';
   const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + key;
-  const body = { systemInstruction: { parts: [{ text: sys }] }, contents: contents,
-    generationConfig: { temperature: 0.8, maxOutputTokens: maxTok || 1200, responseMimeType: 'application/json' } };
-  const r = UrlFetchApp.fetch(url, { method: 'post', contentType: 'application/json', payload: JSON.stringify(body), muteHttpExceptions: true });
+  function call(withThink) {
+    const cfg = { temperature: 0.8, maxOutputTokens: Math.max(maxTok || 1200, 2048), responseMimeType: 'application/json' };
+    if (withThink) cfg.thinkingConfig = { thinkingLevel: 'low' };   // 생각 시간을 줄여 빨리 답하게
+    const body = { systemInstruction: { parts: [{ text: sys }] }, contents: contents, generationConfig: cfg };
+    return UrlFetchApp.fetch(url, { method: 'post', contentType: 'application/json', payload: JSON.stringify(body), muteHttpExceptions: true });
+  }
+  let r = call(true);
+  if (r.getResponseCode() === 400) r = call(false);   // 이 모델이 생각 설정을 안 받으면 설정 없이 다시
   const j = JSON.parse(r.getContentText());
   if (r.getResponseCode() !== 200) throw new Error((j.error && j.error.message) || ('HTTP ' + r.getResponseCode()));
-  const t = j.candidates[0].content.parts.map(function (x) { return x.text || ''; }).join('');
+  const c = j.candidates && j.candidates[0];
+  const t = c && c.content && c.content.parts ? c.content.parts.map(function (x) { return x.text || ''; }).join('') : '';
+  if (!t) throw new Error('AI가 빈 답을 줬어요 (' + (c && c.finishReason || '?') + ')');
   return JSON.parse(t);
 }
 
