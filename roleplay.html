@@ -32,7 +32,7 @@ h2{font-size:17px;margin:2px 0 4px}
 .sc i{font-style:normal;font-size:30px}
 .sc b{display:block;font-size:16px}.sc span{font-size:13px;color:var(--mute)}
 .tag{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:8px;padding:1px 8px;margin-left:6px;vertical-align:1px}
-.tag.상{background:var(--red)}.tag.중{background:#e08a00}.tag.하{background:#2b8a5a}
+.sc .tag{color:#fff;font-size:11px}.tag.상{background:var(--red)}.tag.중{background:#e08a00}.tag.하{background:#2b8a5a}
 .last{font-size:12px;color:var(--mute);margin-top:2px}
 /* 대화 */
 .bar{display:flex;gap:8px;align-items:center;margin-bottom:10px}
@@ -74,6 +74,8 @@ ul.l{margin:6px 0 0;padding-left:20px}ul.l li{margin:5px 0}
 table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:7px 4px;border-bottom:1px solid var(--line);text-align:left}
 th{font-size:12px;color:var(--mute)}
 .hidden{display:none!important}
+.hero{border-radius:16px;overflow:hidden;margin-bottom:12px;box-shadow:0 6px 18px rgba(20,39,92,.18);background:#fff}
+.hero img{display:block;width:100%;height:auto;aspect-ratio:1672/941;object-fit:cover}
 </style>
 </head>
 <body>
@@ -131,6 +133,7 @@ function home(){
   if(!ME){ app.innerHTML='<div class="card"><h2>이름을 먼저 골라 주세요</h2><p class="sub">북서울 Report 첫 화면에서 이름을 고른 뒤 다시 들어오면 돼요.</p><button class="btn red block" id="gor">리포트로 돌아가기</button></div>'; $("#gor").onclick=goReport; return; }
   var h = GUEST ? '<div class="demo">👀 연습은 자유롭게 할 수 있어요. 이름을 고르지 않아 <b>점수는 기록에 남지 않아요.</b></div>' : '';
   h += RP_API ? "" : '<div class="demo">🧪 <b>데모 모드</b> — AI 연결 전이라 미리 정해 둔 고객 대사와 간단 채점으로 동작해요. 흐름을 미리 써 볼 수 있어요.</div>';
+  h = '<div class="hero"><img src="roleplay-bg.jpg" alt="화난 고객에게 공감하며 응대하는 에스원 직원 그림"></div>' + h;
   h += '<div class="card"><h2>어떤 상황을 연습할까요?</h2><p class="sub">AI가 까다로운 고객이 되어 말을 걸어요. 소리로 대답해 보세요. 모두 가상 상황이라 <b>실제 고객 이름·번호는 말하지 않아도 돼요.</b></p>'+
     '<b style="font-size:13px">난이도</b><div class="seg" id="lv">'+["하","중","상"].map(function(l){return '<button type="button" data-l="'+l+'" aria-pressed="'+(S.lv===l)+'">'+l+'</button>';}).join("")+'</div></div>';
   h += SCEN.map(function(c,i){ var l=getLast(c); return '<button type="button" class="sc" data-i="'+i+'"><i>'+c.ic+'</i><div><b>'+esc(c.title)+'<span class="tag '+c.lv+'">추천 '+c.lv+'</span></b><span>'+(l?'지난 점수 '+l.t+'점':'아직 연습 전')+'</span></div></button>'; }).join("");
