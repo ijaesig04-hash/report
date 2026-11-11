@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261111112500">
+<meta name="bsr-ver" content="20261111115000">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -6556,8 +6556,9 @@ if(!me) pickView(); else { send(openTag()); sent[window.state?state.tab:"cmp"]=1
   var mv = document.querySelector('meta[name="bsr-ver"]'), mine = mv ? mv.content : "", busy = false, last = 0;
   function check(){
     var now = Date.now(); if(busy || now-last < 20000) return; busy = true; last = now;
-    fetch("./?t="+now, {cache:"no-store"}).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
-      var m = /name="bsr-ver" content="([^"]+)"/.exec(t||""); busy = false;
+    var ac = window.AbortController ? new AbortController() : null, tm = setTimeout(function(){ busy = false; if(ac) ac.abort(); }, 15000);
+    fetch("./?t="+now, ac ? {cache:"no-store", signal:ac.signal} : {cache:"no-store"}).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
+      clearTimeout(tm); var m = /name="bsr-ver" content="([^"]+)"/.exec(t||""); busy = false;
       if(m && mine && m[1] !== mine){
         var b = document.createElement("div");
         b.setAttribute("style","position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translateX(-50%);z-index:95;background:#1f4fd8;color:#fff;border-radius:999px;padding:9px 16px;font:700 13px 'Noto Sans KR',sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.3)");
@@ -6566,7 +6567,7 @@ if(!me) pickView(); else { send(openTag()); sent[window.state?state.tab:"cmp"]=1
         try{ caches.keys().then(function(ks){ var k=ks.filter(function(x){return /^bs-report/.test(x)})[0]; if(!k) return; return caches.open(k).then(function(c){ return c.put(new URL("./",location.href).href, new Response(t,{headers:{"Content-Type":"text/html; charset=utf-8"}})); }); }).then(go, go); }catch(er){ go(); }
         setTimeout(go, 4000);
       }
-    }).catch(function(){ busy = false; offBadge(); });
+    }).catch(function(){ clearTimeout(tm); busy = false; if(navigator.onLine===false) offBadge(); });
   }
   function offBadge(){ if(document.getElementById("offb")) return; var v=(mine||"").replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2}).*/,function(_,y,mo,d,h,mi){ var t=new Date(Date.UTC(+y,+mo-1,+d,+h,+mi)+9*3600000); return (t.getUTCMonth()+1)+'/'+t.getUTCDate()+' '+("0"+t.getUTCHours()).slice(-2)+':'+("0"+t.getUTCMinutes()).slice(-2); });
     var b=document.createElement("div"); b.id="offb"; b.textContent="📴 오프라인 · "+(v?v+" ":"")+"저장본을 보고 있어요"; b.setAttribute("style","position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);transform:translateX(-50%);z-index:95;background:#475569;color:#fff;border-radius:999px;padding:7px 14px;font:700 12px 'Noto Sans KR',sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.25);white-space:nowrap"); document.body.appendChild(b); }
@@ -6574,7 +6575,7 @@ if(!me) pickView(); else { send(openTag()); sent[window.state?state.tab:"cmp"]=1
   window.addEventListener("online", function(){ var b=document.getElementById("offb"); if(b) b.remove(); last=0; check(); });
   if(navigator.onLine===false) offBadge();
   check();
-  setInterval(function(){ if(document.visibilityState==="visible") check(); }, 180000);
+  setInterval(function(){ if(document.visibilityState==="visible") check(); }, 60000);
   document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible") check(); });
   window.addEventListener("focus", check);
   window.addEventListener("pageshow", function(e){ if(e.persisted) check(); });
