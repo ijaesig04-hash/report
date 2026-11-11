@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261112001500">
+<meta name="bsr-ver" content="20261112003500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1151,6 +1151,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .pu-st{display:flex;align-items:center;gap:12px;border-radius:16px;padding:14px 16px;margin:10px 0 8px;border:2px solid}.pu-st span{font-size:28px;line-height:1}.pu-st b{display:block;font-size:17px}.pu-st small{display:block;font-size:12.5px;margin-top:2px;opacity:.85}
 .pu-st.on{background:#e7f8ee;border-color:#22a35a;color:#0f5132}.pu-st.off{background:#f1f3f7;border-color:#c5ccd8;color:#334155}.pu-st.wait{background:#f8fafc;border-color:#e2e8f0;color:#64748b}
 .pu-b{display:block;width:100%;border:0;border-radius:14px;padding:14px;font:800 16px 'Noto Sans KR',sans-serif;cursor:pointer}.pu-b.on{background:#1f4fd8;color:#fff}.pu-b.off{background:#fff;color:#b4151f;border:2px solid #f3c2c8}
+.sh-act{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;margin:-4px 0 10px}.sh-act button{border:0;background:#eef2f8;border-radius:10px;padding:8px 12px;font:700 13px 'Noto Sans KR',sans-serif;cursor:pointer;color:#14213a}
 .oj-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#eef1f6;border-radius:12px;padding:4px;margin:4px 0 12px}.oj-tabs button{border:0;background:transparent;border-radius:9px;padding:10px 4px;font:800 14px 'Noto Sans KR',sans-serif;color:#475569;cursor:pointer}.oj-tabs button[aria-selected="true"]{background:#fff;color:#14275c;box-shadow:0 2px 6px rgba(16,32,80,.15)}
 .rpb{margin:8px 0 2px;background:linear-gradient(135deg,#fff8e6,#fff 70%);border:1px solid #f3d58a;border-radius:16px;padding:12px 14px;-webkit-user-select:none;user-select:none}.rpb[hidden]{display:none}
 .rpb-h{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}.rpb-h b{font-size:15px;color:#7a4e00}.rpb-h small{font-size:11.5px;color:#9a7b3b}
@@ -3729,7 +3730,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
- {id:"2026-11-12a", date:"11/12", title:"메뉴 정리 · 알림 상태 표시", tabs:["home"], items:["📲 업데이트 알림 받기 — 지금 켜져 있는지 꺼져 있는지 크게 보여 주고, 켜기 · 끄기 버튼으로 바로 바꿀 수 있어요","🎓 OJT 진도표와 ✅ 개시 방문 체크를 한 메뉴로 합쳤어요 (이름표 메뉴 → 🎓 OJT · 개시 방문 체크)","🔄 최신 버전 받기를 누구나 쓸 수 있어요 — 화면이 예전 같으면 이름표 메뉴에서 눌러 주세요"]},
+ {id:"2026-11-12a", date:"11/12", title:"메뉴 정리 · 알림 상태 표시", tabs:["home"], items:["📲 업데이트 알림 받기 — 지금 켜져 있는지 꺼져 있는지 크게 보여 주고, 켜기 · 끄기 버튼으로 바로 바꿀 수 있어요","🎓 OJT 진도표와 ✅ 개시 방문 체크를 한 메뉴로 합쳤어요 (이름표 메뉴 → 🎓 OJT · 개시 방문 체크)","🔄 최신 버전 받기를 누구나 쓸 수 있어요 — 화면이 예전 같으면 이름표 메뉴에서 눌러 주세요","🗂️ 이름표 메뉴 정리 — 「한 장 요약 · 월말 결산」, 「업데이트 이력 · 알림 받기」, 「고객처 한눈에 · 불만 위험」을 각각 한 메뉴로 합쳤어요 (위쪽 탭으로 전환)"]},
  {id:"2026-11-11i", date:"11/11", title:"11월 근무표 수정", tabs:["duty"], items:["🗓️ 11월 근무표 수정본 반영 — 김유건 28~30일 야간, 김지원 13일 휴무, 김동현 30일 주간, 남현준 13일 주간·30일 휴무 · 파트장 근무 조정"]},
  {id:"2026-11-11h", date:"11/11", title:"취합건 연동에 순찰방문 현황 추가", tabs:["rep"], items:["🚓 취합건 연동 탭에 「순찰방문 현황」이 생겼어요 — 판넬 · 위험예지 · 순찰방문 3가지","11월(11.01~11.09) 순찰 방문 90회 · 안내 문자 118건 · 근무자별 순위(이름을 누르면 건별 상세) · 전송 실패 5건"]},
  {id:"2026-11-11g", date:"11/11", title:"다발보 11/10 반영", tabs:["alm"], items:["🔁 다발보 11월 (11.01~11.10) — 18곳 · 41건 · 3회 이상: 상계제일중학교신관(28호) 4건 · 비마트도봉쌍문점(27호) 4건 · 서라벌고등학교(160호) 3건","조치 완료 4곳 — 서라벌고 · 상계제일중 · 한국전력공사노원도봉 · 비마트도봉 (11/9~11/10 조치 반영)"]},
@@ -4303,7 +4304,7 @@ function showMonthReport(){
       (function(){ var mv=[]; try{ mv=cheerTop().slice(0,3); }catch(x){} return mv.length ? '<tr><td>MVP 순위 ('+(+cheerMonth().slice(5,7))+'월)</td><td>'+mv.map(function(x){return x.rk+'위 '+x.n}).join(' · ')+'</td></tr>' : ''; })()+
       '<tr><td>다발보 ('+almPeriodOf(almCurM())+')</td><td>고객처 '+gk.length+'곳 · 조치 완료 '+nd+'곳 · 미조치 '+(gk.length-nd)+'곳</td></tr>'+
     '</table><p class="op-f">※ 관리자(파트장)는 개인 평가 대상에서 제외 · 계약처·고객 정보는 일부 가림</p></div>';
-  openSheet(h);
+  openSheet(shTabs(h,"one","mrep"));
 }
 
 function monthText(){
@@ -5327,7 +5328,7 @@ function pushView(){
   var sup = ('serviceWorker' in navigator) && ('PushManager' in window) && window.Notification;
   var st = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
   var msg = !sup ? '이 폰·브라우저는 푸시 알림을 지원하지 않아요.' : !PUSH_URL ? '아직 준비 중이에요 (서버 연결 대기). 연결되면 이 버튼으로 켤 수 있어요.' : (Notification.permission==="denied" ? '알림이 차단되어 있어요. 폰 설정 → 앱 → 북서울 Report → 알림에서 허용해 주세요.' : '');
-  openSheet('<div class="xs-h"><b>📲 업데이트 알림 받기</b><button type="button" data-xs="close">✕</button></div>'+
+  openSheet(shTabs('<div class="xs-h"><b>📲 업데이트 알림 받기</b><button type="button" data-xs="close">✕</button></div>', "hist", "push")+
     '<p class="note">새 지표가 반영되면 앱이 꺼져 있어도 폰 알림이 와요.'+(st?'':' <b>홈 화면에 설치한 앱</b>으로 열었을 때 켜세요.')+'</p>'+
     (msg?'<div class="pu-st off"><span>⚠️</span><div><b>사용할 수 없어요</b><small>'+msg+'</small></div></div>':'<div id="pu-st" class="pu-st wait"><span>⏳</span><div><b>상태 확인 중…</b></div></div><div id="pu-bt"></div>')+
     '<div id="pushres" class="note"></div>'+(mgrIs()&&myName()==="이재식"&&PUSH_URL?'<div id="pushwho" class="note">알림 켠 직원 불러오는 중…</div>':''));
@@ -5498,7 +5499,7 @@ document.addEventListener("click", function(e){ if(e.target.closest("[data-wkcp]
 
 /* ===== 🔍 고객처 통합 검색 ===== */
 function findView(q){
-  openSheet('<div class="xs-h"><b>🔍 고객처 검색</b><button type="button" data-xs="close">✕</button></div><input id="fd-q" class="fd-q" placeholder="고객처 이름 일부 (예: 우리은행, 월계)" value="'+esc2(q||'')+'" autocomplete="off"><div id="fd-r">'+findRes(q||'')+'</div>');
+  openSheet(shTabs('<div class="xs-h"><b>🔍 고객처 한눈에</b><button type="button" data-xs="close">✕</button></div>',"find","find")+'<input id="fd-q" class="fd-q" placeholder="고객처 이름 일부 (예: 우리은행, 월계)" value="'+esc2(q||'')+'" autocomplete="off"><div id="fd-r">'+findRes(q||'')+'</div>');
   setTimeout(function(){ var i=document.getElementById("fd-q"); if(i){ i.focus(); var v=i.value; i.value=''; i.value=v; } },50);
 }
 function findRes(q){
@@ -5543,7 +5544,7 @@ var GUIDE = [
  ["📲","앱처럼 설치하기","안드로이드: 크롬으로 주소를 열고 ⋮ → 「앱 설치」(또는 홈 화면에 추가)\n아이폰: 사파리로 열고 공유 → 「홈 화면에 추가」\n설치한 아이콘으로 열면 주소창 없이 앱처럼 열려요."],
  ["👤","처음 한 번 — 이름 고르기","처음 열면 「누구신가요?」 화면이 나와요. 내 이름을 고르고 시작하면 돼요.\n나중에 바꾸려면 오른쪽 위 이름 버튼 → 「이름 바꾸기」."],
  ["🏠","화면 위 탭으로 이동","브리핑 — 오늘 꼭 볼 것 · 공지 · 내 할 일\n지사별 — 사업팀 지사끼리 비교\n차량별 · 개인별 — 차량·개인 달성 현황과 순위\n월별 평가 — 월별 점수 순위 (이름을 누르면 월별 항목 점수)\n고객체감 — 해피콜 발송·응답·만족도\n발보관리 · 관리지표 · 근무표 · 운전성향 · 취합건 연동"],
- ["🔔","새 소식 알림","설치한 앱에서 이름 버튼 → 「업데이트 알림 받기」 → 알림 켜기 → 허용.\n새 지표·자료가 반영될 때만 알림이 와요. 기능 소식은 「업데이트 이력」에서 볼 수 있어요."],
+ ["🔔","새 소식 알림","설치한 앱에서 이름 버튼 → 「업데이트 이력 · 알림 받기」 → 📲 알림 받기 → 알림 켜기 → 허용.\n새 지표·자료가 반영될 때만 알림이 와요. 기능 소식은 「업데이트 이력」에서 볼 수 있어요."],
  ["🛡️","고객께 상품 보내기","이름 버튼 → 「에스원 상품 추천」. 카톡 보내기 / 메일 만들기에서 카드를 고르고 보내요.\n내 이름·연락처·사원번호가 자동으로 들어가고, 고객이 구매할 때 사원번호를 입력하면 10% 추가 할인이에요."],
  ["📢","공지 · 경조사","이름 버튼 → 「공지 · 경조사 · 매뉴얼 보기」에서 지난 공지와 경조사를 다시 볼 수 있어요."],
  ["💡","막힐 때","이름 버튼 → 「사용 안내 · 도움말」에서 검색하세요. 화면이 옛날 것 같으면 앱을 완전히 닫았다 다시 열어요."]
@@ -5564,7 +5565,7 @@ document.addEventListener("click", function(e){
 });
 /* ===== 💡 현장 도움말 — 기본 항목 + 관리자가 앱에서 추가 (help|) ===== */
 var HELP = [
- ["앱","업데이트 알림 켜기","이름표 메뉴 → 📲 업데이트 알림 받기 → 🔔 알림 켜기 → 허용\n설치한 앱에서 켜야 해요. 아이폰은 iOS 16.4 이상, 홈 화면 앱에서만 돼요.",["push","📲 알림 켜기 열기"]],
+ ["앱","업데이트 알림 켜기","이름표 메뉴 → 📜 업데이트 이력 · 알림 받기 → 📲 알림 받기 → 🔔 알림 켜기 → 허용\n설치한 앱에서 켜야 해요. 아이폰은 iOS 16.4 이상, 홈 화면 앱에서만 돼요.",["push","📲 알림 켜기 열기"]],
  ["앱","아이콘 숫자(알림)가 안 없어져요","앱을 열고 그 소식이 있는 탭(예: 고객체감)을 한 번 누르면 알림이 지워지고 숫자도 줄어요. 공지 다시 알림은 공지에서 [확인했습니다]를 눌러야 지워져요."],
  ["앱","화면이 예전 그대로예요","앱을 완전히 닫았다가 다시 여세요. 새 버전은 자동으로 받아져요. 그래도 같으면 관리자에게 말해 주세요."],
  ["앱","글씨가 작아요","이름표 메뉴 → 🔠 글자 크게 / 원래대로"],
@@ -5662,7 +5663,7 @@ function riskList(){
 function riskView(){
   var L = riskList(), lo = CSR.filter(function(r){return r[5]!=null && r[5]<=8}), md = function(x){ return (+x.slice(0,2))+'/'+(+x.slice(3)); };
   var lb = {r:'🔴 높음', o:'🟠 주의', y:'🟡 관찰'};
-  openSheet('<div class="xs-h"><b>⚠️ 불만 위험 고객처</b><button type="button" data-xs="close">✕</button></div>'+
+  openSheet(shTabs('<div class="xs-h"><b>⚠️ 불만 위험 고객처</b><button type="button" data-xs="close">✕</button></div>',"find","risk")+
     '<p class="xs-p">발보가 반복되거나 조치가 안 된 곳, 해피콜 점수가 낮은 곳이에요. 해약 전에 먼저 연락 · 방문할 곳을 고르는 데 쓰세요. (다발보 자료 '+(function(){ var d=ALM.multi.rows.map(function(r){return r[2]}).sort(); return d.length?md(d[0])+' ~ '+md(d[d.length-1]):'-'; })()+' · 미조치는 위험도를 높게 봐요)</p>'+
     '<div class="xs-h" style="margin-top:8px"><b>📞 해피콜 8점 이하</b></div>'+(lo.length ? lo.map(function(r){ return '<div class="rk-i"><div class="rk-h"><b>'+esc2(r[9])+'</b><span class="rk-l r">'+r[5]+'점</span></div><small>'+esc2(r[0])+' · '+md(r[2])+' 발송'+(r[7]?' · “'+esc2(r[7])+'”':'')+'</small></div>'; }).join('') : '<p class="xs-p">없음 👍 — 응답한 고객은 모두 9~10점이에요.</p>')+
     '<div class="xs-h" style="margin-top:8px"><b>🔁 발보 반복 고객처 '+L.length+'곳</b></div>'+
@@ -6023,11 +6024,22 @@ function openSheet(html){
 }
 var NH_DATA = {cmp:1,veh:1,ppl:1,mgt:1,eval:1,cs:1,alm:1,drv:1,duty:1}, NH_F = "", NH_N = 20;
 function nhKind(n){ return (n.tabs||[]).some(function(t){return NH_DATA[t]}) ? "data" : "func"; }
+/* 두 화면을 한 메뉴로 — 창 머리글 아래 두 칸 탭 */
+var SH_TABS = { find:[["find","🔍 고객처 한눈에"],["risk","⚠️ 불만 위험 고객처"]], one:[["one","🖨️ 한 장 요약"],["mrep","🧾 월말 결산"]], hist:[["hist","📜 업데이트 이력"],["push","📲 알림 받기"]] };
+function shTabs(h, grp, cur){
+  var i = h.indexOf('<div class="xs-h'), j = i<0 ? -1 : h.indexOf('</div>', i); if(j<0) return h;
+  var t = '<div class="oj-tabs noprint" role="tablist">'+SH_TABS[grp].map(function(x){ return '<button type="button" role="tab" data-shtab="'+x[0]+'" aria-selected="'+(x[0]===cur)+'">'+x[1]+'</button>'; }).join('')+'</div>';
+  var hd = h.slice(i, j+6), act = "", cl = '<button type="button" data-xs="close">✕</button>', m = /<span>([\s\S]*)<\/span>/.exec(hd);
+  if(m && m[1].indexOf(cl)>=0 && m[1].replace(cl,"").trim()){ act = '<div class="sh-act noprint">'+m[1].replace(cl,"")+'</div>'; hd = hd.replace(m[0], cl); }
+  return h.slice(0, i) + hd + t + act + h.slice(j+6);
+}
+document.addEventListener("click", function(e){ var b=e.target.closest("[data-shtab]"); if(!b) return; var k=b.dataset.shtab;
+  if(k==="find") findView(""); else if(k==="risk") riskView(); else if(k==="one") showOnePage(); else if(k==="mrep") showMonthReport(); else if(k==="hist") showHistory("",0); else if(k==="push") pushView(); });
 function showHistory(f, more){
   if(f!=null) NH_F = f; NH_N = more ? NH_N+20 : 20;
   var L = NEWS.filter(function(n){ return !NH_F || nhKind(n)===NH_F; }), V = L.slice(0, NH_N);
   var cnt = function(k){ return NEWS.filter(function(n){ return !k || nhKind(n)===k; }).length; };
-  openSheet('<div class="xs-h"><b>📜 업데이트 이력</b><button type="button" data-xs="close">✕</button></div>'+
+  openSheet(shTabs('<div class="xs-h"><b>📜 업데이트 이력</b><button type="button" data-xs="close">✕</button></div>', "hist", "hist")+
     '<div class="nh-f">'+[["","전체"],["data","📊 지표·자료"],["func","🛠️ 기능·화면"]].map(function(c){ return '<button type="button" class="'+(NH_F===c[0]?'on':'')+'" data-nhf="'+c[0]+'">'+c[1]+' <small>'+cnt(c[0])+'</small></button>'; }).join('')+'</div>'+
     '<p class="note">📊 지표·자료 소식만 폰 알림으로 와요 · 🛠️ 기능·화면 소식은 앱 안에서만 보여요 (최근 2주)</p>'+
     V.map(function(n){ var d = nhKind(n)==="data";
@@ -6053,7 +6065,7 @@ function showOnePage(){
       (mg0?'<tr><td>무사고</td><td colspan="4">차량 '+mg0.carDays+'일 · 안전 '+mg0.safeDays+'일 ('+t.slice(5)+' 기준)</td></tr>':'')+
       (dl?'<tr><td>운전성향 ('+dk.slice(5)+')</td><td colspan="4">양호 '+dl.filter(function(r){return r[3]==="양호"}).length+' · 주의 '+dl.filter(function(r){return r[3]==="주의"}).length+' · 위험 '+dl.filter(function(r){return r[3]==="위험"}).length+'</td></tr>':'')+
     '</table></div>';
-  openSheet(h);
+  openSheet(shTabs(h,"one","one"));
 }
 function noticeText(){
   var n = NEWS.slice(0,4);
@@ -6355,7 +6367,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 응대 연습</button><button type="button" data-vl="find">🔍 고객처 한눈에 보기</button><button type="button" data-vl="risk">⚠️ 불만 위험 고객처</button><button type="button" data-vl="ojt">🎓 OJT · 개시 방문 체크</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="push">📲 업데이트 알림 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 응대 연습</button><button type="button" data-vl="find">🔍 고객처 한눈에 · 불만 위험</button><button type="button" data-vl="ojt">🎓 OJT · 개시 방문 체크</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📜 업데이트 이력 · 알림 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 · 월말 결산</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
@@ -6628,7 +6640,7 @@ function vlPushWho(){
         y.map(function(x){ return '<div class="vl-row"><span class="vl-dot"></span>'+esc(x)+'<em>🔔 받음</em></div>'; }).join('')+
         n.map(function(x){ return '<div class="vl-row"><span class="vl-dot off"></span>'+esc(x)+'<em>못 받음</em></div>'; }).join('')+'</details>'; }).join('');
     el.innerHTML='<h3>🔔 알림 받는 직원<small>'+yes+' / '+tot+'명</small></h3>'+body+
-      '<p class="note" style="margin:8px 2px 0">못 받는 직원은 설치한 앱에서 이름 버튼 → 「업데이트 알림 받기」를 켜야 해요. 폰을 바꾸거나 앱을 지우면 받음으로 보여도 실제로는 안 갈 수 있어요.</p>';
+      '<p class="note" style="margin:8px 2px 0">못 받는 직원은 설치한 앱에서 이름 버튼 → 「업데이트 이력 · 알림 받기」 → 📲 알림 받기를 켜야 해요. 폰을 바꾸거나 앱을 지우면 받음으로 보여도 실제로는 안 갈 수 있어요.</p>';
   }).catch(function(){ var el=document.getElementById("vlpush"); if(el) el.innerHTML='<h3>🔔 알림 받는 직원</h3><div class="vl-row">목록을 불러오지 못했어요.</div>'; });
 }
 chip.addEventListener("click", function(e){ e.stopPropagation(); var adm = MGRS.indexOf(me)>=0;   /* 관리자 메뉴는 관리자 이름을 고른 경우에만 (PIN이 저장된 폰이라도 직원 이름이면 숨김) */ menu.querySelectorAll(".vl-adm").forEach(function(x){ x.hidden = !adm; }); menu.hidden = !menu.hidden; });
