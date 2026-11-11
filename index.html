@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261111133000">
+<meta name="bsr-ver" content="20261111132500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -375,6 +375,8 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .srcsw .src .src-v{font-size:25px}
 .is-pat .chips .chip[aria-pressed="true"]{background:#0d9488;border-color:#0d9488}
 .pt-fail{display:flex;justify-content:space-between;gap:8px;padding:8px 2px;border-top:1px solid var(--line);font-size:13px}.pt-fail:first-child{border-top:0}.pt-fail em{font-style:normal;color:var(--bad);font-weight:700;white-space:nowrap}
+.pt-rk{cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}.pt-rk.on{background:color-mix(in srgb,#0d9488 7%,transparent)}.pt-ar{font-style:normal;font-size:10px;color:#0d9488;margin-left:4px}
+.pt-det{grid-column:1/-1;margin-top:8px;border-top:1px dashed color-mix(in srgb,#0d9488 40%,var(--line));padding-top:4px}.pt-dr{display:grid;grid-template-columns:auto 1fr;column-gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}.pt-dr:last-child{border-bottom:0}.pt-dr span{color:#0d9488;font-weight:700;grid-row:span 2}.pt-dr small{color:var(--muted);font-size:11.5px}.pt-dr em{font-style:normal;color:var(--bad);font-weight:700}
 .pt-site{display:flex;align-items:center;gap:8px;padding:8px 2px;border-top:1px solid var(--line);font-size:13.5px}.pt-site:first-child{border-top:0}.pt-site b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pt-site small{color:var(--muted);font-size:11.5px}.pt-site i{font-style:normal;font-weight:800;color:#0d9488}
 .src{--sc:var(--accent);position:relative;text-align:left;border:1.5px solid color-mix(in srgb,var(--sc) 30%,var(--line));border-radius:16px;padding:12px 12px 11px;
   background:linear-gradient(135deg,color-mix(in srgb,var(--sc) 9%,var(--surface)),var(--surface) 70%);cursor:pointer;display:flex;flex-direction:column;gap:2px;min-width:0;box-shadow:var(--shadow)}
@@ -2336,7 +2338,7 @@ function patrolSection(per, ym, prevYm, perLabel){
   var inPer = function(d){ return per==="month" ? d.slice(0,7)===ym : per==="prev" ? d.slice(0,7)===prevYm : true; };
   var rows = PATROL.rows.filter(function(r){ return inPer(r[0]); });
   var V = {}, vl = [];
-  rows.forEach(function(r){ var k=r[0]+'|'+r[1]+'|'+r[2]+'|'+r[4]; if(!V[k]){ V[k]={d:r[0],car:r[1],site:r[2],ind:r[3],cs:r[5],m:0,f:0}; vl.push(V[k]); } V[k].m++; if(r[6]) V[k].f++; });
+  rows.forEach(function(r){ var k=r[0]+'|'+r[1]+'|'+r[2]+'|'+r[4]; if(!V[k]){ V[k]={d:r[0],car:r[1],site:r[2],ind:r[3],t:r[4],cs:r[5],m:0,f:0}; vl.push(V[k]); } V[k].m++; if(r[6]) V[k].f++; });
   var roster = PPL.map(function(p){return p.name}), by = {}; roster.forEach(function(n){ by[n]={name:n,v:0,m:0}; });
   vl.forEach(function(x){ if(!by[x.cs]) by[x.cs]={name:x.cs,v:0,m:0}; by[x.cs].v++; by[x.cs].m+=x.m; });
   var list = Object.keys(by).map(function(k){return by[k]}).sort(function(a,b){ return b.v-a.v || b.m-a.m || a.name.localeCompare(b.name,"ko"); });
@@ -2344,8 +2346,11 @@ function patrolSection(per, ym, prevYm, perLabel){
   var fails = rows.filter(function(r){return r[6]});
   var rk=0, last=-1;
   var rl = list.map(function(x,i){ if(x.v!==last){rk=i+1; last=x.v;}
-    return '<div class="rk"><span class="n">'+(x.v?rbs(rk):'')+'</span><span class="t">'+x.name+'</span>'+(x.v?'<b class="r plain">'+x.v+'회</b>':'<span class="pl bad">0회</span>')+
-      '<div class="bl"><i class="ac" style="width:'+(x.v/max*100)+'%;background:#0d9488"></i></div><span class="s num">문자 '+x.m+'건</span></div>'; }).join("");
+    var op = x.v && state.ptn===x.name;
+    var det = op ? '<div class="pt-det">'+vl.filter(function(v){return v.cs===x.name}).sort(function(a,b){return (a.d+a.t)<(b.d+b.t)?-1:1}).map(function(v){
+        return '<div class="pt-dr"><span class="num">'+(+v.d.slice(5,7))+'/'+(+v.d.slice(8))+' '+v.t+'</span><b>'+v.site+'</b><small>'+v.car+'호 · '+v.ind+' · 문자 '+v.m+'건'+(v.f?' · <em>실패 '+v.f+'</em>':'')+'</small></div>'; }).join('')+'</div>' : '';
+    return '<div class="rk'+(x.v?' pt-rk':'')+(op?' on':'')+'"'+(x.v?' data-ptn="'+x.name+'" role="button"':'')+'><span class="n">'+(x.v?rbs(rk):'')+'</span><span class="t">'+x.name+(x.v?' <i class="pt-ar">'+(op?'▲':'▼')+'</i>':'')+'</span>'+(x.v?'<b class="r plain">'+x.v+'회</b>':'<span class="pl bad">0회</span>')+
+      '<div class="bl"><i class="ac" style="width:'+(x.v/max*100)+'%;background:#0d9488"></i></div><span class="s num">문자 '+x.m+'건'+(x.v&&!op?' · 눌러서 상세':'')+'</span>'+det+'</div>'; }).join("");
   /* 최근 14일 (자료 기준일까지) */
   var end = PATROL.asof, days = []; for(var i=13;i>=0;i--) days.push(addDays(end,-i));
   var dm = {}; PATROL.rows.forEach(function(r){}); vl.forEach(function(x){ dm[x.d]=(dm[x.d]||0)+1; });
@@ -2365,8 +2370,7 @@ function patrolSection(per, ym, prevYm, perLabel){
       '<div class="card tile"><h3>참여 인원</h3><div class="v">'+act+'<small>/'+roster.length+'명</small></div></div>'+
     '</div><p class="note">'+perLabel+' 기준 · 자료 '+PATROL.period+' · 방문 1회 = 같은 고객처에 같은 시각 보낸 문자 묶음'+(fails.length?' · 전송 실패 '+fails.length+'건':'')+'</p></div>'+
     '<div class="sec"><h2>최근 14일 <span>순찰 방문 횟수</span></h2><div class="card trend">'+bars+'</div></div>'+
-    '<div class="sec"><h2>근무자별 '+perLabel+' <span>방문 많은 순</span></h2><div class="card">'+rl+'</div></div>'+
-    '<div class="sec"><h2>많이 방문한 고객처 <span>상위 '+Math.min(8,so.length)+'곳</span></h2><div class="card">'+sites+'</div></div>'+
+    '<div class="sec"><h2>근무자별 '+perLabel+' <span>이름을 누르면 건별 상세</span></h2><div class="card">'+rl+'</div></div>'+
     (fails.length?'<div class="sec"><h2>문자 전송 실패 <span>고객 연락처 확인 필요</span></h2><div class="card">'+fl+'</div></div>':'');
 }
 function addDays(d,n){var t=new Date(d+"T00:00:00Z");t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10)}
@@ -3717,7 +3721,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
- {id:"2026-11-11h", date:"11/11", title:"취합건 연동에 순찰방문 현황 추가", tabs:["rep"], items:["🚓 취합건 연동 탭에 「순찰방문 현황」이 생겼어요 — 판넬 · 위험예지 · 순찰방문 3가지","11월(11.01~11.09) 순찰 방문 90회 · 안내 문자 118건 · 근무자별 순위 · 많이 방문한 고객처 · 전송 실패 5건"]},
+ {id:"2026-11-11h", date:"11/11", title:"취합건 연동에 순찰방문 현황 추가", tabs:["rep"], items:["🚓 취합건 연동 탭에 「순찰방문 현황」이 생겼어요 — 판넬 · 위험예지 · 순찰방문 3가지","11월(11.01~11.09) 순찰 방문 90회 · 안내 문자 118건 · 근무자별 순위(이름을 누르면 건별 상세) · 전송 실패 5건"]},
  {id:"2026-11-11g", date:"11/11", title:"다발보 11/10 반영", tabs:["alm"], items:["🔁 다발보 11월 (11.01~11.10) — 18곳 · 41건 · 3회 이상: 상계제일중학교신관(28호) 4건 · 비마트도봉쌍문점(27호) 4건 · 서라벌고등학교(160호) 3건","조치 완료 4곳 — 서라벌고 · 상계제일중 · 한국전력공사노원도봉 · 비마트도봉 (11/9~11/10 조치 반영)"]},
  {id:"2026-11-11f", date:"11/11", title:"고객체감 11/11 업데이트", tabs:["cs"], items:["📞 고객체감 11/11 기준 — 발송 241건 · 응답 78건 · 만족도 9.96"]},
  {id:"2026-11-11e", date:"11/11", title:"운전성향 11/11 업데이트", tabs:["drv"], items:["🚗 운전성향 11/11 기준 반영 — 김태건 주의(40건, 하루 평균 5.7), 그 외 양호"]},
@@ -6089,6 +6093,7 @@ document.getElementById("view").addEventListener("click",function(e){   var dsw 
   else if(e.target.closest("[data-dm]")){ state.dm = e.target.closest("[data-dm]").dataset.dm; state.dd = 0; state.dwk=""; render(); goDp(); }
   else if(e.target.closest("[data-dd]")){ state.dd = +e.target.closest("[data-dd]").dataset.dd; render(); }
   else if(rsb){ state.rs = rsb.dataset.rs; render(); }
+  else if(e.target.closest("[data-ptn]")){ var ptn=e.target.closest("[data-ptn]").dataset.ptn; state.ptn = state.ptn===ptn?"":ptn; renderQuiet(); }
   else if(e.target.closest("[data-bm]")){ state.bm = e.target.closest("[data-bm]").dataset.bm; render(); }
   else if(e.target.closest("[data-bp]")){ state.bp = e.target.closest("[data-bp]").dataset.bp; render(); }
   else if(e.target.closest("[data-es]")){ state.es = e.target.closest("[data-es]").dataset.es; render(); }
