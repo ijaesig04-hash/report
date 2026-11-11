@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261111094500">
+<meta name="bsr-ver" content="20261111100000">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2905,7 +2905,7 @@ function viewSal(){
   return '<div class="sec"><div class="sal-h"><span style="font-size:30px">💼</span><span><b>영업 메뉴</b><small>영업에 필요한 메뉴를 한곳에 모았어요</small></span></div>'+
     '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>'+
     '<div class="sal-g">'+c("directmall.html#kakao","💬","카톡으로 상품 홍보","카드 20종 · 버튼 하나로 바로 보내기")+c("directmall.html","✉️","메일로 상품 홍보","메일형 20종 + 카드형 20종")+
-    c("https://s1directmall.co.kr/","🛒","에스원 다이렉트몰","상품 · 가격 바로 보기")+'<button type="button" class="sal-c" data-goto="cs"><i>📞</i><b>내 고객체감</b><small>해피콜 발송 · 응답 · 만족도</small></button><button type="button" class="sal-c" data-ptopen="1"><i>🗺️</i><b>담당구역 출동차량 조회</b><small>우리 구역에 누가 출동하나</small></button><button type="button" class="sal-c sal-rp" data-rpopen="1"><i>🎧</i><b>AI 응대 연습</b><small>AI 고객과 말로 연습 · 점수 받기</small></button></div>'+
+    c("https://s1directmall.co.kr/","🛒","에스원 다이렉트몰","상품 · 가격 바로 보기")+'<button type="button" class="sal-c" data-goto="cs"><i>📞</i><b>내 고객체감</b><small>해피콜 발송 · 응답 · 만족도</small></button><button type="button" class="sal-c" data-ptopen="1"><i>🗺️</i><b>담당구역 출동차량 조회</b><small>우리 구역에 누가 출동하나</small></button><button type="button" class="sal-c sal-rp" data-rpopen="sales"><i>🎧</i><b>AI 영업 상담 연습</b><small>AI 고객과 말로 연습 · 점수 받기</small></button></div>'+
     '<div class="sal-tip"><span style="font-size:22px">🎁</span><span>고객이 다이렉트몰에서 구매할 때 담당자 <b>사원번호</b>를 입력하면 <b>10% 추가 할인</b>이 돼요</span></div></div>';
 }
 function prodLink(){ return '<a class="dh-prod" href="'+PROD_URL+'"><i>🛡️</i><span>에스원 상품 추천 <small style="font-weight:600;color:#8a5a66;font-size:11px">카톡 · 메일 홍보</small></span><em>열기 ›</em></a>'; }   /* 지사 영업일보 (지사장님 운영 · 로그인 필요) */
@@ -3662,7 +3662,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
- {id:"2026-11-11d", date:"11/11", title:"nopush:🎧 AI 응대 연습", tabs:["home"], items:["브리핑 화면 중간의 🎧 AI 응대 연습 카드(또는 이름 버튼 메뉴)에서 AI 고객과 말로 응대를 연습하고 점수·개선점을 받아요","고객 불만 10가지 · 영업 상담 2가지 상황을 난이도별로 연습할 수 있어요. 시범 운영 중이에요"]},
+ {id:"2026-11-11d", date:"11/11", title:"nopush:🎧 AI 응대 연습", tabs:["home"], items:["브리핑 화면 중간의 🎧 AI 응대 연습 카드(또는 이름 버튼 메뉴)에서 AI 고객과 말로 응대를 연습하고 점수·개선점을 받아요","고객 불만 10가지 · 영업 상담 7가지 상황을 난이도별로 연습할 수 있어요. 시범 운영 중이에요"]},
  {id:"2026-11-10m", only:"지사장,서비스팀장,최문혁,이재식,용승우,고혁진,김유건,주상덕,유영민,김민석,김태건,김지원,양심영,박수안,권재원,김민수,김동현,이명섭,남현준", alert:1, date:"11/10", title:"⚡ [긴급] 11/11~12 한전 무인변전소 게릴라 점검 — 지적사항 없도록 각별히 주의", tabs:["home"], items:["11/11(수)~12(목) 한국전력 무인변전소 긴급출동 게릴라 점검 테스트가 예고 없이 진행돼요","모든 변전소 신호는 실제 상황처럼 즉시 출동 · 도착/조치/종료 보고 누락 없이","복장 · 안전장비 · 출입 절차 준수, 안전 운전","지적사항이 나오지 않도록 각별히 주의해 주세요 — 서비스팀장 원종범"]},
  {id:"2026-11-10l", only:"이재식", date:"11/10", title:"⚡ 한전 게릴라 점검 긴급 공지 자료", tabs:["home"], items:["공지 올리기 → 분류 중요이슈 · 서비스 → 자료 첨부 「⚡ 한전 게릴라 점검」 → 보내는 이름은 자동으로 원종범"]},
  {id:"2026-11-10k", date:"11/10", title:"nopush:📖 사용 안내 · 도움말 하나로", tabs:["home"], items:["처음 이용 안내와 현장 도움말을 한 메뉴로 합쳤어요 — 이름 버튼 → 📖 사용 안내 · 도움말"]},
@@ -7123,7 +7123,7 @@ document.addEventListener("visibilitychange", function(){ if(document.visibility
 <script>
 /* 🗺️ 담당구역 출동차량 조회 (미니) — 별도 페이지를 작은 창으로 띄움 */
 function ptOpen(){ location.href="patrol.html?from=report"; }
-document.addEventListener('click', function(e){ if(e.target.closest('[data-rpopen]')){ var m=document.getElementById('vlmenu'); if(m) m.hidden=true; location.href='roleplay.html?from=report'; } });
+document.addEventListener('click', function(e){ if(e.target.closest('[data-rpopen]')){ var m=document.getElementById('vlmenu'); if(m) m.hidden=true; var rb=e.target.closest('[data-rpopen]'); location.href='roleplay.html?from='+(rb.getAttribute('data-rpopen')==='sales'?'sales':'report'); } });
 document.addEventListener('click', function(e){ if(e.target.closest('[data-ptopen]')){ var m=document.getElementById('vlmenu'); if(m) m.hidden=true; ptOpen(); } });
 </script>
 <style>
