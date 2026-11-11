@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="roster-ver" content="2026-11-11c">
 <meta charset="utf-8">
 <title>지사 근무편성 대시보드</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -1294,7 +1294,16 @@ async function exportExcel(){
 function colL(n){var s='';while(n>0){var m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26);}return s;}
 
 // ================= 시작 =================
+// 항상 최신 버전으로: 내려받은 html(file://)은 웹 최신본으로 이동, 웹 버전은 새 버전이 올라오면 자동 새로고침
+var WEB_URL='https://ijaesig04-hash.github.io/report/roster.html',BUILD='2026-11-11c';
+function autoLatest(){try{
+  var here=location.href.split(/[?#]/)[0];
+  if(location.protocol==='file:'){fetch(WEB_URL+'?t='+Date.now(),{cache:'no-store'}).then(function(r){if(r.ok)location.replace(WEB_URL+'?t='+Date.now());}).catch(function(){});return;}
+  if(here===WEB_URL){fetch(WEB_URL+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():'';}).then(function(t){var m=/name="roster-ver" content="([^"]+)"/.exec(t);if(!m||m[1]===BUILD)return;
+    var k='roster.reload.'+m[1];try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');}catch(e){}location.replace(WEB_URL+'?t='+Date.now());}).catch(function(){});}
+}catch(e){}}
 async function boot(){
+  autoLatest();
   var c=window.claude;
   if(c&&c.use)c.use('downloads').then(function(d){S.downloads=d;}).catch(function(){});
   await connectDb(false);
