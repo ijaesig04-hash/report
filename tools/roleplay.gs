@@ -16,6 +16,8 @@ function doPost(e) {
 function doGet(e) {
   const p = (e && e.parameter) || {};
   if (p.action === 'ping') return out({ ok: true });   // 앱을 열 때 미리 깨워 두기 (첫 대답이 빨라짐)
+  if (p.action === 'board') return out(board());                       // 이달 순위 (이름·평균·횟수만)
+  if (p.action === 'me') return out(mine(String(p.name || '').slice(0, 10)));   // 내 항목별 평균 (약한 항목 추천용)
   if (p.action === 'rows') {
     if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
     return out({ ok: true, rows: rows(600) });
@@ -138,7 +140,8 @@ function evaluate(d) {
   const sys = '당신은 보안회사 고객응대 코치입니다. 아래 연습 통화에서 "직원"의 응대를 평가하세요.\n상황: ' + String(sc.title || '') + ' / 난이도 ' + (d.level || '중') + '\n' +
     '항목(각 0~100점): 공감·사과(감정을 먼저 받아 주고 진심으로 사과했는가), 원인 설명(왜 그런지 쉽고 정확하게 설명했는가), 해결책 제시(구체적이고 실행 가능한 다음 단계를 말했는가), 해지 방어(해지·불만을 존중하면서 계속 이용할 이유와 대안을 제시했는가). ' +
     '직원이 거의 말하지 않았으면 낮게 주세요. 잘한 점과 개선할 점은 각각 2~3개, 한 줄씩 쉬운 말로. 마지막에 "이렇게 말해 보세요" 예시 한마디(60자 이내).\n' +
-    '반드시 JSON만: {"scores":{"공감·사과":0,"원인 설명":0,"해결책 제시":0,"해지 방어":0},"good":["..."],"improve":["..."],"example":"..."}';
+    '또 모범 답안 비교: 직원이 실제로 한 말 중 가장 아쉬운 것 2~3개를 골라(원문 그대로, 40자 이내로 줄여도 됨) 각각 더 좋은 말(60자 이내, 실제 현장에서 바로 쓸 수 있는 존댓말)로 바꿔 주세요.\n' +
+    '반드시 JSON만: {"scores":{"공감·사과":0,"원인 설명":0,"해결책 제시":0,"해지 방어":0},"good":["..."],"improve":["..."],"example":"...","pairs":[{"me":"직원이 한 말","better":"이렇게 말하면 더 좋아요"}]}';
   const r = gemini(sys, [{ role: 'user', parts: [{ text: talk || '(대화 없음)' }] }], 1200);
   const s = r.scores || {};
   const k = ['공감·사과', '원인 설명', '해결책 제시', '해지 방어'];
@@ -152,12 +155,37 @@ function evaluate(d) {
       const vals = sh.getRange(Math.max(2, n - 300), 1, Math.min(300, n - 1), 5).getValues();
       for (let i = vals.length - 1; i >= 0; i--) { if (vals[i][1] === name) { prev = Number(vals[i][4]); break; } }
     }
+    try { CacheService.getScriptCache().remove('board'); } catch (e) {}
     sh.appendRow([new Date(), name, String(sc.id || ''), String(d.level || ''), total, v[0], v[1], v[2], v[3], Number(d.turns) || 0]);
   }
   return { ok: true, total: total, scores: { '공감·사과': v[0], '원인 설명': v[1], '해결책 제시': v[2], '해지 방어': v[3] },
-    good: (r.good || []).slice(0, 3), improve: (r.improve || []).slice(0, 3), example: String(r.example || ''), prev: prev };
+    good: (r.good || []).slice(0, 3), improve: (r.improve || []).slice(0, 3), example: String(r.example || ''), prev: prev,
+    pairs: (r.pairs || []).slice(0, 3).map(function (x) { return { me: String(x.me || '').slice(0, 80), better: String(x.better || '').slice(0, 120) }; }).filter(function (x) { return x.me && x.better; }) };
 }
 
+/* 이달(한국 시간) 이름별 평균 점수 — 브리핑 '이달의 응대왕'용. 10분 동안 기억해 둠 */
+function board() {
+  const c = CacheService.getScriptCache(), hit = c.get('board');
+  if (hit) return JSON.parse(hit);
+  const ym = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM'), by = {};
+  rows(800).forEach(function (r) {
+    if (!r.name || Utilities.formatDate(new Date(r.t), 'Asia/Seoul', 'yyyy-MM') !== ym) return;
+    const b = by[r.name] || (by[r.name] = { name: r.name, sum: 0, n: 0, best: 0 });
+    b.sum += Number(r.total) || 0; b.n++; b.best = Math.max(b.best, Number(r.total) || 0);
+  });
+  const list = Object.keys(by).map(function (k) { const b = by[k]; return { name: b.name, avg: Math.round(b.sum / b.n), n: b.n, best: b.best }; })
+    .sort(function (a, b) { return b.avg - a.avg || b.n - a.n; });
+  const o = { ok: true, ym: ym, list: list };
+  c.put('board', JSON.stringify(o), 600);
+  return o;
+}
+/* 한 사람의 최근 10번 항목별 평균 */
+function mine(name) {
+  if (!name) return { ok: false, err: 'name' };
+  const my = rows(800).filter(function (r) { return r.name === name; }).slice(-10);
+  const avg = [0, 1, 2, 3].map(function (i) { return my.length ? Math.round(my.reduce(function (a, r) { return a + (Number(r.s[i]) || 0); }, 0) / my.length) : null; });
+  return { ok: true, n: my.length, avg: avg, done: my.map(function (r) { return r.sc; }) };
+}
 function sheet() {
   let id = P.getProperty('SHEET_ID'), ss;
   if (id) { try { ss = SpreadsheetApp.openById(id); } catch (e) { ss = null; } }

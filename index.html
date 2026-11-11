@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261111183000">
+<meta name="bsr-ver" content="20261111204000">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1148,6 +1148,9 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .hd-w{display:flex;gap:6px;margin-top:7px}.hd-w input{flex:1;min-width:0;border:1px solid #cbd5e1;border-radius:10px;padding:8px;font:500 13px "Noto Sans KR",sans-serif}
 .hd-w button{border:0;background:#334155;color:#fff;border-radius:10px;padding:0 13px;font:800 12.5px "Noto Sans KR",sans-serif;cursor:pointer}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.rpb{margin:8px 0 2px;background:linear-gradient(135deg,#fff8e6,#fff 70%);border:1px solid #f3d58a;border-radius:16px;padding:12px 14px;-webkit-user-select:none;user-select:none}.rpb[hidden]{display:none}
+.rpb-h{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}.rpb-h b{font-size:15px;color:#7a4e00}.rpb-h small{font-size:11.5px;color:#9a7b3b}
+.rpb-r{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px dashed #f0dfb2}.rpb-r:first-of-type{border-top:0}.rpb-m{font-size:20px;width:26px;text-align:center}.rpb-r b{flex:1;font-size:14.5px;color:#1e293b}.rpb-r b em{font-style:normal;font-size:11px;font-weight:800;color:#7a4e00;background:#ffe08a;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}.rpb-r>small{font-size:11.5px;color:#94a3b8}.rpb-r i{font-style:normal;font-weight:900;font-size:18px;color:#b45309;min-width:46px;text-align:right}.rpb-r i small{font-size:11px;font-weight:700;margin-left:1px}
 .rp-mini{display:flex;align-items:center;gap:8px;width:100%;margin-top:8px;padding:8px 12px;border:0;border-radius:12px;background:linear-gradient(100deg,#14275c,#e4002b);color:#fff;font:inherit;text-align:left;cursor:pointer;box-shadow:0 4px 12px rgba(228,0,43,.28);position:relative;overflow:hidden}.rp-mini span{font-size:16px}.rp-mini b{font-size:13px;font-weight:800;white-space:nowrap;color:#fff}.rp-mini small{flex:1;min-width:0;font-size:11.5px;color:rgba(255,255,255,.88);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rp-mini i{font-style:normal;color:#fff;font-weight:800}.rp-mini:active{transform:scale(.98)}.rp-mini::after{content:"";position:absolute;top:0;left:-40%;width:30%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);animation:rpsh 4.5s ease-in-out infinite}@keyframes rpsh{0%,60%{left:-40%}100%{left:130%}}@media(prefers-reduced-motion:reduce){.rp-mini::after{animation:none;display:none}}
 .fr button{border:0;border-radius:14px;padding:9px 10px;font:600 12px "Noto Sans KR",sans-serif;cursor:pointer;text-align:left}
 .fr-c{position:relative;display:flex!important;flex-direction:column;justify-content:center;gap:3px;min-height:56px;padding:10px 24px 10px 12px!important}.fr-c .fr-i{display:none}.fr-c b{font-size:13.5px;font-weight:800;line-height:1.25;white-space:nowrap}.fr-c small{font-size:11.5px;font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fr-c i{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-style:normal;opacity:.5;font-size:14px}
@@ -3727,7 +3730,7 @@ var NEWS = [
  {id:"2026-11-11g", date:"11/11", title:"다발보 11/10 반영", tabs:["alm"], items:["🔁 다발보 11월 (11.01~11.10) — 18곳 · 41건 · 3회 이상: 상계제일중학교신관(28호) 4건 · 비마트도봉쌍문점(27호) 4건 · 서라벌고등학교(160호) 3건","조치 완료 4곳 — 서라벌고 · 상계제일중 · 한국전력공사노원도봉 · 비마트도봉 (11/9~11/10 조치 반영)"]},
  {id:"2026-11-11f", date:"11/11", title:"고객체감 11/11 업데이트", tabs:["cs"], items:["📞 고객체감 11/11 기준 — 발송 241건 · 응답 78건 · 만족도 9.96"]},
  {id:"2026-11-11e", date:"11/11", title:"운전성향 11/11 업데이트", tabs:["drv"], items:["🚗 운전성향 11/11 기준 반영 — 김태건 주의(40건, 하루 평균 5.7), 그 외 양호"]},
- {id:"2026-11-11d", date:"11/11", title:"nopush:🎧 AI 응대 연습", tabs:["home"], items:["브리핑 화면 중간의 🎧 AI 응대 연습 카드(또는 이름 버튼 메뉴)에서 AI 고객과 말로 응대를 연습하고 점수·개선점을 받아요","고객 불만 10가지 · 영업 상담 7가지 상황을 난이도별로 연습할 수 있어요. 시범 운영 중이에요"]},
+ {id:"2026-11-11d", date:"11/11", title:"nopush:🎧 AI 응대 연습", tabs:["home"], items:["브리핑 화면 중간의 🎧 AI 응대 연습 카드(또는 이름 버튼 메뉴)에서 AI 고객과 말로 응대를 연습하고 점수·개선점을 받아요","고객 불만 10가지 · 영업 상담 7가지 상황을 난이도별로 연습할 수 있어요. 시범 운영 중이에요","📝 점수 화면에 모범 답안 비교 — 내가 한 말을 이렇게 바꾸면 더 좋아요","📊 나의 약한 항목 — 4가지 중 약한 곳과 맞춤 상황 추천","🏆 브리핑에 이달의 응대왕 상위 3명","📍 북서울 실제 사례 상황 4개 추가 (반복 오경보·해제 미스·연락처 오류·소동물 감지)"]},
  {id:"2026-11-10m", only:"지사장,서비스팀장,최문혁,이재식,용승우,고혁진,김유건,주상덕,유영민,김민석,김태건,김지원,양심영,박수안,권재원,김민수,김동현,이명섭,남현준", alert:1, date:"11/10", title:"⚡ [긴급] 11/11~12 한전 무인변전소 게릴라 점검 — 지적사항 없도록 각별히 주의", tabs:["home"], items:["11/11(수)~12(목) 한국전력 무인변전소 긴급출동 게릴라 점검 테스트가 예고 없이 진행돼요","모든 변전소 신호는 실제 상황처럼 즉시 출동 · 도착/조치/종료 보고 누락 없이","복장 · 안전장비 · 출입 절차 준수, 안전 운전","지적사항이 나오지 않도록 각별히 주의해 주세요 — 서비스팀장 원종범"]},
  {id:"2026-11-10l", only:"이재식", date:"11/10", title:"⚡ 한전 게릴라 점검 긴급 공지 자료", tabs:["home"], items:["공지 올리기 → 분류 중요이슈 · 서비스 → 자료 첨부 「⚡ 한전 게릴라 점검」 → 보내는 이름은 자동으로 원종범"]},
  {id:"2026-11-10k", date:"11/10", title:"nopush:📖 사용 안내 · 도움말 하나로", tabs:["home"], items:["처음 이용 안내와 현장 도움말을 한 메뉴로 합쳤어요 — 이름 버튼 → 📖 사용 안내 · 도움말"]},
@@ -5040,7 +5043,24 @@ function funRow(){
     '<button type="button" class="fr-c fr-q'+(q?' done':'')+'" data-qzopen="1"><span class="fr-i">🧠</span><b>🧠 안전 퀴즈</b><small>'+(q?'이번 주 완료 '+q.sc+'/3'+(q.sc===3?' 🎉':''):'이번 주 3문제')+'</small><i>›</i></button></div>';
 }
 /* AI 응대 연습 작은 카드 — 이름·부서와 상관없이 모두에게 보임 (funRow와 별개) */
-function rpMini(){ return '<button type="button" class="rp-mini" data-rpopen="1"><span>🎧</span><b>AI 응대 연습</b><small>AI 고객과 말로 연습하고 점수 받기</small><i>›</i></button>'; }
+function rpMini(){ setTimeout(rpBoardLoad,0); return '<button type="button" class="rp-mini" data-rpopen="1"><span>🎧</span><b>AI 응대 연습</b><small>AI 고객과 말로 연습하고 점수 받기</small><i>›</i></button>'+rpBoardHtml(); }
+/* 🏆 이달의 응대왕 — AI 응대 연습 이달 평균 점수 상위 3명 (칭찬용 · 3명만) */
+var RP_API = "https://script.google.com/macros/s/AKfycby7Ggvk7-rHHPYtIia_19uj33TbfJUDefRic63OBz0ifkd7hoOSs1HQ06gkQmNRlTcG/exec", RPB = null, RPB_AT = 0;
+function rpBoardHtml(){
+  var L = RPB && RPB.list ? RPB.list.filter(function(x){ return x.name && ["이재식","최문혁"].indexOf(x.name)<0; }).slice(0,3) : [];
+  if(!L.length) return '<div class="rpb" id="rpb" hidden></div>';
+  var md=["🥇","🥈","🥉"];
+  return '<div class="rpb" id="rpb"><div class="rpb-h"><b>🏆 이달의 응대왕</b><small>'+(+String(RPB.ym).slice(5))+'월 AI 응대 연습 평균 점수</small></div>'+
+    L.map(function(x,i){ return '<div class="rpb-r'+(i===0?' top':'')+'"><span class="rpb-m">'+md[i]+'</span><b>'+x.name+(i===0?' <em>👑 응대왕</em>':'')+'</b><small>'+x.n+'회 연습</small><i class="num">'+x.avg+'<small>점</small></i></div>'; }).join('')+'</div>';
+}
+function rpBoardLoad(){
+  if(Date.now()-RPB_AT<600000) return; RPB_AT=Date.now();
+  try{ var c=JSON.parse(sessionStorage.getItem("rp_board")||"null"); if(c&&Date.now()-c.at<600000){ RPB=c.d; } }catch(e){}
+  fetch(RP_API+"?action=board&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){
+    if(!j||!j.ok||!j.list) return; RPB=j; try{ sessionStorage.setItem("rp_board",JSON.stringify({at:Date.now(),d:j})); }catch(e){}
+    var el=document.getElementById("rpb"); if(el){ var t=document.createElement("div"); t.innerHTML=rpBoardHtml(); el.replaceWith(t.firstChild); }
+  }).catch(function(){});
+}
 function bdView(){
   var B = bdList(), st = stStreak();
   openSheet('<div class="xs-h"><b>🏅 배지 도감</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">🔥 <b>'+st+'일</b> 연속 접속 중 · 모은 배지 <b>'+B.filter(function(b){return b[2]}).length+'</b>/'+B.length+'</p><div class="bd-g">'+
