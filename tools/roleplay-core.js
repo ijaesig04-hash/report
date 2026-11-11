@@ -118,6 +118,7 @@ let LAST_MODEL = '';
 const LV = { '하': '말투는 비교적 차분하고 설명을 잘 들어 줍니다.', '중': '불만이 꽤 있고 말을 자주 끊지만, 납득되면 누그러집니다.', '상': '매우 화가 나 있고 쉽게 풀리지 않으며, 형식적인 답이나 변명에는 더 화를 냅니다.' };
 
 function chat(d) {
+  const T0 = Date.now();
   const sc = d.sc || {};
   const sys = '당신은 보안회사(에스원) 고객 응대 연습에서 "까다로운 고객" 역할을 맡은 연기자입니다.\n' +
     '상황: ' + String(sc.persona || '').slice(0, 600) + '\n난이도: ' + (d.level || '중') + ' — ' + (LV[d.level] || LV['중']) + '\n' +
@@ -131,11 +132,13 @@ function chat(d) {
     contents.push({ role: m.r === 'c' ? 'model' : 'user', parts: [{ text: String(m.t || '').slice(0, 500) }] });
   });
   const r = gemini(sys, contents, 600, true);
-  const o = { ok: true, customer: String(r.customer || '').slice(0, 300), tip: String(r.tip || '').slice(0, 80), end: !!r.end };
+  const o = { ok: true, customer: String(r.customer || '').slice(0, 300), tip: String(r.tip || '').slice(0, 80), end: !!r.end, ms: { ai: Date.now() - T0 } };
   /* 목소리도 같은 요청 안에서 바로 만들어 붙임 — 앱이 서버를 두 번 부르지 않아도 돼서 더 빨라요 */
   if (d.tts && o.customer) {
+    const T1 = Date.now();
     try { const a = tts({ text: o.customer, voice: d.tts.voice, style: d.tts.style }); if (a.ok) { o.audio = a.audio; o.rate = a.rate; o.mime = a.mime; } else o.ttsErr = a.err; }
     catch (e) { o.ttsErr = String(e); }
+    o.ms.tts = Date.now() - T1;
   }
   return o;
 }
