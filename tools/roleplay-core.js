@@ -10,6 +10,7 @@ function doPost(e) {
     if (d.act === 'chat') return out(chat(d));
     if (d.act === 'eval') return out(evaluate(d));
     if (d.act === 'tts') return out(tts(d));
+    if (d.act === 'live') return out(live(d));
     return out({ ok: false, err: 'act' });
   } catch (err) { return out({ ok: false, err: String(err) }); }
 }
@@ -222,6 +223,42 @@ function tts(d) {
     } else { last = code + ' ' + r.getContentText().slice(0, 160); if (code === 429) break; }
   }
   return { ok: false, err: last };
+}
+/* 📞 실시간 통화 모드 — 폰이 구글과 바로 연결할 수 있게 '임시 키'(1번 쓰고 30분 뒤 사라짐)를 만들어 줌.
+   진짜 키는 서버 밖으로 나가지 않아요. 고객 역할 지시문도 여기서 만들어서 같이 보냄 */
+function liveModels(key) {
+  const c = CacheService.getScriptCache(), hit = c.get('live_models');
+  if (hit) return JSON.parse(hit);
+  let list = [];
+  try {
+    const r = UrlFetchApp.fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=300&key=' + key, { muteHttpExceptions: true });
+    list = (JSON.parse(r.getContentText()).models || []).filter(function (m) {
+      return (m.supportedGenerationMethods || []).indexOf('bidiGenerateContent') >= 0;
+    }).map(function (m) { return m.name.replace('models/', ''); });
+    const rank = function (n) { return (/native-audio|live/.test(n) ? 0 : 2) + (/flash/.test(n) ? 0 : 1); };
+    list.sort(function (x, y) { return rank(x) - rank(y) || (x < y ? 1 : -1); });
+  } catch (e) {}
+  if (!list.length) list = ['gemini-2.5-flash-native-audio-preview-12-2025', 'gemini-3.1-flash-live-preview', 'gemini-2.5-flash-native-audio-preview-09-2025'];
+  c.put('live_models', JSON.stringify(list), 21600);
+  return list;
+}
+function live(d) {
+  const key = P.getProperty('GEMINI_KEY');
+  if (!key) return { ok: false, err: 'nokey' };
+  const sc = d.sc || {}, now = Date.now();
+  const r = UrlFetchApp.fetch('https://generativelanguage.googleapis.com/v1alpha/auth_tokens?key=' + key, {
+    method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+    payload: JSON.stringify({ uses: 1, expireTime: new Date(now + 30 * 60000).toISOString(), newSessionExpireTime: new Date(now + 2 * 60000).toISOString() })
+  });
+  if (r.getResponseCode() !== 200) return { ok: false, err: 'token ' + r.getResponseCode() + ' ' + r.getContentText().slice(0, 200) };
+  const tok = JSON.parse(r.getContentText()).name;
+  const models = liveModels(key), pick = String(d.model || '');
+  const sys = '당신은 보안회사 에스원의 고객 응대 연습에서 "까다로운 고객" 역할을 맡은 한국인 연기자입니다. 반드시 한국어로만, 실제 전화 통화하듯 자연스럽게 말합니다.\n' +
+    '상황: ' + String(sc.persona || '').slice(0, 700) + '\n난이도: ' + (d.level || '중') + ' — ' + (LV[d.level] || LV['중']) + '\n' +
+    '규칙: 한 번에 1~2문장으로 짧게 말하고, 직원이 말할 차례를 줍니다. 직원의 공감·사과, 원인 설명, 구체적 해결책이 충분하면 점점 누그러지고, 부족하면 불만을 이어 갑니다. ' +
+    '감정은 목소리 톤으로 실감 나게 표현하되 욕설은 하지 않습니다. 실제 이름·전화번호·주소는 지어내지 않습니다. 당신은 AI라거나 연습이라는 말을 하지 않습니다.\n' +
+    '첫마디는 이렇게 시작합니다: "' + String(sc.open || '') + '"';
+  return { ok: true, token: tok, models: pick ? [pick].concat(models.filter(function (m) { return m !== pick; })) : models, sys: sys };
 }
 function sheet() {
   let id = P.getProperty('SHEET_ID'), ss;

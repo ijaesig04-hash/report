@@ -64,6 +64,8 @@ h2{font-size:17px;margin:2px 0 4px}
 .pr-me{background:#f6f7fa;color:#475569}.pr-me em{color:#94a3b8}.pr-ok{background:#ecf8f1;color:#14532d}.pr-ok em{color:#16a34a}
 .wk h2 small{font-size:12px;font-weight:600;color:var(--mute);margin-left:4px}.wk-t{font-style:normal;font-size:11px;font-weight:700;color:#fff;background:var(--red);border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}
 .wk-h{margin:12px 0 6px;font-size:13.5px}.wk-go{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#f4f7ff;border:0;border-radius:12px;padding:10px 12px;margin-top:6px;font:inherit;color:inherit;cursor:pointer}.wk-go span{font-size:20px}.wk-go b{flex:1;font-size:14.5px}.wk-go i{font-style:normal;color:var(--mute);font-size:18px}
+.pill.lv{background:#fff1f2;border-color:#fecdd3;color:#be123c}.pill.lv small{font-size:10.5px;font-weight:700;opacity:.75;margin-left:2px}.pill.lv.on{background:#be123c;color:#fff;border-color:#be123c}
+.lv-st{margin:0 0 8px;text-align:center;font-size:14px;font-weight:700;color:#334155}.mic.on{background:#334155}
 .tmr{font-size:11.5px;color:#64748b;text-align:center;margin:-2px 0 8px}
 .delta{display:inline-block;margin:10px 0 4px;font-size:14px;font-weight:700;border-radius:999px;padding:5px 12px;line-height:1.3}.delta.up{color:#11683f;background:#e3f5ea}.delta.dn{color:#b4151f;background:#fde8ea}.delta.eq{color:#475569;background:#eef1f6}
 .it{margin:10px 0}.it div{display:flex;justify-content:space-between;font-size:14px;font-weight:700}
@@ -229,6 +231,7 @@ function stopSpeak(){ SPK_ID++; try{ window.speechSynthesis&&speechSynthesis.can
 
 /* ───────── 1. 상황 선택 ───────── */
 function home(){
+  if(LV_) liveStop(); S.live=false;
   stopSpeak(); S.end=false; dock.classList.add("hidden"); fitDock(); $("#ttl").textContent="🎧 AI 응대 연습";
   if(!ME){ app.innerHTML='<div class="card"><h2>이름을 먼저 골라 주세요</h2><p class="sub">북서울 Report 첫 화면에서 이름을 고른 뒤 다시 들어오면 돼요.</p><button class="btn red block" id="gor">리포트로 돌아가기</button></div>'; $("#gor").onclick=goReport; return; }
   var h = GUEST ? '<div class="demo">👀 연습은 자유롭게 할 수 있어요. 이름을 고르지 않아 <b>점수는 기록에 남지 않아요.</b></div>' : '';
@@ -280,6 +283,139 @@ function drawWeak(){
   box.querySelectorAll(".wk-go").forEach(function(b){ b.onclick=function(){ start(SCEN.filter(function(c){return c.id===b.dataset.id;})[0]); }; });
 }
 
+
+/* ───────── 📞 실시간 통화 모드 (시험판) ─────────
+   구글 Gemini Live: 서버가 1회용 임시 키를 만들어 주고, 폰이 구글과 바로 연결해서 목소리를 실시간으로 주고받아요.
+   내 말과 고객 말은 글자로도 받아서 말풍선으로 보여 주고, 끝나면 기존과 똑같이 점수를 매겨요. */
+var LV_ = null;
+function liveMode(){
+  if(!RP_API){ alert("AI 연결 후에 쓸 수 있어요."); return; }
+  if(!navigator.mediaDevices || !window.WebSocket){ alert("이 폰 브라우저에서는 실시간 통화를 쓸 수 없어요. 크롬에서 열어 주세요."); return; }
+  stopSpeak(); try{ rec&&rec.stop(); }catch(e){}
+  S.live=true; S.hist=[]; S.turns=0; $("#chat").innerHTML="";
+  var lb=$("#lvb"); if(lb){ lb.classList.add("on"); lb.innerHTML="📞 실시간 통화 중 <small>시험판</small>"; lb.onclick=null; }
+  var vf=$("#vf"); if(vf) vf.style.display="none";
+  var n=document.createElement("div"); n.className="tip"; n.textContent="📞 실시간 통화 모드예요. ‘통화 시작’을 누르면 고객이 먼저 말해요. 고객 말이 끝나면 그냥 말로 대답하세요. 스피커로 들으며 말해도 돼요."; $("#chat").appendChild(n);
+  dock.classList.remove("hidden");
+  dock.innerHTML='<div class="in"><p class="lv-st" id="lvst">통화 대기 중</p><button type="button" class="mic" id="lvgo">📞 통화 시작</button>'+
+    '<div class="row" style="margin-top:8px"><button type="button" class="btn ghost" id="lvback" style="flex:1">일반 연습으로</button><button type="button" class="btn ghost" id="fin" style="flex:1">마무리하고 점수 받기</button></div></div>';
+  fitDock();
+  $("#lvgo").onclick=function(){ if(LV_) liveStop("통화를 끊었어요"); else liveStart(); };
+  $("#fin").onclick=function(){ liveStop(); finish(); };
+  $("#lvback").onclick=function(){ liveStop(); S.live=false; start(S.sc); };
+}
+function lvStatus(t){ var e=$("#lvst"); if(e) e.textContent=t; }
+function lvBtn(on){ var b=$("#lvgo"); if(!b) return; b.textContent=on?"🔴 통화 끊기":"📞 통화 시작"; b.classList.toggle("on",!!on); }
+function liveStart(tries, model){
+  tries=tries||0; lvStatus("연결하는 중…"); lvBtn(true);
+  var persona=S.sc.persona+(S.sc.g==="영업"?" (이 통화는 불만 접수가 아니라 영업 상담이다. 고객은 화나 있지 않고 망설이는 중이다.)":"");
+  var saved=""; try{ saved=localStorage.getItem("rp_live_model")||""; }catch(e){}
+  api1({act:"live", sc:{id:S.sc.id,title:S.sc.title,persona:persona,open:S.sc.open}, level:S.lv, model:model||saved}).then(function(j){
+    var m=j.models[0]; liveConnect(j.token, m, j.sys, function(fail){
+      /* 이 모델이 안 되면 다음 모델로 (최대 3번) */
+      if(tries<2 && j.models[1]){ liveStart(tries+1, j.models[1]); }
+      else { lvBtn(false); lvStatus("연결하지 못했어요 · "+fail); liveErr(fail); }
+    });
+  }).catch(function(e){ lvBtn(false); lvStatus("연결하지 못했어요"); liveErr(e.message||String(e)); });
+}
+function liveErr(msg){
+  var d=document.createElement("div"); d.className="tip"; d.textContent="⚠️ 실시간 통화 연결이 안 됐어요 ("+String(msg).slice(0,90)+"). ‘일반 연습으로’를 눌러 계속할 수 있어요."; $("#chat").appendChild(d); scrollEnd();
+  rpLog("실시간 실패 · "+String(msg).slice(0,40));
+}
+function b64ToI16(b){ var s=atob(b), n=s.length, u=new Uint8Array(n); for(var i=0;i<n;i++) u[i]=s.charCodeAt(i); return new Int16Array(u.buffer, 0, n>>1); }
+function i16ToB64(a){ var u=new Uint8Array(a.buffer), s="", k=0x8000; for(var i=0;i<u.length;i+=k) s+=String.fromCharCode.apply(null, u.subarray(i,i+k)); return btoa(s); }
+function liveConnect(token, model, sys, onFail){
+  var L={ws:null, ready:false, model:model, outCtx:null, inCtx:null, stream:null, proc:null, playEnd:0, srcs:[], cb:null, sb:null, cTxt:"", sTxt:"", t0:0};
+  LV_=L;
+  var url="wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContentConstrained?access_token="+encodeURIComponent(token);
+  var ws; try{ ws=new WebSocket(url); }catch(e){ LV_=null; onFail(String(e)); return; }
+  L.ws=ws;
+  try{ L.outCtx=new (window.AudioContext||window.webkitAudioContext)({sampleRate:24000}); }catch(e){ L.outCtx=new (window.AudioContext||window.webkitAudioContext)(); }
+  var p=vprof(S.sc);
+  ws.onopen=function(){
+    ws.send(JSON.stringify({setup:{model:"models/"+model,
+      generationConfig:{responseModalities:["AUDIO"], speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:p.voice}}}},
+      systemInstruction:{parts:[{text:sys}]}, inputAudioTranscription:{}, outputAudioTranscription:{}}}));
+  };
+  ws.onmessage=function(ev){
+    var handle=function(txt){ var m; try{ m=JSON.parse(txt); }catch(e){ return; } liveMsg(L,m); };
+    if(typeof ev.data==="string") handle(ev.data); else if(ev.data&&ev.data.text) ev.data.text().then(handle);
+  };
+  ws.onclose=function(ev){
+    var was=L.ready; liveClean(L);
+    if(!was){ onFail((ev.code||"")+" "+(ev.reason||"연결 끊김")); return; }
+    if(LV_===L){ LV_=null; lvBtn(false); lvStatus("통화가 끝났어요"+(ev.reason?" · "+ev.reason.slice(0,60):"")); }
+  };
+  ws.onerror=function(){};
+}
+function liveMsg(L,m){
+  if(m.setupComplete){
+    L.ready=true; try{ localStorage.setItem("rp_live_model",L.model); }catch(e){}
+    rpLog("실시간 연결 · "+L.model); lvStatus("고객이 말하는 중…");
+    L.ws.send(JSON.stringify({clientContent:{turns:[{role:"user",parts:[{text:"(전화가 연결되었습니다. 고객으로서 첫마디를 하세요.)"}]}],turnComplete:true}}));
+    liveMic(L); return;
+  }
+  var sc=m.serverContent; if(!sc) return;
+  if(sc.interrupted){ L.srcs.forEach(function(x){ try{ x.stop(); }catch(e){} }); L.srcs=[]; L.playEnd=0; }
+  if(sc.inputTranscription && sc.inputTranscription.text){
+    L.sTxt+=sc.inputTranscription.text;
+    if(!L.sb){ L.sb=document.createElement("div"); L.sb.className="b s"; $("#chat").appendChild(L.sb); }
+    L.sb.textContent=L.sTxt.trim(); scrollEnd(); L.t0=Date.now();
+  }
+  var gotModel=false;
+  if(sc.outputTranscription && sc.outputTranscription.text){
+    gotModel=true; L.cTxt+=sc.outputTranscription.text;
+    if(!L.cb){ L.cb=document.createElement("div"); L.cb.className="b c"; $("#chat").appendChild(L.cb); }
+    L.cb.textContent=L.cTxt.trim(); scrollEnd();
+  }
+  if(sc.modelTurn && sc.modelTurn.parts){
+    sc.modelTurn.parts.forEach(function(pt){ if(pt.inlineData && pt.inlineData.data){ gotModel=true; livePlay(L, pt.inlineData.data, pt.inlineData.mimeType||""); } });
+  }
+  if(gotModel && L.sb){ /* 고객이 대답을 시작하면 내 말은 확정 */
+    var t=L.sTxt.trim(); if(t){ S.hist.push({r:"s",t:t}); S.turns++; } L.sb=null; L.sTxt="";
+    if(L.t0 && MGR.indexOf(ME)>=0){ var q=document.createElement("div"); q.className="tmr"; q.textContent="⏱ 고객 대답 시작까지 "+((Date.now()-L.t0)/1000).toFixed(1)+"초 (실시간 · 파트장만 보임)"; $("#chat").insertBefore(q, L.cb||null); L.t0=0; }
+  }
+  if(gotModel) lvStatus("고객이 말하는 중…");
+  if(sc.turnComplete){
+    var c=L.cTxt.trim(); if(c) S.hist.push({r:"c",t:c}); L.cb=null; L.cTxt="";
+    lvStatus("🎙️ 말씀하세요 — 그냥 말로 대답하면 돼요");
+    if(S.turns>=10){ lvStatus("통화를 충분히 했어요 · ‘마무리하고 점수 받기’를 눌러 주세요"); }
+  }
+}
+function livePlay(L,b64,mime){
+  var ctx=L.outCtx; if(!ctx) return; if(ctx.state==="suspended") ctx.resume();
+  var rate=+((/rate=(\d+)/.exec(mime)||[])[1]||24000), a=b64ToI16(b64), f=new Float32Array(a.length);
+  for(var i=0;i<a.length;i++) f[i]=a[i]/32768;
+  var buf=ctx.createBuffer(1,f.length,rate); buf.copyToChannel(f,0);
+  var src=ctx.createBufferSource(); src.buffer=buf; src.connect(ctx.destination);
+  var at=Math.max(ctx.currentTime+0.02, L.playEnd); src.start(at); L.playEnd=at+buf.duration; L.srcs.push(src);
+  src.onended=function(){ var k=L.srcs.indexOf(src); if(k>=0) L.srcs.splice(k,1); };
+}
+function liveMic(L){
+  navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true,channelCount:1}}).then(function(st){
+    if(LV_!==L){ st.getTracks().forEach(function(t){t.stop();}); return; }
+    L.stream=st;
+    var C=window.AudioContext||window.webkitAudioContext; try{ L.inCtx=new C({sampleRate:16000}); }catch(e){ L.inCtx=new C(); }
+    var srcN=L.inCtx.createMediaStreamSource(st), proc=L.inCtx.createScriptProcessor(2048,1,1), sr=L.inCtx.sampleRate;
+    proc.onaudioprocess=function(e){
+      if(!L.ready || L.ws.readyState!==1) return;
+      if(L.outCtx && L.playEnd > L.outCtx.currentTime + 0.05) return;   /* 고객 목소리가 나오는 동안은 마이크를 보내지 않음 (스피커 소리 되먹임 방지) */
+      var x=e.inputBuffer.getChannelData(0), step=sr/16000, n=Math.floor(x.length/step), o=new Int16Array(n);
+      for(var i=0;i<n;i++){ var v=x[Math.floor(i*step)]; o[i]=v<0?Math.max(-32768,v*32768):Math.min(32767,v*32767); }
+      L.ws.send(JSON.stringify({realtimeInput:{audio:{data:i16ToB64(o),mimeType:"audio/pcm;rate=16000"}}}));
+    };
+    srcN.connect(proc); proc.connect(L.inCtx.destination); L.proc=proc;
+  }).catch(function(e){ lvStatus("마이크를 켤 수 없어요 · 마이크 권한을 허용해 주세요"); liveErr("마이크 "+(e&&e.name||e)); });
+}
+function liveClean(L){
+  try{ L.proc&&L.proc.disconnect(); }catch(e){} try{ L.stream&&L.stream.getTracks().forEach(function(t){t.stop();}); }catch(e){}
+  try{ L.inCtx&&L.inCtx.close(); }catch(e){} L.srcs.forEach(function(x){ try{ x.stop(); }catch(e){} });
+  setTimeout(function(){ try{ L.outCtx&&L.outCtx.close(); }catch(e){} }, 300);
+  if(L.sb && L.sTxt.trim()){ S.hist.push({r:"s",t:L.sTxt.trim()}); S.turns++; } if(L.cb && L.cTxt.trim()) S.hist.push({r:"c",t:L.cTxt.trim()});
+  L.sb=null; L.cb=null; L.sTxt=""; L.cTxt="";
+}
+function liveStop(msg){ var L=LV_; if(!L) return; LV_=null; L.ready=false; try{ L.ws.close(1000); }catch(e){} liveClean(L); lvBtn(false); if(msg) lvStatus(msg); }
+
 /* ───────── 2. 음성 대화 ───────── */
 var rec=null, recOn=false;
 function start(sc){
@@ -287,9 +423,10 @@ function start(sc){
   rpLog("시작 · "+sc.title+" ("+S.lv+")");
   S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false; S.fb=false; S.fbTold=false;
   $("#ttl").textContent=sc.ic+" "+sc.title.replace(/^\[영업\]\s*/,"");
-  app.innerHTML='<div class="bar"><span class="pill">난이도 '+S.lv+'</span><span class="pill" id="sp" role="button">🔊 소리 켬</span><span class="pill" id="vf" role="button">'+(VFAST?'⚡ 빠른 목소리':'🗣️ 자연 목소리')+'</span></div><details class="keys"><summary>💡 이 상황의 응대 포인트 보기</summary><ol>'+sc.key.map(function(k){return '<li>'+esc(k)+'</li>';}).join("")+'</ol></details><div class="chat" id="chat"></div>';
+  app.innerHTML='<div class="bar"><span class="pill">난이도 '+S.lv+'</span><span class="pill" id="sp" role="button">🔊 소리 켬</span><span class="pill" id="vf" role="button">'+(VFAST?'⚡ 빠른 목소리':'🗣️ 자연 목소리')+'</span><span class="pill lv" id="lvb" role="button">📞 실시간 통화 <small>시험판</small></span></div><details class="keys"><summary>💡 이 상황의 응대 포인트 보기</summary><ol>'+sc.key.map(function(k){return '<li>'+esc(k)+'</li>';}).join("")+'</ol></details><div class="chat" id="chat"></div>';
   $("#vf").onclick=function(){ VFAST=!VFAST; try{ localStorage.setItem("rp_vfast",VFAST?"1":"0"); }catch(e){} $("#vf").textContent=VFAST?"⚡ 빠른 목소리":"🗣️ 자연 목소리"; };
   $("#sp").onclick=function(){ S.voice=!S.voice; $("#sp").textContent=S.voice?"🔊 소리 켬":"🔇 소리 끔"; if(!S.voice) stopSpeak(); };
+  $("#lvb").onclick=function(){ liveMode(); };
   addB("c",sc.open); speak(sc.open); drawDock();
 }
 function addB(r,t){ var d=document.createElement("div"); d.className="b "+r; d.textContent=t; $("#chat").appendChild(d); scrollEnd(); }
