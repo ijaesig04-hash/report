@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261111134500">
+<meta name="bsr-ver" content="20261111172000">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -6268,6 +6268,8 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-k .ng{background:linear-gradient(160deg,#7f1d1d,#b91c1c)}
 .vl-card{margin:12px 16px;background:#fff;border-radius:16px;border:1px solid #e3e9f3;padding:14px}
 .vl-card h3{margin:0 0 6px;font-size:15px}
+.vl-card .rpu-k,.vl-card.fd.op>.rpu-k{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:4px 0 8px}.rpu-k div{background:#fff;border:1px solid #c7d2fe;border-radius:12px;padding:8px 6px;text-align:center;font-size:12px;color:#475569}.rpu-k span{display:block;font-size:11.5px}.rpu-k b{font-size:22px;color:#3730a3;margin-right:2px}
+.rpu-d{width:8px;height:8px;border-radius:50%;background:#cbd5e1;flex:none}.rpu-d.st{background:#6366f1}.rpu-d.ok{background:#16a34a}
 .vl-card.fd{padding:0}.vl-card.fd>h3{margin:0;padding:14px 38px 14px 14px;cursor:pointer;position:relative}.vl-card.fd>h3::after{content:"▾";position:absolute;right:14px;top:14px;color:#94a3b8;transition:transform .2s}.vl-card.fd.op>h3::after{transform:rotate(180deg)}.vl-card.fd>:not(h3){display:none}.vl-card.fd.op>:not(h3){display:revert}.vl-card.fd.op{padding:0 14px 14px}.vl-card.fd.op>h3{margin:0 -14px;}.vl-card h3 small{font-weight:500;color:#5b6880;font-size:11.5px;margin-left:4px}
 .vl-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-top:1px solid #eef2f8;font-size:14px}
 .vl-row:first-of-type{border-top:0}
@@ -6331,7 +6333,7 @@ function openTag(){ var sa=(window.matchMedia&&matchMedia("(display-mode: standa
 function logTab(t){ if(sent[t]) return; sent[t]=1; send(tabName(t)); }
 function showChip(){ chip.hidden = false; chip.textContent = me ? dnm(me)+"님" : "이름 선택"; }
 function close(){ ov.hidden = true; box.innerHTML = ""; document.body.style.overflow = ""; }
-function vlFold(){ box.querySelectorAll(".vl-card").forEach(function(c){ if(c.querySelector(":scope>h3")) c.classList.add("fd"); }); }
+function vlFold(){ box.querySelectorAll(".vl-card").forEach(function(c){ if(c.querySelector(":scope>h3")) c.classList.add("fd"); if(c.classList.contains("vl-rp")) c.classList.add("op"); }); }
 box.addEventListener("click", function(e){ var h=e.target.closest(".vl-card.fd>h3"); if(h) h.parentNode.classList.toggle("op"); });
 function open(html,pk){ box.innerHTML = html; vlFold(); ov.classList.toggle("pk", !!pk); ov.hidden = false; ov.scrollTop = 0; document.body.style.overflow = "hidden"; }
 function esc(x){ return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]}); }
@@ -6503,6 +6505,25 @@ function readCard(RD){
     (ord.length ? ord.map(function(k){ var ns = Object.keys(g[k]).sort(function(a,b){return g[k][b]-g[k][a]});
       return '<div class="vlw-t"><b>'+esc(k)+' · '+ns.length+'명</b>'+ns.map(function(n){ return '<span>'+esc(n)+' <i>'+kst(g[k][n]).md+' '+kst(g[k][n]).hm+'</i></span>'; }).join('')+'</div>'; }).join('') : '<div class="vl-row">아직 열람 기록이 없어요</div>')+'</div>';
 }
+/* 🎧 AI 응대 연습 — 누가 들어왔는지 (이재식만) */
+function rpUseCard(R){
+  var now=Date.now(), today=kst(now).day, w0=now-7*86400000;
+  var P={}, order=[];
+  R.forEach(function(r){ var n=r[1]; if(!P[n]){ P[n]={n:n,in:0,st:0,dn:0,sc:[],last:r[0],ev:[]}; order.push(n); }
+    var t=String(r[2]).replace(/^🎧 AI응대:\s*/,""), p=P[n]; p.ev.push([r[0],t]);
+    if(/^접속/.test(t)) p.in++; else if(/^시작/.test(t)) p.st++; else if(/^완료/.test(t)){ p.dn++; var m=/(\d+)점/.exec(t); if(m) p.sc.push(+m[1]); } });
+  var tP=0, wP=0, dn=0; order.forEach(function(n){ var p=P[n]; if(p.ev.some(function(e){return kst(e[0]).day===today})) tP++; if(p.last>=w0) wP++; dn+=p.dn; });
+  var miss = ALL.filter(function(n){ return !P[n] && MGRS.indexOf(n)<0; });
+  var list = order.map(function(n){ var p=P[n], lt=kst(p.last), best=p.sc.length?Math.max.apply(null,p.sc):null;
+    return '<details class="vl-day"><summary><b>'+esc(n)+'</b><span>'+(p.dn?'완료 '+p.dn+'회'+(best!=null?' · 최고 '+best+'점':'')+' · ':'')+'시작 '+p.st+' · '+lt.md+' '+lt.hm+'</span></summary>'+
+      p.ev.map(function(e){ var t=kst(e[0]); return '<div class="vl-row"><span class="rpu-d '+(/^완료/.test(e[1])?'ok':/^시작/.test(e[1])?'st':'')+'"></span>'+esc(e[1])+'<em>'+t.md+' '+t.hm+'</em></div>'; }).join('')+'</details>'; }).join('');
+  return '<div class="vl-card vl-rp" style="border:2px solid #c7d2fe;background:linear-gradient(135deg,#eef2ff,#fff 70%)"><h3>🎧 AI 응대 연습 접속<small>이재식님만 보여요 · 최근 35일</small></h3>'+
+    '<div class="rpu-k"><div><span>오늘 접속</span><b>'+tP+'</b>명</div><div><span>최근 7일</span><b>'+wP+'</b>명</div><div><span>연습 완료</span><b>'+dn+'</b>회</div></div>'+
+    (order.length ? '<p style="margin:6px 0 2px;font-size:12px;color:#64748b">최근 들어온 순 · 이름을 누르면 접속·연습 기록이 펼쳐져요</p>'+list
+      : '<div class="vl-row">아직 들어온 사람이 없어요. (오늘부터 기록돼요)</div>')+
+    (miss.length ? '<div class="vl-row" style="flex-wrap:wrap;color:#64748b;font-size:12.5px"><b style="color:#334155">아직 안 들어온 직원 '+miss.length+'명</b> '+miss.map(esc).join(' · ')+'</div>' : '')+
+  '</div>';
+}
 function adminView(rows){
   rows = rows.filter(function(r){return r && r[0]}).sort(function(a,b){return b[0]-a[0]});
   var pinFail = rows.filter(function(r){return /PIN 실패/.test(r[2]||"")});
@@ -6511,6 +6532,10 @@ function adminView(rows){
   var RD = rows.filter(function(r){return /^(📖 매뉴얼|📢 공지|📚 교육):/.test(r[2]||"")});
   rows = rows.filter(function(r){return !/^(📖 매뉴얼|📢 공지|📚 교육):/.test(r[2]||"")});
   var rdCard = me==="이재식" ? readCard(RD) : '';
+  /* 🎧 AI 응대 연습 접속 기록 — 이재식만 보고, 다른 통계에서는 뺌 */
+  var RPL = rows.filter(function(r){return /^🎧 AI응대:/.test(r[2]||"")});
+  rows = rows.filter(function(r){return !/^🎧 AI응대:/.test(r[2]||"")});
+  var rpCard = me==="이재식" ? rpUseCard(RPL) : '';
   var now = Date.now(), today = kst(now).day, days = [];
   for(var k=6;k>=0;k--) days.push(kst(now-k*86400000));
   var last = {}, by = {};
@@ -6519,6 +6544,7 @@ function adminView(rows){
   days.forEach(function(d){ Object.keys(by[d.day]||{}).forEach(function(n){ wk[n]=1; }); });
   var tCnt = Object.keys(tSet).length, miss = ALL.filter(function(n){return !tSet[n]});
   var h = '<div class="vl-hero"><button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button><small>ADMIN · '+kst(now).md+' '+kst(now).hm+'</small><h2>🔒 접속 현황</h2><p>직원 '+ALL.length+'명 기준 · 최근 7일</p></div>';
+  h += rpCard;
   h += '<div class="vl-k"><div><span>오늘 접속</span><b>'+tCnt+'</b></div><div class="ng"><span>오늘 미접속</span><b>'+miss.length+'</b></div><div><span>최근 7일</span><b>'+Object.keys(wk).length+'</b></div></div>';
   var midA = rdCard + (me==="이재식"&&window.PUSH_URL?'<div class="vl-card" id="vlpush"><h3>🔔 알림 받는 직원<small>불러오는 중…</small></h3></div>':'') + vlWeek(rows, now) + vlInstall(rows) + ''; var midB = adminExtra(rows, now, pinFail);
   var byDay = {}; rows.forEach(function(r){ var d=kst(r[0]).day; (byDay[d]=byDay[d]||[]).push(r); });
