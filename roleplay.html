@@ -9,6 +9,10 @@
 <style>
 :root{--navy:#14275C;--red:#E4002B;--ink:#16203a;--mute:#5d6879;--line:#dde3ee;--bg:#f2f4f9;--ok:#1d7a4c;--warn:#b4620a}
 *{box-sizing:border-box}
+/* 길게 눌러도 글자 선택·검색 창이 뜨지 않게 (입력칸만 예외) */
+html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+img,a{-webkit-touch-callout:none;-webkit-user-drag:none}
 html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;-webkit-tap-highlight-color:transparent}
 button{font:inherit;cursor:pointer}
 .top{position:sticky;top:0;z-index:5;background:var(--navy);color:#fff;padding:max(12px,env(safe-area-inset-top)) 14px 12px;display:flex;align-items:center;gap:10px}
@@ -90,11 +94,13 @@ var SCEN = [
 ];
 var CATS = ["공감·사과","원인 설명","해결책 제시","해지 방어"];
 var ME = ""; try{ ME = localStorage.getItem("bsr_me")||""; if(ME==="관리자") ME=""; }catch(e){}
+/* '타부서'처럼 사람 이름이 아닌 선택은 점수를 개인 기록으로 남기지 않음 (연습은 가능) */
+var GUEST = ["타부서","그룹장"].indexOf(ME)>=0;
 var $ = function(s){ return document.querySelector(s); };
 var esc = function(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); };
 var S = {sc:null,lv:"중",hist:[],turns:0,busy:false,voice:true,end:false};
 var back = $("#back"), app = $("#app"), dock = $("#dock");
-$("#me").textContent = ME;
+$("#me").textContent = (ME&&!GUEST) ? ME+"님" : "";
 
 /* ───────── 도우미 ───────── */
 /* 구글 AI가 잠깐 몰려 '사용량이 많다'고 하면 자동으로 최대 3번까지 다시 시도 */
@@ -123,7 +129,8 @@ function stopSpeak(){ try{ window.speechSynthesis&&speechSynthesis.cancel(); }ca
 function home(){
   stopSpeak(); S.end=false; dock.classList.add("hidden"); $("#ttl").textContent="🎧 AI 응대 연습";
   if(!ME){ app.innerHTML='<div class="card"><h2>이름을 먼저 골라 주세요</h2><p class="sub">북서울 Report 첫 화면에서 이름을 고른 뒤 다시 들어오면 돼요.</p><button class="btn red block" id="gor">리포트로 돌아가기</button></div>'; $("#gor").onclick=goReport; return; }
-  var h = RP_API ? "" : '<div class="demo">🧪 <b>데모 모드</b> — AI 연결 전이라 미리 정해 둔 고객 대사와 간단 채점으로 동작해요. 흐름을 미리 써 볼 수 있어요.</div>';
+  var h = GUEST ? '<div class="demo">👀 연습은 자유롭게 할 수 있어요. 이름을 고르지 않아 <b>점수는 기록에 남지 않아요.</b></div>' : '';
+  h += RP_API ? "" : '<div class="demo">🧪 <b>데모 모드</b> — AI 연결 전이라 미리 정해 둔 고객 대사와 간단 채점으로 동작해요. 흐름을 미리 써 볼 수 있어요.</div>';
   h += '<div class="card"><h2>어떤 상황을 연습할까요?</h2><p class="sub">AI가 까다로운 고객이 되어 말을 걸어요. 소리로 대답해 보세요. 모두 가상 상황이라 <b>실제 고객 이름·번호는 말하지 않아도 돼요.</b></p>'+
     '<b style="font-size:13px">난이도</b><div class="seg" id="lv">'+["하","중","상"].map(function(l){return '<button type="button" data-l="'+l+'" aria-pressed="'+(S.lv===l)+'">'+l+'</button>';}).join("")+'</div></div>';
   h += SCEN.map(function(c,i){ var l=getLast(c); return '<button type="button" class="sc" data-i="'+i+'"><i>'+c.ic+'</i><div><b>'+esc(c.title)+'<span class="tag '+c.lv+'">추천 '+c.lv+'</span></b><span>'+(l?'지난 점수 '+l.t+'점':'아직 연습 전')+'</span></div></button>'; }).join("");
@@ -206,7 +213,7 @@ function finish(){
   if(S.busy) return; if(S.turns<1){ alert("먼저 고객에게 한 번 이상 대답해 보세요."); return; }
   stopSpeak(); try{ rec&&rec.stop(); }catch(e){}
   dock.classList.add("hidden"); app.innerHTML='<div class="card"><h2>AI 코치가 평가하는 중…</h2><p class="sub">10초쯤 걸려요.</p></div>';
-  var p = RP_API ? api({act:"eval",name:ME,sc:{id:S.sc.id,title:S.sc.title},level:S.lv,hist:S.hist,turns:S.turns}) : Promise.resolve(demoEval());
+  var p = RP_API ? api({act:"eval",name:GUEST?"":ME,sc:{id:S.sc.id,title:S.sc.title},level:S.lv,hist:S.hist,turns:S.turns}) : Promise.resolve(demoEval());
   p.catch(function(e){ var j=demoEval(); j.fail=String(e.message||e).slice(0,80); return j; }).then(showEval).catch(function(e){ app.innerHTML='<div class="card"><h2>평가를 받지 못했어요</h2><p class="sub">'+esc(e.message||e)+'</p><button class="btn red block" id="rt">다시 시도</button><button class="btn ghost block" id="hm">처음으로</button></div>'; $("#rt").onclick=finish; $("#hm").onclick=home; });
 }
 function showEval(j){
