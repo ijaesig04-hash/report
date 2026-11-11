@@ -40,7 +40,7 @@ h2{font-size:17px;margin:2px 0 4px}
 .chat{display:flex;flex-direction:column;gap:10px;padding-bottom:6px}
 .b{max-width:86%;padding:11px 14px;border-radius:18px;font-size:16px;line-height:1.55;word-break:keep-all}
 .b.c{background:#fff;border:1px solid var(--line);border-top-left-radius:6px;align-self:flex-start}
-.b.c::before{content:'😠 고객';display:block;font-size:11px;font-weight:700;color:var(--red);margin-bottom:2px}
+.b.c::before{content:'👤 고객';display:block;font-size:11px;font-weight:700;color:var(--red);margin-bottom:2px}
 .b.s{background:var(--navy);color:#fff;border-top-right-radius:6px;align-self:flex-end}
 .tip{align-self:center;background:#fff4dc;border:1px solid #f0d49a;color:#7a4b00;font-size:13px;border-radius:12px;padding:6px 12px}
 .typing{align-self:flex-start;color:var(--mute);font-size:13px}
@@ -74,6 +74,8 @@ ul.l{margin:6px 0 0;padding-left:20px}ul.l li{margin:5px 0}
 table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:7px 4px;border-bottom:1px solid var(--line);text-align:left}
 th{font-size:12px;color:var(--mute)}
 .hidden{display:none!important}
+.gh{margin:16px 2px 8px;font-size:14px;font-weight:800;color:var(--navy)}
+.keys{background:#eef3ff;border-radius:12px;padding:8px 12px;margin-bottom:10px;font-size:13.5px}.keys summary{font-weight:700;cursor:pointer}.keys ol{margin:6px 0 2px;padding-left:20px}.keys li{margin:3px 0}
 .hero{border-radius:16px;overflow:hidden;margin-bottom:12px;box-shadow:0 6px 18px rgba(20,39,92,.18);background:#fff}
 .hero img{display:block;width:100%;height:auto;aspect-ratio:1672/941;object-fit:cover}
 </style>
@@ -89,10 +91,18 @@ var PUSH_URL = "https://script.google.com/macros/s/AKfycbyt-K4hxHqIMqh7bbAcbmKj3
 var MGR = ["이재식","최문혁"];
 /* 연습 상황 — 여기만 고치면 목록이 바뀜 (persona: AI 고객 설정 / open: 고객의 첫마디 / demo: 데모 모드 고객 대사) */
 var SCEN = [
- {id:"false-alarm",ic:"🌙",title:"오경보로 새벽에 깬 고객",lv:"상",persona:"새벽 3시에 경보가 울려 출동 요원이 다녀갔는데 실제로는 오경보였다. 아이가 놀라 깼고, 이런 일이 이번이 세 번째라 몹시 화가 나 있다. 원인 설명과 재발 방지 대책, 그리고 성의 있는 사과를 원한다.",open:"지금이 새벽 3시예요. 또 오경보라니, 이번이 벌써 세 번째라고요! 애까지 놀라서 깼는데 대체 어떻게 된 거예요?",demo:["세 번째인데 매번 사과만 하시면 끝인가요? 원인이 뭐예요?","그럼 앞으로 안 울린다는 보장은 있어요?","언제 와서 점검해 주시는데요? 또 기다리라고 하시는 건 아니죠?"]},
- {id:"cancel",ic:"✋",title:"해지하겠다는 고객",lv:"상",persona:"이사 계획과 월 이용료 부담 때문에 해지를 요구한다. 사실은 출동 속도와 응대에 작은 불만이 쌓여 있다. 해지를 막으려는 형식적인 설득에는 반발하지만, 불만을 들어주고 현실적인 대안(요금제 조정·이전 설치)을 주면 마음이 흔들린다.",open:"저 이번 달까지만 쓰고 해지할 거예요. 요금도 부담되고, 솔직히 별로 도움이 된다는 생각도 안 들어서요.",demo:["다른 데는 더 싸던데, 굳이 계속 써야 할 이유가 뭐예요?","요금을 낮춰 주는 건 가능해요? 구체적으로 얼마나요?","위약금은 안 나오는 거죠? 일단 알겠는데 좀 더 생각해 볼게요."]},
- {id:"delay",ic:"🚨",title:"출동 지연 항의",lv:"중",persona:"경보가 울려서 신고했는데 출동 요원이 도착하기까지 30분 넘게 걸렸다. 그동안 불안했고 약속된 시간(통상 15분 안팎)보다 훨씬 늦었다고 생각해 항의한다. 지연 이유와 앞으로의 약속, 그리고 사과를 듣고 싶다.",open:"출동한다더니 30분이 넘어서야 도착했어요. 그동안 얼마나 불안했는지 아세요? 이게 보안회사가 할 일이에요?",demo:["왜 이렇게 늦은 건지 이유부터 말씀해 주세요.","그럼 다음에도 이럴 수 있다는 거예요?","보상이나 조치가 있나요? 아니면 그냥 죄송하다만 하시는 거예요?"]},
- {id:"senior",ic:"👵",title:"어르신 장비 사용법 문의",lv:"하",persona:"70대 어르신 고객. 방범 장비(해제 버튼·비밀번호)를 자꾸 잘못 눌러 경보가 울릴까 봐 불안하다. 말이 느리고 용어가 어려우면 못 알아듣는다. 쉬운 말로 천천히, 한 번에 한 가지씩 설명해 주기를 바란다.",open:"여보세요… 내가 그 기계를 자꾸 잘못 눌러서요. 집에 들어오면 뭘 먼저 눌러야 하는지 모르겠어요.",demo:["뭐라고요? 좀 더 천천히, 쉽게 말해 줘요.","그럼 그 버튼은 어디에 있는 거예요?","아이구, 알겠어요. 근데 또 까먹으면 어떡해요?"]}
+ {"id": "false-alarm", "g": "불만", "ic": "🌙", "title": "오경보로 새벽에 깬 고객", "lv": "상", "persona": "새벽 3시에 경보가 울려 출동 요원이 다녀갔는데 오경보였다. 아이가 놀라 깼고 이번이 세 번째라 몹시 화가 나 있다. 매번 '죄송하다'는 말만 들었다고 느낀다. 감지기 오작동 원인, 재발 방지를 위한 점검 일정, 성의 있는 사과를 원한다. 형식적인 사과만 반복하면 '해지하겠다'는 말까지 꺼낸다. 구체적인 점검 약속(언제, 누가)을 들으면 누그러진다.", "open": "지금이 새벽 3시예요. 또 오경보라니, 이번이 벌써 세 번째라고요! 애까지 놀라서 깼는데 대체 어떻게 된 거예요?", "demo": ["세 번째인데 매번 사과만 하시면 끝인가요? 원인이 뭐예요?", "그럼 앞으로 안 울린다는 보장은 있어요?", "언제 와서 점검해 주시는데요? 또 기다리라고 하시는 건 아니죠?"], "key": ["놀라고 잠 깬 불편부터 공감하고 사과하기", "오경보 원인(감지기·환경)을 확인해 쉬운 말로 설명하기", "점검 날짜·시간을 구체적으로 약속하기"]},
+ {"id": "cancel", "g": "불만", "ic": "✋", "title": "해지하겠다는 고객", "lv": "상", "persona": "월 이용료 부담과 이사 계획을 이유로 해지를 요구한다. 속으로는 출동이 늦었던 일과 문의 때 응대가 성의 없었던 일이 쌓여 있다. 해지를 막으려는 형식적인 설득이나 위약금 얘기부터 꺼내면 반발한다. 불만을 먼저 들어주고, 이전 설치나 서비스 구성 조정 같은 현실적인 대안을 제시하면 마음이 흔들린다.", "open": "저 이번 달까지만 쓰고 해지할 거예요. 요금도 부담되고, 솔직히 별로 도움이 된다는 생각도 안 들어서요.", "demo": ["다른 데는 더 싸던데, 굳이 계속 써야 할 이유가 뭐예요?", "이사 가면 어차피 못 쓰잖아요. 그건 어떻게 되는데요?", "일단 알겠는데 좀 더 생각해 볼게요."], "key": ["해지 이유를 끝까지 듣고 숨은 불만 찾기", "이전 설치·구성 조정 등 현실적인 대안 제시하기", "결정을 존중하면서 계속 이용할 이유 전하기"]},
+ {"id": "delay", "g": "불만", "ic": "🚨", "title": "출동 지연 항의", "lv": "중", "persona": "매장에서 경보가 울려 연락했는데 출동 요원 도착까지 30분이 넘게 걸렸다. 그동안 혼자 불안에 떨었고, 보안회사가 이래도 되느냐고 항의한다. 늦은 이유(교통·동시 출동 등)에 대한 솔직한 설명과 사과, 앞으로의 약속을 듣고 싶다. 변명처럼 들리면 더 화를 낸다.", "open": "출동한다더니 30분이 넘어서야 도착했어요. 그동안 얼마나 불안했는지 아세요? 이게 보안회사가 할 일이에요?", "demo": ["왜 이렇게 늦은 건지 이유부터 말씀해 주세요.", "그럼 다음에도 이럴 수 있다는 거예요?", "그냥 죄송하다만 하시는 거예요? 조치는요?"], "key": ["불안했던 마음을 먼저 받아 주기", "늦은 이유를 변명 없이 사실대로 설명하기", "재발 방지를 위해 무엇을 할지 약속하기"]},
+ {"id": "theft", "g": "불만", "ic": "🕵️", "title": "도난 사고 후 책임 추궁", "lv": "상", "persona": "매장에 도둑이 들어 금고의 현금과 물품을 잃었다. 경보는 울렸지만 범인은 이미 달아난 뒤였다. '돈 내고 보안 맡겼는데 이게 뭐냐'며 회사 책임과 보상을 강하게 요구한다. 충격과 분노가 크다. 확답할 수 없는 보상 약속을 하면 나중에 더 큰 문제가 되고, 책임을 피하는 말을 하면 폭발한다. 피해 공감, 사실 확인 절차와 보상 접수 절차를 차분히 안내받으면 조금 진정한다.", "open": "도둑이 들어서 가게가 다 털렸어요! 보안 맡겨 놨더니 이게 뭡니까? 에스원이 다 책임져요!", "demo": ["경보가 울렸으면 잡았어야죠. 도대체 뭘 한 거예요?", "그래서 보상은 해 주는 거예요, 안 해 주는 거예요?", "절차가 어떻게 되는지 똑바로 말해 봐요."], "key": ["피해에 대한 충격과 속상함을 충분히 공감하기", "확답 못 할 보상 약속은 하지 않고 확인 절차 안내하기", "출동 기록 확인·보상 접수 등 다음 단계를 명확히 말하기"]},
+ {"id": "repeat-fault", "g": "불만", "ic": "🔧", "title": "같은 고장이 반복되는 고객", "lv": "중", "persona": "출입문 감지기(또는 카드리더기)가 한 달 사이 세 번째 고장 났다. 기사가 올 때마다 '고쳤다'고 했는데 며칠 지나면 또 말썽이다. 장사하는 데 지장이 있고, 올 때마다 다른 기사가 와서 같은 설명을 반복하는 것도 짜증 난다. 임시방편이 아닌 근본 해결(교체)과 책임 있는 담당자를 원한다.", "open": "이게 벌써 세 번째 고장이에요. 올 때마다 고쳤다면서요? 도대체 제대로 고치긴 하는 거예요?", "demo": ["또 임시로 손만 보고 가실 거 아니에요?", "아예 새 걸로 바꿔 주면 안 돼요?", "이번에도 또 고장 나면 그땐 어쩔 건데요?"], "key": ["반복된 불편과 헛걸음에 대해 사과하기", "이전 수리 이력을 확인하고 근본 원인 설명하기", "교체 등 확실한 조치와 사후 확인 연락 약속하기"]},
+ {"id": "bill", "g": "불만", "ic": "🧾", "title": "요금 청구에 불만인 고객", "lv": "중", "persona": "이번 달 청구 금액이 평소보다 많이 나왔다. 미리 안내받은 기억이 없어서 '몰래 올린 것 아니냐'고 의심한다. 청구 내역을 쉽게 설명해 주기를 원하고, 잘못 청구된 것이면 바로 정정을 요구한다. 어려운 용어로 말하거나 '규정상 그렇다'고만 하면 화를 낸다. 내역을 확인해 다시 연락 주겠다는 구체적인 약속에는 수긍한다.", "open": "이번 달 요금이 왜 이렇게 많이 나왔어요? 아무 말도 없이 올린 거예요?", "demo": ["그런 안내 받은 적 없는데요? 언제 말했다는 거예요?", "잘못 나간 거면 돌려주는 거죠?", "확인해서 언제까지 연락 줄 건데요?"], "key": ["당황스러운 마음을 받아 주고 바로 확인하겠다고 하기", "청구 내역을 쉬운 말로 풀어서 설명하기", "확인 후 회신 시점을 구체적으로 약속하기"]},
+ {"id": "no-show", "g": "불만", "ic": "⏰", "title": "방문 약속을 어긴 데 항의", "lv": "중", "persona": "오후 2시에 점검 기사가 오기로 해서 가게 문을 닫지도 못하고 기다렸는데 4시가 되도록 연락 한 통 없다. 늦는 것보다 미리 연락이 없었던 것에 더 화가 났다. 자기 시간을 무시당했다고 느낀다. 사과와 함께 지금 당장 언제 올 수 있는지 확실한 시간을 원한다.", "open": "2시에 온다고 해서 계속 기다렸는데 지금 4시예요. 전화 한 통이 없어요. 사람 시간을 이렇게 우습게 봐도 돼요?", "demo": ["늦으면 늦는다고 연락이라도 해야 하는 거 아니에요?", "그래서 지금 언제 오는데요? 정확히 말해요.", "또 안 오면 그땐 어떻게 할 건데요?"], "key": ["기다리게 한 것과 연락 없었던 점을 분명히 사과하기", "현재 상황을 확인해 정확한 도착 시간 알려 주기", "다시 어기지 않도록 사전 연락 약속하기"]},
+ {"id": "cctv", "g": "불만", "ic": "📹", "title": "CCTV 녹화가 안 돼 있던 고객", "lv": "상", "persona": "매장에서 손님과 분쟁이 생겨 CCTV 영상을 확인하려 했는데 그 시간대 녹화가 안 돼 있었다. 정작 필요할 때 쓸모가 없었다며 크게 화가 났다. 왜 녹화가 안 됐는지, 그동안 고장인 줄도 몰랐던 이유, 앞으로 같은 일이 없게 할 방법을 따진다. 원인을 모르는 채 추측으로 답하면 더 불신한다.", "open": "필요해서 CCTV를 돌려 봤는데 녹화가 하나도 안 돼 있어요! 이럴 거면 뭐하러 달아 놨어요?", "demo": ["왜 안 찍힌 건지 원인이 뭐예요?", "고장 난 걸 그동안 아무도 몰랐다는 거예요?", "앞으로 또 이러면 어떻게 믿고 써요?"], "key": ["꼭 필요한 순간에 쓰지 못한 속상함 공감하기", "추측하지 말고 점검으로 원인을 확인하겠다고 하기", "즉시 점검 일정과 녹화 상태 확인 방법 안내하기"]},
+ {"id": "rude", "g": "불만", "ic": "😤", "title": "직원 태도에 불만인 고객", "lv": "중", "persona": "지난번 출동(또는 점검) 왔던 직원이 인사도 없이 들어와 퉁명스럽게 대하고, 가게 앞에 차를 막아 세워 손님이 불편해했다. 일은 했지만 기분이 몹시 상했다. 그 직원을 감싸거나 '그럴 리 없다'는 반응이면 더 화낸다. 진심 어린 사과와 교육·재발 방지 약속을 원한다. 듣는 직원이 동료일 수 있다는 점도 안다.", "open": "저번에 온 직원 말이에요. 인사도 없고 말투도 퉁명스럽고, 차는 가게 입구를 떡하니 막아 놓고. 교육을 어떻게 시키는 거예요?", "demo": ["그 직원 편드는 거예요, 지금?", "사과는 됐고, 앞으로 어떻게 할 건지 말해 봐요.", "다음에 또 그 사람 오면 저 진짜 가만 안 있어요."], "key": ["변명·동료 감싸기 없이 불쾌했던 점을 사과하기", "어떤 점이 불편했는지 구체적으로 들어 주기", "내부 전달·교육과 재발 방지를 약속하기"]},
+ {"id": "senior", "g": "불만", "ic": "👵", "title": "어르신 장비 사용법 문의", "lv": "하", "persona": "70대 어르신 고객. 집에 들어올 때 경비 해제하는 법을 자꾸 헷갈려 경보가 울릴까 봐 불안하다. 말이 느리고, '세트·해제·리더기' 같은 용어가 어려우면 못 알아듣는다. 쉬운 말로 천천히, 한 번에 한 가지씩 설명해 주기를 바란다. 빨리 말하거나 한꺼번에 설명하면 '뭐라고요?' 하고 되묻는다. 친절하면 고마워한다.", "open": "여보세요… 내가 그 기계를 자꾸 잘못 눌러서요. 집에 들어오면 뭘 먼저 눌러야 하는지 모르겠어요.", "demo": ["뭐라고요? 좀 더 천천히, 쉽게 말해 줘요.", "그럼 그 버튼은 어디에 있는 거예요?", "아이구, 알겠어요. 근데 또 까먹으면 어떡해요?"], "key": ["어려운 용어 대신 쉬운 말로 천천히 말하기", "한 번에 한 가지씩 순서대로 안내하기", "잊어도 괜찮다고 안심시키고 다시 물어볼 방법 알려 주기"]},
+ {"id": "s-new", "g": "영업", "ic": "🏪", "title": "[영업] 가입을 망설이는 사장님", "lv": "중", "persona": "새로 가게를 연 사장님. 보안 서비스가 필요하다고는 느끼지만 매달 나가는 돈이 부담이다. 'CCTV만 직접 사서 달면 되지 않나', '다른 업체가 더 싸던데'라며 망설인다. 밀어붙이는 영업은 싫어한다. 자기 가게 상황(영업시간, 현금 보관, 혼자 근무 여부)을 물어봐 주고 그에 맞는 이유를 설명해 주면 관심을 보인다. 가격만 말하면 '생각해 볼게요' 하고 끊는다.", "open": "가게 새로 열어서 알아보는 중인데요. 솔직히 CCTV만 사다 달면 되지, 매달 돈 내면서 꼭 써야 해요?", "demo": ["다른 데는 더 싸다던데 뭐가 다른 거예요?", "우리 가게처럼 작은 데도 필요해요?", "음… 좀 더 생각해 볼게요."], "key": ["가게 상황을 먼저 물어보고 필요를 파악하기", "CCTV만 있을 때와 출동 서비스의 차이를 쉽게 설명하기", "부담 없는 다음 단계(방문 상담·견적)를 제안하기"]},
+ {"id": "s-upsell", "g": "영업", "ic": "🛒", "title": "[영업] 기존 고객에게 상품 추천", "lv": "하", "persona": "몇 년째 에스원을 쓰는 음식점 사장님. 점검차 방문한 직원과 이야기하다가 '요즘 집을 자주 비워서 걱정'이라는 말을 꺼낸다. 집에 둘 카메라에 관심은 있지만 '또 뭘 팔려고 하나' 싶은 경계심도 있다. 필요에 맞는 상품을 가볍게 소개하고, 다이렉트몰에서 담당자 사원번호를 입력하면 10% 추가 할인이 된다는 것처럼 실질적인 혜택을 알려 주면 좋아한다. 강요하면 거절한다.", "open": "요즘 가게 때문에 집을 자주 비우는데, 집이 좀 걱정되긴 해요. 근데 뭐 또 달아야 하나 싶기도 하고…", "demo": ["그런 게 있어요? 설치하기 복잡한 거 아니에요?", "가격은 얼마나 해요? 싸게 사는 방법 있어요?", "그럼 어디서 사면 되는 거예요?"], "key": ["고객이 꺼낸 걱정에서 출발해 가볍게 제안하기", "상품이 걱정을 어떻게 덜어 주는지 쉽게 설명하기", "다이렉트몰 구매 방법과 사원번호 10% 추가 할인 안내하기"]}
 ];
 var CATS = ["공감·사과","원인 설명","해결책 제시","해지 방어"];
 var ME = ""; try{ ME = localStorage.getItem("bsr_me")||""; if(ME==="관리자") ME=""; }catch(e){}
@@ -136,7 +146,8 @@ function home(){
   h = '<div class="hero"><img src="roleplay-bg.jpg" alt="화난 고객에게 공감하며 응대하는 에스원 직원 그림"></div>' + h;
   h += '<div class="card"><h2>어떤 상황을 연습할까요?</h2><p class="sub">AI가 까다로운 고객이 되어 말을 걸어요. 소리로 대답해 보세요. 모두 가상 상황이라 <b>실제 고객 이름·번호는 말하지 않아도 돼요.</b></p>'+
     '<b style="font-size:13px">난이도</b><div class="seg" id="lv">'+["하","중","상"].map(function(l){return '<button type="button" data-l="'+l+'" aria-pressed="'+(S.lv===l)+'">'+l+'</button>';}).join("")+'</div></div>';
-  h += SCEN.map(function(c,i){ var l=getLast(c); return '<button type="button" class="sc" data-i="'+i+'"><i>'+c.ic+'</i><div><b>'+esc(c.title)+'<span class="tag '+c.lv+'">추천 '+c.lv+'</span></b><span>'+(l?'지난 점수 '+l.t+'점':'아직 연습 전')+'</span></div></button>'; }).join("");
+  var row=function(c,i){ var l=getLast(c); return '<button type="button" class="sc" data-i="'+i+'"><i>'+c.ic+'</i><div><b>'+esc(c.title)+'<span class="tag '+c.lv+'">추천 '+c.lv+'</span></b><span>'+(l?'지난 점수 '+l.t+'점':'아직 연습 전')+'</span></div></button>'; };
+  [["불만","😠 고객 불만 · 문의 응대"],["영업","💼 영업 상담"]].forEach(function(g){ h += '<p class="gh">'+g[1]+'</p>'+SCEN.map(function(c,i){ return c.g===g[0]?row(c,i):''; }).join(""); });
   if(MGR.indexOf(ME)>=0) h += '<button type="button" class="btn ghost block" id="adm">🔒 파트장 현황 보기</button>';
   app.innerHTML=h;
   app.querySelectorAll("#lv button").forEach(function(b){ b.onclick=function(){ S.lv=b.dataset.l; app.querySelectorAll("#lv button").forEach(function(x){x.setAttribute("aria-pressed",x===b);}); }; });
@@ -149,7 +160,7 @@ var rec=null, recOn=false;
 function start(sc){
   S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false; S.fb=false; S.fbTold=false;
   $("#ttl").textContent=sc.ic+" "+sc.title;
-  app.innerHTML='<div class="bar"><span class="pill">난이도 '+S.lv+'</span><span class="pill" id="sp" role="button">🔊 소리 켬</span></div><div class="chat" id="chat"></div>';
+  app.innerHTML='<div class="bar"><span class="pill">난이도 '+S.lv+'</span><span class="pill" id="sp" role="button">🔊 소리 켬</span></div><details class="keys"><summary>💡 이 상황의 응대 포인트 보기</summary><ol>'+sc.key.map(function(k){return '<li>'+esc(k)+'</li>';}).join("")+'</ol></details><div class="chat" id="chat"></div>';
   $("#sp").onclick=function(){ S.voice=!S.voice; $("#sp").textContent=S.voice?"🔊 소리 켬":"🔇 소리 끔"; if(!S.voice) stopSpeak(); };
   addB("c",sc.open); speak(sc.open); drawDock();
 }
@@ -184,7 +195,7 @@ function send(t){
   t=String(t||"").trim(); if(!t||S.busy||S.end) return;
   $("#tx").value=""; S.busy=true; S.turns++; S.hist.push({r:"s",t:t}); addB("s",t);
   var ty=document.createElement("div"); ty.className="typing"; var t0=Date.now(); ty.textContent="고객이 말하는 중…"; $("#chat").appendChild(ty); scrollEnd(); var iv=setInterval(function(){ ty.textContent="고객이 말하는 중… "+Math.round((Date.now()-t0)/1000)+"초"+((Date.now()-t0)>12000?" (AI가 오래 걸리고 있어요)":""); },1000);
-  var p = RP_API ? api({act:"chat",sc:{id:S.sc.id,title:S.sc.title,persona:S.sc.persona},level:S.lv,hist:S.hist}) : Promise.resolve(demoChat(t));
+  var p = RP_API ? api({act:"chat",sc:{id:S.sc.id,title:S.sc.title,persona:S.sc.persona+(S.sc.g==="영업"?" (이 통화는 불만 접수가 아니라 영업 상담이다. 고객은 화나 있지 않고 망설이는 중이다.)":"")},level:S.lv,hist:S.hist}) : Promise.resolve(demoChat(t));
   p.then(function(j){
     clearInterval(iv); ty.remove(); S.hist.push({r:"c",t:j.customer}); addB("c",j.customer); if(j.tip) addTip(j.tip); speak(j.customer);
     if(j.end||S.turns>=8){ S.end=true; var d=document.createElement("div"); d.className="tip"; d.textContent="통화가 마무리됐어요. 아래 '마무리하고 점수 받기'를 눌러 주세요."; $("#chat").appendChild(d); scrollEnd(); }
@@ -216,7 +227,7 @@ function finish(){
   if(S.busy) return; if(S.turns<1){ alert("먼저 고객에게 한 번 이상 대답해 보세요."); return; }
   stopSpeak(); try{ rec&&rec.stop(); }catch(e){}
   dock.classList.add("hidden"); app.innerHTML='<div class="card"><h2>AI 코치가 평가하는 중…</h2><p class="sub">10초쯤 걸려요.</p></div>';
-  var p = RP_API ? api({act:"eval",name:GUEST?"":ME,sc:{id:S.sc.id,title:S.sc.title},level:S.lv,hist:S.hist,turns:S.turns}) : Promise.resolve(demoEval());
+  var p = RP_API ? api({act:"eval",name:GUEST?"":ME,sc:{id:S.sc.id,title:S.sc.title+" — 이 상황의 핵심 응대 포인트: "+S.sc.key.join(" / ")+(S.sc.g==="영업"?" (영업 상담이므로 '공감·사과'는 고객 걱정 공감, '원인 설명'은 상품·서비스 설명, '해지 방어'는 구매·가입 설득력으로 평가)":"")},level:S.lv,hist:S.hist,turns:S.turns}) : Promise.resolve(demoEval());
   p.catch(function(e){ var j=demoEval(); j.fail=String(e.message||e).slice(0,80); return j; }).then(showEval).catch(function(e){ app.innerHTML='<div class="card"><h2>평가를 받지 못했어요</h2><p class="sub">'+esc(e.message||e)+'</p><button class="btn red block" id="rt">다시 시도</button><button class="btn ghost block" id="hm">처음으로</button></div>'; $("#rt").onclick=finish; $("#hm").onclick=home; });
 }
 function showEval(j){
@@ -228,6 +239,7 @@ function showEval(j){
    CATS.map(function(c){ var v=j.scores[c]||0; return '<div class="it'+(v<60?' lo':'')+'"><div><span>'+c+'</span><span>'+v+'점</span></div><u><i style="width:'+v+'%"></i></u></div>'; }).join("")+'</div>'+
    '<div class="card"><h2>👍 잘한 점</h2><ul class="l">'+(j.good||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul></div>'+
    '<div class="card"><h2>🔧 이렇게 해 보세요</h2><ul class="l">'+(j.improve||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>'+(j.example?'<div class="ex">💬 <b>이렇게 말해 보세요</b><br>'+esc(j.example)+'</div>':'')+'</div>'+
+   '<div class="card"><h2>💡 이 상황의 응대 포인트</h2><ul class="l">'+S.sc.key.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul></div>'+
    '<button class="btn red block" id="again">같은 상황 다시 연습</button><button class="btn ghost block" id="hm">다른 상황 고르기</button>';
   app.innerHTML=h; window.scrollTo(0,0);
   $("#again").onclick=function(){ start(S.sc); }; $("#hm").onclick=home;
