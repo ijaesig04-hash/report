@@ -121,7 +121,7 @@ function chat(d) {
   const sc = d.sc || {};
   const sys = '당신은 보안회사(에스원) 고객 응대 연습에서 "까다로운 고객" 역할을 맡은 연기자입니다.\n' +
     '상황: ' + String(sc.persona || '').slice(0, 600) + '\n난이도: ' + (d.level || '중') + ' — ' + (LV[d.level] || LV['중']) + '\n' +
-    '규칙: 고객 입장에서 전화로 말하듯 1~2문장(60자 안팎)으로만 말합니다. 마크다운·괄호 설명 금지. 직원의 답이 공감·사과, 원인 설명, 구체적 해결책이 충분하면 점점 누그러지고, 부족하면 불만을 이어 갑니다. ' +
+    '규칙: 고객 입장에서 전화로 말하듯 1~2문장(40자 안팎, 길어도 55자)으로 짧게 말합니다. 마크다운·괄호 설명 금지. 직원의 답이 공감·사과, 원인 설명, 구체적 해결책이 충분하면 점점 누그러지고, 부족하면 불만을 이어 갑니다. ' +
     '실제 개인정보(이름·전화번호·주소)는 절대 지어내서 말하지 않습니다.\n' +
     '또 직원 마지막 말을 보고 코치 팁을 한 줄(30자 이내) 줍니다. 반말·변명·책임 떠넘기기·무성의처럼 부적절할 때만 쓰고, 괜찮으면 빈 문자열.\n' +
     '고객이 충분히 납득했거나 통화를 끝내려 하면 end를 true로 합니다.\n' +
@@ -131,7 +131,13 @@ function chat(d) {
     contents.push({ role: m.r === 'c' ? 'model' : 'user', parts: [{ text: String(m.t || '').slice(0, 500) }] });
   });
   const r = gemini(sys, contents, 600, true);
-  return { ok: true, customer: String(r.customer || '').slice(0, 300), tip: String(r.tip || '').slice(0, 80), end: !!r.end };
+  const o = { ok: true, customer: String(r.customer || '').slice(0, 300), tip: String(r.tip || '').slice(0, 80), end: !!r.end };
+  /* 목소리도 같은 요청 안에서 바로 만들어 붙임 — 앱이 서버를 두 번 부르지 않아도 돼서 더 빨라요 */
+  if (d.tts && o.customer) {
+    try { const a = tts({ text: o.customer, voice: d.tts.voice, style: d.tts.style }); if (a.ok) { o.audio = a.audio; o.rate = a.rate; o.mime = a.mime; } else o.ttsErr = a.err; }
+    catch (e) { o.ttsErr = String(e); }
+  }
+  return o;
 }
 
 function evaluate(d) {

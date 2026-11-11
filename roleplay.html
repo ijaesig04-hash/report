@@ -176,10 +176,20 @@ function speak(t){
   if(!S.voice) return; stopSpeak(); var id = ++SPK_ID, p = vprof(S.sc);
   t = String(t||"").replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu,"").trim(); if(!t) return;
   if(RP_API && !TTS_OFF){
+    var ck = "tts:"+p.voice+":"+t;
+    if(window.caches){ caches.open("rp-tts").then(function(c){ return c.match(new Request("https://rp.local/"+encodeURIComponent(ck))); }).then(function(hit){
+        if(id!==SPK_ID) return; if(hit) return hit.blob().then(function(b){ if(id===SPK_ID){ AUD=new Audio(URL.createObjectURL(b)); AUD.play().catch(function(){}); } });
+        ttsNet(t,p,id,ck); }).catch(function(){ ttsNet(t,p,id,ck); }); return; }
+    ttsNet(t,p,id,ck); return;
+  }
+  devSpeak(t,p);
+}
+function ttsNet(t,p,id,ck){
+  {
     var done=false, fb=setTimeout(function(){ if(!done && id===SPK_ID){ done=true; devSpeak(t,p); } }, 9000);   /* 9초 안에 안 오면 폰 목소리로 */
     api1({act:"tts", text:t, voice:p.voice, style:p.style}).then(function(j){
       if(done || id!==SPK_ID) return; done=true; clearTimeout(fb);
-      if(j && j.ok && j.audio) playPcm(j.audio, j.rate||24000, j.mime||"");
+      if(j && j.ok && j.audio){ var bl=playPcm(j.audio, j.rate||24000, j.mime||""); if(bl && window.caches && t.length<120) caches.open("rp-tts").then(function(c){ c.put(new Request("https://rp.local/"+encodeURIComponent(ck)), new Response(bl)); }).catch(function(){}); }
       else { if(j && /nokey|404|429|400/.test(String(j.err||""))) TTS_OFF=true; devSpeak(t,p); }
     }).catch(function(e){ if(/nokey|act|404|429|400|quota|RESOURCE/i.test(String(e&&e.message||""))) TTS_OFF=true; if(done || id!==SPK_ID) return; done=true; clearTimeout(fb); devSpeak(t,p); });
     return;
@@ -195,7 +205,7 @@ function playPcm(b64, rate, mime){
       w(0,"RIFF"); v.setUint32(4,36+n,true); w(8,"WAVE"); w(12,"fmt "); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
       v.setUint32(24,rate,true); v.setUint32(28,rate*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true); w(36,"data"); v.setUint32(40,n,true);
       blob=new Blob([h,u8],{type:"audio/wav"}); }
-    AUD=new Audio(URL.createObjectURL(blob)); AUD.play().catch(function(){});
+    AUD=new Audio(URL.createObjectURL(blob)); AUD.play().catch(function(){}); return blob;
   }catch(e){}
 }
 var KVOICE=null;
@@ -314,9 +324,12 @@ function send(t){
   t=String(t||"").trim(); if(!t||S.busy||S.end) return;
   $("#tx").value=""; S.busy=true; S.turns++; S.hist.push({r:"s",t:t}); addB("s",t);
   var ty=document.createElement("div"); ty.className="typing"; var t0=Date.now(); ty.textContent="고객이 말하는 중…"; $("#chat").appendChild(ty); scrollEnd(); var iv=setInterval(function(){ ty.textContent="고객이 말하는 중… "+Math.round((Date.now()-t0)/1000)+"초"+((Date.now()-t0)>12000?" (AI가 오래 걸리고 있어요)":""); },1000);
-  var p = RP_API ? api({act:"chat",sc:{id:S.sc.id,title:S.sc.title,persona:S.sc.persona+(S.sc.g==="영업"?" (이 통화는 불만 접수가 아니라 영업 상담이다. 고객은 화나 있지 않고 망설이는 중이다.)":"")},level:S.lv,hist:S.hist}) : Promise.resolve(demoChat(t));
+  var p = RP_API ? api({act:"chat",sc:{id:S.sc.id,title:S.sc.title,persona:S.sc.persona+(S.sc.g==="영업"?" (이 통화는 불만 접수가 아니라 영업 상담이다. 고객은 화나 있지 않고 망설이는 중이다.)":"")},level:S.lv,hist:S.hist,tts:(S.voice&&!TTS_OFF)?{voice:vprof(S.sc).voice,style:vprof(S.sc).style}:null}) : Promise.resolve(demoChat(t));
   p.then(function(j){
-    clearInterval(iv); ty.remove(); S.hist.push({r:"c",t:j.customer}); addB("c",j.customer); if(j.tip) addTip(j.tip); speak(j.customer);
+    clearInterval(iv); ty.remove(); S.hist.push({r:"c",t:j.customer}); addB("c",j.customer); if(j.tip) addTip(j.tip);
+    if(S.voice && j.audio){ stopSpeak(); playPcm(j.audio, j.rate||24000, j.mime||""); }     /* 대답과 목소리가 같이 도착 → 바로 재생 */
+    else if(S.voice && j.ttsErr){ if(/nokey|404|429|400|quota|RESOURCE/i.test(j.ttsErr)) TTS_OFF=true; stopSpeak(); devSpeak(j.customer, vprof(S.sc)); }
+    else speak(j.customer);
     if(j.end||S.turns>=8){ S.end=true; var d=document.createElement("div"); d.className="tip"; d.textContent="통화가 마무리됐어요. 아래 '마무리하고 점수 받기'를 눌러 주세요."; $("#chat").appendChild(d); scrollEnd(); }
   }).catch(function(e){ clearInterval(iv); ty.remove();
     /* AI가 답을 못 하면 멈추지 않고 연습용 대사로 이어 감 */
