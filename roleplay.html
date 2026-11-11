@@ -13,10 +13,11 @@
 html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 input,textarea{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 img,a{-webkit-touch-callout:none;-webkit-user-drag:none}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;-webkit-tap-highlight-color:transparent}
+html,body{word-break:keep-all;overflow-wrap:anywhere;margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;-webkit-tap-highlight-color:transparent}
 button{font:inherit;cursor:pointer}
 .top{position:sticky;top:0;z-index:5;background:var(--navy);color:#fff;padding:max(12px,env(safe-area-inset-top)) 14px 12px;display:flex;align-items:center;gap:10px}
-.top b{font-size:17px;flex:1}
+.top b{font-size:17px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .me{flex:none;font-size:13px;opacity:.85}
 .back{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:10px;width:40px;height:36px;font-size:20px}
 .me{font-size:12px;opacity:.85}
 main{max-width:560px;margin:0 auto;padding:14px 14px 90px}
@@ -32,7 +33,7 @@ h2{font-size:17px;margin:2px 0 4px}
 .sc i{font-style:normal;font-size:30px}
 .sc b{display:block;font-size:16px}.sc span{font-size:13px;color:var(--mute)}
 .tag{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:8px;padding:1px 8px;margin-left:6px;vertical-align:1px}
-.sc .tag{color:#fff;font-size:11px}.tag.상{background:var(--red)}.tag.중{background:#e08a00}.tag.하{background:#2b8a5a}
+.sc .tag{color:#fff;font-size:11px;font-style:normal;margin:0 6px 0 0}.tag.상{background:var(--red)}.tag.중{background:#e08a00}.tag.하{background:#2b8a5a}
 .last{font-size:12px;color:var(--mute);margin-top:2px}
 /* 대화 */
 .bar{display:flex;gap:8px;align-items:center;margin-bottom:10px}
@@ -59,7 +60,7 @@ h2{font-size:17px;margin:2px 0 4px}
 /* 평가 */
 .big{font-size:54px;font-weight:900;color:var(--navy);line-height:1}
 .big small{font-size:20px;color:var(--mute);font-weight:700}
-.delta{font-weight:700;margin-left:8px}.delta.up{color:var(--ok)}.delta.dn{color:var(--red)}
+.delta{display:inline-block;margin:10px 0 4px;font-size:14px;font-weight:700;border-radius:999px;padding:5px 12px;line-height:1.3}.delta.up{color:#11683f;background:#e3f5ea}.delta.dn{color:#b4151f;background:#fde8ea}.delta.eq{color:#475569;background:#eef1f6}
 .it{margin:10px 0}.it div{display:flex;justify-content:space-between;font-size:14px;font-weight:700}
 .it u{display:block;height:9px;border-radius:5px;background:#e8ecf5;margin-top:4px;text-decoration:none;overflow:hidden}
 .it u i{display:block;height:100%;background:var(--navy);border-radius:5px}
@@ -166,7 +167,7 @@ function home(){
   h = '<div class="hero"><img src="roleplay-bg.jpg?v=2" alt="화난 고객에게 공감하며 응대하는 에스원 직원 그림"></div>' + h;
   h += '<div class="card"><h2>어떤 상황을 연습할까요?</h2><p class="sub">AI가 까다로운 고객이 되어 말을 걸어요. 소리로 대답해 보세요. 모두 가상 상황이라 <b>실제 고객 이름·번호는 말하지 않아도 돼요.</b></p>'+
     '<b style="font-size:13px">난이도</b><div class="seg" id="lv">'+["하","중","상"].map(function(l){return '<button type="button" data-l="'+l+'" aria-pressed="'+(S.lv===l)+'">'+l+'</button>';}).join("")+'</div></div>';
-  var row=function(c,i){ var l=getLast(c); return '<button type="button" class="sc" data-i="'+i+'"><i>'+c.ic+'</i><div><b>'+esc(c.title)+'<span class="tag '+c.lv+'">추천 '+c.lv+'</span></b><span>'+(l?'지난 점수 '+l.t+'점':'아직 연습 전')+'</span></div></button>'; };
+  var row=function(c,i){ var l=getLast(c); return '<button type="button" class="sc" data-i="'+i+'"><i>'+c.ic+'</i><div><b>'+esc(c.title.replace(/^\[영업\]\s*/,''))+'</b><span><em class="tag '+c.lv+'">추천 '+c.lv+'</em>'+(l?'지난 점수 '+l.t+'점':'아직 연습 전')+'</span></div></button>'; };
   (SALES_FIRST?[["영업","💼 영업 상담"],["불만","😠 고객 불만 · 문의 응대"]]:[["불만","😠 고객 불만 · 문의 응대"],["영업","💼 영업 상담"]]).forEach(function(g){ h += '<p class="gh">'+g[1]+'</p>'+SCEN.map(function(c,i){ return c.g===g[0]?row(c,i):''; }).join(""); });
   if(MGR.indexOf(ME)>=0) h += '<button type="button" class="btn ghost block" id="adm">🔒 파트장 현황 보기</button>';
   app.innerHTML=h;
@@ -181,7 +182,7 @@ function start(sc){
   warm();
   rpLog("시작 · "+sc.title+" ("+S.lv+")");
   S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false; S.fb=false; S.fbTold=false;
-  $("#ttl").textContent=sc.ic+" "+sc.title;
+  $("#ttl").textContent=sc.ic+" "+sc.title.replace(/^\[영업\]\s*/,"");
   app.innerHTML='<div class="bar"><span class="pill">난이도 '+S.lv+'</span><span class="pill" id="sp" role="button">🔊 소리 켬</span></div><details class="keys"><summary>💡 이 상황의 응대 포인트 보기</summary><ol>'+sc.key.map(function(k){return '<li>'+esc(k)+'</li>';}).join("")+'</ol></details><div class="chat" id="chat"></div>';
   $("#sp").onclick=function(){ S.voice=!S.voice; $("#sp").textContent=S.voice?"🔊 소리 켬":"🔇 소리 끔"; if(!S.voice) stopSpeak(); };
   addB("c",sc.open); speak(sc.open); drawDock();
@@ -262,7 +263,7 @@ function showEval(j){
   var dl = (prev!=null) ? j.total-prev : null;
   setLast(S.sc,j.total);
   var h = (j.demo?'<div class="demo">🧪 '+(j.fail?'AI가 지금 평가하지 못해 간단 채점으로 보여 드려요. 기록에는 저장되지 않아요. ('+esc(j.fail)+')':'데모 채점이에요. AI가 연결되면 대화 내용을 실제로 읽고 평가해요.')+'</div>':'')+
-   '<div class="card"><div class="sub">'+esc(S.sc.title)+' · 난이도 '+S.lv+'</div><div class="big">'+j.total+'<small>점</small>'+(dl!=null?'<span class="delta '+(dl>=0?'up':'dn')+'">'+(dl>=0?'▲ ':'▼ ')+Math.abs(dl)+' (지난번 '+prev+')</span>':'')+'</div>'+
+   '<div class="card"><div class="sub">'+esc(S.sc.title)+' · 난이도 '+S.lv+'</div><div class="big">'+j.total+'<small>점</small></div>'+(dl!=null?'<div class="delta '+(dl>0?'up':dl<0?'dn':'eq')+'">지난번 '+prev+'점 → '+(dl>0?'▲ '+dl+'점 올랐어요':dl<0?'▼ '+(-dl)+'점 내려갔어요':'지난번과 같아요')+'</div>':'')+
    CATS.map(function(c){ var v=j.scores[c]||0; return '<div class="it'+(v<60?' lo':'')+'"><div><span>'+c+'</span><span>'+v+'점</span></div><u><i style="width:'+v+'%"></i></u></div>'; }).join("")+'</div>'+
    '<div class="card"><h2>👍 잘한 점</h2><ul class="l">'+(j.good||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul></div>'+
    '<div class="card"><h2>🔧 이렇게 해 보세요</h2><ul class="l">'+(j.improve||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>'+(j.example?'<div class="ex">💬 <b>이렇게 말해 보세요</b><br>'+esc(j.example)+'</div>':'')+'</div>'+
