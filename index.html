@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261111131000">
+<meta name="bsr-ver" content="20261111133000">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -368,7 +368,14 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .kr small{font-size:10.5px;color:var(--muted);margin-top:3px}
 
 /* 취합건 연동: 항목 전환 카드 */
-.srcsw{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.srcsw{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.srcsw .src-t{--sc:#0d9488}
+.srcsw .src{padding:11px 10px 10px}
+.srcsw .src b{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srcsw .src .src-v{font-size:25px}
+.is-pat .chips .chip[aria-pressed="true"]{background:#0d9488;border-color:#0d9488}
+.pt-fail{display:flex;justify-content:space-between;gap:8px;padding:8px 2px;border-top:1px solid var(--line);font-size:13px}.pt-fail:first-child{border-top:0}.pt-fail em{font-style:normal;color:var(--bad);font-weight:700;white-space:nowrap}
+.pt-site{display:flex;align-items:center;gap:8px;padding:8px 2px;border-top:1px solid var(--line);font-size:13.5px}.pt-site:first-child{border-top:0}.pt-site b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pt-site small{color:var(--muted);font-size:11.5px}.pt-site i{font-style:normal;font-weight:800;color:#0d9488}
 .src{--sc:var(--accent);position:relative;text-align:left;border:1.5px solid color-mix(in srgb,var(--sc) 30%,var(--line));border-radius:16px;padding:12px 12px 11px;
   background:linear-gradient(135deg,color-mix(in srgb,var(--sc) 9%,var(--surface)),var(--surface) 70%);cursor:pointer;display:flex;flex-direction:column;gap:2px;min-width:0;box-shadow:var(--shadow)}
 .src-r{--sc:var(--c2)}
@@ -2281,6 +2288,10 @@ var PANEL = {synced:"2026-10-18 03:38", src:"판넬부착건수_데이터", rows
 /*RISK_SYNC_START*/
 var RISK = {synced:"2026-10-18 03:38", src:"위험예지활동_데이터", target:10, rows:[["2026-09-13", "권재원", 1], ["2026-09-13", "용승우", 1], ["2026-09-14", "권재원", 1], ["2026-09-14", "박수안", 2], ["2026-09-14", "용승우", 1], ["2026-09-14", "유영민", 1], ["2026-09-14", "주상덕", 1], ["2026-09-15", "권재원", 1], ["2026-09-15", "용승우", 1], ["2026-09-15", "주상덕", 1], ["2026-09-18", "용승우", 1], ["2026-09-19", "권재원", 1], ["2026-09-19", "김지원", 2], ["2026-09-20", "김지원", 2], ["2026-09-21", "이명섭", 1], ["2026-09-21", "주상덕", 1], ["2026-09-22", "박수안", 4], ["2026-09-22", "유영민", 2], ["2026-09-23", "박수안", 1], ["2026-09-23", "유영민", 1], ["2026-09-24", "양심영", 1], ["2026-09-25", "권재원", 1], ["2026-09-26", "용승우", 1], ["2026-09-27", "용승우", 1], ["2026-09-27", "주상덕", 1], ["2026-09-28", "고혁진", 5], ["2026-09-28", "양심영", 1], ["2026-09-28", "주상덕", 1], ["2026-09-29", "고혁진", 1], ["2026-09-29", "권재원", 1], ["2026-09-29", "양심영", 2], ["2026-09-30", "주상덕", 3], ["2026-10-01", "유영민", 1], ["2026-10-01", "주상덕", 2], ["2026-10-02", "권재원", 2], ["2026-10-03", "양심영", 1], ["2026-10-03", "용승우", 1], ["2026-10-04", "김동현", 1], ["2026-10-04", "유영민", 1], ["2026-10-05", "권재원", 1], ["2026-10-06", "권재원", 1], ["2026-10-06", "김동현", 2], ["2026-10-06", "김지원", 1], ["2026-10-06", "유영민", 1], ["2026-10-06", "주상덕", 3], ["2026-10-07", "박수안", 1], ["2026-10-07", "양심영", 1], ["2026-10-07", "용승우", 2], ["2026-10-07", "유영민", 2], ["2026-10-08", "김동현", 2], ["2026-10-08", "양심영", 2], ["2026-10-08", "유영민", 2], ["2026-10-09", "권재원", 1], ["2026-10-09", "김민석", 1], ["2026-10-09", "김지원", 2], ["2026-10-10", "권재원", 2], ["2026-10-10", "김민석", 1], ["2026-10-10", "박수안", 1], ["2026-10-11", "용승우", 1], ["2026-10-12", "권재원", 2], ["2026-10-12", "김동현", 1], ["2026-10-12", "양심영", 2], ["2026-10-12", "유영민", 1], ["2026-10-13", "권재원", 1], ["2026-10-13", "김동현", 2], ["2026-10-13", "김지원", 1], ["2026-10-13", "양심영", 2], ["2026-10-13", "유영민", 2], ["2026-10-14", "고혁진", 1], ["2026-10-14", "양심영", 1], ["2026-10-15", "김지원", 6], ["2026-10-15", "박수안", 1], ["2026-10-15", "용승우", 1], ["2026-10-16", "박수안", 1], ["2026-10-16", "용승우", 2], ["2026-10-16", "유영민", 1], ["2026-10-17", "김민석", 1], ["2026-10-17", "용승우", 1]]};
 /*RISK_SYNC_END*/
+/* ===== 순찰방문 현황 — 순찰 방문 후 고객 안내 문자 전송 자료 (엑셀 캡처 받으면 rows 교체)
+   rows: [발송일, 차량, 계약처(일부 가림), 업종, 발송시각, CS성명, 전송결과(빈칸=성공)] — 계약번호·고객명·연락처는 넣지 않음
+   방문 1건 = 같은 차량·계약처·발송일·시각 (고객 연락처가 여러 명이면 문자는 여러 건) */
+var PATROL = {asof:"2026-11-09", period:"11.01 ~ 11.09", rows:[["2026-11-01", "27", "칸타빌수유*****", "주택", "01:32", "김민수", ""], ["2026-11-01", "28", "포레나노원*****", "주택", "19:22", "권재원", "잘못된번호"], ["2026-11-01", "26", "꿈의숲아이*****", "사무실", "19:31", "김민수", ""], ["2026-11-01", "26", "꿈의숲아이*****", "사무실", "19:31", "김민수", ""], ["2026-11-01", "26", "태릉해링턴****", "주택", "19:56", "김민수", ""], ["2026-11-01", "26", "래미안장위*****", "주택", "19:31", "김민수", ""], ["2026-11-01", "26", "래미안장위*****", "주택", "19:31", "김민수", ""], ["2026-11-01", "28", "동진신안아*****", "사무실", "19:09", "권재원", ""], ["2026-11-01", "26", "복음당공릉(******", "귀금속점", "19:47", "김민수", ""], ["2026-11-01", "26", "복음당공릉(******", "귀금속점", "19:47", "김민수", ""], ["2026-11-01", "27", "칸타빌수유*****", "주택", "20:39", "김민석", ""], ["2026-11-02", "27", "칸타빌수유*****", "주택", "18:20", "김민석", ""], ["2026-11-02", "26", "태릉해링턴****", "주택", "19:37", "고혁진", ""], ["2026-11-02", "26", "동진신안아*****", "사무실", "19:51", "고혁진", ""], ["2026-11-01", "127", "방학신동아*****", "주택", "20:09", "박수안", ""], ["2026-11-03", "27", "김갑선**", "주택", "00:04", "김민석", ""], ["2026-11-03", "27", "김갑선**", "주택", "00:04", "김민석", ""], ["2026-11-03", "26", "월계센트럴*****", "주택", "01:21", "고혁진", ""], ["2026-11-02", "232", "진각종로***", "종교시설", "21:52", "김유건", ""], ["2026-11-02", "232", "진각종로***", "종교시설", "21:52", "김유건", ""], ["2026-11-03", "27", "칸타빌수유*****", "주택", "18:56", "김민석", ""], ["2026-11-02", "232", "꿈의숲아이*****", "사무실", "21:29", "김유건", ""], ["2026-11-02", "232", "꿈의숲아이*****", "사무실", "21:29", "김유건", ""], ["2026-11-03", "26", "꿈의숲아이*****", "사무실", "18:46", "유영민", ""], ["2026-11-03", "26", "꿈의숲아이*****", "사무실", "18:46", "유영민", ""], ["2026-11-02", "232", "래미안장위*****", "주택", "21:20", "김유건", ""], ["2026-11-02", "232", "래미안장위*****", "주택", "21:20", "김유건", ""], ["2026-11-03", "26", "래미안장위*****", "주택", "19:23", "유영민", ""], ["2026-11-03", "26", "래미안장위*****", "주택", "19:23", "유영민", ""], ["2026-11-02", "232", "성북육아종*****", "관공서", "21:54", "김유건", ""], ["2026-11-02", "127", "방학신동아*****", "주택", "22:31", "권재원", ""], ["2026-11-03", "26", "월계센트럴*****", "주택", "20:11", "유영민", ""], ["2026-11-03", "27", "인터엠방학****", "사무실", "21:12", "김민석", "기타에러"], ["2026-11-03", "27", "인터엠방학****", "사무실", "21:12", "김민석", ""], ["2026-11-04", "28", "포레나노원*****", "주택", "19:44", "김지원", "잘못된번호"], ["2026-11-03", "160", "태릉해링턴****", "주택", "21:32", "남현준", ""], ["2026-11-04", "160", "태릉해링턴****", "주택", "19:07", "남현준", ""], ["2026-11-03", "160", "동진신안아*****", "사무실", "21:17", "남현준", ""], ["2026-11-04", "27", "황규영**", "주택", "18:50", "양심영", ""], ["2026-11-04", "27", "황규영**", "주택", "18:50", "양심영", ""], ["2026-11-03", "27", "방학신동아*****", "주택", "20:21", "김민석", ""], ["2026-11-05", "26", "월계센트럴*****", "주택", "18:15", "양심영", ""], ["2026-11-04", "27", "칸타빌수유*****", "주택", "23:13", "양심영", ""], ["2026-11-05", "26", "꿈의숲아이*****", "사무실", "18:00", "양심영", ""], ["2026-11-05", "26", "꿈의숲아이*****", "사무실", "18:00", "양심영", ""], ["2026-11-05", "26", "래미안장위*****", "주택", "17:59", "양심영", ""], ["2026-11-05", "26", "래미안장위*****", "주택", "17:59", "양심영", ""], ["2026-11-04", "160", "동진신안아*****", "사무실", "20:59", "남현준", ""], ["2026-11-05", "127", "방학신동아*****", "주택", "00:42", "박수안", ""], ["2026-11-06", "28", "성서대밀알*****", "학교", "18:56", "양심영", ""], ["2026-11-06", "28", "빠른**", "일반점포", "18:58", "양심영", ""], ["2026-11-06", "28", "빠른**", "일반점포", "18:58", "양심영", ""], ["2026-11-06", "28", "국민성서대****", "금융", "18:55", "양심영", ""], ["2026-11-06", "28", "성서대어***", "교육시설", "18:55", "양심영", ""], ["2026-11-06", "28", "성서대일립****", "학교", "18:57", "양심영", ""], ["2026-11-05", "160", "태릉해링턴****", "주택", "23:03", "김민수", ""], ["2026-11-05", "160", "동진신안아*****", "사무실", "21:44", "김민수", ""], ["2026-11-06", "28", "백약국**", "일반점포", "18:59", "양심영", ""], ["2026-11-06", "28", "용한**", "병원", "06:16", "유영민", ""], ["2026-11-05", "127", "방학신동아*****", "주택", "20:26", "박수안", ""], ["2026-11-06", "28", "온곡중**", "학교", "22:18", "양심영", ""], ["2026-11-06", "28", "온곡중학****", "학교", "22:18", "양심영", ""], ["2026-11-06", "28", "청원초***", "학교", "22:08", "양심영", ""], ["2026-11-06", "28", "상계초***", "학교", "22:20", "양심영", ""], ["2026-11-06", "28", "청원중학****", "학교", "22:13", "양심영", ""], ["2026-11-06", "28", "청원고등****", "학교", "22:09", "양심영", ""], ["2026-11-06", "28", "청원중학***", "학교", "22:12", "양심영", ""], ["2026-11-06", "28", "청원여자****", "학교", "22:11", "양심영", ""], ["2026-11-06", "28", "청원여고***", "학교", "22:10", "양심영", ""], ["2026-11-06", "28", "청원고등학****", "학교", "22:10", "양심영", ""], ["2026-11-06", "28", "청원여고***", "학교", "22:11", "양심영", ""], ["2026-11-07", "27", "칸타빌수유*****", "주택", "18:41", "김민석", ""], ["2026-11-06", "28", "포레나노원*****", "주택", "20:54", "양심영", "잘못된번호"], ["2026-11-06", "28", "청원여자고****", "학교", "22:12", "양심영", ""], ["2026-11-06", "26", "꿈의숲아이*****", "사무실", "20:56", "고혁진", ""], ["2026-11-06", "26", "꿈의숲아이*****", "사무실", "20:56", "고혁진", ""], ["2026-11-07", "26", "꿈의숲아이*****", "사무실", "18:48", "용승우", ""], ["2026-11-07", "26", "꿈의숲아이*****", "사무실", "18:48", "용승우", ""], ["2026-11-06", "160", "태릉해링턴****", "주택", "21:59", "김동현", ""], ["2026-11-06", "26", "래미안장위*****", "주택", "20:49", "고혁진", ""], ["2026-11-06", "26", "래미안장위*****", "주택", "20:49", "고혁진", ""], ["2026-11-07", "26", "래미안장위*****", "주택", "18:55", "용승우", ""], ["2026-11-07", "26", "래미안장위*****", "주택", "18:55", "용승우", ""], ["2026-11-06", "28", "삼성어린****", "교육시설", "22:17", "양심영", ""], ["2026-11-06", "160", "동진신안아*****", "사무실", "23:02", "김동현", ""], ["2026-11-06", "28", "상계초등****", "학교", "22:21", "양심영", ""], ["2026-11-06", "27", "황규영**", "주택", "21:07", "주상덕", ""], ["2026-11-06", "27", "황규영**", "주택", "21:07", "주상덕", ""], ["2026-11-07", "27", "황규영**", "주택", "18:25", "김민석", ""], ["2026-11-07", "27", "황규영**", "주택", "18:25", "김민석", ""], ["2026-11-06", "28", "청원여고***", "학교", "22:10", "양심영", ""], ["2026-11-06", "28", "노원세무서*****", "관공서", "21:04", "양심영", ""], ["2026-11-06", "28", "노원세무***", "관공서", "21:02", "양심영", ""], ["2026-11-06", "28", "노원세무***", "관공서", "21:02", "양심영", ""], ["2026-11-06", "28", "상계초***", "학교", "22:20", "양심영", ""], ["2026-11-07", "26", "월계센트럴*****", "주택", "21:12", "용승우", ""], ["2026-11-08", "26", "꿈의숲아이*****", "사무실", "19:40", "용승우", ""], ["2026-11-08", "26", "꿈의숲아이*****", "사무실", "19:40", "용승우", ""], ["2026-11-07", "26", "태릉해링턴****", "주택", "20:15", "용승우", ""], ["2026-11-08", "26", "래미안장위*****", "주택", "19:45", "용승우", ""], ["2026-11-08", "26", "래미안장위*****", "주택", "19:45", "용승우", ""], ["2026-11-08", "160", "동진신안아*****", "사무실", "19:46", "유영민", ""], ["2026-11-07", "127", "방학신동아*****", "주택", "22:46", "권재원", ""], ["2026-11-08", "127", "방학신동아*****", "주택", "18:50", "권재원", ""], ["2026-11-08", "26", "월계센트럴*****", "주택", "20:18", "유영민", ""], ["2026-11-09", "26", "월계센트럴*****", "주택", "19:25", "유영민", ""], ["2026-11-09", "127", "키웨스트****", "음식점", "00:08", "권재원", ""], ["2026-11-08", "27", "칸타빌수유*****", "주택", "21:55", "김민석", ""], ["2026-11-09", "27", "칸타빌수유*****", "주택", "17:47", "김민석", ""], ["2026-11-08", "127", "포레나노원*****", "주택", "20:46", "권재원", "잘못된번호"], ["2026-11-09", "26", "꿈의숲아이*****", "사무실", "19:07", "유영민", ""], ["2026-11-09", "26", "꿈의숲아이*****", "사무실", "19:07", "유영민", ""], ["2026-11-08", "26", "롯데프레***", "일반점포", "20:00", "용승우", ""], ["2026-11-08", "160", "태릉해링턴****", "주택", "20:12", "유영민", ""], ["2026-11-09", "26", "래미안장위*****", "주택", "19:13", "유영민", ""], ["2026-11-09", "26", "래미안장위*****", "주택", "19:13", "유영민", ""], ["2026-11-08", "160", "복음당공릉(******", "귀금속점", "20:21", "유영민", ""], ["2026-11-08", "160", "복음당공릉(******", "귀금속점", "20:21", "유영민", ""]]};
 /* 입력 앱 주소 — 바뀌면 여기만 고치면 됩니다 */
 var APPS = {panel:"https://ijaesig04-hash.github.io/-panel-report.-Public/", risk:"https://ijaesig04-hash.github.io/report/risk.html"};
 function goLink(kind){
@@ -2320,6 +2331,43 @@ function riskSection(per, ym, prevYm, perLabel){
     '</div>'+
     '<p class="note">'+(useT?'개인 월 목표 '+T+'건(위험예지 앱 설정값과 자동 동기화) 기준입니다. ':'')+'테스트 입력은 뺐습니다.</p></div>'+
     '<div class="sec"><h2>근무자별 '+perLabel+' <span>많은 순</span></h2><div class="card">'+rows+'</div></div>';
+}
+function patrolSection(per, ym, prevYm, perLabel){
+  var inPer = function(d){ return per==="month" ? d.slice(0,7)===ym : per==="prev" ? d.slice(0,7)===prevYm : true; };
+  var rows = PATROL.rows.filter(function(r){ return inPer(r[0]); });
+  var V = {}, vl = [];
+  rows.forEach(function(r){ var k=r[0]+'|'+r[1]+'|'+r[2]+'|'+r[4]; if(!V[k]){ V[k]={d:r[0],car:r[1],site:r[2],ind:r[3],cs:r[5],m:0,f:0}; vl.push(V[k]); } V[k].m++; if(r[6]) V[k].f++; });
+  var roster = PPL.map(function(p){return p.name}), by = {}; roster.forEach(function(n){ by[n]={name:n,v:0,m:0}; });
+  vl.forEach(function(x){ if(!by[x.cs]) by[x.cs]={name:x.cs,v:0,m:0}; by[x.cs].v++; by[x.cs].m+=x.m; });
+  var list = Object.keys(by).map(function(k){return by[k]}).sort(function(a,b){ return b.v-a.v || b.m-a.m || a.name.localeCompare(b.name,"ko"); });
+  var act = list.filter(function(x){return x.v>0}).length, max = Math.max.apply(null, list.map(function(x){return x.v}).concat([1]));
+  var fails = rows.filter(function(r){return r[6]});
+  var rk=0, last=-1;
+  var rl = list.map(function(x,i){ if(x.v!==last){rk=i+1; last=x.v;}
+    return '<div class="rk"><span class="n">'+(x.v?rbs(rk):'')+'</span><span class="t">'+x.name+'</span>'+(x.v?'<b class="r plain">'+x.v+'회</b>':'<span class="pl bad">0회</span>')+
+      '<div class="bl"><i class="ac" style="width:'+(x.v/max*100)+'%;background:#0d9488"></i></div><span class="s num">문자 '+x.m+'건</span></div>'; }).join("");
+  /* 최근 14일 (자료 기준일까지) */
+  var end = PATROL.asof, days = []; for(var i=13;i>=0;i--) days.push(addDays(end,-i));
+  var dm = {}; PATROL.rows.forEach(function(r){}); vl.forEach(function(x){ dm[x.d]=(dm[x.d]||0)+1; });
+  var all = {}; PATROL.rows.forEach(function(r){ var k=r[0]+'|'+r[1]+'|'+r[2]+'|'+r[4]; all[k]=r[0]; }); var dAll={}; Object.keys(all).forEach(function(k){ dAll[all[k]]=(dAll[all[k]]||0)+1; });
+  var dmax = Math.max.apply(null, days.map(function(d){return dAll[d]||0}).concat([1]));
+  var bars = days.map(function(d){ var t=dAll[d]||0, wd=new Date(d+"T00:00:00Z").getUTCDay();
+    return '<div class="tb"><span class="tv num">'+(t||'')+'</span><div class="tc"><i class="tp" style="height:'+(t/dmax*100)+'%;background:#0d9488"></i></div><span class="td num'+(wd===0?' sun':'')+'">'+(+d.slice(8))+'</span></div>'; }).join("");
+  /* 많이 방문한 고객처 */
+  var sg = {}, so = []; vl.forEach(function(x){ if(!sg[x.site]){ sg[x.site]={site:x.site,ind:x.ind,n:0,who:{}}; so.push(sg[x.site]); } sg[x.site].n++; sg[x.site].who[x.cs]=1; });
+  so.sort(function(a,b){ return b.n-a.n || a.site.localeCompare(b.site,"ko"); });
+  var sites = so.slice(0,8).map(function(x){ return '<div class="pt-site"><b>'+x.site+' <small>'+x.ind+'</small></b><small>'+Object.keys(x.who).join(' · ')+'</small><i class="num">'+x.n+'회</i></div>'; }).join("");
+  var fl = fails.map(function(r){ return '<div class="pt-fail"><span>'+(+r[0].slice(5,7))+'/'+(+r[0].slice(8))+' · '+r[1]+'호 · '+r[2]+' <small style="color:var(--muted)">('+r[5]+')</small></span><em>'+r[6]+'</em></div>'; }).join("");
+  if(!rows.length) return '<div class="sec"><div class="card"><p class="note" style="margin:0">'+perLabel+' 순찰방문 자료가 아직 없어요. 엑셀 캡처를 보내 주시면 반영할게요.</p></div></div>';
+  return '<div class="sec"><div class="tiles3">'+
+      '<div class="card tile"><h3>순찰 방문</h3><div class="v" style="color:#0d9488">'+vl.length+'<small>회</small></div></div>'+
+      '<div class="card tile"><h3>안내 문자</h3><div class="v">'+rows.length+'<small>건</small></div></div>'+
+      '<div class="card tile"><h3>참여 인원</h3><div class="v">'+act+'<small>/'+roster.length+'명</small></div></div>'+
+    '</div><p class="note">'+perLabel+' 기준 · 자료 '+PATROL.period+' · 방문 1회 = 같은 고객처에 같은 시각 보낸 문자 묶음'+(fails.length?' · 전송 실패 '+fails.length+'건':'')+'</p></div>'+
+    '<div class="sec"><h2>최근 14일 <span>순찰 방문 횟수</span></h2><div class="card trend">'+bars+'</div></div>'+
+    '<div class="sec"><h2>근무자별 '+perLabel+' <span>방문 많은 순</span></h2><div class="card">'+rl+'</div></div>'+
+    '<div class="sec"><h2>많이 방문한 고객처 <span>상위 '+Math.min(8,so.length)+'곳</span></h2><div class="card">'+sites+'</div></div>'+
+    (fails.length?'<div class="sec"><h2>문자 전송 실패 <span>고객 연락처 확인 필요</span></h2><div class="card">'+fl+'</div></div>':'');
 }
 function addDays(d,n){var t=new Date(d+"T00:00:00Z");t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10)}
 function viewRep(){
@@ -2368,11 +2416,14 @@ function viewRep(){
   }).join("");
   var rs = state.rs || "panel";
   var rTot = RISK.rows.reduce(function(a,r){return a+(inPer(r[0])?r[2]:0)},0);
+  var ptK = {}; PATROL.rows.forEach(function(r){ if(inPer(r[0])) ptK[r[0]+'|'+r[1]+'|'+r[2]+'|'+r[4]]=1; }); var ptTot = Object.keys(ptK).length;
   var sw = '<div class="srcsw" role="tablist" aria-label="취합 항목">'+
     '<button type="button" role="tab" class="src src-p" data-rs="panel" aria-selected="'+(rs==="panel")+'">'+
       '<span class="src-k">PANEL</span><b>판넬 리텐션</b><span class="src-v num">'+(tp+ts)+'<small>건</small></span><span class="src-s">'+perLabel+' · '+(PS?'앱 서버 '+PS.at.slice(11,16):syncLbl(PANEL))+'</span></button>'+
     '<button type="button" role="tab" class="src src-r" data-rs="risk" aria-selected="'+(rs==="risk")+'">'+
       '<span class="src-k">SAFETY</span><b>위험예지 활동</b><span class="src-v num">'+rTot+'<small>건</small></span><span class="src-s">'+perLabel+' · '+syncLbl(RISK)+'</span></button>'+
+    '<button type="button" role="tab" class="src src-t" data-rs="patrol" aria-selected="'+(rs==="patrol")+'">'+
+      '<span class="src-k">PATROL</span><b>순찰방문 현황</b><span class="src-v num">'+ptTot+'<small>회</small></span><span class="src-s">'+perLabel+' · 자료 '+(+PATROL.asof.slice(5,7))+'/'+(+PATROL.asof.slice(8))+'</span></button>'+
     '</div>';
   var panelView = goLink("panel")+'<div class="sec"><div class="tiles3">'+
       '<div class="card tile"><h3>판넬</h3><div class="v" style="color:var(--accent)">'+tp+'<small>건</small></div></div>'+
@@ -2384,8 +2435,8 @@ function viewRep(){
     '<div class="card trend">'+bars+'</div></div>'+
     '<div class="sec"><h2>근무자별 '+perLabel+' <span>많은 순</span></h2><div class="card">'+rows+'</div></div>';
   return sw+
-    '<div class="'+(rs==="risk"?"is-risk":"")+'"><div class="chips" role="group" aria-label="기간 선택">'+chips+'</div></div>'+
-    '<div class="srcbody '+(rs==="panel"?"is-p":"is-r")+'">'+(rs==="panel" ? panelView : riskSection(per, ym, prevYm, perLabel))+'</div>'+
+    '<div class="'+(rs==="risk"?"is-risk":rs==="patrol"?"is-pat":"")+'"><div class="chips" role="group" aria-label="기간 선택">'+chips+'</div></div>'+
+    '<div class="srcbody '+(rs==="panel"?"is-p":rs==="patrol"?"is-t":"is-r")+'">'+(rs==="panel" ? panelView : rs==="patrol" ? patrolSection(per, ym, prevYm, perLabel) : riskSection(per, ym, prevYm, perLabel))+'</div>'+
     '<p class="note">'+(PS?'판넬 '+perLabel+' 건수는 판넬 앱 서버가 직접 센 값(근무자 화면의 「이번 달 n건」과 같음) · ':'')+((PANEL.live||RISK.live)?'실시간 연동: 앱을 열 때마다 각 앱의 구글 시트에서 최신 숫자를 불러옵니다 ('+(RISK.live?'위험예지 '+RISK.synced.slice(11,16):'위험예지 연결 실패')+').':'⚠️ 지금은 연결이 안 돼 마지막 반영값을 보여줍니다.')+' 판넬은 북서울지사 입력만, 두 항목 모두 테스트 입력은 빼고 집계합니다.</p><button type="button" class="rp-sync" data-rpsync="1">🔄 지금 다시 불러오기</button>';
 }
 function rbs(n){return '<span class="rb sm'+rbc(n)+'">'+n+'</span>'}
@@ -3666,6 +3717,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-11h", date:"11/11", title:"취합건 연동에 순찰방문 현황 추가", tabs:["rep"], items:["🚓 취합건 연동 탭에 「순찰방문 현황」이 생겼어요 — 판넬 · 위험예지 · 순찰방문 3가지","11월(11.01~11.09) 순찰 방문 90회 · 안내 문자 118건 · 근무자별 순위 · 많이 방문한 고객처 · 전송 실패 5건"]},
  {id:"2026-11-11g", date:"11/11", title:"다발보 11/10 반영", tabs:["alm"], items:["🔁 다발보 11월 (11.01~11.10) — 18곳 · 41건 · 3회 이상: 상계제일중학교신관(28호) 4건 · 비마트도봉쌍문점(27호) 4건 · 서라벌고등학교(160호) 3건","조치 완료 4곳 — 서라벌고 · 상계제일중 · 한국전력공사노원도봉 · 비마트도봉 (11/9~11/10 조치 반영)"]},
  {id:"2026-11-11f", date:"11/11", title:"고객체감 11/11 업데이트", tabs:["cs"], items:["📞 고객체감 11/11 기준 — 발송 241건 · 응답 78건 · 만족도 9.96"]},
  {id:"2026-11-11e", date:"11/11", title:"운전성향 11/11 업데이트", tabs:["drv"], items:["🚗 운전성향 11/11 기준 반영 — 김태건 주의(40건, 하루 평균 5.7), 그 외 양호"]},
