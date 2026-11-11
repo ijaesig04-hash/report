@@ -70,6 +70,7 @@ h2{font-size:17px;margin:2px 0 4px}
 .subs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:6px}.subs button{border:1px solid var(--line,#dfe4ee);background:#fff;border-radius:12px;padding:8px 4px;font:700 13px/1.35 'Noto Sans KR',sans-serif;color:#334155;cursor:pointer;text-align:center}.subs button small{display:block;font-size:11px;font-weight:600;color:#94a3b8;margin-top:1px}.subs button[aria-pressed="true"]{background:#e4002b;border-color:#e4002b;color:#fff}.subs button[aria-pressed="true"] small{color:#ffd5dc}
 .gh-d{margin:4px 2px 10px;font-size:13px;color:#64748b;line-height:1.5}
 .mt-h{margin:12px 0 4px;font-size:13.5px;font-weight:800;color:#0f5132}.mt{margin:5px 0;background:#ecf8f1;border-radius:10px;padding:8px 11px;font-size:14px;line-height:1.55;color:#14532d}
+.fq{margin:-2px 0 12px;background:#f4f6fa;border-radius:10px;padding:9px 11px;font-size:12.5px;line-height:1.55;color:#475569}.fq b{color:#334155}
 .tmr{font-size:11.5px;color:#64748b;text-align:center;margin:-2px 0 8px}
 .delta{display:inline-block;margin:10px 0 4px;font-size:14px;font-weight:700;border-radius:999px;padding:5px 12px;line-height:1.3}.delta.up{color:#11683f;background:#e3f5ea}.delta.dn{color:#b4151f;background:#fde8ea}.delta.eq{color:#475569;background:#eef1f6}
 .it{margin:10px 0}.it div{display:flex;justify-content:space-between;font-size:14px;font-weight:700}
@@ -257,6 +258,7 @@ function home(){
   h += RP_API ? "" : '<div class="demo">🧪 <b>데모 모드</b> — AI 연결 전이라 미리 정해 둔 고객 대사와 간단 채점으로 동작해요. 흐름을 미리 써 볼 수 있어요.</div>';
   h = '<div class="hero"><img src="roleplay-bg.jpg?v=2" alt="화난 고객에게 공감하며 응대하는 에스원 직원 그림"></div>' + h;
   h += '<div class="card"><h2>어떤 상황을 연습할까요?</h2><p class="sub">AI가 까다로운 고객이 되어 말을 걸어요. 소리로 대답해 보세요. 모두 가상 상황이라 <b>실제 고객 이름·번호는 말하지 않아도 돼요.</b></p>'+
+    (RP_API?'<p class="fq">📞 실시간 통화는 구글 AI <b>무료 사용량</b>으로 운영돼요. 그날 무료 사용량이 끝나면 연결이 안 될 수 있으니, 이때는 <b>「글자로 연습」</b>으로 이어서 해 주세요. 사용자가 많아지면 유료로 바뀔 수 있고, 그때는 따로 안내드릴게요.</p>':'')+
     '<b style="font-size:13px">난이도</b><div class="seg" id="lv">'+["하","중","상"].map(function(l){return '<button type="button" data-l="'+l+'" aria-pressed="'+(S.lv===l)+'">'+l+'</button>';}).join("")+'</div></div>';
   var row=function(c,i){ var l=getLast(c); return '<button type="button" class="sc" data-i="'+i+'"><i>'+c.ic+'</i><div><b>'+esc(c.title)+'</b><span><em class="tag '+c.lv+'">추천 '+c.lv+'</em>'+(l?'지난 점수 '+l.t+'점':'아직 연습 전')+'</span></div></button>'; };
   var tab=homeTab(), sub=homeSub(tab), subs=CATS2[tab];
@@ -353,7 +355,7 @@ function liveStart(tries, model){
   }).catch(function(e){ lvBtn(false); lvStatus("연결하지 못했어요"); liveErr(e.message||String(e)); LIVE_BAD=true; });
 }
 function liveErr(msg){
-  var d=document.createElement("div"); d.className="tip"; d.textContent="⚠️ 실시간 통화 연결이 안 됐어요 ("+String(msg).slice(0,90)+"). ‘일반 연습으로’를 눌러 계속할 수 있어요."; $("#chat").appendChild(d); scrollEnd();
+  var d=document.createElement("div"); d.className="tip"; d.textContent="⚠️ 실시간 통화 연결이 안 됐어요. 오늘 무료 사용량이 끝났거나 연결이 불안정할 수 있어요. 「글자로 연습」을 눌러 계속할 수 있어요. ("+String(msg).slice(0,60)+")"; $("#chat").appendChild(d); scrollEnd();
   rpLog("실시간 실패 · "+String(msg).slice(0,40));
 }
 function b64ToI16(b){ var s=atob(b), n=s.length, u=new Uint8Array(n); for(var i=0;i<n;i++) u[i]=s.charCodeAt(i); return new Int16Array(u.buffer, 0, n>>1); }
