@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261112003500">
+<meta name="bsr-ver" content="20261112070500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1153,6 +1153,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .pu-b{display:block;width:100%;border:0;border-radius:14px;padding:14px;font:800 16px 'Noto Sans KR',sans-serif;cursor:pointer}.pu-b.on{background:#1f4fd8;color:#fff}.pu-b.off{background:#fff;color:#b4151f;border:2px solid #f3c2c8}
 .sh-act{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;margin:-4px 0 10px}.sh-act button{border:0;background:#eef2f8;border-radius:10px;padding:8px 12px;font:700 13px 'Noto Sans KR',sans-serif;cursor:pointer;color:#14213a}
 .oj-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#eef1f6;border-radius:12px;padding:4px;margin:4px 0 12px}.oj-tabs button{border:0;background:transparent;border-radius:9px;padding:10px 4px;font:800 14px 'Noto Sans KR',sans-serif;color:#475569;cursor:pointer}.oj-tabs button[aria-selected="true"]{background:#fff;color:#14275c;box-shadow:0 2px 6px rgba(16,32,80,.15)}
+.tl-s{margin:2px 0 0;font-size:11.5px;color:var(--muted);white-space:nowrap}
 .rpb{margin:8px 0 2px;background:linear-gradient(135deg,#fff8e6,#fff 70%);border:1px solid #f3d58a;border-radius:16px;padding:12px 14px;-webkit-user-select:none;user-select:none}.rpb[hidden]{display:none}
 .rpb-h{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}.rpb-h b{font-size:15px;color:#7a4e00}.rpb-h small{font-size:11.5px;color:#9a7b3b}
 .rpb-r{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px dashed #f0dfb2}.rpb-r:first-of-type{border-top:0}.rpb-m{font-size:20px;width:26px;text-align:center}.rpb-r b{flex:1;font-size:14.5px;color:#1e293b}.rpb-r b em{font-style:normal;font-size:11px;font-weight:800;color:#7a4e00;background:#ffe08a;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}.rpb-r>small{font-size:11.5px;color:#94a3b8}.rpb-r i{font-style:normal;font-weight:900;font-size:18px;color:#b45309;min-width:46px;text-align:right}.rpb-r i small{font-size:11px;font-weight:700;margin-left:1px}
@@ -2420,12 +2421,17 @@ function viewRep(){
     return '<button type="button" class="chip" data-rp="'+l[0]+'" aria-pressed="'+(per===l[0])+'">'+l[1]+'</button>';
   }).join("");
   var rk = 0, last = -1;
+  /* 개인 월 목표 (판넬+스티커 합계) — 위험예지와 같은 방식으로 n/목표 표시 */
+  var PT = per==="prev" ? panelGoal(prevYm) : panelGoal(ym), pUseT = per!=="all", pmx = pUseT ? PT : max;
+  var pAch = list.filter(function(x){ return x.p+x.s>=PT; }).length;
   var rows = list.map(function(x,i){
     var t = x.p+x.s; if(t!==last){rk=i+1; last=t;}
+    var cls = !pUseT ? "plain" : t>=PT ? "good" : t>=PT/2 ? "warn" : "bad";
+    var pw = Math.min(100, x.p/pmx*100), sw2 = Math.min(100-pw, x.s/pmx*100);
     return '<div class="rk"><span class="n">'+(t?rbs(rk):'')+'</span><span class="t">'+x.name+'</span>'+
-      (t ? '<b class="r plain">'+t+'건</b>' : '<span class="pl bad">0건</span>')+
-      '<div class="bl"><i class="pp" style="width:'+(x.p/max*100)+'%"></i><i class="ps" style="left:'+(x.p/max*100)+'%;width:'+(x.s/max*100)+'%"></i></div>'+
-      '<span class="s num">판넬 '+x.p+' · 스티커 '+x.s+'</span></div>';
+      (t ? '<b class="r '+cls+'">'+t+(pUseT?'<small class="num" style="color:var(--muted);font-weight:500">/'+PT+'</small>':'건')+'</b>' : '<span class="pl bad">0'+(pUseT?'/'+PT:'건')+'</span>')+
+      '<div class="bl"><i class="pp" style="width:'+pw+'%"></i><i class="ps" style="left:'+pw+'%;width:'+sw2+'%"></i></div>'+
+      '<span class="s num">판넬 '+x.p+' · 스티커 '+x.s+(pUseT?' · '+(t>=PT?'목표 달성':'목표까지 '+(PT-t)+'건'):'')+'</span></div>';
   }).join("");
   var rs = state.rs || "panel";
   var rTot = RISK.rows.reduce(function(a,r){return a+(inPer(r[0])?r[2]:0)},0);
@@ -2439,11 +2445,11 @@ function viewRep(){
       '<span class="src-k">PATROL</span><b>순찰방문 현황</b><span class="src-v num">'+ptTot+'<small>회</small></span><span class="src-s">'+perLabel+' · 자료 '+(+PATROL.asof.slice(5,7))+'/'+(+PATROL.asof.slice(8))+'</span></button>'+
     '</div>';
   var panelView = goLink("panel")+'<div class="sec"><div class="tiles3">'+
-      '<div class="card tile"><h3>판넬</h3><div class="v" style="color:var(--accent)">'+tp+'<small>건</small></div></div>'+
-      '<div class="card tile"><h3>스티커</h3><div class="v" style="color:var(--c1)">'+ts+'<small>건</small></div></div>'+
+      '<div class="card tile"><h3>'+perLabel+' 건수</h3><div class="v" style="color:var(--accent)">'+(tp+ts)+'<small>건</small></div><p class="tl-s">판넬 '+tp+' · 스티커 '+ts+'</p></div>'+
       '<div class="card tile"><h3>참여 인원</h3><div class="v">'+active+'<small>/'+roster.length+'명</small></div></div>'+
+      '<div class="card tile"><h3>목표 달성</h3><div class="v" style="color:var(--good)">'+(pUseT?pAch:'–')+'<small>'+(pUseT?'명':'')+'</small></div></div>'+
     '</div>'+
-    '<p class="note">'+perLabel+' 합계 '+(tp+ts)+'건 · '+(+today.slice(5,7))+'/'+(+today.slice(8))+' 입력 '+td+'건 (마지막 입력일)</p></div>'+
+    '<p class="note">'+(pUseT?'개인 월 목표 '+PT+'건(판넬+스티커 합계, 11~3월 10건 · 4~10월 20건) 기준 · ':'')+perLabel+' 합계 '+(tp+ts)+'건 · '+(+today.slice(5,7))+'/'+(+today.slice(8))+' 입력 '+td+'건 (마지막 입력일)</p></div>'+
     '<div class="sec"><h2>최근 14일 <span><i class="lg lp"></i>판넬 <i class="lg ls"></i>스티커</span></h2>'+
     '<div class="card trend">'+bars+'</div></div>'+
     '<div class="sec"><h2>근무자별 '+perLabel+' <span>많은 순</span></h2><div class="card">'+rows+'</div></div>';
@@ -3730,6 +3736,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-12b", date:"11/12", title:"판넬 개인 목표 표시", tabs:["rep"], items:["📋 취합건 연동 → 판넬 리텐션도 위험예지처럼 개인 목표 대비 n/10건으로 보여요 (판넬+스티커 합계 · 11~3월 월 10건) · 목표 달성 인원 · 목표까지 남은 건수"]},
  {id:"2026-11-12a", date:"11/12", title:"메뉴 정리 · 알림 상태 표시", tabs:["home"], items:["📲 업데이트 알림 받기 — 지금 켜져 있는지 꺼져 있는지 크게 보여 주고, 켜기 · 끄기 버튼으로 바로 바꿀 수 있어요","🎓 OJT 진도표와 ✅ 개시 방문 체크를 한 메뉴로 합쳤어요 (이름표 메뉴 → 🎓 OJT · 개시 방문 체크)","🔄 최신 버전 받기를 누구나 쓸 수 있어요 — 화면이 예전 같으면 이름표 메뉴에서 눌러 주세요","🗂️ 이름표 메뉴 정리 — 「한 장 요약 · 월말 결산」, 「업데이트 이력 · 알림 받기」, 「고객처 한눈에 · 불만 위험」을 각각 한 메뉴로 합쳤어요 (위쪽 탭으로 전환)"]},
  {id:"2026-11-11i", date:"11/11", title:"11월 근무표 수정", tabs:["duty"], items:["🗓️ 11월 근무표 수정본 반영 — 김유건 28~30일 야간, 김지원 13일 휴무, 김동현 30일 주간, 남현준 13일 주간·30일 휴무 · 파트장 근무 조정"]},
  {id:"2026-11-11h", date:"11/11", title:"취합건 연동에 순찰방문 현황 추가", tabs:["rep"], items:["🚓 취합건 연동 탭에 「순찰방문 현황」이 생겼어요 — 판넬 · 위험예지 · 순찰방문 3가지","11월(11.01~11.09) 순찰 방문 90회 · 안내 문자 118건 · 근무자별 순위(이름을 누르면 건별 상세) · 전송 실패 5건"]},
@@ -4083,7 +4090,7 @@ function csStat(name){
 /* 배지 — 기준값은 여기서 수정
    CERT: 자격증 취득자 {이름:"자격증명"} (알려주시면 추가) · 판넬 목표: 4~10월 20건, 11~3월 10건 (판넬+스티커 합계, 이번 달 기준) */
 var CERT = {};
-function panelGoal(){ var m=+kstDate(0).slice(5,7); return (m>=11||m<=3) ? 10 : 20; }
+function panelGoal(ym){ var m=+(ym||kstDate(0)).slice(5,7); return (m>=11||m<=3) ? 10 : 20; }   /* 개인 월 목표: 11~3월 10건, 4~10월 20건 (판넬+스티커 합계) */
 function praiseTop(){ var c={}; CSR.forEach(function(r){ if(r[6]==="칭찬" && CS_MGR.indexOf(r[0])<0) c[r[0]]=(c[r[0]]||0)+1; });
   var ks=Object.keys(c).sort(function(a,b){return c[b]-c[a]}); var cut = ks.length>=3 ? c[ks[2]] : 1; return {c:c, cut:Math.max(cut,2)}; }
 function panelMonth(name){ if(typeof PANEL==="undefined") return 0; var ym=kstDate(0).slice(0,7);
