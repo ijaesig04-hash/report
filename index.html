@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261111235500">
+<meta name="bsr-ver" content="20261112001500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1148,6 +1148,10 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .hd-w{display:flex;gap:6px;margin-top:7px}.hd-w input{flex:1;min-width:0;border:1px solid #cbd5e1;border-radius:10px;padding:8px;font:500 13px "Noto Sans KR",sans-serif}
 .hd-w button{border:0;background:#334155;color:#fff;border-radius:10px;padding:0 13px;font:800 12.5px "Noto Sans KR",sans-serif;cursor:pointer}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.pu-st{display:flex;align-items:center;gap:12px;border-radius:16px;padding:14px 16px;margin:10px 0 8px;border:2px solid}.pu-st span{font-size:28px;line-height:1}.pu-st b{display:block;font-size:17px}.pu-st small{display:block;font-size:12.5px;margin-top:2px;opacity:.85}
+.pu-st.on{background:#e7f8ee;border-color:#22a35a;color:#0f5132}.pu-st.off{background:#f1f3f7;border-color:#c5ccd8;color:#334155}.pu-st.wait{background:#f8fafc;border-color:#e2e8f0;color:#64748b}
+.pu-b{display:block;width:100%;border:0;border-radius:14px;padding:14px;font:800 16px 'Noto Sans KR',sans-serif;cursor:pointer}.pu-b.on{background:#1f4fd8;color:#fff}.pu-b.off{background:#fff;color:#b4151f;border:2px solid #f3c2c8}
+.oj-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#eef1f6;border-radius:12px;padding:4px;margin:4px 0 12px}.oj-tabs button{border:0;background:transparent;border-radius:9px;padding:10px 4px;font:800 14px 'Noto Sans KR',sans-serif;color:#475569;cursor:pointer}.oj-tabs button[aria-selected="true"]{background:#fff;color:#14275c;box-shadow:0 2px 6px rgba(16,32,80,.15)}
 .rpb{margin:8px 0 2px;background:linear-gradient(135deg,#fff8e6,#fff 70%);border:1px solid #f3d58a;border-radius:16px;padding:12px 14px;-webkit-user-select:none;user-select:none}.rpb[hidden]{display:none}
 .rpb-h{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}.rpb-h b{font-size:15px;color:#7a4e00}.rpb-h small{font-size:11.5px;color:#9a7b3b}
 .rpb-r{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px dashed #f0dfb2}.rpb-r:first-of-type{border-top:0}.rpb-m{font-size:20px;width:26px;text-align:center}.rpb-r b{flex:1;font-size:14.5px;color:#1e293b}.rpb-r b em{font-style:normal;font-size:11px;font-weight:800;color:#7a4e00;background:#ffe08a;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}.rpb-r>small{font-size:11.5px;color:#94a3b8}.rpb-r i{font-style:normal;font-weight:900;font-size:18px;color:#b45309;min-width:46px;text-align:right}.rpb-r i small{font-size:11px;font-weight:700;margin-left:1px}
@@ -3725,6 +3729,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-12a", date:"11/12", title:"메뉴 정리 · 알림 상태 표시", tabs:["home"], items:["📲 업데이트 알림 받기 — 지금 켜져 있는지 꺼져 있는지 크게 보여 주고, 켜기 · 끄기 버튼으로 바로 바꿀 수 있어요","🎓 OJT 진도표와 ✅ 개시 방문 체크를 한 메뉴로 합쳤어요 (이름표 메뉴 → 🎓 OJT · 개시 방문 체크)","🔄 최신 버전 받기를 누구나 쓸 수 있어요 — 화면이 예전 같으면 이름표 메뉴에서 눌러 주세요"]},
  {id:"2026-11-11i", date:"11/11", title:"11월 근무표 수정", tabs:["duty"], items:["🗓️ 11월 근무표 수정본 반영 — 김유건 28~30일 야간, 김지원 13일 휴무, 김동현 30일 주간, 남현준 13일 주간·30일 휴무 · 파트장 근무 조정"]},
  {id:"2026-11-11h", date:"11/11", title:"취합건 연동에 순찰방문 현황 추가", tabs:["rep"], items:["🚓 취합건 연동 탭에 「순찰방문 현황」이 생겼어요 — 판넬 · 위험예지 · 순찰방문 3가지","11월(11.01~11.09) 순찰 방문 90회 · 안내 문자 118건 · 근무자별 순위(이름을 누르면 건별 상세) · 전송 실패 5건"]},
  {id:"2026-11-11g", date:"11/11", title:"다발보 11/10 반영", tabs:["alm"], items:["🔁 다발보 11월 (11.01~11.10) — 18곳 · 41건 · 3회 이상: 상계제일중학교신관(28호) 4건 · 비마트도봉쌍문점(27호) 4건 · 서라벌고등학교(160호) 3건","조치 완료 4곳 — 서라벌고 · 상계제일중 · 한국전력공사노원도봉 · 비마트도봉 (11/9~11/10 조치 반영)"]},
@@ -5324,13 +5329,31 @@ function pushView(){
   var msg = !sup ? '이 폰·브라우저는 푸시 알림을 지원하지 않아요.' : !PUSH_URL ? '아직 준비 중이에요 (서버 연결 대기). 연결되면 이 버튼으로 켤 수 있어요.' : (Notification.permission==="denied" ? '알림이 차단되어 있어요. 폰 설정 → 앱 → 북서울 Report → 알림에서 허용해 주세요.' : '');
   openSheet('<div class="xs-h"><b>📲 업데이트 알림 받기</b><button type="button" data-xs="close">✕</button></div>'+
     '<p class="note">새 지표가 반영되면 앱이 꺼져 있어도 폰 알림이 와요.'+(st?'':' <b>홈 화면에 설치한 앱</b>으로 열었을 때 켜세요.')+'</p>'+
-    (msg?'<div class="mgc"><div class="mgc-t"><b>⚠️ '+msg+'</b></div></div>':'<button type="button" class="mg-b" data-pushon="1">🔔 알림 켜기</button>')+
+    (msg?'<div class="pu-st off"><span>⚠️</span><div><b>사용할 수 없어요</b><small>'+msg+'</small></div></div>':'<div id="pu-st" class="pu-st wait"><span>⏳</span><div><b>상태 확인 중…</b></div></div><div id="pu-bt"></div>')+
     '<div id="pushres" class="note"></div>'+(mgrIs()&&myName()==="이재식"&&PUSH_URL?'<div id="pushwho" class="note">알림 켠 직원 불러오는 중…</div>':''));
+  if(!msg) pushState();
   if(mgrIs() && myName()==="이재식" && PUSH_URL) fetch(PUSH_URL+"?action=names&pin="+encodeURIComponent(BSR_PIN())+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ var el=document.getElementById("pushwho"); if(!el) return;
     if(!j||!j.ok){ el.textContent = "알림 켠 직원 목록은 보관함 v2 업데이트 후 보여요"; return; }
     var on = j.names||[], staff = staffOnly().concat(DEPTS["영업"],DEPTS["기술"]), off = staff.filter(function(n){return on.indexOf(n)<0});
     el.innerHTML = '<b>🔔 알림 켠 직원 '+on.length+'명</b>: '+esc2(on.join(', ')||'없음')+(off.length?'<br><b>⏳ 아직 안 켠 직원 '+off.length+'명</b>: '+esc2(off.join(', ')):''); }).catch(function(){});
 }
+/* 지금 이 폰에 알림이 켜져 있는지 확인해서 크게 보여 줌 */
+function pushState(){
+  var put=function(on){ var a=document.getElementById("pu-st"), b=document.getElementById("pu-bt"); if(!a||!b) return;
+    a.className="pu-st "+(on?"on":"off");
+    a.innerHTML = on ? '<span>🔔</span><div><b>지금 알림 켜짐</b><small>업데이트가 반영되면 폰 알림이 와요</small></div>' : '<span>🔕</span><div><b>지금 알림 꺼짐</b><small>켜 두면 새 지표가 반영될 때 바로 알려 드려요</small></div>';
+    b.innerHTML = on ? '<button type="button" class="pu-b off" data-pushoff="1">🔕 알림 끄기</button>' : '<button type="button" class="pu-b on" data-pushon="1">🔔 알림 켜기</button>'; };
+  try{ if(Notification.permission!=="granted"){ put(false); return; } }catch(x){ put(false); return; }
+  navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); }).then(function(sub){ put(!!sub); }).catch(function(){ put(false); });
+  setTimeout(function(){ var a=document.getElementById("pu-st"); if(a && /wait/.test(a.className)){ var on=false; try{ on=localStorage.getItem("bsr_push")==="1" && Notification.permission==="granted"; }catch(x){} put(on); } }, 2500);
+}
+document.addEventListener("click", function(e){
+  if(!e.target.closest("[data-pushoff]")) return;
+  var out=document.getElementById("pushres");
+  navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); }).then(function(sub){ return sub ? sub.unsubscribe() : true; })
+    .then(function(){ try{ localStorage.setItem("bsr_push","0"); }catch(x){} if(out) out.textContent="알림을 껐어요. 언제든 다시 켤 수 있어요."; pushState(); })
+    .catch(function(){ if(out) out.textContent="끄지 못했어요. 폰 설정 → 앱 → 북서울 Report → 알림에서 끌 수도 있어요."; });
+});
 document.addEventListener("click", function(e){
   if(!e.target.closest("[data-pushon]")) return;
   var out=document.getElementById("pushres"), say=function(t){ if(out) out.textContent=t; };
@@ -5338,7 +5361,7 @@ document.addEventListener("click", function(e){
     if(p!=="granted"){ say("알림이 허용되지 않았어요."); return; }
     return navigator.serviceWorker.ready.then(function(reg){
       return reg.pushManager.getSubscription().then(function(s){ return s || reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:pushB64(PUSH_KEY)}); });
-    }).then(function(s){ try{ localStorage.setItem("bsr_push","1"); }catch(x){} return pushSend(s.toJSON()); }).then(function(){ say("✅ 켜졌어요! 이제 업데이트되면 알림이 와요."); });
+    }).then(function(s){ try{ localStorage.setItem("bsr_push","1"); }catch(x){} return pushSend(s.toJSON()); }).then(function(){ say("✅ 켜졌어요! 이제 업데이트되면 알림이 와요."); pushState(); });
   }).catch(function(){ say("켜지 못했어요. 설치한 앱에서 다시 시도해 주세요."); });
 });
 try{ if(PUSH_URL && localStorage.getItem("bsr_push")==="1" && "serviceWorker" in navigator && window.Notification && Notification.permission==="granted"){ navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); }).then(function(s){ if(s) pushSend(s.toJSON()); }).catch(function(){}); } }catch(x){}
@@ -5599,13 +5622,20 @@ function ojtList(){ return (typeof DUTY!=="undefined" && DUTY.ojt) ? DUTY.ojt : 
 function ojtItems(){ var x = actLast("ojtitem|"), L = OJT_BASE.filter(function(b){ var r=x["ojtitem|"+b[0]]; return !(r && r[3]==="삭제"); }).map(function(b){ return {id:b[0], t:b[1], d:b[2]}; });
   Object.keys(x).forEach(function(k){ var id=k.slice(8); if(id.charAt(0)!=="c" || x[k][3]==="삭제") return; L.push({id:id, t:String(x[k][3]).slice(0,40), d:"관리자 추가 · "+x[k][2]}); }); return L; }
 var OJT_SEL = "";
+/* 🎓 신입 OJT · 개시 방문 — 한 메뉴 안에서 두 칸 탭으로 전환 */
+function ojTabs(cur){
+  var svc = !document.documentElement.classList.contains("dept-x");
+  return '<div class="xs-h"><b>🎓 OJT · 개시 방문</b><button type="button" data-xs="close">✕</button></div>'+
+    (svc?'<div class="oj-tabs" role="tablist"><button type="button" role="tab" data-ojtab="ojt" aria-selected="'+(cur==="ojt")+'">🎓 OJT 진도표</button><button type="button" role="tab" data-ojtab="open" aria-selected="'+(cur==="open")+'">✅ 개시 방문 체크</button></div>':'');
+}
+document.addEventListener("click", function(e){ var t=e.target.closest("[data-ojtab]"); if(!t) return; if(t.dataset.ojtab==="open") openCheck(); else ojtView(); });
 function ojtView(msg){
-  var O = ojtList(), me = myName(); if(!O.length){ openSheet('<div class="xs-h"><b>🎓 OJT 진도표</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">지금 근무표에 OJT 직원이 없어요.</p>'); return; }
+  var O = ojtList(), me = myName(); if(!O.length){ openSheet(ojTabs("ojt")+'<p class="xs-p">지금 근무표에 OJT 직원이 없어요.</p>'); return; }
   var o = O.filter(function(x){return x.n===OJT_SEL})[0] || O.filter(function(x){return x.n===me||x.with===me})[0] || O[0]; OJT_SEL = o.n;
   var can = mgrIs() || me===o.n || me===o.with, ck = actLast("ojt|"+o.n+"|"), I = ojtItems();
   var done = I.filter(function(it){ var r=ck["ojt|"+o.n+"|"+it.id]; return r && r[3]!=="해제"; }).length, pct = I.length?Math.round(done/I.length*100):0;
   var md = function(d){ return (+d.slice(5,7))+'/'+(+d.slice(8)); };
-  openSheet('<div class="xs-h"><b>🎓 OJT 진도표</b><button type="button" data-xs="close">✕</button></div>'+
+  openSheet(ojTabs("ojt")+
     (O.length>1?'<div class="hp-c">'+O.map(function(x){ return '<button type="button" data-ojs="'+esc2(x.n)+'" aria-pressed="'+(x.n===o.n)+'">'+esc2(x.n)+'</button>'; }).join('')+'</div>':'')+
     '<div class="oj-h"><b style="font-size:16px">'+esc2(o.n)+'</b><small class="xs-p">동승 '+esc2(o.with||'-')+' · '+md(o.from)+' ~ '+md(o.to)+'</small></div>'+
     '<div class="oj-bar"><i style="width:'+pct+'%"></i></div><p class="xs-p" style="margin:0 0 6px"><b>'+done+'/'+I.length+'</b> 완료 ('+pct+'%)'+(can?'':' · 본인 · 동승자 · 관리자만 체크할 수 있어요')+'</p>'+
@@ -5653,7 +5683,7 @@ var OPEN_CK = [
 function openMine(){ var me=myName(); return (typeof ACTS!=="undefined"?ACTS:[]).concat(typeof ACTS_PEND!=="undefined"?ACTS_PEND:[]).filter(function(r){ return /^open\|/.test(r[1]) && (mgrIs() || r[2]===me); }).sort(function(a,b){return b[0]-a[0]}); }
 function openCheck(msg){
   var L = openMine(), ym = kstDate(0).slice(0,7), mo = L.filter(function(r){ return new Date(r[0]+9*3600000).toISOString().slice(0,7)===ym; });
-  openSheet('<div class="xs-h"><b>✅ 개시 방문 체크리스트</b><button type="button" data-xs="close">✕</button></div>'+
+  openSheet(ojTabs("open")+
     '<p class="xs-p">개시 방문 때 하나씩 체크하고 <b>완료</b>를 누르면 관리자에게 기록이 남아요. 고객 이름 · 연락처 · 비밀번호는 적지 마세요.</p>'+
     '<input id="ck-p" class="ck-in" maxlength="20" placeholder="고객처 (예: ○○약국 · 선택)" autocomplete="off">'+
     '<div class="ck-l">'+OPEN_CK.map(function(c,i){ return '<label><input type="checkbox" id="ck-'+i+'"><span><b>'+c[0]+'</b><small>'+c[1]+'</small></span></label>'; }).join('')+'</div>'+
@@ -6325,7 +6355,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 응대 연습</button><button type="button" data-vl="find">🔍 고객처 한눈에 보기</button><button type="button" data-vl="risk">⚠️ 불만 위험 고객처</button><button type="button" data-vl="open">✅ 개시 방문 체크리스트</button><button type="button" data-vl="ojt">🎓 OJT 진도표</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="push">📲 업데이트 알림 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button><button type="button" data-vl="fresh" class="vl-adm">🔄 최신 버전 받기</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 응대 연습</button><button type="button" data-vl="find">🔍 고객처 한눈에 보기</button><button type="button" data-vl="risk">⚠️ 불만 위험 고객처</button><button type="button" data-vl="ojt">🎓 OJT · 개시 방문 체크</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📜 업데이트 이력</button><button type="button" data-vl="push">📲 업데이트 알림 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 (PDF)</button><button type="button" data-vl="mrep">🧾 월말 결산 보고서</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
