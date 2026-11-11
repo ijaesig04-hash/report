@@ -15,6 +15,7 @@ function doPost(e) {
 }
 function doGet(e) {
   const p = (e && e.parameter) || {};
+  if (p.action === 'ping') return out({ ok: true });   // 앱을 열 때 미리 깨워 두기 (첫 대답이 빨라짐)
   if (p.action === 'rows') {
     if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
     return out({ ok: true, rows: rows(600) });
@@ -29,11 +30,11 @@ function doGet(e) {
 function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 
 /* AI 부르기: ANTHROPIC_KEY 속성이 있으면 Claude, 없으면 Gemini */
-function gemini(sys, contents, maxTok) {
-  if (P.getProperty('ANTHROPIC_KEY')) return claude(sys, contents, maxTok);
-  return geminiCall(sys, contents, maxTok);
+function gemini(sys, contents, maxTok, fast) {
+  if (P.getProperty('ANTHROPIC_KEY')) return claude(sys, contents, maxTok, fast);
+  return geminiCall(sys, contents, maxTok, fast);
 }
-function claude(sys, contents, maxTok) {
+function claude(sys, contents, maxTok, fast) {
   const model = P.getProperty('CLAUDE_MODEL') || 'claude-haiku-5-5';
   const msgs = [];
   contents.forEach(function (c) {
@@ -41,7 +42,7 @@ function claude(sys, contents, maxTok) {
     if (msgs.length && msgs[msgs.length - 1].role === role) msgs[msgs.length - 1].content += '\n' + text;
     else msgs.push({ role: role, content: text });
   });
-  const body = { model: model, max_tokens: Math.max(maxTok || 1000, 1000), system: sys + '\n\n반드시 JSON 한 덩어리만 출력하세요. 설명·코드블록 금지.', messages: msgs };
+  const body = { model: model, max_tokens: fast ? 300 : Math.max(maxTok || 1000, 1000), system: sys + '\n\n반드시 JSON 한 덩어리만 출력하세요. 설명·코드블록 금지.', messages: msgs };
   let r;
   for (let k = 0; k < 3; k++) {
     r = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', { method: 'post', contentType: 'application/json',
@@ -71,7 +72,7 @@ function modelList(key) {
   if (list.length) c.put('models', JSON.stringify(list), 21600);
   return list;
 }
-function geminiCall(sys, contents, maxTok) {
+function geminiCall(sys, contents, maxTok, fast) {
   const key = P.getProperty('GEMINI_KEY');
   if (!key) throw new Error('GEMINI_KEY 없음');
   const c = CacheService.getScriptCache(), tryList = [];
@@ -80,14 +81,19 @@ function geminiCall(sys, contents, maxTok) {
   let lastErr = '';
   for (let i = 0; i < tryList.length && i < 8; i++) {
     const model = tryList[i], url = 'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + key;
-    const call = function (withThink) {
-      const cfg = { temperature: 0.8, maxOutputTokens: Math.max(maxTok || 1200, 2048), responseMimeType: 'application/json' };
-      if (withThink) cfg.thinkingConfig = { thinkingLevel: 'low' };
+    /* 생각(thinking) 설정: 대화는 가장 짧게(빠름), 채점은 조금(정확). 모델마다 받는 설정이 달라서 되는 것을 기억해 둠 */
+    const modes = fast ? ['minimal', 'b0', 'none'] : ['low', 'none'];
+    const call = function (mode) {
+      const cfg = { temperature: 0.8, maxOutputTokens: fast ? 512 : Math.max(maxTok || 1200, 2048), responseMimeType: 'application/json' };
+      if (mode === 'minimal' || mode === 'low') cfg.thinkingConfig = { thinkingLevel: mode };
+      else if (mode === 'b0') cfg.thinkingConfig = { thinkingBudget: 0 };
       return UrlFetchApp.fetch(url, { method: 'post', contentType: 'application/json', muteHttpExceptions: true,
         payload: JSON.stringify({ systemInstruction: { parts: [{ text: sys }] }, contents: contents, generationConfig: cfg }) });
     };
-    let r = call(true);
-    if (r.getResponseCode() === 400) r = call(false);
+    const mk = 'thk_' + (fast ? 'f_' : 's_') + model, known = c.get(mk);
+    let order = known ? [known].concat(modes.filter(function (m) { return m !== known; })) : modes, r, used = order[0];
+    for (let q = 0; q < order.length; q++) { used = order[q]; r = call(used); if (r.getResponseCode() !== 400) break; }
+    if (r.getResponseCode() === 200) c.put(mk, used, 21600);
     const code = r.getResponseCode();
     if (code === 200) {
       try {
@@ -119,10 +125,10 @@ function chat(d) {
     '고객이 충분히 납득했거나 통화를 끝내려 하면 end를 true로 합니다.\n' +
     '반드시 JSON만: {"customer":"고객 대사","tip":"코치 팁 또는 빈 문자열","end":false}';
   const contents = [{ role: 'user', parts: [{ text: '(전화가 연결되었습니다)' }] }];
-  (d.hist || []).slice(-24).forEach(function (m) {
+  (d.hist || []).slice(-12).forEach(function (m) {
     contents.push({ role: m.r === 'c' ? 'model' : 'user', parts: [{ text: String(m.t || '').slice(0, 500) }] });
   });
-  const r = gemini(sys, contents, 600);
+  const r = gemini(sys, contents, 600, true);
   return { ok: true, customer: String(r.customer || '').slice(0, 300), tip: String(r.tip || '').slice(0, 80), end: !!r.end };
 }
 

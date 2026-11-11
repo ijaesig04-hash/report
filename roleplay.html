@@ -143,6 +143,11 @@ function api1(body){
   return fetch(RP_API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body),signal:ac.signal}).then(function(r){return r.json();}).then(function(j){ clearTimeout(tm); if(!j||!j.ok) throw new Error((j&&j.err)||"오류"); return j; })
   .catch(function(e){ clearTimeout(tm); throw new Error(e&&e.name==="AbortError"?"40초 안에 답이 오지 않았어요":(e&&e.message)||"연결 오류"); });
 }
+/* 서버 미리 깨우기 — 구글 서버는 한동안 안 쓰면 잠들어서 첫 대답이 몇 초 더 걸림. 앱을 열 때·상황을 고를 때·고객 대사가 나온 뒤 미리 깨워 둠 */
+var WARM_AT=0;
+function warm(){ if(!RP_API || Date.now()-WARM_AT<90000) return; WARM_AT=Date.now(); try{ fetch(RP_API+"?action=ping&t="+Date.now(),{mode:"no-cors",cache:"no-store"}).catch(function(){}); }catch(e){} }
+warm();
+document.addEventListener("focusin",warm); document.addEventListener("touchstart",warm,{passive:true});   /* 직원이 답을 쓰기 시작할 때도 깨워 둠 */
 function lastKey(sc){ return "rp_last_"+ME+"_"+sc.id; }
 function getLast(sc){ try{ return JSON.parse(localStorage.getItem(lastKey(sc))||"null"); }catch(e){ return null; } }
 function setLast(sc,total){ try{ localStorage.setItem(lastKey(sc),JSON.stringify({t:total,d:Date.now()})); }catch(e){} }
@@ -173,6 +178,7 @@ function home(){
 /* ───────── 2. 음성 대화 ───────── */
 var rec=null, recOn=false;
 function start(sc){
+  warm();
   rpLog("시작 · "+sc.title+" ("+S.lv+")");
   S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false; S.fb=false; S.fbTold=false;
   $("#ttl").textContent=sc.ic+" "+sc.title;
