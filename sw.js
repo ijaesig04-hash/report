@@ -1,4 +1,4 @@
-// 북서울 Report — 항상 최신 (v7.4 · 화면은 서버 먼저 · patrol·directmall.html 허용 · 업데이트 아이콘 뱃지)
+// 북서울 Report — 항상 최신 (v7.5 · roster.html 허용 · 화면은 서버 먼저 · patrol·directmall.html 허용 · 업데이트 아이콘 뱃지)
 // 1) 화면(index.html)은 열 때마다 서버에서 최신을 받아 띄우고 저장본도 바꿔 둠 (6초 넘게 걸리거나 오프라인이면 저장본)
 // 2) 새 버전이 받아지면 화면 쪽 버전 확인이 자동으로 새로고침 → 항상 최신 유지
 // 3) 인터넷이 끊겨도 마지막 화면 표시
@@ -18,7 +18,7 @@ self.addEventListener("fetch",function(e){
     return;
   }
   if(r.mode==="navigate"){
-    if(/\.html$/i.test(name) && !/^(index|404|risk|patrol|directmall|card|mail-setup|roleplay|roleplay-setup)\.html$/i.test(name)){ e.respondWith(Response.redirect(home()+u.hash,302)); return; }
+    if(/\.html$/i.test(name) && !/^(index|404|risk|patrol|directmall|card|mail-setup|roleplay|roleplay-setup|roster)\.html$/i.test(name)){ e.respondWith(Response.redirect(home()+u.hash,302)); return; }
     if(name!=="" && !/^index\.html$/i.test(name)){ e.respondWith(fetch(r,{cache:"no-store"}).catch(function(){return caches.match(r)})); return; }
     /* 항상 서버의 최신 화면을 먼저 받음(최대 6초). 인터넷이 끊겼거나 너무 느릴 때만 저장본 */
     e.respondWith(caches.open(C).then(function(c){
