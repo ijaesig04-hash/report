@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261111123000">
+<meta name="bsr-ver" content="20261111124500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -6545,6 +6545,40 @@ if(!me) pickView(); else { send(openTag()); sent[window.state?state.tab:"cmp"]=1
     '<div style="text-align:right;margin-top:8px"><button type="button" style="border:0;background:#1f4fd8;color:#fff;border-radius:10px;padding:8px 16px;font:700 13px \'Noto Sans KR\',sans-serif">확인</button></div>';
   b.querySelector("button").onclick = function(){ try{localStorage.setItem("bsr_darktip","1")}catch(e){} b.remove(); };
   document.body.appendChild(b);
+})();
+</script>
+<script>
+/* 새 기능 안내창 — 🎧 AI 응대 연습 (이름을 고른 사람에게 접속 시 한 번만 · 버튼을 누르면 다시 안 뜸) */
+(function(){
+  var KEY="bsr_rpnew1";
+  function seen(){ try{ return localStorage.getItem(KEY)==="1"; }catch(e){ return false; } }
+  function mark(){ try{ localStorage.setItem(KEY,"1"); }catch(e){} }
+  var tries=0;
+  function show(){
+    if(seen()) return;
+    try{ if(!localStorage.getItem("bsr_me")) return retry(); }catch(e){ return; }
+    if(document.getElementById("ngate")||document.getElementById("mxc")||document.getElementById("bday")||document.getElementById("rpnew")) return retry();
+    var o=document.createElement("div"); o.id="rpnew";
+    o.setAttribute("style","position:fixed;inset:0;z-index:300;background:rgba(7,14,34,.72);display:flex;align-items:center;justify-content:center;padding:18px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none");
+    o.innerHTML='<div role="dialog" aria-modal="true" style="width:100%;max-width:360px;background:#fff;color:#14213a;border-radius:22px;padding:22px 20px 18px;box-shadow:0 20px 50px rgba(0,0,0,.45);font-family:\'Noto Sans KR\',sans-serif;text-align:center">'+
+      '<div style="font-size:46px;line-height:1">🎧</div>'+
+      '<div style="display:inline-block;margin-top:10px;background:#e8f0ff;color:#1f4fd8;font-weight:800;font-size:12px;border-radius:999px;padding:4px 12px">NEW 새 기능</div>'+
+      '<h3 style="margin:10px 0 6px;font-size:21px;font-weight:900">AI 응대 연습이 생겼어요!</h3>'+
+      '<p style="margin:0 0 12px;font-size:14px;line-height:1.6;color:#334155">AI 고객과 <b>말이나 글로</b> 응대를 연습하고,<br><b>점수와 코칭</b>까지 받아 보세요.</p>'+
+      '<div style="text-align:left;background:#f4f7ff;border-radius:14px;padding:12px 14px;font-size:13.5px;line-height:1.7;color:#1e2a44">'+
+        '<div>😠 고객 불만 · 현장 응대 상황 다양하게</div><div>💼 영업 상담 상황도 연습할 수 있어요</div><div>⏱️ 한 번에 3~5분이면 충분해요</div><div>👥 직원 누구나 사용할 수 있어요</div></div>'+
+      '<button type="button" data-rpn="go" style="display:block;width:100%;margin-top:14px;border:0;background:#1f4fd8;color:#fff;border-radius:14px;padding:14px;font:800 16px \'Noto Sans KR\',sans-serif">🎧 지금 연습해 보기</button>'+
+      '<button type="button" data-rpn="no" style="display:block;width:100%;margin-top:8px;border:0;background:transparent;color:#64748b;padding:10px;font:600 14px \'Noto Sans KR\',sans-serif">나중에 할게요</button>'+
+      '<p style="margin:4px 0 0;font-size:11.5px;color:#94a3b8">나중에는 브리핑 화면의 🎧 카드나 이름 버튼 메뉴에서 열 수 있어요</p></div>';
+    o.addEventListener("click",function(e){
+      var b=e.target.closest("[data-rpn]"); if(!b) return;
+      mark(); o.remove(); document.body.style.overflow="";
+      if(b.getAttribute("data-rpn")==="go") location.href="roleplay.html?from=report";
+    });
+    document.body.appendChild(o); document.body.style.overflow="hidden";
+  }
+  function retry(){ if(++tries<40) setTimeout(show,2500); }
+  if(/^https?:/.test(location.protocol) || location.protocol==="file:") setTimeout(show,1800);
 })();
 </script>
 <script>
