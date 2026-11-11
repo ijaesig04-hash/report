@@ -10,6 +10,7 @@ function doPost(e) {
     const d = JSON.parse(e.postData.contents);
     if (d.act === 'chat') return out(chat(d));
     if (d.act === 'eval') return out(evaluate(d));
+    if (d.act === 'tts') return out(tts(d));
     return out({ ok: false, err: 'act' });
   } catch (err) { return out({ ok: false, err: String(err) }); }
 }
@@ -185,6 +186,34 @@ function mine(name) {
   const my = rows(800).filter(function (r) { return r.name === name; }).slice(-10);
   const avg = [0, 1, 2, 3].map(function (i) { return my.length ? Math.round(my.reduce(function (a, r) { return a + (Number(r.s[i]) || 0); }, 0) / my.length) : null; });
   return { ok: true, n: my.length, avg: avg, done: my.map(function (r) { return r.sc; }) };
+}
+/* 🗣️ 고객 목소리 — 구글 Gemini 음성 모델로 사람 같은 목소리 만들기 (GEMINI_KEY 필요)
+   안 되면 앱이 폰 기본 목소리로 자동으로 바꿔서 읽어 줌 */
+function tts(d) {
+  const key = P.getProperty('GEMINI_KEY');
+  if (!key) return { ok: false, err: 'nokey' };
+  const text = String(d.text || '').slice(0, 400), voice = String(d.voice || 'Kore').replace(/[^A-Za-z]/g, '');
+  if (!text) return { ok: false, err: 'text' };
+  const c = CacheService.getScriptCache();
+  const list = [P.getProperty('TTS_MODEL'), c.get('tts_ok'), 'gemini-2.5-flash-preview-tts', 'gemini-2.5-flash-tts', 'gemini-2.5-pro-preview-tts']
+    .filter(function (m, i, a) { return m && a.indexOf(m) === i; });
+  let last = '';
+  for (let i = 0; i < list.length; i++) {
+    const r = UrlFetchApp.fetch('https://generativelanguage.googleapis.com/v1beta/models/' + list[i] + ':generateContent?key=' + key, {
+      method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+      payload: JSON.stringify({ contents: [{ parts: [{ text: String(d.style || '실제 한국 사람이 전화로 말하듯 자연스럽게') + ': ' + text }] }],
+        generationConfig: { responseModalities: ['AUDIO'], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voice } } } } })
+    });
+    const code = r.getResponseCode();
+    if (code === 200) {
+      const j = JSON.parse(r.getContentText());
+      const part = (((j.candidates || [])[0] || {}).content || {}).parts || [];
+      const au = part.filter(function (p) { return p.inlineData && p.inlineData.data; })[0];
+      if (au) { c.put('tts_ok', list[i], 21600); const m = /rate=(\d+)/.exec(au.inlineData.mimeType || ''); return { ok: true, audio: au.inlineData.data, rate: m ? +m[1] : 24000, mime: au.inlineData.mimeType || '' }; }
+      last = 'noaudio';
+    } else { last = code + ' ' + r.getContentText().slice(0, 160); if (code === 429) break; }
+  }
+  return { ok: false, err: last };
 }
 function sheet() {
   let id = P.getProperty('SHEET_ID'), ss;

@@ -160,11 +160,60 @@ document.addEventListener("focusin",warm); document.addEventListener("touchstart
 function lastKey(sc){ return "rp_last_"+ME+"_"+sc.id; }
 function getLast(sc){ try{ return JSON.parse(localStorage.getItem(lastKey(sc))||"null"); }catch(e){ return null; } }
 function setLast(sc,total){ try{ localStorage.setItem(lastKey(sc),JSON.stringify({t:total,d:Date.now()})); }catch(e){} }
-function speak(t){
-  if(!S.voice||!window.speechSynthesis) return;
-  try{ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(t); u.lang="ko-KR"; u.rate=1.02; speechSynthesis.speak(u); }catch(e){}
+/* ───────── 고객 목소리 ─────────
+   1순위: 구글 AI 음성(사람 같은 목소리 · 상황별 말투)  2순위: 폰 기본 목소리(가장 자연스러운 한국어 목소리를 골라서) */
+var MALE = ["delay","theft","repeat-fault","cancel","s-new","s-cold","s-price","r-animal","s-renew"];
+function vprof(sc){
+  sc = sc || {}; var id = sc.id||"", male = MALE.indexOf(id)>=0, old = /senior/.test(id);
+  var mood = old ? "조금 느리고 걱정스러운 어르신 말투로" : sc.g==="영업" ? (sc.lv==="상"?"바쁘고 귀찮아하는 말투로":"궁금해하며 차분한 말투로")
+    : sc.lv==="상" ? "몹시 화가 나서 따지는 말투로" : sc.lv==="중" ? "짜증 섞인 불만스러운 말투로" : "차분하게 묻는 말투로";
+  return { voice: old ? (male?"Charon":"Sulafat") : male ? (sc.lv==="상"?"Fenrir":"Orus") : (sc.lv==="상"?"Kore":"Aoede"),
+    style: "에스원 보안회사에 전화한 실제 한국인 고객처럼, "+mood+" 자연스럽게 말하세요. 기계처럼 또박또박 읽지 말고 실제 통화처럼",
+    rate: old ? 0.92 : sc.lv==="상" ? 1.12 : 1.04, pitch: old ? 0.85 : male ? 0.88 : 1.02, male: male };
 }
-function stopSpeak(){ try{ window.speechSynthesis&&speechSynthesis.cancel(); }catch(e){} }
+var AUD = null, TTS_OFF = false, SPK_ID = 0;
+function speak(t){
+  if(!S.voice) return; stopSpeak(); var id = ++SPK_ID, p = vprof(S.sc);
+  t = String(t||"").replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu,"").trim(); if(!t) return;
+  if(RP_API && !TTS_OFF){
+    var done=false, fb=setTimeout(function(){ if(!done && id===SPK_ID){ done=true; devSpeak(t,p); } }, 9000);   /* 9초 안에 안 오면 폰 목소리로 */
+    api1({act:"tts", text:t, voice:p.voice, style:p.style}).then(function(j){
+      if(done || id!==SPK_ID) return; done=true; clearTimeout(fb);
+      if(j && j.ok && j.audio) playPcm(j.audio, j.rate||24000, j.mime||"");
+      else { if(j && /nokey|404|429|400/.test(String(j.err||""))) TTS_OFF=true; devSpeak(t,p); }
+    }).catch(function(e){ if(/nokey|act|404|429|400|quota|RESOURCE/i.test(String(e&&e.message||""))) TTS_OFF=true; if(done || id!==SPK_ID) return; done=true; clearTimeout(fb); devSpeak(t,p); });
+    return;
+  }
+  devSpeak(t,p);
+}
+function playPcm(b64, rate, mime){
+  try{
+    var bin=atob(b64), n=bin.length, u8=new Uint8Array(n); for(var i=0;i<n;i++) u8[i]=bin.charCodeAt(i);
+    var blob;
+    if(/wav|mpeg|mp3|ogg/.test(mime)) blob=new Blob([u8],{type:mime.split(";")[0]});
+    else { var h=new ArrayBuffer(44), v=new DataView(h), w=function(o,s){ for(var k=0;k<s.length;k++) v.setUint8(o+k,s.charCodeAt(k)); };
+      w(0,"RIFF"); v.setUint32(4,36+n,true); w(8,"WAVE"); w(12,"fmt "); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+      v.setUint32(24,rate,true); v.setUint32(28,rate*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true); w(36,"data"); v.setUint32(40,n,true);
+      blob=new Blob([h,u8],{type:"audio/wav"}); }
+    AUD=new Audio(URL.createObjectURL(blob)); AUD.play().catch(function(){});
+  }catch(e){}
+}
+var KVOICE=null;
+function pickVoice(male){
+  if(!window.speechSynthesis) return null;
+  var vs=speechSynthesis.getVoices().filter(function(v){ return /^ko/i.test(v.lang); }); if(!vs.length) return null;
+  var score=function(v){ var n=v.name; return (/neural|natural|online|premium|enhanced/i.test(n)?8:0)+(!v.localService?4:0)+(/google/i.test(n)?3:0)+(/samsung|smt/i.test(n)?2:0)+(male&&/male|남|injoon|minjun|hyunsu/i.test(n)&&!/female/i.test(n)?5:0)+(!male&&/female|여|sunhi|yuna|heami|seoyeon/i.test(n)?3:0); };
+  return vs.sort(function(a,b){ return score(b)-score(a); })[0];
+}
+function devSpeak(t,p){
+  if(!window.speechSynthesis) return;
+  try{ speechSynthesis.cancel();
+    var parts=t.match(/[^.!?…~]+[.!?…~]*/g)||[t], vo=pickVoice(p.male);   /* 문장마다 끊어 읽어 숨 쉬는 느낌 */
+    parts.forEach(function(x){ x=x.trim(); if(!x) return; var u=new SpeechSynthesisUtterance(x); u.lang="ko-KR"; if(vo) u.voice=vo; u.rate=p.rate*(/[!?]$/.test(x)?1.04:1); u.pitch=p.pitch; speechSynthesis.speak(u); });
+  }catch(e){}
+}
+if(window.speechSynthesis){ try{ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=function(){}; }catch(e){} }
+function stopSpeak(){ SPK_ID++; try{ window.speechSynthesis&&speechSynthesis.cancel(); }catch(e){} try{ if(AUD){ AUD.pause(); AUD=null; } }catch(e){} }
 
 /* ───────── 1. 상황 선택 ───────── */
 function home(){
