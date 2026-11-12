@@ -13,6 +13,7 @@ function doPost(e) {
     if (d.act === 'live') return out(live(d));
     if (d.act === 'sug') return out(sugAdd(d));                          // 💬 건의·질문함 — 남기기 (누구나)
     if (d.act === 'sugdone') return out(sugDone(d));                      // 파트장: 확인·답변 표시
+    if (d.act === 'evpick') return out(evPick(d));                        // 📝 연습 결과를 평가에 반영 (본인이 고른 것만)
     if (d.act === 'evsub') return out(evAdd(d));                          // 📝 롤플레잉 평가 — 본인이 등급을 골라 제출
     return out({ ok: false, err: 'act' });
   } catch (err) { return out({ ok: false, err: String(err) }); }
@@ -332,10 +333,36 @@ function evSheet() {
   if (!sh) { sh = ss.insertSheet('평가제출', ss.getSheets().length); sh.appendRow(EV_HEAD); sh.setFrozenRows(1); }
   return sh;
 }
+const PK_HEAD = ['시각', '월', '이름', '상황', '난이도', '총점'];
+function pkSheet() {
+  const ss = sheet().getParent();
+  let sh = ss.getSheetByName('평가반영');
+  if (!sh) { sh = ss.insertSheet('평가반영', ss.getSheets().length); sh.appendRow(PK_HEAD); sh.setFrozenRows(1); }
+  return sh;
+}
+function pkRows(name, ym) {
+  const sh = pkSheet(), n = sh.getLastRow();
+  if (n < 2) return [];
+  return sh.getRange(2, 1, n - 1, PK_HEAD.length).getValues().filter(function (r) { return r[1] === ym && r[2] === name; })
+    .map(function (r) { return { t: new Date(r[0]).getTime(), sc: r[3], lv: r[4], total: Number(r[5]) || 0 }; });
+}
+function evPick(d) {
+  const name = String(d.name || '').slice(0, 10), sc = String(d.sc || ''), total = Number(d.total);
+  if (!name) return { ok: false, err: '이름을 먼저 골라 주세요' };
+  // 실제로 방금 AI 평가를 받은 기록(같은 이름·상황·점수, 3시간 이내)이 있어야 반영
+  const lim = Date.now() - 3 * 36e5, hit = rows(300).filter(function (r) { return r.name === name && String(r.sc) === sc && Number(r.total) === total && r.t >= lim; })[0];
+  if (!hit) return { ok: false, err: '방금 받은 점수 기록을 찾지 못했어요' };
+  const ym = ymNow();
+  if (pkRows(name, ym).some(function (x) { return x.t === hit.t || (x.sc === sc && x.total === total && Math.abs(x.t - Date.now()) < 3 * 36e5); })) return { ok: true, dup: 1, stats: evStats(name, ym) };
+  const lock = LockService.getScriptLock(); lock.waitLock(10000);
+  try { pkSheet().appendRow([new Date(), ym, name, sc, hit.lv, total]); } finally { lock.releaseLock(); }
+  return { ok: true, stats: evStats(name, ym) };
+}
 function evStats(name, ym) {
-  const my = rows(800).filter(function (r) { return r.name === name && Utilities.formatDate(new Date(r.t), 'Asia/Seoul', 'yyyy-MM') === ym; });
+  const my = pkRows(name, ym);
+  const all = rows(800).filter(function (r) { return r.name === name && Utilities.formatDate(new Date(r.t), 'Asia/Seoul', 'yyyy-MM') === ym; }).length;
   const sc = {}; my.forEach(function (r) { sc[r.sc] = 1; });
-  return { n: my.length, avg: my.length ? Math.round(my.reduce(function (a, r) { return a + (Number(r.total) || 0); }, 0) / my.length) : 0, kinds: Object.keys(sc).length, ids: Object.keys(sc) };
+  return { n: my.length, all: all, avg: my.length ? Math.round(my.reduce(function (a, r) { return a + (Number(r.total) || 0); }, 0) / my.length) : 0, kinds: Object.keys(sc).length, ids: Object.keys(sc) };
 }
 function evRows() {
   const sh = evSheet(), n = sh.getLastRow();

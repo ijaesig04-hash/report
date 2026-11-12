@@ -89,6 +89,7 @@ ul.l{margin:6px 0 0;padding-left:20px}ul.l li{margin:5px 0}
 .ev-t{width:100%;min-height:70px;border:1.5px solid var(--line);border-radius:12px;padding:10px;font:14px 'Noto Sans KR',sans-serif;margin-top:8px;box-sizing:border-box}
 .ev-ok{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:12px;padding:10px;font-size:13px;margin-top:8px}
 .ev-m{border-top:1px solid var(--line);padding:9px 0;font-size:13px}.ev-m b{color:var(--navy)}.ev-m small{display:block;color:var(--mute);margin-top:2px}
+.ev-pk{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;margin-top:4px}.ev-pk.done{background:#16a34a}.ev-pkh{font-size:12.5px;color:var(--mute);text-align:center;margin:6px 0 4px}
 .k3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
 .k3 div{background:#f3f6fd;border-radius:12px;padding:10px 6px;text-align:center}
 .k3 span{display:block;font-size:11px;color:var(--mute)}.k3 b{font-size:22px;color:var(--navy)}
@@ -303,10 +304,10 @@ function home(){
 
 /* ───────── 📝 평가 — 지사 평가용: 등급 기준을 보고 본인이 등급을 골라 파트장에게 제출 ───────── */
 var EV_G = [
-  ["S","최우수","이번 달 AI 고객 응대 연습을 꾸준히 하고, 점수도 높아요",[["연습 10번 이상",function(s){return s.n>=10;}],["평균 85점 이상",function(s){return s.avg>=85;}],["서비스·영업 상황 6가지 이상 연습",function(s){return s.kinds>=6;}]]],
-  ["A","우수","연습을 자주 하고 점수가 안정적이에요",[["연습 6번 이상",function(s){return s.n>=6;}],["평균 75점 이상",function(s){return s.avg>=75;}],["서로 다른 상황 4가지 이상",function(s){return s.kinds>=4;}]]],
-  ["B","보통","기본 연습은 했어요",[["연습 3번 이상",function(s){return s.n>=3;}],["평균 60점 이상",function(s){return s.avg>=60;}]]],
-  ["C","노력 필요","연습이 적거나 점수가 낮아요 — 다음 달에 더 해 봐요",[["연습 1~2번 또는 평균 60점 미만",function(s){return s.n<3||s.avg<60;}]]]
+  ["S","최우수","이번 달 AI 고객 응대 연습을 꾸준히 하고, 점수도 높아요",[["평가 반영 10번 이상",function(s){return s.n>=10;}],["평균 85점 이상",function(s){return s.avg>=85;}],["서비스·영업 상황 6가지 이상 연습",function(s){return s.kinds>=6;}]]],
+  ["A","우수","연습을 자주 하고 점수가 안정적이에요",[["평가 반영 6번 이상",function(s){return s.n>=6;}],["평균 75점 이상",function(s){return s.avg>=75;}],["서로 다른 상황 4가지 이상",function(s){return s.kinds>=4;}]]],
+  ["B","보통","기본 연습은 했어요",[["평가 반영 3번 이상",function(s){return s.n>=3;}],["평균 60점 이상",function(s){return s.avg>=60;}]]],
+  ["C","노력 필요","연습이 적거나 점수가 낮아요 — 다음 달에 더 해 봐요",[["평가 반영 1~2번 또는 평균 60점 미만",function(s){return s.n<3||s.avg<60;}]]]
 ];
 var EV_SEL = "";
 function evStat(){ var s=(window.EV_ST)||{n:0,avg:0,kinds:0}; return s; }
@@ -323,8 +324,8 @@ function evView(){
 function evDraw(j){
   var box=$("#evbox"), st=j.stats||{n:0,avg:0,kinds:0}, sub=j.sub; if(!EV_SEL&&sub) EV_SEL=sub.grade;
   var h='<div class="card"><h2>📝 '+(+j.ym.slice(5))+'월 AI 응대 평가 <small style="font-weight:400;color:var(--mute)">스스로 평가</small></h2>'+
-    '<p class="sub">내 연습 기록을 보고 아래 등급 중 나에게 맞는 것을 골라 파트장에게 제출해요.</p>'+
-    '<div class="ev-st"><div><span>이번 달 연습</span><b>'+st.n+'번</b></div><div><span>평균 점수</span><b>'+(st.n?st.avg:"-")+'</b></div><div><span>다른 상황</span><b>'+st.kinds+'가지</b></div></div>';
+    '<p class="sub">연습 결과 화면에서 「평가에 반영」한 연습만 계산해요. 기록을 보고 나에게 맞는 등급을 골라 제출해요.</p>'+
+    '<div class="ev-st"><div><span>평가 반영</span><b>'+st.n+'번</b></div><div><span>반영 평균</span><b>'+(st.n?st.avg:"-")+'</b></div><div><span>다른 상황</span><b>'+st.kinds+'가지</b></div></div>'+(st.all!=null?'<p class="sub" style="margin:-2px 0 4px;font-size:12px">이번 달 전체 연습 '+st.all+'번 중 '+st.n+'번 반영</p>':'');
   h+=EV_G.map(function(g){ var oks=g[3].map(function(c){ return c[1](st); }), all=oks.every(Boolean);
     return '<button type="button" class="ev-g" data-g="'+g[0]+'" aria-pressed="'+(EV_SEL===g[0])+'"><div class="t"><i>'+g[0]+'</i>'+g[1]+(all?'<em>기록 충족</em>':'')+'</div><div style="font-size:13px;color:#64748b;margin-top:4px">'+g[2]+'</div><ul>'+g[3].map(function(c,i){ return '<li'+(oks[i]?' class="ok"':'')+'>'+(oks[i]?'✔ ':'')+c[0]+'</li>'; }).join('')+'</ul></button>'; }).join('');
   h+='<textarea class="ev-t" id="evtx" maxlength="500" placeholder="한 달 동안 느낀 점이나 파트장에게 하고 싶은 말 (선택)">'+esc(sub&&sub.text||"")+'</textarea>'+
@@ -352,7 +353,7 @@ function evMgr(){
       var R=j.rows||[], cnt={S:0,A:0,B:0,C:0}; R.forEach(function(x){ if(cnt[x.grade]!=null) cnt[x.grade]++; });
       box.innerHTML='<div class="card"><h2>📝 '+(+j.ym.slice(5))+'월 평가 제출 현황 <small style="font-weight:400;color:var(--mute)">'+R.length+'명 제출</small></h2>'+
         '<div class="ev-st" style="grid-template-columns:repeat(4,1fr)">'+["S","A","B","C"].map(function(g){ return '<div><span>'+g+'</span><b>'+cnt[g]+'</b></div>'; }).join("")+'</div>'+
-        (R.length?R.map(function(x){ return '<div class="ev-m"><b>'+esc(x.name)+'</b> · 등급 '+esc(x.grade)+' <small>연습 '+x.n+'번 · 평균 '+x.avg+'점'+(x.text?'<br>'+esc(x.text):'')+'</small></div>'; }).join(""):'<p class="sub">아직 제출한 직원이 없어요.</p>')+
+        (R.length?R.map(function(x){ return '<div class="ev-m"><b>'+esc(x.name)+'</b> · 등급 '+esc(x.grade)+' <small>반영 '+x.n+'번 · 평균 '+x.avg+'점'+(x.text?'<br>'+esc(x.text):'')+'</small></div>'; }).join(""):'<p class="sub">아직 제출한 직원이 없어요.</p>')+
         '<button type="button" class="btn ghost block" id="evr">새로고침</button></div>';
       $("#evr").onclick=evMgr2;
     }).catch(function(e){ box.querySelector("#evl").textContent="제출 현황 보기"; alert(e.message||"불러오지 못했어요"); });
@@ -644,9 +645,18 @@ function showEval(j){
    '<div class="card"><h2>🔧 이렇게 해 보세요</h2><ul class="l">'+(j.improve||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>'+(j.example?'<div class="ex">💬 <b>이렇게 말해 보세요</b><br>'+esc(j.example)+'</div>':'')+'</div>'+
    ((j.pairs&&j.pairs.length)?'<div class="card"><h2>📝 모범 답안 비교</h2><p class="sub" style="margin:-4px 0 8px">내가 한 말을 이렇게 바꾸면 더 좋아요</p>'+j.pairs.map(function(x){ return '<div class="pr"><div class="pr-me"><em>내가 한 말</em>'+esc(x.me)+'</div><div class="pr-ok"><em>이렇게 말해 보세요</em>'+esc(x.better)+'</div></div>'; }).join('')+'</div>':'')+
    '<div class="card"><h2>💡 이 상황의 응대 포인트</h2><ul class="l">'+S.sc.key.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>'+(S.sc.ment?'<p class="mt-h">💬 실전 추천 멘트</p>'+S.sc.ment.map(function(m){return '<p class="mt">“'+esc(m)+'”</p>';}).join(""):'')+'</div>'+
+   ((!j.demo && !GUEST && ME && RP_API && MGR.indexOf(ME)<0)?'<button class="btn block ev-pk" id="evpk">📝 이 연습을 평가에 반영</button><p class="ev-pkh" id="evpkm">반영한 연습만 이번 달 평가 점수에 들어가요.</p>':'')+
    '<button class="btn red block" id="again">같은 상황 다시 연습</button><button class="btn ghost block" id="hm">다른 상황 고르기</button>';
   app.innerHTML=h; window.scrollTo(0,0);
   $("#again").onclick=function(){ start(S.sc); }; $("#hm").onclick=home;
+  var pk=$("#evpk"); if(pk) pk.onclick=function(){
+    pk.disabled=true; pk.textContent="반영하는 중…";
+    api1({act:"evpick",name:ME,sc:S.sc.id,total:j.total}).then(function(r){
+      if(!r||!r.ok) throw new Error(r&&r.err||"실패");
+      var st=r.stats||{}; pk.textContent="✅ 평가에 반영했어요"; pk.classList.add("done");
+      $("#evpkm").innerHTML='이번 달 반영 <b>'+(st.n||0)+'번</b> · 평균 <b>'+(st.avg||0)+'점</b> — 「📝 평가」 탭에서 등급을 골라 제출하세요.';
+    }).catch(function(e){ pk.disabled=false; pk.textContent="📝 이 연습을 평가에 반영"; $("#evpkm").textContent="반영하지 못했어요 ("+(e.message||e)+"). 다시 눌러 주세요."; });
+  };
 }
 
 /* ───────── 4. 파트장 현황 ───────── */
