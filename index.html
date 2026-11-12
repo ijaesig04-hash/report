@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261112221500">
+<meta name="bsr-ver" content="20261112223500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1161,6 +1161,10 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .rp-mini{display:flex;align-items:center;gap:8px;width:100%;margin-top:8px;padding:8px 12px;border:0;border-radius:12px;background:linear-gradient(100deg,#5a94f5 0%,#8286ee 100%);color:#fff;font:inherit;text-align:left;cursor:pointer;box-shadow:0 4px 12px rgba(99,102,241,.2);position:relative;overflow:hidden}.rp-mini span{font-size:16px}.rp-mini b{font-size:13px;font-weight:800;white-space:nowrap;color:#fff}.rp-mini small{flex:1;min-width:0;font-size:11.5px;color:rgba(255,255,255,.88);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rp-mini i{font-style:normal;color:#fff;font-weight:800}.rp-mini:active{transform:scale(.98)}.rp-mini::after{content:"";position:absolute;top:0;left:-40%;width:30%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);animation:rpsh 4.5s ease-in-out infinite}@keyframes rpsh{0%,60%{left:-40%}100%{left:130%}}@media(prefers-reduced-motion:reduce){.rp-mini::after{animation:none;display:none}}
 .fr button{border:0;border-radius:14px;padding:9px 10px;font:600 12px "Noto Sans KR",sans-serif;cursor:pointer;text-align:left}
 .fr-c{position:relative;display:flex!important;flex-direction:column;justify-content:center;gap:3px;min-height:56px;padding:10px 24px 10px 12px!important}.fr-c .fr-i{display:none}.fr-c b{font-size:13.5px;font-weight:800;line-height:1.25;white-space:nowrap}.fr-c small{font-size:11.5px;font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fr-c i{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-style:normal;opacity:.5;font-size:14px}
+.fr.rpr{margin:0}.sec>.fr.rpr,.dh>.fr.rpr{margin:0}
+.fr.rpr .fr-c{text-decoration:none;border:0;border-radius:14px;min-height:64px;box-sizing:border-box}.fr.rpr .fr-c b{white-space:normal;font-size:13px;line-height:1.25}
+.fr-rp{background:linear-gradient(100deg,#5a94f5 0%,#8286ee 100%);color:#fff}.fr-rp small{color:rgba(255,255,255,.9)}
+.fr-pd{background:linear-gradient(105deg,#fff2f4 0%,#f4f1ff 100%);border:1px solid #f2cdd5!important;color:#7f1d3a}.fr-pd small{color:#8a5a66}
 .fr-b{background:linear-gradient(135deg,#fff1f2,#ffedd5);color:#7c2d12}.fr-b em{font-style:normal;color:#ea580c}.fr-b small{color:#9a3412}
 .fr-f{font-size:12px;font-weight:800;white-space:nowrap}.fr-f b{font-size:18px;color:#ea580c;margin-left:1px}
 .fr-b>span:nth-child(2){font-size:11.5px;line-height:1.35}.fr-b i{margin-left:auto;font-style:normal;opacity:.6}
@@ -3738,6 +3742,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-12p", date:"11/12", title:"홈 메뉴 두 칸으로", tabs:["home"], items:["🎧 AI 고객 응대 롤플레잉과 🛡️ 에스원 상품 추천을 반반씩 한 줄로 묶었어요"]},
  {id:"2026-11-12o", date:"11/12", title:"브리핑 화면 정리", tabs:["home"], items:["🧹 브리핑 화면에서 이번 주 요약 · 직원별 미리보기 · 차량 대항전 줄을 뺐어요 (차량 대항전은 차량별 탭에서 계속 볼 수 있어요)"]},
  {id:"2026-11-12n", date:"11/12", title:"롤플레잉 안내 문구·응답 간격", tabs:["home"], items:["🎧 무료 사용량 안내를 한 줄로 줄였어요","📞 실시간 통화에서 내 말이 끝난 뒤 2초 조용하면 고객이 대답해요"]},
  {id:"2026-11-12m", date:"11/12", title:"실시간 통화 마무리 후 재연결 막음", tabs:["home"], items:["📞 실시간 통화에서 마무리를 눌러도 통화가 다시 연결되어 첫 멘트가 반복되던 문제를 고쳤어요"]},
@@ -4144,7 +4149,7 @@ function deptHome(d){
   var md = function(x){ return (+x.slice(0,2))+'/'+(+x.slice(3)); };
   var h = '<div class="dh">';
   var gg = deptGreet(d); h += '<div class="dh-c dh-hero '+(d==="영업"?'sal':'tec')+'"><small>'+(d==="영업"?'💼':'💻')+' 북서울지사 '+d+' · '+(function(){ var k=new Date(Date.now()+9*3600000); return (k.getUTCMonth()+1)+'/'+k.getUTCDate()+'('+'일월화수목금토'.charAt(k.getUTCDay())+')'; })()+'</small><b>'+esc2(me)+(isLead(me)?' '+d+'팀장':'')+'님, '+gg[0]+' '+gg[1]+'</b><small>'+gg[2]+'</small></div>';
-  h += rpBtn() + '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + prodLink();
+  h += rpProdRow() + '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>';
   h += (typeof wxCard==="function" ? wxCard() : '');
   h += rpMini();
   h += '<details class="dh-c dh-dt"><summary class="dh-h">📞 내 해피콜 <small>발송 '+rows.length+' · 응답 '+rs.length+' ▾</small></summary><p class="dh-sub">'+esc2(S.period.replace('2026.',''))+' 누적</p><div class="dh-k">'+
@@ -4273,7 +4278,7 @@ function brief(){
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small>'+(typeof sfxChip==="function"?sfxChip():'')+'<b>'+(nm2?'<span class="hm-nm">'+esc2(nm2)+'님,</span>':'')+'<span class="hm-gr'+(greet.replace(/ /g,'').length>10?' long':'')+'">'+greet+' <i class="wv">'+gp[1]+'</i></span></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
   setTimeout(safeAuto, 300); setTimeout(wxAuto, 900);
-  var salesA = rpBtn() + '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + prodLink();
+  var salesA = rpProdRow() + '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>';
   return '<div class="sec">'+hero+salesA+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+funRow()+rpMini()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<span class="pt-bs"><button type="button" class="fd-btn" data-ptopen="1">🗺️ 구역 조회</button><button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></span></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
@@ -5070,6 +5075,10 @@ function funRow(){
     '<button type="button" class="fr-c fr-q'+(q?' done':'')+'" data-qzopen="1"><span class="fr-i">🧠</span><b>🧠 안전 퀴즈</b><small>'+(q?'이번 주 완료 '+q.sc+'/3'+(q.sc===3?' 🎉':''):'이번 주 3문제')+'</small><i>›</i></button></div>';
 }
 /* AI 고객 응대 롤플레잉 작은 카드 — 이름·부서와 상관없이 모두에게 보임 (funRow와 별개) */
+function rpProdRow(){
+  return '<div class="fr rpr"><button type="button" class="fr-c fr-rp" data-rpopen="1"><b>🎧 AI 고객 응대<br>롤플레잉</b><small>말로 연습 · 점수 받기</small><i>›</i></button>'+
+    '<a class="fr-c fr-pd" href="'+PROD_URL+'"><b>🛡️ 에스원<br>상품 추천</b><small>카톡 · 메일 홍보</small><i>›</i></a></div>';
+}
 function rpBtn(){ return '<button type="button" class="rp-mini" data-rpopen="1"><span>🎧</span><b>AI 고객 응대 롤플레잉</b><small>말로 연습 · 점수 받기</small><i>›</i></button>'; }
 function rpMini(){ setTimeout(rpBoardLoad,0); return rpBoardHtml(); }   /* 버튼은 영업일보 아래(rpBtn), 여기는 연습 현황판만 */
 /* 🏆 이달의 응대왕 — AI 고객 응대 롤플레잉 이달 평균 점수 상위 3명 (칭찬용 · 3명만) */
