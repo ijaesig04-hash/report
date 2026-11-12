@@ -13,6 +13,7 @@ function doPost(e) {
     if (d.act === 'live') return out(live(d));
     if (d.act === 'sug') return out(sugAdd(d));                          // 💬 건의·질문함 — 남기기 (누구나)
     if (d.act === 'sugdone') return out(sugDone(d));                      // 파트장: 확인·답변 표시
+    if (d.act === 'evstart') return out(evStart(d));                      // 📝 평가 시작 (한 달 3회)
     if (d.act === 'evpick') return out(evPick(d));                        // 📝 연습 결과를 평가에 반영 (본인이 고른 것만)
     if (d.act === 'evsub') return out(evAdd(d));                          // 📝 롤플레잉 평가 — 본인이 등급을 골라 제출
     return out({ ok: false, err: 'act' });
@@ -324,71 +325,73 @@ function sugDone(d) {
   return { ok: true };
 }
 
-/* ───── 📝 롤플레잉 평가 — 같은 기록 파일의 「평가제출」 시트. 한 사람이 한 달에 한 줄 (다시 내면 덮어씀) ───── */
-const EV_HEAD = ['시각', '월', '이름', '등급', '연습 횟수', '평균 점수', '소감', '확인'];
+/* ───── 📝 롤플레잉 평가 (서비스 전용) — 한 달에 3회까지 「평가 시작」, 그중 가장 좋은 회차를 본인이 골라 제출
+   「평가회차」 시트: 회차마다 한 줄(시작 때 만들고 끝나면 점수 기록) · 「평가제출」 시트: 한 사람이 한 달에 한 줄 ───── */
+const EV_MAX = 3;
+const AT_HEAD = ['시작', '월', '이름', '회차', '상황', '총점', '완료'];
+const EV_HEAD = ['시각', '월', '이름', '등급', '제출 회차', '점수', '소감', '확인'];
 function ymNow() { return Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM'); }
-function evSheet() {
+function evSh(name, head) {
   const ss = sheet().getParent();
-  let sh = ss.getSheetByName('평가제출');
-  if (!sh) { sh = ss.insertSheet('평가제출', ss.getSheets().length); sh.appendRow(EV_HEAD); sh.setFrozenRows(1); }
+  let sh = ss.getSheetByName(name);
+  if (!sh) { sh = ss.insertSheet(name, ss.getSheets().length); sh.appendRow(head); sh.setFrozenRows(1); }
   return sh;
 }
-const PK_HEAD = ['시각', '월', '이름', '상황', '난이도', '총점'];
-function pkSheet() {
-  const ss = sheet().getParent();
-  let sh = ss.getSheetByName('평가반영');
-  if (!sh) { sh = ss.insertSheet('평가반영', ss.getSheets().length); sh.appendRow(PK_HEAD); sh.setFrozenRows(1); }
-  return sh;
-}
-function pkRows(name, ym) {
-  const sh = pkSheet(), n = sh.getLastRow();
+function evGrade(t) { t = Number(t) || 0; return t >= 90 ? 'S' : t >= 80 ? 'A' : t >= 70 ? 'B' : 'C'; }
+function atRows(name, ym) {
+  const sh = evSh('평가회차', AT_HEAD), n = sh.getLastRow();
   if (n < 2) return [];
-  return sh.getRange(2, 1, n - 1, PK_HEAD.length).getValues().filter(function (r) { return r[1] === ym && r[2] === name; })
-    .map(function (r) { return { t: new Date(r[0]).getTime(), sc: r[3], lv: r[4], total: Number(r[5]) || 0 }; });
+  return sh.getRange(2, 1, n - 1, AT_HEAD.length).getValues().map(function (r, i) { return { row: i + 2, t: new Date(r[0]).getTime(), ym: r[1], name: r[2], no: Number(r[3]) || 0, sc: r[4], total: r[5] === '' ? null : Number(r[5]), done: !!r[6] }; })
+    .filter(function (x) { return x.ym === ym && x.name === name; });
 }
-function evPick(d) {
-  const name = String(d.name || '').slice(0, 10), sc = String(d.sc || ''), total = Number(d.total);
+function evStart(d) {
+  const name = String(d.name || '').slice(0, 10), sc = String(d.sc || '').slice(0, 40);
   if (!name) return { ok: false, err: '이름을 먼저 골라 주세요' };
-  // 실제로 방금 AI 평가를 받은 기록(같은 이름·상황·점수, 3시간 이내)이 있어야 반영
-  const lim = Date.now() - 3 * 36e5, hit = rows(300).filter(function (r) { return r.name === name && String(r.sc) === sc && Number(r.total) === total && r.t >= lim; })[0];
-  if (!hit) return { ok: false, err: '방금 받은 점수 기록을 찾지 못했어요' };
-  const ym = ymNow();
-  if (pkRows(name, ym).some(function (x) { return x.t === hit.t || (x.sc === sc && x.total === total && Math.abs(x.t - Date.now()) < 3 * 36e5); })) return { ok: true, dup: 1, stats: evStats(name, ym) };
-  const lock = LockService.getScriptLock(); lock.waitLock(10000);
-  try { pkSheet().appendRow([new Date(), ym, name, sc, hit.lv, total]); } finally { lock.releaseLock(); }
-  return { ok: true, stats: evStats(name, ym) };
+  const ym = ymNow(), lock = LockService.getScriptLock(); lock.waitLock(10000);
+  try {
+    const L = atRows(name, ym);
+    if (L.length >= EV_MAX) return { ok: false, err: '이번 달 평가 3회를 모두 썼어요' };
+    const no = L.length + 1;
+    evSh('평가회차', AT_HEAD).appendRow([new Date(), ym, name, no, sc, '', '']);
+    return { ok: true, no: no };
+  } finally { lock.releaseLock(); }
 }
-function evStats(name, ym) {
-  const my = pkRows(name, ym);
-  const all = rows(800).filter(function (r) { return r.name === name && Utilities.formatDate(new Date(r.t), 'Asia/Seoul', 'yyyy-MM') === ym; }).length;
-  const sc = {}; my.forEach(function (r) { sc[r.sc] = 1; });
-  return { n: my.length, all: all, avg: my.length ? Math.round(my.reduce(function (a, r) { return a + (Number(r.total) || 0); }, 0) / my.length) : 0, kinds: Object.keys(sc).length, ids: Object.keys(sc) };
+function evPick(d) {   // 평가 회차가 끝나면 점수 기록 — 실제로 방금 AI 채점을 받은 기록이 있어야 함
+  const name = String(d.name || '').slice(0, 10), sc = String(d.sc || ''), total = Number(d.total), no = Number(d.no) || 0;
+  const ym = ymNow(), at = atRows(name, ym).filter(function (x) { return x.no === no; })[0];
+  if (!at) return { ok: false, err: '평가 회차를 찾지 못했어요' };
+  if (at.done) return { ok: true, dup: 1 };
+  if (String(at.sc) !== sc) return { ok: false, err: '상황이 달라요' };
+  const hit = rows(300).filter(function (r) { return r.name === name && String(r.sc) === sc && Number(r.total) === total && r.t >= at.t; })[0];
+  if (!hit) return { ok: false, err: '방금 받은 점수 기록을 찾지 못했어요' };
+  evSh('평가회차', AT_HEAD).getRange(at.row, 6, 1, 2).setValues([[total, '완료']]);
+  return { ok: true };
 }
 function evRows() {
-  const sh = evSheet(), n = sh.getLastRow();
+  const sh = evSh('평가제출', EV_HEAD), n = sh.getLastRow();
   if (n < 2) return [];
   return sh.getRange(2, 1, n - 1, EV_HEAD.length).getValues().map(function (r) {
-    return { t: new Date(r[0]).getTime(), ym: r[1], name: r[2], grade: r[3], n: r[4], avg: r[5], text: r[6] };
+    return { t: new Date(r[0]).getTime(), ym: r[1], name: r[2], grade: r[3], no: r[4], total: r[5], text: r[6] };
   }).filter(function (x) { return x.ym === ymNow(); }).reverse();
 }
 function evMine(name) {
   if (!name) return { ok: false, err: 'name' };
   const ym = ymNow(), sub = evRows().filter(function (x) { return x.name === name; })[0] || null;
-  return { ok: true, ym: ym, stats: evStats(name, ym), sub: sub };
+  return { ok: true, ym: ym, max: EV_MAX, tries: atRows(name, ym).map(function (x) { return { no: x.no, sc: x.sc, total: x.total, done: x.done }; }), sub: sub };
 }
 function evAdd(d) {
-  const name = String(d.name || '').slice(0, 10), grade = String(d.grade || '');
+  const name = String(d.name || '').slice(0, 10), no = Number(d.no) || 0;
   if (!name) return { ok: false, err: '이름을 먼저 골라 주세요' };
-  if (['S', 'A', 'B', 'C'].indexOf(grade) < 0) return { ok: false, err: '등급을 골라 주세요' };
-  const ym = ymNow(), st = evStats(name, ym), text = String(d.text || '').trim().slice(0, 500);
-  const lock = LockService.getScriptLock(); lock.waitLock(10000);
+  const ym = ymNow(), at = atRows(name, ym).filter(function (x) { return x.no === no && x.done; })[0];
+  if (!at) return { ok: false, err: '제출할 회차를 골라 주세요' };
+  const text = String(d.text || '').trim().slice(0, 500), lock = LockService.getScriptLock(); lock.waitLock(10000);
   try {
-    const sh = evSheet(), n = sh.getLastRow(), vals = [new Date(), ym, name, grade, st.n, st.avg, text, ''];
+    const sh = evSh('평가제출', EV_HEAD), n = sh.getLastRow(), vals = [new Date(), ym, name, evGrade(at.total), no, at.total, text, ''];
     let hit = 0;
     if (n >= 2) { const cur = sh.getRange(2, 2, n - 1, 2).getValues(); for (let i = 0; i < cur.length; i++) if (cur[i][0] === ym && cur[i][1] === name) hit = i + 2; }
     if (hit) sh.getRange(hit, 1, 1, EV_HEAD.length).setValues([vals]); else sh.appendRow(vals);
   } finally { lock.releaseLock(); }
-  return { ok: true, stats: st };
+  return { ok: true, grade: evGrade(at.total) };
 }
 
 return { doPost: doPost, doGet: doGet };
