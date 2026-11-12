@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261112235955">
+<meta name="bsr-ver" content="20261112235958">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1116,8 +1116,8 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mx>*{position:relative}
 @keyframes mxs{0%{left:-70%}55%,100%{left:140%}}
 @media (prefers-reduced-motion:reduce){.mx::before{animation:none}}
-.mxst:not(.ldb){display:inline-block;animation:mxtw 3.2s ease-in-out infinite}
-@keyframes mxtw{0%,100%{opacity:1;filter:drop-shadow(0 0 3px rgba(255,200,40,.85))}50%{opacity:.35;filter:none}}
+.mx .mxst:not(.ldb){display:inline-block;filter:drop-shadow(0 0 2px rgba(255,210,60,.7));animation:mxtw 3.2s ease-in-out infinite}
+@keyframes mxtw{0%,100%{filter:drop-shadow(0 0 2px rgba(255,210,60,.7));transform:scale(1)}50%{filter:drop-shadow(0 0 6px rgba(255,220,80,1)) drop-shadow(0 0 12px rgba(255,190,40,.8)) brightness(1.25);transform:scale(1.12)}}
 @media (prefers-reduced-motion:reduce){.mxst{animation:none!important}}
 .mx::after{content:"";position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,215,105,.35),transparent 70%);pointer-events:none}
 .mx-k{font-size:11px;letter-spacing:.14em;font-weight:700;color:#ffd769}
