@@ -91,6 +91,20 @@ th{font-size:12px;color:var(--mute)}
 .keys{background:#eef3ff;border-radius:12px;padding:8px 12px;margin-bottom:10px;font-size:13.5px}.keys summary{font-weight:700;cursor:pointer}.keys ol{margin:6px 0 2px;padding-left:20px}.keys li{margin:3px 0}
 .hero{border-radius:16px;overflow:hidden;margin-bottom:12px;box-shadow:0 6px 18px rgba(20,39,92,.18);background:#fff}
 .hero img{display:block;width:100%;height:auto;aspect-ratio:1672/941;object-fit:cover}
+
+.hero img{max-height:150px;object-fit:cover;object-position:center 0%}
+.subs button[aria-pressed="true"]{background:#eef2ff!important;color:#16306b!important;border-color:#16306b!important;box-shadow:none!important}
+.hm1 h2{margin-bottom:2px}.hm1 .sub{margin:0 0 10px}
+.lvrow{display:flex;align-items:center;gap:12px}.lvrow b{font-size:13px;color:#475569;white-space:nowrap}.lvrow .seg{flex:1;margin:0}.lvrow .seg button{padding:7px 0}
+.subs button{padding:7px 4px!important;font-size:12.5px!important}
+.sclist{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.sclist .sc{border:0;border-radius:0;margin:0;padding:12px 14px;gap:10px;border-top:1px solid #eef1f6}.sclist .sc:first-child{border-top:0}
+.sclist .sc i{font-size:20px;width:26px;text-align:center}.sclist .sc>div{flex:1;min-width:0}.sclist .sc b{font-size:14.5px;font-weight:700;word-break:keep-all}
+.sc-r{display:flex;align-items:center;gap:6px;flex:none}.sc-r .tag{margin:0}.sc-p{font-style:normal;font-size:12px;font-weight:800;color:#1f4fd8}
+.sc-lg{margin:6px 4px 0;font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:3px}.sc-lg .tag{margin:0;font-size:10px;padding:0 6px}
+.hm-ft{margin:14px 4px 4px;font-size:11.5px;line-height:1.5;color:#94a3b8;word-break:keep-all}
+.adm-l{display:block;margin:4px auto 0;border:0;background:none;color:#64748b;font:700 12.5px 'Noto Sans KR',sans-serif;text-decoration:underline;cursor:pointer;padding:8px}
+#weak:empty{display:none}
 </style>
 </head>
 <body>
@@ -257,17 +271,17 @@ function home(){
   var h = GUEST ? '<div class="demo">👀 연습은 자유롭게 할 수 있어요. 이름을 고르지 않아 <b>점수는 기록에 남지 않아요.</b></div>' : '';
   h += RP_API ? "" : '<div class="demo">🧪 <b>데모 모드</b> — AI 연결 전이라 미리 정해 둔 고객 대사와 간단 채점으로 동작해요. 흐름을 미리 써 볼 수 있어요.</div>';
   h = '<div class="hero"><img src="roleplay-bg.jpg?v=2" alt="화난 고객에게 공감하며 응대하는 에스원 직원 그림"></div>' + h;
-  h += '<div class="card"><h2>어떤 상황을 연습할까요?</h2><p class="sub">AI가 까다로운 고객이 되어 말을 걸어요. 소리로 대답해 보세요. 모두 가상 상황이라 <b>실제 고객 이름·번호는 말하지 않아도 돼요.</b></p>'+
-    (RP_API?'<p class="fq">📞 실시간 통화는 무료 사용량이 끝나면 안 될 수 있어요. 그땐 <b>「글자로 연습」</b>을 써 주세요.</p>':'')+
-    '<b style="font-size:13px">난이도</b><div class="seg" id="lv">'+["하","중","상"].map(function(l){return '<button type="button" data-l="'+l+'" aria-pressed="'+(S.lv===l)+'">'+l+'</button>';}).join("")+'</div></div>';
-  var row=function(c,i){ var l=getLast(c); return '<button type="button" class="sc" data-i="'+i+'"><i>'+c.ic+'</i><div><b>'+esc(c.title)+'</b><span><em class="tag '+c.lv+'">추천 '+c.lv+'</em>'+(l?'지난 점수 '+l.t+'점':'아직 연습 전')+'</span></div></button>'; };
+  h += '<div class="card hm1"><h2>어떤 상황을 연습할까요?</h2><p class="sub">AI 고객에게 말로 대답하고 점수를 받아요.</p>'+
+    '<div class="lvrow"><b>난이도</b><div class="seg" id="lv">'+["하","중","상"].map(function(l){return '<button type="button" data-l="'+l+'" aria-pressed="'+(S.lv===l)+'">'+l+'</button>';}).join("")+'</div></div></div>';
+  var row=function(c,i){ var l=getLast(c); return '<button type="button" class="sc" data-i="'+i+'"><i>'+c.ic+'</i><div><b>'+esc(c.title)+'</b></div><span class="sc-r">'+(l?'<em class="sc-p">'+l.t+'점</em>':'')+'<em class="tag '+c.lv+'">'+c.lv+'</em></span></button>'; };
   var tab=homeTab(), sub=homeSub(tab), subs=CATS2[tab];
   h += '<div class="tabs" role="tablist">'+[["svc","🛠️ 서비스 응대"],["sal","💼 영업"]].map(function(t){ return '<button type="button" role="tab" data-tab="'+t[0]+'" aria-selected="'+(tab===t[0])+'">'+t[1]+'</button>'; }).join("")+'</div>';
-  h += '<div class="subs">'+subs.map(function(x){ var n=SCEN.filter(function(c){return c.c===x[0];}).length; return '<button type="button" data-sub="'+x[0]+'" aria-pressed="'+(sub===x[0])+'">'+x[1]+'<small>'+n+'개</small></button>'; }).join("")+'</div>';
+  h += '<div class="subs">'+subs.map(function(x){ var n=SCEN.filter(function(c){return c.c===x[0];}).length; return '<button type="button" data-sub="'+x[0]+'" aria-pressed="'+(sub===x[0])+'">'+x[1]+'</button>'; }).join("")+'</div>';
   var cur=subs.filter(function(x){return x[0]===sub;})[0];
-  h += '<p class="gh-d">'+cur[2]+'</p>'+SCEN.map(function(c,i){ return c.c===sub?row(c,i):''; }).join("");
+  h += '<div class="sclist">'+SCEN.map(function(c,i){ return c.c===sub?row(c,i):''; }).join("")+'</div><p class="sc-lg"><em class="tag 하">하</em><em class="tag 중">중</em><em class="tag 상">상</em> 추천 난이도</p>';
   if(!GUEST && ME) h += '<div id="weak" style="margin-top:14px"></div>';
-  if(MGR.indexOf(ME)>=0) h += '<button type="button" class="btn ghost block" id="adm">🔒 파트장 현황 보기</button>';
+  h += '<p class="hm-ft">가상 상황이라 실제 고객 정보는 말하지 않아도 돼요.'+(RP_API?' 실시간 통화가 안 되면 「글자로 연습」을 써 주세요.':'')+'</p>';
+  if(MGR.indexOf(ME)>=0) h += '<button type="button" class="adm-l" id="adm">🔒 파트장 현황 보기</button>';
   app.innerHTML=h;
   app.querySelectorAll("#lv button").forEach(function(b){ b.onclick=function(){ S.lv=b.dataset.l; app.querySelectorAll("#lv button").forEach(function(x){x.setAttribute("aria-pressed",x===b);}); }; });
   app.querySelectorAll(".sc").forEach(function(b){ b.onclick=function(){ start(SCEN[+b.dataset.i]); }; });
@@ -308,7 +322,7 @@ function loadMine(){
 function drawWeak(){
   var box=$("#weak"); if(!box) return;
   var a=mineAvg();
-  if(!a){ box.innerHTML='<div class="card wk"><h2>📊 나의 약한 항목</h2><p class="sub" style="margin:0">한 번 연습하고 점수를 받으면, 4가지 항목 중 약한 곳과 맞춤 상황을 추천해 드려요.</p></div>'; return; }
+  if(!a){ box.innerHTML=''; return; }
   var lo=0; a.avg.forEach(function(v,i){ if(v<a.avg[lo]) lo=i; });
   var cat=CATS[lo], ids=FOCUS[cat], done={}; a.done.forEach(function(x){done[x]=(done[x]||0)+1;});
   var pick=ids.map(function(id){return SCEN.filter(function(c){return c.id===id;})[0];}).filter(Boolean).sort(function(x,y){return (done[x.id]||0)-(done[y.id]||0);}).slice(0,2);
