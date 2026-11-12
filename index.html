@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261112224500">
+<meta name="bsr-ver" content="20261112225500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1162,9 +1162,17 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .fr button{border:0;border-radius:14px;padding:9px 10px;font:600 12px "Noto Sans KR",sans-serif;cursor:pointer;text-align:left}
 .fr-c{position:relative;display:flex!important;flex-direction:column;justify-content:center;gap:3px;min-height:56px;padding:10px 24px 10px 12px!important}.fr-c .fr-i{display:none}.fr-c b{font-size:13.5px;font-weight:800;line-height:1.25;white-space:nowrap}.fr-c small{font-size:11.5px;font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fr-c i{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-style:normal;opacity:.5;font-size:14px}
 .fr.rpr{margin:0}.sec>.fr.rpr,.dh>.fr.rpr{margin:0}
-.fr.rpr .fr-c{align-items:center;text-align:center;padding:10px 8px!important;text-decoration:none;border:0;border-radius:14px;min-height:64px;box-sizing:border-box}.fr.rpr .fr-c b{white-space:normal;font-size:13px;line-height:1.25}
-.fr-rp{background:linear-gradient(100deg,#5a94f5 0%,#8286ee 100%);color:#fff}.fr-rp small{color:rgba(255,255,255,.9)}
-.fr-pd{background:linear-gradient(105deg,#fff2f4 0%,#f4f1ff 100%);border:1px solid #f2cdd5!important;color:#7f1d3a}.fr-pd small{color:#8a5a66}
+.fr.rpr .fr-c{position:relative;overflow:hidden;align-items:center;text-align:center;padding:10px 34px!important;text-decoration:none;border:0;border-radius:14px;min-height:66px;box-sizing:border-box}
+.fr.rpr .fr-c b{white-space:normal;font-size:13px;line-height:1.25;position:relative}.fr.rpr .fr-c small{position:relative}
+.fr.rpr .rpi{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:20px;line-height:1;display:block!important}
+.fr-rp{background:linear-gradient(120deg,#4f46e5 0%,#7c3aed 50%,#db2777 100%);background-size:200% 200%;color:#fff;box-shadow:0 6px 16px rgba(124,58,237,.35);animation:rpg 6s ease-in-out infinite}
+.fr-rp small{color:rgba(255,255,255,.92)}
+.fr-rp::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);animation:rps 3.2s ease-in-out infinite}
+.fr-rp .rpn{position:absolute;top:4px;right:5px;font-style:normal;font-size:9px;font-weight:900;letter-spacing:.3px;color:#7c3aed;background:#fff;border-radius:999px;padding:1px 6px;line-height:1.5}
+@keyframes rpg{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes rps{0%{left:-60%}60%,100%{left:130%}}
+@media (prefers-reduced-motion:reduce){.fr-rp,.fr-rp::after{animation:none}}
+.fr-pd{background:#fff;border:1px solid #e2e8f0!important;color:#1e293b;box-shadow:0 2px 8px rgba(20,50,95,.06)}.fr-pd b{color:#b91c3c}.fr-pd small{color:#64748b}
 .fr-b{background:linear-gradient(135deg,#fff1f2,#ffedd5);color:#7c2d12}.fr-b em{font-style:normal;color:#ea580c}.fr-b small{color:#9a3412}
 .fr-f{font-size:12px;font-weight:800;white-space:nowrap}.fr-f b{font-size:18px;color:#ea580c;margin-left:1px}
 .fr-b>span:nth-child(2){font-size:11.5px;line-height:1.35}.fr-b i{margin-left:auto;font-style:normal;opacity:.6}
@@ -3742,7 +3750,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
- {id:"2026-11-12p", date:"11/12", title:"홈 메뉴 두 칸으로", tabs:["home"], items:["🎧 AI 고객 응대 롤플레잉과 에스원 상품 추천을 반반씩 한 줄로 묶었어요 (글자 가운데 정렬)"]},
+ {id:"2026-11-12p", date:"11/12", title:"홈 메뉴 두 칸으로", tabs:["home"], items:["🎧 AI 고객 응대 롤플레잉과 에스원 상품 추천을 반반씩 한 줄로 묶었어요 (롤플레잉은 반짝이는 그라데이션으로 강조)"]},
  {id:"2026-11-12o", date:"11/12", title:"브리핑 화면 정리", tabs:["home"], items:["🧹 브리핑 화면에서 이번 주 요약 · 직원별 미리보기 · 차량 대항전 줄을 뺐어요 (차량 대항전은 차량별 탭에서 계속 볼 수 있어요)"]},
  {id:"2026-11-12n", date:"11/12", title:"롤플레잉 안내 문구·응답 간격", tabs:["home"], items:["🎧 무료 사용량 안내를 한 줄로 줄였어요","📞 실시간 통화에서 내 말이 끝난 뒤 2초 조용하면 고객이 대답해요"]},
  {id:"2026-11-12m", date:"11/12", title:"실시간 통화 마무리 후 재연결 막음", tabs:["home"], items:["📞 실시간 통화에서 마무리를 눌러도 통화가 다시 연결되어 첫 멘트가 반복되던 문제를 고쳤어요"]},
@@ -5076,8 +5084,8 @@ function funRow(){
 }
 /* AI 고객 응대 롤플레잉 작은 카드 — 이름·부서와 상관없이 모두에게 보임 (funRow와 별개) */
 function rpProdRow(){
-  return '<div class="fr rpr"><button type="button" class="fr-c fr-rp" data-rpopen="1"><b>AI 고객 응대<br>롤플레잉</b><small>말로 연습 · 점수 받기</small></button>'+
-    '<a class="fr-c fr-pd" href="'+PROD_URL+'"><b>에스원<br>상품 추천</b><small>카톡 · 메일 홍보</small></a></div>';
+  return '<div class="fr rpr"><button type="button" class="fr-c fr-rp" data-rpopen="1"><span class="rpi">🎧</span><em class="rpn">NEW</em><b>AI 고객 응대<br>롤플레잉</b><small>말로 연습 · 점수 받기</small></button>'+
+    '<a class="fr-c fr-pd" href="'+PROD_URL+'"><span class="rpi">🛡️</span><b>에스원<br>상품 추천</b><small>카톡 · 메일 홍보</small></a></div>';
 }
 function rpBtn(){ return '<button type="button" class="rp-mini" data-rpopen="1"><span>🎧</span><b>AI 고객 응대 롤플레잉</b><small>말로 연습 · 점수 받기</small><i>›</i></button>'; }
 function rpMini(){ setTimeout(rpBoardLoad,0); return rpBoardHtml(); }   /* 버튼은 영업일보 아래(rpBtn), 여기는 연습 현황판만 */
