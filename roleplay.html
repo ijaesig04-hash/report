@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#14275C">
-<title>AI 응대 연습 · 북서울 Report</title>
+<title>AI 고객 응대 롤플레잉 · 북서울 Report</title>
 <style>
 :root{--navy:#14275C;--red:#E4002B;--ink:#16203a;--mute:#5d6879;--line:#dde3ee;--bg:#f2f4f9;--ok:#1d7a4c;--warn:#b4620a}
 *{box-sizing:border-box}
@@ -94,7 +94,7 @@ th{font-size:12px;color:var(--mute)}
 </style>
 </head>
 <body>
-<div class="top"><button class="back" id="back" aria-label="뒤로">‹</button><b id="ttl">🎧 AI 응대 연습</b><span class="me" id="me"></span></div>
+<div class="top"><button class="back" id="back" aria-label="뒤로">‹</button><b id="ttl">🎧 AI 고객 응대 롤플레잉</b><span class="me" id="me"></span></div>
 <main id="app"></main>
 <div class="dock hidden" id="dock"></div>
 <script>
@@ -252,7 +252,7 @@ function stopSpeak(){ SPK_ID++; try{ window.speechSynthesis&&speechSynthesis.can
 /* ───────── 1. 상황 선택 ───────── */
 function home(){
   if(LV_) liveStop(); S.live=false;
-  stopSpeak(); S.end=false; dock.classList.add("hidden"); fitDock(); $("#ttl").textContent="🎧 AI 응대 연습";
+  stopSpeak(); S.end=false; dock.classList.add("hidden"); fitDock(); $("#ttl").textContent="🎧 AI 고객 응대 롤플레잉";
   if(!ME){ app.innerHTML='<div class="card"><h2>이름을 먼저 골라 주세요</h2><p class="sub">북서울 Report 첫 화면에서 이름을 고른 뒤 다시 들어오면 돼요.</p><button class="btn red block" id="gor">리포트로 돌아가기</button></div>'; $("#gor").onclick=goReport; return; }
   var h = GUEST ? '<div class="demo">👀 연습은 자유롭게 할 수 있어요. 이름을 고르지 않아 <b>점수는 기록에 남지 않아요.</b></div>' : '';
   h += RP_API ? "" : '<div class="demo">🧪 <b>데모 모드</b> — AI 연결 전이라 미리 정해 둔 고객 대사와 간단 채점으로 동작해요. 흐름을 미리 써 볼 수 있어요.</div>';
@@ -598,7 +598,7 @@ function drawAdmin(rows,names){
 
 /* ───────── 시작 ───────── */
 function goReport(){ stopSpeak(); location.href="./"; }
-back.onclick=function(){ if(S.sc&&dock&&!dock.classList.contains("hidden")){ if(!confirm("연습을 멈추고 나갈까요? (점수는 저장되지 않아요)")) return; } if($("#ttl").textContent.indexOf("AI 응대 연습")>=0) goReport(); else home(); };
+back.onclick=function(){ if(S.sc&&dock&&!dock.classList.contains("hidden")){ if(!confirm("연습을 멈추고 나갈까요? (점수는 저장되지 않아요)")) return; } if($("#ttl").textContent.indexOf("AI 고객 응대 롤플레잉")>=0) goReport(); else home(); };
 home();
 </script>
 <script>rpLog("접속");</script>

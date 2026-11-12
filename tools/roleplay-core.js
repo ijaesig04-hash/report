@@ -1,4 +1,4 @@
-/* AI 응대 연습 — 서버 동작 코드 (자동 업데이트 본체)
+/* AI 고객 응대 롤플레잉 — 서버 동작 코드 (자동 업데이트 본체)
    이 파일은 구글 Apps Script(roleplay.gs)가 GitHub에서 5분마다 읽어 가서 실행해요.
    여기만 고치면 서버 다시 배포 없이 반영돼요. 마지막 줄의 return 은 지우지 마세요. */
 const P = PropertiesService.getScriptProperties();
@@ -263,7 +263,7 @@ function live(d) {
 function sheet() {
   let id = P.getProperty('SHEET_ID'), ss;
   if (id) { try { ss = SpreadsheetApp.openById(id); } catch (e) { ss = null; } }
-  if (!ss) { ss = SpreadsheetApp.create('AI 응대 연습 기록 (북서울 Report)'); P.setProperty('SHEET_ID', ss.getId()); }
+  if (!ss) { ss = SpreadsheetApp.create('AI 고객 응대 롤플레잉 기록 (북서울 Report)'); P.setProperty('SHEET_ID', ss.getId()); }
   let sh = ss.getSheets()[0];
   if (sh.getLastRow() === 0) { sh.appendRow(HEAD); sh.setFrozenRows(1); }
   return sh;
