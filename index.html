@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261112174500">
+<meta name="bsr-ver" content="20261112180500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3738,6 +3738,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-12h", date:"11/12", title:"알림 켜기·끄기 즉시 반영", tabs:["home"], items:["🔔 알림을 켜고 끌 때 상태 표시가 바로 바뀌어요","⚠️ 켜지 못하면 이유를 화면에 알려줘요"]},
  {id:"2026-11-12g", date:"11/12", title:"어디서 열어도 항상 최신 화면", tabs:["home"], items:["🔄 회사 PC처럼 인터넷이 느린 곳에서도 옛 화면이 뜨지 않게 고쳤어요 — 새 버전이 있으면 끝까지 받아서 보여줘요","⚡ 바뀐 게 없을 때는 저장된 화면을 바로 띄워서 더 빨리 열려요"]},
  {id:"2026-11-12f", date:"11/12", title:"AI 응대 실시간 통화: 3초 기다려 주기", tabs:["home"], items:["🎧 실시간 통화에서 내 말이 끝나고 3초 이상 조용할 때만 고객이 대답해요 (말을 잠깐 쉬어도 바로 끊기지 않아요)"]},
  {id:"2026-11-12e", date:"11/12", title:"브리핑 카드 간격 정리", tabs:["home"], items:["📐 영업일보 · AI 응대 연습 · 상품 추천 · 안전 무사고 카드 사이 간격을 줄였어요"]},
@@ -5353,32 +5354,50 @@ function pushView(){
     var on = j.names||[], staff = staffOnly().concat(DEPTS["영업"],DEPTS["기술"]), off = staff.filter(function(n){return on.indexOf(n)<0});
     el.innerHTML = '<b>🔔 알림 켠 직원 '+on.length+'명</b>: '+esc2(on.join(', ')||'없음')+(off.length?'<br><b>⏳ 아직 안 켠 직원 '+off.length+'명</b>: '+esc2(off.join(', ')):''); }).catch(function(){});
 }
-/* 지금 이 폰에 알림이 켜져 있는지 확인해서 크게 보여 줌 */
-function pushState(){
-  var put=function(on){ var a=document.getElementById("pu-st"), b=document.getElementById("pu-bt"); if(!a||!b) return;
-    a.className="pu-st "+(on?"on":"off");
-    a.innerHTML = on ? '<span>🔔</span><div><b>지금 알림 켜짐</b><small>업데이트가 반영되면 폰 알림이 와요</small></div>' : '<span>🔕</span><div><b>지금 알림 꺼짐</b><small>켜 두면 새 지표가 반영될 때 바로 알려 드려요</small></div>';
-    b.innerHTML = on ? '<button type="button" class="pu-b off" data-pushoff="1">🔕 알림 끄기</button>' : '<button type="button" class="pu-b on" data-pushon="1">🔔 알림 켜기</button>'; };
-  try{ if(Notification.permission!=="granted"){ put(false); return; } }catch(x){ put(false); return; }
-  navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); }).then(function(sub){ put(!!sub); }).catch(function(){ put(false); });
-  setTimeout(function(){ var a=document.getElementById("pu-st"); if(a && /wait/.test(a.className)){ var on=false; try{ on=localStorage.getItem("bsr_push")==="1" && Notification.permission==="granted"; }catch(x){} put(on); } }, 2500);
+/* 지금 이 기기에 알림이 켜져 있는지 크게 보여 줌 — 켜고 끌 때마다 바로 바뀜 */
+function pushPut(on, note){
+  var a=document.getElementById("pu-st"), b=document.getElementById("pu-bt"); if(!a||!b) return;
+  if(on==="busy"){ a.className="pu-st wait"; a.innerHTML='<span>⏳</span><div><b>처리 중…</b><small>잠시만 기다려 주세요</small></div>'; b.innerHTML=''; return; }
+  a.className="pu-st "+(on?"on":"off");
+  a.innerHTML = on ? '<span>🔔</span><div><b>지금 알림 켜짐</b><small>업데이트가 반영되면 알림이 와요</small></div>' : '<span>🔕</span><div><b>지금 알림 꺼짐</b><small>'+(note||'켜 두면 새 지표가 반영될 때 바로 알려 드려요')+'</small></div>';
+  b.innerHTML = on ? '<button type="button" class="pu-b off" data-pushoff="1">🔕 알림 끄기</button>' : '<button type="button" class="pu-b on" data-pushon="1">🔔 알림 켜기</button>';
 }
+function pushState(){
+  var put=pushPut;
+  try{ if(Notification.permission!=="granted"){ put(false, Notification.permission==="denied"?'알림이 차단되어 있어요 — 주소창 왼쪽 자물쇠(또는 앱 설정)에서 알림을 허용해 주세요':''); return; } }catch(x){ put(false); return; }
+  navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); }).then(function(sub){
+    if(sub){ put(true); return; }
+    /* 허용은 되어 있는데 구독이 없으면(브라우저가 지움 등) 자동으로 다시 켬 */
+    var want=false; try{ want=localStorage.getItem("bsr_push")==="1"; }catch(x){}
+    if(!want){ put(false); return; }
+    put("busy");
+    return navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:pushB64(PUSH_KEY)}); }).then(function(s){ pushSend(s.toJSON()); put(true); });
+  }).catch(function(){ put(false); });
+  setTimeout(function(){ var a=document.getElementById("pu-st"); if(a && /wait/.test(a.className) && !/처리 중/.test(a.textContent)){ var on=false; try{ on=localStorage.getItem("bsr_push")==="1" && Notification.permission==="granted"; }catch(x){} put(on); } }, 2500);
+}
+function pushErr(e){ var n=(e&&e.name)||"", m=(e&&e.message)||"";
+  if(/NotAllowed|denied/i.test(n+m)) return "알림 허용이 안 됐어요 — 허용을 눌러 주세요";
+  if(/Abort|push service/i.test(n+m)) return "이 PC의 인터넷이 알림 서버(구글/마이크로소프트)를 막고 있는 것 같아요 — 회사 보안망 때문일 수 있어요";
+  return "켜지 못했어요 ("+(n||"오류")+")"; }
 document.addEventListener("click", function(e){
   if(!e.target.closest("[data-pushoff]")) return;
   var out=document.getElementById("pushres");
-  navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); }).then(function(sub){ return sub ? sub.unsubscribe() : true; })
-    .then(function(){ try{ localStorage.setItem("bsr_push","0"); }catch(x){} if(out) out.textContent="알림을 껐어요. 언제든 다시 켤 수 있어요."; pushState(); })
-    .catch(function(){ if(out) out.textContent="끄지 못했어요. 폰 설정 → 앱 → 북서울 Report → 알림에서 끌 수도 있어요."; });
+  pushPut("busy");
+  navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); }).then(function(sub){
+      if(sub){ return sub.unsubscribe(); } })
+    .then(function(){ try{ localStorage.setItem("bsr_push","0"); }catch(x){} pushPut(false); if(out) out.textContent="알림을 껐어요. 언제든 다시 켤 수 있어요."; })
+    .catch(function(){ pushState(); if(out) out.textContent="끄지 못했어요. 브라우저·폰 설정의 알림에서 끌 수도 있어요."; });
 });
 document.addEventListener("click", function(e){
   if(!e.target.closest("[data-pushon]")) return;
   var out=document.getElementById("pushres"), say=function(t){ if(out) out.textContent=t; };
+  pushPut("busy");
   Notification.requestPermission().then(function(p){
-    if(p!=="granted"){ say("알림이 허용되지 않았어요."); return; }
+    if(p!=="granted"){ pushPut(false, p==="denied"?'알림이 차단되어 있어요 — 주소창 왼쪽 자물쇠(또는 앱 설정)에서 허용해 주세요':'알림 허용을 눌러야 켜져요'); say("알림이 허용되지 않았어요."); return; }
     return navigator.serviceWorker.ready.then(function(reg){
       return reg.pushManager.getSubscription().then(function(s){ return s || reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:pushB64(PUSH_KEY)}); });
-    }).then(function(s){ try{ localStorage.setItem("bsr_push","1"); }catch(x){} return pushSend(s.toJSON()); }).then(function(){ say("✅ 켜졌어요! 이제 업데이트되면 알림이 와요."); pushState(); });
-  }).catch(function(){ say("켜지 못했어요. 설치한 앱에서 다시 시도해 주세요."); });
+    }).then(function(s){ try{ localStorage.setItem("bsr_push","1"); }catch(x){} pushPut(true); say("✅ 켜졌어요! 이제 업데이트되면 알림이 와요."); return pushSend(s.toJSON()).catch(function(){}); });   /* 등록 전송이 늦거나 실패해도 켜짐 표시는 유지 — 앱을 열 때마다 다시 보냄 */
+  }).catch(function(er){ var t=pushErr(er); pushPut(false, t); say(t); });
 });
 try{ if(PUSH_URL && localStorage.getItem("bsr_push")==="1" && "serviceWorker" in navigator && window.Notification && Notification.permission==="granted"){ navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); }).then(function(s){ if(s) pushSend(s.toJSON()); }).catch(function(){}); } }catch(x){}
 
