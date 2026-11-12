@@ -11,6 +11,8 @@ function doPost(e) {
     if (d.act === 'eval') return out(evaluate(d));
     if (d.act === 'tts') return out(tts(d));
     if (d.act === 'live') return out(live(d));
+    if (d.act === 'sug') return out(sugAdd(d));                          // 💬 건의·질문함 — 남기기 (누구나)
+    if (d.act === 'sugdone') return out(sugDone(d));                      // 파트장: 확인·답변 표시
     return out({ ok: false, err: 'act' });
   } catch (err) { return out({ ok: false, err: String(err) }); }
 }
@@ -23,6 +25,11 @@ function doGet(e) {
     if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
     return out({ ok: true, rows: rows(600) });
   }
+  if (p.action === 'sugs') {   // 💬 건의·질문함 — 파트장만 (비밀번호)
+    if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
+    return out({ ok: true, rows: sugRows() });
+  }
+  if (p.action === 'mysug') return out({ ok: true, rows: sugRows().filter(function (x) { return x.key && x.key === String(p.key || ''); }) });   // 내가 남긴 글의 답변 보기 (이 폰 열쇠로만)
   if (p.action === 'test') {   // 브라우저에서 주소 뒤에 ?action=test 를 붙여 열면 AI 연결·속도를 점검
     const t0 = Date.now();
     try { const r = chat({ sc: { persona: '시험 통화' }, level: '중', hist: [{ r: 'c', t: '여보세요?' }, { r: 's', t: '안녕하세요, 에스원입니다.' }] }); return out({ ok: true, ms: Date.now() - t0, model: P.getProperty('ANTHROPIC_KEY') ? (P.getProperty('CLAUDE_MODEL') || 'claude-haiku-5-5') : LAST_MODEL, r: r }); }
@@ -275,6 +282,39 @@ function rows(limit) {
   return sh.getRange(n - cnt + 1, 1, cnt, HEAD.length).getValues().map(function (r) {
     return { t: new Date(r[0]).getTime(), name: r[1], sc: r[2], lv: r[3], total: r[4], s: [r[5], r[6], r[7], r[8]], n: r[9] };
   });
+}
+
+/* ───── 💬 건의·질문함 — 같은 기록 파일의 「건의함」 시트. 익명이면 이름 칸을 비워 저장 ───── */
+const SUG_HEAD = ['시각', '이름', '분류', '내용', '확인', '답변', '열쇠'];
+function sugSheet() {
+  const sh0 = sheet(), ss = sh0.getParent();
+  let sh = ss.getSheetByName('건의함');
+  if (!sh) { sh = ss.insertSheet('건의함', ss.getSheets().length); sh.appendRow(SUG_HEAD); sh.setFrozenRows(1); }
+  return sh;
+}
+function sugAdd(d) {
+  const t = String(d.text || '').trim().slice(0, 1000);
+  if (t.length < 2) return { ok: false, err: '내용을 적어 주세요' };
+  const cat = ['건의', '질문', '불편', '칭찬'].indexOf(d.cat) >= 0 ? d.cat : '건의';
+  const name = d.anon ? '' : String(d.name || '').slice(0, 10);
+  const lock = LockService.getScriptLock(); lock.waitLock(10000);
+  try { sugSheet().appendRow([new Date(), name, cat, t, '', '', String(d.key || '').slice(0, 40)]); } finally { lock.releaseLock(); }
+  return { ok: true };
+}
+function sugRows() {
+  const sh = sugSheet(), n = sh.getLastRow();
+  if (n < 2) return [];
+  return sh.getRange(2, 1, n - 1, SUG_HEAD.length).getValues().map(function (r, i) {
+    return { row: i + 2, t: new Date(r[0]).getTime(), name: r[1], cat: r[2], text: r[3], done: r[4] ? 1 : 0, reply: r[5], key: r[6] };
+  }).reverse().slice(0, 300);
+}
+function sugDone(d) {
+  if (!P.getProperty('ADMIN_PIN') || d.pin !== P.getProperty('ADMIN_PIN')) return { ok: false, err: 'pin' };
+  const sh = sugSheet(), row = Number(d.row) || 0;
+  if (row < 2 || row > sh.getLastRow()) return { ok: false, err: 'row' };
+  sh.getRange(row, 5).setValue(d.done ? '확인 ' + Utilities.formatDate(new Date(), 'Asia/Seoul', 'MM/dd') : '');
+  if (typeof d.reply === 'string') sh.getRange(row, 6).setValue(d.reply.slice(0, 500));
+  return { ok: true };
 }
 
 return { doPost: doPost, doGet: doGet };
