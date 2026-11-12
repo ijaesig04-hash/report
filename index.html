@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261112215000">
+<meta name="bsr-ver" content="20261112221500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3738,6 +3738,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-12o", date:"11/12", title:"브리핑 화면 정리", tabs:["home"], items:["🧹 브리핑 화면에서 이번 주 요약 · 직원별 미리보기 · 차량 대항전 줄을 뺐어요 (차량 대항전은 차량별 탭에서 계속 볼 수 있어요)"]},
  {id:"2026-11-12n", date:"11/12", title:"롤플레잉 안내 문구·응답 간격", tabs:["home"], items:["🎧 무료 사용량 안내를 한 줄로 줄였어요","📞 실시간 통화에서 내 말이 끝난 뒤 2초 조용하면 고객이 대답해요"]},
  {id:"2026-11-12m", date:"11/12", title:"실시간 통화 마무리 후 재연결 막음", tabs:["home"], items:["📞 실시간 통화에서 마무리를 눌러도 통화가 다시 연결되어 첫 멘트가 반복되던 문제를 고쳤어요"]},
  {id:"2026-11-12l", date:"11/12", title:"마무리 후 마이크 꺼짐", tabs:["home"], items:["🎤 롤플레잉 마무리를 누르면 마이크도 같이 꺼져서, 결과 화면에서 고객 멘트가 다시 나오지 않아요"]},
@@ -4240,8 +4241,7 @@ function brief(){
   items.push([nWarn+nRisk?'dn':'up','운전성향 양호 '+dl.filter(function(r){return r[3]==="양호"}).length+'명 · 주의 '+nWarn+' · 위험 '+nRisk]);
   var mt = (typeof ALM!=="undefined" && ALM.multi.rows) ? ALM.multi.rows : [], hot = {}; mt.forEach(function(r){var k=r[1]; hot[k]=(hot[k]||0)+1});
   var nHot = Object.keys(hot).filter(function(k){return hot[k]>=3}).length; if(nHot) items.push(['dn','다발보 3회 이상 고객처 '+nHot+'곳']);
-  h += '<details class="bf-more"><summary><span>📈 이번 주 요약 · 📅 월말 D-'+Math.max(0,dday())+'</span><em>더 보기</em></summary><div class="bf-more-in">';
-  h += '<div class="bf-sum"><div class="bf-dh">📈 이번 주 요약 <small>기준일 '+md(SD.br)+(PREV?' · '+md(PREV.d)+' 대비':'')+'</small></div>'+items.map(function(x){return '<div class="bf-it '+x[0]+'"><i>'+(x[0]==='up'?'▲':'▼')+'</i>'+x[1]+'</div>'}).join('')+'</div>';
+  h += '<details class="bf-more"><summary><span>📅 월말 D-'+Math.max(0,dday())+'</span><em>더 보기</em></summary><div class="bf-more-in">';
   /* 4) 월말 D-day */
   var dd2 = dday(), near = PPL.filter(function(x){return x.ok===4}), vnear = VEH.filter(function(v){return okc(v)===4});
   var nearTxt = near.map(function(x){ var mi=x.m.findIndex(function(c){return !(c.r>=100)}); return x.name+'('+M[mi].short+' '+fr(x.m[mi].r)+')'; });
@@ -4274,7 +4274,7 @@ function brief(){
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
   setTimeout(safeAuto, 300); setTimeout(wxAuto, 900);
   var salesA = rpBtn() + '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + prodLink();
-  return '<div class="sec">'+hero+salesA+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+funRow()+rpMini()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<span class="pt-bs"><button type="button" class="fd-btn" data-ptopen="1">🗺️ 구역 조회</button><button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></span></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
+  return '<div class="sec">'+hero+salesA+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+funRow()+rpMini()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<span class="pt-bs"><button type="button" class="fd-btn" data-ptopen="1">🗺️ 구역 조회</button><button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></span></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
 /* 미응답 고객 응답 요청 문자 — 예시 문구는 여기만 수정. {이름}은 앱에서 고른 이름으로 자동 입력(없으면 000) */
@@ -5968,7 +5968,7 @@ function sparkSvg(v, ref, hi){
 }
 function myBox(){
   var nm = myName(), emp = (function(){ var lm=Object.keys(DUTY.months).sort().filter(function(m){return m<=kstDate(0).slice(0,7)}).pop()||Object.keys(DUTY.months).sort().pop(); return DUTY.months[lm].filter(function(r){return r[0]!=="CS파트장"}).map(function(r){return r[1]}); })().filter(function(n){return CS_MGR.indexOf(n)<0});
-  var mgr = !nm || emp.indexOf(nm)<0, who = mgr ? (state.myv||'') : nm;
+  var mgr = !nm || emp.indexOf(nm)<0; if(mgr) return ''; var who = nm;
   var sel = mgr ? '<div class="my-pv"><span>👀 직원 화면 미리보기</span><select data-myv aria-label="직원 선택"><option value="">직원 선택</option>'+emp.map(function(n){return '<option'+(n===who?' selected':'')+'>'+n+'</option>'}).join('')+'</select></div>' : '';
   if(!who) return mgr ? '<div class="sec my"><div class="my-pvc"><span><b>👀 직원 화면 미리보기</b><small>직원별 \'내 할 일\' 확인</small></span><select data-myv aria-label="직원 선택"><option value="">직원 선택</option>'+emp.map(function(n){return '<option>'+n+'</option>'}).join('')+'</select></div></div>' : '';
   var w="일월화수목금토", I=dutyIndex(), pd=I.idx[who], days='';
