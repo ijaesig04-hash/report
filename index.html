@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261112085000">
+<meta name="bsr-ver" content="20261112110000">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -839,6 +839,7 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .dh{display:grid;gap:10px}
 .dh-dt summary{list-style:none;cursor:pointer;margin:0!important}.dh-dt summary::-webkit-details-marker{display:none}.dh-dt[open] summary{margin-bottom:8px!important}.dh-dt[open] summary small{opacity:.6}.dh-sub{margin:0 0 6px;font-size:11.5px;color:#64748b}
 .dh-sales{display:flex;align-items:center;gap:12px;text-decoration:none;box-sizing:border-box;width:100%;padding:12px 14px;border-radius:16px;color:#fff;background:linear-gradient(120deg,#4f46e5 0%,#7c3aed 55%,#c026d3 100%);box-shadow:0 6px 18px rgba(124,58,237,.28);margin:10px 0}.dh-sales i{font-style:normal;flex:none;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:21px}.dh-sales span{flex:1;min-width:0;display:grid;gap:1px;text-align:left}.dh-sales b{font-size:15.5px;font-weight:800;letter-spacing:-.01em}.dh-sales small{font-size:11.5px;opacity:.85;font-weight:500}.dh-sales em{font-style:normal;flex:none;font-size:12.5px;font-weight:800;background:#fff;color:#6d28d9;border-radius:999px;padding:6px 12px}.dh-sales:active{transform:scale(.99)}
+.dh-sales+.rp-mini{margin:10px 0 0}.rp-mini+.dh-prod{margin-top:10px}
 .dh-prod{display:flex;align-items:center;gap:10px;text-decoration:none;box-sizing:border-box;width:100%;padding:8px 12px;border-radius:12px;margin:-2px 0 10px;background:linear-gradient(105deg,#fff2f4 0%,#f4f1ff 55%,#eaf3ff 100%);border:1px solid #f2cdd5;border-left:4px solid #e5002d;color:#14325f;box-shadow:0 2px 8px rgba(229,0,45,.08)}
 .dh-prod i{font-style:normal;font-size:15px;display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:#fff;box-shadow:0 1px 3px rgba(20,50,95,.15)}
 .dh-prod span{flex:1;font-size:13.5px;font-weight:700}
@@ -3737,6 +3738,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-12d", date:"11/12", title:"AI 응대 연습 위치 변경", tabs:["home"], items:["🎧 AI 응대 연습 버튼을 북서울 영업일보 바로 아래로 옮겼어요"]},
  {id:"2026-11-12c", date:"11/12", title:"고객체감 11/12 업데이트", tabs:["cs"], items:["📞 고객체감 11/12 기준 — 발송 251건 · 응답 78건 · 만족도 9.96 (11월 발송 72건 중 응답 21건)"]},
  {id:"2026-11-12b", date:"11/12", title:"판넬 개인 목표 표시", tabs:["rep"], items:["📋 취합건 연동 → 판넬 리텐션도 위험예지처럼 개인 목표 대비 n/10건으로 보여요 (판넬+스티커 합계 · 11~3월 월 10건) · 목표 달성 인원 · 목표까지 남은 건수"]},
  {id:"2026-11-12a", date:"11/12", title:"메뉴 정리 · 알림 상태 표시", tabs:["home"], items:["📲 업데이트 알림 받기 — 지금 켜져 있는지 꺼져 있는지 크게 보여 주고, 켜기 · 끄기 버튼으로 바로 바꿀 수 있어요","🎓 OJT 진도표와 ✅ 개시 방문 체크를 한 메뉴로 합쳤어요 (이름표 메뉴 → 🎓 OJT · 개시 방문 체크)","🔄 최신 버전 받기를 누구나 쓸 수 있어요 — 화면이 예전 같으면 이름표 메뉴에서 눌러 주세요","🗂️ 이름표 메뉴 정리 — 「한 장 요약 · 월말 결산」, 「업데이트 이력 · 알림 받기」, 「고객처 한눈에 · 불만 위험」을 각각 한 메뉴로 합쳤어요 (위쪽 탭으로 전환)"]},
@@ -4131,7 +4133,7 @@ function deptHome(d){
   var md = function(x){ return (+x.slice(0,2))+'/'+(+x.slice(3)); };
   var h = '<div class="dh">';
   var gg = deptGreet(d); h += '<div class="dh-c dh-hero '+(d==="영업"?'sal':'tec')+'"><small>'+(d==="영업"?'💼':'💻')+' 북서울지사 '+d+' · '+(function(){ var k=new Date(Date.now()+9*3600000); return (k.getUTCMonth()+1)+'/'+k.getUTCDate()+'('+'일월화수목금토'.charAt(k.getUTCDay())+')'; })()+'</small><b>'+esc2(me)+(isLead(me)?' '+d+'팀장':'')+'님, '+gg[0]+' '+gg[1]+'</b><small>'+gg[2]+'</small></div>';
-  h += '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + prodLink();
+  h += '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + rpBtn() + prodLink();
   h += (typeof wxCard==="function" ? wxCard() : '');
   h += rpMini();
   h += '<details class="dh-c dh-dt"><summary class="dh-h">📞 내 해피콜 <small>발송 '+rows.length+' · 응답 '+rs.length+' ▾</small></summary><p class="dh-sub">'+esc2(S.period.replace('2026.',''))+' 누적</p><div class="dh-k">'+
@@ -4261,7 +4263,7 @@ function brief(){
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small>'+(typeof sfxChip==="function"?sfxChip():'')+'<b>'+(nm2?'<span class="hm-nm">'+esc2(nm2)+'님,</span>':'')+'<span class="hm-gr'+(greet.replace(/ /g,'').length>10?' long':'')+'">'+greet+' <i class="wv">'+gp[1]+'</i></span></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
   setTimeout(safeAuto, 300); setTimeout(wxAuto, 900);
-  var salesA = '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + prodLink();
+  var salesA = '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + rpBtn() + prodLink();
   return '<div class="sec">'+hero+salesA+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+leagueMini()+funRow()+rpMini()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<span class="pt-bs"><button type="button" class="fd-btn" data-ptopen="1">🗺️ 구역 조회</button><button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></span></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
@@ -5058,7 +5060,8 @@ function funRow(){
     '<button type="button" class="fr-c fr-q'+(q?' done':'')+'" data-qzopen="1"><span class="fr-i">🧠</span><b>🧠 안전 퀴즈</b><small>'+(q?'이번 주 완료 '+q.sc+'/3'+(q.sc===3?' 🎉':''):'이번 주 3문제')+'</small><i>›</i></button></div>';
 }
 /* AI 응대 연습 작은 카드 — 이름·부서와 상관없이 모두에게 보임 (funRow와 별개) */
-function rpMini(){ setTimeout(rpBoardLoad,0); return '<button type="button" class="rp-mini" data-rpopen="1"><span>🎧</span><b>AI 응대 연습</b><small>AI 고객과 말로 연습하고 점수 받기</small><i>›</i></button>'+rpBoardHtml(); }
+function rpBtn(){ return '<button type="button" class="rp-mini" data-rpopen="1"><span>🎧</span><b>AI 응대 연습</b><small>AI 고객과 말로 연습하고 점수 받기</small><i>›</i></button>'; }
+function rpMini(){ setTimeout(rpBoardLoad,0); return rpBoardHtml(); }   /* 버튼은 영업일보 아래(rpBtn), 여기는 연습 현황판만 */
 /* 🏆 이달의 응대왕 — AI 응대 연습 이달 평균 점수 상위 3명 (칭찬용 · 3명만) */
 var RP_API = "https://script.google.com/macros/s/AKfycby7Ggvk7-rHHPYtIia_19uj33TbfJUDefRic63OBz0ifkd7hoOSs1HQ06gkQmNRlTcG/exec", RPB = null, RPB_AT = 0;
 function rpBoardHtml(){
