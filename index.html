@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261113033334">
+<meta name="bsr-ver" content="20261113033520">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -5637,7 +5637,7 @@ function praiseView(f){
     (L.length ? L.map(function(r){ return '<div class="pz-i"><p>'+(r[7]?'“'+esc2(r[7])+'”':'⭐ '+r[5]+'점 · 칭찬')+'</p><span>'+esc2(r[0])+' ('+D(r[0])+') · '+md(r[3]||r[2])+' · '+esc2(r[9])+' · '+esc2(r[4])+'</span></div>'; }).join('') : '<p class="xs-p">아직 칭찬이 없어요.</p>'));
 }
 document.addEventListener("click", function(e){ var b=e.target.closest("[data-pzf]"); if(b){ praiseView(b.dataset.pzf); return; }
-  var x=e.target.closest("[data-xf]"); if(!x) return; var k=x.dataset.xf; if(k==="risk") riskView(); else if(k==="open") openCheck(); else if(k==="find") findView(""); else if(k==="praise") praiseView(""); else if(k==="help") helpView(""); });
+  var x=e.target.closest("[data-xf]"); if(!x) return; var k=x.dataset.xf; if(k==="risk") riskView(); else if(k==="find") findView(""); else if(k==="praise") praiseView(""); else if(k==="help") helpView(""); });
 
 
 /* ===== 📖 사용 안내 — 처음 쓰는 직원용 한 장 안내 ===== */
@@ -5703,56 +5703,12 @@ document.addEventListener("input", function(e){ if(e.target.id!=="hp-q") return;
   if(r) r.innerHTML = helpRes(helpItems().filter(function(h){ return (!HP_F || h.c===HP_F) && (!qq || (h.q+h.a).replace(/\s/g,"").indexOf(qq)>=0); })); });
 document.addEventListener("click", function(e){
   var f=e.target.closest("[data-hpf]"); if(f){ HP_F=f.dataset.hpf; helpView((document.getElementById("hp-q")||{}).value||""); return; }
-  var g=e.target.closest("[data-hpgo]"); if(g){ var k=g.dataset.hpgo; if(k.indexOf("goto:")===0){ var xo=document.getElementById("xsheet"); if(xo){ xo.hidden=true; document.body.style.overflow=""; } state.tab=k.slice(5); render(); window.scrollTo(0,0); } else if(k==="push") pushView(); else if(k==="open") openCheck(); else if(k==="find") findView(""); else if(k==="praise") praiseView(""); return; }
+  var g=e.target.closest("[data-hpgo]"); if(g){ var k=g.dataset.hpgo; if(k.indexOf("goto:")===0){ var xo=document.getElementById("xsheet"); if(xo){ xo.hidden=true; document.body.style.overflow=""; } state.tab=k.slice(5); render(); window.scrollTo(0,0); } else if(k==="push") pushView(); else if(k==="find") findView(""); else if(k==="praise") praiseView(""); return; }
   if(e.target.closest("[data-hpadd]")){ var q=((document.getElementById("hp-nq")||{}).value||"").trim(), a=((document.getElementById("hp-na")||{}).value||"").trim();
     if(!q||!a){ helpView("", "질문과 답변을 모두 적어 주세요."); return; } axPush("help|"+Date.now(), q.replace(/\|/g,"/")+"||"+a.replace(/\|\|/g,"/")); HP_F=""; helpView("", "✅ 올렸어요. 모든 직원에게 보여요."); return; }
   var d=e.target.closest("[data-hpdel]"); if(d){ axPush(d.dataset.hpdel, "삭제"); helpView(""); }
 });
 
-/* ===== 🎓 OJT 진도표 — 근무표의 OJT 직원별 항목 체크 (본인 · 동승자 · 관리자) ===== */
-var OJT_BASE = [
- ["d1","차량 · 장비 점검","출발 전 차량 · 무전 · 단말 · 비상장비 확인"],
- ["d2","출동 접수 ~ 도착 보고","접수 확인 · 이동 · 도착 · 종료 보고 흐름"],
- ["d3","경비 해제 · 설정 · 원격 조작","고객 요청 처리와 관제 연락"],
- ["d4","감지기 종류별 점검","열선(SPI) · 적외선(SPR) · 자석 · 비상벨"],
- ["d5","영상기기 개시 방문","비밀번호 고객 직접 설정 지침 · 개시 방문 체크리스트"],
- ["d6","고객 응대 · 해피콜 안내","인사 · 설명 · 마무리, 고객체감 문자 안내"],
- ["d7","다발보 원인 확인 · 조치 입력","원인 찾기와 앱 조치 입력"],
- ["d8","안전운전 · 위험예지 활동","운전성향 관리 · 위험예지 보고"],
- ["d9","단독 출동 테스트","동승자 · 관리자 확인 후 단독 근무"]
-];
-function ojtList(){ return (typeof DUTY!=="undefined" && DUTY.ojt) ? DUTY.ojt : []; }
-function ojtItems(){ var x = actLast("ojtitem|"), L = OJT_BASE.filter(function(b){ var r=x["ojtitem|"+b[0]]; return !(r && r[3]==="삭제"); }).map(function(b){ return {id:b[0], t:b[1], d:b[2]}; });
-  Object.keys(x).forEach(function(k){ var id=k.slice(8); if(id.charAt(0)!=="c" || x[k][3]==="삭제") return; L.push({id:id, t:String(x[k][3]).slice(0,40), d:"관리자 추가 · "+x[k][2]}); }); return L; }
-var OJT_SEL = "";
-/* 🎓 신입 OJT · 개시 방문 — 한 메뉴 안에서 두 칸 탭으로 전환 */
-function ojTabs(cur){
-  var svc = !document.documentElement.classList.contains("dept-x");
-  return '<div class="xs-h"><b>🎓 OJT · 개시 방문</b><button type="button" data-xs="close">✕</button></div>'+
-    (svc?'<div class="oj-tabs" role="tablist"><button type="button" role="tab" data-ojtab="ojt" aria-selected="'+(cur==="ojt")+'">🎓 OJT 진도표</button><button type="button" role="tab" data-ojtab="open" aria-selected="'+(cur==="open")+'">✅ 개시 방문 체크</button></div>':'');
-}
-document.addEventListener("click", function(e){ var t=e.target.closest("[data-ojtab]"); if(!t) return; if(t.dataset.ojtab==="open") openCheck(); else ojtView(); });
-function ojtView(msg){
-  var O = ojtList(), me = myName(); if(!O.length){ openSheet(ojTabs("ojt")+'<p class="xs-p">지금 근무표에 OJT 직원이 없어요.</p>'); return; }
-  var o = O.filter(function(x){return x.n===OJT_SEL})[0] || O.filter(function(x){return x.n===me||x.with===me})[0] || O[0]; OJT_SEL = o.n;
-  var can = mgrIs() || me===o.n || me===o.with, ck = actLast("ojt|"+o.n+"|"), I = ojtItems();
-  var done = I.filter(function(it){ var r=ck["ojt|"+o.n+"|"+it.id]; return r && r[3]!=="해제"; }).length, pct = I.length?Math.round(done/I.length*100):0;
-  var md = function(d){ return (+d.slice(5,7))+'/'+(+d.slice(8)); };
-  openSheet(ojTabs("ojt")+
-    (O.length>1?'<div class="hp-c">'+O.map(function(x){ return '<button type="button" data-ojs="'+esc2(x.n)+'" aria-pressed="'+(x.n===o.n)+'">'+esc2(x.n)+'</button>'; }).join('')+'</div>':'')+
-    '<div class="oj-h"><b style="font-size:16px">'+esc2(o.n)+'</b><small class="xs-p">동승 '+esc2(o.with||'-')+' · '+md(o.from)+' ~ '+md(o.to)+'</small></div>'+
-    '<div class="oj-bar"><i style="width:'+pct+'%"></i></div><p class="xs-p" style="margin:0 0 6px"><b>'+done+'/'+I.length+'</b> 완료 ('+pct+'%)'+(can?'':' · 본인 · 동승자 · 관리자만 체크할 수 있어요')+'</p>'+
-    '<div class="oj-l">'+I.map(function(it){ var r=ck["ojt|"+o.n+"|"+it.id], on = r && r[3]!=="해제";
-      return '<label><input type="checkbox" data-ojc="'+esc2(it.id)+'"'+(on?' checked':'')+(can?'':' disabled')+'><span><b>'+esc2(it.t)+'</b><small>'+esc2(it.d)+(on?' · ✅ '+esc2(r[2])+' '+notiDate(r[0]):'')+'</small></span>'+(mgrIs()?'<button type="button" class="oj-x" data-ojdel="'+esc2(it.id)+'" aria-label="항목 빼기">빼기</button>':'')+'</label>'; }).join('')+'</div>'+
-    (mgrIs()?'<div class="ntw"><input id="oj-new" maxlength="40" placeholder="항목 추가 (예: 금융사 출동 절차)"><button type="button" class="ntw-go" data-ojadd="1">＋ 항목 추가</button></div>':'')+
-    (msg?'<p class="ntw-msg">'+msg+'</p>':'')+'<p class="xs-p">기본 항목은 예시예요. 관리자가 빼거나 추가할 수 있어요.</p>');
-}
-document.addEventListener("click", function(e){
-  var s0=e.target.closest("[data-ojs]"); if(s0){ OJT_SEL=s0.dataset.ojs; ojtView(); return; }
-  var dl=e.target.closest("[data-ojdel]"); if(dl){ e.preventDefault(); axPush("ojtitem|"+dl.dataset.ojdel, "삭제"); ojtView("항목을 뺐어요."); return; }
-  if(e.target.closest("[data-ojadd]")){ var t=((document.getElementById("oj-new")||{}).value||"").trim(); if(!t){ ojtView("추가할 항목을 적어 주세요."); return; } axPush("ojtitem|c"+Date.now(), t); ojtView("✅ 항목을 추가했어요."); return; }
-});
-document.addEventListener("change", function(e){ var c=e.target.closest("[data-ojc]"); if(!c) return; axPush("ojt|"+OJT_SEL+"|"+c.dataset.ojc, c.checked?"완료":"해제"); ojtView(c.checked?"✅ 체크했어요":"체크를 풀었어요"); });
 
 /* ===== 💬 건의 · 질문함 — 직원이 익명(기본)으로 남기면 파트장만 봄 · 답변하면 남긴 폰에서 확인 (저장: 롤플레잉 서버의 「건의함」 시트) ===== */
 var SUG_TAB = "write", SUG_CAT = "건의", SUG_ROWS = null, SUG_MINE = null;
@@ -5975,31 +5931,6 @@ function riskView(){
     (L.length>30?'<p class="xs-p">외 '+(L.length-30)+'곳</p>':''));
 }
 
-/* ===== ✅ 개시 방문 체크리스트 — 영상기기 비밀번호 지침(10/27) · VOC RISK포인트(11/3~) ===== */
-var OPEN_CK = [
-  ["직접 설정 확인","방문 즉시 고객이 영상기기 비밀번호를 직접 설정했는지 확인"],
-  ["미설정이면 초기화","모두앱 또는 영상기기로 초기화 → 변경 방법 안내 → 고객이 직접 설정"],
-  ["임시 비밀번호 변경","공사 협력사 임시 비밀번호였다면 고객이 직접 바꾸도록 함 (해당 없으면 체크)"],
-  ["주의사항 안내","초기 비밀번호 변경 · 주기적 변경 · 타인 공유 금지"],
-  ["VOC에 비밀번호 안 적음","처리내용에 비밀번호 값 기재 · 고객에게 알려줌 없음 (RISK포인트 1등급)"]
-];
-function openMine(){ var me=myName(); return (typeof ACTS!=="undefined"?ACTS:[]).concat(typeof ACTS_PEND!=="undefined"?ACTS_PEND:[]).filter(function(r){ return /^open\|/.test(r[1]) && (mgrIs() || r[2]===me); }).sort(function(a,b){return b[0]-a[0]}); }
-function openCheck(msg){
-  var L = openMine(), ym = kstDate(0).slice(0,7), mo = L.filter(function(r){ return new Date(r[0]+9*3600000).toISOString().slice(0,7)===ym; });
-  openSheet(ojTabs("open")+
-    '<p class="xs-p">개시 방문 때 하나씩 체크하고 <b>완료</b>를 누르면 관리자에게 기록이 남아요. 고객 이름 · 연락처 · 비밀번호는 적지 마세요.</p>'+
-    '<input id="ck-p" class="ck-in" maxlength="20" placeholder="고객처 (예: ○○약국 · 선택)" autocomplete="off">'+
-    '<div class="ck-l">'+OPEN_CK.map(function(c,i){ return '<label><input type="checkbox" id="ck-'+i+'"><span><b>'+c[0]+'</b><small>'+c[1]+'</small></span></label>'; }).join('')+'</div>'+
-    '<button type="button" class="ntw-go" style="width:100%" data-ckgo="1">✅ 개시 방문 체크 완료</button>'+(msg?'<p class="ntw-msg">'+msg+'</p>':'')+
-    '<div class="xs-h" style="margin-top:14px"><b>'+(mgrIs()?'지사 전체':'내')+' 체크 기록</b><small style="margin-left:6px;color:#64748b">이번 달 '+mo.length+'건</small></div>'+
-    (L.length ? L.slice(0,15).map(function(r){ return '<div class="dh-r"><span>'+esc2(r[3])+'<small>'+notiDate(r[0])+(mgrIs()?' · '+esc2(r[2]):'')+'</small></span><em class="ok">완료</em></div>'; }).join('') : '<p class="xs-p">아직 기록이 없어요.</p>'));
-}
-document.addEventListener("click", function(e){ if(!e.target.closest("[data-ckgo]")) return;
-  var n = OPEN_CK.filter(function(c,i){ var el=document.getElementById("ck-"+i); return el && el.checked; }).length;
-  if(n<OPEN_CK.length){ openCheck("⚠️ 5개 항목을 모두 체크해야 완료할 수 있어요 ("+n+"/5)"); return; }
-  if(!myName()){ openCheck("이름표 메뉴에서 이름을 먼저 골라 주세요."); return; }
-  var pl = ((document.getElementById("ck-p")||{}).value||"").replace(/\d{2,}/g,"").trim().slice(0,20) || "고객처 미입력";
-  axPush("open|"+Date.now(), pl+" · 5/5 체크"); openCheck("✅ 기록했어요. 수고하셨어요!"); });
 
 /* ===== 🔠 글자 크게 ===== */
 /* 화면 배치는 그대로 두고, 작은 글자(14.5px 미만)만 키움 — 칸을 넘치면 원래대로 */
@@ -6951,7 +6882,7 @@ menu.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return; menu.hidden = true;
   var a = b.dataset.vl;
   if(a==="pc"){ pcView(); return; } if(a==="sug"){ SUG_TAB="write"; sugView(); return; } if(a==="edu"){ eduView(); return; }
-  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ pushView(); } else if(a==="guide"){ guideView(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="bdg"){ badgeCheck(); } else if(a==="push"){ pushView(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ NL_T==="edu" ? eduTab() : NL_T==="man" ? manTab() : notiList(); } else if(a==="sales"){ window.open(SALES_URL, "_blank"); } else if(a==="prod"){ location.href = PROD_URL; }   /* 같은 앱 화면에서 열기(주소창 없음) · 상품 추천의 ‹ 버튼으로 돌아옴 */ else if(a==="find"){ findView(""); } else if(a==="praise"){ praiseView(""); } else if(a==="risk"){ riskView(); } else if(a==="open"){ openCheck(); } else if(a==="help"){ helpView(""); } else if(a==="ojt"){ ojtView(); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
+  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ pushView(); } else if(a==="guide"){ guideView(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="bdg"){ badgeCheck(); } else if(a==="push"){ pushView(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ NL_T==="edu" ? eduTab() : NL_T==="man" ? manTab() : notiList(); } else if(a==="sales"){ window.open(SALES_URL, "_blank"); } else if(a==="prod"){ location.href = PROD_URL; }   /* 같은 앱 화면에서 열기(주소창 없음) · 상품 추천의 ‹ 버튼으로 돌아옴 */ else if(a==="find"){ findView(""); } else if(a==="praise"){ praiseView(""); } else if(a==="risk"){ riskView(); } else if(a==="help"){ helpView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
 });
 ov.addEventListener("click", function(e){
   var n = e.target.closest("[data-nm]");
@@ -7540,7 +7471,7 @@ function actsLoad(){
   }).catch(function(){});
 }
 /* 🔔 다발보 조치 알림 — 근무자가 조치를 입력하면 관리자 브리핑 맨 위에 알림 카드 + 앱을 열어 둔 상태면 토스트 (MVP 앱 활용도 항목) */
-function actIsAlm(k){ return !/^(hc|chk|nr|mvp|mvpwin|mvpack|cheer|cheerdel|hand|handdel|quiz|open|help|ojt|ojtitem|edu|eduitem|cmt)\|/.test(k); }
+function actIsAlm(k){ return !/^(hc|chk|nr|mvp|mvpwin|mvpack|cheer|cheerdel|hand|handdel|quiz|help|edu|eduitem|cmt)\|/.test(k); }
 function actNew(){
   if(typeof mgrIs!=="function" || !mgrIs()) return [];
   var me = myName(), kk = 'bsr_actseen_'+me, seen = +lsGet(kk)||0; if(!seen){ seen = Date.now()-86400000; lsSet(kk, String(seen)); }
