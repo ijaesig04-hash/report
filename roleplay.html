@@ -251,7 +251,7 @@ function stopSpeak(){ SPK_ID++; try{ window.speechSynthesis&&speechSynthesis.can
 
 /* ───────── 1. 상황 선택 ───────── */
 function home(){
-  if(LV_) liveStop(); S.live=false;
+  if(LV_) liveStop(); S.live=false; S.sid=(S.sid||0)+1;
   stopSpeak(); S.end=false; dock.classList.add("hidden"); fitDock(); $("#ttl").textContent="🎧 AI 고객 응대 롤플레잉";
   if(!ME){ app.innerHTML='<div class="card"><h2>이름을 먼저 골라 주세요</h2><p class="sub">북서울 Report 첫 화면에서 이름을 고른 뒤 다시 들어오면 돼요.</p><button class="btn red block" id="gor">리포트로 돌아가기</button></div>'; $("#gor").onclick=goReport; return; }
   var h = GUEST ? '<div class="demo">👀 연습은 자유롭게 할 수 있어요. 이름을 고르지 않아 <b>점수는 기록에 남지 않아요.</b></div>' : '';
@@ -376,7 +376,7 @@ function liveConnect(token, model, sys, onFail){
       realtimeInputConfig:{automaticActivityDetection:{endOfSpeechSensitivity:"END_SENSITIVITY_LOW", silenceDurationMs:3000}}}}));
   };
   ws.onmessage=function(ev){
-    var handle=function(txt){ var m; try{ m=JSON.parse(txt); }catch(e){ return; } liveMsg(L,m); };
+    var handle=function(txt){ var m; if(LV_!==L||L.ended) return; try{ m=JSON.parse(txt); }catch(e){ return; } if(LV_!==L||L.ended) return; liveMsg(L,m); };
     if(typeof ev.data==="string") handle(ev.data); else if(ev.data&&ev.data.text) ev.data.text().then(handle);
   };
   ws.onclose=function(ev){
@@ -421,7 +421,7 @@ function liveMsg(L,m){
   }
 }
 function livePlay(L,b64,mime){
-  var ctx=L.outCtx; if(!ctx) return; if(ctx.state==="suspended") ctx.resume();
+  var ctx=L.outCtx; if(!ctx||L.ended) return; if(ctx.state==="suspended") ctx.resume();
   var rate=+((/rate=(\d+)/.exec(mime)||[])[1]||24000), a=b64ToI16(b64), f=new Float32Array(a.length);
   for(var i=0;i<a.length;i++) f[i]=a[i]/32768;
   var buf=ctx.createBuffer(1,f.length,rate); buf.copyToChannel(f,0);
@@ -452,14 +452,14 @@ function liveClean(L){
   if(L.sb && L.sTxt.trim()){ S.hist.push({r:"s",t:L.sTxt.trim()}); S.turns++; } if(L.cb && L.cTxt.trim()) S.hist.push({r:"c",t:L.cTxt.trim()});
   L.sb=null; L.cb=null; L.sTxt=""; L.cTxt="";
 }
-function liveStop(msg){ var L=LV_; if(!L) return; LV_=null; L.ready=false; try{ L.ws.close(1000); }catch(e){} liveClean(L); lvBtn(false); if(msg) lvStatus(msg); }
+function liveStop(msg){ var L=LV_; if(!L) return; LV_=null; L.ready=false; L.ended=true; try{ L.ws.onmessage=null; }catch(e){} try{ L.ws.close(1000); }catch(e){} liveClean(L); lvBtn(false); if(msg) lvStatus(msg); }
 
 /* ───────── 2. 음성 대화 ───────── */
 var rec=null, recOn=false;
 function start(sc){
   warm();
   rpLog("시작 · "+sc.title+" ("+S.lv+")");
-  S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false; S.fb=false; S.fbTold=false;
+  S.sid=(S.sid||0)+1; S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false; S.fb=false; S.fbTold=false;
   $("#ttl").textContent=sc.ic+" "+sc.title.replace(/^\[영업\]\s*/,"");
   app.innerHTML='<div class="bar"><span class="pill">난이도 '+S.lv+'</span><span class="pill" id="sp" role="button">🔊 소리 켬</span><span class="pill" id="vf" role="button">'+(VFAST?'⚡ 빠른 목소리':'🗣️ 자연 목소리')+'</span><span class="pill lv" id="lvb" role="button">📞 실시간 통화 <small>시험판</small></span></div><details class="keys"><summary>💡 이 상황의 응대 포인트 보기</summary><ol>'+sc.key.map(function(k){return '<li>'+esc(k)+'</li>';}).join("")+'</ol>'+(sc.ment?'<p class="mt-h">💬 이렇게 말해 보세요</p>'+sc.ment.map(function(m){return '<p class="mt">“'+esc(m)+'”</p>';}).join(""):'')+'</details><div class="chat" id="chat"></div>';
   $("#vf").onclick=function(){ VFAST=!VFAST; try{ localStorage.setItem("rp_vfast",VFAST?"1":"0"); }catch(e){} $("#vf").textContent=VFAST?"⚡ 빠른 목소리":"🗣️ 자연 목소리"; };
@@ -502,16 +502,16 @@ function toggleMic(SR,btn){
 function send(t){
   t=String(t||"").trim(); if(!t||S.busy||S.end) return;
   $("#tx").value=""; S.busy=true; S.turns++; S.hist.push({r:"s",t:t}); addB("s",t);
-  var ty=document.createElement("div"); ty.className="typing"; var t0=Date.now(); S.t0=t0; ty.textContent="고객이 말하는 중…"; $("#chat").appendChild(ty); scrollEnd(); var iv=setInterval(function(){ ty.textContent="고객이 말하는 중… "+Math.round((Date.now()-t0)/1000)+"초"+((Date.now()-t0)>12000?" (AI가 오래 걸리고 있어요)":""); },1000);
+  var ty=document.createElement("div"); ty.className="typing"; var t0=Date.now(); S.t0=t0; ty.textContent="고객이 말하는 중…"; $("#chat").appendChild(ty); scrollEnd(); var sid=S.sid; var iv=setInterval(function(){ ty.textContent="고객이 말하는 중… "+Math.round((Date.now()-t0)/1000)+"초"+((Date.now()-t0)>12000?" (AI가 오래 걸리고 있어요)":""); },1000);
   var p = RP_API ? api({act:"chat",sc:{id:S.sc.id,title:S.sc.title,persona:S.sc.persona+(S.sc.g==="영업"?" (이 통화는 불만 접수가 아니라 영업 상담이다. 고객은 화나 있지 않고 망설이는 중이다.)":"")},level:S.lv,hist:S.hist,tts:(S.voice&&!TTS_OFF&&!VFAST)?{voice:vprof(S.sc).voice,style:vprof(S.sc).style}:null}) : Promise.resolve(demoChat(t));
   p.then(function(j){
-    clearInterval(iv); ty.remove(); S.hist.push({r:"c",t:j.customer}); addB("c",j.customer); if(j.tip) addTip(j.tip);
+    clearInterval(iv); ty.remove(); if(sid!==S.sid) return; S.hist.push({r:"c",t:j.customer}); addB("c",j.customer); if(j.tip) addTip(j.tip);
     if(MGR.indexOf(ME)>=0 && j.ms){ var tot=(Date.now()-S.t0)/1000, ai=(j.ms.ai||0)/1000, tt=(j.ms.tts||0)/1000, q=document.createElement("div"); q.className="tmr"; q.textContent="⏱ 총 "+tot.toFixed(1)+"초 = AI 대답 "+ai.toFixed(1)+" + 목소리 "+tt.toFixed(1)+" + 서버 오가기 "+Math.max(0,tot-ai-tt).toFixed(1)+" (파트장만 보임)"; $("#chat").appendChild(q); scrollEnd(); }
     if(S.voice && j.audio){ stopSpeak(); playPcm(j.audio, j.rate||24000, j.mime||""); }     /* 대답과 목소리가 같이 도착 → 바로 재생 */
     else if(S.voice && j.ttsErr){ if(/nokey|404|429|400|quota|RESOURCE/i.test(j.ttsErr)) TTS_OFF=true; stopSpeak(); devSpeak(j.customer, vprof(S.sc)); }
     else speak(j.customer);
     if(j.end||S.turns>=8){ S.end=true; var d=document.createElement("div"); d.className="tip"; d.textContent="통화가 마무리됐어요. 아래 '마무리하고 점수 받기'를 눌러 주세요."; $("#chat").appendChild(d); scrollEnd(); }
-  }).catch(function(e){ clearInterval(iv); ty.remove();
+  }).catch(function(e){ clearInterval(iv); ty.remove(); if(sid!==S.sid) return;
     /* AI가 답을 못 하면 멈추지 않고 연습용 대사로 이어 감 */
     S.fb=true; var j=demoChat(t); if(!S.fbTold){ S.fbTold=true; var d=document.createElement("div"); d.className="tip"; d.textContent="⚠️ AI가 지금 답하지 못해 연습용 대사로 이어 가요 ("+String(e.message||e).slice(0,60)+")"; $("#chat").appendChild(d); }
     S.hist.push({r:"c",t:j.customer}); addB("c",j.customer); if(j.tip) addTip(j.tip); speak(j.customer);
@@ -536,8 +536,8 @@ function demoEval(){
 
 /* ───────── 3. 평가 ───────── */
 function finish(){
-  if(S.busy) return; if(S.turns<1){ alert("먼저 고객에게 한 번 이상 대답해 보세요."); return; }
-  stopSpeak(); try{ rec&&rec.stop(); }catch(e){}
+  if(S.turns<1){ alert("먼저 고객에게 한 번 이상 대답해 보세요."); return; }
+  S.sid=(S.sid||0)+1; try{ liveStop(); }catch(e){} stopSpeak(); try{ rec&&rec.stop(); }catch(e){}
   dock.classList.add("hidden"); fitDock(); app.innerHTML='<div class="card"><h2>AI 코치가 평가하는 중…</h2><p class="sub">10초쯤 걸려요.</p></div>';
   var p = RP_API ? api({act:"eval",name:GUEST?"":ME,sc:{id:S.sc.id,title:S.sc.title+" — 이 상황의 핵심 응대 포인트: "+S.sc.key.join(" / ")+(S.sc.g==="영업"?" (영업 상담이므로 '공감·사과'는 고객 걱정 공감, '원인 설명'은 상품·서비스 설명, '해지 방어'는 구매·가입 설득력으로 평가)":"")},level:S.lv,hist:S.hist,turns:S.turns}) : Promise.resolve(demoEval());
   p.catch(function(e){ var j=demoEval(); j.fail=String(e.message||e).slice(0,80); return j; }).then(showEval).catch(function(e){ app.innerHTML='<div class="card"><h2>평가를 받지 못했어요</h2><p class="sub">'+esc(e.message||e)+'</p><button class="btn red block" id="rt">다시 시도</button><button class="btn ghost block" id="hm">처음으로</button></div>'; $("#rt").onclick=finish; $("#hm").onclick=home; });
