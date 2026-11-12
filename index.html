@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261112220842">
+<meta name="bsr-ver" content="20261112222611">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1120,6 +1120,12 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 @keyframes mxtw{0%,100%{filter:drop-shadow(0 0 2px rgba(255,210,60,.7));transform:scale(1)}50%{filter:drop-shadow(0 0 6px rgba(255,220,80,1)) drop-shadow(0 0 12px rgba(255,190,40,.8)) brightness(1.25);transform:scale(1.12)}}
 @media (prefers-reduced-motion:reduce){.mxst{animation:none!important}}
 .mx{padding:22px 18px 16px}.mx .mx-m{margin-top:10px}.mx .mx-note{margin-top:16px;padding-top:10px}
+.hm-hero .sfx-chip{color:#ffd769!important}
+.hm-hero>small{position:relative;overflow:hidden;animation:tbg 3.6s ease-in-out infinite}
+.hm-hero>small::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.7),transparent);transform:skewX(-20deg);animation:tbs 3.6s ease-in-out infinite;pointer-events:none}
+@keyframes tbg{0%,100%{text-shadow:0 0 0 rgba(255,255,255,0)}50%{text-shadow:0 0 8px rgba(255,255,255,.95),0 0 14px rgba(147,197,253,.8)}}
+@keyframes tbs{0%{left:-60%}50%,100%{left:130%}}
+@media (prefers-reduced-motion:reduce){.hm-hero>small,.hm-hero>small::after{animation:none}}
 .mx-av{position:relative;overflow:hidden}.mx-av::before{content:"";position:absolute;top:-10%;left:-80%;width:50%;height:120%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);transform:skewX(-20deg);animation:mxav 4s ease-in-out infinite 1s;pointer-events:none}
 @keyframes mxav{0%{left:-80%}45%,100%{left:140%}}
 @media (prefers-reduced-motion:reduce){.mx-av::before{animation:none;display:none}}
