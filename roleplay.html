@@ -92,7 +92,6 @@ th{font-size:12px;color:var(--mute)}
 .hero{border-radius:16px;overflow:hidden;margin-bottom:12px;box-shadow:0 6px 18px rgba(20,39,92,.18);background:#fff}
 .hero img{display:block;width:100%;height:auto;aspect-ratio:1672/941;object-fit:cover}
 
-.hero img{max-height:150px;object-fit:cover;object-position:center 0%}
 .subs button[aria-pressed="true"]{background:#eef2ff!important;color:#16306b!important;border-color:#16306b!important;box-shadow:none!important}
 .hm1 h2{margin-bottom:2px}.hm1 .sub{margin:0 0 10px}
 .lvrow{display:flex;align-items:center;gap:12px}.lvrow b{font-size:13px;color:#475569;white-space:nowrap}.lvrow .seg{flex:1;margin:0}.lvrow .seg button{padding:7px 0}
@@ -285,8 +284,8 @@ function home(){
   app.innerHTML=h;
   app.querySelectorAll("#lv button").forEach(function(b){ b.onclick=function(){ S.lv=b.dataset.l; app.querySelectorAll("#lv button").forEach(function(x){x.setAttribute("aria-pressed",x===b);}); }; });
   app.querySelectorAll(".sc").forEach(function(b){ b.onclick=function(){ start(SCEN[+b.dataset.i]); }; });
-  app.querySelectorAll("[data-tab]").forEach(function(b){ b.onclick=function(){ try{ localStorage.setItem("rp_tab",b.dataset.tab); }catch(e){} home(); keepTabs(); }; });
-  app.querySelectorAll("[data-sub]").forEach(function(b){ b.onclick=function(){ try{ localStorage.setItem("rp_sub_"+homeTab(),b.dataset.sub); }catch(e){} home(); keepTabs(); }; });
+  app.querySelectorAll("[data-tab]").forEach(function(b){ b.onclick=function(){ try{ localStorage.setItem("rp_tab",b.dataset.tab); }catch(e){} var y=window.scrollY; document.body.style.minHeight=document.body.scrollHeight+"px"; home(); window.scrollTo(0,y); }; });
+  app.querySelectorAll("[data-sub]").forEach(function(b){ b.onclick=function(){ try{ localStorage.setItem("rp_sub_"+homeTab(),b.dataset.sub); }catch(e){} var y=window.scrollY; document.body.style.minHeight=document.body.scrollHeight+"px"; home(); window.scrollTo(0,y); }; });
   var a=$("#adm"); if(a) a.onclick=admin;
   drawWeak(); loadMine();
 }
@@ -298,7 +297,7 @@ var CATS2 = {
 };
 function homeTab(){ var t=""; try{ t=localStorage.getItem("rp_tab")||""; }catch(e){} return t==="sal"||t==="svc" ? t : (SALES_FIRST?"sal":"svc"); }
 function homeSub(tab){ var v=""; try{ v=localStorage.getItem("rp_sub_"+tab)||""; }catch(e){} return CATS2[tab].some(function(x){return x[0]===v;}) ? v : CATS2[tab][0][0]; }
-function keepTabs(){ var t=document.querySelector(".tabs"); if(t) window.scrollTo(0, t.getBoundingClientRect().top+window.scrollY-70); }
+function keepTabs(){ /* 탭을 눌러도 화면이 움직이지 않게 — 누르기 전 위치 그대로 */ }
 
 /* ───────── 나의 약한 항목 — 최근 10번 항목별 평균, 약한 항목에 맞는 상황 추천 ───────── */
 var FOCUS = {"공감·사과":["rude","theft","false-alarm","r-keyman"],"원인 설명":["bill","cctv","r-multi","r-animal"],"해결책 제시":["repeat-fault","no-show","delay","r-wrongnum"],"해지 방어":["cancel","s-renew","k-think","k-competitor"]};
@@ -477,7 +476,7 @@ var rec=null, recOn=false;
 function start(sc){
   warm();
   rpLog("시작 · "+sc.title+" ("+S.lv+")");
-  S.sid=(S.sid||0)+1; S.done=false; S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false; S.fb=false; S.fbTold=false;
+  document.body.style.minHeight=""; S.sid=(S.sid||0)+1; S.done=false; S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false; S.fb=false; S.fbTold=false;
   $("#ttl").textContent=sc.ic+" "+sc.title.replace(/^\[영업\]\s*/,"");
   app.innerHTML='<div class="bar"><span class="pill">난이도 '+S.lv+'</span><span class="pill" id="sp" role="button">🔊 소리 켬</span><span class="pill" id="vf" role="button">'+(VFAST?'⚡ 빠른 목소리':'🗣️ 자연 목소리')+'</span><span class="pill lv" id="lvb" role="button">📞 실시간 통화 <small>시험판</small></span></div><details class="keys"><summary>💡 이 상황의 응대 포인트 보기</summary><ol>'+sc.key.map(function(k){return '<li>'+esc(k)+'</li>';}).join("")+'</ol>'+(sc.ment?'<p class="mt-h">💬 이렇게 말해 보세요</p>'+sc.ment.map(function(m){return '<p class="mt">“'+esc(m)+'”</p>';}).join(""):'')+'</details><div class="chat" id="chat"></div>';
   $("#vf").onclick=function(){ VFAST=!VFAST; try{ localStorage.setItem("rp_vfast",VFAST?"1":"0"); }catch(e){} $("#vf").textContent=VFAST?"⚡ 빠른 목소리":"🗣️ 자연 목소리"; };
