@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261112180500">
+<meta name="bsr-ver" content="20261112181500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3738,6 +3738,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-12i", date:"11/12", title:"알림 받기를 먼저 보이게", tabs:["home"], items:["📲 이름 버튼 메뉴에서 「알림 받기 · 업데이트 이력」으로 순서를 바꿨고, 누르면 알림 받기 화면이 먼저 열려요"]},
  {id:"2026-11-12h", date:"11/12", title:"알림 켜기·끄기 즉시 반영", tabs:["home"], items:["🔔 알림을 켜고 끌 때 상태 표시가 바로 바뀌어요","⚠️ 켜지 못하면 이유를 화면에 알려줘요"]},
  {id:"2026-11-12g", date:"11/12", title:"어디서 열어도 항상 최신 화면", tabs:["home"], items:["🔄 회사 PC처럼 인터넷이 느린 곳에서도 옛 화면이 뜨지 않게 고쳤어요 — 새 버전이 있으면 끝까지 받아서 보여줘요","⚡ 바뀐 게 없을 때는 저장된 화면을 바로 띄워서 더 빨리 열려요"]},
  {id:"2026-11-12f", date:"11/12", title:"AI 응대 실시간 통화: 3초 기다려 주기", tabs:["home"], items:["🎧 실시간 통화에서 내 말이 끝나고 3초 이상 조용할 때만 고객이 대답해요 (말을 잠깐 쉬어도 바로 끊기지 않아요)"]},
@@ -5578,7 +5579,7 @@ var GUIDE = [
  ["📲","앱처럼 설치하기","안드로이드: 크롬으로 주소를 열고 ⋮ → 「앱 설치」(또는 홈 화면에 추가)\n아이폰: 사파리로 열고 공유 → 「홈 화면에 추가」\n설치한 아이콘으로 열면 주소창 없이 앱처럼 열려요."],
  ["👤","처음 한 번 — 이름 고르기","처음 열면 「누구신가요?」 화면이 나와요. 내 이름을 고르고 시작하면 돼요.\n나중에 바꾸려면 오른쪽 위 이름 버튼 → 「이름 바꾸기」."],
  ["🏠","화면 위 탭으로 이동","브리핑 — 오늘 꼭 볼 것 · 공지 · 내 할 일\n지사별 — 사업팀 지사끼리 비교\n차량별 · 개인별 — 차량·개인 달성 현황과 순위\n월별 평가 — 월별 점수 순위 (이름을 누르면 월별 항목 점수)\n고객체감 — 해피콜 발송·응답·만족도\n발보관리 · 관리지표 · 근무표 · 운전성향 · 취합건 연동"],
- ["🔔","새 소식 알림","설치한 앱에서 이름 버튼 → 「업데이트 이력 · 알림 받기」 → 📲 알림 받기 → 알림 켜기 → 허용.\n새 지표·자료가 반영될 때만 알림이 와요. 기능 소식은 「업데이트 이력」에서 볼 수 있어요."],
+ ["🔔","새 소식 알림","설치한 앱에서 이름 버튼 → 「알림 받기 · 업데이트 이력」 → 알림 켜기 → 허용.\n새 지표·자료가 반영될 때만 알림이 와요. 기능 소식은 「업데이트 이력」에서 볼 수 있어요."],
  ["🛡️","고객께 상품 보내기","이름 버튼 → 「에스원 상품 추천」. 카톡 보내기 / 메일 만들기에서 카드를 고르고 보내요.\n내 이름·연락처·사원번호가 자동으로 들어가고, 고객이 구매할 때 사원번호를 입력하면 10% 추가 할인이에요."],
  ["📢","공지 · 경조사","이름 버튼 → 「공지 · 경조사 · 매뉴얼 보기」에서 지난 공지와 경조사를 다시 볼 수 있어요."],
  ["💡","막힐 때","이름 버튼 → 「사용 안내 · 도움말」에서 검색하세요. 화면이 옛날 것 같으면 앱을 완전히 닫았다 다시 열어요."]
@@ -5599,7 +5600,7 @@ document.addEventListener("click", function(e){
 });
 /* ===== 💡 현장 도움말 — 기본 항목 + 관리자가 앱에서 추가 (help|) ===== */
 var HELP = [
- ["앱","업데이트 알림 켜기","이름표 메뉴 → 📜 업데이트 이력 · 알림 받기 → 📲 알림 받기 → 🔔 알림 켜기 → 허용\n설치한 앱에서 켜야 해요. 아이폰은 iOS 16.4 이상, 홈 화면 앱에서만 돼요.",["push","📲 알림 켜기 열기"]],
+ ["앱","업데이트 알림 켜기","이름표 메뉴 → 📲 알림 받기 · 업데이트 이력 → 🔔 알림 켜기 → 허용\n설치한 앱에서 켜야 해요. 아이폰은 iOS 16.4 이상, 홈 화면 앱에서만 돼요.",["push","📲 알림 켜기 열기"]],
  ["앱","아이콘 숫자(알림)가 안 없어져요","앱을 열고 그 소식이 있는 탭(예: 고객체감)을 한 번 누르면 알림이 지워지고 숫자도 줄어요. 공지 다시 알림은 공지에서 [확인했습니다]를 눌러야 지워져요."],
  ["앱","화면이 예전 그대로예요","앱을 완전히 닫았다가 다시 여세요. 새 버전은 자동으로 받아져요. 그래도 같으면 관리자에게 말해 주세요."],
  ["앱","글씨가 작아요","이름표 메뉴 → 🔠 글자 크게 / 원래대로"],
@@ -6059,7 +6060,7 @@ function openSheet(html){
 var NH_DATA = {cmp:1,veh:1,ppl:1,mgt:1,eval:1,cs:1,alm:1,drv:1,duty:1}, NH_F = "", NH_N = 20;
 function nhKind(n){ return (n.tabs||[]).some(function(t){return NH_DATA[t]}) ? "data" : "func"; }
 /* 두 화면을 한 메뉴로 — 창 머리글 아래 두 칸 탭 */
-var SH_TABS = { find:[["find","🔍 고객처 한눈에"],["risk","⚠️ 불만 위험 고객처"]], one:[["one","🖨️ 한 장 요약"],["mrep","🧾 월말 결산"]], hist:[["hist","📜 업데이트 이력"],["push","📲 알림 받기"]] };
+var SH_TABS = { find:[["find","🔍 고객처 한눈에"],["risk","⚠️ 불만 위험 고객처"]], one:[["one","🖨️ 한 장 요약"],["mrep","🧾 월말 결산"]], hist:[["push","📲 알림 받기"],["hist","📜 업데이트 이력"]] };
 function shTabs(h, grp, cur){
   var i = h.indexOf('<div class="xs-h'), j = i<0 ? -1 : h.indexOf('</div>', i); if(j<0) return h;
   var t = '<div class="oj-tabs noprint" role="tablist">'+SH_TABS[grp].map(function(x){ return '<button type="button" role="tab" data-shtab="'+x[0]+'" aria-selected="'+(x[0]===cur)+'">'+x[1]+'</button>'; }).join('')+'</div>';
@@ -6401,7 +6402,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 응대 연습</button><button type="button" data-vl="find">🔍 고객처 한눈에 · 불만 위험</button><button type="button" data-vl="ojt">🎓 OJT · 개시 방문 체크</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📜 업데이트 이력 · 알림 받기</button><button type="button" data-vl="one">🖨️ 한 장 요약 · 월말 결산</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 응대 연습</button><button type="button" data-vl="find">🔍 고객처 한눈에 · 불만 위험</button><button type="button" data-vl="ojt">🎓 OJT · 개시 방문 체크</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📲 알림 받기 · 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 · 월말 결산</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
@@ -6674,7 +6675,7 @@ function vlPushWho(){
         y.map(function(x){ return '<div class="vl-row"><span class="vl-dot"></span>'+esc(x)+'<em>🔔 받음</em></div>'; }).join('')+
         n.map(function(x){ return '<div class="vl-row"><span class="vl-dot off"></span>'+esc(x)+'<em>못 받음</em></div>'; }).join('')+'</details>'; }).join('');
     el.innerHTML='<h3>🔔 알림 받는 직원<small>'+yes+' / '+tot+'명</small></h3>'+body+
-      '<p class="note" style="margin:8px 2px 0">못 받는 직원은 설치한 앱에서 이름 버튼 → 「업데이트 이력 · 알림 받기」 → 📲 알림 받기를 켜야 해요. 폰을 바꾸거나 앱을 지우면 받음으로 보여도 실제로는 안 갈 수 있어요.</p>';
+      '<p class="note" style="margin:8px 2px 0">못 받는 직원은 설치한 앱에서 이름 버튼 → 「알림 받기 · 업데이트 이력」 → 알림 켜기를 해야 해요. 폰을 바꾸거나 앱을 지우면 받음으로 보여도 실제로는 안 갈 수 있어요.</p>';
   }).catch(function(){ var el=document.getElementById("vlpush"); if(el) el.innerHTML='<h3>🔔 알림 받는 직원</h3><div class="vl-row">목록을 불러오지 못했어요.</div>'; });
 }
 chip.addEventListener("click", function(e){ e.stopPropagation(); var adm = MGRS.indexOf(me)>=0;   /* 관리자 메뉴는 관리자 이름을 고른 경우에만 (PIN이 저장된 폰이라도 직원 이름이면 숨김) */ menu.querySelectorAll(".vl-adm").forEach(function(x){ x.hidden = !adm; }); menu.hidden = !menu.hidden; });
@@ -6682,7 +6683,7 @@ document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contain
 menu.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return; menu.hidden = true;
   var a = b.dataset.vl;
-  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ showHistory("",0); } else if(a==="guide"){ guideView(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="bdg"){ badgeCheck(); } else if(a==="push"){ pushView(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ NL_T==="edu" ? eduTab() : NL_T==="man" ? manTab() : notiList(); } else if(a==="sales"){ window.open(SALES_URL, "_blank"); } else if(a==="prod"){ location.href = PROD_URL; }   /* 같은 앱 화면에서 열기(주소창 없음) · 상품 추천의 ‹ 버튼으로 돌아옴 */ else if(a==="find"){ findView(""); } else if(a==="praise"){ praiseView(""); } else if(a==="risk"){ riskView(); } else if(a==="open"){ openCheck(); } else if(a==="help"){ helpView(""); } else if(a==="ojt"){ ojtView(); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
+  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ pushView(); } else if(a==="guide"){ guideView(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="bdg"){ badgeCheck(); } else if(a==="push"){ pushView(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ NL_T==="edu" ? eduTab() : NL_T==="man" ? manTab() : notiList(); } else if(a==="sales"){ window.open(SALES_URL, "_blank"); } else if(a==="prod"){ location.href = PROD_URL; }   /* 같은 앱 화면에서 열기(주소창 없음) · 상품 추천의 ‹ 버튼으로 돌아옴 */ else if(a==="find"){ findView(""); } else if(a==="praise"){ praiseView(""); } else if(a==="risk"){ riskView(); } else if(a==="open"){ openCheck(); } else if(a==="help"){ helpView(""); } else if(a==="ojt"){ ojtView(); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
 });
 ov.addEventListener("click", function(e){
   var n = e.target.closest("[data-nm]");
