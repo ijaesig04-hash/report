@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261112141500">
+<meta name="bsr-ver" content="20261112174500">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3738,6 +3738,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-12g", date:"11/12", title:"어디서 열어도 항상 최신 화면", tabs:["home"], items:["🔄 회사 PC처럼 인터넷이 느린 곳에서도 옛 화면이 뜨지 않게 고쳤어요 — 새 버전이 있으면 끝까지 받아서 보여줘요","⚡ 바뀐 게 없을 때는 저장된 화면을 바로 띄워서 더 빨리 열려요"]},
  {id:"2026-11-12f", date:"11/12", title:"AI 응대 실시간 통화: 3초 기다려 주기", tabs:["home"], items:["🎧 실시간 통화에서 내 말이 끝나고 3초 이상 조용할 때만 고객이 대답해요 (말을 잠깐 쉬어도 바로 끊기지 않아요)"]},
  {id:"2026-11-12e", date:"11/12", title:"브리핑 카드 간격 정리", tabs:["home"], items:["📐 영업일보 · AI 응대 연습 · 상품 추천 · 안전 무사고 카드 사이 간격을 줄였어요"]},
  {id:"2026-11-12d", date:"11/12", title:"AI 응대 연습 위치 변경", tabs:["home"], items:["🎧 AI 응대 연습 버튼을 북서울 영업일보 바로 위로 옮겼어요"]},
@@ -6754,19 +6755,21 @@ if(!me) pickView(); else { send(openTag()); sent[window.state?state.tab:"cmp"]=1
   if(cur && !/^index\.html$/i.test(cur)){ location.replace("./"+(location.hash||"")); return; }
   if(/[?&]t=/.test(location.search)){ try{ history.replaceState(null,"","./"+(location.hash||"")); }catch(er){} }
   var mv = document.querySelector('meta[name="bsr-ver"]'), mine = mv ? mv.content : "", busy = false, last = 0;
+  /* 새 버전 확인은 몇 글자짜리 ver.txt로만 함(회선이 느려도 바로 끝남). 다르면 새 화면으로 이동 — 받는 동안은 지금 화면을 그대로 보여줌 */
+  function tries(v){ try{ var o=JSON.parse(sessionStorage.getItem("bsr_upd")||"{}"); return (o.v===v && Date.now()-o.ts<600000) ? o.n : 0; }catch(er){ return 0; } }
+  function bump(v){ try{ sessionStorage.setItem("bsr_upd", JSON.stringify({v:v, n:tries(v)+1, ts:Date.now()})); }catch(er){} }
+  function pill(txt, fn){ var b=document.getElementById("updb"); if(!b){ b=document.createElement("div"); b.id="updb"; document.body.appendChild(b); }
+    b.setAttribute("style","position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translateX(-50%);z-index:95;background:#1f4fd8;color:#fff;border-radius:999px;padding:9px 16px;font:700 13px 'Noto Sans KR',sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.3);white-space:nowrap"+(fn?";cursor:pointer":""));
+    b.textContent=txt; b.onclick=fn||null; }
+  function goNew(v){ bump(v); pill("🔄 새 업데이트를 불러오는 중…"); location.replace("./?t="+Date.now()+(location.hash||"")); }
   function check(){
     var now = Date.now(); if(busy || now-last < 20000) return; busy = true; last = now;
     var ac = window.AbortController ? new AbortController() : null, tm = setTimeout(function(){ busy = false; if(ac) ac.abort(); }, 15000);
-    fetch("./?t="+now, ac ? {cache:"no-store", signal:ac.signal} : {cache:"no-store"}).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
-      clearTimeout(tm); var m = /name="bsr-ver" content="([^"]+)"/.exec(t||""); busy = false;
-      if(m && mine && m[1] !== mine){
-        var b = document.createElement("div");
-        b.setAttribute("style","position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translateX(-50%);z-index:95;background:#1f4fd8;color:#fff;border-radius:999px;padding:9px 16px;font:700 13px 'Noto Sans KR',sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.3)");
-        b.textContent = "🔄 새 업데이트를 불러오는 중…"; document.body.appendChild(b);
-        var go = function(){ location.replace("./?t="+Date.now()+(location.hash||"")); };
-        try{ caches.keys().then(function(ks){ var k=ks.filter(function(x){return /^bs-report/.test(x)})[0]; if(!k) return; return caches.open(k).then(function(c){ return c.put(new URL("./",location.href).href, new Response(t,{headers:{"Content-Type":"text/html; charset=utf-8"}})); }); }).then(go, go); }catch(er){ go(); }
-        setTimeout(go, 4000);
-      }
+    fetch("ver.txt?t="+now, ac ? {cache:"no-store", signal:ac.signal} : {cache:"no-store"}).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
+      clearTimeout(tm); busy = false; var v = (t||"").trim();
+      if(!/^\d{14}$/.test(v) || !mine || v === mine){ var b=document.getElementById("updb"); if(b && v===mine) b.remove(); return; }
+      if(tries(v) < 3) goNew(v);
+      else pill("🔄 새 버전이 있어요 · 눌러서 받기", function(){ try{ sessionStorage.removeItem("bsr_upd"); }catch(er){} goNew(v); });   /* 3번 받아도 안 바뀌면 자동 반복은 멈추고 버튼으로 */
     }).catch(function(){ clearTimeout(tm); busy = false; if(navigator.onLine===false) offBadge(); });
   }
   function offBadge(){ if(document.getElementById("offb")) return; var v=(mine||"").replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2}).*/,function(_,y,mo,d,h,mi){ var t=new Date(Date.UTC(+y,+mo-1,+d,+h,+mi)+9*3600000); return (t.getUTCMonth()+1)+'/'+t.getUTCDate()+' '+("0"+t.getUTCHours()).slice(-2)+':'+("0"+t.getUTCMinutes()).slice(-2); });

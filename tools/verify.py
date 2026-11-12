@@ -41,6 +41,14 @@ if m_new:
     elif not m_new.group(1).startswith(today):
         errs.append("bsr-ver(%s)가 오늘(%s) 날짜가 아닙니다" % (m_new.group(1), today))
 
+# ①-2 ver.txt (앱이 새 버전인지 확인할 때 읽는 작은 파일) — bsr-ver와 항상 같게 자동으로 맞춤. 커밋에 꼭 같이 넣을 것
+if m_new and rel == "index.html":
+    vp = os.path.join(root, "ver.txt")
+    cur = open(vp).read().strip() if os.path.exists(vp) else ""
+    if cur != m_new.group(1):
+        open(vp, "w").write(m_new.group(1) + "\n")
+        print("ℹ️ ver.txt를 %s 로 맞췄습니다 — git add ver.txt 필요" % m_new.group(1))
+
 # ② 자료 변경 → NEWS
 if old and "var NEWS" in new:
     changed = [k for k, v in data_keys(new).items() if v != data_keys(old)[k]]
