@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261112235958">
+<meta name="bsr-ver" content="20261112235959">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1119,6 +1119,9 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mx .mxst:not(.ldb){display:inline-block;filter:drop-shadow(0 0 2px rgba(255,210,60,.7));animation:mxtw 3.2s ease-in-out infinite}
 @keyframes mxtw{0%,100%{filter:drop-shadow(0 0 2px rgba(255,210,60,.7));transform:scale(1)}50%{filter:drop-shadow(0 0 6px rgba(255,220,80,1)) drop-shadow(0 0 12px rgba(255,190,40,.8)) brightness(1.25);transform:scale(1.12)}}
 @media (prefers-reduced-motion:reduce){.mxst{animation:none!important}}
+.mx-av{position:relative;overflow:hidden}.mx-av::before{content:"";position:absolute;top:-10%;left:-80%;width:50%;height:120%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);transform:skewX(-20deg);animation:mxav 4s ease-in-out infinite 1s;pointer-events:none}
+@keyframes mxav{0%{left:-80%}45%,100%{left:140%}}
+@media (prefers-reduced-motion:reduce){.mx-av::before{animation:none;display:none}}
 .mx::after{content:"";position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,215,105,.35),transparent 70%);pointer-events:none}
 .mx-k{font-size:11px;letter-spacing:.14em;font-weight:700;color:#ffd769}
 .mx-m{display:flex;align-items:center;gap:14px;margin-top:10px;position:relative;z-index:1}
