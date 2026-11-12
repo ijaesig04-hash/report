@@ -13,6 +13,7 @@ function doPost(e) {
     if (d.act === 'live') return out(live(d));
     if (d.act === 'sug') return out(sugAdd(d));                          // 💬 건의·질문함 — 남기기 (누구나)
     if (d.act === 'sugdone') return out(sugDone(d));                      // 파트장: 확인·답변 표시
+    if (d.act === 'evsub') return out(evAdd(d));                          // 📝 롤플레잉 평가 — 본인이 등급을 골라 제출
     return out({ ok: false, err: 'act' });
   } catch (err) { return out({ ok: false, err: String(err) }); }
 }
@@ -28,6 +29,11 @@ function doGet(e) {
   if (p.action === 'sugs') {   // 💬 건의·질문함 — 파트장만 (비밀번호)
     if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
     return out({ ok: true, rows: sugRows() });
+  }
+  if (p.action === 'myev') return out(evMine(String(p.name || '').slice(0, 10)));   // 내 이번 달 기록 + 제출한 평가
+  if (p.action === 'evsubs') {   // 📝 평가 제출 현황 — 파트장만 (비밀번호)
+    if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
+    return out({ ok: true, ym: ymNow(), rows: evRows() });
   }
   if (p.action === 'mysug') return out({ ok: true, rows: sugRows().filter(function (x) { return x.key && x.key === String(p.key || ''); }) });   // 내가 남긴 글의 답변 보기 (이 폰 열쇠로만)
   if (p.action === 'test') {   // 브라우저에서 주소 뒤에 ?action=test 를 붙여 열면 AI 연결·속도를 점검
@@ -315,6 +321,47 @@ function sugDone(d) {
   sh.getRange(row, 5).setValue(d.done ? '확인 ' + Utilities.formatDate(new Date(), 'Asia/Seoul', 'MM/dd') : '');
   if (typeof d.reply === 'string') sh.getRange(row, 6).setValue(d.reply.slice(0, 500));
   return { ok: true };
+}
+
+/* ───── 📝 롤플레잉 평가 — 같은 기록 파일의 「평가제출」 시트. 한 사람이 한 달에 한 줄 (다시 내면 덮어씀) ───── */
+const EV_HEAD = ['시각', '월', '이름', '등급', '연습 횟수', '평균 점수', '소감', '확인'];
+function ymNow() { return Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM'); }
+function evSheet() {
+  const ss = sheet().getParent();
+  let sh = ss.getSheetByName('평가제출');
+  if (!sh) { sh = ss.insertSheet('평가제출', ss.getSheets().length); sh.appendRow(EV_HEAD); sh.setFrozenRows(1); }
+  return sh;
+}
+function evStats(name, ym) {
+  const my = rows(800).filter(function (r) { return r.name === name && Utilities.formatDate(new Date(r.t), 'Asia/Seoul', 'yyyy-MM') === ym; });
+  const sc = {}; my.forEach(function (r) { sc[r.sc] = 1; });
+  return { n: my.length, avg: my.length ? Math.round(my.reduce(function (a, r) { return a + (Number(r.total) || 0); }, 0) / my.length) : 0, kinds: Object.keys(sc).length, ids: Object.keys(sc) };
+}
+function evRows() {
+  const sh = evSheet(), n = sh.getLastRow();
+  if (n < 2) return [];
+  return sh.getRange(2, 1, n - 1, EV_HEAD.length).getValues().map(function (r) {
+    return { t: new Date(r[0]).getTime(), ym: r[1], name: r[2], grade: r[3], n: r[4], avg: r[5], text: r[6] };
+  }).filter(function (x) { return x.ym === ymNow(); }).reverse();
+}
+function evMine(name) {
+  if (!name) return { ok: false, err: 'name' };
+  const ym = ymNow(), sub = evRows().filter(function (x) { return x.name === name; })[0] || null;
+  return { ok: true, ym: ym, stats: evStats(name, ym), sub: sub };
+}
+function evAdd(d) {
+  const name = String(d.name || '').slice(0, 10), grade = String(d.grade || '');
+  if (!name) return { ok: false, err: '이름을 먼저 골라 주세요' };
+  if (['S', 'A', 'B', 'C'].indexOf(grade) < 0) return { ok: false, err: '등급을 골라 주세요' };
+  const ym = ymNow(), st = evStats(name, ym), text = String(d.text || '').trim().slice(0, 500);
+  const lock = LockService.getScriptLock(); lock.waitLock(10000);
+  try {
+    const sh = evSheet(), n = sh.getLastRow(), vals = [new Date(), ym, name, grade, st.n, st.avg, text, ''];
+    let hit = 0;
+    if (n >= 2) { const cur = sh.getRange(2, 2, n - 1, 2).getValues(); for (let i = 0; i < cur.length; i++) if (cur[i][0] === ym && cur[i][1] === name) hit = i + 2; }
+    if (hit) sh.getRange(hit, 1, 1, EV_HEAD.length).setValues([vals]); else sh.appendRow(vals);
+  } finally { lock.releaseLock(); }
+  return { ok: true, stats: st };
 }
 
 return { doPost: doPost, doGet: doGet };

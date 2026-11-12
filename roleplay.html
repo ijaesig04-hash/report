@@ -66,7 +66,7 @@ h2{font-size:17px;margin:2px 0 4px}
 .wk-h{margin:12px 0 6px;font-size:13.5px}.wk-go{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#f4f7ff;border:0;border-radius:12px;padding:10px 12px;margin-top:6px;font:inherit;color:inherit;cursor:pointer}.wk-go span{font-size:20px}.wk-go b{flex:1;font-size:14.5px}.wk-go i{font-style:normal;color:var(--mute);font-size:18px}
 .pill.lv{background:#fff1f2;border-color:#fecdd3;color:#be123c}.pill.lv small{font-size:10.5px;font-weight:700;opacity:.75;margin-left:2px}.pill.lv.on{background:#be123c;color:#fff;border-color:#be123c}
 .lv-st{margin:0 0 8px;text-align:center;font-size:14px;font-weight:700;color:#334155}.mic.on{background:#334155}
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#e6eaf2;border-radius:14px;padding:4px;margin:14px 0 10px}.tabs button{border:0;background:transparent;border-radius:11px;padding:11px 6px;font:800 15px 'Noto Sans KR',sans-serif;color:#475569;cursor:pointer}.tabs button[aria-selected="true"]{background:var(--navy);color:#fff;box-shadow:0 3px 10px rgba(16,32,80,.25)}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#e6eaf2;border-radius:14px;padding:4px;margin:14px 0 10px}.tabs button{border:0;background:transparent;border-radius:11px;padding:11px 2px;font:800 14px 'Noto Sans KR',sans-serif;color:#475569;cursor:pointer}.tabs button[aria-selected="true"]{background:var(--navy);color:#fff;box-shadow:0 3px 10px rgba(16,32,80,.25)}
 .subs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:6px}.subs button{border:1px solid var(--line,#dfe4ee);background:#fff;border-radius:12px;padding:8px 4px;font:700 13px/1.35 'Noto Sans KR',sans-serif;color:#334155;cursor:pointer;text-align:center}.subs button small{display:block;font-size:11px;font-weight:600;color:#94a3b8;margin-top:1px}.subs button[aria-pressed="true"]{background:#e4002b;border-color:#e4002b;color:#fff}.subs button[aria-pressed="true"] small{color:#ffd5dc}
 .gh-d{margin:4px 2px 10px;font-size:13px;color:#64748b;line-height:1.5}
 .mt-h{margin:12px 0 4px;font-size:13.5px;font-weight:800;color:#0f5132}.mt{margin:5px 0;background:#ecf8f1;border-radius:10px;padding:8px 11px;font-size:14px;line-height:1.55;color:#14532d}
@@ -80,6 +80,15 @@ h2{font-size:17px;margin:2px 0 4px}
 ul.l{margin:6px 0 0;padding-left:20px}ul.l li{margin:5px 0}
 .ex{background:#eef3ff;border-radius:12px;padding:10px 12px;margin-top:8px;font-size:15px}
 /* 현황 */
+.ev-st{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.ev-st div{background:#f3f6fd;border-radius:12px;padding:9px 4px;text-align:center}.ev-st span{display:block;font-size:11px;color:var(--mute)}.ev-st b{font-size:20px;color:var(--navy)}
+.ev-g{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:12px;margin-top:8px;cursor:pointer;font-family:inherit;color:var(--ink,#1e293b)}
+.ev-g[aria-pressed="true"]{border-color:var(--navy);background:#eef2ff;box-shadow:0 0 0 2px rgba(16,32,80,.12)}
+.ev-g .t{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px}.ev-g .t i{font-style:normal;min-width:26px;height:26px;border-radius:8px;background:var(--navy);color:#fff;display:inline-grid;place-items:center;font-size:14px}
+.ev-g .t em{margin-left:auto;font-style:normal;font-size:11px;font-weight:700;color:#15803d;background:#dcfce7;border-radius:8px;padding:2px 7px}
+.ev-g ul{margin:7px 0 0;padding-left:18px;font-size:13px;color:#475569;line-height:1.6}.ev-g li.ok{color:#15803d;font-weight:700}
+.ev-t{width:100%;min-height:70px;border:1.5px solid var(--line);border-radius:12px;padding:10px;font:14px 'Noto Sans KR',sans-serif;margin-top:8px;box-sizing:border-box}
+.ev-ok{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:12px;padding:10px;font-size:13px;margin-top:8px}
+.ev-m{border-top:1px solid var(--line);padding:9px 0;font-size:13px}.ev-m b{color:var(--navy)}.ev-m small{display:block;color:var(--mute);margin-top:2px}
 .k3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
 .k3 div{background:#f3f6fd;border-radius:12px;padding:10px 6px;text-align:center}
 .k3 span{display:block;font-size:11px;color:var(--mute)}.k3 b{font-size:22px;color:var(--navy)}
@@ -270,11 +279,13 @@ function home(){
   var h = GUEST ? '<div class="demo">👀 연습은 자유롭게 할 수 있어요. 이름을 고르지 않아 <b>점수는 기록에 남지 않아요.</b></div>' : '';
   h += RP_API ? "" : '<div class="demo">🧪 <b>데모 모드</b> — AI 연결 전이라 미리 정해 둔 고객 대사와 간단 채점으로 동작해요. 흐름을 미리 써 볼 수 있어요.</div>';
   h = '<div class="hero"><img src="roleplay-bg.jpg?v=2" alt="화난 고객에게 공감하며 응대하는 에스원 직원 그림"></div>' + h;
-  h += '<div class="card hm1"><h2>어떤 상황을 연습할까요?</h2><p class="sub">AI 고객에게 말로 대답하고 점수를 받아요.</p>'+
+  var hm1=homeTab()!=="eva";
+  if(hm1) h += '<div class="card hm1"><h2>어떤 상황을 연습할까요?</h2><p class="sub">AI 고객에게 말로 대답하고 점수를 받아요.</p>'+
     '<div class="lvrow"><b>난이도</b><div class="seg" id="lv">'+["하","중","상"].map(function(l){return '<button type="button" data-l="'+l+'" aria-pressed="'+(S.lv===l)+'">'+l+'</button>';}).join("")+'</div></div></div>';
   var row=function(c,i){ var l=getLast(c); return '<button type="button" class="sc" data-i="'+i+'"><i>'+c.ic+'</i><div><b>'+esc(c.title)+'</b></div><span class="sc-r">'+(l?'<em class="sc-p">'+l.t+'점</em>':'')+'<em class="tag '+c.lv+'">'+c.lv+'</em></span></button>'; };
-  var tab=homeTab(), sub=homeSub(tab), subs=CATS2[tab];
-  h += '<div class="tabs" role="tablist">'+[["svc","🛠️ 서비스 응대"],["sal","💼 영업"]].map(function(t){ return '<button type="button" role="tab" data-tab="'+t[0]+'" aria-selected="'+(tab===t[0])+'">'+t[1]+'</button>'; }).join("")+'</div>';
+  var tab=homeTab(), sub=tab==="eva"?"":homeSub(tab), subs=CATS2[tab]||[];
+  h += '<div class="tabs" role="tablist">'+[["svc","🛠️ 서비스"],["sal","💼 영업"],["eva","📝 평가"]].map(function(t){ return '<button type="button" role="tab" data-tab="'+t[0]+'" aria-selected="'+(tab===t[0])+'">'+t[1]+'</button>'; }).join("")+'</div>';
+  if(tab==="eva"){ h += '<div id="evbox"></div>'; app.innerHTML=h; app.querySelectorAll("[data-tab]").forEach(function(b){ b.onclick=function(){ try{ localStorage.setItem("rp_tab",b.dataset.tab); }catch(e){} var y=window.scrollY; document.body.style.minHeight=document.body.scrollHeight+"px"; home(); window.scrollTo(0,y); }; }); evView(); return; }
   h += '<div class="subs">'+subs.map(function(x){ var n=SCEN.filter(function(c){return c.c===x[0];}).length; return '<button type="button" data-sub="'+x[0]+'" aria-pressed="'+(sub===x[0])+'">'+x[1]+'</button>'; }).join("")+'</div>';
   var cur=subs.filter(function(x){return x[0]===sub;})[0];
   h += '<div class="sclist">'+SCEN.map(function(c,i){ return c.c===sub?row(c,i):''; }).join("")+'</div><p class="sc-lg"><em class="tag 하">하</em><em class="tag 중">중</em><em class="tag 상">상</em> 추천 난이도</p>';
@@ -290,12 +301,73 @@ function home(){
   drawWeak(); loadMine();
 }
 
+/* ───────── 📝 평가 — 지사 평가용: 등급 기준을 보고 본인이 등급을 골라 파트장에게 제출 ───────── */
+var EV_G = [
+  ["S","최우수","이번 달 AI 고객 응대 연습을 꾸준히 하고, 점수도 높아요",[["연습 10번 이상",function(s){return s.n>=10;}],["평균 85점 이상",function(s){return s.avg>=85;}],["서비스·영업 상황 6가지 이상 연습",function(s){return s.kinds>=6;}]]],
+  ["A","우수","연습을 자주 하고 점수가 안정적이에요",[["연습 6번 이상",function(s){return s.n>=6;}],["평균 75점 이상",function(s){return s.avg>=75;}],["서로 다른 상황 4가지 이상",function(s){return s.kinds>=4;}]]],
+  ["B","보통","기본 연습은 했어요",[["연습 3번 이상",function(s){return s.n>=3;}],["평균 60점 이상",function(s){return s.avg>=60;}]]],
+  ["C","노력 필요","연습이 적거나 점수가 낮아요 — 다음 달에 더 해 봐요",[["연습 1~2번 또는 평균 60점 미만",function(s){return s.n<3||s.avg<60;}]]]
+];
+var EV_SEL = "";
+function evStat(){ var s=(window.EV_ST)||{n:0,avg:0,kinds:0}; return s; }
+function evView(){
+  var box=$("#evbox"); if(!box) return;
+  if(GUEST){ box.innerHTML='<div class="card"><h2>📝 평가</h2><p class="sub">이름을 고른 직원만 평가를 낼 수 있어요.</p></div>'; return; }
+  if(MGR.indexOf(ME)>=0){ evMgr(); return; }
+  if(!RP_API){ box.innerHTML='<div class="card"><h2>📝 평가</h2><p class="sub">AI 서버가 연결되면 쓸 수 있어요.</p></div>'; return; }
+  box.innerHTML='<div class="card"><p class="sub">불러오는 중…</p></div>';
+  fetch(RP_API+"?action=myev&name="+encodeURIComponent(ME)+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){
+    if(!j||!j.ok) throw 0; window.EV_ST=j.stats; evDraw(j);
+  }).catch(function(){ box.innerHTML='<div class="card"><h2>📝 평가</h2><p class="sub">불러오지 못했어요. 잠시 뒤 다시 눌러 주세요.</p></div>'; });
+}
+function evDraw(j){
+  var box=$("#evbox"), st=j.stats||{n:0,avg:0,kinds:0}, sub=j.sub; if(!EV_SEL&&sub) EV_SEL=sub.grade;
+  var h='<div class="card"><h2>📝 '+(+j.ym.slice(5))+'월 AI 응대 평가 <small style="font-weight:400;color:var(--mute)">스스로 평가</small></h2>'+
+    '<p class="sub">내 연습 기록을 보고 아래 등급 중 나에게 맞는 것을 골라 파트장에게 제출해요.</p>'+
+    '<div class="ev-st"><div><span>이번 달 연습</span><b>'+st.n+'번</b></div><div><span>평균 점수</span><b>'+(st.n?st.avg:"-")+'</b></div><div><span>다른 상황</span><b>'+st.kinds+'가지</b></div></div>';
+  h+=EV_G.map(function(g){ var oks=g[3].map(function(c){ return c[1](st); }), all=oks.every(Boolean);
+    return '<button type="button" class="ev-g" data-g="'+g[0]+'" aria-pressed="'+(EV_SEL===g[0])+'"><div class="t"><i>'+g[0]+'</i>'+g[1]+(all?'<em>기록 충족</em>':'')+'</div><div style="font-size:13px;color:#64748b;margin-top:4px">'+g[2]+'</div><ul>'+g[3].map(function(c,i){ return '<li'+(oks[i]?' class="ok"':'')+'>'+(oks[i]?'✔ ':'')+c[0]+'</li>'; }).join('')+'</ul></button>'; }).join('');
+  h+='<textarea class="ev-t" id="evtx" maxlength="500" placeholder="한 달 동안 느낀 점이나 파트장에게 하고 싶은 말 (선택)">'+esc(sub&&sub.text||"")+'</textarea>'+
+    '<button type="button" class="btn red block" id="evgo">파트장에게 제출</button>'+
+    (sub?'<div class="ev-ok">✅ 제출했어요 — 선택한 등급 <b>'+sub.grade+'</b>. 다시 제출하면 바뀐 내용으로 덮어써요.</div>':'')+'<div id="evmsg"></div></div>';
+  box.innerHTML=h;
+  box.querySelectorAll(".ev-g").forEach(function(b){ b.onclick=function(){ EV_SEL=b.dataset.g; box.querySelectorAll(".ev-g").forEach(function(x){ x.setAttribute("aria-pressed",x===b); }); }; });
+  $("#evgo").onclick=function(){
+    var m=$("#evmsg"); if(!EV_SEL){ m.innerHTML='<div class="ev-ok" style="background:#fef2f2;border-color:#fecaca;color:#991b1b">등급을 먼저 골라 주세요.</div>'; return; }
+    var bt=$("#evgo"); bt.disabled=true; bt.textContent="제출 중…";
+    api1({act:"evsub",name:ME,grade:EV_SEL,text:($("#evtx").value||"")}).then(function(r){
+      if(!r||!r.ok) throw new Error(r&&r.err||"실패"); evView();
+    }).catch(function(e){ bt.disabled=false; bt.textContent="파트장에게 제출"; m.innerHTML='<div class="ev-ok" style="background:#fef2f2;border-color:#fecaca;color:#991b1b">제출하지 못했어요. 다시 눌러 주세요.</div>'; });
+  };
+}
+function evMgr(){
+  var box=$("#evbox"), pin=""; try{ pin=sessionStorage.getItem("rp_pin")||""; }catch(e){}
+  box.innerHTML='<div class="card"><h2>📝 평가 제출 현황</h2><p class="sub">직원이 스스로 고른 등급을 모아 봐요.</p><button type="button" class="btn red block" id="evl">제출 현황 보기</button></div>';
+  var load=function(){
+    var p=pin; if(!p){ p=prompt("파트장 현황 비밀번호를 입력하세요"); if(!p) return; }
+    box.querySelector("#evl").textContent="불러오는 중…";
+    fetch(RP_API+"?action=evsubs&pin="+encodeURIComponent(p)+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){
+      if(!j||!j.ok){ try{sessionStorage.removeItem("rp_pin");}catch(e){} pin=""; throw new Error(j&&j.err==="pin"?"비밀번호가 맞지 않아요":"불러오지 못했어요"); }
+      try{ sessionStorage.setItem("rp_pin",p); }catch(e){}
+      var R=j.rows||[], cnt={S:0,A:0,B:0,C:0}; R.forEach(function(x){ if(cnt[x.grade]!=null) cnt[x.grade]++; });
+      box.innerHTML='<div class="card"><h2>📝 '+(+j.ym.slice(5))+'월 평가 제출 현황 <small style="font-weight:400;color:var(--mute)">'+R.length+'명 제출</small></h2>'+
+        '<div class="ev-st" style="grid-template-columns:repeat(4,1fr)">'+["S","A","B","C"].map(function(g){ return '<div><span>'+g+'</span><b>'+cnt[g]+'</b></div>'; }).join("")+'</div>'+
+        (R.length?R.map(function(x){ return '<div class="ev-m"><b>'+esc(x.name)+'</b> · 등급 '+esc(x.grade)+' <small>연습 '+x.n+'번 · 평균 '+x.avg+'점'+(x.text?'<br>'+esc(x.text):'')+'</small></div>'; }).join(""):'<p class="sub">아직 제출한 직원이 없어요.</p>')+
+        '<button type="button" class="btn ghost block" id="evr">새로고침</button></div>';
+      $("#evr").onclick=evMgr2;
+    }).catch(function(e){ box.querySelector("#evl").textContent="제출 현황 보기"; alert(e.message||"불러오지 못했어요"); });
+  };
+  var evMgr2=function(){ load(); };
+  box.querySelector("#evl").onclick=load;
+  if(pin) load();
+}
+
 /* 분류: 서비스(신입 기본 · 불만 심화 · 북서울 실제 사례) / 영업(영업 기본 · 영업 심화 · 영업왕 만들기) */
 var CATS2 = {
   svc:[["신입","🌱 신입 기본","처음 배우는 직원용 — 기본 안내·인사·간단 문의를 차분하게 응대해요"],["심화","🔥 불만 심화","화난 고객 응대 — 공감·원인 설명·해결 약속·해지 방어까지"],["실제","📍 실제 사례","우리 지사에서 실제 있었던 일(다발보·해제 미스·연락처 오류·소동물)을 연습해요"]],
   sal:[["영업기본","🌱 영업 기본","관심 있는 고객에게 상품을 쉽게 소개해요"],["영업심화","🔥 영업 심화","망설이는 고객·비교하는 고객·바쁜 사장님 설득"],["영업왕","🏆 영업왕 만들기","현장에서 계약까지 이어지는 실전 영업 — 필요 끌어내기·반론 극복·소개·마무리"]]
 };
-function homeTab(){ var t=""; try{ t=localStorage.getItem("rp_tab")||""; }catch(e){} return t==="sal"||t==="svc" ? t : (SALES_FIRST?"sal":"svc"); }
+function homeTab(){ var t=""; try{ t=localStorage.getItem("rp_tab")||""; }catch(e){} return t==="sal"||t==="svc"||t==="eva" ? t : (SALES_FIRST?"sal":"svc"); }
 function homeSub(tab){ var v=""; try{ v=localStorage.getItem("rp_sub_"+tab)||""; }catch(e){} return CATS2[tab].some(function(x){return x[0]===v;}) ? v : CATS2[tab][0][0]; }
 function keepTabs(){ /* 탭을 눌러도 화면이 움직이지 않게 — 누르기 전 위치 그대로 */ }
 
