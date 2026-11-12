@@ -251,7 +251,7 @@ function stopSpeak(){ SPK_ID++; try{ window.speechSynthesis&&speechSynthesis.can
 
 /* ───────── 1. 상황 선택 ───────── */
 function home(){
-  if(LV_) liveStop(); S.live=false; S.sid=(S.sid||0)+1;
+  if(LV_) liveStop(); S.live=false; S.sid=(S.sid||0)+1; S.done=true; try{ if(rec){ rec.onend=null; rec.onresult=null; rec.abort?rec.abort():rec.stop(); } }catch(e){} recOn=false;
   stopSpeak(); S.end=false; dock.classList.add("hidden"); fitDock(); $("#ttl").textContent="🎧 AI 고객 응대 롤플레잉";
   if(!ME){ app.innerHTML='<div class="card"><h2>이름을 먼저 골라 주세요</h2><p class="sub">북서울 Report 첫 화면에서 이름을 고른 뒤 다시 들어오면 돼요.</p><button class="btn red block" id="gor">리포트로 돌아가기</button></div>'; $("#gor").onclick=goReport; return; }
   var h = GUEST ? '<div class="demo">👀 연습은 자유롭게 할 수 있어요. 이름을 고르지 않아 <b>점수는 기록에 남지 않아요.</b></div>' : '';
@@ -459,7 +459,7 @@ var rec=null, recOn=false;
 function start(sc){
   warm();
   rpLog("시작 · "+sc.title+" ("+S.lv+")");
-  S.sid=(S.sid||0)+1; S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false; S.fb=false; S.fbTold=false;
+  S.sid=(S.sid||0)+1; S.done=false; S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false; S.fb=false; S.fbTold=false;
   $("#ttl").textContent=sc.ic+" "+sc.title.replace(/^\[영업\]\s*/,"");
   app.innerHTML='<div class="bar"><span class="pill">난이도 '+S.lv+'</span><span class="pill" id="sp" role="button">🔊 소리 켬</span><span class="pill" id="vf" role="button">'+(VFAST?'⚡ 빠른 목소리':'🗣️ 자연 목소리')+'</span><span class="pill lv" id="lvb" role="button">📞 실시간 통화 <small>시험판</small></span></div><details class="keys"><summary>💡 이 상황의 응대 포인트 보기</summary><ol>'+sc.key.map(function(k){return '<li>'+esc(k)+'</li>';}).join("")+'</ol>'+(sc.ment?'<p class="mt-h">💬 이렇게 말해 보세요</p>'+sc.ment.map(function(m){return '<p class="mt">“'+esc(m)+'”</p>';}).join(""):'')+'</details><div class="chat" id="chat"></div>';
   $("#vf").onclick=function(){ VFAST=!VFAST; try{ localStorage.setItem("rp_vfast",VFAST?"1":"0"); }catch(e){} $("#vf").textContent=VFAST?"⚡ 빠른 목소리":"🗣️ 자연 목소리"; };
@@ -500,7 +500,7 @@ function toggleMic(SR,btn){
   }catch(e){ alert("이 기기에서는 음성 입력을 쓸 수 없어요. 글자로 입력해 주세요."); }
 }
 function send(t){
-  t=String(t||"").trim(); if(!t||S.busy||S.end) return;
+  t=String(t||"").trim(); if(!t||S.busy||S.end||S.done) return;
   $("#tx").value=""; S.busy=true; S.turns++; S.hist.push({r:"s",t:t}); addB("s",t);
   var ty=document.createElement("div"); ty.className="typing"; var t0=Date.now(); S.t0=t0; ty.textContent="고객이 말하는 중…"; $("#chat").appendChild(ty); scrollEnd(); var sid=S.sid; var iv=setInterval(function(){ ty.textContent="고객이 말하는 중… "+Math.round((Date.now()-t0)/1000)+"초"+((Date.now()-t0)>12000?" (AI가 오래 걸리고 있어요)":""); },1000);
   var p = RP_API ? api({act:"chat",sc:{id:S.sc.id,title:S.sc.title,persona:S.sc.persona+(S.sc.g==="영업"?" (이 통화는 불만 접수가 아니라 영업 상담이다. 고객은 화나 있지 않고 망설이는 중이다.)":"")},level:S.lv,hist:S.hist,tts:(S.voice&&!TTS_OFF&&!VFAST)?{voice:vprof(S.sc).voice,style:vprof(S.sc).style}:null}) : Promise.resolve(demoChat(t));
@@ -537,7 +537,7 @@ function demoEval(){
 /* ───────── 3. 평가 ───────── */
 function finish(){
   if(S.turns<1){ alert("먼저 고객에게 한 번 이상 대답해 보세요."); return; }
-  S.sid=(S.sid||0)+1; try{ liveStop(); }catch(e){} stopSpeak(); try{ rec&&rec.stop(); }catch(e){}
+  S.sid=(S.sid||0)+1; S.done=true; try{ liveStop(); }catch(e){} stopSpeak(); try{ if(rec){ rec.onend=null; rec.onresult=null; rec.abort?rec.abort():rec.stop(); } }catch(e){} recOn=false;
   dock.classList.add("hidden"); fitDock(); app.innerHTML='<div class="card"><h2>AI 코치가 평가하는 중…</h2><p class="sub">10초쯤 걸려요.</p></div>';
   var p = RP_API ? api({act:"eval",name:GUEST?"":ME,sc:{id:S.sc.id,title:S.sc.title+" — 이 상황의 핵심 응대 포인트: "+S.sc.key.join(" / ")+(S.sc.g==="영업"?" (영업 상담이므로 '공감·사과'는 고객 걱정 공감, '원인 설명'은 상품·서비스 설명, '해지 방어'는 구매·가입 설득력으로 평가)":"")},level:S.lv,hist:S.hist,turns:S.turns}) : Promise.resolve(demoEval());
   p.catch(function(e){ var j=demoEval(); j.fail=String(e.message||e).slice(0,80); return j; }).then(showEval).catch(function(e){ app.innerHTML='<div class="card"><h2>평가를 받지 못했어요</h2><p class="sub">'+esc(e.message||e)+'</p><button class="btn red block" id="rt">다시 시도</button><button class="btn ghost block" id="hm">처음으로</button></div>'; $("#rt").onclick=finish; $("#hm").onclick=home; });
