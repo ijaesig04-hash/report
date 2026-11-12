@@ -371,7 +371,9 @@ function liveConnect(token, model, sys, onFail){
   ws.onopen=function(){
     ws.send(JSON.stringify({setup:{model:"models/"+model,
       generationConfig:{responseModalities:["AUDIO"], speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:p.voice}}}},
-      systemInstruction:{parts:[{text:sys}]}, inputAudioTranscription:{}, outputAudioTranscription:{}}}));
+      systemInstruction:{parts:[{text:sys}]}, inputAudioTranscription:{}, outputAudioTranscription:{},
+      /* 내 말이 끝나고 3초 이상 조용할 때만 고객이 대답 (바로 넘어가지 않게) */
+      realtimeInputConfig:{automaticActivityDetection:{endOfSpeechSensitivity:"END_SENSITIVITY_LOW", silenceDurationMs:3000}}}}));
   };
   ws.onmessage=function(ev){
     var handle=function(txt){ var m; try{ m=JSON.parse(txt); }catch(e){ return; } liveMsg(L,m); };
