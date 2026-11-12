@@ -343,11 +343,14 @@ function liveMode(){
 function lvStatus(t){ var e=$("#lvst"); if(e) e.textContent=t; }
 function lvBtn(on){ var b=$("#lvgo"); if(!b) return; b.textContent=on?"🔴 통화 끊기":"📞 통화 시작"; b.classList.toggle("on",!!on); }
 function liveStart(tries, model){
+  if(S.done) return; var sid0=S.sid;
   tries=tries||0; lvStatus("연결하는 중…"); lvBtn(true);
   var persona=S.sc.persona+(S.sc.g==="영업"?" (이 통화는 불만 접수가 아니라 영업 상담이다. 고객은 화나 있지 않고 망설이는 중이다.)":"");
   var saved=""; try{ saved=localStorage.getItem("rp_live_model")||""; }catch(e){}
   api1({act:"live", sc:{id:S.sc.id,title:S.sc.title,persona:persona,open:S.sc.open}, level:S.lv, model:model||saved}).then(function(j){
+    if(S.done||S.sid!==sid0) return;
     var m=j.models[0]; liveConnect(j.token, m, j.sys, function(fail){
+      if(S.done||S.sid!==sid0) return;
       /* 이 모델이 안 되면 다음 모델로 (최대 3번) */
       if(tries<2 && j.models[1]){ liveStart(tries+1, j.models[1]); }
       else { lvBtn(false); lvStatus("연결하지 못했어요 · "+fail); liveErr(fail); LIVE_BAD=true; }
@@ -380,6 +383,7 @@ function liveConnect(token, model, sys, onFail){
     if(typeof ev.data==="string") handle(ev.data); else if(ev.data&&ev.data.text) ev.data.text().then(handle);
   };
   ws.onclose=function(ev){
+    if(L.ended){ liveClean(L); return; }
     var was=L.ready; liveClean(L);
     if(!was){ onFail((ev.code||"")+" "+(ev.reason||"연결 끊김")); return; }
     if(LV_===L){ LV_=null; lvBtn(false); lvStatus("통화가 끝났어요"+(ev.reason?" · "+ev.reason.slice(0,60):"")); }
