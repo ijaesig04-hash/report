@@ -2,7 +2,7 @@
 // 설정 방법
 // 1) 구글 드라이브 > 새로 만들기 > 더보기 > Google Apps Script
 // 2) 편집기 내용을 모두 지우고 이 파일 내용을 붙여넣기
-// 3) 아래 KEY 값을 본인만 아는 비밀번호로 바꾸기 (영문·숫자 조합 권장)
+// 3) 아래 KEY 값을 본인만 아는 비밀번호로 바꾸기 — 따옴표 안에 적기 (예: var KEY = '155900';)
 // 4) 오른쪽 위 "배포" > "새 배포" > 종류: 웹 앱
 //    - 실행 사용자: 나
 //    - 액세스 권한: 모든 사용자
@@ -45,7 +45,7 @@ function doGet(e) {
 function doPost(e) {
   try {
     var req = JSON.parse(e.postData.contents);
-    if (req.key !== KEY) return reply_({ error: 'key' });
+    if (String(req.key).trim() !== String(KEY).trim()) return reply_({ error: 'key' });   // 숫자·글자 어느 쪽으로 적어도 같게 비교
     var sh = sheet_();
     var out = {};
     if (req.action === 'get') {
