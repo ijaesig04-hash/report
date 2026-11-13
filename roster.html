@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" data-theme="light" style="color-scheme:light"><head><meta name="color-scheme" content="only light"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="roster-ver" content="2026-11-13c">
+<html lang="ko" data-theme="light" style="color-scheme:light"><head><meta name="color-scheme" content="only light"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="roster-ver" content="2026-11-13d">
 <meta charset="utf-8">
 <title>지사 근무편성 대시보드</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -811,6 +811,20 @@ function localDB(){var PFX='roster.db/',mem={},lsOK=true;
     doc:function(p){return {get:async function(){var v=read(p);return {exists:!!v,data:function(){return clone(v);}};},set:async function(d){lsSet(p,clone(d));}};},
     dump:function(pre){var o={};keys().forEach(function(k){if(pre&&k!==pre&&k.indexOf(pre+'/')!==0)return;var v=read(k);if(v)o[k]=v;});return o;},
     load:function(o){Object.keys(o).forEach(function(k){if(/^branches\/[\w.-]+(\/months\/\d{6})?$/.test(k)&&o[k]&&typeof o[k]==='object')lsSet(k,o[k]);});}};}
+// 구글 시트(Apps Script 웹앱)에 저장 — 기기끼리 같은 근무표를 함께 봄
+function gsCfg(){try{var v=JSON.parse(localStorage.getItem('roster.gs')||'null');return (v&&v.url&&v.key)?v:null;}catch(e){return null;}}
+function gsDB(cfg){
+  function call(body){return fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({key:cfg.key},body))})
+    .then(function(r){return r.json();}).then(function(j){if(j.error)throw new Error(j.error==='key'?'비밀번호가 맞지 않아요':j.error);return j;});}
+  return {gs:true,lsOK:true,
+    collection:function(c){var n=c.split('/').length+1;return {get:async function(){var j=await call({action:'list',prefix:c+'/',depth:n});return {docs:(j.docs||[]).map(function(d){return {id:d.id,data:function(){return clone(d.data);}};})};}};},
+    doc:function(p){return {get:async function(){var j=await call({action:'get',path:p});return {exists:!!j.exists,data:function(){return clone(j.data);}};},
+      set:async function(d){await call({action:'set',path:p,data:clone(d)});}};}};}
+function gsSetup(){var cur=gsCfg()||{};var u=prompt('구글 시트 연결 주소 (Apps Script 웹앱 주소, /exec 로 끝남)',cur.url||'');if(u===null)return;
+  if(!u.trim()){try{localStorage.removeItem('roster.gs');}catch(e){}toast('구글 시트 연결을 끊었어요');connectDb(true);return;}
+  var k=prompt('비밀번호 (Apps Script 코드의 KEY 값)',cur.key||'');if(k===null)return;
+  try{localStorage.setItem('roster.gs',JSON.stringify({url:u.trim(),key:k.trim()}));}catch(e){toast('이 브라우저에는 연결 정보를 저장할 수 없어요');return;}
+  connectDb(true);}
 async function saveFile(name,blob,ascii){
   if(S.downloads){await S.downloads.save({filename:name,data:blob});return;}
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=ascii||name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},2000);}
@@ -834,7 +848,7 @@ async function exportBranchHtml(){if(!S.bid){toast('먼저 지사 설정을 저�
 function localBanner(){var lsOK=S.db.lsOK;
   return el('div',{class:'banner info',role:'status'},[el('div',{style:'font-weight:700;margin-bottom:4px',text:'PC 저장 모드 — 이 컴퓨터 브라우저에 저장돼요'}),
     el('div',{text:(lsOK?'저장 버튼을 누르면 이 PC에 남아요. ':'이 브라우저는 저장이 막혀 있어 창을 닫으면 사라져요. 꼭 백업 파일을 받으세요. ')+'다른 PC로 옮길 땐 “백업 받기 → 불러오기”, 직원에게 나눠 줄 땐 “지사용 html 받기”로 받은 파일을 보내세요.'}),
-    el('div',{class:'row',style:'margin-top:8px'},[el('button',{class:'btn sm pri',text:'지사용 html 받기',onclick:exportBranchHtml}),el('button',{class:'btn sm',text:'백업 받기',onclick:exportBackup}),el('button',{class:'btn sm',text:'백업 불러오기',onclick:importBackup})])]);}
+    el('div',{class:'row',style:'margin-top:8px'},[el('button',{class:'btn sm pri',text:'구글 시트에 연결 (기기 간 공유)',onclick:gsSetup}),el('button',{class:'btn sm',text:'지사용 html 받기',onclick:exportBranchHtml}),el('button',{class:'btn sm',text:'백업 받기',onclick:exportBackup}),el('button',{class:'btn sm',text:'백업 불러오기',onclick:importBackup})])]);}
 // 저장(DB)이 안 될 때 이유와 해결 방법
 function noSaveMsg(){if(S.dbState==='booting')return '저장 기능을 연결하는 중이에요. 잠시 후 다시 눌러 주세요.';
   if(S.dbState==='nohost')return '지금 화면은 미리보기라 저장이 안 돼요. 아래 “claude.ai에서 열기”를 눌러 웹 브라우저(크롬·엣지)에서 열어 주세요.';
@@ -852,7 +866,14 @@ function saveBanner(){if(S.db&&S.db.local&&!S.db.ro)return (S.step===1||S.step==
 async function fixDb(){try{if(S.dbState==='denied')await S.perms.manage();else await S.perms.request(['db','user']);}catch(e){toast('대시보드 오른쪽 위 메뉴의 “권한(Permissions)”에서 저장(db)을 켜 주세요');}
   connectDb(true);}
 async function connectDb(manual){var c=window.claude;
-  if(!c||!c.use){S.dbState='local';S.db=localDB();S.isOwner=true;render();return;}
+  var gcf=gsCfg();
+  if(!c||!c.use){
+    if(gcf){S.db=gsDB(gcf);S.dbState='gs';S.isOwner=true;
+      try{await loadBranches();if(!Object.keys(S.branches).length){for(var k in EMBED.docs){if(/^branches\/[\w.-]+(\/months\/\d{6})?$/.test(k))await S.db.doc(k).set(EMBED.docs[k]);}await loadBranches();}
+        if(manual){if(S.bid&&S.branches[S.bid]&&!S.dirtyBranch)S.br=normBranch(clone(S.branches[S.bid]));await loadMonth();toast('구글 시트에 연결됐어요');}}
+      catch(e){S.db=localDB();S.db.ro=true;S.dbState='local';toast('구글 시트에 연결하지 못했어요: '+(e.message||'')+' — 주소와 비밀번호를 확인하세요');}
+      render();return;}
+    S.dbState='local';S.db=localDB();S.isOwner=true;render();return;}
   S.dbState='booting';render();
   try{var pP=c.use('permissions');S.perms=await Promise.race([pP,new Promise(function(r){setTimeout(function(){r(null);},10000);})]);}catch(e){S.perms=null;}
   var db=null;try{db=await Promise.race([c.use('db'),new Promise(function(r){setTimeout(function(){r(null);},10000);})]);}catch(e){db=null;}
@@ -1284,7 +1305,7 @@ function colL(n){var s='';while(n>0){var m=(n-1)%26;s=String.fromCharCode(65+m)+
 
 // ================= 시작 =================
 // 항상 최신 버전으로: 내려받은 html(file://)은 웹 최신본으로 이동, 웹 버전은 새 버전이 올라오면 자동 새로고침
-var WEB_URL='https://ijaesig04-hash.github.io/report/roster.html',BUILD='2026-11-13c';
+var WEB_URL='https://ijaesig04-hash.github.io/report/roster.html',BUILD='2026-11-13d';
 function autoLatest(){try{
   var here=location.href.split(/[?#]/)[0];
   /* 내려받은 html(회사 PC 등): 인터넷이 되면 바로 웹 최신본으로 이동 */
