@@ -32,6 +32,11 @@ function doGet(e) {
     if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
     return out({ ok: true, rows: sugRows() });
   }
+  if (p.action === 'evbest') {   // MVP 「AI 응대 평가」 점수용 — 월별 이름: 최고 점수
+    const m = {}; const sh = evSh('평가제출', EV_HEAD), n = sh.getLastRow();
+    if (n >= 2) sh.getRange(2, 1, n - 1, EV_HEAD.length).getValues().forEach(function (r) { const ym = ymOf(r[1]); (m[ym] = m[ym] || {})[String(r[2])] = Number(r[5]) || 0; });
+    return out({ ok: true, m: m });
+  }
   if (p.action === 'myev') return out(evMine(String(p.name || '').slice(0, 10)));   // 내 이번 달 기록 + 제출한 평가
   if (p.action === 'evsubs') {   // 📝 평가 제출 현황 — 파트장만 (비밀번호)
     if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
