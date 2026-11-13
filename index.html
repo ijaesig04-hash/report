@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261113145621">
+<meta name="bsr-ver" content="20261114025111">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1215,7 +1215,8 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 @keyframes rpg{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 @media (prefers-reduced-motion:reduce){.fr-rp{animation:none}}
 .fr-pd{background:linear-gradient(135deg,#fff1f2,#ffe4e6);border:1px solid #fbcfd6!important;color:#9f1239}
-.fr.rpr{overflow:visible}.fr.rpr .fr-c>i{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-style:normal;opacity:.5;font-size:14px}
+.fr.rpr{overflow:visible}
+.fr.rpr .fr-c b small.rpe{display:block;margin-top:2px;font-size:10px;font-weight:600;letter-spacing:.3px;opacity:.6;line-height:1.2}.fr.rpr .fr-c>i{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-style:normal;opacity:.5;font-size:14px}
 .fr-b{background:linear-gradient(135deg,#fff1f2,#ffedd5);color:#7c2d12}.fr-b em{font-style:normal;color:#ea580c}.fr-b small{color:#9a3412}
 .fr-f{font-size:12px;font-weight:800;white-space:nowrap}.fr-f b{font-size:18px;color:#ea580c;margin-left:1px}
 .fr-b>span:nth-child(2){font-size:11.5px;line-height:1.35}.fr-b i{margin-left:auto;font-style:normal;opacity:.6}
@@ -5156,8 +5157,8 @@ function funRow(){
 }
 /* AI 고객 응대 롤플레잉 작은 카드 — 이름·부서와 상관없이 모두에게 보임 (funRow와 별개) */
 function rpProdRow(){
-  return '<div class="fr rpr"><button type="button" class="fr-c fr-rp" data-rpopen="1"><span class="rpi">🎧</span><em class="rpn">NEW</em><b>AI 고객 응대<br>롤플레잉</b><i>›</i></button>'+
-    '<a class="fr-c fr-pd" href="'+PROD_URL+'"><span class="rpi">🛡️</span><b>에스원<br>다이렉트몰</b><i>›</i></a></div>';
+  return '<div class="fr rpr"><button type="button" class="fr-c fr-rp" data-rpopen="1"><span class="rpi">🎧</span><em class="rpn">NEW</em><b>AI 고객 응대<br>롤플레잉<small class="rpe">Speech</small></b><i>›</i></button>'+
+    '<a class="fr-c fr-pd" href="'+PROD_URL+'"><span class="rpi">🛡️</span><b>에스원<br>다이렉트몰<small class="rpe">Mail · KakaoTalk</small></b><i>›</i></a></div>';
 }
 function rpBtn(){ return '<button type="button" class="rp-mini" data-rpopen="1"><span>🎧</span><b>AI 고객 응대 롤플레잉</b><small>말로 연습 · 점수 받기</small><i>›</i></button>'; }
 function rpMini(){ setTimeout(rpBoardLoad,0); return rpBoardHtml(); }   /* 버튼은 영업일보 아래(rpBtn), 여기는 연습 현황판만 */
