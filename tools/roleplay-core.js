@@ -164,14 +164,20 @@ function evaluate(d) {
   const talk = (d.hist || []).slice(-30).map(function (m) { return (m.r === 'c' ? '고객: ' : '직원: ') + String(m.t || '').slice(0, 400); }).join('\n');
   const sys = '당신은 보안회사 고객응대 코치입니다. 아래 연습 통화에서 "직원"의 응대를 평가하세요.\n상황: ' + String(sc.title || '') + ' / 난이도 ' + (d.level || '중') + '\n' +
     '항목(각 0~100점): 공감·사과(감정을 먼저 받아 주고 진심으로 사과했는가), 원인 설명(왜 그런지 쉽고 정확하게 설명했는가), 해결책 제시(구체적이고 실행 가능한 다음 단계를 말했는가), 해지 방어(해지·불만을 존중하면서 계속 이용할 이유와 대안을 제시했는가). ' +
-    '직원이 거의 말하지 않았으면 낮게 주세요. 잘한 점과 개선할 점은 각각 2~3개, 한 줄씩 쉬운 말로. 마지막에 "이렇게 말해 보세요" 예시 한마디(60자 이내).\n' +
+    '채점은 후하게 하세요. 현장 직원의 연습이므로 칭찬 위주로 봅니다. 고객이 결국 이해·만족하고 통화가 좋게 끝났다면 각 항목 85~100점을 주세요. 기본 예절을 지키며 응대를 끝까지 했다면 70점 이상을 주세요. ' +
+    '해지 방어: 이 상황에 해지·계약 문제가 없었다면 "고객이 만족해 계속 믿고 이용하게 만들었는가"로 보고, 고객이 만족했다면 85점 이상을 주세요(0점 금지). ' +
+    '직원이 거의 말하지 않았거나 고객에게 무례했을 때만 낮게 주세요. 잘한 점과 개선할 점은 각각 2~3개, 한 줄씩 쉬운 말로. 마지막에 "이렇게 말해 보세요" 예시 한마디(60자 이내).\n' +
     '또 모범 답안 비교: 직원이 실제로 한 말 중 가장 아쉬운 것 2~3개를 골라(원문 그대로, 40자 이내로 줄여도 됨) 각각 더 좋은 말(60자 이내, 실제 현장에서 바로 쓸 수 있는 존댓말)로 바꿔 주세요.\n' +
     '반드시 JSON만: {"scores":{"공감·사과":0,"원인 설명":0,"해결책 제시":0,"해지 방어":0},"good":["..."],"improve":["..."],"example":"...","pairs":[{"me":"직원이 한 말","better":"이렇게 말하면 더 좋아요"}]}';
   const r = gemini(sys, [{ role: 'user', parts: [{ text: talk || '(대화 없음)' }] }], 1200);
   const s = r.scores || {};
   const k = ['공감·사과', '원인 설명', '해결책 제시', '해지 방어'];
   const v = k.map(function (n) { return Math.max(0, Math.min(100, Math.round(Number(s[n]) || 0))); });
-  const total = Math.round(v.reduce(function (a, b) { return a + b; }, 0) / 4);
+  /* 해지 방어가 상황에 안 맞아 0점이면 나머지 세 항목 평균으로 대신 (부당하게 깎이지 않게) */
+  if (v[3] === 0 && (v[0] + v[1] + v[2]) > 0) v[3] = Math.round((v[0] + v[1] + v[2]) / 3);
+  /* 후한 보정: 원점수 50→65, 70→79, 80→86, 90→93 (대화가 거의 없으면 보정 안 함) */
+  const raw = v.reduce(function (a, b) { return a + b; }, 0) / 4;
+  const total = Math.min(100, Math.round((d.hist || []).length >= 4 ? raw * 0.7 + 30 : raw));
   const name = String(d.name || '').slice(0, 10);
   let prev = null;
   if (name) {
@@ -331,6 +337,8 @@ const EV_MAX = 3;
 const AT_HEAD = ['시작', '월', '이름', '회차', '상황', '총점', '완료'];
 const EV_HEAD = ['시각', '월', '이름', '등급', '제출 회차', '점수', '소감', '확인'];
 function ymNow() { return Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM'); }
+/* 시트가 '2026-11'을 날짜로 바꿔 버려서 비교가 안 되던 문제 — 읽을 때 항상 'yyyy-MM' 글자로 맞춤 */
+function ymOf(v) { return v instanceof Date ? Utilities.formatDate(v, 'Asia/Seoul', 'yyyy-MM') : String(v).replace(/^'/, '').slice(0, 7); }
 function evSh(name, head) {
   const ss = sheet().getParent();
   let sh = ss.getSheetByName(name);
@@ -341,7 +349,7 @@ function evGrade(t) { t = Number(t) || 0; return t >= 90 ? 'S' : t >= 80 ? 'A' :
 function atRows(name, ym) {
   const sh = evSh('평가회차', AT_HEAD), n = sh.getLastRow();
   if (n < 2) return [];
-  return sh.getRange(2, 1, n - 1, AT_HEAD.length).getValues().map(function (r, i) { return { row: i + 2, t: new Date(r[0]).getTime(), ym: r[1], name: r[2], no: Number(r[3]) || 0, sc: r[4], total: r[5] === '' ? null : Number(r[5]), done: !!r[6] }; })
+  return sh.getRange(2, 1, n - 1, AT_HEAD.length).getValues().map(function (r, i) { return { row: i + 2, t: new Date(r[0]).getTime(), ym: ymOf(r[1]), name: String(r[2]), no: Number(r[3]) || 0, sc: r[4], total: r[5] === '' ? null : Number(r[5]), done: !!r[6] }; })
     .filter(function (x) { return x.ym === ym && x.name === name; });
 }
 function evStart(d) {
@@ -352,7 +360,7 @@ function evStart(d) {
     const L = atRows(name, ym);
     if (L.length >= EV_MAX) return { ok: false, err: '이번 달 평가 3회를 모두 썼어요' };
     const no = L.length + 1;
-    evSh('평가회차', AT_HEAD).appendRow([new Date(), ym, name, no, sc, '', '']);
+    evSh('평가회차', AT_HEAD).appendRow([new Date(), "'" + ym, name, no, sc, '', '']);
     return { ok: true, no: no };
   } finally { lock.releaseLock(); }
 }
@@ -372,13 +380,27 @@ function evRows() {
   const sh = evSh('평가제출', EV_HEAD), n = sh.getLastRow();
   if (n < 2) return [];
   return sh.getRange(2, 1, n - 1, EV_HEAD.length).getValues().map(function (r) {
-    return { t: new Date(r[0]).getTime(), ym: r[1], name: r[2], grade: r[3], no: r[4], total: r[5], text: r[6] };
+    return { t: new Date(r[0]).getTime(), ym: ymOf(r[1]), name: String(r[2]), grade: r[3], no: r[4], total: r[5], text: r[6] };
   }).filter(function (x) { return x.ym === ymNow(); }).reverse();
 }
 function evMine(name) {
   if (!name) return { ok: false, err: 'name' };
-  const ym = ymNow(), sub = evRows().filter(function (x) { return x.name === name; })[0] || null;
+  const ym = ymNow();
+  evFix(name, ym);
+  const sub = evRows().filter(function (x) { return x.name === name; })[0] || null;
   return { ok: true, ym: ym, max: EV_MAX, tries: atRows(name, ym).map(function (x) { return { no: x.no, sc: x.sc, total: x.total, done: x.done }; }), sub: sub };
+}
+/* 점수 기록이 빠진 회차(통신 오류 등)는 시작 후 40분 안에 같은 상황으로 받은 채점 기록으로 채움 */
+function evFix(name, ym) {
+  const L = atRows(name, ym), miss = L.filter(function (x) { return !x.done; });
+  if (!miss.length) return;
+  const R = rows(400), sh = evSh('평가회차', AT_HEAD); let ch = 0;
+  miss.forEach(function (at) {
+    const nx = L.filter(function (y) { return y.no === at.no + 1; })[0], end = Math.min(at.t + 40 * 60000, nx ? nx.t : Infinity);
+    const hit = R.filter(function (r) { return r.name === name && String(r.sc) === String(at.sc) && r.t >= at.t && r.t <= end; })[0];
+    if (hit) { sh.getRange(at.row, 6, 1, 2).setValues([[Number(hit.total) || 0, '완료']]); ch = 1; }
+  });
+  if (ch) evBest(name, ym);
 }
 function evBest(name, ym) {
   const best = atRows(name, ym).filter(function (x) { return x.done; }).sort(function (a, b) { return b.total - a.total; })[0];
@@ -391,9 +413,9 @@ function evAdd(d) {
   if (!at) return { ok: false, err: '제출할 회차를 골라 주세요' };
   const text = String(d.text || '').trim().slice(0, 500), lock = LockService.getScriptLock(); lock.waitLock(10000);
   try {
-    const sh = evSh('평가제출', EV_HEAD), n = sh.getLastRow(), vals = [new Date(), ym, name, evGrade(at.total), no, at.total, text, ''];
+    const sh = evSh('평가제출', EV_HEAD), n = sh.getLastRow(), vals = [new Date(), "'" + ym, name, evGrade(at.total), no, at.total, text, ''];
     let hit = 0;
-    if (n >= 2) { const cur = sh.getRange(2, 2, n - 1, 2).getValues(); for (let i = 0; i < cur.length; i++) if (cur[i][0] === ym && cur[i][1] === name) hit = i + 2; }
+    if (n >= 2) { const cur = sh.getRange(2, 2, n - 1, 2).getValues(); for (let i = 0; i < cur.length; i++) if (ymOf(cur[i][0]) === ym && String(cur[i][1]) === name) hit = i + 2; }
     if (hit) sh.getRange(hit, 1, 1, EV_HEAD.length).setValues([vals]); else sh.appendRow(vals);
   } finally { lock.releaseLock(); }
   return { ok: true, grade: evGrade(at.total) };
