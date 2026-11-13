@@ -96,6 +96,7 @@ ul.l{margin:6px 0 0;padding-left:20px}ul.l li{margin:5px 0}
 .ev-c{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:10px 4px;text-align:center;font-family:inherit;cursor:pointer;color:var(--navy)}.ev-c span{display:block;font-size:11.5px;color:var(--mute)}.ev-c b{display:block;font-size:22px;margin:2px 0}.ev-c b small{font-size:12px}.ev-c>small{font-size:11.5px;color:#475569}
 .ev-c[aria-pressed="true"]{border-color:var(--navy);background:#eef2ff;box-shadow:0 0 0 2px rgba(16,32,80,.15)}.ev-c.none{background:#f8fafc;color:#94a3b8;cursor:default}.ev-c.none b{color:#cbd5e1}
 .ev-err{background:#fef2f2!important;border-color:#fecaca!important;color:#991b1b!important}.ev-done{border-color:#c7d2fe;background:#f5f7ff}
+.ev-tabs{grid-template-columns:1fr 1fr!important}.ev-left{background:#ecfeff;border:1px solid #a5f3fc;color:#155e75;border-radius:12px;padding:9px 12px;font-size:13.5px;margin-top:8px}.ev-left.no{background:#f8fafc;border-color:var(--line);color:#64748b}
 .k3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
 .k3 div{background:#f3f6fd;border-radius:12px;padding:10px 6px;text-align:center}
 .k3 span{display:block;font-size:11px;color:var(--mute)}.k3 b{font-size:22px;color:var(--navy)}
@@ -311,7 +312,7 @@ function home(){
 /* ───────── 📝 평가 (서비스 전용) — 「평가 시작」으로 한 달 3회까지, 그중 가장 좋은 회차를 골라 제출 ───────── */
 var EV_G = [["S","최우수","90점 이상"],["A","우수","80~89점"],["B","보통","70~79점"],["C","노력 필요","69점 이하"]];
 function evGrade(t){ t=+t||0; return t>=90?"S":t>=80?"A":t>=70?"B":"C"; }
-var EV_SEL = 0, EV_DATA = null;
+var EV_SEL = 0, EV_DATA = null, EV_TAB = "go", EV_SUB = "";
 function evView(){
   var box=$("#evbox"); if(!box) return;
   if(GUEST){ box.innerHTML='<div class="card"><h2>📝 평가</h2><p class="sub">이름을 고른 직원만 평가를 볼 수 있어요.</p></div>'; return; }
@@ -326,24 +327,36 @@ function evScTitle(id){ var c=SCEN.filter(function(x){return x.id===id;})[0]; re
 function evDraw(j){
   var box=$("#evbox"), T=j.tries||[], sub=j.sub, left=j.max-T.length, done=T.filter(function(x){return x.done;});
   if(!EV_SEL){ if(sub) EV_SEL=+sub.no; else if(done.length) EV_SEL=done.slice().sort(function(a,b){return b.total-a.total;})[0].no; }
-  var h='<div class="card"><h2>📝 '+(+j.ym.slice(5))+'월 AI 응대 평가 <em class="ev-svc">서비스 전용</em></h2>'+
-    '<p class="sub">「평가 시작」을 누르면 서비스 상황 하나가 무작위로 나와요(난이도 중). 한 달에 <b>3번</b>까지 볼 수 있고, 그중 가장 좋은 점수를 골라 제출해요.</p>'+
+  var h='<div class="subs ev-tabs">'+[["go","▶ 평가 시작"],["st","📋 내 평가 현황"]].map(function(x){ return '<button type="button" data-evt="'+x[0]+'" aria-pressed="'+(EV_TAB===x[0])+'">'+x[1]+'</button>'; }).join('')+'</div>';
+  if(EV_TAB==="go"){
+    var subs=CATS2.svc; if(!subs.some(function(x){return x[0]===EV_SUB;})) EV_SUB=subs[0][0];
+    h+='<div class="card"><h2>▶ '+(+j.ym.slice(5))+'월 평가 시작 <em class="ev-svc">서비스 전용</em></h2>'+
+      '<p class="sub">평가 볼 상황을 골라요. 난이도는 <b>중</b>으로 고정이에요. 한 달에 3번까지 볼 수 있어요.</p>'+
+      '<div class="ev-left'+(left>0?'':' no')+'">'+(left>0?'남은 기회 <b>'+left+'번</b> · 다음은 '+(T.length+1)+'회차':'이번 달 평가 3번을 모두 봤어요 — 「내 평가 현황」에서 제출하세요')+'</div></div>';
+    if(left>0){
+      h+='<div class="subs">'+subs.map(function(x){ return '<button type="button" data-evs="'+x[0]+'" aria-pressed="'+(EV_SUB===x[0])+'">'+x[1]+'</button>'; }).join('')+'</div>'+
+        '<div class="sclist">'+SCEN.map(function(c,i){ return (c.g!=="영업"&&c.c===EV_SUB)?'<button type="button" class="sc" data-evi="'+i+'"><i>'+c.ic+'</i><div><b>'+esc(c.title)+'</b></div><span class="sc-r"><em class="tag 중">평가</em></span></button>':''; }).join('')+'</div>';
+    }
+    box.innerHTML=h; evTabs(box);
+    box.querySelectorAll("[data-evs]").forEach(function(b){ b.onclick=function(){ EV_SUB=b.dataset.evs; var y=window.scrollY; evDraw(EV_DATA); window.scrollTo(0,y); }; });
+    box.querySelectorAll("[data-evi]").forEach(function(b){ b.onclick=function(){ evBegin(SCEN[+b.dataset.evi], b); }; });
+    return;
+  }
+  h+='<div class="card"><h2>📋 '+(+j.ym.slice(5))+'월 내 평가 현황 <em class="ev-svc">서비스 전용</em></h2>'+
+    '<p class="sub">3번 중 가장 좋은 회차를 골라 제출해요. 제출한 점수로 등급이 정해져요.</p>'+
     '<div class="ev-gl">'+EV_G.map(function(g){ return '<span><i>'+g[0]+'</i>'+g[2]+'</span>'; }).join('')+'</div>';
   h+='<div class="ev-tr">'+[1,2,3].map(function(n){ var t=T.filter(function(x){return x.no===n;})[0];
     if(!t) return '<div class="ev-c none"><span>'+n+'회차</span><b>-</b><small>아직 안 봤어요</small></div>';
     if(!t.done) return '<div class="ev-c none"><span>'+n+'회차</span><b>✕</b><small>중간에 멈춤</small></div>';
     return '<button type="button" class="ev-c" data-no="'+n+'" aria-pressed="'+(EV_SEL===n)+'"><span>'+n+'회차</span><b>'+t.total+'<small>점</small></b><small>등급 '+evGrade(t.total)+'</small></button>'; }).join('')+'</div>';
-  h+= left>0 ? '<button type="button" class="btn block ev-pk" id="evst">▶ 평가 시작 ('+(T.length+1)+'회차 · 남은 기회 '+left+'번)</button>'
-             : '<p class="ev-pkh">이번 달 평가 3번을 모두 봤어요.</p>';
   if(done.length){
     h+='<textarea class="ev-t" id="evtx" maxlength="500" placeholder="파트장에게 하고 싶은 말 (선택)">'+esc(sub&&sub.text||"")+'</textarea>'+
       '<button type="button" class="btn red block" id="evgo">'+(EV_SEL?EV_SEL+'회차 점수로 제출':'제출할 회차를 골라 주세요')+'</button>'+
       (sub?'<div class="ev-ok">✅ 제출했어요 — '+sub.no+'회차 '+sub.total+'점 · 등급 <b>'+sub.grade+'</b>. 다시 제출하면 바뀐 회차로 덮어써요.</div>':'');
-  }
+  } else h+='<p class="ev-pkh">아직 끝낸 평가가 없어요. 「▶ 평가 시작」에서 상황을 골라 시작하세요.</p>';
   h+='<div id="evmsg"></div></div>';
-  box.innerHTML=h;
+  box.innerHTML=h; evTabs(box);
   box.querySelectorAll(".ev-c[data-no]").forEach(function(b){ b.onclick=function(){ EV_SEL=+b.dataset.no; evDraw(EV_DATA); }; });
-  var st=$("#evst"); if(st) st.onclick=evBegin;
   var go=$("#evgo"); if(go) go.onclick=function(){
     var m=$("#evmsg"); if(!EV_SEL){ m.innerHTML='<div class="ev-ok ev-err">제출할 회차를 먼저 골라 주세요.</div>'; return; }
     go.disabled=true; go.textContent="제출 중…";
@@ -352,11 +365,11 @@ function evDraw(j){
     }).catch(function(e){ go.disabled=false; go.textContent=EV_SEL+"회차 점수로 제출"; m.innerHTML='<div class="ev-ok ev-err">제출하지 못했어요 ('+esc(e.message||e)+'). 다시 눌러 주세요.</div>'; });
   };
 }
-function evBegin(){
+function evTabs(box){ box.querySelectorAll("[data-evt]").forEach(function(b){ b.onclick=function(){ EV_TAB=b.dataset.evt; var y=window.scrollY; document.body.style.minHeight=document.body.scrollHeight+"px"; evDraw(EV_DATA); window.scrollTo(0,y); }; }); }
+function evBegin(sc, btn){
   var T=(EV_DATA&&EV_DATA.tries)||[], no=T.length+1;
-  if(!confirm("📝 "+no+"회차 평가를 시작할까요?\n\n· 서비스 상황 하나가 무작위로 나와요 (난이도 중)\n· 시작하면 횟수가 바로 차감돼요 (한 달 3번)\n· 중간에 나가면 그 회차는 점수 없이 끝나요")) return;
-  var L=SCEN.filter(function(c){ return c.g!=="영업"; }), sc=L[Math.floor(Math.random()*L.length)];
-  var st=$("#evst"); if(st){ st.disabled=true; st.textContent="준비 중…"; }
+  if(!confirm("📝 "+no+"회차 평가를 시작할까요?\n\n"+sc.ic+" "+sc.title+" (난이도 중)\n· 시작하면 횟수가 바로 차감돼요 (한 달 3번)\n· 중간에 나가면 그 회차는 점수 없이 끝나요")) return;
+  if(btn) btn.disabled=true;
   api1({act:"evstart",name:ME,sc:sc.id}).then(function(r){
     if(!r||!r.ok) throw new Error(r&&r.err||"실패");
     S.lv="중"; S.ev={no:r.no}; start(sc); $("#ttl").textContent="📝 평가 "+r.no+"회차 · 서비스";
@@ -670,7 +683,7 @@ function showEval(j){
   app.innerHTML=h; window.scrollTo(0,0);
   if(S.ev){ var ev=S.ev; S.ev=null;
     var er=$("#evres"); if(er) app.insertBefore(er, app.firstChild);
-    $("#evback").onclick=function(){ try{ localStorage.setItem("rp_tab","eva"); }catch(e){} home(); };
+    $("#evback").onclick=function(){ try{ localStorage.setItem("rp_tab","eva"); }catch(e){} EV_TAB="st"; home(); };
     if(!j.demo) api1({act:"evpick",name:ME,sc:S.sc.id,total:j.total,no:ev.no}).then(function(r){
       if(!r||!r.ok) throw new Error(r&&r.err||"실패");
       $("#evresm").innerHTML='✅ '+ev.no+'회차 점수를 기록했어요 (등급 '+evGrade(j.total)+'). 3번 중 가장 좋은 회차를 평가 탭에서 골라 제출하세요.';
