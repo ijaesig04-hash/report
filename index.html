@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261113142653">
+<meta name="bsr-ver" content="20261113143115">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1152,7 +1152,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mx-top{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;position:relative;z-index:1}.mx-top div{background:rgba(255,255,255,.08);border-radius:10px;padding:6px 10px;font-size:13px;display:flex;justify-content:space-between}.mx-top em{font-style:normal;color:#ffd769}
 .mx-note{display:block;width:100%;text-align:left;margin-top:12px;font:500 11.5px "Noto Sans KR",sans-serif;color:#c9d6f5;background:none;border:0;border-top:1px solid rgba(255,255,255,.15);padding:8px 0 0;cursor:pointer;position:relative;z-index:1}
 .mx.mx-only{padding:10px 14px}.mx.mx-only .mx-rk{margin:0}
-.mx-rk{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;margin:10px 0 2px;padding:7px 11px;border-radius:12px;background:rgba(255,255,255,.12);border:1px solid rgba(255,215,105,.35);font-size:12.5px;color:#fde68a}.mx-rk b{color:#fff;font-size:14px}.mx-rk em{font-style:normal;font-weight:800;color:#ffd769}.mx-rk small{flex-basis:100%;font-size:11px;color:rgba(255,255,255,.65)}
+.mx .mx-rk,.mx-rk{display:flex!important;flex-direction:row!important;align-items:center;justify-content:flex-start;gap:6px;width:fit-content;max-width:100%;margin:8px 0 0!important;padding:3px 11px!important;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,215,105,.35);font-size:12px;line-height:1.4;color:#fde68a;text-align:left}.mx-rk>span,.mx-rk>b{display:inline;margin:0;padding:0}.mx-rk b{color:#fff;font-size:12.5px}
 .mx-cr{display:flex;flex-direction:column;gap:6px}.mx-cr p{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:center;margin:0;border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px}.mx-cr i{grid-row:1/3;width:8px;height:30px;border-radius:4px}.mx-cr b{font-size:13.5px}.mx-cr em{grid-row:1/3;grid-column:3;font-style:normal;font-weight:800;color:#0f2a5c}.mx-cr small{grid-column:2;font-size:12px;color:#64748b}
 .mxst{font-size:.72em;margin-left:2px;letter-spacing:-2px;vertical-align:.12em;white-space:nowrap}
 .mx-ms{margin:4px 0 8px}
@@ -4536,7 +4536,7 @@ function rpKing(){
   var L = Object.keys(E).filter(function(n){ return ex.indexOf(n)<0; }).map(function(n){ return {n:n, v:+E[n]}; }).sort(function(a,b){ return b.v-a.v; }), lab = "평가 최고 점수";
   if(!L.length && RPB && RPB.list && String(RPB.ym)===cm){ L = RPB.list.filter(function(x){ return x.name && ex.indexOf(x.name)<0; }).map(function(x){ return {n:x.name, v:x.avg}; }); lab = "연습 평균"; }
   if(!L.length) return '<div class="mx-rk" id="mxrk" hidden></div>';
-  return '<div class="mx-rk" id="mxrk"><span>👑 '+(+cm.slice(5))+'월 응대왕</span><b>'+esc2(L[0].n)+'</b><em class="num">'+L[0].v+'점</em><small>AI 응대 '+lab+(L[1]?' · 2위 '+esc2(L[1].n)+' '+L[1].v:'')+'</small></div>';
+  return '<div class="mx-rk" id="mxrk"><span>👑 이달의 응대왕</span><b>'+esc2(L[0].n)+'</b></div>';
 }
 var EVB = {}, EVB_AT = 0;
 function evbLoad(){
