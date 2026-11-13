@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" data-theme="light" style="color-scheme:light"><head><meta name="color-scheme" content="only light"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="roster-ver" content="2026-11-13d">
+<html lang="ko" data-theme="light" style="color-scheme:light"><head><meta name="color-scheme" content="only light"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="roster-ver" content="2026-11-13e">
 <meta charset="utf-8">
 <title>지사 근무편성 대시보드</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -211,7 +211,7 @@ var ENGINE = (function () {
   function build(inp) {
     var N = inp.N, P = inp.people.length, T = 7;
     var M = {
-      N: N, P: P, T: T, hol: inp.hol, wd: inp.weekday, rules: inp.rules, people: inp.people, V: inp.vehicles,
+      N: N, P: P, T: T, hol: inp.hol, tgt: inp.tgt, wd: inp.weekday, rules: inp.rules, people: inp.people, V: inp.vehicles,
       grid: [], free: [], seqLen: T + N, appr: {}
     };
     (inp.approved || []).forEach(function (a) { M.appr[a.p + '|' + a.kind + '|' + a.start] = 1; });
@@ -235,7 +235,7 @@ var ENGINE = (function () {
     }
     // 기대 근무일(형평)
     var r = M.rules, exp = 0;
-    for (d = 0; d < N; d++) exp += r.dayAmin + (M.hol[d] ? r.holNight : r.wkNight);
+    for (d = 0; d < N; d++) exp += r.dayAmin + M.tgt[d];
     M.tgt = M.avail.map(function (a) { return Math.round(exp * a / availCnt); });
     M.htgt = M.avail.map(function (a) { return Math.round(hols * (r.dayAmin + r.holNight) / P * a / N); });
     // 주(월~일) 경계: seq index 기준 각 주의 시작/끝
@@ -349,11 +349,10 @@ var ENGINE = (function () {
         }
       }
     }
-    var tB = M.hol[d] ? r.holNight : r.wkNight;
+    var tB = M.tgt[d];
     if (b > tB) { c += HARD * (b - tB); if (out) out.push({ p: -1, rule: '야간 ' + b + '명 (기준 ' + tB + '대)', lv: 'hard', d: d }); }
     else if (b < tB) {
-      if (!M.hol[d] && r.allowShort && b === tB - 1) c += 120;
-      else { c += HARD * (tB - b); if (out) out.push({ p: -1, rule: '야간 ' + b + '명 (기준 ' + tB + '대)', lv: 'hard', d: d }); }
+      c += HARD * (tB - b); if (out) out.push({ p: -1, rule: '야간 ' + b + '명 (기준 ' + tB + '대)', lv: 'hard', d: d });
     }
     var need = 0; req.forEach(function (q) { if (q) need++; });
     if (need > Math.min(b, V)) { c += HARD * (need - Math.min(b, V)); if (out) out.push({ p: -1, rule: '야간 필수 차량 부족', lv: 'hard', d: d }); }
@@ -708,9 +707,9 @@ function verify(br,month,res){
   });
   var daily=[],full=0;
   for(var d=0;d<N;d++){var a=0,b=0;fp.forEach(function(p){var c=res.sched[p.name][d];if(c==='A')a++;if(c==='B')b++;});
-    var tB=hol[d]?r.holNight:r.wkNight;var off=(res.nightOff&&res.nightOff[d]?res.nightOff[d].split(' ').filter(Boolean):[]);
+    var tB=tgtOfDay(month,r,d);var off=(res.nightOff&&res.nightOff[d]?res.nightOff[d].split(' ').filter(Boolean):[]);
     var running=br.vehicles.length-off.length;
-    if(running===tB)full++;else if(running<tB-1||hol[d]||!r.allowShort)iss.push({lv:'hard',name:'(전체)',d:d+1,t:'야간 '+running+'대 운영 (기준 '+tB+'대)'});
+    if(running===tB)full++;else iss.push({lv:'hard',name:'(전체)',d:d+1,t:'야간 '+running+'대 운영 (기준 '+tB+'대)'});
     if(a<r.dayAmin)iss.push({lv:'hard',name:'(전체)',d:d+1,t:'주간 '+a+'명 (최소 '+r.dayAmin+')'});
     br.vehicles.forEach(function(v){if(!fp.some(function(p){return res.sched[p.name][d]==='A'&&res.va[p.name][d]===v.no;}))iss.push({lv:'hard',name:'(전체)',d:d+1,t:v.no+'호 주간 근무자 없음'});
       if(!v.dropOk&&off.indexOf(v.no)>=0)iss.push({lv:'hard',name:'(전체)',d:d+1,t:v.no+'호 야간 미운영 (빼면 안 되는 차량)'});});
@@ -724,6 +723,8 @@ function verify(br,month,res){
     wmax:Math.max.apply(null,ppl.map(function(p){return p.wmax;})),QI:QI,
     qlMin:(function(){var a=ppl.filter(function(p){return p.ql!=null;}).map(function(p){return p.ql;});return a.length?Math.min.apply(null,a):null;})()};
 }
+// 날짜별 야간 목표 대수: 휴일=주말·공휴일 대수, 파트장이 4대로 지정한 평일=평일 대수−1, 그 외=평일 대수 (1대 줄이기는 자동으로 하지 않음)
+function tgtOfDay(M,r,d){var day=d+1;if((M.holidays||[]).indexOf(day)>=0)return r.holNight;if((M.fourNight||[]).indexOf(day)>=0)return Math.max(1,r.wkNight-1);return r.wkNight;}
 function holArr(month){var N=dim(month.y,month.m),a=[];for(var d=1;d<=N;d++)a.push(month.holidays.indexOf(d)>=0);return a;}
 
 // ================= DB =================
@@ -751,7 +752,7 @@ async function loadMonth(){
   if(S.db&&S.bid){try{var a=await S.db.doc('branches/'+S.bid+'/months/'+key).get();if(a.exists)md=a.data();}catch(e){}
     try{var b=await S.db.doc('branches/'+S.bid+'/months/'+ymKey(pv[0],pv[1])).get();if(b.exists)pd=b.data();}catch(e){}}
   S.prevDoc=pd;
-  var month={qUsed:md&&md.qUsed?md.qUsed:null,qSrc:md&&md.qSrc||'',y:y,m:m,holidays:md&&md.holidays?md.holidays:defaultHolidays(y,m),reqText:md&&md.reqText||'',req:md&&md.req?md.req:{},tail:{},approved:md&&md.approved||[],plans:md&&md.plans||{},status:md&&md.status||'',prevPaste:md&&md.prevPaste||''};
+  var month={qUsed:md&&md.qUsed?md.qUsed:null,qSrc:md&&md.qSrc||'',y:y,m:m,holidays:md&&md.holidays?md.holidays:defaultHolidays(y,m),reqText:md&&md.reqText||'',req:md&&md.req?md.req:{},tail:{},approved:md&&md.approved||[],fourNight:md&&md.fourNight||[],plans:md&&md.plans||{},status:md&&md.status||'',prevPaste:md&&md.prevPaste||''};
   if(pd&&pd.sched){Object.keys(pd.sched).forEach(function(n){month.tail[n]=pd.sched[n].slice(-7);});S.prevSrc=(pd.status==='final'?'확정본':'초안')+' ('+pv[0]+'년 '+pv[1]+'월)';}
   else if(month.prevPaste){month.tail=parsePrev(month.prevPaste).tail;S.prevSrc='붙여넣기';}
   else S.prevSrc='';
@@ -767,7 +768,7 @@ async function saveMonth(status){
   if(!S.db||S.db.ro){toast(noSaveMsg());return;}
   if(!S.bid){toast('먼저 1단계에서 지사 설정을 저장해 주세요');return;}
   if(!canSave(S.bid)){toast(lockMsg(S.bid));return;}
-  var M=S.month,R=S.result;var data={qUsed:M.qUsed||{},qSrc:M.qSrc||'',y:M.y,m:M.m,holidays:M.holidays,reqText:M.reqText,req:M.req,approved:M.approved,prevPaste:M.prevPaste||'',plans:M.plans||{},updatedAt:stamp(),status:status||M.status||'draft'};
+  var M=S.month,R=S.result;var data={qUsed:M.qUsed||{},qSrc:M.qSrc||'',y:M.y,m:M.m,holidays:M.holidays,fourNight:M.fourNight||[],reqText:M.reqText,req:M.req,approved:M.approved,prevPaste:M.prevPaste||'',plans:M.plans||{},updatedAt:stamp(),status:status||M.status||'draft'};
   if(R){data.sched=R.sched;data.va=R.va;data.nightOff=R.nightOff;data.cost=R.cost||0;}
   try{await S.db.doc('branches/'+S.bid+'/months/'+ymKey(M.y,M.m)).set(data);M.status=data.status;
     if(data.status==='final'&&S.planId){var ym=ymKey(M.y,M.m),sv=(S.branches[S.bid]||{}).people||[];var diff=S.br.people.some(function(p){var q=sv.find(function(x){return x.name===p.name;});return !q||isOut(q,ym)!==isOut(p,ym);});if(diff)await saveBranch();}
@@ -1023,8 +1024,7 @@ function viewRules(mn){
   var ops=el('div',{class:'card'},[el('h2',{text:'운영 대수'}),el('p',{class:'lead',text:'차량 '+br.vehicles.length+'대 기준이에요.'}),
     num('wkNight','평일 야간 운영 대수','기본은 전 차량',1,20),num('holNight','주말·공휴일 야간 운영 대수','',1,20),
     num('dayAmin','하루 주간 최소 인원','차량마다 최소 1명',1,30),num('dayAmax','하루 주간 최대 인원','',1,30),
-    el('div',{class:'rule'},[el('div',{},[el('div',{class:'k',text:'인원 부족 시 평일 야간 1대 줄이기 허용'}),el('div',{class:'d',text:'휴무 보장과 부딪힐 때만, 가능한 적게 써요'})]),
-      el('input',{type:'checkbox',id:'r_allowShort',checked:!!r.allowShort,style:'width:auto',onchange:function(e){br.rules.allowShort=e.target.checked;S.dirtyBranch=true;renderCtx();}})])]);
+    el('div',{class:'rule'},[el('div',{},[el('div',{class:'k',text:'평일 야간은 항상 지정 대수 (고정)'}),el('div',{class:'d',text:'인원이 부족해도 자동으로 1대 줄이지 않아요. 4대로 할 날은 “자동 편성” 3단계 달력에서 파트장이 직접 지정해요'})])])]);
   var soft=el('div',{class:'card'},[el('h2',{text:'권장 기준'}),el('p',{class:'lead',text:'기본 패턴은 주주야야휴휴(AABBDD)이고, 주·휴·야(A-D-B)도 정식 휴무로 쳐요. 아래 숫자가 클수록 더 강하게 지켜요.'}),
     num('rest12w','정식 휴무 12일 안에 1번 (가중치)','휴휴 또는 주·휴·야',0,500),num('rest15w','정식 휴무 15일 안에 1번 (가중치)','거의 필수',0,2000),
     num('seconds','자동 편성 계산 시간(초)','길수록 결과가 좋아져요 · 권장 20~60초',5,180)]);
@@ -1042,6 +1042,9 @@ function viewMonth(mn){
   var ms=el('select',{id:'msel',onchange:async function(e){S.m=+e.target.value;await loadMonth();render();}});
   for(var i=1;i<=12;i++)ms.appendChild(el('option',{value:i,selected:i===S.m,text:i+'월'}));
   // holidays
+  var frowEl=el('div',{class:'chips'});
+  for(var fd2=1;fd2<=N;fd2++)(function(d){var wk=M.holidays.indexOf(d)<0;if(!wk)return;var on=(M.fourNight||[]).indexOf(d)>=0;
+    frowEl.appendChild(el('button',{class:'chip'+(on?' on':''),title:on?'야간 4대로 운영':'야간 기본 대수',text:d+DOW[dowIdx(M.y,M.m,d)],onclick:function(){M.fourNight=M.fourNight||[];var k=M.fourNight.indexOf(d);if(k>=0)M.fourNight.splice(k,1);else M.fourNight.push(d);M.fourNight.sort(function(a,b){return a-b;});S.dirtyBranch=S.dirtyBranch;render();}}));})(fd2);
   var hrow=el('div',{class:'chips'});
   for(var d=1;d<=N;d++)(function(d){var on=M.holidays.indexOf(d)>=0;var hn=holName(M.y,M.m,d);
     hrow.appendChild(el('button',{class:'chip'+(on?' on':''),title:hn||DOW[dowIdx(M.y,M.m,d)]+'요일',text:d+DOW[dowIdx(M.y,M.m,d)],onclick:function(){var k=M.holidays.indexOf(d);if(k>=0)M.holidays.splice(k,1);else M.holidays.push(d);M.holidays.sort(function(a,b){return a-b;});render();}}));})(d);
@@ -1049,6 +1052,7 @@ function viewMonth(mn){
   var known=krHolidays(M.y).known;
   var c1=el('div',{class:'card'},[el('h2',{text:'대상 월과 휴일'}),el('div',{class:'row',style:'margin:8px 0 12px'},[ys,ms,el('span',{class:'muted',text:'주말·공휴일 '+M.holidays.length+'일'})]),
     el('p',{class:'lead',text:'파란 칩이 휴일(야간 '+rulesOf(br).holNight+'대 운영)이에요. 눌러서 바꿀 수 있어요. 선거일·임시공휴일은 직접 눌러 추가하세요.'}),hrow,
+    el('p',{class:'lead',style:'margin-top:12px',text:'야간 4대로 운영할 평일 (파트장 지정 · 기본은 평일 야간 '+rulesOf(br).wkNight+'대)'}),frowEl,
     el('p',{class:'muted',style:'margin-top:8px',text:(named.length?'자동 반영: '+named.join(' · '):'이 달은 공휴일이 없어요')+(known?'':' (이 해의 음력 공휴일 표가 없어 설·추석·부처님오신날은 직접 넣어 주세요)')})]);
   // requests
   var ta=el('textarea',{id:'reqtext',placeholder:'예)\n승우 - 2,3,4일(1일주간 진도) 20,21일\n심영 - 21(주간)22(휴)23(야간)\n명섭 - 1~13일 결혼\n현준 - 10,11,12일(9일주간 예비군)',oninput:function(e){M.reqText=e.target.value;}});ta.value=M.reqText;
@@ -1109,7 +1113,7 @@ function preflight(){
   var hol=holArr(M);
   out.push({lv:br.vehicles.length?'ok':'bad',t:'차량 '+br.vehicles.length+'대 · 근무자 '+fp.length+'명'+(activePeople(br).length>fp.length?' (+동승 '+(activePeople(br).length-fp.length)+'명)':'')+' · 파트장 '+(br.leaders||[]).length+'명'});
   var names={};activePeople(br).forEach(function(p){if(names[p.name])out.push({lv:'bad',t:'이름 중복: '+p.name});names[p.name]=1;if(!br.vehicles.some(function(v){return v.no===p.veh;}))out.push({lv:'bad',t:p.name+': 차량이 지정되지 않음'});});
-  var need=0;for(var d=0;d<N;d++)need+=r.dayAmin+(hol[d]?r.holNight:r.wkNight);
+  var need=0;for(var d=0;d<N;d++)need+=r.dayAmin+tgtOfDay(M,r,d);
   var avail=0;fp.forEach(function(p){for(var d=1;d<=N;d++){var q=(M.req[p.name]||{})[d];if(!q||q==='A'||q==='B')avail++;}});
   var ratio=avail?need/avail:9;
   out.push({lv:ratio<=0.72?'ok':ratio<=0.8?'warn':'bad',t:'필요 근무 '+need+'칸 / 가용 '+avail+'칸 ('+Math.round(ratio*100)+'%)'+(ratio>0.8?' — 인원이 빠듯해요':'')});
@@ -1148,7 +1152,8 @@ function buildInput(){
     return {qLeft:(qu!=null&&qu!=='')?r1(quarterInfo(M.y,M.m,r).cap-(+qu)):null,name:p.name,veh:p.veh,newbie:!!p.newbie,junior:!!p.junior,rank:p.rank||'mid',keep:p.newbie?(p.keep||[]):[],fixed:fixed,fixedPattern:!!p.fixedPattern,tail:padTail(M.tail[p.name])};});
   var idx={};fp.forEach(function(p,i){idx[p.name]=i;});
   var approved=(M.approved||[]).filter(function(a){return idx[a.name]!==undefined;}).map(function(a){return {p:idx[a.name],kind:a.kind,start:a.start};});
-  return {N:N,hol:hol,firstDow:fd,people:people,vehicles:br.vehicles.map(function(v){return {no:v.no,dropOk:!!v.dropOk};}),rules:r,seconds:r.seconds,seed:(Date.now()%100000)+1,approved:approved};
+  var tgt=[];for(var td=0;td<N;td++)tgt.push(tgtOfDay(M,r,td));
+  return {N:N,hol:hol,tgt:tgt,firstDow:fd,people:people,vehicles:br.vehicles.map(function(v){return {no:v.no,dropOk:!!v.dropOk};}),rules:r,seconds:r.seconds,seed:(Date.now()%100000)+1,approved:approved};
 }
 function padTail(t){t=(t||[]).slice(-7);while(t.length<7)t.unshift('?');return t;}
 function runSolve(){
@@ -1305,7 +1310,7 @@ function colL(n){var s='';while(n>0){var m=(n-1)%26;s=String.fromCharCode(65+m)+
 
 // ================= 시작 =================
 // 항상 최신 버전으로: 내려받은 html(file://)은 웹 최신본으로 이동, 웹 버전은 새 버전이 올라오면 자동 새로고침
-var WEB_URL='https://ijaesig04-hash.github.io/report/roster.html',BUILD='2026-11-13d';
+var WEB_URL='https://ijaesig04-hash.github.io/report/roster.html',BUILD='2026-11-13e';
 function autoLatest(){try{
   var here=location.href.split(/[?#]/)[0];
   /* 내려받은 html(회사 PC 등): 인터넷이 되면 바로 웹 최신본으로 이동 */
