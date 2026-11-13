@@ -365,6 +365,7 @@ function evPick(d) {   // 평가 회차가 끝나면 점수 기록 — 실제로
   const hit = rows(300).filter(function (r) { return r.name === name && String(r.sc) === sc && Number(r.total) === total && r.t >= at.t; })[0];
   if (!hit) return { ok: false, err: '방금 받은 점수 기록을 찾지 못했어요' };
   evSh('평가회차', AT_HEAD).getRange(at.row, 6, 1, 2).setValues([[total, '완료']]);
+  evBest(name, ym);   // 3번 중 가장 좋은 점수를 자동으로 「평가제출」에 반영
   return { ok: true };
 }
 function evRows() {
@@ -378,6 +379,10 @@ function evMine(name) {
   if (!name) return { ok: false, err: 'name' };
   const ym = ymNow(), sub = evRows().filter(function (x) { return x.name === name; })[0] || null;
   return { ok: true, ym: ym, max: EV_MAX, tries: atRows(name, ym).map(function (x) { return { no: x.no, sc: x.sc, total: x.total, done: x.done }; }), sub: sub };
+}
+function evBest(name, ym) {
+  const best = atRows(name, ym).filter(function (x) { return x.done; }).sort(function (a, b) { return b.total - a.total; })[0];
+  if (best) evAdd({ name: name, no: best.no, text: '' });
 }
 function evAdd(d) {
   const name = String(d.name || '').slice(0, 10), no = Number(d.no) || 0;
