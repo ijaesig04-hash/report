@@ -334,7 +334,7 @@ function evDraw(j){
   var h=evTabH();
   if(EV_TAB==="go"){
     h+='<div class="card"><h2>▶ '+(+j.ym.slice(5))+'월 평가 시작 <em class="ev-svc">서비스 전용</em></h2>'+
-      '<p class="sub">「평가 시작」을 누르면 서비스 상황 하나가 <b>무작위</b>로 나와요. 난이도는 <b>상</b>이에요. 한 달에 3번까지 볼 수 있고, <b>가장 좋은 점수가 자동으로 평가에 반영</b>돼요.</p>+'<p class="sub" style="margin-top:6px"><em class="sc-hot" style="margin:0 4px 0 0">🆕 최근 이슈</em>영상기기 비밀번호 응대 상황이 3번 중 <b>1번은 꼭</b> 나와요.</p>'+
+      '<p class="sub">「평가 시작」을 누르면 서비스 상황 하나가 <b>무작위</b>로 나와요. 난이도는 <b>상</b>이에요. 한 달에 3번까지 볼 수 있고, <b>가장 좋은 점수가 자동으로 평가에 반영</b>돼요.</p>'+'<p class="sub" style="margin-top:6px"><em class="sc-hot" style="margin:0 4px 0 0">🆕 최근 이슈</em>영상기기 비밀번호 응대 상황이 3번 중 <b>1번은 꼭</b> 나와요.</p>'+
       '<div class="ev-left'+(left>0?'':' no')+'">'+(left>0?'남은 기회 <b>'+left+'번</b> · 다음은 '+(T.length+1)+'회차':'이번 달 평가 3번을 모두 봤어요 — 「내 평가 현황」에서 제출하세요')+'</div></div>';
     if(left>0) h+='<button type="button" class="btn block ev-pk ev-big" id="evst">▶ 평가 시작</button>';
     box.innerHTML=h; evTabs(box);
