@@ -96,7 +96,7 @@ ul.l{margin:6px 0 0;padding-left:20px}ul.l li{margin:5px 0}
 .ev-c{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:10px 4px;text-align:center;font-family:inherit;cursor:pointer;color:var(--navy)}.ev-c span{display:block;font-size:11.5px;color:var(--mute)}.ev-c b{display:block;font-size:22px;margin:2px 0}.ev-c b small{font-size:12px}.ev-c>small{font-size:11.5px;color:#475569}
 .ev-c[aria-pressed="true"]{border-color:var(--navy);background:#eef2ff;box-shadow:0 0 0 2px rgba(16,32,80,.15)}.ev-c.none{background:#f8fafc;color:#94a3b8;cursor:default}.ev-c.none b{color:#cbd5e1}
 .ev-err{background:#fef2f2!important;border-color:#fecaca!important;color:#991b1b!important}.ev-done{border-color:#c7d2fe;background:#f5f7ff}
-.ev-tabs{grid-template-columns:1fr 1fr!important}.ev-left{background:#ecfeff;border:1px solid #a5f3fc;color:#155e75;border-radius:12px;padding:9px 12px;font-size:13.5px;margin-top:8px}.ev-left.no{background:#f8fafc;border-color:var(--line);color:#64748b}
+.ev-tabs{grid-template-columns:1fr 1fr!important}.ev-tabs.t3{grid-template-columns:repeat(3,1fr)!important}.ev-left{background:#ecfeff;border:1px solid #a5f3fc;color:#155e75;border-radius:12px;padding:9px 12px;font-size:13.5px;margin-top:8px}.ev-left.no{background:#f8fafc;border-color:var(--line);color:#64748b}
 .ev-big{font-size:17px;padding:16px;margin-top:10px}.ev-best{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:12px;padding:10px 12px;font-size:14px;margin:8px 0}.ev-best small{color:#a16207}
 .k3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
 .k3 div{background:#f3f6fd;border-radius:12px;padding:10px 6px;text-align:center}
@@ -317,7 +317,6 @@ var EV_SEL = 0, EV_DATA = null, EV_TAB = "go", EV_SUB = "";
 function evView(){
   var box=$("#evbox"); if(!box) return;
   if(GUEST){ box.innerHTML='<div class="card"><h2>📝 평가</h2><p class="sub">이름을 고른 직원만 평가를 볼 수 있어요.</p></div>'; return; }
-  if(MGR.indexOf(ME)>=0){ evMgr(); return; }
   if(!RP_API){ box.innerHTML='<div class="card"><h2>📝 평가</h2><p class="sub">AI 서버가 연결되면 쓸 수 있어요.</p></div>'; return; }
   box.innerHTML='<div class="card"><p class="sub">불러오는 중…</p></div>';
   fetch(RP_API+"?action=myev&name="+encodeURIComponent(ME)+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){
@@ -328,7 +327,8 @@ function evScTitle(id){ var c=SCEN.filter(function(x){return x.id===id;})[0]; re
 function evDraw(j){
   var box=$("#evbox"), T=j.tries||[], sub=j.sub, left=j.max-T.length, done=T.filter(function(x){return x.done;});
   var best=done.slice().sort(function(a,b){return b.total-a.total;})[0];
-  var h='<div class="subs ev-tabs">'+[["go","▶ 평가 시작"],["st","📋 내 평가 현황"]].map(function(x){ return '<button type="button" data-evt="'+x[0]+'" aria-pressed="'+(EV_TAB===x[0])+'">'+x[1]+'</button>'; }).join('')+'</div>';
+  if(EV_TAB==="mgr"&&MGR.indexOf(ME)>=0){ evMgr(); return; }
+  var h=evTabH();
   if(EV_TAB==="go"){
     h+='<div class="card"><h2>▶ '+(+j.ym.slice(5))+'월 평가 시작 <em class="ev-svc">서비스 전용</em></h2>'+
       '<p class="sub">「평가 시작」을 누르면 서비스 상황 하나가 <b>무작위</b>로 나와요. 난이도는 <b>상</b>이에요. 한 달에 3번까지 볼 수 있고, <b>가장 좋은 점수가 자동으로 평가에 반영</b>돼요.</p>'+
@@ -349,6 +349,8 @@ function evDraw(j){
   h+='<div id="evmsg"></div></div>';
   box.innerHTML=h; evTabs(box);
 }
+function evTabH(){ var L=[["go","▶ 평가 시작"],["st","📋 내 현황"]]; if(MGR.indexOf(ME)>=0) L.push(["mgr","👥 직원 현황"]);
+  return '<div class="subs ev-tabs'+(L.length>2?' t3':'')+'">'+L.map(function(x){ return '<button type="button" data-evt="'+x[0]+'" aria-pressed="'+(EV_TAB===x[0])+'">'+x[1]+'</button>'; }).join('')+'</div>'; }
 function evTabs(box){ box.querySelectorAll("[data-evt]").forEach(function(b){ b.onclick=function(){ EV_TAB=b.dataset.evt; var y=window.scrollY; document.body.style.minHeight=document.body.scrollHeight+"px"; evDraw(EV_DATA); window.scrollTo(0,y); }; }); }
 function evBegin(btn){
   var T=(EV_DATA&&EV_DATA.tries)||[], no=T.length+1;
@@ -362,7 +364,7 @@ function evBegin(btn){
 }
 function evMgr(){
   var box=$("#evbox"), pin=""; try{ pin=sessionStorage.getItem("rp_pin")||""; }catch(e){}
-  box.innerHTML='<div class="card"><h2>📝 평가 제출 현황 <em class="ev-svc">서비스 전용</em></h2><p class="sub">직원별로 3번 중 가장 좋은 점수(자동 반영)와 등급을 모아 봐요.</p><button type="button" class="btn red block" id="evl">제출 현황 보기</button></div>';
+  box.innerHTML=evTabH()+'<div class="card"><h2>📝 평가 제출 현황 <em class="ev-svc">서비스 전용</em></h2><p class="sub">직원별로 3번 중 가장 좋은 점수(자동 반영)와 등급을 모아 봐요.</p><button type="button" class="btn red block" id="evl">제출 현황 보기</button></div>';
   var load=function(){
     var p=pin; if(!p){ p=prompt("파트장 현황 비밀번호를 입력하세요"); if(!p) return; }
     box.querySelector("#evl").textContent="불러오는 중…";
@@ -370,14 +372,14 @@ function evMgr(){
       if(!j||!j.ok){ try{sessionStorage.removeItem("rp_pin");}catch(e){} pin=""; throw new Error(j&&j.err==="pin"?"비밀번호가 맞지 않아요":"불러오지 못했어요"); }
       try{ sessionStorage.setItem("rp_pin",p); }catch(e){}
       var R=j.rows||[], cnt={S:0,A:0,B:0,C:0}; R.forEach(function(x){ if(cnt[x.grade]!=null) cnt[x.grade]++; });
-      box.innerHTML='<div class="card"><h2>📝 '+(+j.ym.slice(5))+'월 평가 제출 현황 <small style="font-weight:400;color:var(--mute)">'+R.length+'명 제출</small></h2>'+
+      box.innerHTML=evTabH()+'<div class="card"><h2>📝 '+(+j.ym.slice(5))+'월 평가 제출 현황 <small style="font-weight:400;color:var(--mute)">'+R.length+'명 제출</small></h2>'+
         '<div class="ev-st" style="grid-template-columns:repeat(4,1fr)">'+["S","A","B","C"].map(function(g){ return '<div><span>'+g+'</span><b>'+cnt[g]+'</b></div>'; }).join("")+'</div>'+
         (R.length?R.map(function(x){ return '<div class="ev-m"><b>'+esc(x.name)+'</b> · '+esc(x.total)+'점 · 등급 '+esc(x.grade)+' <small>'+esc(x.no)+'회차 · 최고 점수 자동 반영'+(x.text?'<br>'+esc(x.text):'')+'</small></div>'; }).join(""):'<p class="sub">아직 제출한 직원이 없어요.</p>')+
         '<button type="button" class="btn ghost block" id="evr">새로고침</button></div>';
-      $("#evr").onclick=load;
+      $("#evr").onclick=load; evTabs(box);
     }).catch(function(e){ var b=box.querySelector("#evl"); if(b) b.textContent="제출 현황 보기"; alert(e.message||"불러오지 못했어요"); });
   };
-  box.querySelector("#evl").onclick=load;
+  box.querySelector("#evl").onclick=load; evTabs(box);
   if(pin) load();
 }
 
