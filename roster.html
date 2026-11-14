@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" data-theme="light" style="color-scheme:light"><head><meta name="color-scheme" content="only light"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="roster-ver" content="2026-11-14a">
+<html lang="ko" data-theme="light" style="color-scheme:light"><head><meta name="color-scheme" content="only light"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="roster-ver" content="2026-11-14b">
 <meta charset="utf-8">
 <title>지사 근무편성 대시보드</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -361,7 +361,8 @@ var ENGINE = (function () {
     var tB = M.tgt[d];
     if (b > tB) { c += HARD * (b - tB); if (out) out.push({ p: -1, rule: '야간 ' + b + '명 (기준 ' + tB + '대)', lv: 'hard', d: d }); }
     else if (b < tB) {
-      c += HARD * (tB - b); if (out) out.push({ p: -1, rule: '야간 ' + b + '명 (기준 ' + tB + '대)', lv: 'hard', d: d });
+      if (r.wkFixed === false && !M.hol[d] && tB === r.wkNight && b === tB - 1) c += 400;   // 지사 설정: 인원 부족 시 평일 1대까지 줄이기 허용 (가능한 적게)
+      else { c += HARD * (tB - b); if (out) out.push({ p: -1, rule: '야간 ' + b + '명 (기준 ' + tB + '대)', lv: 'hard', d: d }); }
     }
     var need = 0; req.forEach(function (q) { if (q) need++; });
     if (need > Math.min(b, V)) { c += HARD * (need - Math.min(b, V)); if (out) out.push({ p: -1, rule: '야간 필수 차량 부족', lv: 'hard', d: d }); }
@@ -505,7 +506,7 @@ var AFTER_B={B:1,D:1,I:1,J:1}; // 불변: 야간(B) 다음날은 B·D·I·J만
 function badAfterB(prev,c){return prev==='B'&&!!c&&c!=='?'&&!AFTER_B[c];}
 var RANKS=[['top','프로1(차량선임)'],['mid','프로2'],['last','프로3']];
 var DOW='월화수목금토일';
-var DEF_RULES={weekMax:64,qWeekAvg:52,aMax:3,bMax:3,dMax:2,wkNight:null,holNight:null,allowShort:true,dayAmin:null,dayAmax:null,rest12w:15,rest15w:150,seconds:25};
+var DEF_RULES={weekMax:64,qWeekAvg:52,aMax:3,bMax:3,dMax:2,wkNight:null,holNight:null,allowShort:true,wkFixed:true,dayAmin:null,dayAmax:null,rest12w:15,rest15w:150,seconds:25};
 var BRANCH_LIST=[['seongbuk-direct','성북지사(직할)'],['songpa','송파지사'],['bukseoul','북서울지사'],['dongseoul','동서울지사'],['seongbuk-ssft','성북지사(SSFT)'],['seouldongbu','서울동부지사'],['seoseoul','서서울지사'],['gangdong','강동지사'],['jeju','제주지사'],['gangseo','강서지사'],['seocho','서초지사'],['namyangju','남양주지사'],['yeongdeungpo','영등포지사'],['gangnam-gwangyeok','강남광역지사'],['guro','구로지사'],['gangbuk-jungang','강북광역지사(중앙)'],['seogang','서강지사'],['gangbuk-hannam','강북광역지사(한남)']];
 var PRESET_BUKSEOUL={"name": "북서울지사", "vehicles": [{"no": "026", "area": "장위·돌곶이·월곡·월계·번1·2", "dropOk": false}, {"no": "027", "area": "강북구", "dropOk": false}, {"no": "028", "area": "상계·노원", "dropOk": true}, {"no": "127", "area": "도봉구", "dropOk": true}, {"no": "160", "area": "공릉·태릉·중계본동", "dropOk": true}], "people": [{"name": "용승우", "veh": "026", "sabun": "", "rank": "top", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "고혁진", "veh": "026", "sabun": "", "rank": "mid", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "김유건", "veh": "026", "sabun": "", "rank": "mid", "newbie": true, "junior": true, "keep": ["160", "028"], "fixedPattern": null, "shadow": ""}, {"name": "주상덕", "veh": "027", "sabun": "", "rank": "top", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "유영민", "veh": "027", "sabun": "", "rank": "mid", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "김민석", "veh": "027", "sabun": "", "rank": "mid", "newbie": true, "junior": false, "keep": ["026", "127"], "fixedPattern": null, "shadow": ""}, {"name": "김태건", "veh": "028", "sabun": "", "rank": "top", "newbie": false, "junior": false, "keep": [], "fixedPattern": ["B", "B", "B", "D", "D", "A", "A"], "shadow": ""}, {"name": "김지원", "veh": "028", "sabun": "", "rank": "mid", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "양심영", "veh": "028", "sabun": "", "rank": "last", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "박수안", "veh": "127", "sabun": "", "rank": "top", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": "", "outFrom": "202612"}, {"name": "권재원", "veh": "127", "sabun": "", "rank": "mid", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "김민수", "veh": "127", "sabun": "", "rank": "last", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "김동현", "veh": "160", "sabun": "", "rank": "top", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "이명섭", "veh": "160", "sabun": "", "rank": "mid", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "남현준", "veh": "160", "sabun": "", "rank": "mid", "newbie": true, "junior": false, "keep": ["026", "028"], "fixedPattern": null, "shadow": ""}], "leaders": [{"name": "최문혁", "sabun": ""}, {"name": "이재식", "sabun": ""}], "leaderAFirst": "이재식", "rules": {"weekMax": 64, "aMax": 3, "bMax": 3, "dMax": 2, "wkNight": 5, "holNight": 4, "allowShort": true, "dayAmin": 5, "dayAmax": 6, "rest12w": 15, "rest15w": 150, "seconds": 30}, "memo": "김태건: 육아휴직 대신 고정근무로 협의 — 월·화·수 야간, 목·금 휴무, 토·일 주간 (휴가·요청일만 요청 우선)\n야간 미운영은 28·127·160호 중에서만 돌아가며 정함. 26·27호는 빼지 않음 (주택 많고 거리 멂)\n신입(1년 미만) 남현준160·김민석27·김유건26은 본인 차량만. 김유건은 2026-12부터 단독, 6개월 미만이라 근무 강도 배려\n신입 야간 시 유지 차량: 남현준→26·28호 / 김민석→26·127호 / 김유건→160·28호\n본인 차량 근무 우선순위: 신입 > 프로1(차량선임) > 프로2 > 프로3. 겹치면 프로3부터 다른 차량 지원\n휴무 전날 주간은 요청이 있을 때만 / 동승(OJT) 신입은 선임과 같은 근무, 인원 집계 제외\n야간·주간 4일 연속이 꼭 필요하면 확정 전에 파트장에게 먼저 물어봄"};
 function vColor(br,no){var i=br.vehicles.findIndex(function(v){return v.no===no;});return i<0?'var(--sub)':'var(--v'+(i%6)+')';}
@@ -718,7 +719,7 @@ function verify(br,month,res){
   for(var d=0;d<N;d++){var a=0,b=0;fp.forEach(function(p){var c=res.sched[p.name][d];if(c==='A')a++;if(c==='B')b++;});
     var tB=tgtOfDay(month,r,d);var off=(res.nightOff&&res.nightOff[d]?res.nightOff[d].split(' ').filter(Boolean):[]);
     var running=br.vehicles.length-off.length;
-    if(running===tB)full++;else iss.push({lv:'hard',name:'(전체)',d:d+1,t:'야간 '+running+'대 운영 (기준 '+tB+'대)'});
+    if(running===tB)full++;else if(r.wkFixed===false&&!hol[d]&&tB===r.wkNight&&running===tB-1)iss.push({lv:'warn',name:'(전체)',d:d+1,t:'평일 야간 '+running+'대 (인원 부족으로 1대 줄임 · 기준 '+tB+'대)'});else iss.push({lv:'hard',name:'(전체)',d:d+1,t:'야간 '+running+'대 운영 (기준 '+tB+'대)'});
     if(a<r.dayAmin)iss.push({lv:'hard',name:'(전체)',d:d+1,t:'주간 '+a+'명 (최소 '+r.dayAmin+')'});
     br.vehicles.forEach(function(v){if(!fp.some(function(p){return res.sched[p.name][d]==='A'&&res.va[p.name][d]===v.no;}))iss.push({lv:'hard',name:'(전체)',d:d+1,t:v.no+'호 주간 근무자 없음'});
       if(!v.dropOk&&off.indexOf(v.no)>=0)iss.push({lv:'hard',name:'(전체)',d:d+1,t:v.no+'호 야간 미운영 (빼면 안 되는 차량)'});});
@@ -1063,9 +1064,10 @@ function viewRules(mn){
   var ops=el('div',{class:'card'},[el('h2',{text:'운영 대수'}),el('p',{class:'lead',text:'차량 '+br.vehicles.length+'대 기준이에요.'}),
     num('wkNight','평일 야간 운영 대수','기본은 전 차량',1,20),num('holNight','주말·공휴일 야간 운영 대수','',1,20),
     num('dayAmin','하루 주간 최소 인원','차량마다 최소 1명',1,30),num('dayAmax','하루 주간 최대 인원','',1,30),
-    el('div',{class:'rule'},[el('div',{},[el('div',{class:'k',text:'평일 야간은 항상 지정 대수 (고정)'}),el('div',{class:'d',text:'인원이 부족해도 자동으로 1대 줄이지 않아요. 4대로 할 날은 “자동 편성” 3단계 달력에서 파트장이 직접 지정해요'})])])]);
-  var soft=el('div',{class:'card'},[el('h2',{text:'권장 기준'}),el('p',{class:'lead',text:'기본 패턴은 주주야야휴휴(AABBDD)이고, 주·휴·야(A-D-B)도 정식 휴무로 쳐요. 아래 숫자가 클수록 더 강하게 지켜요.'}),
-    num('rest12w','정식 휴무 12일 안에 1번 (가중치)','휴휴 또는 주·휴·야',0,500),num('rest15w','정식 휴무 15일 안에 1번 (가중치)','거의 필수',0,2000),
+    el('div',{class:'rule'},[el('div',{},[el('div',{class:'k',text:'평일 야간은 항상 지정 대수로 운영'}),el('div',{class:'d',text:r.wkFixed!==false?'켜짐 — 인원이 부족해도 자동으로 줄이지 않아요. 줄일 날은 3단계 달력에서 직접 지정해요. (북서울지사 기준)':'꺼짐 — 인원이 부족하면 평일 야간을 1대까지 줄일 수 있어요(가능한 적게). 줄인 날은 점검에 주의로 표시돼요.'})]),
+      el('input',{type:'checkbox',id:'r_wkFixed',checked:r.wkFixed!==false,style:'width:22px;height:22px',onchange:function(e){br.rules.wkFixed=e.target.checked;S.dirtyBranch=true;render();}})])]);
+  var soft=el('div',{class:'card'},[el('h2',{text:'권장 기준'}),el('p',{class:'lead',text:'기본 패턴은 주주야야휴휴(AABBDD)이고, 휴휴 또는 주·휴·야(A-D-B)를 “정식 휴무”로 쳐요. 아래 숫자는 어겼을 때 받는 벌점이에요. 자동 편성은 벌점 합계가 가장 작은 근무표를 고르니, 숫자가 클수록 다른 기준보다 먼저 지켜요. 참고로 근무일 수가 고르지 않으면 1일당 15점, 불변 원칙 위반은 10000점이라 이 값과 상관없이 항상 지켜요.'}),
+    num('rest12w','정식 휴무 12일 안에 1번 (벌점)','정식 휴무 없이 12일째로 넘어가면 그날부터 하루마다 이 점수. 15 = 되도록 지킴 · 0 = 안 따짐',0,500),num('rest15w','정식 휴무 15일 안에 1번 (벌점)','15일째부터 하루마다 이 점수 (12일 벌점에 더해짐). 150 = 거의 필수 — 다른 권장 기준보다 먼저 지켜요',0,2000),
     num('seconds','자동 편성 계산 시간(초)','길수록 결과가 좋아져요 · 권장 20~60초',5,180)]);
   var memoTa=el('textarea',{id:'brmemo',style:'min-height:150px;background:var(--panel)',placeholder:'예) 26·27호는 야간에서 빼지 않음',oninput:function(e){br.memo=e.target.value;S.dirtyBranch=true;renderCtx();}});memoTa.value=br.memo||'';
   var memo=el('div',{class:'card memo'},[el('h2',{text:br.name+' 고유 규칙'}),el('p',{class:'lead',text:'참고용 메모예요. 이 글 자체는 계산에 들어가지 않아요. 실제로 적용되는 건 아래 “편성에 실제로 적용되는 규칙”이에요. 새 약속이 생기면 1단계(차량·근무자)·2단계(숫자) 항목으로 넣어야 적용돼요.'}),memoTa]);
@@ -1376,7 +1378,7 @@ function colL(n){var s='';while(n>0){var m=(n-1)%26;s=String.fromCharCode(65+m)+
 
 // ================= 시작 =================
 // 항상 최신 버전으로: 내려받은 html(file://)은 웹 최신본으로 이동, 웹 버전은 새 버전이 올라오면 자동 새로고침
-var WEB_URL='https://ijaesig04-hash.github.io/report/roster.html',BUILD='2026-11-14a';
+var WEB_URL='https://ijaesig04-hash.github.io/report/roster.html',BUILD='2026-11-14b';
 function autoLatest(){try{
   var here=location.href.split(/[?#]/)[0];
   /* 내려받은 html(회사 PC 등): 인터넷이 되면 바로 웹 최신본으로 이동 */
