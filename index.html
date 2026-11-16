@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261116104618">
+<meta name="bsr-ver" content="20261117075437">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -4503,6 +4503,7 @@ function trendCard(kind, key){
 }
 
 /* ===== 🎉 칭찬 알림 — 내 고객 칭찬이 새로 들어오면 브리핑 맨 위에 ===== */
+function przSc(v){ v=+v; return v===10?'10점 만점':(isNaN(v)||!v?'칭찬':v+'점'); }
 function przSeen(){ try{ return JSON.parse(localStorage.getItem("bsr_prz_seen")||"[]"); }catch(e){ return []; } }
 function przKey(r){ return r[0]+'|'+r[2]+'|'+r[9]; }
 function przNew(who){
@@ -4515,7 +4516,7 @@ function przBanner(){
   var nm = myName(); if(!nm || CS_MGR.indexOf(nm)>=0) return '';
   var L = przNew(nm); if(!L.length) return '';
   return '<div class="prz"><div class="prz-h"><span class="prz-ic">🎉</span><b>'+esc2(nm)+'님, 고객 칭찬이 도착했어요!</b></div>'+
-    L.slice(0,3).map(function(r){ return '<div class="prz-i">'+(r[7]?'<p>“'+esc2(r[7])+'”</p>':'<p>⭐ 10점 만점 · 칭찬</p>')+'<span>'+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+esc2(r[9])+' · '+esc2(r[4])+'</span><button type="button" class="przc" data-przc="'+esc2(nm)+'" data-przt="'+esc2(r[7]||'')+'" data-przs="'+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+esc2(r[4])+' · 10점 만점">🖼️ 카드로 저장</button></div>'; }).join('')+
+    L.slice(0,3).map(function(r){ return '<div class="prz-i">'+(r[7]?'<p>“'+esc2(r[7])+'”</p>':'<p>⭐ '+przSc(r[5])+' · 칭찬</p>')+'<span>'+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+esc2(r[9])+' · '+esc2(r[4])+'</span><button type="button" class="przc" data-przc="'+esc2(nm)+'" data-przt="'+esc2(r[7]||'')+'" data-przs="'+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+esc2(r[4])+' · '+przSc(r[5])+'" data-przn="'+(r[5]==null?'':r[5])+'">🖼️ 카드로 저장</button></div>'; }).join('')+
     (L.length>3?'<div class="prz-m">외 '+(L.length-3)+'건 더</div>':'')+
     '<button type="button" class="prz-ok" data-przok="'+esc2(L.map(przKey).join('\n'))+'">고마워요 👍</button></div>';
 }
@@ -5651,7 +5652,7 @@ function raceCard(){
 }
 
 /* ===== 🖼️ 칭찬 카드 이미지 ===== */
-function przCard(name, text, sub){
+function przCard(name, text, sub, sc){
   var c=document.createElement("canvas"), W=1080, H=1350; c.width=W; c.height=H; var x=c.getContext("2d");
   var g=x.createLinearGradient(0,0,W,H); g.addColorStop(0,"#1e3a8a"); g.addColorStop(.55,"#4f46e5"); g.addColorStop(1,"#db2777"); x.fillStyle=g; x.fillRect(0,0,W,H);
   x.fillStyle="rgba(255,255,255,.08)"; x.beginPath(); x.arc(940,160,260,0,7); x.fill(); x.beginPath(); x.arc(120,1220,220,0,7); x.fill();
@@ -5661,20 +5662,20 @@ function przCard(name, text, sub){
   x.font="800 60px "+F; x.fillText("고객님의 칭찬이 도착했어요",80,370);
   x.fillStyle="rgba(255,255,255,.95)"; var bx=70, by=450, bw=W-140, bh=620; x.beginPath(); if(x.roundRect) x.roundRect(bx,by,bw,bh,48); else x.rect(bx,by,bw,bh); x.fill();
   x.fillStyle="#4f46e5"; x.font="900 140px Georgia,serif"; x.fillText("“",bx+40,by+150);
-  x.fillStyle="#1f2937"; x.font="700 58px "+F; var words=(text||"10점 만점, 칭찬해요!").split(""), line="", y=by+230, lh=84;
+  x.fillStyle="#1f2937"; x.font="700 58px "+F; var words=(text||(sc&&+sc!==10?sc+"점, 칭찬해요!":"10점 만점, 칭찬해요!")).split(""), line="", y=by+230, lh=84;
   for(var i=0;i<words.length;i++){ var t=line+words[i]; if(x.measureText(t).width>bw-120 && line){ x.fillText(line,bx+60,y); line=words[i]; y+=lh; if(y>by+bh-60) { line+="…"; break; } } else line=t; }
   if(line) x.fillText(line,bx+60,y);
   x.fillStyle="#fff"; x.font="600 40px "+F; x.fillText(sub||"",80,1160);
   x.fillStyle="#fde68a"; x.font="800 44px "+F; x.fillText("오늘도 고객의 안전을 지키는 에스원 ⭐",80,1260);
   return c;
 }
-function przSave(name, text, sub){
-  var c = przCard(name, text, sub);
+function przSave(name, text, sub, sc){
+  var c = przCard(name, text, sub, sc);
   c.toBlob(function(b){ var f=null; try{ f=new File([b],"칭찬카드_"+name+".png",{type:"image/png"}); }catch(e){}
     if(f && navigator.canShare && navigator.canShare({files:[f]})){ navigator.share({files:[f], text:name+"님 고객 칭찬 🎉"}).catch(function(){}); return; }
     var a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="칭찬카드_"+name+".png"; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(a.href); a.remove();},1000); nrToast("🖼️ 칭찬 카드를 저장했어요"); },"image/png");
 }
-document.addEventListener("click", function(e){ var b=e.target.closest("[data-przc]"); if(!b) return; e.stopPropagation(); przSave(b.dataset.przc, b.dataset.przt, b.dataset.przs); });
+document.addEventListener("click", function(e){ var b=e.target.closest("[data-przc]"); if(!b) return; e.stopPropagation(); przSave(b.dataset.przc, b.dataset.przt, b.dataset.przs, b.dataset.przn); });
 
 /* ===== 📋 주간 보고 문구 (파트장) ===== */
 function weeklyText(){
@@ -6345,7 +6346,7 @@ function csExtra(){
       : '<div class="krow">미응답 건이 없습니다 👍</div>')+'</div><p class="note">고객에게 응답 안내 문자를 한 번 더 드리면 응답률이 올라갑니다. 계약처는 일부 가려서 표시합니다.</p></div>';
   var hp = '<div class="sec"><h2>👏 칭찬 게시판 <span>'+(cmx?(+cmx.slice(5))+'월 · ':'')+'칭찬 '+pr.length+'건</span></h2><div class="card pz">'+
     '<div class="pz-top">'+top.map(function(n,i){return '<div class="pz-p r'+(i+1)+'">'+medal(i+1,30)+'<b>'+n+'</b><span class="num">'+cnt[n]+'건</span></div>'}).join('')+'</div>'+
-    words.map(function(r){return '<div class="pz-w"><p>“'+esc2(r[7])+'”</p><span>'+r[0]+' · '+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+r[4]+'</span><button type="button" class="przc sm" data-przc="'+esc2(r[0])+'" data-przt="'+esc2(r[7])+'" data-przs="'+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+esc2(r[4])+' · 10점 만점">🖼️ 카드</button></div>'}).join('')+'</div></div>';
+    words.map(function(r){return '<div class="pz-w"><p>“'+esc2(r[7])+'”</p><span>'+r[0]+' · '+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+r[4]+'</span><button type="button" class="przc sm" data-przc="'+esc2(r[0])+'" data-przt="'+esc2(r[7])+'" data-przs="'+(+r[3].slice(0,2))+'/'+(+r[3].slice(3))+' · '+esc2(r[4])+' · '+przSc(r[5])+'" data-przn="'+(r[5]==null?'':r[5])+'">🖼️ 카드</button></div>'}).join('')+'</div></div>';
   return h+hp;
 }
 
