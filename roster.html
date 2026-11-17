@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" data-theme="light" style="color-scheme:light"><head><meta name="color-scheme" content="only light"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="roster-ver" content="2026-11-17b">
+<html lang="ko" data-theme="light" style="color-scheme:light"><head><meta name="color-scheme" content="only light"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="roster-ver" content="2026-11-17c">
 <meta charset="utf-8">
 <title>지사 근무편성 대시보드</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -359,16 +359,17 @@ var ENGINE = (function () {
       }
     }
     var tB = M.ntgt[d];
+    if (b < r.nightMin) { c += HARD * 5 * (r.nightMin - b); if (out) out.push({ p: -1, rule: '야간 ' + b + '명 — 절대 최소 ' + r.nightMin + '대 미만', lv: 'hard', d: d }); }   // 고정값: 어떤 경우에도 위반 불가
     if (b > tB) { c += HARD * (b - tB); if (out) out.push({ p: -1, rule: '야간 ' + b + '명 (기준 ' + tB + '대)', lv: 'hard', d: d }); }
     else if (b < tB) {
-      if (r.wkFixed === false && !M.hol[d] && tB === r.wkNight && b === tB - 1) c += 400;   // 지사 설정: 인원 부족 시 평일 1대까지 줄이기 허용 (가능한 적게)
+      if (r.wkFixed === false && !M.hol[d] && tB === r.wkNight && b === tB - 1 && b >= r.nightMin) c += 400;   // 지사 설정: 인원 부족 시 평일 1대까지 줄이기 허용 (가능한 적게)
       else { c += HARD * (tB - b); if (out) out.push({ p: -1, rule: '야간 ' + b + '명 (기준 ' + tB + '대)', lv: 'hard', d: d }); }
     }
     var need = 0; req.forEach(function (q) { if (q) need++; });
     if (need > Math.min(b, V)) { c += HARD * (need - Math.min(b, V)); if (out) out.push({ p: -1, rule: '야간 필수 차량 부족', lv: 'hard', d: d }); }
     for (var k in nbV) if (nbV[k] > 1) c += HARD;
     for (k in naV) if (naV[k] > 2) c += HARD;
-    if (a < r.dayAmin) { c += HARD * (r.dayAmin - a); if (out) out.push({ p: -1, rule: '주간 ' + a + '명 (최소 ' + r.dayAmin + ')', lv: 'hard', d: d }); }
+    if (a < r.dayAmin) { c += HARD * 5 * (r.dayAmin - a); if (out) out.push({ p: -1, rule: '주간 ' + a + '명 (최소 ' + r.dayAmin + ')', lv: 'hard', d: d }); }
     if (a > r.dayAmax) { c += HARD * (a - r.dayAmax); if (out) out.push({ p: -1, rule: '주간 ' + a + '명 (최대 ' + r.dayAmax + ')', lv: 'hard', d: d }); }
     if (a > r.dayAmin) c += 4 * (a - r.dayAmin);
     // 다른 차량 지원 줄이기: 본인 차량 주간 공백 수, 야간 본인 차량 겹침 수
@@ -507,7 +508,7 @@ var AFTER_B={B:1,D:1,I:1,J:1}; // 불변: 야간(B) 다음날은 B·D·I·J만
 function badAfterB(prev,c){return prev==='B'&&!!c&&c!=='?'&&!AFTER_B[c];}
 var RANKS=[['top','프로1(차량선임)'],['mid','프로2'],['last','프로3']];
 var DOW='월화수목금토일';
-var DEF_RULES={weekMax:64,qWeekAvg:52,aMax:3,bMax:3,dMax:2,wkNight:null,holNight:null,allowShort:true,wkFixed:true,noReqRest:true,qEndRelax:true,qEndSlack:24,dayAmin:null,dayAmax:null,rest12w:15,rest15w:150,seconds:25};
+var DEF_RULES={weekMax:64,qWeekAvg:52,aMax:3,bMax:3,dMax:2,wkNight:null,holNight:null,allowShort:true,wkFixed:true,noReqRest:true,qEndRelax:true,qEndSlack:24,dayAmin:null,dayAmax:null,nightMin:4,rest12w:15,rest15w:150,seconds:25};
 var BRANCH_LIST=[['seongbuk-direct','성북지사(직할)'],['songpa','송파지사'],['bukseoul','북서울지사'],['dongseoul','동서울지사'],['seongbuk-ssft','성북지사(SSFT)'],['seouldongbu','서울동부지사'],['seoseoul','서서울지사'],['gangdong','강동지사'],['jeju','제주지사'],['gangseo','강서지사'],['seocho','서초지사'],['namyangju','남양주지사'],['yeongdeungpo','영등포지사'],['gangnam-gwangyeok','강남광역지사'],['guro','구로지사'],['gangbuk-jungang','강북광역지사(중앙)'],['seogang','서강지사'],['gangbuk-hannam','강북광역지사(한남)']];
 var PRESET_BUKSEOUL={"name": "북서울지사", "vehicles": [{"no": "026", "area": "장위·돌곶이·월곡·월계·번1·2", "dropOk": false}, {"no": "027", "area": "강북구", "dropOk": false}, {"no": "028", "area": "상계·노원", "dropOk": true}, {"no": "127", "area": "도봉구", "dropOk": true}, {"no": "160", "area": "공릉·태릉·중계본동", "dropOk": true}], "people": [{"name": "용승우", "veh": "026", "sabun": "", "rank": "top", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "고혁진", "veh": "026", "sabun": "", "rank": "mid", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "김유건", "veh": "026", "sabun": "", "rank": "mid", "newbie": true, "junior": true, "keep": ["160", "028"], "fixedPattern": null, "shadow": ""}, {"name": "주상덕", "veh": "027", "sabun": "", "rank": "top", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "유영민", "veh": "027", "sabun": "", "rank": "mid", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "김민석", "veh": "027", "sabun": "", "rank": "mid", "newbie": true, "junior": false, "keep": ["026", "127"], "fixedPattern": null, "shadow": ""}, {"name": "김태건", "veh": "028", "sabun": "", "rank": "top", "newbie": false, "junior": false, "keep": [], "fixedPattern": ["B", "B", "B", "D", "D", "A", "A"], "shadow": ""}, {"name": "김지원", "veh": "028", "sabun": "", "rank": "mid", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "양심영", "veh": "028", "sabun": "", "rank": "last", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "박수안", "veh": "127", "sabun": "", "rank": "top", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": "", "outFrom": "202612"}, {"name": "권재원", "veh": "127", "sabun": "", "rank": "mid", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "김민수", "veh": "127", "sabun": "", "rank": "last", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "김동현", "veh": "160", "sabun": "", "rank": "top", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "이명섭", "veh": "160", "sabun": "", "rank": "mid", "newbie": false, "junior": false, "keep": [], "fixedPattern": null, "shadow": ""}, {"name": "남현준", "veh": "160", "sabun": "", "rank": "mid", "newbie": true, "junior": false, "keep": ["026", "028"], "fixedPattern": null, "shadow": ""}], "leaders": [{"name": "최문혁", "sabun": ""}, {"name": "이재식", "sabun": ""}], "leaderAFirst": "이재식", "rules": {"weekMax": 64, "aMax": 3, "bMax": 3, "dMax": 2, "wkNight": 5, "holNight": 4, "allowShort": true, "dayAmin": 5, "dayAmax": 6, "rest12w": 15, "rest15w": 150, "seconds": 30}, "memo": "김태건: 육아휴직 대신 고정근무로 협의 — 월·화·수 야간, 목·금 휴무, 토·일 주간 (휴가·요청일만 요청 우선)\n야간 미운영은 28·127·160호 중에서만 돌아가며 정함. 26·27호는 빼지 않음 (주택 많고 거리 멂)\n신입(1년 미만) 남현준160·김민석27·김유건26은 본인 차량만. 김유건은 2026-12부터 단독, 6개월 미만이라 근무 강도 배려\n신입 야간 시 유지 차량: 남현준→26·28호 / 김민석→26·127호 / 김유건→160·28호\n본인 차량 근무 우선순위: 신입 > 프로1(차량선임) > 프로2 > 프로3. 겹치면 프로3부터 다른 차량 지원\n휴무 전날 주간은 요청이 있을 때만 / 동승(OJT) 신입은 선임과 같은 근무, 인원 집계 제외\n야간·주간 4일 연속이 꼭 필요하면 확정 전에 파트장에게 먼저 물어봄"};
 function vColor(br,no){var i=br.vehicles.findIndex(function(v){return v.no===no;});return i<0?'var(--sub)':'var(--v'+(i%6)+')';}
@@ -528,7 +529,7 @@ function dowIdx(y,m,d){return (new Date(y,m-1,d).getDay()+6)%7;}
 function ymKey(y,m){return y+String(m).padStart(2,'0');}
 function prevYM(y,m){return m===1?[y-1,12]:[y,m-1];}
 function clone(o){return JSON.parse(JSON.stringify(o));}
-function rulesOf(br){var r=Object.assign({},DEF_RULES,br.rules||{});var V=br.vehicles.length;if(r.wkNight==null)r.wkNight=V;if(r.holNight==null)r.holNight=Math.max(1,V-1);if(r.dayAmin==null)r.dayAmin=V;if(r.dayAmax==null)r.dayAmax=V+1;return r;}
+function rulesOf(br){var r=Object.assign({},DEF_RULES,br.rules||{});var V=br.vehicles.length;if(r.wkNight==null)r.wkNight=V;if(r.holNight==null)r.holNight=Math.max(1,V-1);if(r.dayAmin==null)r.dayAmin=V;if(r.dayAmax==null)r.dayAmax=V+1;r.nightMin=Math.max(1,Math.min(+r.nightMin||1,r.wkNight,r.holNight));return r;}
 function quarterInfo(y,m,r){var q=Math.floor((m-1)/3),m0=q*3+1,days=0,k;for(k=0;k<3;k++)days+=dim(y,m0+k);var avg=(r&&r.qWeekAvg)||52;
   var before=[];for(k=m0;k<m;k++)before.push(ymKey(y,k));return {q:q+1,m0:m0,days:days,cap:Math.round(days/7*avg*10)/10,before:before,first:m===m0};}
 function r1(x){return Math.round(x*10)/10;}
@@ -727,8 +728,9 @@ function verify(br,month,res){
   for(var d=0;d<N;d++){var a=0,b=0;fp.forEach(function(p){var c=res.sched[p.name][d];if(c==='A')a++;if(c==='B')b++;});
     var tB=tgtOfDay(month,r,d);var off=(res.nightOff&&res.nightOff[d]?res.nightOff[d].split(' ').filter(Boolean):[]);
     var running=br.vehicles.length-off.length;
-    if(running===tB)full++;else if(r.wkFixed===false&&!hol[d]&&tB===r.wkNight&&running===tB-1)iss.push({lv:'warn',name:'(전체)',d:d+1,t:'평일 야간 '+running+'대 (인원 부족으로 1대 줄임 · 기준 '+tB+'대)'});else iss.push({lv:'hard',name:'(전체)',d:d+1,t:'야간 '+running+'대 운영 (기준 '+tB+'대)'});
-    if(a<r.dayAmin)iss.push({lv:'hard',name:'(전체)',d:d+1,t:'주간 '+a+'명 (최소 '+r.dayAmin+')'});
+    if(running<r.nightMin)iss.push({lv:'hard',abs:1,name:'(전체)',d:d+1,t:'야간 '+running+'대 — 절대 최소 '+r.nightMin+'대 미만 (고정값 위반)'});
+    if(running===tB)full++;else if(r.wkFixed===false&&!hol[d]&&tB===r.wkNight&&running===tB-1&&running>=r.nightMin)iss.push({lv:'warn',name:'(전체)',d:d+1,t:'평일 야간 '+running+'대 (인원 부족으로 1대 줄임 · 기준 '+tB+'대)'});else iss.push({lv:'hard',name:'(전체)',d:d+1,t:'야간 '+running+'대 운영 (기준 '+tB+'대)'});
+    if(a<r.dayAmin)iss.push({lv:'hard',abs:1,name:'(전체)',d:d+1,t:'주간 '+a+'명 — 절대 최소 '+r.dayAmin+'명 미만 (고정값 위반)'});
     br.vehicles.forEach(function(v){if(!fp.some(function(p){return res.sched[p.name][d]==='A'&&res.va[p.name][d]===v.no;}))iss.push({lv:'hard',name:'(전체)',d:d+1,t:v.no+'호 주간 근무자 없음'});
       if(!v.dropOk&&off.indexOf(v.no)>=0)iss.push({lv:'hard',name:'(전체)',d:d+1,t:v.no+'호 야간 미운영 (빼면 안 되는 차량)'});});
     fp.forEach(function(p){var c=res.sched[p.name][d],v=res.va[p.name][d];
@@ -742,7 +744,7 @@ function verify(br,month,res){
     qlMin:(function(){var a=ppl.filter(function(p){return p.ql!=null;}).map(function(p){return p.ql;});return a.length?Math.min.apply(null,a):null;})()};
 }
 // 날짜별 야간 목표 대수: 휴일=주말·공휴일 대수, 파트장이 4대로 지정한 평일=평일 대수−1, 그 외=평일 대수 (1대 줄이기는 자동으로 하지 않음)
-function tgtOfDay(M,r,d){var day=d+1;if((M.holidays||[]).indexOf(day)>=0)return r.holNight;if((M.fourNight||[]).indexOf(day)>=0)return Math.max(1,r.wkNight-1);return r.wkNight;}
+function tgtOfDay(M,r,d){var day=d+1;if((M.holidays||[]).indexOf(day)>=0)return r.holNight;if((M.fourNight||[]).indexOf(day)>=0)return Math.max(r.nightMin||1,r.wkNight-1);return r.wkNight;}
 function holArr(month){var N=dim(month.y,month.m),a=[];for(var d=1;d<=N;d++)a.push(month.holidays.indexOf(d)>=0);return a;}
 
 // ================= DB =================
@@ -1087,7 +1089,7 @@ function viewRules(mn){
     num('dMax','휴무(D) 최대 연속일','그 다음 날부터는 연차(I)로 바뀌어요',1,4)]);
   var ops=el('div',{class:'card'},[el('h2',{text:'운영 대수'}),el('p',{class:'lead',text:'차량 '+br.vehicles.length+'대 기준이에요.'}),
     num('wkNight','평일 야간 운영 대수','기본은 전 차량',1,20),num('holNight','주말·공휴일 야간 운영 대수','',1,20),
-    num('dayAmin','하루 주간 최소 인원','차량마다 최소 1명',1,30),num('dayAmax','하루 주간 최대 인원','',1,30),
+    num('dayAmin','하루 주간 최소 인원 (절대 · 고정값)','이 인원 미만은 어떤 경우에도 편성·저장 안 됨 · 북서울 5명',1,30),num('nightMin','야간 최소 대수 (절대 · 고정값)','이 대수 미만은 어떤 경우에도 편성·저장 안 됨 · 북서울 4대 (평일·휴일 대수보다 클 수 없음)',1,20),num('dayAmax','하루 주간 최대 인원','',1,30),
     el('div',{class:'rule'},[el('div',{},[el('div',{class:'k',text:'평일 야간은 항상 지정 대수로 운영'}),el('div',{class:'d',text:r.wkFixed!==false?'켜짐 — 인원이 부족해도 자동으로 줄이지 않아요. 줄일 날은 3단계 달력에서 직접 지정해요. (북서울지사 기준)':'꺼짐 — 인원이 부족하면 평일 야간을 1대까지 줄일 수 있어요(가능한 적게). 줄인 날은 점검에 주의로 표시돼요.'})]),
       el('input',{type:'checkbox',id:'r_wkFixed',checked:r.wkFixed!==false,style:'width:22px;height:22px',onchange:function(e){br.rules.wkFixed=e.target.checked;S.dirtyBranch=true;render();}})])]);
   var soft=el('div',{class:'card'},[el('h2',{text:'권장 기준'}),el('p',{class:'lead',text:'기본 패턴은 주주야야휴휴(AABBDD)이고, 휴휴 또는 주·휴·야(A-D-B)를 “정식 휴무”로 쳐요. 아래 숫자는 어겼을 때 받는 벌점이에요. 자동 편성은 벌점 합계가 가장 작은 근무표를 고르니, 숫자가 클수록 다른 기준보다 먼저 지켜요. 참고로 근무일 수가 고르지 않으면 1일당 15점, 불변 원칙 위반은 10000점이라 이 값과 상관없이 항상 지켜요.'}),
@@ -1174,7 +1176,8 @@ function viewMonth(mn){
 }
 // 편성에 실제로 적용되는 지사 설정 (메모 글이 아니라 1·2단계 항목에서 자동으로 만듦)
 function appliedRules(br){var r=rulesOf(br),out=[],ap=activePeople(br),PAT='월화수목금토일';
-  out.push('평일 야간 '+r.wkNight+'대 · 주말·공휴일 야간 '+r.holNight+'대 (평일 4대는 3단계에서 지정한 날만) · 하루 주간 최소 '+r.dayAmin+'명');
+  out.push('평일 야간 '+r.wkNight+'대 · 주말·공휴일 야간 '+r.holNight+'대 (평일 4대는 3단계에서 지정한 날만)');
+  out.push('절대 고정값 — 하루 주간 최소 '+r.dayAmin+'명 · 야간 최소 '+r.nightMin+'대 (미만이면 편성·저장 불가)');
   var dz=br.vehicles.filter(function(v){return v.dropOk;}).map(function(v){return v.no;}),nd=br.vehicles.filter(function(v){return !v.dropOk;}).map(function(v){return v.no;});
   if(dz.length)out.push('야간 미운영은 '+dz.join('·')+'호 중에서만'+(nd.length?' · '+nd.join('·')+'호는 빼지 않음':''));
   ap.filter(function(p){return p.newbie;}).forEach(function(p){out.push('신입 '+p.name+' — '+p.veh+'호만 근무'+(p.keep&&p.keep.length?' · 야간 시 '+p.keep.join('·')+'호 유지':''));});
@@ -1330,7 +1333,7 @@ function viewResult(mn){
   var c4=el('div',{class:'card'},[el('h2',{text:'개인별 요약 · 근무시간'}),el('p',{class:'lead',text:'주별 시간은 전월 말과 이어진 월~일 기준이에요. 빨강 = 상한 초과, 주황 = 주 '+(WM-2)+'h 이상·분기 여유 8h 미만. 분기 누적 = 전월까지 누적 + 이번 달.'}),el('div',{class:'tbl-wrap'},[pt])]);
   var act=el('div',{class:'card'},[el('h2',{text:'저장·내보내기'}),el('p',{class:'lead',text:'확정본으로 저장하면 다음 달 편성 때 전월 근무표로 자동으로 불러와요.'}),
     el('div',{class:'row'},[el('button',{class:'btn',text:'초안 저장',onclick:function(){saveMonth('draft');}}),
-      M.status==='final'?el('button',{class:'btn pri',text:'변경 근무 저장 (최종 근무표)',disabled:!S.chgDirty,onclick:function(){if(hard.length&&!confirm('원칙 위반 '+hard.length+'건이 있어요. 실제로 바뀐 근무라면 그대로 저장할까요?'))return;saveMonth('final');}}):
+      M.status==='final'?el('button',{class:'btn pri',text:'변경 근무 저장 (최종 근무표)',disabled:!S.chgDirty,onclick:function(){var ab=hard.filter(function(x){return x.abs;});if(ab.length){alert('주간 최소 인원·야간 최소 대수는 고정값이라 저장할 수 없어요:\n'+ab.slice(0,5).map(function(x){return x.d+'일 '+x.t;}).join('\n'));return;}if(hard.length&&!confirm('원칙 위반 '+hard.length+'건이 있어요. 실제로 바뀐 근무라면 그대로 저장할까요?'))return;saveMonth('final');}}):
       el('button',{class:'btn pri',text:'확정본 저장',disabled:!!(hard.length||appr.length),onclick:function(){saveMonth('final');}}),
       el('button',{class:'btn',text:'회사 양식 엑셀 받기',onclick:exportExcel}),el('button',{class:'btn ghost',text:'다시 편성',onclick:function(){go(4);}})])]);
   var cl=null;if(M.status==='final'){var chs=(M.changes||[]).slice().reverse();
@@ -1418,7 +1421,7 @@ function colL(n){var s='';while(n>0){var m=(n-1)%26;s=String.fromCharCode(65+m)+
 
 // ================= 시작 =================
 // 항상 최신 버전으로: 내려받은 html(file://)은 웹 최신본으로 이동, 웹 버전은 새 버전이 올라오면 자동 새로고침
-var WEB_URL='https://ijaesig04-hash.github.io/report/roster.html',BUILD='2026-11-17b';
+var WEB_URL='https://ijaesig04-hash.github.io/report/roster.html',BUILD='2026-11-17c';
 function autoLatest(){try{
   var here=location.href.split(/[?#]/)[0];
   /* 내려받은 html(회사 PC 등): 인터넷이 되면 바로 웹 최신본으로 이동 */
