@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261117221334">
+<meta name="bsr-ver" content="20261118033145">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1452,6 +1452,38 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mxc-st{margin:8px 0 0;font-size:13px;color:#6b4e00}.mxc-n{margin:8px 0 0;font-size:11.5px;color:#64748b}
 .mxc-ok{margin-top:14px;width:100%;border:0;border-radius:14px;padding:13px;font:900 16px "Noto Sans KR",sans-serif;color:#3d2c00;background:linear-gradient(135deg,#ffe28a,#d4a017);cursor:pointer;box-shadow:0 6px 14px rgba(212,160,23,.35)}
 .sec.mh{background:linear-gradient(160deg,#fffaf0,#fff1cc);border:1.5px solid #f0c24b;border-radius:20px;padding:14px 14px 12px;box-shadow:0 6px 18px rgba(212,160,23,.16)}.sec.mh h2{color:#6b4e00}.sec.mh h2 span{color:#9a7414}.sec.mh .mh-c:not(.on):not(.now){background:#fffdf7;border-color:#f3e2b3}.sec.mh .mh-s{color:#6b4e00}.sec.mh .mh-d>summary{background:#fff!important;color:#8a6200!important;border:1px solid #f0d58a!important}
+.efs{display:flex;flex-direction:column;gap:10px;margin:0 0 14px}
+.efd{border-radius:18px;overflow:hidden;border:1.5px solid #e2e8f0;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.06)}
+.efd>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.efd>summary::-webkit-details-marker{display:none}
+.efd-i{flex:none;width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.efd-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.efd-t b{font-size:15.5px;font-weight:800;line-height:1.3}
+.efd-t small{font-size:11.5px;font-weight:600;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.efd-v{flex:none;font-size:12.5px;font-weight:600;white-space:nowrap;text-align:right}
+.efd-v b{font-weight:800}
+.efd-a{flex:none;width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin:0 4px 4px 2px;opacity:.55;transition:transform .2s}
+.efd[open]>summary .efd-a{transform:rotate(225deg);margin:4px 4px 0 2px}
+.efd-b{padding:2px 14px 14px}
+.efd-mvp{background:linear-gradient(160deg,#fffaf0,#fff1cc);border-color:#f0c24b}
+.efd-mvp>summary{color:#6b4e00}.efd-mvp .efd-i{background:#fff;border:1px solid #f0d58a}
+.efd-mvp .mh-c:not(.on):not(.now){background:#fffdf7;border-color:#f3e2b3}.efd-mvp .mh-s{color:#6b4e00}
+.efd-mvp .mh-d>summary{background:#fff!important;color:#8a6200!important;border:1px solid #f0d58a!important}
+.efd-rp{background:linear-gradient(160deg,#faf5ff,#ede9fe);border-color:#c4b5fd}
+.efd-rp>summary{color:#4c1d95}.efd-rp .efd-i{background:#fff;border:1px solid #ddd6fe}
+.efd-rp .mh-c:not(.on):not(.now){background:#fdfbff;border-color:#e9e3fb}
+.efd-rp .mh-c.on{background:linear-gradient(150deg,#2e1065,#6d28d9);border-color:#a78bfa}.efd-rp .mh-c.on small{color:#e9d5ff}
+.efd-rp .mh-c.now{border-color:#7c3aed;background:#f5f3ff}.efd-rp .mh-c.now .mh-e{color:#6d28d9}
+.rk-h{margin:12px 0 6px;font-size:13.5px;font-weight:800;color:#4c1d95}.rk-h small{font-weight:600;color:#7c6aa8;margin-left:4px}
+.rk-r{display:grid;grid-template-columns:30px minmax(0,1fr) auto 26px;align-items:center;gap:8px;background:#fff;border:1px solid #ece7fb;border-radius:12px;padding:8px 10px;margin-bottom:6px}
+.rk-r.top{border-color:#a78bfa;box-shadow:0 2px 10px rgba(124,58,237,.14)}
+.rk-m{font-size:17px;text-align:center;font-weight:800;color:#6d28d9}
+.rk-r b{font-size:14.5px;color:#1e1b4b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-r em{font-style:normal;font-size:14px;font-weight:800;color:#4c1d95;text-align:right}
+.rk-r i{font-style:normal;font-size:12px;font-weight:800;width:26px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;background:#94a3b8}
+.rk-r i.gS{background:#7c3aed}.rk-r i.gA{background:#2563eb}.rk-r i.gB{background:#0d9488}
+.rk-0{margin:4px 0 0;font-size:13px;color:#6b7280;background:#fff;border-radius:12px;padding:12px;text-align:center}
+.rk-n{margin:8px 0 0;font-size:11.5px;line-height:1.55;color:#6b5f8a;word-break:keep-all}
 .mh-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .mh-c{border-radius:12px;padding:8px 6px;text-align:center;background:#f1f5f9;border:1px solid #e2e8f0;display:flex;flex-direction:column;gap:1px;min-height:64px;justify-content:center}
 .mh-c small{font-size:11px;font-weight:700;color:#64748b}.mh-c.on{background:linear-gradient(150deg,#0b1736,#1d3a9a);border-color:#d4a017}.mh-c.on small{color:#ffd769}
@@ -3531,7 +3563,7 @@ function viewEvalTeam2(mode){
 function viewEval(){ return cheerWrite()+viewEval0()+cheerBoard(); }
 function viewEval0(){
   var es = state.es || "total";
-  var box = function(h){ return mxHist()+'<div class="evbox">'+halfBanner()+evalSwitch()+h+'</div>'; };
+  var box = function(h){ return '<div class="efs">'+mxHist()+rpKingFold()+'</div><div class="evbox">'+halfBanner()+evalSwitch()+h+'</div>'; };
   if(es==="branch") return box(viewEvalBranch());
   if(es==="team") return box(viewEvalTeam2("team"));
   if(es==="total") return box(viewEvalTeam2("total"));
@@ -3866,6 +3898,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-18a", date:"11/18", title:"🏆 월별 평가 — MVP·응대왕 접기", tabs:["eval"], items:["🏆 이달의 MVP · 👑 이달의 응대왕을 접힌 칸으로 정리 — 누르면 펼쳐져요","👑 응대왕 칸: 월별 응대왕 + 이번 달 AI 응대 평가 순위(점수·등급)"]},
  {id:"2026-11-17l", date:"11/17", title:"📝 AI 응대 평가 — 카운트다운 뒤 바로 통화", tabs:["home"], items:["📞 5·4·3·2·1 START 뒤 ‘통화 시작’을 누르지 않아도 바로 고객이 말해요"]},
  {id:"2026-11-17k", date:"11/17", title:"📝 AI 응대 평가 — 상황 사진", tabs:["home"], items:["🖼️ 평가를 시작하면 통화 화면 위에 그 상황에 맞는 고객 사진이 떠요 (서비스 19개 상황)"]},
  {id:"2026-11-17j", date:"11/17", title:"📝 AI 응대 평가 — 직원 현황은 파트장만", tabs:["home"], items:["🔒 평가 → 직원 현황은 다시 파트장만 볼 수 있어요 (비밀번호)"]},
@@ -4637,6 +4670,7 @@ function evbLoad(){
     if(!j||!j.ok||!j.m) return; var same = JSON.stringify(j.m)===JSON.stringify(EVB); EVB=j.m;
     try{ sessionStorage.setItem("bsr_evb",JSON.stringify({at:Date.now(),d:j.m})); }catch(e){}
     var el=document.getElementById("mxrk"); if(el){ var t=document.createElement("div"); t.innerHTML=rpKing(); el.replaceWith(t.firstChild); }
+    if(!same && window.state && state.tab==="eval") renderQuiet();
   }).catch(function(){});
 }
 try{ var _evc=JSON.parse(sessionStorage.getItem("bsr_evb")||"null"); if(_evc) EVB=_evc.d||{}; }catch(e){}
@@ -4657,10 +4691,33 @@ function mxHist(){
   var cells = H.months.map(function(mo){ var y = mo===12 ? H.y-1 : H.y, k = y+'-'+('0'+mo).slice(-2), w = mxWin(k); if(w && !(w.t>0)) w = null;
     return '<div class="mh-c'+(w?' on':k===cm?' now':'')+'"><small>'+mo+'월</small>'+(w?'<b class="mh-n">'+esc2(w.n)+'</b><em class="num">'+w.t+'점</em>':'<span class="mh-e">'+(k===cm?'진행 중':k>cm?'–':'선정 전')+'</span>')+'</div>'; }).join('');
   var cnt = mxStarMap(), top = Object.keys(cnt).sort(function(a,b){return cnt[b]-cnt[a] || a.localeCompare(b,"ko")});
-  return '<div class="sec mh"><h2>🏆 이달의 MVP <span>고과 미반영 · 동기부여</span></h2>'+
+  var lw = null; H.months.forEach(function(mo){ var y = mo===12 ? H.y-1 : H.y, k = y+'-'+('0'+mo).slice(-2), w = mxWin(k); if(w && w.t>0) lw = {m:mo, n:w.n}; });
+  return efFold("mvp","efd-mvp","🏆","이달의 MVP","고과 미반영 · 동기부여", lw ? lw.m+'월 <b>'+esc2(lw.n)+'</b>' : '선정 전',
     '<div class="mh-g">'+cells+'</div>'+
     (top.length?'<p class="mh-s">'+H.h+' 누적 · '+top.map(function(n){return '<b>'+esc2(n)+'</b> '+cnt[n]+'회'}).join(' · ')+'</p>':'')+
-    '<details class="fct mh-d"><summary>📘 선정 기준 · 취지 보기</summary><div class="mh-b">'+mxRule()+'</div></details></div>';
+    '<details class="fct mh-d"><summary>📘 선정 기준 · 취지 보기</summary><div class="mh-b">'+mxRule()+'</div></details>');
+}
+/* 월별 평가 탭 — 접는 칸 (기본 접힘, 펼친 상태는 화면이 다시 그려져도 유지) */
+var EF_OPEN = {};
+function efFold(key, cls, ico, title, sub, peek, body){
+  return '<details class="efd '+cls+'" data-fold="'+key+'"'+(EF_OPEN[key]?' open':'')+'><summary><span class="efd-i" aria-hidden="true">'+ico+'</span><span class="efd-t"><b>'+title+'</b><small>'+sub+'</small></span><span class="efd-v">'+peek+'</span><span class="efd-a" aria-hidden="true"></span></summary><div class="efd-b">'+body+'</div></details>';
+}
+document.addEventListener("toggle", function(e){ var d = e.target; if(d && d.matches && d.matches("details[data-fold]")) EF_OPEN[d.getAttribute("data-fold")] = d.open; }, true);
+/* 👑 이달의 응대왕 — AI 응대 평가(서비스) 한 달 3번 중 최고 점수 1위 */
+function rpKingFold(){
+  setTimeout(evbLoad,0);
+  var t = kstDate(0), H = halfOf(t), cm = t.slice(0,7), ex = ["이재식","최문혁"];
+  var rank = function(k){ var E = EVB[k] || {}; return Object.keys(E).filter(function(n){ return ex.indexOf(n)<0 && +E[n]>0; }).map(function(n){ return {n:n, v:Math.round(+E[n])}; }).sort(function(a,b){ return b.v-a.v || a.n.localeCompare(b.n,"ko"); }); };
+  var gr = function(v){ return v>=90?"S":v>=80?"A":v>=70?"B":"C"; };
+  var cells = H.months.map(function(mo){ var y = mo===12 ? H.y-1 : H.y, k = y+'-'+('0'+mo).slice(-2), L = rank(k), w = L[0];
+    return '<div class="mh-c'+(w?' on':k===cm?' now':'')+'"><small>'+mo+'월</small>'+(w?'<b class="mh-n">'+esc2(w.n)+'</b><em class="num">'+w.v+'점</em>':'<span class="mh-e">'+(k===cm?'진행 중':k>cm?'–':'기록 없음')+'</span>')+'</div>'; }).join('');
+  var L = rank(cm), md = ['🥇','🥈','🥉'], rk = 0, lv = null;
+  var rows = L.map(function(x,i){ if(x.v!==lv){ rk=i+1; lv=x.v; } return '<div class="rk-r'+(rk===1?' top':'')+'"><span class="rk-m">'+(md[rk-1]||rk)+'</span><b>'+esc2(x.n)+'</b><em class="num">'+x.v+'점</em><i class="g'+gr(x.v)+'">'+gr(x.v)+'</i></div>'; }).join('');
+  return efFold("rp","efd-rp","👑","이달의 응대왕","AI 응대 평가 · 서비스 전용", L[0] ? (+cm.slice(5))+'월 <b>'+esc2(L[0].n)+'</b>' : '평가 전',
+    '<div class="mh-g">'+cells+'</div>'+
+    '<p class="rk-h">'+(+cm.slice(5))+'월 평가 순위 <small>'+L.length+'명 응시</small></p>'+
+    (rows || '<p class="rk-0">아직 이번 달 평가를 본 사람이 없어요.</p>')+
+    '<p class="rk-n">🎧 AI 고객 응대 롤플레잉 「평가」 한 달 3번 중 가장 좋은 점수로 순위를 정해요 · S 90 이상 · A 80 · B 70 · C 그 아래 · 파트장 제외</p>');
 }
 /* ⭐ MVP 별 — 확정된 MVP 횟수만큼 이름 옆에 별 (화면 어디서든 이름만 있는 글자에 자동으로 붙임) */
 var MX_ST = {k:'', map:{}};
