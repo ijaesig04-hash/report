@@ -65,6 +65,22 @@ h2{font-size:17px;margin:2px 0 4px}
 .wk h2 small{font-size:12px;font-weight:600;color:var(--mute);margin-left:4px}.wk-t{font-style:normal;font-size:11px;font-weight:700;color:#fff;background:var(--red);border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}
 .wk-h{margin:12px 0 6px;font-size:13.5px}.wk-go{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#f4f7ff;border:0;border-radius:12px;padding:10px 12px;margin-top:6px;font:inherit;color:inherit;cursor:pointer}.wk-go span{font-size:20px}.wk-go b{flex:1;font-size:14.5px}.wk-go i{font-style:normal;color:var(--mute);font-size:18px}
 .pill.lv{background:#fff1f2;border-color:#fecdd3;color:#be123c}.pill.lv small{font-size:10.5px;font-weight:700;opacity:.75;margin-left:2px}.pill.lv.on{background:#be123c;color:#fff;border-color:#be123c}
+#evcd{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,#1e3a8a 0%,#0b1636 70%);color:#fff;text-align:center;padding:24px;transition:background .4s}
+#evcd.hot{background:radial-gradient(circle at 50% 40%,#9f1239 0%,#1a0b1f 72%)}
+#evcd .cd-in{width:100%;max-width:340px}
+#evcd .cd-t{margin:0 0 22px;font-size:18px;font-weight:800;opacity:.92}
+#evcd .cd-ring{position:relative;width:210px;height:210px;margin:0 auto}
+#evcd svg{width:100%;height:100%;transform:rotate(-90deg)}
+#evcd .cd-bg{fill:none;stroke:rgba(255,255,255,.14);stroke-width:7}
+#evcd .cd-fg{fill:none;stroke:#fbbf24;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+#evcd.hot .cd-fg{stroke:#fb7185}
+#evcd b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:104px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+#evcd b.go{font-size:46px;letter-spacing:.04em;color:#fde047}
+#evcd b.pop{animation:cdpop .9s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes cdpop{0%{transform:scale(1.7);opacity:0}25%{transform:scale(1);opacity:1}85%{opacity:1}100%{transform:scale(.92);opacity:.85}}
+#evcd .cd-m{margin:24px 0 6px;font-size:15px;font-weight:700;line-height:1.5;word-break:keep-all}
+#evcd .cd-s{margin:0;font-size:13px;opacity:.7}
+@media (prefers-reduced-motion:reduce){#evcd b.pop{animation:none}#evcd .cd-fg{transition:none}}
 .lv-btns{display:flex;gap:8px}.lv-btns .mic{flex:1;min-width:0}.lv-btns .lv-done{background:#16a34a}.lv-btns .lv-done[hidden]{display:none}
 .lv-st{margin:0 0 8px;text-align:center;font-size:14px;font-weight:700;color:#334155}.mic.on{background:#334155}
 .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#e6eaf2;border-radius:14px;padding:4px;margin:14px 0 10px}.tabs button{border:0;background:transparent;border-radius:11px;padding:11px 2px;font:800 14px 'Noto Sans KR',sans-serif;color:#475569;cursor:pointer}.tabs button[aria-selected="true"]{background:var(--navy);color:#fff;box-shadow:0 3px 10px rgba(16,32,80,.25)}
@@ -364,12 +380,45 @@ function evBegin(btn){
   if(!had && HOT.length && Math.random() < 1/Math.max(1,left)) sc=HOT[Math.floor(Math.random()*HOT.length)];
   else sc=L[Math.floor(Math.random()*L.length)];
   if(!confirm("📝 "+no+"회차 평가를 시작할까요?\n\n· 서비스 상황이 무작위로 나와요 (난이도 상)\n· 시작하면 횟수가 바로 차감돼요 (한 달 3번)\n· 중간에 나가면 그 회차는 점수 없이 끝나요")) return;
-  if(btn){ btn.disabled=true; btn.textContent="준비 중…"; }
-  api1({act:"evstart",name:ME,sc:sc.id}).then(function(r){
-    if(!r||!r.ok) throw new Error(r&&r.err||"실패");
-    S.lv="상"; S.ev={no:r.no}; start(sc); $("#ttl").textContent="📝 평가 "+r.no+"회차 · 서비스";
-  }).catch(function(e){ alert("평가를 시작하지 못했어요: "+(e.message||e)); evView(); });
+  if(btn){ btn.disabled=true; }
+  /* 서버 등록은 카운트다운과 동시에 진행 — 둘 다 끝나면 바로 시작 */
+  var res=null, err=null, cdDone=false, go=function(){
+    if(!cdDone || (!res && !err)) return;
+    evCdClose();
+    if(err){ alert("평가를 시작하지 못했어요: "+(err.message||err)); evView(); return; }
+    S.lv="상"; S.ev={no:res.no}; start(sc); $("#ttl").textContent="📝 평가 "+res.no+"회차 · 서비스";
+  };
+  api1({act:"evstart",name:ME,sc:sc.id}).then(function(r){ if(!r||!r.ok) throw new Error(r&&r.err||"실패"); res=r; go(); }).catch(function(e){ err=e; go(); });
+  evCountdown(no, function(){ cdDone=true; if(!res&&!err){ var w=$("#evcdn"); if(w){ w.textContent="…"; } var m=$("#evcdm"); if(m) m.textContent="연결하는 중"; } go(); });
 }
+/* ⏱ 평가 시작 카운트다운 5·4·3·2·1 → START */
+function evCountdown(no, done){
+  evCdClose();
+  var o=document.createElement("div"); o.id="evcd"; o.setAttribute("role","dialog"); o.setAttribute("aria-live","assertive");
+  o.innerHTML='<div class="cd-in"><p class="cd-t">📝 '+no+'회차 평가</p><div class="cd-ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="54" class="cd-bg"/><circle cx="60" cy="60" r="54" class="cd-fg" id="evcdr"/></svg><b id="evcdn">5</b></div><p class="cd-m" id="evcdm">어떤 고객이 나올지 몰라요 · 숨 한 번 고르세요</p><p class="cd-s">서비스 · 난이도 상</p></div>';
+  document.body.appendChild(o);
+  var ac=null; try{ ac=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){}
+  var beep=function(f,d){ if(!ac) return; try{ var t=ac.currentTime, g=ac.createGain(), os=ac.createOscillator(); os.frequency.value=f; os.connect(g); g.connect(ac.destination); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.18,t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+d); os.start(t); os.stop(t+d+0.02); }catch(e){} };
+  var n=5, num=$("#evcdn"), ring=$("#evcdr"), C=2*Math.PI*54;
+  ring.style.strokeDasharray=C; ring.style.strokeDashoffset=0;
+  var tick=function(){
+    if(!document.getElementById("evcd")) return;
+    if(n>0){
+      num.textContent=n; num.classList.remove("pop"); void num.offsetWidth; num.classList.add("pop");
+      ring.style.strokeDashoffset=C*(1-n/5);
+      if(n<=3) o.classList.add("hot");
+      beep(n<=3?880:660,0.12); try{ navigator.vibrate&&navigator.vibrate(n<=3?60:30); }catch(e){}
+      n--; setTimeout(tick,1000);
+    } else {
+      num.textContent="START"; num.classList.add("go"); num.classList.remove("pop"); void num.offsetWidth; num.classList.add("pop");
+      ring.style.strokeDashoffset=C; $("#evcdm").textContent="고객 연결!";
+      beep(1320,0.35); try{ navigator.vibrate&&navigator.vibrate([80,40,120]); }catch(e){}
+      setTimeout(function(){ try{ ac&&ac.close(); }catch(e){} done(); },700);
+    }
+  };
+  tick();
+}
+function evCdClose(){ var o=document.getElementById("evcd"); if(o) o.remove(); }
 function evMgr(){
   var box=$("#evbox"), pin=""; try{ pin=sessionStorage.getItem("rp_pin")||""; }catch(e){}
   box.innerHTML=evTabH()+'<div class="card"><h2>📝 평가 제출 현황 <em class="ev-svc">서비스 전용</em></h2><p class="sub">직원별로 3번 중 가장 좋은 점수(자동 반영)와 등급을 모아 봐요.</p><button type="button" class="btn red block" id="evl">불러오는 중…</button></div>';
