@@ -533,8 +533,9 @@ function liveMsg(L,m){
   /* 고객 말은 끝까지 — 끊김 신호가 와도 이미 받은 목소리는 계속 재생 */
   if(sc.inputTranscription && sc.inputTranscription.text){
     L.sTxt+=sc.inputTranscription.text;
-    if(!L.sb){ L.sb=document.createElement("div"); L.sb.className="b s"; $("#chat").appendChild(L.sb); }
-    L.sb.textContent=L.sTxt.trim(); scrollEnd(); L.t0=Date.now();
+    /* 받아쓰기 글자는 정확하지 않아 화면에 보여 주지 않음 — 채점용으로만 보관 */
+    if(!L.sb){ L.sb=document.createElement("div"); L.sb.className="b s"; L.sb.textContent="🎙️ 말하는 중…"; $("#chat").appendChild(L.sb); scrollEnd(); }
+    L.t0=Date.now();
   }
   var gotModel=false;
   if(sc.outputTranscription && sc.outputTranscription.text){
@@ -547,7 +548,7 @@ function liveMsg(L,m){
   }
   if(gotModel){ L.hold=0; L.cSpeak=true; lvDoneReset(); }
   if(gotModel && L.sb){ /* 고객이 대답을 시작하면 내 말은 확정 */
-    var t=L.sTxt.trim(); if(t){ S.hist.push({r:"s",t:t}); S.turns++; } L.sb=null; L.sTxt="";
+    var t=L.sTxt.trim(); if(t){ S.hist.push({r:"s",t:t}); S.turns++; } L.sb.textContent="🎙️ 음성으로 대답했어요"; L.sb=null; L.sTxt="";
     if(L.t0 && MGR.indexOf(ME)>=0){ var q=document.createElement("div"); q.className="tmr"; q.textContent="⏱ 고객 대답 시작까지 "+((Date.now()-L.t0)/1000).toFixed(1)+"초 (실시간 · 파트장만 보임)"; $("#chat").insertBefore(q, L.cb||null); L.t0=0; }
   }
   if(gotModel) lvStatus("고객이 말하는 중…");
@@ -589,6 +590,7 @@ function liveClean(L){
   try{ L.proc&&L.proc.disconnect(); }catch(e){} try{ L.stream&&L.stream.getTracks().forEach(function(t){t.stop();}); }catch(e){}
   try{ L.inCtx&&L.inCtx.close(); }catch(e){} L.srcs.forEach(function(x){ try{ x.stop(); }catch(e){} });
   setTimeout(function(){ try{ L.outCtx&&L.outCtx.close(); }catch(e){} }, 300);
+  if(L.sb) L.sb.textContent="🎙️ 음성으로 대답했어요";
   if(L.sb && L.sTxt.trim()){ S.hist.push({r:"s",t:L.sTxt.trim()}); S.turns++; } if(L.cb && L.cTxt.trim()) S.hist.push({r:"c",t:L.cTxt.trim()});
   L.sb=null; L.cb=null; L.sTxt=""; L.cTxt="";
 }

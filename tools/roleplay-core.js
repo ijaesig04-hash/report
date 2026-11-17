@@ -21,7 +21,7 @@ function doPost(e) {
 }
 function doGet(e) {
   const p = (e && e.parameter) || {};
-  evCleanOnce();
+  evCleanOnce(); evCleanOnce2();
   if (p.action === 'ping') return out({ ok: true });   // 앱을 열 때 미리 깨워 두기 (첫 대답이 빨라짐)
   if (p.action === 'board') return out(board());                       // 이달 순위 (이름·평균·횟수만)
   if (p.action === 'me') return out(mine(String(p.name || '').slice(0, 10)));   // 내 항목별 평균 (약한 항목 추천용)
@@ -424,6 +424,22 @@ function evCleanOnce() {
       const sh = evSh(x[0], x[1]), n = sh.getLastRow(); if (n < 2) return;
       const v = sh.getRange(2, 2, n - 1, 2).getValues();
       for (let i = v.length - 1; i >= 0; i--) if (ymOf(v[i][0]) === '2026-11' && String(v[i][1]).trim() === '이수열') sh.deleteRow(i + 2);
+    });
+    P.setProperty(KEY, String(new Date()));
+  } finally { lock.releaseLock(); }
+}
+/* 한 번만 — 직원 현황에서 홍길동·이재식(테스트) 11월 기록 삭제 (11/17 요청, 이재식2·이재식3은 그대로) */
+function evCleanOnce2() {
+  const KEY = 'EVCLEAN_202611_TEST2';
+  if (P.getProperty(KEY)) return;
+  const lock = LockService.getScriptLock(); if (!lock.tryLock(5000)) return;
+  try {
+    if (P.getProperty(KEY)) return;
+    const DEL = ['홍길동', '이재식'];
+    [['평가제출', EV_HEAD], ['평가회차', AT_HEAD]].forEach(function (x) {
+      const sh = evSh(x[0], x[1]), n = sh.getLastRow(); if (n < 2) return;
+      const v = sh.getRange(2, 2, n - 1, 2).getValues();
+      for (let i = v.length - 1; i >= 0; i--) if (ymOf(v[i][0]) === '2026-11' && DEL.indexOf(String(v[i][1]).trim()) >= 0) sh.deleteRow(i + 2);
     });
     P.setProperty(KEY, String(new Date()));
   } finally { lock.releaseLock(); }
