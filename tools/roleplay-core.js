@@ -39,7 +39,8 @@ function doGet(e) {
     return out({ ok: true, m: m });
   }
   if (p.action === 'myev') return out(evMine(String(p.name || '').slice(0, 10)));   // 내 이번 달 기록 + 제출한 평가
-  if (p.action === 'evsubs') {   // 📝 평가 제출 현황 — 모든 직원이 볼 수 있음 (11/17 파트장 요청)
+  if (p.action === 'evsubs') {   // 📝 평가 제출 현황 — 파트장만 (비밀번호)
+    if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
     try { evFixAll(ymNow()); } catch (e) {}
     return out({ ok: true, ym: ymNow(), rows: evRows() });
   }
