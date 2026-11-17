@@ -330,7 +330,7 @@ function evScTitle(id){ var c=SCEN.filter(function(x){return x.id===id;})[0]; re
 function evDraw(j){
   var box=$("#evbox"), T=j.tries||[], sub=j.sub, left=j.max-T.length, done=T.filter(function(x){return x.done;});
   var best=done.slice().sort(function(a,b){return b.total-a.total;})[0];
-  if(EV_TAB==="mgr"&&MGR.indexOf(ME)>=0){ evMgr(); return; }
+  if(EV_TAB==="mgr"){ evMgr(); return; }
   var h=evTabH();
   if(EV_TAB==="go"){
     h+='<div class="card"><h2>▶ '+(+j.ym.slice(5))+'월 평가 시작 <em class="ev-svc">서비스 전용</em></h2>'+
@@ -352,7 +352,7 @@ function evDraw(j){
   h+='<div id="evmsg"></div></div>';
   box.innerHTML=h; evTabs(box);
 }
-function evTabH(){ var L=[["go","▶ 평가 시작"],["st","📋 내 현황"]]; if(MGR.indexOf(ME)>=0) L.push(["mgr","👥 직원 현황"]);
+function evTabH(){ var L=[["go","▶ 평가 시작"],["st","📋 내 현황"],["mgr","👥 직원 현황"]];
   return '<div class="subs ev-tabs'+(L.length>2?' t3':'')+'">'+L.map(function(x){ return '<button type="button" data-evt="'+x[0]+'" aria-pressed="'+(EV_TAB===x[0])+'">'+x[1]+'</button>'; }).join('')+'</div>'; }
 function evTabs(box){ box.querySelectorAll("[data-evt]").forEach(function(b){ b.onclick=function(){ EV_TAB=b.dataset.evt; var y=window.scrollY; document.body.style.minHeight=document.body.scrollHeight+"px"; evDraw(EV_DATA); window.scrollTo(0,y); }; }); }
 function evBegin(btn){
@@ -371,23 +371,21 @@ function evBegin(btn){
 }
 function evMgr(){
   var box=$("#evbox"), pin=""; try{ pin=sessionStorage.getItem("rp_pin")||""; }catch(e){}
-  box.innerHTML=evTabH()+'<div class="card"><h2>📝 평가 제출 현황 <em class="ev-svc">서비스 전용</em></h2><p class="sub">직원별로 3번 중 가장 좋은 점수(자동 반영)와 등급을 모아 봐요.</p><button type="button" class="btn red block" id="evl">제출 현황 보기</button></div>';
+  box.innerHTML=evTabH()+'<div class="card"><h2>📝 평가 제출 현황 <em class="ev-svc">서비스 전용</em></h2><p class="sub">직원별로 3번 중 가장 좋은 점수(자동 반영)와 등급을 모아 봐요.</p><button type="button" class="btn red block" id="evl">불러오는 중…</button></div>';
   var load=function(){
-    var p=pin; if(!p){ p=prompt("파트장 현황 비밀번호를 입력하세요"); if(!p) return; }
-    box.querySelector("#evl").textContent="불러오는 중…";
-    fetch(RP_API+"?action=evsubs&pin="+encodeURIComponent(p)+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){
-      if(!j||!j.ok){ try{sessionStorage.removeItem("rp_pin");}catch(e){} pin=""; throw new Error(j&&j.err==="pin"?"비밀번호가 맞지 않아요":"불러오지 못했어요"); }
-      try{ sessionStorage.setItem("rp_pin",p); }catch(e){}
+    var b0=box.querySelector("#evl"); if(b0) b0.textContent="불러오는 중…";
+    fetch(RP_API+"?action=evsubs&pin="+encodeURIComponent(pin)+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){
+      if(!j||!j.ok) throw new Error(j&&j.err==="pin"?"서버 반영 중이에요 — 5분 뒤 다시 눌러 주세요":"불러오지 못했어요");
       var R=j.rows||[], cnt={S:0,A:0,B:0,C:0}; R.forEach(function(x){ if(cnt[x.grade]!=null) cnt[x.grade]++; });
       box.innerHTML=evTabH()+'<div class="card"><h2>📝 '+(+j.ym.slice(5))+'월 평가 제출 현황 <small style="font-weight:400;color:var(--mute)">'+R.length+'명 제출</small></h2>'+
         '<div class="ev-st" style="grid-template-columns:repeat(4,1fr)">'+["S","A","B","C"].map(function(g){ return '<div><span>'+g+'</span><b>'+cnt[g]+'</b></div>'; }).join("")+'</div>'+
         (R.length?R.map(function(x){ return '<div class="ev-m"><b>'+esc(x.name)+'</b> · '+esc(x.total)+'점 · 등급 '+esc(x.grade)+' <small>'+esc(x.no)+'회차 · 최고 점수 자동 반영'+(x.text?'<br>'+esc(x.text):'')+'</small></div>'; }).join(""):'<p class="sub">아직 제출한 직원이 없어요.</p>')+
         '<button type="button" class="btn ghost block" id="evr">새로고침</button></div>';
       $("#evr").onclick=load; evTabs(box);
-    }).catch(function(e){ var b=box.querySelector("#evl"); if(b) b.textContent="제출 현황 보기"; alert(e.message||"불러오지 못했어요"); });
+    }).catch(function(e){ var b=box.querySelector("#evl"); if(b) b.textContent="다시 불러오기"; alert(e.message||"불러오지 못했어요"); });
   };
   box.querySelector("#evl").onclick=load; evTabs(box);
-  if(pin) load();
+  load();
 }
 
 /* 분류: 서비스(신입 기본 · 불만 심화 · 북서울 실제 사례) / 영업(영업 기본 · 영업 심화 · 영업왕 만들기) */

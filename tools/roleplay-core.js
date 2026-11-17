@@ -21,6 +21,7 @@ function doPost(e) {
 }
 function doGet(e) {
   const p = (e && e.parameter) || {};
+  evCleanOnce();
   if (p.action === 'ping') return out({ ok: true });   // 앱을 열 때 미리 깨워 두기 (첫 대답이 빨라짐)
   if (p.action === 'board') return out(board());                       // 이달 순위 (이름·평균·횟수만)
   if (p.action === 'me') return out(mine(String(p.name || '').slice(0, 10)));   // 내 항목별 평균 (약한 항목 추천용)
@@ -38,8 +39,7 @@ function doGet(e) {
     return out({ ok: true, m: m });
   }
   if (p.action === 'myev') return out(evMine(String(p.name || '').slice(0, 10)));   // 내 이번 달 기록 + 제출한 평가
-  if (p.action === 'evsubs') {   // 📝 평가 제출 현황 — 파트장만 (비밀번호)
-    if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
+  if (p.action === 'evsubs') {   // 📝 평가 제출 현황 — 모든 직원이 볼 수 있음 (11/17 파트장 요청)
     return out({ ok: true, ym: ymNow(), rows: evRows() });
   }
   if (p.action === 'mysug') return out({ ok: true, rows: sugRows().filter(function (x) { return x.key && x.key === String(p.key || ''); }) });   // 내가 남긴 글의 답변 보기 (이 폰 열쇠로만)
@@ -406,6 +406,22 @@ function evFix(name, ym) {
     if (hit) { sh.getRange(at.row, 6, 1, 2).setValues([[Number(hit.total) || 0, '완료']]); ch = 1; }
   });
   if (ch) evBest(name, ym);
+}
+/* 한 번만 실행되는 정리 — 2026-11 이수열 이름으로 들어간 평가 기록은 파트장 테스트라서 삭제 (11/17 요청)
+   평가제출·평가회차 두 시트에서 지우므로 이수열 본인은 이번 달 3회를 처음부터 쓸 수 있음 */
+function evCleanOnce() {
+  const KEY = 'EVCLEAN_202611_LSY';
+  if (P.getProperty(KEY)) return;
+  const lock = LockService.getScriptLock(); if (!lock.tryLock(5000)) return;
+  try {
+    if (P.getProperty(KEY)) return;
+    [['평가제출', EV_HEAD], ['평가회차', AT_HEAD]].forEach(function (x) {
+      const sh = evSh(x[0], x[1]), n = sh.getLastRow(); if (n < 2) return;
+      const v = sh.getRange(2, 2, n - 1, 2).getValues();
+      for (let i = v.length - 1; i >= 0; i--) if (ymOf(v[i][0]) === '2026-11' && String(v[i][1]).trim() === '이수열') sh.deleteRow(i + 2);
+    });
+    P.setProperty(KEY, String(new Date()));
+  } finally { lock.releaseLock(); }
 }
 function evBest(name, ym) {
   const best = atRows(name, ym).filter(function (x) { return x.done; }).sort(function (a, b) { return b.total - a.total; })[0];
