@@ -81,6 +81,12 @@ h2{font-size:17px;margin:2px 0 4px}
 #evcd .cd-m{margin:24px 0 6px;font-size:15px;font-weight:700;line-height:1.5;word-break:keep-all}
 #evcd .cd-s{margin:0;font-size:13px;opacity:.7}
 @media (prefers-reduced-motion:reduce){#evcd b.pop{animation:none}#evcd .cd-fg{transition:none}}
+.rp-hero{position:relative;margin:0 0 12px;border-radius:16px;overflow:hidden;aspect-ratio:16/9;background:#e2e8f0;opacity:0;transition:opacity .4s}
+.rp-hero.on{opacity:1}
+.rp-hero img{display:block;width:100%;height:100%;object-fit:cover}
+.rp-hero figcaption{position:absolute;left:0;right:0;bottom:0;padding:28px 14px 11px;background:linear-gradient(to top,rgba(11,22,54,.88),rgba(11,22,54,0));color:#fff;display:flex;flex-direction:column;gap:2px}
+.rp-hero figcaption em{font-style:normal;font-size:12px;font-weight:700;color:#fde047}
+.rp-hero figcaption b{font-size:16px;font-weight:800;line-height:1.35;word-break:keep-all}
 .lv-btns{display:flex;gap:8px}.lv-btns .mic{flex:1;min-width:0}.lv-btns .lv-done{background:#16a34a}.lv-btns .lv-done[hidden]{display:none}
 .lv-st{margin:0 0 8px;text-align:center;font-size:14px;font-weight:700;color:#334155}.mic.on{background:#334155}
 .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#e6eaf2;border-radius:14px;padding:4px;margin:14px 0 10px}.tabs button{border:0;background:transparent;border-radius:11px;padding:11px 2px;font:800 14px 'Noto Sans KR',sans-serif;color:#475569;cursor:pointer}.tabs button[aria-selected="true"]{background:var(--navy);color:#fff;box-shadow:0 3px 10px rgba(16,32,80,.25)}
@@ -533,6 +539,15 @@ function liveStart(tries, model){
     });
   }).catch(function(e){ lvBtn(false); lvStatus("연결하지 못했어요"); liveErr(e.message||String(e)); LIVE_BAD=true; });
 }
+var RP_CF="https://d8j0ntlcm91z4.cloudfront.net/user_3MCkAoZYnakI9OZqcK9TYibu7ho/hf_20261117_", RP_IMG={"bill":"rp-img/bill.jpg","false-alarm":"rp-img/false-alarm.jpg","rude":"rp-img/rude.jpg","repeat-fault":"rp-img/repeat-fault.jpg","no-show":RP_CF+"125321_f1c838b8-708e-4ef7-8db1-969b50996b4e.png","senior":RP_CF+"125253_45b95ccd-4409-4fff-bb6a-334dcda043d4.png","n-arm":RP_CF+"125347_9c5ed902-886e-4fe8-a8a2-bd8a2ad6fb6f.png","n-card":RP_CF+"125407_815db5dc-5698-465a-bd4d-38d0dafc4f14.png","n-visit":RP_CF+"125435_8381a032-78d6-424e-937d-cfd6b947815d.png","cancel":RP_CF+"125450_1aa97e7b-229b-4d40-abb8-6afe6b501e59.png","delay":RP_CF+"125510_c469a164-1019-4391-a8c9-0d30b2c0ff58.png","theft":RP_CF+"125529_b4da3e9e-d48a-4a1e-b957-f1f486ab53a3.png","cctv":RP_CF+"125546_04b41a08-d585-48a8-8712-29e4d61a7459.png","pw-open":RP_CF+"125604_f7577001-ffd7-4bc9-bc9a-3e384cc57160.png","pw-voc":RP_CF+"125627_b3a8085b-8e37-4762-9313-5412620cde65.png","r-multi":RP_CF+"125646_07e5c421-fd4f-4d94-a0e4-67a597ed6fd1.png","r-keyman":RP_CF+"125710_d2c9ebe1-415b-441a-87be-3f76486517e0.png","r-wrongnum":RP_CF+"125732_3cdc2100-abe8-4ff9-aa81-f020f0dfd67c.png","r-animal":RP_CF+"125758_4f2da76c-bdc3-4ffe-a4cf-889dee168fd2.png"};
+/* 📝 평가 중 — 상황에 맞는 사진을 통화 화면 위에 보여 줌 (사진이 안 열리면 칸째 숨김) */
+function rpHero(sc){
+  var u=RP_IMG[sc.id], ch=$("#chat"); if(!S.ev||!u||!ch) return;
+  var f=document.createElement("figure"); f.className="rp-hero";
+  f.innerHTML='<img alt="" decoding="async"><figcaption><em>📝 평가 상황</em><b>'+esc(sc.title)+'</b></figcaption>';
+  var im=f.querySelector("img"); im.onload=function(){ f.classList.add("on"); }; im.onerror=function(){ f.remove(); }; im.src=u;
+  ch.parentNode.insertBefore(f, ch);
+}
 var LV_NOAH=false, LV_PF=null;   /* 통화 연결표를 미리 받아 둠 — 「통화 시작」을 누르면 바로 연결돼 고객 첫마디가 빨라짐 */
 function liveTok(model){
   var persona=S.sc.persona+(S.sc.g==="영업"?" (이 통화는 불만 접수가 아니라 영업 상담이다. 고객은 화나 있지 않고 망설이는 중이다.)":"");
@@ -655,6 +670,7 @@ function start(sc){
   document.body.style.minHeight=""; S.sid=(S.sid||0)+1; S.done=false; S.sc=sc; S.hist=[{r:"c",t:sc.open}]; S.turns=0; S.end=false; S.busy=false; S.fb=false; S.fbTold=false;
   $("#ttl").textContent=sc.ic+" "+sc.title.replace(/^\[영업\]\s*/,"");
   app.innerHTML='<div class="bar"><span class="pill">난이도 '+S.lv+'</span><span class="pill" id="sp" role="button">🔊 소리 켬</span><span class="pill" id="vf" role="button">'+(VFAST?'⚡ 빠른 목소리':'🗣️ 자연 목소리')+'</span><span class="pill lv" id="lvb" role="button">📞 실시간 통화 <small>시험판</small></span></div><details class="keys"><summary>💡 이 상황의 응대 포인트 보기</summary><ol>'+sc.key.map(function(k){return '<li>'+esc(k)+'</li>';}).join("")+'</ol>'+(sc.ment?'<p class="mt-h">💬 이렇게 말해 보세요</p>'+sc.ment.map(function(m){return '<p class="mt">“'+esc(m)+'”</p>';}).join(""):'')+'</details><div class="chat" id="chat"></div>';
+  rpHero(sc);
   $("#vf").onclick=function(){ VFAST=!VFAST; try{ localStorage.setItem("rp_vfast",VFAST?"1":"0"); }catch(e){} $("#vf").textContent=VFAST?"⚡ 빠른 목소리":"🗣️ 자연 목소리"; };
   $("#sp").onclick=function(){ S.voice=!S.voice; $("#sp").textContent=S.voice?"🔊 소리 켬":"🔇 소리 끔"; if(!S.voice) stopSpeak(); };
   $("#lvb").onclick=function(){ liveMode(); };
