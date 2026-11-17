@@ -40,6 +40,7 @@ function doGet(e) {
   }
   if (p.action === 'myev') return out(evMine(String(p.name || '').slice(0, 10)));   // 내 이번 달 기록 + 제출한 평가
   if (p.action === 'evsubs') {   // 📝 평가 제출 현황 — 모든 직원이 볼 수 있음 (11/17 파트장 요청)
+    try { evFixAll(ymNow()); } catch (e) {}
     return out({ ok: true, ym: ymNow(), rows: evRows() });
   }
   if (p.action === 'mysug') return out({ ok: true, rows: sugRows().filter(function (x) { return x.key && x.key === String(p.key || ''); }) });   // 내가 남긴 글의 답변 보기 (이 폰 열쇠로만)
@@ -171,6 +172,7 @@ function evaluate(d) {
     '항목(각 0~100점): 공감·사과(감정을 먼저 받아 주고 진심으로 사과했는가), 원인 설명(왜 그런지 쉽고 정확하게 설명했는가), 해결책 제시(구체적이고 실행 가능한 다음 단계를 말했는가), 해지 방어(해지·불만을 존중하면서 계속 이용할 이유와 대안을 제시했는가). ' +
     '채점은 후하게 하세요. 현장 직원의 연습이므로 칭찬 위주로 봅니다. 고객이 결국 이해·만족하고 통화가 좋게 끝났다면 각 항목 85~100점을 주세요. 기본 예절을 지키며 응대를 끝까지 했다면 70점 이상을 주세요. ' +
     '해지 방어: 이 상황에 해지·계약 문제가 없었다면 "고객이 만족해 계속 믿고 이용하게 만들었는가"로 보고, 고객이 만족했다면 85점 이상을 주세요(0점 금지). ' +
+    '직원 말은 음성 인식으로 받아 적은 글자라서 잘못 적힌 단어·끊긴 문장이 섞일 수 있습니다. 엉뚱한 단어는 문맥상 원래 의도대로 이해하고, 받아쓰기 오류는 절대 감점하지 마세요. ' +
     '직원이 거의 말하지 않았거나 고객에게 무례했을 때만 낮게 주세요. 잘한 점과 개선할 점은 각각 2~3개, 한 줄씩 쉬운 말로. 마지막에 "이렇게 말해 보세요" 예시 한마디(60자 이내).\n' +
     '또 모범 답안 비교: 직원이 실제로 한 말 중 가장 아쉬운 것 2~3개를 골라(원문 그대로, 40자 이내로 줄여도 됨) 각각 더 좋은 말(60자 이내, 실제 현장에서 바로 쓸 수 있는 존댓말)로 바꿔 주세요.\n' +
     '반드시 JSON만: {"scores":{"공감·사과":0,"원인 설명":0,"해결책 제시":0,"해지 방어":0},"good":["..."],"improve":["..."],"example":"...","pairs":[{"me":"직원이 한 말","better":"이렇게 말하면 더 좋아요"}]}';
@@ -370,12 +372,15 @@ function evStart(d) {
   } finally { lock.releaseLock(); }
 }
 function evPick(d) {   // 평가 회차가 끝나면 점수 기록 — 실제로 방금 AI 채점을 받은 기록이 있어야 함
-  const name = String(d.name || '').slice(0, 10), sc = String(d.sc || ''), total = Number(d.total), no = Number(d.no) || 0;
+  const name = String(d.name || '').slice(0, 10), sc = String(d.sc || ''), no = Number(d.no) || 0; let total = Number(d.total);
   const ym = ymNow(), at = atRows(name, ym).filter(function (x) { return x.no === no; })[0];
   if (!at) return { ok: false, err: '평가 회차를 찾지 못했어요' };
   if (at.done) return { ok: true, dup: 1 };
   if (String(at.sc) !== sc) return { ok: false, err: '상황이 달라요' };
-  const hit = rows(300).filter(function (r) { return r.name === name && String(r.sc) === sc && Number(r.total) === total && r.t >= at.t; })[0];
+  /* 방금 받은 채점 기록 — 점수가 같으면 그것, 아니면 시작 뒤 같은 상황의 가장 최근 기록 */
+  const cand = rows(400).filter(function (r) { return String(r.name).trim() === name && String(r.sc) === sc && r.t >= at.t - 60000; });
+  const hit = cand.filter(function (r) { return Number(r.total) === total; })[0] || cand[cand.length - 1];
+  if (hit) total = Number(hit.total) || total;
   if (!hit) return { ok: false, err: '방금 받은 점수 기록을 찾지 못했어요' };
   evSh('평가회차', AT_HEAD).getRange(at.row, 6, 1, 2).setValues([[total, '완료']]);
   evBest(name, ym);   // 3번 중 가장 좋은 점수를 자동으로 「평가제출」에 반영
@@ -395,14 +400,14 @@ function evMine(name) {
   const sub = evRows().filter(function (x) { return x.name === name; })[0] || null;
   return { ok: true, ym: ym, max: EV_MAX, tries: atRows(name, ym).map(function (x) { return { no: x.no, sc: x.sc, total: x.total, done: x.done }; }), sub: sub };
 }
-/* 점수 기록이 빠진 회차(통신 오류 등)는 시작 후 40분 안에 같은 상황으로 받은 채점 기록으로 채움 */
+/* 점수 기록이 빠진 회차(통신 오류 등)는 시작 후 90분 안에 같은 상황으로 받은 채점 기록으로 채움 */
 function evFix(name, ym) {
   const L = atRows(name, ym), miss = L.filter(function (x) { return !x.done; });
   if (!miss.length) return;
   const R = rows(400), sh = evSh('평가회차', AT_HEAD); let ch = 0;
   miss.forEach(function (at) {
-    const nx = L.filter(function (y) { return y.no === at.no + 1; })[0], end = Math.min(at.t + 40 * 60000, nx ? nx.t : Infinity);
-    const hit = R.filter(function (r) { return r.name === name && String(r.sc) === String(at.sc) && r.t >= at.t && r.t <= end; })[0];
+    const nx = L.filter(function (y) { return y.no === at.no + 1; })[0], end = Math.min(at.t + 90 * 60000, nx ? nx.t : Infinity);
+    const hit = R.filter(function (r) { return String(r.name).trim() === name && String(r.sc) === String(at.sc) && r.t >= at.t - 60000 && r.t <= end; })[0];
     if (hit) { sh.getRange(at.row, 6, 1, 2).setValues([[Number(hit.total) || 0, '완료']]); ch = 1; }
   });
   if (ch) evBest(name, ym);
@@ -422,6 +427,13 @@ function evCleanOnce() {
     });
     P.setProperty(KEY, String(new Date()));
   } finally { lock.releaseLock(); }
+}
+/* 직원 현황을 열 때 — 점수 기록이 빠진 회차가 있는 사람은 모두 자동 보정 */
+function evFixAll(ym) {
+  const sh = evSh('평가회차', AT_HEAD), n = sh.getLastRow(); if (n < 2) return;
+  const seen = {};
+  sh.getRange(2, 1, n - 1, AT_HEAD.length).getValues().forEach(function (r) { if (ymOf(r[1]) === ym && !r[6]) seen[String(r[2])] = 1; });
+  Object.keys(seen).forEach(function (nm) { evFix(nm, ym); });
 }
 function evBest(name, ym) {
   const best = atRows(name, ym).filter(function (x) { return x.done; }).sort(function (a, b) { return b.total - a.total; })[0];

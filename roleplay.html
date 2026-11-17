@@ -65,6 +65,7 @@ h2{font-size:17px;margin:2px 0 4px}
 .wk h2 small{font-size:12px;font-weight:600;color:var(--mute);margin-left:4px}.wk-t{font-style:normal;font-size:11px;font-weight:700;color:#fff;background:var(--red);border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}
 .wk-h{margin:12px 0 6px;font-size:13.5px}.wk-go{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#f4f7ff;border:0;border-radius:12px;padding:10px 12px;margin-top:6px;font:inherit;color:inherit;cursor:pointer}.wk-go span{font-size:20px}.wk-go b{flex:1;font-size:14.5px}.wk-go i{font-style:normal;color:var(--mute);font-size:18px}
 .pill.lv{background:#fff1f2;border-color:#fecdd3;color:#be123c}.pill.lv small{font-size:10.5px;font-weight:700;opacity:.75;margin-left:2px}.pill.lv.on{background:#be123c;color:#fff;border-color:#be123c}
+.lv-btns{display:flex;gap:8px}.lv-btns .mic{flex:1;min-width:0}.lv-btns .lv-done{background:#16a34a}.lv-btns .lv-done[hidden]{display:none}
 .lv-st{margin:0 0 8px;text-align:center;font-size:14px;font-weight:700;color:#334155}.mic.on{background:#334155}
 .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#e6eaf2;border-radius:14px;padding:4px;margin:14px 0 10px}.tabs button{border:0;background:transparent;border-radius:11px;padding:11px 2px;font:800 14px 'Noto Sans KR',sans-serif;color:#475569;cursor:pointer}.tabs button[aria-selected="true"]{background:var(--navy);color:#fff;box-shadow:0 3px 10px rgba(16,32,80,.25)}
 .subs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:6px}.subs button{border:1px solid var(--line,#dfe4ee);background:#fff;border-radius:12px;padding:8px 4px;font:700 13px/1.35 'Noto Sans KR',sans-serif;color:#334155;cursor:pointer;text-align:center}.subs button small{display:block;font-size:11px;font-weight:600;color:#94a3b8;margin-top:1px}.subs button[aria-pressed="true"]{background:#e4002b;border-color:#e4002b;color:#fff}.subs button[aria-pressed="true"] small{color:#ffd5dc}
@@ -442,18 +443,23 @@ function liveMode(){
   S.live=true; S.hist=[]; S.turns=0; $("#chat").innerHTML="";
   var lb=$("#lvb"); if(lb){ lb.classList.add("on"); lb.innerHTML="📞 실시간 통화 중 <small>시험판</small>"; lb.onclick=null; }
   var vf=$("#vf"); if(vf) vf.style.display="none";
-  var n=document.createElement("div"); n.className="tip"; n.textContent="📞 ‘통화 시작’을 누르면 고객이 먼저 말해요. 고객 말이 끝나면 그냥 말로 대답하세요. 버튼을 누를 필요 없어요."; $("#chat").appendChild(n);
+  var n=document.createElement("div"); n.className="tip"; n.textContent="📞 ‘통화 시작’을 누르면 고객이 먼저 말해요. 고객 말이 끝나면 그냥 말로 대답하세요. 말이 끝나면 「✅ 말 다 했어요」를 누르면 고객이 바로 대답해요."; $("#chat").appendChild(n);
   dock.classList.remove("hidden");
-  dock.innerHTML='<div class="in"><p class="lv-st" id="lvst">통화 대기 중</p><button type="button" class="mic" id="lvgo">📞 통화 시작</button>'+
+  dock.innerHTML='<div class="in"><p class="lv-st" id="lvst">통화 대기 중</p><div class="lv-btns"><button type="button" class="mic lv-done" id="lvdone" hidden>✅ 말 다 했어요</button><button type="button" class="mic" id="lvgo">📞 통화 시작</button></div>'+
     '<div class="row" style="margin-top:8px"><button type="button" class="btn ghost" id="lvback" style="flex:1">글자로 연습</button><button type="button" class="btn ghost" id="fin" style="flex:1">마무리하고 점수 받기</button></div></div>';
   fitDock();
   $("#lvgo").onclick=function(){ if(LV_) liveStop("통화를 끊었어요"); else liveStart(); };
+  $("#lvdone").onclick=liveDone;
   if(!LV_) livePre();
   $("#fin").onclick=function(){ liveStop(); finish(); };
   $("#lvback").onclick=function(){ liveStop(); S.live=false; S.normal=true; start(S.sc); S.normal=false; };
 }
 function lvStatus(t){ var e=$("#lvst"); if(e) e.textContent=t; }
-function lvBtn(on){ var b=$("#lvgo"); if(!b) return; b.textContent=on?"🔴 통화 끊기":"📞 통화 시작"; b.classList.toggle("on",!!on); }
+function lvBtn(on){ var b=$("#lvgo"); if(!b) return; b.textContent=on?"🔴 끊기":"📞 통화 시작"; b.classList.toggle("on",!!on); var d=$("#lvdone"); if(d) d.hidden=!on; }
+/* ✅ 말 다 했어요 — 조용해지길 기다리지 않고 바로 고객 대답을 받음 (마이크 묶음을 즉시 끝냄) */
+function liveDone(){ var L=LV_; if(!L||!L.ready||L.ws.readyState!==1) return; if(!L.sTxt.trim()&&!L.sb) return;
+  try{ L.ws.send(JSON.stringify({realtimeInput:{audioStreamEnd:true}})); }catch(e){ return; }
+  L.hold=Date.now()+4000; lvStatus("고객이 대답하는 중…"); }
 function liveStart(tries, model){
   if(S.done) return; var sid0=S.sid;
   tries=tries||0; lvStatus("연결하는 중…"); lvBtn(true);
@@ -494,8 +500,8 @@ function liveConnect(token, model, sys, onFail){
     ws.send(JSON.stringify({setup:{model:"models/"+model,
       generationConfig:{responseModalities:["AUDIO"], speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:p.voice}}}},
       systemInstruction:{parts:[{text:sys}]}, inputAudioTranscription:{}, outputAudioTranscription:{},
-      /* 내 말이 끝나고 2초 이상 조용할 때만 고객이 대답 (바로 넘어가지 않게) */
-      realtimeInputConfig:{automaticActivityDetection:{endOfSpeechSensitivity:"END_SENSITIVITY_LOW", silenceDurationMs:2000}}}}));
+      /* 내 말이 끝나고 1초 조용하면 고객이 대답 — 더 빨리 받고 싶으면 「말 다 했어요」 버튼 */
+      realtimeInputConfig:{automaticActivityDetection:{endOfSpeechSensitivity:"END_SENSITIVITY_LOW", silenceDurationMs:1000}}}}));
   };
   ws.onmessage=function(ev){
     var handle=function(txt){ var m; if(LV_!==L||L.ended) return; try{ m=JSON.parse(txt); }catch(e){ return; } if(LV_!==L||L.ended) return; liveMsg(L,m); };
@@ -532,6 +538,7 @@ function liveMsg(L,m){
   if(sc.modelTurn && sc.modelTurn.parts){
     sc.modelTurn.parts.forEach(function(pt){ if(pt.inlineData && pt.inlineData.data){ gotModel=true; livePlay(L, pt.inlineData.data, pt.inlineData.mimeType||""); } });
   }
+  if(gotModel) L.hold=0;
   if(gotModel && L.sb){ /* 고객이 대답을 시작하면 내 말은 확정 */
     var t=L.sTxt.trim(); if(t){ S.hist.push({r:"s",t:t}); S.turns++; } L.sb=null; L.sTxt="";
     if(L.t0 && MGR.indexOf(ME)>=0){ var q=document.createElement("div"); q.className="tmr"; q.textContent="⏱ 고객 대답 시작까지 "+((Date.now()-L.t0)/1000).toFixed(1)+"초 (실시간 · 파트장만 보임)"; $("#chat").insertBefore(q, L.cb||null); L.t0=0; }
@@ -557,9 +564,10 @@ function liveMic(L){
     if(LV_!==L){ st.getTracks().forEach(function(t){t.stop();}); return; }
     L.stream=st;
     var C=window.AudioContext||window.webkitAudioContext; try{ L.inCtx=new C({sampleRate:16000}); }catch(e){ L.inCtx=new C(); }
-    var srcN=L.inCtx.createMediaStreamSource(st), proc=L.inCtx.createScriptProcessor(2048,1,1), sr=L.inCtx.sampleRate;
+    var srcN=L.inCtx.createMediaStreamSource(st), proc=L.inCtx.createScriptProcessor(1024,1,1), sr=L.inCtx.sampleRate;
     proc.onaudioprocess=function(e){
       if(!L.ready || L.ws.readyState!==1) return;
+      if(L.hold && Date.now()<L.hold) return;   /* 「말 다 했어요」 직후 잠깐은 마이크를 보내지 않음 */
       if(L.outCtx && L.playEnd > L.outCtx.currentTime + 0.05) return;   /* 고객 목소리가 나오는 동안은 마이크를 보내지 않음 (스피커 소리 되먹임 방지) */
       var x=e.inputBuffer.getChannelData(0), step=sr/16000, n=Math.floor(x.length/step), o=new Int16Array(n);
       for(var i=0;i<n;i++){ var v=x[Math.floor(i*step)]; o[i]=v<0?Math.max(-32768,v*32768):Math.min(32767,v*32767); }
@@ -684,7 +692,8 @@ function showEval(j){
   if(S.ev){ var ev=S.ev; S.ev=null;
     var er=$("#evres"); if(er) app.insertBefore(er, app.firstChild);
     $("#evback").onclick=function(){ try{ localStorage.setItem("rp_tab","eva"); }catch(e){} EV_TAB="st"; home(); };
-    if(!j.demo) api1({act:"evpick",name:ME,sc:S.sc.id,total:j.total,no:ev.no}).then(function(r){
+    var evp=function(k){ return api1({act:"evpick",name:ME,sc:S.sc.id,total:j.total,no:ev.no}).catch(function(e){ if(k<2) return new Promise(function(r){ setTimeout(r,2000*(k+1)); }).then(function(){ return evp(k+1); }); throw e; }); };
+    if(!j.demo) evp(0).then(function(r){
       if(!r||!r.ok) throw new Error(r&&r.err||"실패");
       $("#evresm").innerHTML='✅ '+ev.no+'회차 점수를 기록했어요 (등급 '+evGrade(j.total)+'). 3번 중 가장 좋은 점수가 자동으로 평가에 반영돼요.';
     }).catch(function(e){ $("#evresm").textContent="기록하지 못했어요 ("+(e.message||e)+"). 파트장에게 알려 주세요."; });
