@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261117144200">
+<meta name="bsr-ver" content="20261117161356">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -6584,7 +6584,7 @@ function gvJsonp(u){
 }
 function getSheet(u){ return getText(u).catch(function(){ return gvJsonp(u); }); }
 /* 수기 보정: 앱 전송이 누락된 건을 파트장이 확인해 최소 건수로 맞춤 (실제 서버 건수가 이 값 이상이 되면 보정은 자동으로 사라짐) */
-var MANUAL_FIX = [ {ym:"2026-11", name:"김지원", panel:6, risk:6, date:"2026-11-16", why:"앱 전송 누락 — 파트장 확인(11/17)"} ];
+var MANUAL_FIX = [ {ym:"2026-11", name:"김지원", panel:7, risk:7, date:"2026-11-17", why:"앱 전송 누락 — 파트장 확인(11/17, 오늘 4건 포함 누적 7건)"} ];
 function fixPanelRows(rows){ MANUAL_FIX.forEach(function(f){ if(!f.panel) return; var have=0; rows.forEach(function(r){ if(String(r[0]).slice(0,7)===f.ym && r[1]===f.name) have+=(+r[2]||0); });
   if(have<f.panel) rows.push([f.date, f.name, f.panel-have, 0, "fix"]); }); rows.sort(function(a,b){ return a[0]<b[0]?-1:a[0]>b[0]?1:0; }); return rows; }
 function fixRiskRows(rows){ MANUAL_FIX.forEach(function(f){ if(!f.risk) return; var have=0; rows.forEach(function(r){ if(String(r[0]).slice(0,7)===f.ym && r[1]===f.name) have+=(+r[2]||0); });
