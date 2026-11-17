@@ -457,9 +457,14 @@ function liveMode(){
 function lvStatus(t){ var e=$("#lvst"); if(e) e.textContent=t; }
 function lvBtn(on){ var b=$("#lvgo"); if(!b) return; b.textContent=on?"🔴 끊기":"📞 통화 시작"; b.classList.toggle("on",!!on); var d=$("#lvdone"); if(d) d.hidden=!on; }
 /* ✅ 말 다 했어요 — 조용해지길 기다리지 않고 바로 고객 대답을 받음 (마이크 묶음을 즉시 끝냄) */
-function liveDone(){ var L=LV_; if(!L||!L.ready||L.ws.readyState!==1) return; if(!L.sTxt.trim()&&!L.sb) return;
-  try{ L.ws.send(JSON.stringify({realtimeInput:{audioStreamEnd:true}})); }catch(e){ return; }
-  L.hold=Date.now()+4000; lvStatus("고객이 대답하는 중…"); }
+function liveDone(){ var L=LV_; if(!L||!L.ready||L.ws.readyState!==1||L.cSpeak) return;
+  /* 1.2초 분량의 무음을 한 번에 보내 서버가 '말 끝'을 바로 알아채게 함 → 고객이 곧바로 대답 */
+  L.hold=Date.now()+5000;
+  try{ var z=i16ToB64(new Int16Array(1600)); for(var i=0;i<12;i++) L.ws.send(JSON.stringify({realtimeInput:{audio:{data:z,mimeType:"audio/pcm;rate=16000"}}})); }catch(e){ return; }
+  var b=$("#lvdone"); if(b){ b.textContent="⏳ 대답 기다리는 중"; b.disabled=true; }
+  setTimeout(function(){ if(LV_===L && !L.cSpeak){ lvDoneReset(); lvStatus("🎙️ 말씀하세요 — 그냥 말로 대답하면 돼요"); } }, 5000);
+  lvStatus("고객이 대답하는 중…"); }
+function lvDoneReset(){ var b=$("#lvdone"); if(b){ b.textContent="✅ 말 다 했어요"; b.disabled=false; } }
 function liveStart(tries, model){
   if(S.done) return; var sid0=S.sid;
   tries=tries||0; lvStatus("연결하는 중…"); lvBtn(true);
@@ -469,13 +474,15 @@ function liveStart(tries, model){
     if(S.done||S.sid!==sid0) return;
     var m=j.models[0]; liveConnect(j.token, m, j.sys, function(fail){
       if(S.done||S.sid!==sid0) return;
+      /* 「고객 말 끊지 않기」 설정을 못 받는 모델이면 그 설정만 빼고 다시 */
+      if(!LV_NOAH && /activity|unknown|invalid/i.test(fail)){ LV_NOAH=true; liveStart(tries, m); return; }
       /* 이 모델이 안 되면 다음 모델로 (최대 3번) */
       if(tries<2 && j.models[1]){ liveStart(tries+1, j.models[1]); }
       else { lvBtn(false); lvStatus("연결하지 못했어요 · "+fail); liveErr(fail); LIVE_BAD=true; }
     });
   }).catch(function(e){ lvBtn(false); lvStatus("연결하지 못했어요"); liveErr(e.message||String(e)); LIVE_BAD=true; });
 }
-var LV_PF=null;   /* 통화 연결표를 미리 받아 둠 — 「통화 시작」을 누르면 바로 연결돼 고객 첫마디가 빨라짐 */
+var LV_NOAH=false, LV_PF=null;   /* 통화 연결표를 미리 받아 둠 — 「통화 시작」을 누르면 바로 연결돼 고객 첫마디가 빨라짐 */
 function liveTok(model){
   var persona=S.sc.persona+(S.sc.g==="영업"?" (이 통화는 불만 접수가 아니라 영업 상담이다. 고객은 화나 있지 않고 망설이는 중이다.)":"");
   var saved=""; try{ saved=localStorage.getItem("rp_live_model")||""; }catch(e){}
@@ -501,7 +508,7 @@ function liveConnect(token, model, sys, onFail){
       generationConfig:{responseModalities:["AUDIO"], speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:p.voice}}}},
       systemInstruction:{parts:[{text:sys}]}, inputAudioTranscription:{}, outputAudioTranscription:{},
       /* 내 말이 끝나고 1초 조용하면 고객이 대답 — 더 빨리 받고 싶으면 「말 다 했어요」 버튼 */
-      realtimeInputConfig:{automaticActivityDetection:{endOfSpeechSensitivity:"END_SENSITIVITY_LOW", silenceDurationMs:1000}}}}));
+      realtimeInputConfig:{activityHandling:(LV_NOAH?undefined:"NO_INTERRUPTION"), automaticActivityDetection:{endOfSpeechSensitivity:"END_SENSITIVITY_LOW", silenceDurationMs:1000}}}}));
   };
   ws.onmessage=function(ev){
     var handle=function(txt){ var m; if(LV_!==L||L.ended) return; try{ m=JSON.parse(txt); }catch(e){ return; } if(LV_!==L||L.ended) return; liveMsg(L,m); };
@@ -523,7 +530,7 @@ function liveMsg(L,m){
     liveMic(L); return;
   }
   var sc=m.serverContent; if(!sc) return;
-  if(sc.interrupted){ L.srcs.forEach(function(x){ try{ x.stop(); }catch(e){} }); L.srcs=[]; L.playEnd=0; }
+  /* 고객 말은 끝까지 — 끊김 신호가 와도 이미 받은 목소리는 계속 재생 */
   if(sc.inputTranscription && sc.inputTranscription.text){
     L.sTxt+=sc.inputTranscription.text;
     if(!L.sb){ L.sb=document.createElement("div"); L.sb.className="b s"; $("#chat").appendChild(L.sb); }
@@ -538,13 +545,14 @@ function liveMsg(L,m){
   if(sc.modelTurn && sc.modelTurn.parts){
     sc.modelTurn.parts.forEach(function(pt){ if(pt.inlineData && pt.inlineData.data){ gotModel=true; livePlay(L, pt.inlineData.data, pt.inlineData.mimeType||""); } });
   }
-  if(gotModel) L.hold=0;
+  if(gotModel){ L.hold=0; L.cSpeak=true; lvDoneReset(); }
   if(gotModel && L.sb){ /* 고객이 대답을 시작하면 내 말은 확정 */
     var t=L.sTxt.trim(); if(t){ S.hist.push({r:"s",t:t}); S.turns++; } L.sb=null; L.sTxt="";
     if(L.t0 && MGR.indexOf(ME)>=0){ var q=document.createElement("div"); q.className="tmr"; q.textContent="⏱ 고객 대답 시작까지 "+((Date.now()-L.t0)/1000).toFixed(1)+"초 (실시간 · 파트장만 보임)"; $("#chat").insertBefore(q, L.cb||null); L.t0=0; }
   }
   if(gotModel) lvStatus("고객이 말하는 중…");
-  if(sc.turnComplete){
+  if(sc.turnComplete || sc.interrupted){
+    L.cSpeak=false;
     var c=L.cTxt.trim(); if(c) S.hist.push({r:"c",t:c}); L.cb=null; L.cTxt="";
     lvStatus("🎙️ 말씀하세요 — 그냥 말로 대답하면 돼요");
     if(S.turns>=10){ lvStatus("통화를 충분히 했어요 · ‘마무리하고 점수 받기’를 눌러 주세요"); }
@@ -568,7 +576,8 @@ function liveMic(L){
     proc.onaudioprocess=function(e){
       if(!L.ready || L.ws.readyState!==1) return;
       if(L.hold && Date.now()<L.hold) return;   /* 「말 다 했어요」 직후 잠깐은 마이크를 보내지 않음 */
-      if(L.outCtx && L.playEnd > L.outCtx.currentTime + 0.05) return;   /* 고객 목소리가 나오는 동안은 마이크를 보내지 않음 (스피커 소리 되먹임 방지) */
+      if(L.cSpeak) return;   /* 고객이 말하는 동안(대답 시작~끝)은 마이크를 아예 보내지 않음 — 잡음에 고객 말이 끊기지 않게 */
+      if(L.outCtx && L.playEnd > L.outCtx.currentTime - 0.3) return;   /* 고객 목소리가 끝난 뒤 0.3초까지 */   /* 고객 목소리가 나오는 동안은 마이크를 보내지 않음 (스피커 소리 되먹임 방지) */
       var x=e.inputBuffer.getChannelData(0), step=sr/16000, n=Math.floor(x.length/step), o=new Int16Array(n);
       for(var i=0;i<n;i++){ var v=x[Math.floor(i*step)]; o[i]=v<0?Math.max(-32768,v*32768):Math.min(32767,v*32767); }
       L.ws.send(JSON.stringify({realtimeInput:{audio:{data:i16ToB64(o),mimeType:"audio/pcm;rate=16000"}}}));
