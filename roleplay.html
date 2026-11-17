@@ -458,9 +458,9 @@ function lvStatus(t){ var e=$("#lvst"); if(e) e.textContent=t; }
 function lvBtn(on){ var b=$("#lvgo"); if(!b) return; b.textContent=on?"🔴 끊기":"📞 통화 시작"; b.classList.toggle("on",!!on); var d=$("#lvdone"); if(d) d.hidden=!on; }
 /* ✅ 말 다 했어요 — 조용해지길 기다리지 않고 바로 고객 대답을 받음 (마이크 묶음을 즉시 끝냄) */
 function liveDone(){ var L=LV_; if(!L||!L.ready||L.ws.readyState!==1||L.cSpeak) return;
-  /* 1.2초 분량의 무음을 한 번에 보내 서버가 '말 끝'을 바로 알아채게 함 → 고객이 곧바로 대답 */
+  /* 2.2초 분량의 무음을 한 번에 보내 서버가 '말 끝'을 바로 알아채게 함 → 고객이 곧바로 대답 */
   L.hold=Date.now()+5000;
-  try{ var z=i16ToB64(new Int16Array(1600)); for(var i=0;i<12;i++) L.ws.send(JSON.stringify({realtimeInput:{audio:{data:z,mimeType:"audio/pcm;rate=16000"}}})); }catch(e){ return; }
+  try{ var z=i16ToB64(new Int16Array(1600)); for(var i=0;i<22;i++) L.ws.send(JSON.stringify({realtimeInput:{audio:{data:z,mimeType:"audio/pcm;rate=16000"}}})); }catch(e){ return; }
   var b=$("#lvdone"); if(b){ b.textContent="⏳ 대답 기다리는 중"; b.disabled=true; }
   setTimeout(function(){ if(LV_===L && !L.cSpeak){ lvDoneReset(); lvStatus("🎙️ 말씀하세요 — 그냥 말로 대답하면 돼요"); } }, 5000);
   lvStatus("고객이 대답하는 중…"); }
@@ -507,8 +507,8 @@ function liveConnect(token, model, sys, onFail){
     ws.send(JSON.stringify({setup:{model:"models/"+model,
       generationConfig:{responseModalities:["AUDIO"], speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:p.voice}}}},
       systemInstruction:{parts:[{text:sys}]}, inputAudioTranscription:{}, outputAudioTranscription:{},
-      /* 내 말이 끝나고 1초 조용하면 고객이 대답 — 더 빨리 받고 싶으면 「말 다 했어요」 버튼 */
-      realtimeInputConfig:{activityHandling:(LV_NOAH?undefined:"NO_INTERRUPTION"), automaticActivityDetection:{endOfSpeechSensitivity:"END_SENSITIVITY_LOW", silenceDurationMs:1000}}}}));
+      /* 내 말이 끝나고 2초 조용하면 고객이 대답 — 더 빨리 받고 싶으면 「말 다 했어요」 버튼 */
+      realtimeInputConfig:{activityHandling:(LV_NOAH?undefined:"NO_INTERRUPTION"), automaticActivityDetection:{endOfSpeechSensitivity:"END_SENSITIVITY_LOW", silenceDurationMs:2000}}}}));
   };
   ws.onmessage=function(ev){
     var handle=function(txt){ var m; if(LV_!==L||L.ended) return; try{ m=JSON.parse(txt); }catch(e){ return; } if(LV_!==L||L.ended) return; liveMsg(L,m); };
