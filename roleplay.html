@@ -507,7 +507,7 @@ function liveMode(){
   fitDock();
   $("#lvgo").onclick=function(){ if(LV_) liveStop("통화를 끊었어요"); else liveStart(); };
   $("#lvdone").onclick=liveDone;
-  if(!LV_) livePre();
+  if(!LV_){ if(S.ev) liveStart(); else livePre(); }   /* 평가는 카운트다운 뒤 통화 바로 연결 */
   $("#fin").onclick=function(){ liveStop(); finish(); };
   $("#lvback").onclick=function(){ liveStop(); S.live=false; S.normal=true; start(S.sc); S.normal=false; };
 }
