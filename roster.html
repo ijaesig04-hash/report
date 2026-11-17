@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" data-theme="light" style="color-scheme:light"><head><meta name="color-scheme" content="only light"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="roster-ver" content="2026-11-14c">
+<html lang="ko" data-theme="light" style="color-scheme:light"><head><meta name="color-scheme" content="only light"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="roster-ver" content="2026-11-17a">
 <meta charset="utf-8">
 <title>지사 근무편성 대시보드</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -141,7 +141,7 @@ td input[type=text]{width:100%}
 .cal tfoot td.nm{background:var(--soft)}
 .k-A{background:var(--cA);color:var(--cAi)} .k-B{background:var(--cB);color:var(--cBi)} .k-D{background:var(--cD);color:var(--cDi)}
 .k-I{background:var(--cI);color:var(--cIi)} .k-J{background:var(--cJ);color:var(--cJi)} .k-K{background:var(--cJ);color:var(--cJi)}
-.k-P{background:var(--cP);color:var(--cPi)} .k-G,.k-U{background:var(--cG);color:var(--cGi)} .k-AJ{background:var(--cAJ);color:var(--cAJi)}
+.k-P,.k-K2{background:var(--cP);color:var(--cPi)} .k-G,.k-U{background:var(--cG);color:var(--cGi)} .k-AJ{background:var(--cAJ);color:var(--cAJi)}
 .k-N{background:var(--cD);color:var(--cDi)}
 .legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:var(--sub);margin:10px 0}
 .legend span{display:inline-flex;align-items:center;gap:5px}
@@ -212,7 +212,7 @@ td.wk{white-space:nowrap}
 var ENGINE = (function () {
   var HARD = 10000, APPR = 2500;
   var HRS = { A: 10, B: 11, AJ: 11, G: 8, U: 8 };
-  var REST = { D: 1, I: 1, J: 1, K: 1, P: 1, '/': 1 };
+  var REST = { D: 1, I: 1, J: 1, K: 1, K2: 1, P: 1, '/': 1 };
   var AFTER_B = { B: 1, D: 1, I: 1, J: 1 }; // 불변: 야간(B) 다음날은 B·D·I·J만
 
   function rng(seed) { var s = seed >>> 0 || 1; return function () { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; }
@@ -499,7 +499,7 @@ if (typeof module !== 'undefined') module.exports = ENGINE;
 var ORIG_HTML=document.documentElement.outerHTML;
 // ================= 기본값 =================
 var CODES_REQ=['','D','A','B','I','J','P','G','K','U'];
-var CODE_NAME={A:'주간',B:'야간',D:'휴무',AJ:'조석회',I:'연차',J:'경조',K:'공가',P:'예비군',G:'교육출장',U:'유동',N:'입사 전/OJT'};
+var CODE_NAME={A:'주간',B:'야간',D:'휴무',AJ:'조석회',I:'연차',J:'경조',K:'공가',K2:'예비군훈련',P:'예비군(→K2)',G:'교육출장',U:'유동',N:'입사 전/OJT'};
 var HRS={A:10,B:11,AJ:11,G:8,U:8};
 var REST={D:1,I:1,J:1,K:1,P:1,'/':1};
 var AFTER_B={B:1,D:1,I:1,J:1}; // 불변: 야간(B) 다음날은 B·D·I·J만
@@ -563,10 +563,10 @@ function matchPerson(tok,names){tok=tok.replace(/(프로|님|씨)$/,'');var ex=n
   var a=names.filter(function(n){return n.slice(-tok.length)===tok;});if(a.length)return a;return names.filter(function(n){return n.indexOf(tok)>=0;});}
 // 일정방 글 해석: 날짜 뒤 코드(25일A·21(주간))는 그 날짜, 괄호 안 날짜+말(15~17은 교육G)은 그 날짜, 괄호 안에 남는 말(9일주간 예비군)은 괄호 앞 날짜, 나머지는 휴무 D. 다음 달 날짜(1월3일)는 빼고 알림
 function parseReq(text,names,N,holSet,mon){
-  var req={},notes=[],CODEW=[['결혼|웨딩|신혼|경조','WED'],['예비군|민방위','P'],['교육|출장|선발대회|연수','G'],['공가','K'],['연차|휴가|리프레쉬','I'],['주간','A'],['야간','B'],['휴무|비번|휴','D']];
-  var LET={A:'A',B:'B',D:'D',I:'I',G:'G',P:'P',J:'WED',K:'K',U:'U'};
+  var req={},notes=[],CODEW=[['결혼|웨딩|신혼|경조','WED'],['예비군|민방위','K2'],['교육|출장|선발대회|연수','G'],['공가','K'],['연차|휴가|리프레쉬','I'],['주간','A'],['야간','B'],['휴무|비번|휴','D']];
+  var LET={A:'A',B:'B',D:'D',I:'I',G:'G',P:'K2',J:'WED',K:'K',U:'U'};
   var allP=(typeof S!=='undefined'&&S.br)?S.br.people:[];
-  function lex(body){var t=[],i=0,s=body;
+  function lex(body){var t=[],i=0,s=body.replace(/[Kk]\s*2(?!\d|\s*일)/g,'예비군');
     var re=/(\d{1,2})\s*월\s*(\d{1,2})\s*일?|(\d{1,2})\s*일?|[~～–]|[()（）]|[A-Za-z]|[가-힣]+|./g,x;
     while((x=re.exec(s))){var w=x[0];
       if(x[1]!==undefined){var mm=+x[1],dd=+x[2];t.push(mm===mon?{k:'n',v:dd}:{k:'f',v:dd,m:mm});continue;}
@@ -770,7 +770,7 @@ async function loadMonth(){
     try{var b=await S.db.doc('branches/'+S.bid+'/months/'+ymKey(pv[0],pv[1])).get();if(b.exists)pd=b.data();}catch(e){}}
   S.prevDoc=pd;
   var month={qUsed:md&&md.qUsed?md.qUsed:null,qSrc:md&&md.qSrc||'',y:y,m:m,holidays:md&&md.holidays?md.holidays:defaultHolidays(y,m),reqText:md&&md.reqText||'',req:md&&md.req?md.req:{},tail:{},approved:md&&md.approved||[],fourNight:md&&md.fourNight||[],restOff:md&&md.restOff||[],plans:md&&md.plans||{},status:md&&md.status||'',prevPaste:md&&md.prevPaste||''};
-  if(pd&&pd.sched){Object.keys(pd.sched).forEach(function(n){month.tail[n]=pd.sched[n].slice(-7);});S.prevSrc=(pd.status==='final'?'확정본':'초안')+' ('+pv[0]+'년 '+pv[1]+'월)';}
+  if(pd&&pd.sched){Object.keys(pd.sched).forEach(function(n){month.tail[n]=pd.sched[n].slice(-7).map(function(c){return c==='P'?'K2':c;});});S.prevSrc=(pd.status==='final'?'확정본':'초안')+' ('+pv[0]+'년 '+pv[1]+'월)';}
   else if(month.prevPaste){month.tail=parsePrev(month.prevPaste).tail;S.prevSrc='붙여넣기';}
   else S.prevSrc='';
   var qi=quarterInfo(y,m,rulesOf(S.br));
@@ -782,6 +782,9 @@ async function loadMonth(){
       Object.keys(month.qManual).forEach(function(n){var dl=r1((qc.sum[n]||0)-(month.qBase[n]||0));eff[n]=r1((+month.qManual[n])+dl);if(dl)adj[n]=dl;});
       month.qUsed=eff;month.qAdj=adj;}}
   month.planned=md&&md.planned||null;month.changes=md&&md.changes||[];S.savedSched=md&&md.sched?clone(md.sched):null;S.chgDirty=false;
+  // 예비군 코드 P → 회사 코드 K2 (예전 저장본 자동 변환)
+  if(md){var pk=function(o){if(!o)return;Object.keys(o).forEach(function(n){var v=o[n];if(Array.isArray(v)){for(var i=0;i<v.length;i++)if(v[i]==='P')v[i]='K2';}else if(v&&typeof v==='object'){Object.keys(v).forEach(function(k){if(v[k]==='P')v[k]='K2';});}});};
+    pk(md.sched);pk(md.req);pk(md.planned);if(month.req)pk(month.req);Object.keys(md.plans||{}).forEach(function(k){pk(md.plans[k].sched);pk(md.plans[k].req);});}
   if(md&&md.sched){S.result={sched:md.sched,va:md.va||{},nightOff:md.nightOff||[],cost:md.cost||0,from:'saved'};
     // 회사 양식에서 옮긴 근무표처럼 차량 배정이 없으면 여기서 채움 (점검 화면 오류 방지)
     var fpL=fieldPeople(S.br).filter(function(p){return md.sched[p.name];});
@@ -1179,7 +1182,7 @@ function appliedCard(br){return el('div',{class:'card memo applied'},[el('h2',{t
   el('ul',{},appliedRules(br).map(function(x){return el('li',{text:x});}))]);}
 function memoCard(){var t=(S.br.memo||'').split(/\n+/).map(function(x){return x.trim();}).filter(Boolean);if(!t.length)return null;
   return el('div',{class:'card memo'},[el('h2',{text:S.br.name+' 고유 규칙'}),el('ul',{},t.map(function(x){return el('li',{text:x});}))]);}
-function legend(){var lg=el('div',{class:'legend'});['A','B','D','AJ','I','J','P','G','K'].forEach(function(c){lg.appendChild(el('span',{},[el('i',{class:'k-'+c,text:c}),CODE_NAME[c]]));});return lg;}
+function legend(){var lg=el('div',{class:'legend'});['A','B','D','AJ','I','J','K2','G','K'].forEach(function(c){lg.appendChild(el('span',{},[el('i',{class:'k-'+c,text:c}),CODE_NAME[c]]));});return lg;}
 
 // ================= 4. 자동 편성 =================
 function preflight(){
@@ -1346,7 +1349,7 @@ function loadPlan(id){var M=S.month,P=M.plans[id],ym=ymKey(M.y,M.m);if(!P)return
   S.planId=id;if(M.status==='final')M.status='draft';toast((P.label||id)+' 안을 불러왔어요 — 명단 제외: '+(out.join(', ')||'없음'));render();}
 function kpi(l,v,cls){return el('div',{class:'kpi '+cls},[el('div',{class:'l',text:l}),el('div',{class:'v',text:v})]);}
 function pickCode(title,cur,cb){var ov=el('div',{class:'pick-ov',onclick:function(e){if(e.target===ov)ov.remove();}});
-  var cs=['A','B','D','I','AJ','G','U','J','K','P'],box=el('div',{class:'codes'});
+  var cs=['A','B','D','I','AJ','G','U','J','K','K2'],box=el('div',{class:'codes'});
   cs.forEach(function(c){box.appendChild(el('button',{class:'k-'+c+(c===cur?' on':''),onclick:function(){ov.remove();if(c!==cur)cb(c);}},[c,el('small',{text:CODE_NAME[c]||''})]));});
   ov.appendChild(el('div',{class:'pick'},[el('h3',{text:title}),box,el('div',{class:'row',style:'margin-top:12px'},[el('button',{class:'btn',text:'닫기',onclick:function(){ov.remove();}})])]));document.body.appendChild(ov);}
 function refreshAfterEdit(){var br=S.br,M=S.month,N=dim(M.y,M.m);var fs={};fieldPeople(br).forEach(function(p){fs[p.name]=S.result.sched[p.name];});
@@ -1403,7 +1406,7 @@ function colL(n){var s='';while(n>0){var m=(n-1)%26;s=String.fromCharCode(65+m)+
 
 // ================= 시작 =================
 // 항상 최신 버전으로: 내려받은 html(file://)은 웹 최신본으로 이동, 웹 버전은 새 버전이 올라오면 자동 새로고침
-var WEB_URL='https://ijaesig04-hash.github.io/report/roster.html',BUILD='2026-11-14c';
+var WEB_URL='https://ijaesig04-hash.github.io/report/roster.html',BUILD='2026-11-17a';
 function autoLatest(){try{
   var here=location.href.split(/[?#]/)[0];
   /* 내려받은 html(회사 PC 등): 인터넷이 되면 바로 웹 최신본으로 이동 */
