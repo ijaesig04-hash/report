@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261117082225">
+<meta name="bsr-ver" content="20261117124441">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -6583,6 +6583,13 @@ function gvJsonp(u){
   });
 }
 function getSheet(u){ return getText(u).catch(function(){ return gvJsonp(u); }); }
+/* 수기 보정: 앱 전송이 누락된 건을 파트장이 확인해 최소 건수로 맞춤 (실제 서버 건수가 이 값 이상이 되면 보정은 자동으로 사라짐) */
+var MANUAL_FIX = [ {ym:"2026-11", name:"김지원", panel:6, risk:6, date:"2026-11-16", why:"앱 전송 누락 — 파트장 확인(11/17)"} ];
+function fixPanelRows(rows){ MANUAL_FIX.forEach(function(f){ if(!f.panel) return; var have=0; rows.forEach(function(r){ if(String(r[0]).slice(0,7)===f.ym && r[1]===f.name) have+=(+r[2]||0); });
+  if(have<f.panel) rows.push([f.date, f.name, f.panel-have, 0, "fix"]); }); rows.sort(function(a,b){ return a[0]<b[0]?-1:a[0]>b[0]?1:0; }); return rows; }
+function fixRiskRows(rows){ MANUAL_FIX.forEach(function(f){ if(!f.risk) return; var have=0; rows.forEach(function(r){ if(String(r[0]).slice(0,7)===f.ym && r[1]===f.name) have+=(+r[2]||0); });
+  if(have<f.risk) rows.push([f.date, f.name, f.risk-have, "fix"]); }); rows.sort(function(a,b){ return a[0]<b[0]?-1:a[0]>b[0]?1:0; }); return rows; }
+function fixPstat(ym, by){ MANUAL_FIX.forEach(function(f){ if(f.ym!==ym || !f.panel) return; var o=by[f.name]||{p:0,s:0}; if(o.p<f.panel) o.p=f.panel; by[f.name]=o; }); return by; }
 var PANEL_API = "https://script.google.com/macros/s/AKfycbyVVBGIG4NEZt8m3tCoZAop2kuuygMIctDmG2XtQE52hAAcx9HkJq75ChQOxB1wda_MNQ/exec", PSTAT = {}, PSTAT_BUSY = {};
 function repRoster(ym){ try{ var r = mxRoster(ym).map(function(x){return x[1]}); if(r.length) return r; }catch(e){} return PPL.map(function(p){return p.name}); }
 /* 판넬 앱 서버가 직접 세는 이번 달 건수 (근무자 화면의 '이번 달 n건'과 같은 값) */
@@ -6593,7 +6600,7 @@ function panelStatLoad(ym, force){
   var R = [];
   names.reduce(function(pr,n){ return pr.then(function(){ return fetch(PANEL_API+'?action=myStat&branch='+encodeURIComponent('북서울지사')+'&name='+encodeURIComponent(n)+'&month='+ym,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){ R.push(j && j.ok ? [n, +j.panel||0, +j.sticker||0, +j.count||0] : null); }).catch(function(){ R.push(null); }); }); }, Promise.resolve())
   .then(function(){ PSTAT_BUSY[ym] = false; var ok = R.filter(Boolean); if(!ok.length) return; var by = {}; ok.forEach(function(x){ var p=x[1], s2=x[2]; if(!p && !s2 && x[3]) s2 = x[3]; by[x[0]] = {p:p, s:s2}; });
-    var prev = PSTAT[ym] ? JSON.stringify(PSTAT[ym].by) : ''; PSTAT[ym] = {t:Date.now(), at:kstNow(), by:by}; if(prev!==JSON.stringify(by) && window.state && state.tab==="rep") renderQuiet(); });
+    by = fixPstat(ym, by); var prev = PSTAT[ym] ? JSON.stringify(PSTAT[ym].by) : ''; PSTAT[ym] = {t:Date.now(), at:kstNow(), by:by}; if(prev!==JSON.stringify(by) && window.state && state.tab==="rep") renderQuiet(); });
 }
 var RISK_API = "https://script.google.com/macros/s/AKfycbygmjwcblQ9W9rF8KPHh9HhHaMuJ6Ys8e13QainA_ktd_0PmTRJs3DeD8eHmldXzvfA/exec";
 function syncLbl(o){ var t=String(o.synced||'').slice(5,16).replace('-','/'); if(o.err) return '연결 안 됨 · 마지막 '+t; return (o.live?'실시간 ':'저장본 ')+t; }
@@ -6601,13 +6608,14 @@ function liveSync(){
   if(!window.fetch) return;
   var now=kstNow(), changed=false, ym=kstDate(0).slice(0,7);
   panelStatLoad(ym);
-  var a=getSheet(LIVE.panel).then(function(t){ var rows=parsePanel(t); if(rows.length){ PANEL.rows=rows; PANEL.synced=now; PANEL.live=true; changed=true; PANEL.err=false; } else { changed=true; PANEL.err=true; } }).catch(function(){ changed=true; PANEL.err=true; });
+  var a=getSheet(LIVE.panel).then(function(t){ var rows=parsePanel(t); if(rows.length){ PANEL.rows=fixPanelRows(rows); PANEL.synced=now; PANEL.live=true; changed=true; PANEL.err=false; } else { changed=true; PANEL.err=true; } }).catch(function(){ changed=true; PANEL.err=true; });
   /* 위험예지: 앱 서버(script.google.com)에서 직접 받고, 서버 응답이 없으면 구글 시트로 대신 받음 */
-  var b=fetch(RISK_API+"?action=daily&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok&&Array.isArray(j.rows)){ RISK.rows=j.rows; RISK.synced=now; RISK.live=true; RISK.err=false; changed=true; return; } throw 0; }).catch(function(){ return getSheet(LIVE.risk).then(function(t){ var rows=parseRisk(t); if(rows.length){ RISK.rows=rows; RISK.synced=now; RISK.live=true; RISK.err=false; } else { RISK.err=true; } changed=true; }).catch(function(){ changed=true; RISK.err=true; }); });
+  var b=fetch(RISK_API+"?action=daily&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok&&Array.isArray(j.rows)){ RISK.rows=fixRiskRows(j.rows); RISK.synced=now; RISK.live=true; RISK.err=false; changed=true; return; } throw 0; }).catch(function(){ return getSheet(LIVE.risk).then(function(t){ var rows=parseRisk(t); if(rows.length){ RISK.rows=fixRiskRows(rows); RISK.synced=now; RISK.live=true; RISK.err=false; } else { RISK.err=true; } changed=true; }).catch(function(){ changed=true; RISK.err=true; }); });
   /* 월 목표(인당): 위험예지 앱 서버의 값을 그대로 따라감 */
   var c=fetch(RISK_API+"?action=roster&key=PUBLIC_EMPLOYEE_KEY&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ var t=j&&j.ok?+j.target:0; if(t>0 && t<=200 && t!==RISK.target){ RISK.target=t; changed=true; } }).catch(function(){});
   Promise.all([a,b,c]).then(function(){ if(changed && state.tab==="rep") renderQuiet(); });
 }
+try{ PANEL.rows=fixPanelRows(PANEL.rows); RISK.rows=fixRiskRows(RISK.rows); }catch(e){}
 liveSync();
 document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible") liveSync(); });
 setInterval(function(){ if(document.visibilityState==="visible") liveSync(); }, 300000);

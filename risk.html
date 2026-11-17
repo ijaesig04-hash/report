@@ -448,7 +448,8 @@ async function pushRecordToServer(r){
     setRecords(rows);
     setSyncStatus('✅ 서버 저장 완료 · '+new Date().toLocaleTimeString('ko-KR'),true);
   }catch(e){
-    setSyncStatus('⚠️ 서버 저장 실패 — 재동기화 필요',false);
+    setSyncStatus('⚠️ 서버 저장 실패 — 인터넷 연결되면 자동으로 다시 보냅니다',false);
+    toast('⚠️ 서버 전송 실패 — 이 폰에 저장했고, 자동으로 다시 보냅니다');
   }
 }
 function todayISO(){
@@ -585,7 +586,8 @@ setInterval(()=>{if(sync.url) syncFromServer(false);},15000);
 window.addEventListener('DOMContentLoaded',()=>{
   const ho=store.get('rk_ho'),nm=store.get('rk_name');
   if(ho) $('f_ho').value=ho;
-  $('f_date').value=store.get('rk_date')||todayISO();
+  // 활동일자: 직접 바꾼 날짜는 그날 하루만 기억하고, 다음 날부터는 오늘 날짜로 시작
+  (function(){let v='';try{const o=JSON.parse(store.get('rk_date2')||'null');if(o&&o.set===todayISO())v=o.v;}catch(e){}$('f_date').value=v||todayISO();})();
   $('statYear').value=Number(todayISO().slice(0,4));
   $('statMonth').value=todayISO().slice(5,7);
   $('monthlyTarget').value=store.get('rk_target')||'';
@@ -602,7 +604,17 @@ window.addEventListener('DOMContentLoaded',()=>{
 });
 $('f_ho').addEventListener('change',e=>store.set('rk_ho',e.target.value));
 $('f_name').addEventListener('change',e=>{store.set('rk_name',e.target.value);renderMyStat();});
-$('f_date').addEventListener('change',e=>{store.set('rk_date',e.target.value);renderMyStat();});
+$('f_date').addEventListener('change',e=>{store.set('rk_date2',JSON.stringify({v:e.target.value,set:todayISO()}));renderMyStat();});
+// 앱을 켜 둔 채 날짜가 바뀌면 활동일자를 오늘로 (직접 고른 날짜가 아닐 때)
+let _rkDay=todayISO();
+function rollDate(){const t=todayISO();if(t===_rkDay)return;let picked='';try{const o=JSON.parse(store.get('rk_date2')||'null');if(o&&o.set===t)picked=o.v;}catch(e){}if(!picked&&$('f_date').value===_rkDay)$('f_date').value=t;_rkDay=t;renderMyStat();}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')rollDate();});setInterval(rollDate,60000);
+// 서버에 못 올라간 기록(synced:false)은 직원 화면에서도 자동으로 다시 보냄
+async function retryPending(){const pend=getRecords().filter(r=>r.synced===false);if(!pend.length)return;
+  try{const res=await fetch(FIXED_SERVER_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'addRecords',key:(currentMode==='employee'?PUBLIC_EMPLOYEE_KEY:sync.pin),records:pend.map(r=>{const {synced,...x}=r;return x;})})});
+    const d=await res.json();if(!d.ok)throw new Error(d.error||'');const ids=new Set(pend.map(r=>r.id));setRecords(getRecords().map(r=>ids.has(r.id)?{...r,synced:true}:r));
+    setSyncStatus('✅ 못 보낸 기록 '+pend.length+'건 서버 저장 완료',true);toast('못 보낸 기록 '+pend.length+'건을 서버에 다시 보냈습니다');renderMyStat();}catch(e){}}
+setTimeout(retryPending,2500);window.addEventListener('focus',retryPending);setInterval(retryPending,60000);
 $('statYear').addEventListener('input',renderStats);
 $('statMonth').addEventListener('change',renderStats);
 $('monthlyTarget').addEventListener('input',e=>{store.set('rk_target',e.target.value);renderStats();renderMyStat();});
