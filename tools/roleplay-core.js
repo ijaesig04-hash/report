@@ -11,6 +11,9 @@ function doPost(e) {
     if (d.act === 'eval') return out(evaluate(d));
     if (d.act === 'tts') return out(tts(d));
     if (d.act === 'live') return out(live(d));
+    if (d.act === 'aiuse') return out(aiUse(d));                         // 💳 실시간 통화 사용량(토큰) 기록 → 추정 잔액
+    if (d.act === 'aierr') return out(aiErr(String(d.msg || ''), Number(d.code) || 0));   // 💳 폰에서 난 사용량 소진 오류 알림
+    if (d.act === 'balset') return out(balSet(d));                        // 💳 파트장: AI Studio 실제 잔액으로 맞추기
     if (d.act === 'sug') return out(sugAdd(d));                          // 💬 건의·질문함 — 남기기 (누구나)
     if (d.act === 'sugdone') return out(sugDone(d));                      // 파트장: 확인·답변 표시
     if (d.act === 'evstart') return out(evStart(d));                      // 📝 평가 시작 (한 달 3회)
@@ -33,6 +36,8 @@ function doGet(e) {
     if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
     return out({ ok: true, rows: sugRows() });
   }
+  if (p.action === 'aibal') return out(aiBal());                         // 💳 AI 충전 잔액(추정) — 현황판용
+  if (p.action === 'aiclaim') return out(aiClaim(String(p.ev || '')));    // 💳 알림 보내기(GitHub 5분 작업)용 — 새 사건이면 한 번만 true
   if (p.action === 'evbest') {   // MVP 「AI 응대 평가」 점수용 — 월별 이름: 최고 점수
     const m = {}; const sh = evSh('평가제출', EV_HEAD), n = sh.getLastRow();
     if (n >= 2) sh.getRange(2, 1, n - 1, EV_HEAD.length).getValues().forEach(function (r) { const ym = ymOf(r[1]); (m[ym] = m[ym] || {})[String(r[2])] = Number(r[5]) || 0; });
@@ -125,12 +130,14 @@ function geminiCall(sys, contents, maxTok, fast) {
         const j = JSON.parse(r.getContentText()), cd = j.candidates && j.candidates[0];
         const t = cd && cd.content && cd.content.parts ? cd.content.parts.map(function (x) { return x.text || ''; }).join('') : '';
         const a = t.indexOf('{'), b = t.lastIndexOf('}');
+        try { const um = j.usageMetadata || {}; aiLog('text', model, { tin: um.promptTokenCount || 0, tout: (um.candidatesTokenCount || 0) + (um.thoughtsTokenCount || 0) }); } catch (e) {}
         if (a >= 0 && b > a) { c.put('okModel', model, 21600); LAST_MODEL = model; return JSON.parse(t.slice(a, b + 1)); }
         lastErr = model + ': 빈 답';
       } catch (e) { lastErr = model + ': ' + e; }
     } else {
       let msg = ''; try { msg = JSON.parse(r.getContentText()).error.message; } catch (e) {}
       lastErr = model + ' (' + code + '): ' + String(msg).slice(0, 160);
+      aiErr(msg, code);
       if (c.get('okModel') === model) c.remove('okModel');
     }
   }
@@ -247,9 +254,10 @@ function tts(d) {
       const j = JSON.parse(r.getContentText());
       const part = (((j.candidates || [])[0] || {}).content || {}).parts || [];
       const au = part.filter(function (p) { return p.inlineData && p.inlineData.data; })[0];
+      try { const um = j.usageMetadata || {}; aiLog('tts', list[i], { tin: um.promptTokenCount || 0, aout: um.candidatesTokenCount || 0 }); } catch (e) {}
       if (au) { c.put('tts_ok', list[i], 21600); const m = /rate=(\d+)/.exec(au.inlineData.mimeType || ''); return { ok: true, audio: au.inlineData.data, rate: m ? +m[1] : 24000, mime: au.inlineData.mimeType || '' }; }
       last = 'noaudio';
-    } else { last = code + ' ' + r.getContentText().slice(0, 160); if (code === 429) break; }
+    } else { last = code + ' ' + r.getContentText().slice(0, 160); aiErr(r.getContentText().slice(0, 300), code); if (code === 429) break; }
   }
   return { ok: false, err: last };
 }
@@ -279,7 +287,7 @@ function live(d) {
     method: 'post', contentType: 'application/json', muteHttpExceptions: true,
     payload: JSON.stringify({ uses: 1, expireTime: new Date(now + 30 * 60000).toISOString(), newSessionExpireTime: new Date(now + 2 * 60000).toISOString() })
   });
-  if (r.getResponseCode() !== 200) return { ok: false, err: 'token ' + r.getResponseCode() + ' ' + r.getContentText().slice(0, 200) };
+  if (r.getResponseCode() !== 200) { aiErr(r.getContentText().slice(0, 300), r.getResponseCode()); return { ok: false, err: 'token ' + r.getResponseCode() + ' ' + r.getContentText().slice(0, 200) }; }
   const tok = JSON.parse(r.getContentText()).name;
   const models = liveModels(key), pick = String(d.model || '');
   const sys = '당신은 보안회사 에스원의 고객 응대 연습에서 "까다로운 고객" 역할을 맡은 한국인 연기자입니다. 반드시 한국어로만, 실제 전화 통화하듯 자연스럽게 말합니다.\n' +
@@ -347,6 +355,73 @@ const EV_HEAD = ['시각', '월', '이름', '등급', '제출 회차', '점수',
 function ymNow() { return Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM'); }
 /* 시트가 '2026-11'을 날짜로 바꿔 버려서 비교가 안 되던 문제 — 읽을 때 항상 'yyyy-MM' 글자로 맞춤 */
 function ymOf(v) { return v instanceof Date ? Utilities.formatDate(v, 'Asia/Seoul', 'yyyy-MM') : String(v).replace(/^'/, '').slice(0, 7); }
+/* ===== 💳 AI 충전 잔액(추정) =====
+   구글은 선불 잔액을 앱에서 읽을 수 있게 열어 주지 않아서, 쓸 때마다 구글이 알려 주는 토큰 수 × 단가로 사용액을 추정해 빼 나감.
+   파트장이 AI Studio 실제 잔액을 입력하면(balset) 그 값을 새 기준으로 다시 시작 → 오차가 쌓이지 않음.
+   단가(달러/100만 토큰, 유료 1단계 기준 · 넉넉하게): 실시간 통화 텍스트 입력 0.5 · 음성 입력 3 · 텍스트 출력 2 · 음성 출력 12
+   / 대사·채점(Flash) 입력 0.75 · 출력 3.75 / 목소리(TTS) 입력 0.5 · 음성 출력 10. 환율은 스크립트 속성 KRW (기본 1450) */
+const AI_RATE = { live: { tin: 0.5, ain: 3, tout: 2, aout: 12 }, text: { tin: 0.75, tout: 3.75 }, tts: { tin: 0.5, aout: 10 } };
+const USE_HEAD = ['시각', '종류', '이름', '모델', '입력(텍스트)', '입력(음성)', '출력(텍스트)', '출력(음성)', '추정(원)'];
+function aiWon(kind, u) {
+  const R = AI_RATE[kind] || AI_RATE.text, krw = Number(P.getProperty('KRW')) || 1450;
+  const usd = ((u.tin || 0) * (R.tin || 0) + (u.ain || 0) * (R.ain || R.tin || 0) + (u.tout || 0) * (R.tout || 0) + (u.aout || 0) * (R.aout || R.tout || 0)) / 1e6;
+  return Math.round(usd * krw * 100) / 100;
+}
+function aiLog(kind, model, u, name) {
+  const won = aiWon(kind, u); if (!(won > 0)) return 0;
+  const lock = LockService.getScriptLock(); try { lock.waitLock(5000); } catch (e) {}
+  try {
+    P.setProperty('AI_USED', String((Number(P.getProperty('AI_USED')) || 0) + won));
+    const day = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd'), dk = 'AI_DAY_' + day, prev = JSON.parse(P.getProperty('AI_DAY') || '{}');
+    const cur = prev.d === day ? prev : { d: day, n: 0, won: 0 }; cur.won = Math.round((cur.won + won) * 100) / 100; if (kind === 'live' || kind === 'evalx') cur.n++;
+    P.setProperty('AI_DAY', JSON.stringify(cur));
+    if (P.getProperty('AI_EMPTY')) { P.deleteProperty('AI_EMPTY'); }   // 다시 잘 되면 '소진' 표시 해제
+  } finally { try { lock.releaseLock(); } catch (e) {} }
+  try { evSh('AI사용', USE_HEAD).appendRow([new Date(), kind, String(name || '').slice(0, 10), String(model || '').slice(0, 60), u.tin || 0, u.ain || 0, u.tout || 0, u.aout || 0, won]); } catch (e) {}
+  return won;
+}
+function aiUse(d) {
+  const u = d.u || {}, f = function (x) { return Math.max(0, Math.min(5e6, Number(x) || 0)); };
+  const won = aiLog('live', d.model, { tin: f(u.tin), ain: f(u.ain), tout: f(u.tout), aout: f(u.aout) }, d.name);
+  return { ok: true, won: won };
+}
+/* 사용량 소진 감지 — 선불 잔액 소진(depleted·prepay·credit) 오류는 바로, '한도 초과(quota)'는 10분에 5번 넘게 나면 소진으로 봄 */
+function aiErr(msg, code) {
+  msg = String(msg || ''); if (!msg && !code) return { ok: true };
+  const hard = /depleted|prepay/i.test(msg), quota = (code === 429 || /RESOURCE_EXHAUSTED/.test(msg)) && /quota|exhausted/i.test(msg);
+  if (!hard && !quota) return { ok: true };
+  let hit = hard;
+  if (!hard) {
+    const c = CacheService.getScriptCache(), n = (Number(c.get('ai_q')) || 0) + 1; c.put('ai_q', String(n), 600); hit = n >= 5;
+  }
+  if (hit && !P.getProperty('AI_EMPTY')) P.setProperty('AI_EMPTY', JSON.stringify({ at: Date.now(), msg: msg.slice(0, 160), id: 'e' + Date.now() }));
+  return { ok: true, empty: hit };
+}
+function aiBal() {
+  if (!P.getProperty('AI_BASE')) { P.setProperty('AI_BASE', '20000'); P.setProperty('AI_BASE_AT', String(Date.now())); P.setProperty('AI_USED', '0'); }   // 첫 충전 2만 원 (11/18)
+  const base = Number(P.getProperty('AI_BASE')) || 0, used = Math.round(Number(P.getProperty('AI_USED')) || 0);
+  const day = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd'), dd = JSON.parse(P.getProperty('AI_DAY') || '{}');
+  let empty = null; try { empty = JSON.parse(P.getProperty('AI_EMPTY') || 'null'); } catch (e) {}
+  const est = Math.max(0, base - used);
+  return { ok: true, base: base, at: Number(P.getProperty('AI_BASE_AT')) || 0, used: used, est: est, low: est < 2000, empty: empty,
+    today: dd.d === day ? { n: dd.n, won: Math.round(dd.won) } : { n: 0, won: 0 } };
+}
+function balSet(d) {
+  if (!P.getProperty('ADMIN_PIN') || String(d.pin) !== P.getProperty('ADMIN_PIN')) return { ok: false, err: 'pin' };
+  const won = Math.round(Number(d.won)); if (!(won >= 0)) return { ok: false, err: 'won' };
+  P.setProperty('AI_BASE', String(won)); P.setProperty('AI_BASE_AT', String(Date.now())); P.setProperty('AI_USED', '0');
+  P.deleteProperty('AI_EMPTY'); P.deleteProperty('AI_CLAIM_low');
+  return aiBal();
+}
+/* 알림은 사건마다 한 번만: empty(소진) · low(2천 원 미만) */
+function aiClaim(ev) {
+  const b = aiBal(); let id = '';
+  if (ev === 'empty' && b.empty) id = b.empty.id;
+  if (ev === 'low' && b.low && !b.empty) id = 'l' + b.at;
+  if (!id) return { ok: true, claim: false, bal: b };
+  const k = 'AI_CLAIM_' + ev; if (P.getProperty(k) === id) return { ok: true, claim: false, bal: b };
+  P.setProperty(k, id); return { ok: true, claim: true, bal: b };
+}
 function evSh(name, head) {
   const ss = sheet().getParent();
   let sh = ss.getSheetByName(name);

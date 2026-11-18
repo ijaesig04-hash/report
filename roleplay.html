@@ -558,6 +558,7 @@ function livePre(){ try{ var p=liveTok(); p.catch(function(){}); LV_PF={key:S.si
 function liveErr(msg){
   var d=document.createElement("div"); d.className="tip"; d.textContent="⚠️ 실시간 통화 연결이 안 됐어요. 오늘 무료 사용량이 끝났거나 연결이 불안정할 수 있어요. 「글자로 연습」을 눌러 계속할 수 있어요. ("+String(msg).slice(0,60)+")"; $("#chat").appendChild(d); scrollEnd();
   rpLog("실시간 실패 · "+String(msg).slice(0,40));
+  try{ api1({act:"aierr", msg:String(msg).slice(0,300)}).catch(function(){}); }catch(e){}
 }
 function b64ToI16(b){ var s=atob(b), n=s.length, u=new Uint8Array(n); for(var i=0;i<n;i++) u[i]=s.charCodeAt(i); return new Int16Array(u.buffer, 0, n>>1); }
 function i16ToB64(a){ var u=new Uint8Array(a.buffer), s="", k=0x8000; for(var i=0;i<u.length;i+=k) s+=String.fromCharCode.apply(null, u.subarray(i,i+k)); return btoa(s); }
@@ -588,7 +589,19 @@ function liveConnect(token, model, sys, onFail){
   };
   ws.onerror=function(){};
 }
+/* 💳 사용량(토큰) 모으기 — 구글이 보내 주는 usageMetadata를 매번 더함(실제 요금과 맞는 방식) → 통화 끝나면 서버에 한 번 기록 */
+function lvUsage(L,u){ var a=L.u||(L.u={tin:0,ain:0,tout:0,aout:0});
+  var pd=u.promptTokensDetails||[], rd=u.responseTokensDetails||[];
+  if(pd.length) pd.forEach(function(x){ if(/AUDIO/i.test(x.modality)) a.ain+=x.tokenCount||0; else a.tin+=x.tokenCount||0; }); else a.tin+=u.promptTokenCount||0;
+  if(rd.length) rd.forEach(function(x){ if(/AUDIO/i.test(x.modality)) a.aout+=x.tokenCount||0; else a.tout+=x.tokenCount||0; }); else a.aout+=u.responseTokenCount||0;
+  a.tout+=u.thoughtsTokenCount||0; }
+function lvUseSend(L,beacon){ if(!L||L.uSent||!L.u) return; var a=L.u; if(!(a.tin+a.ain+a.tout+a.aout)) return; L.uSent=true;
+  var body={act:"aiuse", name:GUEST?"":ME, model:L.model, u:a};
+  try{ if(beacon && navigator.sendBeacon){ navigator.sendBeacon(RP_API, JSON.stringify(body)); return; } }catch(e){}
+  api1(body).catch(function(){}); }
+window.addEventListener("pagehide", function(){ if(LV_) lvUseSend(LV_, true); });
 function liveMsg(L,m){
+  if(m.usageMetadata) lvUsage(L,m.usageMetadata);
   if(m.setupComplete){
     L.ready=true; try{ localStorage.setItem("rp_live_model",L.model); }catch(e){}
     rpLog("실시간 연결 · "+L.model); lvStatus("고객이 말하는 중…");
@@ -653,6 +666,7 @@ function liveMic(L){
   }).catch(function(e){ lvStatus("마이크를 켤 수 없어요 · 마이크 권한을 허용해 주세요"); liveErr("마이크 "+(e&&e.name||e)); });
 }
 function liveClean(L){
+  lvUseSend(L);
   try{ L.proc&&L.proc.disconnect(); }catch(e){} try{ L.stream&&L.stream.getTracks().forEach(function(t){t.stop();}); }catch(e){}
   try{ L.inCtx&&L.inCtx.close(); }catch(e){} L.srcs.forEach(function(x){ try{ x.stop(); }catch(e){} });
   setTimeout(function(){ try{ L.outCtx&&L.outCtx.close(); }catch(e){} }, 300);
