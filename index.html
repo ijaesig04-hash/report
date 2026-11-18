@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261118134827">
+<meta name="bsr-ver" content="20261118135316">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3925,8 +3925,9 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-18i", only:"이재식", date:"11/18", title:"nopush:💳 AI 충전 잔액은 파트장만", tabs:["home"], items:["💳 브리핑의 AI 응대 충전 잔액(추정)은 이재식 파트장 화면에만 보여요"]},
  {id:"2026-11-18h", only:"이재식", date:"11/18", title:"nopush:👑 응대왕 가점 공지 준비", tabs:["home"], items:["✏️ 공지 쓰기 → 자료 첨부에서 「👑 응대왕 가점」을 고르면 제목·부서가 채워져요"]},
- {id:"2026-11-18g", date:"11/18", title:"nopush:💳 AI 응대 충전 잔액 표시", tabs:["home"], items:["💳 브리핑에 AI 응대 충전 잔액(추정) 표시 — 통화·채점 사용량으로 계산","⚠️ 2천 원 미만이면 주황 경고 · ⛔ 다 쓰면 빨간 알림 (파트장 폰으로 알림)"]},
+ {id:"2026-11-18g", only:"이재식", date:"11/18", title:"nopush:💳 AI 응대 충전 잔액 표시", tabs:["home"], items:["💳 브리핑에 AI 응대 충전 잔액(추정) 표시 — 통화·채점 사용량으로 계산","⚠️ 2천 원 미만이면 주황 경고 · ⛔ 다 쓰면 빨간 알림 (파트장 폰으로 알림)"]},
  {id:"2026-11-18f", date:"11/18", title:"👑 12월부터 응대왕 지사 평가 가점", tabs:["eval"], items:["🎁 26년 12월부터 매월 AI 고객 응대 평가 상위 3명(3위 동점 모두 · 파트장 제외)에게 지사 평가 +2점 자동 반영","📋 지사 평가 가·감점 기준(포상·자격)에 항목 추가"]},
  {id:"2026-11-18e", date:"11/18", title:"👑 응대왕 칸에 평가 바로가기", tabs:["eval"], items:["🎧 이달의 응대왕 칸 안 「평가 보러 가기」 → AI 고객 응대 평가 탭으로 바로 이동"]},
  {id:"2026-11-18d", date:"11/18", title:"운전성향 11/18 반영", tabs:["drv"], items:["🚗 운전성향 11/18 — 김태건 주의(71건, 하루 평균 5.5), 그 외 양호"]},
@@ -5384,7 +5385,7 @@ function rpProdRow(){
   return '<div class="fr rpr"><button type="button" class="fr-c fr-rp" data-rpopen="1"><span class="rpi">🎧</span><em class="rpn">NEW</em><b>AI 고객 응대<br>롤플레잉<small class="rpe">Speech</small></b><i>›</i></button>'+
     '<a class="fr-c fr-pd" href="'+PROD_URL+'"><span class="rpi">🛡️</span><b>에스원<br>다이렉트몰<small class="rpe">Mail · KakaoTalk</small></b><i>›</i></a></div>'+aibHtml();
 }
-/* 💳 AI 응대 충전 잔액(추정) — 모두에게 보임 · 2천 원 미만 경고 · 소진 시 빨간 알림. 파트장(이재식)은 눌러서 실제 잔액으로 맞춤 */
+/* 💳 AI 응대 충전 잔액(추정) — 이재식 파트장만 보임 · 2천 원 미만 경고 · 소진 시 빨간 알림. 파트장(이재식)은 눌러서 실제 잔액으로 맞춤 */
 var AIB = null, AIB_AT = 0;
 try{ var _ab = JSON.parse(sessionStorage.getItem("bsr_aib")||"null"); if(_ab){ AIB = _ab.d; } }catch(e){}
 function aibLoad(force){
@@ -5395,6 +5396,7 @@ function aibLoad(force){
   }).catch(function(){});
 }
 function aibHtml(noLoad){
+  if(myName()!=="이재식") return '';   /* 파트장(이재식)만 보임 */
   if(!noLoad) setTimeout(aibLoad,0);
   var a = AIB, me = myName()==="이재식";
   if(!a) return '<div id="aibal" class="aib"><span class="aib-i">💳</span><div class="aib-t"><b>AI 응대 충전 잔액</b><small>불러오는 중…</small></div></div>';
