@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261118225505">
+<meta name="bsr-ver" content="20261118225940">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3936,6 +3936,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-18m", date:"11/18", title:"nopush:📊 해피콜 월 누계 공개", tabs:["home"], items:["📊 근무일엔 퇴근 2시간 뒤까지 해피콜 발송 현황 카드에서 월 누계(제출/근무 · 발송 건수)를 볼 수 있어요"]},
  {id:"2026-11-18l", date:"11/18", title:"nopush:📱 해피콜 현황 — 근무조 함께 보기", tabs:["home"], items:["📱 근무일엔 퇴근 2시간 뒤까지 브리핑에 우리 근무조 해피콜 발송 현황이 보여요 (제출해도 그대로)"]},
  {id:"2026-11-18k", only:"이재식", date:"11/18", title:"nopush:📊 해피콜 발송 누계", tabs:["home"], items:["📱 브리핑 해피콜 발송 현황 아래 「📊 월 누계」 — 사람별 제출/근무 · 발송 건수 · 0건 사유 (이번 달·지난달)"]},
  {id:"2026-11-18j", date:"11/18", title:"nopush:📝 평가 상황 사진 교체", tabs:["home"], items:["🖼️ AI 응대 평가 — CCTV 녹화 안 됨 · 출동 지연 · 요금 불만 상황 사진을 새 사진으로 바꿨어요"]},
@@ -6438,7 +6439,7 @@ function hcMgr(fx, staff){
   if(fold) return '<div class="hc mgr-hc">'+head+'</div>';
   return '<div class="hc mgr-hc">'+head+'<small class="hc-d">🕒 '+hcLbl(x)+'</small>'+
     '<div class="hcm-g1">'+st.map(function(q){ var v=q.v; return '<span class="hcm-p '+(v?(v.cnt?'ok':'wy'):'no')+'">'+q.n+'<em>'+(v?(v.cnt?v.cnt+'건':esc2(v.why)):'미제출')+'</em></span>'; }).join('')+'</div>'+
-    (staff ? (miss.length?'':'<p class="hc-all">우리 근무조 모두 제출했어요 👍</p>') :
+    (staff ? (miss.length?'':'<p class="hc-all">우리 근무조 모두 제출했어요 👍</p>')+hcAcc() :
       (miss.length?'<button type="button" class="hc-e" data-hccp="'+esc2(miss.join(', '))+'">📋 미제출자 안내 복사</button>':'<p class="hc-all">모두 제출했어요 👍</p>')+hcAcc())+'</div>';
 }
 /* 📊 해피콜 누계 — 이번 달(또는 지난달) 근무조별 제출 기록을 사람별로 합산. 근무 = 근무표상 주간·야간(퇴근 2시간 지난 것만 셈) */
