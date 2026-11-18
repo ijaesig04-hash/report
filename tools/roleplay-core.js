@@ -398,7 +398,7 @@ function aiErr(msg, code) {
   return { ok: true, empty: hit };
 }
 function aiBal() {
-  if (!P.getProperty('AI_BASE')) { P.setProperty('AI_BASE', '20000'); P.setProperty('AI_BASE_AT', String(Date.now())); P.setProperty('AI_USED', '0'); }   // 첫 충전 2만 원 (11/18)
+  if (P.getProperty('AI_BASE_V') !== '2') { P.setProperty('AI_BASE', '19927'); P.setProperty('AI_BASE_AT', String(Date.now())); P.setProperty('AI_USED', '0'); P.setProperty('AI_BASE_V', '2'); }   // 11/18 13:51 AI Studio 실제 잔액 ₩19,927 (11/17 ₩20,000 충전)
   const base = Number(P.getProperty('AI_BASE')) || 0, used = Math.round(Number(P.getProperty('AI_USED')) || 0);
   const day = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd'), dd = JSON.parse(P.getProperty('AI_DAY') || '{}');
   let empty = null; try { empty = JSON.parse(P.getProperty('AI_EMPTY') || 'null'); } catch (e) {}
