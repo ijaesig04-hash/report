@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261119073418">
+<meta name="bsr-ver" content="20261119084834">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -817,7 +817,7 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .ncf button[aria-pressed="true"],.ncw button[aria-pressed="true"]{background:var(--nc,#14213a);border-color:var(--nc,#14213a);color:#fff}
 .ncw{display:flex;flex-wrap:wrap;gap:6px}
 .ntw select{border:1px solid #cbd5e1;border-radius:10px;padding:10px;font:500 14px "Noto Sans KR",sans-serif;width:100%;background:#fff;color:#14213a}
-.nli{--nc:#1f4fd8;display:block;width:100%;text-align:left;border:0;border-top:1px solid #e3e9f3;background:none;padding:11px 0;cursor:pointer;font-family:"Noto Sans KR",sans-serif;color:#14213a}
+.nli{--nc:#1f4fd8;display:block;width:100%;text-align:left;border:1px solid #e3e9f3;border-left:4px solid var(--nc);border-radius:14px;background:#f6f8fd;background:color-mix(in srgb,var(--nc) 7%,#fff);border-color:color-mix(in srgb,var(--nc) 22%,#fff);border-left-color:var(--nc);padding:11px 12px;margin-top:10px;cursor:pointer;font-family:"Noto Sans KR",sans-serif;color:#14213a;box-shadow:0 1px 3px rgba(20,33,58,.06)}
 .nli-a{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:11.5px;color:#64748b;line-height:1.3}
 .nli-a>*{white-space:nowrap}
 .nli-a .nli-t{color:#64748b}.nli-a .nli-t::before{content:"·";margin-right:8px;color:#cbd5e1}
@@ -826,8 +826,9 @@ button.hrow[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 
 .nli-a i{font-style:normal;font-weight:800;color:var(--nc)}
 .nli-a .nli-st{font-weight:700;border-radius:999px;padding:2px 8px;background:#fff1e6;color:#c2410c}
 .nli-a .nli-st.ok{background:#e7f7ee;color:#137a3f}
-.nli b{display:block;font-size:14.5px;margin-top:3px;line-height:1.4}
-.nli p{margin:4px 0 0;font-size:12px;color:#475569;background:#f1f5fc;border-radius:8px;padding:5px 8px}
+.nli b{display:block;font-size:14.5px;margin-top:3px;line-height:1.4;word-break:keep-all;overflow-wrap:anywhere}
+.nli .ntg{background:#fff}
+.nli p{margin:6px 0 0;font-size:12px;color:#475569;background:rgba(255,255,255,.75);border-radius:8px;padding:5px 8px}
 .nv{--nc:#1f4fd8}
 .nv-k{display:inline-flex;align-items:center;gap:5px;background:color-mix(in srgb,var(--nc) 11%,#fff);color:var(--nc);font-weight:800;font-size:12px;border-radius:999px;padding:4px 10px}
 .nv h3{margin:10px 0 4px;font-size:19px;line-height:1.35;font-weight:900;text-wrap:balance}
@@ -3938,6 +3939,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-19c", only:"이재식", date:"11/19", title:"nopush:🎨 공지 목록 색 구분", tabs:["home"], items:["📢 공지 목록을 칸마다 분류 색(업무공지 파랑 · 일반 회색 등)으로 칠해 한눈에 구분돼요"]},
  {id:"2026-11-19b", date:"11/19", title:"운전성향 11/19 반영", tabs:["drv"], items:["🚗 운전성향 11/19 — 김태건 주의(75건, 하루 평균 5.4), 그 외 양호"]},
  {id:"2026-11-19a", date:"11/19", title:"고객체감 11/19 반영", tabs:["cs"], items:["📞 고객체감 10/1~11/19 누적 발송 291건 · 응답 100건 · 만족도 9.88점","🎉 새 칭찬 — 유영민"]},
  {id:"2026-11-18o", date:"11/18", title:"nopush:🎧 응대왕·연습왕 구분", tabs:["home"], items:["👑 응대왕 = AI 응대 「평가」 점수 1위 (월별 평가 탭과 같음)","🎧 연습 평균 점수 순위는 「이달의 연습왕」으로 이름을 바꿨어요"]},
