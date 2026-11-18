@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261118230355">
+<meta name="bsr-ver" content="20261118230930">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3936,6 +3936,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-18o", date:"11/18", title:"nopush:🎧 응대왕·연습왕 구분", tabs:["home"], items:["👑 응대왕 = AI 응대 「평가」 점수 1위 (월별 평가 탭과 같음)","🎧 연습 평균 점수 순위는 「이달의 연습왕」으로 이름을 바꿨어요"]},
  {id:"2026-11-18n", date:"11/18", title:"nopush:🏆 MVP 칸 정리", tabs:["home"], items:["🏆 이번 달 MVP 발표 전엔 '11월 이달의 MVP · 11/30 이후 발표' 표시","👑 응대왕은 실제 직원만 (테스트 이름 제외)"]},
  {id:"2026-11-18m", date:"11/18", title:"nopush:📊 해피콜 월 누계 공개", tabs:["home"], items:["📊 근무일엔 퇴근 2시간 뒤까지 해피콜 발송 현황 카드에서 월 누계(제출/근무 · 발송 건수)를 볼 수 있어요"]},
  {id:"2026-11-18l", date:"11/18", title:"nopush:📱 해피콜 현황 — 근무조 함께 보기", tabs:["home"], items:["📱 근무일엔 퇴근 2시간 뒤까지 브리핑에 우리 근무조 해피콜 발송 현황이 보여요 (제출해도 그대로)"]},
@@ -4717,13 +4718,13 @@ function mxCard(){
     (w.top.length?'<div class="mx-top">'+w.top.slice(0,2).map(function(x,i){return '<div><span>'+(i===0?'🥈':'🥉')+' '+esc2(x[0])+'</span><em class="num">'+x[1]+'</em></div>'}).join('')+'</div>':'')+
     rpKing()+'<button type="button" class="mx-note" data-mxinfo="1">ℹ️ 선정 기준 ›</button></div>';
 }
-/* 🎧 이달의 응대왕 — MVP 칸 안에 작게 (롤플레잉 평가 최고 점수 1위, 평가가 없으면 연습 평균 1위) */
+/* 🎧 이달의 응대왕 — MVP 칸 안에 작게 (롤플레잉 「평가」 최고 점수 1위 · 연습 점수는 연습왕으로 따로) */
 function rpKing(){
   setTimeout(evbLoad,0); setTimeout(rpBoardLoad,0);
   var cm = kstDate(0).slice(0,7), E = EVB[cm] || {}, ex = ["이재식","최문혁"];
   var st = rpStaff(cm);   /* 실제 직원만 (이재식2·3 같은 테스트 이름 제외) */
   var L = Object.keys(E).filter(function(n){ return ex.indexOf(n)<0 && st[n]; }).map(function(n){ return {n:n, v:+E[n]}; }).sort(function(a,b){ return b.v-a.v; }), lab = "평가 최고 점수";
-  if(!L.length && RPB && RPB.list && String(RPB.ym)===cm){ L = RPB.list.filter(function(x){ return x.name && ex.indexOf(x.name)<0 && st[x.name]; }).map(function(x){ return {n:x.name, v:x.avg}; }); lab = "연습 평균"; }
+  if(false){ L = RPB.list.filter(function(x){ return x.name && ex.indexOf(x.name)<0 && st[x.name]; }).map(function(x){ return {n:x.name, v:x.avg}; }); lab = "연습 평균"; }
   if(!L.length) return '<div class="mx-kg" id="mxrk" hidden></div>';
   return '<div class="mx-kg" id="mxrk"><span>👑 이달의 응대왕</span><b>'+esc2(L[0].n)+'</b></div>';
 }
@@ -5438,14 +5439,14 @@ document.addEventListener("click", function(e){ var b = e.target.closest("[data-
 });
 function rpBtn(){ return '<button type="button" class="rp-mini" data-rpopen="1"><span>🎧</span><b>AI 고객 응대 롤플레잉</b><small>말로 연습 · 점수 받기</small><i>›</i></button>'; }
 function rpMini(){ setTimeout(rpBoardLoad,0); return rpBoardHtml(); }   /* 버튼은 영업일보 아래(rpBtn), 여기는 연습 현황판만 */
-/* 🏆 이달의 응대왕 — AI 고객 응대 롤플레잉 이달 평균 점수 상위 3명 (칭찬용 · 3명만) */
+/* 🎧 이달의 연습왕 — AI 고객 응대 롤플레잉 '연습' 이달 평균 점수 상위 3명 (칭찬용). 응대왕(평가 기준)과 구분 */
 var RP_API = "https://script.google.com/macros/s/AKfycby7Ggvk7-rHHPYtIia_19uj33TbfJUDefRic63OBz0ifkd7hoOSs1HQ06gkQmNRlTcG/exec", RPB = null, RPB_AT = 0;
 function rpBoardHtml(){
   var L = RPB && RPB.list ? RPB.list.filter(function(x){ return x.name && ["이재식","최문혁"].indexOf(x.name)<0; }).slice(0,3) : [];
   if(!L.length) return '<div class="rpb" id="rpb" hidden></div>';
   var md=["🥇","🥈","🥉"];
-  return '<div class="rpb" id="rpb"><div class="rpb-h"><b>🏆 이달의 응대왕</b><small>'+(+String(RPB.ym).slice(5))+'월 AI 고객 응대 롤플레잉 평균 점수</small></div>'+
-    L.map(function(x,i){ return '<div class="rpb-r'+(i===0?' top':'')+'"><span class="rpb-m">'+md[i]+'</span><b>'+x.name+(i===0?' <em>👑 응대왕</em>':'')+'</b><small>'+x.n+'회 연습</small><i class="num">'+x.avg+'<small>점</small></i></div>'; }).join('')+'</div>';
+  return '<div class="rpb" id="rpb"><div class="rpb-h"><b>🎧 이달의 연습왕</b><small>'+(+String(RPB.ym).slice(5))+'월 AI 고객 응대 「연습」 평균 점수</small></div>'+
+    L.map(function(x,i){ return '<div class="rpb-r'+(i===0?' top':'')+'"><span class="rpb-m">'+md[i]+'</span><b>'+x.name+(i===0?' <em>🎧 연습왕</em>':'')+'</b><small>'+x.n+'회 연습</small><i class="num">'+x.avg+'<small>점</small></i></div>'; }).join('')+'</div>';
 }
 function rpBoardLoad(){
   if(Date.now()-RPB_AT<600000) return; RPB_AT=Date.now();
