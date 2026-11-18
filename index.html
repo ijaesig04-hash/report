@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261118122107">
+<meta name="bsr-ver" content="20261118122401">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1483,6 +1483,8 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .rk-r i{font-style:normal;font-size:12px;font-weight:800;width:26px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;background:#94a3b8}
 .rk-r i.gS{background:#7c3aed}.rk-r i.gA{background:#2563eb}.rk-r i.gB{background:#0d9488}
 .rk-0{margin:4px 0 0;font-size:13px;color:#6b7280;background:#fff;border-radius:12px;padding:12px;text-align:center}
+.rk-go{display:flex;align-items:center;gap:10px;width:100%;margin:10px 0 0;padding:12px 14px;border:0;border-radius:14px;background:linear-gradient(135deg,#5b21b6,#7c3aed);color:#fff;text-align:left;font:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(124,58,237,.28)}
+.rk-go span{font-size:20px;flex:none}.rk-go b{font-size:15px;font-weight:800;flex:none}.rk-go small{flex:1;min-width:0;font-size:12px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rk-go i{font-style:normal;font-size:22px;line-height:1;flex:none;opacity:.9}
 .rk-n{margin:8px 0 0;font-size:11.5px;line-height:1.55;color:#6b5f8a;word-break:keep-all}
 .fee-pp{padding:4px 10px}
 .fee-pr{display:grid;grid-template-columns:minmax(0,1.3fr) repeat(4,minmax(0,1fr));align-items:center;gap:4px;padding:9px 2px;border-bottom:1px solid #eef2f7;font-size:14px;text-align:center}
@@ -3909,6 +3911,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-18e", date:"11/18", title:"👑 응대왕 칸에 평가 바로가기", tabs:["eval"], items:["🎧 이달의 응대왕 칸 안 「평가 보러 가기」 → AI 고객 응대 평가 탭으로 바로 이동"]},
  {id:"2026-11-18d", date:"11/18", title:"운전성향 11/18 반영", tabs:["drv"], items:["🚗 운전성향 11/18 — 김태건 주의(71건, 하루 평균 5.5), 그 외 양호"]},
  {id:"2026-11-18c", date:"11/18", title:"고객체감 11/18 반영", tabs:["cs"], items:["📞 고객체감 10/1~11/18 누적 발송 289건 · 응답 98건 · 만족도 9.88점","🎉 새 칭찬 — 양심영 · 박정훈 · 주상덕 · 고혁진"]},
  {id:"2026-11-18b", date:"11/18", title:"🧾 출동료 청구 11월 현황", tabs:["alm"], items:["🧾 11월 출동료 청구 — 북서울 평가 청구율 66.7% (사업팀 49.8%) · 16개 지사 중 4위","👤 북서울 개인별 현황 신설 — 출동자별 고객사유·당사사유·청구 건수","📋 요청출동 5건 내역 (청구 3 · 당사사유 2)"]},
@@ -4741,6 +4744,7 @@ function rpKingFold(){
     '<div class="mh-g">'+cells+'</div>'+
     '<p class="rk-h">'+(+cm.slice(5))+'월 평가 순위 <small>'+L.length+'명 응시</small></p>'+
     (rows || '<p class="rk-0">아직 이번 달 평가를 본 사람이 없어요.</p>')+
+    '<button type="button" class="rk-go" data-rpeval="1"><span aria-hidden="true">🎧</span><b>평가 보러 가기</b><small>AI 고객 응대 → 평가</small><i aria-hidden="true">›</i></button>'+
     '<p class="rk-n">🎧 AI 고객 응대 롤플레잉 「평가」 한 달 3번 중 가장 좋은 점수로 순위를 정해요 · S 90 이상 · A 80 · B 70 · C 그 아래 · 파트장 제외</p>');
 }
 /* ⭐ MVP 별 — 확정된 MVP 횟수만큼 이름 옆에 별 (화면 어디서든 이름만 있는 글자에 자동으로 붙임) */
@@ -7755,6 +7759,7 @@ document.addEventListener("visibilitychange", function(){ if(document.visibility
 <script>
 /* 🗺️ 담당구역 출동차량 조회 (미니) — 별도 페이지를 작은 창으로 띄움 */
 function ptOpen(){ location.href="patrol.html?from=report"; }
+document.addEventListener('click', function(e){ if(e.target.closest('[data-rpeval]')){ try{ localStorage.setItem('rp_tab','eva'); }catch(x){} location.href='roleplay.html?from=report'; return; } });
 document.addEventListener('click', function(e){ if(e.target.closest('[data-rpopen]')){ var m=document.getElementById('vlmenu'); if(m) m.hidden=true; var rb=e.target.closest('[data-rpopen]'); location.href='roleplay.html?from='+(rb.getAttribute('data-rpopen')==='sales'?'sales':'report'); } });
 document.addEventListener('click', function(e){ if(e.target.closest('[data-ptopen]')){ var m=document.getElementById('vlmenu'); if(m) m.hidden=true; ptOpen(); } });
 </script>
