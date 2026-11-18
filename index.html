@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261118225940">
+<meta name="bsr-ver" content="20261118230355">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1152,7 +1152,7 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .mx-why{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;position:relative;z-index:1}.mx-why span{font-size:12px;font-weight:700;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 10px}
 .mx-top{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;position:relative;z-index:1}.mx-top div{background:rgba(255,255,255,.08);border-radius:10px;padding:6px 10px;font-size:13px;display:flex;justify-content:space-between}.mx-top em{font-style:normal;color:#ffd769}
 .mx-note{display:block;width:100%;text-align:left;margin-top:12px;font:500 11.5px "Noto Sans KR",sans-serif;color:#c9d6f5;background:none;border:0;border-top:1px solid rgba(255,255,255,.15);padding:8px 0 0;cursor:pointer;position:relative;z-index:1}
-.mx.mx-only{padding:10px 14px}.mx.mx-only .mx-kg{margin:0}
+.mx.mx-only{padding:12px 14px}.mx.mx-only .mx-k{margin:0 0 8px}.mx.mx-only .mx-kg{margin:0 0 8px}
 .mx .mx-kg,.mx-kg{display:flex!important;flex-direction:row!important;align-items:center;justify-content:flex-start;gap:6px;width:fit-content;max-width:100%;margin:8px 0 0!important;padding:3px 11px!important;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,215,105,.35);font-size:12px;line-height:1.4;color:#fde68a;text-align:left}.mx-kg>span,.mx-kg>b{display:inline;margin:0;padding:0}.mx-kg b{color:#fff;font-size:12.5px}
 .mx-cr{display:flex;flex-direction:column;gap:6px}.mx-cr p{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:center;margin:0;border:1px solid #e2e8f0;border-radius:12px;padding:8px 10px}.mx-cr i{grid-row:1/3;width:8px;height:30px;border-radius:4px}.mx-cr b{font-size:13.5px}.mx-cr em{grid-row:1/3;grid-column:3;font-style:normal;font-weight:800;color:#0f2a5c}.mx-cr small{grid-column:2;font-size:12px;color:#64748b}
 .mxst{font-size:.72em;margin-left:2px;letter-spacing:-2px;vertical-align:.12em;white-space:nowrap}
@@ -3936,6 +3936,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-18n", date:"11/18", title:"nopush:🏆 MVP 칸 정리", tabs:["home"], items:["🏆 이번 달 MVP 발표 전엔 '11월 이달의 MVP · 11/30 이후 발표' 표시","👑 응대왕은 실제 직원만 (테스트 이름 제외)"]},
  {id:"2026-11-18m", date:"11/18", title:"nopush:📊 해피콜 월 누계 공개", tabs:["home"], items:["📊 근무일엔 퇴근 2시간 뒤까지 해피콜 발송 현황 카드에서 월 누계(제출/근무 · 발송 건수)를 볼 수 있어요"]},
  {id:"2026-11-18l", date:"11/18", title:"nopush:📱 해피콜 현황 — 근무조 함께 보기", tabs:["home"], items:["📱 근무일엔 퇴근 2시간 뒤까지 브리핑에 우리 근무조 해피콜 발송 현황이 보여요 (제출해도 그대로)"]},
  {id:"2026-11-18k", only:"이재식", date:"11/18", title:"nopush:📊 해피콜 발송 누계", tabs:["home"], items:["📱 브리핑 해피콜 발송 현황 아래 「📊 월 누계」 — 사람별 제출/근무 · 발송 건수 · 0건 사유 (이번 달·지난달)"]},
@@ -4701,11 +4702,14 @@ function mxCalc(m){
 }
 function mxWhy(x){ return [x.bsrc?'지사평가 우수':x.ok+'개 지표 달성'].concat(x.rs!=null&&x.rs>=80?['AI 응대 '+x.rs+'점']:[]).concat(x.so?['소개 '+x.so+'건']:[]).concat(x.up?['인상 '+x.up+'건']:[]).concat(x.pr?['고객 칭찬 '+x.pr+'건']:[]).concat(x.d>=16?['앱 활용 우수']:[]); }
 /* 확정 결과 */
-function mxWin(m){ var L = typeof actsFor==="function" ? actsFor('mvpwin|'+m) : []; if(!L.length) return null; var r = L.slice().sort(function(a,b){return a[0]-b[0]}).pop(), p = String(r[3]).split('|'); if(!p[0] || p[0]==="취소") return null;
+/* 게시된 MVP 기록은 폰에도 따로 보관 — 서버 목록에서 빠져도(오래된 기록 정리 등) 그대로 보이게 */
+function mxWinCache(){ try{ return JSON.parse(localStorage.getItem("bsr_mvpwin")||"{}"); }catch(e){ return {}; } }
+function mxWinKeep(){ try{ var C = mxWinCache(), ch = false; (ACTS||[]).forEach(function(r){ var k=String(r[1]); if(k.indexOf('mvpwin|')!==0) return; var m=k.slice(7); if(!C[m] || C[m][0] < r[0]){ C[m] = r.slice(0,4); ch = true; } }); if(ch) localStorage.setItem("bsr_mvpwin", JSON.stringify(C)); }catch(e){} }
+function mxWin(m){ var L = typeof actsFor==="function" ? actsFor('mvpwin|'+m) : []; if(!L.length){ var c = mxWinCache()[m]; if(c) L = [c]; } else mxWinKeep(); if(!L.length) return null; var r = L.slice().sort(function(a,b){return a[0]-b[0]}).pop(), p = String(r[3]).split('|'); if(!p[0] || p[0]==="취소") return null;
   return {m:m, n:p[0], car:p[1], t:+p[2], why:(p[3]||'').split(',').filter(Boolean), top:(p[4]||'').split(',').filter(Boolean).map(function(q){var z=q.split(':'); return [z[0], +z[1]];}), by:r[2], at:r[0]}; }
 function mxCard(){
   var cm = kstDate(0).slice(0,7), y = +cm.slice(0,4), mo = +cm.slice(5), pm = mo===1 ? (y-1)+'-12' : y+'-'+('0'+(mo-1)).slice(-2);
-  var w0 = mxWin(cm), w1 = mxWin(pm), w = w0 && w0.t>0 ? w0 : w1 && w1.t>0 ? w1 : null; if(!w){ var k=rpKing(); return k.indexOf(' hidden')>=0 ? k : '<div class="mx mx-only">'+k+'</div>'; }
+  var w0 = mxWin(cm), w1 = mxWin(pm), w = w0 && w0.t>0 ? w0 : w1 && w1.t>0 ? w1 : null; if(!w){ var k=rpKing(), last=new Date(Date.UTC(y, mo, 0)).getUTCDate(); return '<div class="mx mx-only"><div class="mx-k">🏆 '+mo+'월 이달의 MVP · '+mo+'/'+last+' 이후 발표</div>'+(k.indexOf(' hidden')>=0?'':k)+'<button type="button" class="mx-note" data-mxinfo="1">ℹ️ 선정 기준 ›</button></div>'; }
   var M = +w.m.slice(5), EN = ["","JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"][M];
   return '<div class="mx"><div class="mx-k">'+EN+' MVP · '+M+'월 이달의 MVP</div>'+
     '<div class="mx-m"><div class="mx-av">'+esc2(w.n.slice(1))+'</div><div class="mx-n">'+esc2(w.n)+'<small>'+esc2(w.car)+' · 축하합니다! 🎉</small></div><div class="mx-s"><b class="num">'+w.t+'</b><small>/ 100점</small></div></div>'+
@@ -4717,8 +4721,9 @@ function mxCard(){
 function rpKing(){
   setTimeout(evbLoad,0); setTimeout(rpBoardLoad,0);
   var cm = kstDate(0).slice(0,7), E = EVB[cm] || {}, ex = ["이재식","최문혁"];
-  var L = Object.keys(E).filter(function(n){ return ex.indexOf(n)<0; }).map(function(n){ return {n:n, v:+E[n]}; }).sort(function(a,b){ return b.v-a.v; }), lab = "평가 최고 점수";
-  if(!L.length && RPB && RPB.list && String(RPB.ym)===cm){ L = RPB.list.filter(function(x){ return x.name && ex.indexOf(x.name)<0; }).map(function(x){ return {n:x.name, v:x.avg}; }); lab = "연습 평균"; }
+  var st = rpStaff(cm);   /* 실제 직원만 (이재식2·3 같은 테스트 이름 제외) */
+  var L = Object.keys(E).filter(function(n){ return ex.indexOf(n)<0 && st[n]; }).map(function(n){ return {n:n, v:+E[n]}; }).sort(function(a,b){ return b.v-a.v; }), lab = "평가 최고 점수";
+  if(!L.length && RPB && RPB.list && String(RPB.ym)===cm){ L = RPB.list.filter(function(x){ return x.name && ex.indexOf(x.name)<0 && st[x.name]; }).map(function(x){ return {n:x.name, v:x.avg}; }); lab = "연습 평균"; }
   if(!L.length) return '<div class="mx-kg" id="mxrk" hidden></div>';
   return '<div class="mx-kg" id="mxrk"><span>👑 이달의 응대왕</span><b>'+esc2(L[0].n)+'</b></div>';
 }
@@ -4798,7 +4803,7 @@ document.addEventListener("toggle", function(e){ var d = e.target; if(d && d.mat
 function rpKingFold(){
   setTimeout(evbLoad,0);
   var t = kstDate(0), H = halfOf(t), cm = t.slice(0,7), ex = ["이재식","최문혁"];
-  var rank = function(k){ var E = EVB[k] || {}; return Object.keys(E).filter(function(n){ return ex.indexOf(n)<0 && +E[n]>0; }).map(function(n){ return {n:n, v:Math.round(+E[n])}; }).sort(function(a,b){ return b.v-a.v || a.n.localeCompare(b.n,"ko"); }); };
+  var rank = function(k){ var E = EVB[k] || {}, st = rpStaff(k); return Object.keys(E).filter(function(n){ return ex.indexOf(n)<0 && st[n] && +E[n]>0; }).map(function(n){ return {n:n, v:Math.round(+E[n])}; }).sort(function(a,b){ return b.v-a.v || a.n.localeCompare(b.n,"ko"); }); };
   var gr = function(v){ return v>=90?"S":v>=80?"A":v>=70?"B":"C"; };
   var cells = H.months.map(function(mo){ var y = mo===12 ? H.y-1 : H.y, k = y+'-'+('0'+mo).slice(-2), L = rank(k), w = L[0];
     return '<div class="mh-c'+(w?' on':k===cm?' now':'')+'"><small>'+mo+'월</small>'+(w?'<b class="mh-n">'+esc2(w.n)+'</b><em class="num">'+w.v+'점</em>':'<span class="mh-e">'+(k===cm?'진행 중':k>cm?'–':'기록 없음')+'</span>')+'</div>'; }).join('');
@@ -7823,7 +7828,7 @@ function actsLoad(){
   fetch(apiUrl("a=acts"),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
     if(!j||!j.ok||!j.rows) return;
     var same = JSON.stringify(j.rows)===JSON.stringify(ACTS);
-    ACTS = j.rows;
+    ACTS = j.rows; mxWinKeep();
     var left = ACTS_PEND.filter(function(p){ return !ACTS.some(function(r){return r[1]===p[1] && r[2]===p[2] && r[3]===p[3]}); });
     if(left.length){ left.forEach(function(p){ if(!p.sent || Date.now()-p.sent>60000){ actSend(p); p.sent=Date.now(); } }); }
     ACTS_PEND = left; actsSavePend();
