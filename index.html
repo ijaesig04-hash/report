@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261118122401">
+<meta name="bsr-ver" content="20261118133840">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1485,6 +1485,8 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .rk-0{margin:4px 0 0;font-size:13px;color:#6b7280;background:#fff;border-radius:12px;padding:12px;text-align:center}
 .rk-go{display:flex;align-items:center;gap:10px;width:100%;margin:10px 0 0;padding:12px 14px;border:0;border-radius:14px;background:linear-gradient(135deg,#5b21b6,#7c3aed);color:#fff;text-align:left;font:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(124,58,237,.28)}
 .rk-go span{font-size:20px;flex:none}.rk-go b{font-size:15px;font-weight:800;flex:none}.rk-go small{flex:1;min-width:0;font-size:12px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rk-go i{font-style:normal;font-size:22px;line-height:1;flex:none;opacity:.9}
+.rk-b{display:inline-block;margin-left:4px;padding:1px 6px;border-radius:6px;background:#fef3c7;color:#92400e;font-size:11px;font-weight:800;vertical-align:2px}
+.rk-p{margin:8px 0 0;padding:9px 11px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;font-size:12.5px;line-height:1.5;word-break:keep-all}
 .rk-n{margin:8px 0 0;font-size:11.5px;line-height:1.55;color:#6b5f8a;word-break:keep-all}
 .fee-pp{padding:4px 10px}
 .fee-pr{display:grid;grid-template-columns:minmax(0,1.3fr) repeat(4,minmax(0,1fr));align-items:center;gap:4px;padding:9px 2px;border-bottom:1px solid #eef2f7;font-size:14px;text-align:center}
@@ -3400,7 +3402,7 @@ function viewEvalBranch(){
   return '<div class="sec"><h2>지사 평가 <span>근무자 가점·감점 · 월 20점 기준</span></h2>'+
     '<div class="chips" role="group" aria-label="기간">'+chips+'</div>'+podium+
     '<div class="kpsum"><span>평균 <b class="num">'+(Math.round(avg*10)/10)+'</b>점</span><i></i><span>반영 <b class="num">'+keys.map(function(k){return +k.slice(5)}).join("·")+'</b>월</span><i></i><span>대상 <b class="num">'+list.length+'</b>명</span></div></div>'+
-    '<div class="sec">'+'<details class="crit tcrit"><summary>가·감점 기준 보기 <small>지사 평가 · 월 20점 기준</small></summary><div class="tc-g c1"><div class="tc-gh"><b>근태·기본</b></div><div class="tc-r"><span class="tc-n">지각</span><b class="tc-p num tc-w neg">−1</b></div><div class="tc-r"><span class="tc-n">무단결근</span><b class="tc-p num tc-w neg">−5</b></div><div class="tc-r"><span class="tc-n">복장불량</span><b class="tc-p num tc-w neg">−1</b></div><div class="tc-r"><span class="tc-n">CS 기본 미준수 · 지시 불이행</span><b class="tc-p num tc-w neg">−2</b></div><div class="tc-r"><span class="tc-n">필수 교육 미수료</span><b class="tc-p num tc-w neg">−1</b></div><div class="tc-r"><span class="tc-n">근무준비상태 / QR 미실시</span><b class="tc-p num tc-w neg">−1</b></div></div><div class="tc-g c2"><div class="tc-gh"><b>차량·사고</b></div><div class="tc-r"><span class="tc-n">차량사고 가해 / 피해</span><b class="tc-p num tc-w neg">−5 / −2</b></div><div class="tc-r"><span class="tc-n">자차사고</span><b class="tc-p num tc-w neg">−3</b></div><div class="tc-r"><span class="tc-n">차량관리 부실</span><b class="tc-p num tc-w neg">−2</b></div><div class="tc-r"><span class="tc-n">운전습관 개선상</span><b class="tc-p num tc-w">+1</b></div></div><div class="tc-g c3"><div class="tc-gh"><b>고객·업무</b></div><div class="tc-r"><span class="tc-n">클레임 VOC 원인 제공자</span><b class="tc-p num tc-w neg">−3</b></div><div class="tc-r"><span class="tc-n">수명업무 달성률 미흡</span><b class="tc-p num tc-w neg">−1</b></div><div class="tc-r"><span class="tc-n">긴급출동테스트 80점 미만 / 이상</span><b class="tc-p num tc-w neg">−2 / +2</b></div><div class="tc-r"><span class="tc-n">캠페인 개인목표 달성</span><b class="tc-p num tc-w">+2</b></div></div><div class="tc-g c4"><div class="tc-gh"><b>포상·자격</b></div><div class="tc-r"><span class="tc-n">표창 (대표이사 / 사외 / 사업부)</span><b class="tc-p num tc-w">+5 / +3 / +2</b></div><div class="tc-r"><span class="tc-n">자격증 (사업팀 평가 기준)</span><b class="tc-p num tc-w">+2</b></div><div class="tc-r"><span class="tc-n">서비스 지표 ALL 만점 (5항목)</span><b class="tc-p num tc-w">+3</b></div><div class="tc-r"><span class="tc-n">지사 서비스 지표 전월 부진 1항목 목표(100%) 달성 차량</span><b class="tc-p num tc-w">+2</b></div><div class="tc-r"><span class="tc-n">개인 지표 ALL 만점 (5항목) <small style="color:var(--bad)">26년 11월부터</small></span><b class="tc-p num tc-w">+2</b></div></div><p class="tc-src">차량연동 책임제: 해당자 100%, 같은 차량 팀원 50% 반영 (홀수 반내림)<br>연동 항목: 운전성향(−1) · 테스트 · 차량사고 · 차량관리 · 클레임 · 기본 미준수 · 자격증 · 근무준비상태 / QR 미실시</p></details>'+'<h2>순위 <span>누르면 월별 내역</span></h2><div class="card">'+rows+'</div></div>'+
+    '<div class="sec">'+'<details class="crit tcrit"><summary>가·감점 기준 보기 <small>지사 평가 · 월 20점 기준</small></summary><div class="tc-g c1"><div class="tc-gh"><b>근태·기본</b></div><div class="tc-r"><span class="tc-n">지각</span><b class="tc-p num tc-w neg">−1</b></div><div class="tc-r"><span class="tc-n">무단결근</span><b class="tc-p num tc-w neg">−5</b></div><div class="tc-r"><span class="tc-n">복장불량</span><b class="tc-p num tc-w neg">−1</b></div><div class="tc-r"><span class="tc-n">CS 기본 미준수 · 지시 불이행</span><b class="tc-p num tc-w neg">−2</b></div><div class="tc-r"><span class="tc-n">필수 교육 미수료</span><b class="tc-p num tc-w neg">−1</b></div><div class="tc-r"><span class="tc-n">근무준비상태 / QR 미실시</span><b class="tc-p num tc-w neg">−1</b></div></div><div class="tc-g c2"><div class="tc-gh"><b>차량·사고</b></div><div class="tc-r"><span class="tc-n">차량사고 가해 / 피해</span><b class="tc-p num tc-w neg">−5 / −2</b></div><div class="tc-r"><span class="tc-n">자차사고</span><b class="tc-p num tc-w neg">−3</b></div><div class="tc-r"><span class="tc-n">차량관리 부실</span><b class="tc-p num tc-w neg">−2</b></div><div class="tc-r"><span class="tc-n">운전습관 개선상</span><b class="tc-p num tc-w">+1</b></div></div><div class="tc-g c3"><div class="tc-gh"><b>고객·업무</b></div><div class="tc-r"><span class="tc-n">클레임 VOC 원인 제공자</span><b class="tc-p num tc-w neg">−3</b></div><div class="tc-r"><span class="tc-n">수명업무 달성률 미흡</span><b class="tc-p num tc-w neg">−1</b></div><div class="tc-r"><span class="tc-n">긴급출동테스트 80점 미만 / 이상</span><b class="tc-p num tc-w neg">−2 / +2</b></div><div class="tc-r"><span class="tc-n">캠페인 개인목표 달성</span><b class="tc-p num tc-w">+2</b></div></div><div class="tc-g c4"><div class="tc-gh"><b>포상·자격</b></div><div class="tc-r"><span class="tc-n">표창 (대표이사 / 사외 / 사업부)</span><b class="tc-p num tc-w">+5 / +3 / +2</b></div><div class="tc-r"><span class="tc-n">자격증 (사업팀 평가 기준)</span><b class="tc-p num tc-w">+2</b></div><div class="tc-r"><span class="tc-n">서비스 지표 ALL 만점 (5항목)</span><b class="tc-p num tc-w">+3</b></div><div class="tc-r"><span class="tc-n">지사 서비스 지표 전월 부진 1항목 목표(100%) 달성 차량</span><b class="tc-p num tc-w">+2</b></div><div class="tc-r"><span class="tc-n">개인 지표 ALL 만점 (5항목) <small style="color:var(--bad)">26년 11월부터</small></span><b class="tc-p num tc-w">+2</b></div><div class="tc-r"><span class="tc-n">👑 AI 고객 응대 평가 상위 3명 (동점 포함 · 파트장 제외) <small style="color:var(--bad)">26년 12월부터</small></span><b class="tc-p num tc-w">+2</b></div></div><p class="tc-src">차량연동 책임제: 해당자 100%, 같은 차량 팀원 50% 반영 (홀수 반내림)<br>연동 항목: 운전성향(−1) · 테스트 · 차량사고 · 차량관리 · 클레임 · 기본 미준수 · 자격증 · 근무준비상태 / QR 미실시</p></details>'+'<h2>순위 <span>누르면 월별 내역</span></h2><div class="card">'+rows+'</div></div>'+
     '<div class="sec"><div class="card"><div class="vhead">'+sel.n+' · '+sel.rk+'위<span>'+bHo(sel.n)+' · '+(per==="sum"?H.h+' 누계 ':'')+(Math.round(sel.t*10)/10)+'점</span></div>'+det+'</div>'+
     '</div>';
 }
@@ -3911,6 +3913,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-18f", date:"11/18", title:"👑 12월부터 응대왕 지사 평가 가점", tabs:["eval"], items:["🎁 26년 12월부터 매월 AI 고객 응대 평가 상위 3명(3위 동점 모두 · 파트장 제외)에게 지사 평가 +2점 자동 반영","📋 지사 평가 가·감점 기준(포상·자격)에 항목 추가"]},
  {id:"2026-11-18e", date:"11/18", title:"👑 응대왕 칸에 평가 바로가기", tabs:["eval"], items:["🎧 이달의 응대왕 칸 안 「평가 보러 가기」 → AI 고객 응대 평가 탭으로 바로 이동"]},
  {id:"2026-11-18d", date:"11/18", title:"운전성향 11/18 반영", tabs:["drv"], items:["🚗 운전성향 11/18 — 김태건 주의(71건, 하루 평균 5.5), 그 외 양호"]},
  {id:"2026-11-18c", date:"11/18", title:"고객체감 11/18 반영", tabs:["cs"], items:["📞 고객체감 10/1~11/18 누적 발송 289건 · 응답 98건 · 만족도 9.88점","🎉 새 칭찬 — 양심영 · 박정훈 · 주상덕 · 고혁진"]},
@@ -4690,14 +4693,45 @@ function rpKing(){
   return '<div class="mx-kg" id="mxrk"><span>👑 이달의 응대왕</span><b>'+esc2(L[0].n)+'</b></div>';
 }
 var EVB = {}, EVB_AT = 0;
+/* 👑 응대왕 가점 — 26년 12월부터 매월 AI 고객 응대 평가 상위 3명(동점 3위 모두 포함 · 파트장 제외)에게 지사 평가 +2점
+   BEVAL 해당 월이 들어와 있을 때 자동 반영 (가감점·지사 점수 +2, 내역에 기록). 시트에 이미 '응대' 가점이 적혀 있으면 중복으로 넣지 않음 */
+var RPB_FROM = "2026-12", RPB_MGR = ["이재식","최문혁"];
+function rpStaff(k){ var o = {}; (BEVAL[k] ? [k] : Object.keys(BEVAL)).forEach(function(m){ Object.keys(BEVAL[m].rows).forEach(function(n){ o[n]=1; }); }); return o; }
+function rpTop3(k){
+  if(k < RPB_FROM) return [];
+  var E = EVB[k] || {}, st = rpStaff(k);
+  var L = Object.keys(E).filter(function(n){ return st[n] && RPB_MGR.indexOf(n)<0 && +E[n]>0; }).map(function(n){ return {n:n, v:Math.round(+E[n])}; }).sort(function(a,b){ return b.v-a.v; });
+  var rk = 0, lv = null; L.forEach(function(x,i){ if(x.v!==lv){ rk=i+1; lv=x.v; } x.rk=rk; });
+  return L.filter(function(x){ return x.rk<=3; });
+}
+function rpBonusApply(){
+  var ch = false;
+  Object.keys(BEVAL).forEach(function(k){
+    if(k < RPB_FROM) return; var B = BEVAL[k], mo = (+k.slice(5))+"월";
+    var prev = (B._rpb||[]).join("|");
+    (B._rpb||[]).forEach(function(n){ var r=B.rows[n]; if(r){ r[0]-=2; r[4]-=2; } });
+    B.log = B.log.filter(function(l){ return l[5]!=="rpb"; }); B._rpb = [];
+    rpTop3(k).forEach(function(x){
+      var r = B.rows[x.n]; if(!r) return;
+      if(B.log.some(function(l){ return l[1]===x.n && /응대/.test(l[3]||""); })) return;   /* 시트에 이미 반영된 경우 */
+      r[0]+=2; r[4]+=2; B._rpb.push(x.n);
+      B.log.push([mo, x.n, "가점", "👑 AI 고객 응대 평가 상위 3명 ("+x.v+"점)", 2, "rpb"]);
+    });
+    if(B._rpb.join("|")!==prev) ch = true;
+  });
+  return ch;
+}
+try{ var _ec=JSON.parse(sessionStorage.getItem("bsr_evb")||"null"); if(_ec&&_ec.d){ EVB=_ec.d; rpBonusApply(); } }catch(e){}
+setTimeout(function(){ if(Object.keys(BEVAL).some(function(k){ return k>=RPB_FROM; })) evbLoad(); }, 1500);
 function evbLoad(){
   if(Date.now()-EVB_AT<600000) return; EVB_AT=Date.now();
-  try{ var c=JSON.parse(sessionStorage.getItem("bsr_evb")||"null"); if(c&&Date.now()-c.at<600000){ EVB=c.d; } }catch(e){}
+  try{ var c=JSON.parse(sessionStorage.getItem("bsr_evb")||"null"); if(c&&Date.now()-c.at<600000){ EVB=c.d; rpBonusApply(); } }catch(e){}
   fetch(RP_API+"?action=evbest&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){
     if(!j||!j.ok||!j.m) return; var same = JSON.stringify(j.m)===JSON.stringify(EVB); EVB=j.m;
     try{ sessionStorage.setItem("bsr_evb",JSON.stringify({at:Date.now(),d:j.m})); }catch(e){}
     var el=document.getElementById("mxrk"); if(el){ var t=document.createElement("div"); t.innerHTML=rpKing(); el.replaceWith(t.firstChild); }
-    if(!same && window.state && state.tab==="eval") renderQuiet();
+    var bch = rpBonusApply();
+    if((!same && window.state && state.tab==="eval") || bch) renderQuiet();
   }).catch(function(){});
 }
 try{ var _evc=JSON.parse(sessionStorage.getItem("bsr_evb")||"null"); if(_evc) EVB=_evc.d||{}; }catch(e){}
@@ -4739,13 +4773,15 @@ function rpKingFold(){
   var cells = H.months.map(function(mo){ var y = mo===12 ? H.y-1 : H.y, k = y+'-'+('0'+mo).slice(-2), L = rank(k), w = L[0];
     return '<div class="mh-c'+(w?' on':k===cm?' now':'')+'"><small>'+mo+'월</small>'+(w?'<b class="mh-n">'+esc2(w.n)+'</b><em class="num">'+w.v+'점</em>':'<span class="mh-e">'+(k===cm?'진행 중':k>cm?'–':'기록 없음')+'</span>')+'</div>'; }).join('');
   var L = rank(cm), md = ['🥇','🥈','🥉'], rk = 0, lv = null;
-  var rows = L.map(function(x,i){ if(x.v!==lv){ rk=i+1; lv=x.v; } return '<div class="rk-r'+(rk===1?' top':'')+'"><span class="rk-m">'+(md[rk-1]||rk)+'</span><b>'+esc2(x.n)+'</b><em class="num">'+x.v+'점</em><i class="g'+gr(x.v)+'">'+gr(x.v)+'</i></div>'; }).join('');
+  var T3 = rpTop3(cm).map(function(x){ return x.n; });
+  var rows = L.map(function(x,i){ if(x.v!==lv){ rk=i+1; lv=x.v; } return '<div class="rk-r'+(rk===1?' top':'')+'"><span class="rk-m">'+(md[rk-1]||rk)+'</span><b>'+esc2(x.n)+(T3.indexOf(x.n)>=0?' <span class="rk-b">지사 +2</span>':'')+'</b><em class="num">'+x.v+'점</em><i class="g'+gr(x.v)+'">'+gr(x.v)+'</i></div>'; }).join('');
   return efFold("rp","efd-rp","👑","이달의 응대왕","AI 응대 평가 · 서비스 전용", L[0] ? (+cm.slice(5))+'월 <b>'+esc2(L[0].n)+'</b>' : '평가 전',
     '<div class="mh-g">'+cells+'</div>'+
     '<p class="rk-h">'+(+cm.slice(5))+'월 평가 순위 <small>'+L.length+'명 응시</small></p>'+
     (rows || '<p class="rk-0">아직 이번 달 평가를 본 사람이 없어요.</p>')+
     '<button type="button" class="rk-go" data-rpeval="1"><span aria-hidden="true">🎧</span><b>평가 보러 가기</b><small>AI 고객 응대 → 평가</small><i aria-hidden="true">›</i></button>'+
-    '<p class="rk-n">🎧 AI 고객 응대 롤플레잉 「평가」 한 달 3번 중 가장 좋은 점수로 순위를 정해요 · S 90 이상 · A 80 · B 70 · C 그 아래 · 파트장 제외</p>');
+    '<p class="rk-n">🎧 AI 고객 응대 롤플레잉 「평가」 한 달 3번 중 가장 좋은 점수로 순위를 정해요 · S 90 이상 · A 80 · B 70 · C 그 아래 · 파트장 제외</p>'+
+    '<p class="rk-p">🎁 <b>26년 12월부터</b> 매월 상위 3명에게 <b>지사 평가 +2점</b> 자동 반영 · 3위 동점은 모두 포함</p>');
 }
 /* ⭐ MVP 별 — 확정된 MVP 횟수만큼 이름 옆에 별 (화면 어디서든 이름만 있는 글자에 자동으로 붙임) */
 var MX_ST = {k:'', map:{}};
