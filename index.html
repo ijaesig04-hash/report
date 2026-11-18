@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261118213019">
+<meta name="bsr-ver" content="20261118225101">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1497,6 +1497,17 @@ button.aib{cursor:pointer}
 .aib-a{flex:none;font-style:normal;font-size:20px;color:#94a3b8;line-height:1}
 .aib.low{border-color:#fdba74;background:#fff7ed}.aib.low .aib-i{background:#ffedd5}.aib.low .aib-bar i{background:#f97316}.aib.low .aib-v b{color:#c2410c}.aib.low .aib-t small{color:#9a3412;font-weight:700}
 .aib.empty{border-color:#fca5a5;background:#fef2f2}.aib.empty .aib-i{background:#fee2e2}.aib.empty .aib-v b{color:#b91c1c}.aib.empty .aib-t small{color:#b91c1c;font-weight:700}
+.hca-h{display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 0;padding:10px 12px;border:1px solid #dbe4f3;border-radius:12px;background:#f5f8fd;font:inherit;color:#1e3a8a;cursor:pointer;text-align:left}
+.hca-h span{font-size:13.5px;font-weight:800;flex:none}.hca-h b{flex:1;min-width:0;text-align:right;font-size:13px;font-weight:700;color:#334155;white-space:nowrap}.hca-h i{font-style:normal;font-size:12px;color:#64748b;flex:none}
+.hca{margin-top:8px}
+.hca-sw{display:flex;gap:6px;margin-bottom:8px}.hca-sw button{flex:1;padding:7px 0;border-radius:10px;border:1px solid #dbe4f3;background:#fff;font:inherit;font-size:13px;font-weight:700;color:#64748b;cursor:pointer}.hca-sw button[aria-pressed="true"]{background:#1e3a8a;border-color:#1e3a8a;color:#fff}
+.hca-r{display:grid;grid-template-columns:minmax(0,1fr) 76px 64px;align-items:center;column-gap:6px;padding:8px 6px;border-bottom:1px solid #eef2f7;font-size:14px}
+.hca-r b{font-size:14px;color:#1e293b}.hca-r span{text-align:right}.hca-r .hca-v{font-weight:800;color:#1e3a8a}
+.hca-r small{grid-column:1/-1;font-size:11.5px;color:#64748b;margin-top:2px}
+.hca-r.lo span:nth-of-type(1){color:#dc2626;font-weight:700}
+.hca-th{font-size:11.5px;color:#64748b;padding:4px 6px}.hca-th b{font-size:11.5px;color:#64748b;font-weight:700}
+.hca-tot{background:#f8fafc;border-radius:8px;border-bottom:0;font-weight:800}
+.hca-n{margin:6px 2px 0;font-size:11.5px;color:#64748b;line-height:1.5;word-break:keep-all}
 .rk-b{display:inline-block;margin-left:4px;padding:1px 6px;border-radius:6px;background:#fef3c7;color:#92400e;font-size:11px;font-weight:800;vertical-align:2px}
 .rk-p{margin:8px 0 0;padding:9px 11px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;font-size:12.5px;line-height:1.5;word-break:keep-all}
 .rk-n{margin:8px 0 0;font-size:11.5px;line-height:1.55;color:#6b5f8a;word-break:keep-all}
@@ -3925,6 +3936,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-18k", only:"이재식", date:"11/18", title:"nopush:📊 해피콜 발송 누계", tabs:["home"], items:["📱 브리핑 해피콜 발송 현황 아래 「📊 월 누계」 — 사람별 제출/근무 · 발송 건수 · 0건 사유 (이번 달·지난달)"]},
  {id:"2026-11-18j", date:"11/18", title:"nopush:📝 평가 상황 사진 교체", tabs:["home"], items:["🖼️ AI 응대 평가 — CCTV 녹화 안 됨 · 출동 지연 · 요금 불만 상황 사진을 새 사진으로 바꿨어요"]},
  {id:"2026-11-18i", only:"이재식", date:"11/18", title:"nopush:💳 AI 충전 잔액은 파트장만", tabs:["home"], items:["💳 브리핑의 AI 응대 충전 잔액(추정)은 이재식 파트장 화면에만 보여요"]},
  {id:"2026-11-18h", only:"이재식", date:"11/18", title:"nopush:👑 응대왕 가점 공지 준비", tabs:["home"], items:["✏️ 공지 쓰기 → 자료 첨부에서 「👑 응대왕 가점」을 고르면 제목·부서가 채워져요"]},
@@ -6420,10 +6432,44 @@ function hcMgr(){
   if(fold) return '<div class="hc mgr-hc">'+head+'</div>';
   return '<div class="hc mgr-hc">'+head+'<small class="hc-d">🕒 '+hcLbl(x)+'</small>'+
     '<div class="hcm-g1">'+st.map(function(q){ var v=q.v; return '<span class="hcm-p '+(v?(v.cnt?'ok':'wy'):'no')+'">'+q.n+'<em>'+(v?(v.cnt?v.cnt+'건':esc2(v.why)):'미제출')+'</em></span>'; }).join('')+'</div>'+
-    (miss.length?'<button type="button" class="hc-e" data-hccp="'+esc2(miss.join(', '))+'">📋 미제출자 안내 복사</button>':'<p class="hc-all">모두 제출했어요 👍</p>')+'</div>';
+    (miss.length?'<button type="button" class="hc-e" data-hccp="'+esc2(miss.join(', '))+'">📋 미제출자 안내 복사</button>':'<p class="hc-all">모두 제출했어요 👍</p>')+hcAcc()+'</div>';
+}
+/* 📊 해피콜 누계 — 이번 달(또는 지난달) 근무조별 제출 기록을 사람별로 합산. 근무 = 근무표상 주간·야간(퇴근 2시간 지난 것만 셈) */
+var HC_ACC_M = 0, HC_ACC_OPEN = false;
+function hcSum(ym){
+  var now = Date.now(), P = {}, first = null, tot = {sent:0, sub:0, exp:0};
+  var y = +ym.slice(0,4), m = +ym.slice(5,7), last = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  for(var day=1; day<=last; day++){
+    var d = ym+'-'+('0'+day).slice(-2);
+    [["주간",7,18],["야간",18,31]].forEach(function(S){
+      var b = hcT(d, S[2]); if(b > now) return;
+      hcRoster(d, S[0]).forEach(function(n){
+        var v = hcGet(d, n), p = P[n] || (P[n] = {n:n, exp:0, sub:0, sent:0, why:{}});
+        var due = b + HC_GRACE*3600000 <= now; if(due || v){ p.exp++; tot.exp++; }
+        if(v){ p.sub++; tot.sub++; p.sent += v.cnt; tot.sent += v.cnt; if(!v.cnt && v.why) p.why[v.why] = (p.why[v.why]||0)+1; if(!first || d<first) first = d; }
+      });
+    });
+  }
+  var L = Object.keys(P).map(function(k){ return P[k]; }).filter(function(p){ return p.exp; }).sort(function(a,b){ return b.sent-a.sent || (b.sub/b.exp)-(a.sub/a.exp) || a.n.localeCompare(b.n,"ko"); });
+  return {L:L, tot:tot, first:first};
+}
+function hcAcc(){
+  var t = kstDate(0), ym = HC_ACC_M ? (function(){ var y=+t.slice(0,4), m=+t.slice(5,7)-1; if(!m){ m=12; y--; } return y+'-'+('0'+m).slice(-2); })() : t.slice(0,7);
+  var R = hcSum(ym), T = R.tot, rate = T.exp ? Math.round(T.sub/T.exp*100) : 0, mo = +ym.slice(5,7);
+  var sw = '<div class="hca-sw"><button type="button" data-hcam="0" aria-pressed="'+!HC_ACC_M+'">이번 달</button><button type="button" data-hcam="1" aria-pressed="'+!!HC_ACC_M+'">지난달</button></div>';
+  var rows = R.L.map(function(p){ var r = Math.round(p.sub/p.exp*100), w = Object.keys(p.why).map(function(k){ return k.replace(/ 건$/,'')+' '+p.why[k]; }).join(' · ');
+    return '<div class="hca-r'+(r<100?' lo':'')+'"><b>'+esc2(p.n)+'</b><span class="num">'+p.sub+'/'+p.exp+'</span><span class="num hca-v">'+p.sent+'건</span>'+(w?'<small>0건: '+esc2(w)+'</small>':'')+'</div>'; }).join('');
+  return '<button type="button" class="hca-h" data-hcacc="1" aria-expanded="'+HC_ACC_OPEN+'"><span>📊 '+mo+'월 누계</span><b class="num">발송 '+T.sent+'건 · 제출 '+rate+'%</b><i>'+(HC_ACC_OPEN?'▴':'▾')+'</i></button>'+
+    (HC_ACC_OPEN ? '<div class="hca">'+sw+
+      (R.L.length ? '<div class="hca-r hca-th"><b>이름</b><span>제출/근무</span><span>발송</span></div>'+rows+
+        '<div class="hca-r hca-tot"><b>합계</b><span class="num">'+T.sub+'/'+T.exp+'</span><span class="num hca-v">'+T.sent+'건</span></div>'+
+        '<p class="hca-n">근무표 기준 주간·야간 근무마다 1번 제출 · 퇴근 2시간 지난 근무만 셈'+(R.first?' · 첫 기록 '+md(R.first):'')+'</p>'
+      : '<p class="hca-n">이 달 기록이 아직 없어요.</p>')+'</div>' : '');
 }
 document.addEventListener("click", function(e){
   var b;
+  if((b=e.target.closest("[data-hcam]"))){ HC_ACC_M = +b.dataset.hcam; render(); return; }
+  if(e.target.closest("[data-hcacc]")){ HC_ACC_OPEN = !HC_ACC_OPEN; render(); return; }
   if(e.target.closest("[data-hcfold]")){ lsSet("bsr_hcfold", lsGet("bsr_hcfold")!=="0"?"0":"1"); render(); return; }
   if((b=e.target.closest("[data-hcop]"))){ HC_FORM.open = b.dataset.hcop==="1"; render(); return; }
   if((b=e.target.closest("[data-hcn]"))){ HC_FORM.cnt=Math.max(0,HC_FORM.cnt+(+b.dataset.hcn)); if(HC_FORM.cnt>0) HC_FORM.why=''; render(); return; }
