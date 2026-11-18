@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261118225101">
+<meta name="bsr-ver" content="20261118225505">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3936,6 +3936,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-18l", date:"11/18", title:"nopush:📱 해피콜 현황 — 근무조 함께 보기", tabs:["home"], items:["📱 근무일엔 퇴근 2시간 뒤까지 브리핑에 우리 근무조 해피콜 발송 현황이 보여요 (제출해도 그대로)"]},
  {id:"2026-11-18k", only:"이재식", date:"11/18", title:"nopush:📊 해피콜 발송 누계", tabs:["home"], items:["📱 브리핑 해피콜 발송 현황 아래 「📊 월 누계」 — 사람별 제출/근무 · 발송 건수 · 0건 사유 (이번 달·지난달)"]},
  {id:"2026-11-18j", date:"11/18", title:"nopush:📝 평가 상황 사진 교체", tabs:["home"], items:["🖼️ AI 응대 평가 — CCTV 녹화 안 됨 · 출동 지연 · 요금 불만 상황 사진을 새 사진으로 바꿨어요"]},
  {id:"2026-11-18i", only:"이재식", date:"11/18", title:"nopush:💳 AI 충전 잔액은 파트장만", tabs:["home"], items:["💳 브리핑의 AI 응대 충전 잔액(추정)은 이재식 파트장 화면에만 보여요"]},
@@ -6404,9 +6405,14 @@ var HC_FORM = {cnt:0, why:'', open:false}, HC_THX = null;
 function hcCard(){
   var nm = myName();
   if(mgrIs()) return HC_SVC.indexOf(nm)>=0 ? hcMgr() : '';
-  if(HC_THX && Date.now()<HC_THX.until) return '<div class="hc thx"><b>🙌 '+esc2(nm)+'님, 오늘도 고생 많으셨어요!</b><span>해피콜 '+HC_THX.txt+' 제출 완료 · 조심히 퇴근하세요</span></div>';
+  if(HC_THX && Date.now()<HC_THX.until){ var xt = hcMine(nm); return '<div class="hc thx"><b>🙌 '+esc2(nm)+'님, 오늘도 고생 많으셨어요!</b><span>해피콜 '+HC_THX.txt+' 제출 완료 · 조심히 퇴근하세요</span></div>'+(xt?hcMgr(xt,true):''); }
   var x = hcMine(nm); if(!x) return '';
-  if(hcGet(x.d, nm)) return '';
+  /* 서비스 직원: 근무일엔 퇴근 2시간 뒤까지 우리 근무조 해피콜 현황도 함께 보임 */
+  var team = hcMgr(x, true);
+  if(hcGet(x.d, nm)) return team;
+  return hcForm(x, nm) + team;
+}
+function hcForm(x, nm){
   var full = Date.now() >= x.b - 3*3600000, endH = x.s==="주간"?18:7;
   if(!full && !HC_FORM.open) return '<button type="button" class="hc-mini" data-hcop="1"><i class="hcm-ic">📱</i><span class="hcm-tx"><b>퇴근 전 해피콜 문자 발송 체크</b><small>'+x.s+' 근무 · '+('0'+(endH-3)).slice(-2)+'시부터 자동으로 펼쳐져요</small></span><em class="hcm-ar">▾</em></button>';
   var f = HC_FORM;
@@ -6417,22 +6423,23 @@ function hcCard(){
 }
 /* 파트장: 퇴근 3시간 전부터 그 근무조, 그 전에는 직전 근무조 현황 */
 var HC_SVC = ["서비스팀장","최문혁","이재식"];   /* 해피콜 현황을 보는 서비스 관리자 */
-function hcStat(){
+function hcStat(fx){
   var h = new Date(Date.now()+9*3600000).getUTCHours(), t = kstDate(0), y = kstDate(-1);
-  var x = h>=15 ? {d:t,s:"주간"} : h>=4 ? {d:y,s:"야간"} : {d:y,s:"주간"};
+  var x = fx || (h>=15 ? {d:t,s:"주간"} : h>=4 ? {d:y,s:"야간"} : {d:y,s:"주간"});
   var L = hcRoster(x.d, x.s); if(!L.length) return null;
   var st = L.map(function(n){ return {n:n, v:hcGet(x.d, n)}; });
   return {x:x, st:st, done:st.filter(function(q){return q.v}).length, sum:st.reduce(function(a,q){return a+(q.v?q.v.cnt:0)},0), miss:st.filter(function(q){return !q.v}).map(function(q){return q.n})};
 }
-function hcMgr(){
-  var H = hcStat(); if(!H) return '';
+function hcMgr(fx, staff){
+  var H = hcStat(fx); if(!H) return '';
   var x = H.x, st = H.st, done = H.done, sum = H.sum, miss = H.miss;
   var fold = lsGet("bsr_hcfold")!=="0";
   var head = '<button type="button" class="hc-fold" data-hcfold="1" aria-expanded="'+!fold+'"><div class="hc-h"><b>📱 해피콜 발송 현황</b><span class="hc-s">제출 '+done+'/'+st.length+' · '+sum+'건<span class="hc-ar">'+(fold?'▾':'▴')+'</span></span></div></button>';
   if(fold) return '<div class="hc mgr-hc">'+head+'</div>';
   return '<div class="hc mgr-hc">'+head+'<small class="hc-d">🕒 '+hcLbl(x)+'</small>'+
     '<div class="hcm-g1">'+st.map(function(q){ var v=q.v; return '<span class="hcm-p '+(v?(v.cnt?'ok':'wy'):'no')+'">'+q.n+'<em>'+(v?(v.cnt?v.cnt+'건':esc2(v.why)):'미제출')+'</em></span>'; }).join('')+'</div>'+
-    (miss.length?'<button type="button" class="hc-e" data-hccp="'+esc2(miss.join(', '))+'">📋 미제출자 안내 복사</button>':'<p class="hc-all">모두 제출했어요 👍</p>')+hcAcc()+'</div>';
+    (staff ? (miss.length?'':'<p class="hc-all">우리 근무조 모두 제출했어요 👍</p>') :
+      (miss.length?'<button type="button" class="hc-e" data-hccp="'+esc2(miss.join(', '))+'">📋 미제출자 안내 복사</button>':'<p class="hc-all">모두 제출했어요 👍</p>')+hcAcc())+'</div>';
 }
 /* 📊 해피콜 누계 — 이번 달(또는 지난달) 근무조별 제출 기록을 사람별로 합산. 근무 = 근무표상 주간·야간(퇴근 2시간 지난 것만 셈) */
 var HC_ACC_M = 0, HC_ACC_OPEN = false;
