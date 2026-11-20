@@ -18,7 +18,10 @@ function doPost(e) {
     if (d.act === 'sugdone') return out(sugDone(d));                      // 파트장: 확인·답변 표시
     if (d.act === 'evstart') return out(evStart(d));                      // 📝 평가 시작 (한 달 3회)
     if (d.act === 'evpick') return out(evPick(d));                        // 📝 연습 결과를 평가에 반영 (본인이 고른 것만)
-    if (d.act === 'evsub') return out(evAdd(d));                          // 📝 롤플레잉 평가 — 본인이 등급을 골라 제출
+    if (d.act === 'evsub') return out(evAdd(d));
+    if (d.act === 'diag') return out(diag(d));                            // 📸 AI 현장 진단 — 사진 → 기기·원인·조치
+    if (d.act === 'diagfb') return out(diagFb(d));                        // 📸 진단 결과 도움 여부 / 실제 조치 남기기
+    if (d.act === 'vbrief') return out(vbrief(d));                        // 🎬 AI 실적 영상 브리핑 — 내레이션 원고                          // 📝 롤플레잉 평가 — 본인이 등급을 골라 제출
     return out({ ok: false, err: 'act' });
   } catch (err) { return out({ ok: false, err: String(err) }); }
 }
@@ -43,6 +46,7 @@ function doGet(e) {
     if (n >= 2) sh.getRange(2, 1, n - 1, EV_HEAD.length).getValues().forEach(function (r) { const ym = ymOf(r[1]); (m[ym] = m[ym] || {})[String(r[2])] = Number(r[5]) || 0; });
     return out({ ok: true, m: m });
   }
+  if (p.action === 'diags') return out({ ok: true, rows: diagRows(40) });   // 📸 지사 현장 진단 사례 (최근)
   if (p.action === 'myev') return out(evMine(String(p.name || '').slice(0, 10)));   // 내 이번 달 기록 + 제출한 평가
   if (p.action === 'evsubs') {   // 📝 평가 제출 현황 — 파트장만 (비밀번호)
     if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
@@ -544,6 +548,72 @@ function evAdd(d) {
     if (hit) sh.getRange(hit, 1, 1, EV_HEAD.length).setValues([vals]); else sh.appendRow(vals);
   } finally { lock.releaseLock(); }
   return { ok: true, grade: evGrade(at.total) };
+}
+
+/* ───── 📸 AI 현장 진단 — 사진(최대 3장) + 메모 → 기기 · 원인 · 조치 순서. 사례는 「현장진단」 시트에 쌓임 ───── */
+const DIAG_HEAD = ['시각', '이름', '기기', '증상', '원인', '조치', '확신도', '도움', '실제 조치', '번호'];
+const DIAG_SYS = [
+  '너는 에스원(세콤) 보안 서비스 출동요원을 돕는 현장 진단 선배다. 20년 경력의 기술팀장처럼, 짧고 정확하게 말한다.',
+  '대상 장비: 세콤 컨트롤러(주장치)·키패드·카드리더·출입통제기, 감지기(열선/적외선·자석·유리파손·화재·가스), 비상버튼, 사이렌, 통신 모듈(유선·LTE), 축전지·전원장치, CCTV 카메라·DVR·NVR·모니터, 도어락·스트라이크, 배선·단자함.',
+  '사진에서 보이는 것(표시등 색·깜빡임, 화면 글자·오류 문구, 배선 상태, 파손·습기·먼지, 부착 위치)을 근거로 판단한다.',
+  '모델명·오류코드가 확실하지 않으면 지어내지 말고 "모델 확인 필요"라고 쓰고, 무엇을 찍으면 되는지 알려 준다.',
+  '현장에서 출동요원이 바로 할 수 있는 조치를 순서대로 쓰고, 기술팀·A/S 접수가 필요한 경우를 분명히 구분한다.',
+  '전기·사다리·고객 재산 관련 안전 주의는 꼭 넣는다. 고객 비밀번호를 묻거나 대신 설정하라는 조치는 절대 쓰지 않는다.',
+  '반드시 JSON만 출력: {"device":"기기 이름(추정이면 \'추정\' 표시)","seen":"사진에서 본 핵심 근거 한두 줄","symptom":"증상 요약",',
+  '"causes":[{"c":"원인","p":"높음|보통|낮음"}] (최대 3개, 가능성 높은 순),"steps":["현장 조치 1", ...] (3~6개, 짧은 명령형),',
+  '"call":"기술팀·A/S 요청이 필요한 조건 한 줄 (없으면 빈칸)","safety":"안전 주의 한 줄","say":"고객에게 할 안내 멘트 한두 문장","more":"더 정확히 보려면 추가로 찍을 사진 (없으면 빈칸)","conf":0~100}',
+  '모든 문장은 한국어, 존댓말 없이 간결하게 (고객 멘트 say 만 존댓말).'
+].join('\n');
+function diagSh() { return evSh('현장진단', DIAG_HEAD); }
+function diag(d) {
+  const imgs = (d.imgs || []).slice(0, 3).filter(function (x) { return x && String(x).length < 2500000; });
+  if (!imgs.length) return { ok: false, err: 'img' };
+  const memo = String(d.memo || '').slice(0, 300), name = String(d.name || '').slice(0, 10);
+  const parts = imgs.map(function (b) { return { inlineData: { mimeType: 'image/jpeg', data: String(b).replace(/^data:[^,]+,/, '') } }; });
+  /* 지사에 쌓인 비슷한 사례(도움 됐던 것)를 참고로 붙임 */
+  let ref = '';
+  try { const rs = diagRows(60).filter(function (r) { return r.fix || r.ok === '도움'; }).slice(0, 8);
+    if (rs.length) ref = '\n\n[지사 과거 사례 — 참고만]\n' + rs.map(function (r) { return '- ' + r.dev + ' / ' + r.sym + ' → ' + (r.fix || r.cause); }).join('\n'); } catch (e) {}
+  parts.push({ text: '출동요원 메모: ' + (memo || '(없음)') + ref + '\n\n위 사진을 진단해서 JSON으로 답해.' });
+  let j;
+  try { j = geminiCall(DIAG_SYS, [{ role: 'user', parts: parts }], 1600, false); }
+  catch (err) { return { ok: false, err: String(err).slice(0, 200) }; }
+  const no = 'D' + Utilities.formatDate(new Date(), 'Asia/Seoul', 'MMddHHmmss') + Math.floor(Math.random() * 90 + 10);
+  try { diagSh().appendRow([new Date(), name, String(j.device || '').slice(0, 60), String(j.symptom || '').slice(0, 120),
+    ((j.causes || [])[0] || {}).c || '', (j.steps || []).slice(0, 3).join(' → ').slice(0, 300), Number(j.conf) || 0, '', '', no]); } catch (e) {}
+  j.ok = true; j.no = no; j.model = LAST_MODEL; return j;
+}
+function diagFb(d) {
+  const no = String(d.no || ''); if (!no) return { ok: false };
+  const sh = diagSh(), n = sh.getLastRow(); if (n < 2) return { ok: false };
+  const ids = sh.getRange(2, 10, n - 1, 1).getValues();
+  for (let i = ids.length - 1; i >= 0; i--) if (String(ids[i][0]) === no) {
+    if (d.ok) sh.getRange(i + 2, 8).setValue(String(d.ok).slice(0, 10));
+    if (d.fix != null) sh.getRange(i + 2, 9).setValue(String(d.fix).slice(0, 200));
+    return { ok: true };
+  }
+  return { ok: false };
+}
+function diagRows(limit) {
+  const sh = diagSh(), n = sh.getLastRow(); if (n < 2) return [];
+  const cnt = Math.min(limit, n - 1);
+  return sh.getRange(n - cnt + 1, 1, cnt, DIAG_HEAD.length).getValues().reverse().map(function (r) {
+    return { t: new Date(r[0]).getTime(), name: r[1], dev: r[2], sym: r[3], cause: r[4], step: r[5], conf: r[6], ok: r[7], fix: r[8] };
+  });
+}
+
+/* ───── 🎬 AI 실적 영상 브리핑 — 앱이 보낸 지표 요약으로 장면별 내레이션 원고를 씀 ───── */
+function vbrief(d) {
+  const data = JSON.stringify(d.data || {}).slice(0, 6000), ids = (d.scenes || []).slice(0, 10);
+  const sys = ['너는 에스원 북서울지사 월간 실적 영상의 내레이터 원고 작가다.',
+    '아래 장면 목록 순서대로, 장면마다 한국어 내레이션 1~2문장(40~80자)을 쓴다. 뉴스 앵커처럼 또렷하고 힘 있게, 존댓말.',
+    '숫자는 데이터에 있는 것만 쓰고 절대 지어내지 않는다. 숫자는 읽기 쉽게 (예: 9.88점, 3위).',
+    '잘한 점은 구체적으로 칭찬하고, 약한 지표는 다음 달 과제로 긍정적으로 말한다. 직원 개인을 깎아내리지 않는다.',
+    '반드시 JSON만: {"lines":{"장면id":"내레이션", ...},"title":"영상 제목(15자 이내)","one":"총평 한 줄(30자 이내)"}'].join('\n');
+  try {
+    const j = geminiCall(sys, [{ role: 'user', parts: [{ text: '장면 목록: ' + ids.join(', ') + '\n데이터: ' + data }] }], 1500, false);
+    j.ok = true; return j;
+  } catch (err) { return { ok: false, err: String(err).slice(0, 200) }; }
 }
 
 return { doPost: doPost, doGet: doGet };

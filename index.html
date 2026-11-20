@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261119101215">
+<meta name="bsr-ver" content="20261120102057">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3170,6 +3170,7 @@ var CS_MGR = ["최문혁","이재식","지사장","서비스팀장"];
 var DEPTS = {"영업":["최영국","이수열","임영민","정문재","박광춘"], "기술":["박정훈","김상훈","박광모"]};
 var SALES_URL = "https://jhsim2545.github.io/DailySales/User.html";
 var REF_URL = "https://www.appcreator24.com/app4193156-lb0sei";   /* 🤝 소개영업(지사장님 운영) — 지금은 앱 받기 페이지, 웹 주소 받으면 교체 */
+function aiRow(){ return '<div class="ai2"><button type="button" class="v" data-vb="open"><i>🎬</i><b>AI 실적 영상 브리핑</b><small>지표로 1분 영상 자동 제작</small></button><a class="d" href="diag.html"><i>📸</i><b>AI 현장 진단</b><small>사진 한 장 → 원인 · 조치</small></a></div>'; }
 function refLink(){ return '<a class="dh-sales ref" href="'+REF_URL+'" target="_blank" rel="noopener"><i>🤝</i><span><b>소개영업 등록·관리</b><small>지사장님 운영 · 앱 받기</small></span><em>받기 ›</em></a>'; }
 var PROD_URL = "directmall.html#kakao";   /* 에스원 상품 추천 대시보드 */
 function viewSal(){
@@ -3940,6 +3941,9 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-20a", only:"이재식", date:"11/20", title:"nopush:🎬 AI 영상 · 📸 현장 진단", tabs:["home"], items:["🎬 브리핑의 「AI 실적 영상 브리핑」 — 지표로 1분 영상 자동 제작 (AI 원고 · 목소리), 영상 파일 저장 · 카톡 공유","📸 「AI 현장 진단」 — 장비 사진 → 기기 · 원인 · 조치 순서 · 고객 멘트, 지사 사례로 쌓임"]},
+ {id:"2026-11-19y", only:"-", date:"11/19", title:"nopush:고객체감 11/19 (이력 숨김)", tabs:["cs"], items:[""]},
+ {id:"2026-11-19x", only:"-", date:"11/19", title:"nopush:운전성향 11/19 (이력 숨김)", tabs:["drv"], items:[""]},
  {id:"2026-11-18o", date:"11/18", title:"nopush:🎧 응대왕·연습왕 구분", tabs:["home"], items:["👑 응대왕 = AI 응대 「평가」 점수 1위 (월별 평가 탭과 같음)","🎧 연습 평균 점수 순위는 「이달의 연습왕」으로 이름을 바꿨어요"]},
  {id:"2026-11-18n", date:"11/18", title:"nopush:🏆 MVP 칸 정리", tabs:["home"], items:["🏆 이번 달 MVP 발표 전엔 '11월 이달의 MVP · 11/30 이후 발표' 표시","👑 응대왕은 실제 직원만 (테스트 이름 제외)"]},
  {id:"2026-11-18m", date:"11/18", title:"nopush:📊 해피콜 월 누계 공개", tabs:["home"], items:["📊 근무일엔 퇴근 2시간 뒤까지 해피콜 발송 현황 카드에서 월 누계(제출/근무 · 발송 건수)를 볼 수 있어요"]},
@@ -4396,6 +4400,7 @@ function deptHome(d){
   var h = '<div class="dh">';
   var gg = deptGreet(d); h += '<div class="dh-c dh-hero '+(d==="영업"?'sal':'tec')+'"><small>'+(d==="영업"?'💼':'💻')+' 북서울지사 '+d+' · '+(function(){ var k=new Date(Date.now()+9*3600000); return (k.getUTCMonth()+1)+'/'+k.getUTCDate()+'('+'일월화수목금토'.charAt(k.getUTCDay())+')'; })()+'</small><b>'+esc2(me)+(isLead(me)?' '+d+'팀장':'')+'님, '+gg[0]+' '+gg[1]+'</b><small>'+gg[2]+'</small></div>';
   h += rpProdRow() + '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + refLink();
+  h += aiRow();
   h += (typeof wxCard==="function" ? wxCard() : '');
   h += rpMini();
   h += '<details class="dh-c dh-dt"><summary class="dh-h">📞 내 해피콜 <small>발송 '+rows.length+' · 응답 '+rs.length+' ▾</small></summary><p class="dh-sub">'+esc2(S.period.replace('2026.',''))+' 누적</p><div class="dh-k">'+
@@ -4539,7 +4544,7 @@ function brief(){
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small>'+(typeof sfxChip==="function"?sfxChip():'')+'<b>'+(nm2?'<span class="hm-nm">'+esc2(nm2)+'님,</span>':'')+'<span class="hm-gr'+(greet.replace(/ /g,'').length>10?' long':'')+'">'+greet+' <i class="wv">'+gp[1]+'</i></span></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
   setTimeout(safeAuto, 300); setTimeout(wxAuto, 900);
-  var salesA = rpProdRow() + '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + refLink();
+  var salesA = rpProdRow() + '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + refLink() + aiRow();
   return '<div class="sec">'+hero+salesA+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+funRow()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<span class="pt-bs"><button type="button" class="fd-btn" data-ptopen="1">🗺️ 구역 조회</button><button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></span></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
@@ -6974,7 +6979,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="ref">🤝 소개영업 앱 받기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 고객 응대 롤플레잉</button><button type="button" data-vl="find">🔍 고객처 한눈에 · 불만 위험</button><button type="button" data-vl="pc">👤 개인 카드</button><button type="button" data-vl="edu">📚 교육 이수 현황</button><button type="button" data-vl="sug">💬 건의 · 질문함</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📲 알림 받기 · 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 · 월말 결산</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm vl-own">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="ref">🤝 소개영업 앱 받기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 고객 응대 롤플레잉</button><button type="button" data-vb="open">🎬 AI 실적 영상 브리핑</button><button type="button" data-vl="diag">📸 AI 현장 진단</button><button type="button" data-vl="find">🔍 고객처 한눈에 · 불만 위험</button><button type="button" data-vl="pc">👤 개인 카드</button><button type="button" data-vl="edu">📚 교육 이수 현황</button><button type="button" data-vl="sug">💬 건의 · 질문함</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📲 알림 받기 · 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 · 월말 결산</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm vl-own">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
@@ -7256,6 +7261,7 @@ menu.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return; menu.hidden = true;
   var a = b.dataset.vl;
   if(a==="pc"){ pcView(); return; } if(a==="sug"){ SUG_TAB="write"; sugView(); return; } if(a==="edu"){ eduView(); return; }
+  if(a==="diag"){ location.href="diag.html"; return; }
   if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ pushView(); } else if(a==="guide"){ guideView(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="bdg"){ badgeCheck(); } else if(a==="push"){ pushView(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ if(me!=="이재식") return; pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ NL_T==="edu" ? eduTab() : NL_T==="man" ? manTab() : notiList(); } else if(a==="sales"){ window.open(SALES_URL, "_blank"); } else if(a==="ref"){ window.open(REF_URL, "_blank"); } else if(a==="prod"){ location.href = PROD_URL; }   /* 같은 앱 화면에서 열기(주소창 없음) · 상품 추천의 ‹ 버튼으로 돌아옴 */ else if(a==="find"){ findView(""); } else if(a==="praise"){ praiseView(""); } else if(a==="risk"){ riskView(); } else if(a==="help"){ helpView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
 });
 ov.addEventListener("click", function(e){
@@ -7945,6 +7951,207 @@ document.addEventListener('click', function(e){ if(e.target.closest('[data-ptope
 .pt-bs{display:inline-flex;gap:6px}
 .pt-if{width:100%;height:min(62vh,520px);border:1.5px solid #c7d2fe;border-radius:14px;background:#f3f5f8;display:block}
 .pt-full{display:block;text-align:center;margin:8px 0 2px;font-size:12px;font-weight:700;color:#1f4fd8;text-decoration:none}
+.vb{position:fixed;inset:0;z-index:9999;background:#050b1c;display:flex;flex-direction:column;font-family:"Noto Sans KR",sans-serif}
+.vb-top{display:flex;align-items:center;gap:10px;color:#fff;padding:max(10px,env(safe-area-inset-top)) 14px 8px}
+.vb-top b{flex:1;font-size:16px}
+.vb-top button{width:38px;height:38px;border-radius:12px;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:16px}
+.vb-stage{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center;padding:4px 12px}
+.vb-stage canvas{max-width:100%;max-height:100%;aspect-ratio:9/16;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.5);background:#0b1d4a}
+.vb-prep{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;text-align:center;background:rgba(5,11,28,.55);padding:20px}
+.vb-prep b{font-size:17px;word-break:keep-all}.vb-prep small{font-size:13px;opacity:.75}
+.vb-prep ol{list-style:none;padding:0;margin:6px 0 0;text-align:left;font-size:14px;color:rgba(255,255,255,.55)}
+.vb-prep li{padding:3px 0}.vb-prep li.on{color:#7dd3fc;font-weight:800}.vb-prep li.ok{color:#86efac}.vb-prep li span{font-size:12px;opacity:.85}
+.vb-dot{width:44px;height:44px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:#38bdf8;animation:vbs 1s linear infinite}
+@keyframes vbs{to{transform:rotate(360deg)}}
+.vb-big{width:92px;height:92px;border-radius:50%;border:0;background:#fff;color:#13307a;font-size:38px;padding-left:8px;box-shadow:0 10px 30px rgba(56,189,248,.45)}
+.vb-prep.rec{background:none;justify-content:flex-start;padding-top:18px;pointer-events:none}.vb-prep.rec b{color:#f87171}
+.vb-sv{display:flex;flex-direction:column;gap:8px;width:min(280px,80%);margin-top:6px}
+.vb-sv a,.vb-sv button{display:block;text-align:center;border:0;border-radius:14px;padding:12px;font:800 15px "Noto Sans KR",sans-serif;text-decoration:none;background:rgba(255,255,255,.14);color:#fff}
+.vb-sv .pri{background:#fee500;color:#191600}
+.vb [hidden]{display:none!important}
+.vb-ctl{display:grid;grid-template-columns:1fr 1.3fr;gap:8px;padding:8px 14px max(14px,env(safe-area-inset-bottom))}
+.vb-ctl button{border:0;border-radius:14px;padding:13px 0;font:800 15px "Noto Sans KR",sans-serif;background:rgba(255,255,255,.14);color:#fff}
+.vb-ctl .pri{background:linear-gradient(120deg,#2563eb,#0ea5e9)}
+.ai2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ai2 a,.ai2 button{display:flex;flex-direction:column;gap:2px;text-align:left;border:0;border-radius:18px;padding:14px;color:#fff;text-decoration:none;font-family:"Noto Sans KR",sans-serif;box-shadow:0 8px 20px rgba(15,35,80,.18)}
+.ai2 i{font-style:normal;font-size:26px}.ai2 b{font-size:15px;font-weight:800;word-break:keep-all}.ai2 small{font-size:11.5px;opacity:.85;word-break:keep-all;line-height:1.4}
+.ai2 .v{background:linear-gradient(135deg,#0b1d4a,#1f4fd8 70%,#7c3aed)}.ai2 .d{background:linear-gradient(135deg,#0f2350,#0284c7 70%,#0ea5e9)}
 </style>
+<script>
+/* ===== 🎬 AI 실적 영상 브리핑 — 지표로 장면을 그리고 AI가 원고 · 목소리를 만듦. 사람 손 0 ===== */
+var VB = {on:false};
+function vbData(){
+  var sorted = BR.slice().sort(function(a,b){return okc(b)-okc(a) || score(b)-score(a) || score2(b)-score2(a)});
+  var oRk = 1+sorted.findIndex(function(b){return b.name===MY});
+  var mets = me.m.map(function(c,i){ return {n:M[i].short, full:M[i].name, r:Math.round(c.r), rk:rank(i,c.r)}; });
+  var best = mets.slice().sort(function(a,b){return a.rk-b.rk||b.r-a.r})[0], worst = mets.slice().sort(function(a,b){return a.r-b.r})[0];
+  var cars = VEH.map(function(v){ return {no:v.no+'호', ok:okc(v), sc:Math.round(score2(v))}; }).sort(function(a,b){return b.ok-a.ok||b.sc-a.sc});
+  var ck = Object.keys(CSD).sort().pop(), C = CSD[ck];
+  var dk = Object.keys(DRIVE.snaps).sort().pop(), dr = DRIVE.snaps[dk]||[];
+  var cm = kstDate(0).slice(0,7), y = +cm.slice(0,4), mo = +cm.slice(5), pm = mo===1 ? (y-1)+'-12' : y+'-'+('0'+(mo-1)).slice(-2);
+  var w = null; try{ w = mxWin(cm) || mxWin(pm); if(w && !(w.t>0)) w = null; }catch(e){}
+  return {branch:MY+'지사', date:SD.br, month:+SD.br.slice(5,7), brN:BR.length, rank:oRk, ok:okc(me), mets:mets, best:best, worst:worst,
+    top3:sorted.slice(0,3).map(function(b){return b.name}), cars:cars.slice(0,3),
+    cs:{sent:C.sent, resp:C.resp, sat:C.sat, ten:C.ten, rate:Math.round(C.resp/C.sent*100)},
+    drv:{n:dr.length, good:dr.filter(function(r){return r[3]==="양호"}).length, warn:dr.filter(function(r){return r[3]!=="양호"}).length},
+    safe:mg&&mg.safeDays||0, carDays:mg&&mg.carDays||0, mvp:w?{m:+w.m.slice(5), n:w.n, t:w.t}:null};
+}
+function vbScenes(D){
+  var S = [{id:"intro"},{id:"rank"},{id:"kpi"},{id:"car"},{id:"cs"},{id:"safe"}];
+  if(D.mvp) S.push({id:"mvp"});
+  S.push({id:"outro"});
+  return S;
+}
+function vbFallback(D){
+  return {intro:D.branch+' '+D.month+'월 서비스 실적 브리핑을 시작합니다.',
+    rank:'사업팀 '+D.brN+'개 지사 중 종합 '+D.rank+'위, 다섯 개 지표 중 '+D.ok+'개를 달성했습니다.',
+    kpi:'가장 강한 지표는 '+D.best.full+' '+D.best.r+'퍼센트'+(D.ok===5?', 다섯 개 모두 목표를 넘었습니다.':', 보완할 지표는 '+D.worst.full+'입니다.'),
+    car:'차량별로는 '+D.cars[0].no+'가 지표 '+D.cars[0].ok+'개를 달성하며 가장 앞섰습니다.',
+    cs:'고객체감은 '+D.cs.sent+'건 발송에 '+D.cs.resp+'건 응답, 만족도는 '+D.cs.sat+'점입니다.',
+    safe:'안전 무사고 '+D.safe+'일째, 운전성향은 '+D.drv.n+'명 중 '+D.drv.good+'명이 양호합니다.',
+    mvp:D.mvp?D.mvp.m+'월 이달의 MVP는 '+D.mvp.n+' 프로입니다. 축하합니다.':'',
+    outro:(D.ok===5?'다음 달도 다섯 개 지표 모두 지키겠습니다. 특히 '+D.worst.full+'을 챙기겠습니다.':'다음 달은 '+D.worst.full+' 개선에 집중하겠습니다.')+' 이상 '+D.branch+'였습니다.'};
+}
+function vbApi(body){ return fetch(RP_API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)}).then(function(r){return r.json()}); }
+function vbPcm(b64, rate){ var s=atob(b64), n=s.length>>1, f=new Float32Array(n), dv=new DataView(new ArrayBuffer(s.length)); for(var i=0;i<s.length;i++) dv.setUint8(i,s.charCodeAt(i)); for(var k=0;k<n;k++) f[k]=dv.getInt16(k*2,true)/32768; var b=VB.ac.createBuffer(1,n,rate); b.copyToChannel(f,0); return b; }
+
+function vbOpen(){
+  if(VB.on) return; VB.on = true;
+  var el = document.createElement("div"); el.className = "vb"; el.id = "vb";
+  el.innerHTML = '<div class="vb-top"><b>🎬 AI 실적 영상 브리핑</b><button type="button" data-vb="x" aria-label="닫기">✕</button></div>'+
+    '<div class="vb-stage"><canvas id="vbc" width="720" height="1280"></canvas><div class="vb-prep" id="vbp"></div></div>'+
+    '<div class="vb-ctl" id="vbctl" hidden><button type="button" data-vb="play">▶ 다시 보기</button><button type="button" data-vb="rec" class="pri">💾 영상 파일 저장</button></div>';
+  document.body.appendChild(el); document.documentElement.style.overflow="hidden";
+  var D = vbData(), S = vbScenes(D); VB.D = D; VB.S = S; VB.cv = document.getElementById("vbc"); VB.cx = VB.cv.getContext("2d");
+  try{ VB.ac = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ VB.ac = null; }
+  var P = document.getElementById("vbp"), st = function(a,b,c){ P.innerHTML = '<div class="vb-dot"></div><b>'+a+'</b><ol>'+[['📊 지표 정리',1],['✍️ AI 원고 작성',2],['🎙️ AI 목소리 녹음',3],['🎞️ 장면 구성',4]].map(function(x){ return '<li class="'+(x[1]<b?'ok':x[1]===b?'on':'')+'">'+x[0]+(x[1]===3&&c?' <span>'+c+'</span>':'')+'</li>'; }).join('')+'</ol>'; };
+  vbFrame(0, 0); st('지표를 정리하고 있어요', 1);
+  var FB = vbFallback(D);
+  setTimeout(function(){ st('AI가 원고를 쓰고 있어요', 2);
+    vbApi({act:"vbrief", scenes:S.map(function(s){return s.id}), data:D}).then(function(j){ return j&&j.ok&&j.lines ? j : {}; }).catch(function(){ return {}; }).then(function(j){
+      VB.title = j.title || (D.month+'월 실적 브리핑'); VB.one = j.one || '';
+      S.forEach(function(s){ s.text = String((j.lines||{})[s.id] || FB[s.id] || '').slice(0, 160); });
+      var done = 0; st('AI 목소리를 녹음하고 있어요', 3, '0/'+S.length);
+      return Promise.all(S.map(function(s){
+        return vbApi({act:"tts", text:s.text, voice:"Charon", style:"뉴스 앵커처럼 또렷하고 힘 있게, 자신감 있는 목소리로 읽어 주세요"}).then(function(a){
+          if(a&&a.ok&&a.audio&&VB.ac) s.buf = vbPcm(a.audio, a.rate||24000);
+        }).catch(function(){}).then(function(){ done++; if(VB.on) st('AI 목소리를 녹음하고 있어요', 3, done+'/'+S.length); });
+      }));
+    }).then(function(){ if(!VB.on) return; st('장면을 맞추고 있어요', 4);
+      var t = 0; S.forEach(function(s){ s.t0 = t; s.dur = Math.max(4.2, (s.buf ? s.buf.duration : s.text.length*0.13) + 0.9); t += s.dur; }); VB.total = t;
+      setTimeout(function(){ P.innerHTML = '<button type="button" class="vb-big" data-vb="play">▶</button><b>영상이 준비됐어요</b><small>'+Math.round(t)+'초 · 소리를 켜고 보세요</small><div class="vb-sv"><button type="button" data-vb="rec">💾 바로 영상 파일로 만들기</button></div>'; }, 400);
+    });
+  }, 500);
+}
+function vbClose(){ VB.on = false; cancelAnimationFrame(VB.raf); try{ VB.srcs&&VB.srcs.forEach(function(s){ try{s.stop()}catch(e){} }); }catch(e){} try{ VB.rec&&VB.rec.state!=="inactive"&&VB.rec.stop(); }catch(e){} try{ VB.ac&&VB.ac.close(); }catch(e){}
+  var el = document.getElementById("vb"); if(el) el.remove(); document.documentElement.style.overflow=""; }
+function vbPlay(rec){
+  var P = document.getElementById("vbp"); P.innerHTML = ''; P.hidden = true; P.className = "vb-prep"; document.getElementById("vbctl").hidden = true;
+  cancelAnimationFrame(VB.raf); (VB.srcs||[]).forEach(function(s){ try{s.stop()}catch(e){} }); VB.srcs = [];
+  var ac = VB.ac, dest = null; if(ac && ac.state==="suspended") ac.resume();
+  if(rec && ac){ dest = ac.createMediaStreamDestination(); }
+  var t0 = ac ? ac.currentTime + 0.25 : 0, w0 = performance.now() + 250;
+  VB.S.forEach(function(s){ if(!s.buf || !ac) return; var b = ac.createBufferSource(); b.buffer = s.buf; b.connect(ac.destination); if(dest) b.connect(dest); b.start(t0 + s.t0 + 0.35); VB.srcs.push(b); });
+  if(rec){
+    var vs = VB.cv.captureStream(30), tr = vs.getVideoTracks().concat(dest ? dest.stream.getAudioTracks() : []), ms = new MediaStream(tr);
+    var ty = ["video/mp4;codecs=avc1,mp4a","video/mp4","video/webm;codecs=vp9,opus","video/webm"].filter(function(x){ return window.MediaRecorder && MediaRecorder.isTypeSupported(x); })[0] || "";
+    var ch = []; VB.rec = new MediaRecorder(ms, ty?{mimeType:ty, videoBitsPerSecond:4000000}:{}); VB.rec.ondataavailable = function(e){ if(e.data.size) ch.push(e.data); };
+    VB.rec.onstop = function(){ if(!VB.on) return; var bl = new Blob(ch,{type:(ty||"video/webm").split(";")[0]}); vbSaved(bl); };
+    VB.rec.start(500);
+  }
+  var loop = function(){ var el = (performance.now() - w0)/1000;
+    vbFrame(Math.max(0,el));
+    if(el < VB.total + 0.3){ VB.raf = requestAnimationFrame(loop); }
+    else { if(rec && VB.rec) VB.rec.stop(); else { document.getElementById("vbctl").hidden = false; } }
+  };
+  VB.raf = requestAnimationFrame(loop);
+}
+function vbSaved(bl){
+  var ext = /mp4/.test(bl.type) ? "mp4" : "webm", nm = "북서울_"+VB.D.month+"월_실적브리핑."+ext, f = null;
+  try{ f = new File([bl], nm, {type:bl.type}); }catch(e){}
+  var P = document.getElementById("vbp"); P.hidden = false; P.className = "vb-prep";
+  P.innerHTML = '<b>🎉 영상 파일이 만들어졌어요</b><small>'+(bl.size/1048576).toFixed(1)+'MB · '+ext.toUpperCase()+'</small><div class="vb-sv">'+
+    (f && navigator.canShare && navigator.canShare({files:[f]}) ? '<button type="button" data-vb="share" class="pri">📤 카톡 · 메일로 보내기</button>' : '')+
+    '<a download="'+nm+'" href="'+URL.createObjectURL(bl)+'">💾 휴대폰에 저장</a><button type="button" data-vb="play">▶ 다시 보기</button></div>';
+  VB.file = f;
+}
+document.addEventListener("click", function(e){
+  var b = e.target.closest("[data-vb]"); if(!b) return; var a = b.dataset.vb;
+  if(a==="open") vbOpen(); else if(a==="x") vbClose(); else if(a==="play") vbPlay(false);
+  else if(a==="rec"){ if(!window.MediaRecorder || !VB.cv.captureStream){ alert("이 폰은 영상 저장을 지원하지 않아요. 화면 녹화로 저장해 주세요."); return; } var P=document.getElementById("vbp"); vbPlay(true); P.hidden=false; P.className="vb-prep rec"; P.innerHTML='<b>● 녹화 중</b><small>끝날 때까지 화면을 그대로 두세요</small>'; }
+  else if(a==="share" && VB.file){ navigator.share({files:[VB.file], title:"북서울지사 실적 브리핑"}).catch(function(){}); }
+});
+
+/* ---------- 장면 그리기 (720×1280) ---------- */
+function vbEase(x){ x = Math.max(0, Math.min(1, x)); return 1 - Math.pow(1 - x, 3); }
+function vbT(cx, t, x, y, sz, col, wt, al){ cx.font = (wt||800)+' '+sz+'px "Noto Sans KR",sans-serif'; cx.fillStyle = col||"#fff"; cx.textAlign = al||"center"; cx.fillText(t, x, y); }
+function vbRR(cx, x, y, w, h, r, fill){ cx.beginPath(); cx.moveTo(x+r,y); cx.arcTo(x+w,y,x+w,y+h,r); cx.arcTo(x+w,y+h,x,y+h,r); cx.arcTo(x,y+h,x,y,r); cx.arcTo(x,y,x+w,y,r); cx.closePath(); cx.fillStyle = fill; cx.fill(); }
+function vbWrap(cx, t, x, y, maxW, lh){ var w = t.split(''), line = '', out = []; cx.font = '600 30px "Noto Sans KR",sans-serif';
+  var words = t.split(' '); words.forEach(function(wd){ var tt = line ? line+' '+wd : wd; if(cx.measureText(tt).width > maxW && line){ out.push(line); line = wd; } else line = tt; }); if(line) out.push(line);
+  out.slice(0,3).forEach(function(l,i){ cx.fillText(l, x, y + i*lh); }); return out.length; }
+function vbFrame(el){
+  var cx = VB.cx, D = VB.D, S = VB.S, W = 720, H = 1280; if(!cx) return;
+  var s = S[0]; for(var i=0;i<S.length;i++){ if(S[i].t0 != null && el >= S[i].t0) s = S[i]; }
+  var le = el - (s.t0||0), p = s.dur ? le/s.dur : 0, ap = vbEase(le/0.6);
+  /* 배경 */
+  var g = cx.createLinearGradient(0,0,W,H); g.addColorStop(0,"#0b1d4a"); g.addColorStop(.55,"#13307a"); g.addColorStop(1,"#0a1636"); cx.fillStyle = g; cx.fillRect(0,0,W,H);
+  cx.save(); cx.globalAlpha = .08; cx.fillStyle = "#fff"; for(var k=0;k<6;k++){ cx.beginPath(); cx.arc((k*173+el*14)%W, 200+k*190, 90+k*18, 0, 7); cx.fill(); } cx.restore();
+  cx.fillStyle = "#e4002b"; cx.fillRect(0,0,W,10);
+  vbT(cx, "S1  "+D.branch+" · 기준일 "+md(D.date), 48, 72, 24, "rgba(255,255,255,.7)", 700, "left");
+  /* 진행 막대 */
+  if(VB.total){ cx.fillStyle = "rgba(255,255,255,.15)"; cx.fillRect(48,94,W-96,5); cx.fillStyle = "#38bdf8"; cx.fillRect(48,94,(W-96)*Math.min(1,el/VB.total),5); }
+  cx.save(); cx.globalAlpha = ap; cx.translate(0, (1-ap)*40);
+  var F = VB_SC[s.id]; if(F) F(cx, D, le, W, H);
+  cx.restore();
+  /* 자막 */
+  if(s.text && VB.total){ var a2 = vbEase((le-0.2)/0.5); cx.save(); cx.globalAlpha = a2; vbRR(cx, 40, 1040, W-80, 190, 26, "rgba(0,0,0,.42)"); cx.fillStyle = "#fff"; cx.textAlign = "center"; vbWrap(cx, s.text, W/2, 1102, W-140, 46); cx.restore(); }
+}
+var VB_SC = {
+  intro:function(cx,D,le,W){ vbT(cx, "🎬", W/2, 380, 120); vbT(cx, D.month+"월", W/2, 540, 110, "#fff", 900); vbT(cx, "서비스 실적 브리핑", W/2, 630, 58, "#fff", 800);
+    vbT(cx, D.branch, W/2, 710, 40, "#93c5fd", 700); if(VB.one){ vbRR(cx, 110, 770, W-220, 76, 38, "rgba(255,255,255,.12)"); vbT(cx, VB.one, W/2, 820, 28, "#fde68a", 700); }
+    vbT(cx, "AI가 지표로 자동 제작", W/2, 960, 24, "rgba(255,255,255,.55)", 600); },
+  rank:function(cx,D,le,W){ var c = vbEase(le/1.4);
+    vbT(cx, "사업팀 종합 순위", W/2, 300, 40, "#93c5fd", 700);
+    vbT(cx, String(Math.max(1, Math.round(D.brN - (D.brN - D.rank)*c))), W/2-20, 560, 260, "#fff", 900); vbT(cx, "위", W/2+150, 560, 70, "#fff", 800);
+    vbT(cx, "/ "+D.brN+"개 지사", W/2, 640, 34, "rgba(255,255,255,.7)", 600);
+    for(var i=0;i<5;i++){ var on = i < D.ok && le > 1.2 + i*0.25; vbRR(cx, 140+i*92, 720, 76, 76, 20, on ? "#22c55e" : "rgba(255,255,255,.14)"); vbT(cx, on?"✓":"", 178+i*92, 774, 40); }
+    vbT(cx, "지표 달성 "+D.ok+" / 5", W/2, 880, 40, "#fff", 800);
+    vbT(cx, "TOP3  "+D.top3.join(" · "), W/2, 960, 28, "rgba(255,255,255,.6)", 600); },
+  kpi:function(cx,D,le,W){ vbT(cx, "5대 지표 달성률", W/2, 230, 44, "#fff", 800);
+    D.mets.forEach(function(m,i){ var y = 300+i*140, c = vbEase((le-0.3-i*0.18)/0.9), mx = 160, bw = (W-300)*Math.min(m.r, mx)/mx*c;
+      var col = m.r>=100 ? "#22c55e" : m.r>=80 ? "#f59e0b" : "#ef4444";
+      vbT(cx, m.n, 60, y+58, 32, "#fff", 800, "left");
+      vbRR(cx, 210, y+20, W-300, 54, 27, "rgba(255,255,255,.1)"); if(bw>8) vbRR(cx, 210, y+20, Math.max(54,bw), 54, 27, col);
+      vbT(cx, Math.round(m.r*c)+"%", W-60, y+60, 32, "#fff", 800, "right");
+      if(m===D.best && c>.95) vbT(cx, "👑 최고", 210, y+112, 24, "#fde68a", 800, "left");
+      if(m===D.worst && c>.95 && m!==D.best) vbT(cx, m.r>=100?"🔎 여유 적음":"🎯 보완", 210, y+112, 24, "#fca5a5", 800, "left"); });
+    vbT(cx, "100% = 목표 달성", W/2, 1000, 22, "rgba(255,255,255,.5)", 600); },
+  car:function(cx,D,le,W){ vbT(cx, "🚓 차량별 TOP", W/2, 260, 48, "#fff", 800);
+    var hs = [300, 220, 170], xs = [W/2, W/2-210, W/2+210], ord = [0,1,2];
+    ord.forEach(function(k){ var c = D.cars[k]; if(!c) return; var e = vbEase((le-0.3-(2-k)*0.25)/0.8), h = hs[k]*e, x = xs[k];
+      vbRR(cx, x-90, 860-h, 180, h, 18, k===0 ? "#f59e0b" : "rgba(255,255,255,.22)");
+      vbT(cx, (k+1)+"", x, 860-h+60, 48, k===0?"#3b2400":"#fff", 900);
+      if(e>.9){ vbT(cx, c.no, x, 860-h-70, 42, "#fff", 800); vbT(cx, "달성 "+c.ok+"/5", x, 860-h-26, 26, "#fde68a", 700); } });
+    vbRR(cx, 60, 860, W-120, 8, 4, "rgba(255,255,255,.3)"); },
+  cs:function(cx,D,le,W){ vbT(cx, "📞 고객체감", W/2, 250, 48, "#fff", 800);
+    var c = vbEase((le-0.2)/1.4), R = 170, cxp = W/2, cyp = 520;
+    cx.lineWidth = 34; cx.lineCap = "round"; cx.strokeStyle = "rgba(255,255,255,.12)"; cx.beginPath(); cx.arc(cxp,cyp,R,0,7); cx.stroke();
+    cx.strokeStyle = "#38bdf8"; cx.beginPath(); cx.arc(cxp,cyp,R,-Math.PI/2,-Math.PI/2+Math.PI*2*(D.cs.sat/10)*c); cx.stroke();
+    vbT(cx, (D.cs.sat*c).toFixed(2), cxp, cyp+30, 96, "#fff", 900); vbT(cx, "만족도 / 10점", cxp, cyp+80, 26, "rgba(255,255,255,.65)", 600);
+    [["발송",D.cs.sent+"건"],["응답",D.cs.resp+"건"],["10점 만점",D.cs.ten+"건"]].forEach(function(x,i){ var x0 = 70+i*200; vbRR(cx, x0, 780, 180, 130, 22, "rgba(255,255,255,.1)"); vbT(cx, x[1], x0+90, 845, 40, "#fff", 800); vbT(cx, x[0], x0+90, 888, 24, "#93c5fd", 700); }); },
+  safe:function(cx,D,le,W){ vbT(cx, "🛡️ 안전 · 운전", W/2, 250, 48, "#fff", 800);
+    var c = vbEase((le-0.2)/1.4); vbT(cx, String(Math.round(D.safe*c)), W/2, 500, 190, "#4ade80", 900); vbT(cx, "일째 안전 무사고", W/2, 580, 40, "#fff", 800); vbT(cx, "차량 무사고 "+D.carDays+"일", W/2, 640, 28, "rgba(255,255,255,.65)", 600);
+    var n = D.drv.n || 1; vbT(cx, "운전성향  양호 "+D.drv.good+"명 · 주의 "+D.drv.warn+"명", W/2, 720, 30, "#fff", 700);
+    for(var i=0;i<n;i++){ var on = le > 1 + i*0.08, x = W/2 - (n*40)/2 + i*40 + 20; cx.beginPath(); cx.arc(x, 790, 15, 0, 7); cx.fillStyle = !on ? "rgba(255,255,255,.12)" : i < D.drv.good ? "#22c55e" : "#f59e0b"; cx.fill(); } },
+  mvp:function(cx,D,le,W){ vbT(cx, "🏆", W/2, 420, 170); vbT(cx, D.mvp.m+"월 이달의 MVP", W/2, 540, 40, "#fde68a", 800);
+    var c = vbEase((le-0.4)/0.7); cx.save(); cx.globalAlpha = c; vbT(cx, D.mvp.n, W/2, 680, 120, "#fff", 900); vbT(cx, Math.round(D.mvp.t)+"점", W/2, 760, 36, "#93c5fd", 700); cx.restore();
+    for(var i=0;i<26;i++){ var a = (i*137.5)%360, r = 200 + ((le*120 + i*30) % 260); cx.fillStyle = ["#fde68a","#f472b6","#38bdf8","#4ade80"][i%4]; cx.fillRect(W/2 + Math.cos(a)*r, 600 + Math.sin(a)*r*0.8, 10, 18); } },
+  outro:function(cx,D,le,W){ var all = D.ok===5; vbT(cx, all ? "다음 달도 5 / 5 유지" : "다음 달 집중 과제", W/2, 330, 40, "#93c5fd", 700);
+    vbRR(cx, 90, 380, W-180, 170, 30, all ? "rgba(34,197,94,.18)" : "rgba(239,68,68,.18)"); vbT(cx, (all?"🔎 ":"🎯 ")+D.worst.full, W/2, 482, 50, "#fff", 900);
+    vbT(cx, all ? "가장 여유가 적은 지표 · 현재 "+D.worst.r+"%" : "현재 "+D.worst.r+"% → 목표 100%", W/2, 620, 34, all ? "#86efac" : "#fca5a5", 700);
+    vbT(cx, "에스원 "+D.branch, W/2, 820, 40, "#fff", 800); vbT(cx, "고객의 안전을 지킵니다", W/2, 880, 30, "rgba(255,255,255,.7)", 600); }
+};
+
+</script>
 
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
