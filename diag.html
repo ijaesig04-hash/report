@@ -131,6 +131,7 @@ textarea{width:100%;min-height:64px;border:1.5px solid var(--line);border-radius
 <script>
 var API = "https://script.google.com/macros/s/AKfycby7Ggvk7-rHHPYtIia_19uj33TbfJUDefRic63OBz0ifkd7hoOSs1HQ06gkQmNRlTcG/exec";
 var ME = (function(){ try{ var n=localStorage.getItem("bsr_me")||""; return n==="관리자"?"":n; }catch(e){ return ""; } })();
+if(ME!=="이재식"){ location.replace("./"); }
 document.getElementById("me").textContent = ME ? ME+"님" : "";
 var IMGS = [], LAST = null;
 var CHIPS = ["표시등 깜빡임","경계 안 걸림","오경보 반복","통신 이상","화면 안 나옴","녹화 안 됨","배터리 경고","문이 안 열림","소리가 남"];
