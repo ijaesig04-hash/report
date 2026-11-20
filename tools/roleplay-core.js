@@ -28,7 +28,8 @@ function doPost(e) {
 function doGet(e) {
   const p = (e && e.parameter) || {};
   evCleanOnce(); evCleanOnce2();
-  if (p.action === 'ping') return out({ ok: true });   // 앱을 열 때 미리 깨워 두기 (첫 대답이 빨라짐)
+  if (p.action === 'ping') { if (p.kb) { try { kbLoad(); } catch (err) {} } return out({ ok: true }); }   // 앱을 열 때 미리 깨워 두기 (kb=1 이면 현장진단 자료도 미리 풀어 둠)
+  if (p.action === 'kbinfo') return out(kbInfo());                      // 📚 현장진단 자료 연결 상태
   if (p.action === 'board') return out(board());                       // 이달 순위 (이름·평균·횟수만)
   if (p.action === 'me') return out(mine(String(p.name || '').slice(0, 10)));   // 내 항목별 평균 (약한 항목 추천용)
   if (p.action === 'rows') {
@@ -550,38 +551,148 @@ function evAdd(d) {
   return { ok: true, grade: evGrade(at.total) };
 }
 
-/* ───── 📸 AI 현장 진단 — 사진(최대 3장) + 메모 → 기기 · 원인 · 조치 순서. 사례는 「현장진단」 시트에 쌓임 ───── */
+/* ───── 📸 AI 현장 진단 — 사진·글·음성 질문 → 매뉴얼·장애사례(kb/kb.dat) 근거로 답. 사례는 「현장진단」 시트에 쌓임 ───── */
 const DIAG_HEAD = ['시각', '이름', '기기', '증상', '원인', '조치', '확신도', '도움', '실제 조치', '번호'];
+
+/* 📚 지식베이스: GitHub의 kb/kb.dat (매뉴얼·장애사례 조각, gzip + ChaCha20 암호화). 열쇠는 스크립트 속성 KB_KEY에만 있음.
+   한 번 풀면 6시간 캐시. 새 자료는 tools/kb_build.py --add 로 kb.dat만 바꾸면 자동 반영 */
+const KB_URL = 'https://raw.githubusercontent.com/ijaesig04-hash/report/main/kb/kb.dat';
+let KB_MEM = null;
+function kbCrypt(sb, keyStr) {
+  const kd = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, keyStr, Utilities.Charset.UTF_8).map(function (b) { return b & 255; });
+  const k = []; for (let i = 0; i < 8; i++) k.push((kd[i * 4] | (kd[i * 4 + 1] << 8) | (kd[i * 4 + 2] << 16) | (kd[i * 4 + 3] << 24)) >>> 0);
+  const n = sb.length, outA = new Array(n), st = new Uint32Array(16), x = new Uint32Array(16);
+  function R(v, c) { return ((v << c) | (v >>> (32 - c))) >>> 0; }
+  function Q(a, b, c, d) {
+    x[a] = x[a] + x[b]; x[d] = R(x[d] ^ x[a], 16); x[c] = x[c] + x[d]; x[b] = R(x[b] ^ x[c], 12);
+    x[a] = x[a] + x[b]; x[d] = R(x[d] ^ x[a], 8); x[c] = x[c] + x[d]; x[b] = R(x[b] ^ x[c], 7);
+  }
+  for (let blk = 0; blk * 64 < n; blk++) {
+    st[0] = 0x61707865; st[1] = 0x3320646e; st[2] = 0x79622d32; st[3] = 0x6b206574;
+    for (let i = 0; i < 8; i++) st[4 + i] = k[i];
+    st[12] = blk; st[13] = 0; st[14] = 0; st[15] = 0;
+    x.set(st);
+    for (let r = 0; r < 10; r++) { Q(0, 4, 8, 12); Q(1, 5, 9, 13); Q(2, 6, 10, 14); Q(3, 7, 11, 15); Q(0, 5, 10, 15); Q(1, 6, 11, 12); Q(2, 7, 8, 13); Q(3, 4, 9, 14); }
+    const o = blk * 64;
+    for (let i = 0; i < 64 && o + i < n; i++) {
+      const w = (x[i >> 2] + st[i >> 2]) >>> 0, kb = (w >>> ((i & 3) * 8)) & 255;
+      outA[o + i] = (((sb[o + i] & 255) ^ kb) << 24) >> 24;
+    }
+  }
+  return outA;
+}
+function kbLoad() {
+  if (KB_MEM) return KB_MEM;
+  const key = P.getProperty('KB_KEY'); if (!key) return null;
+  const c = CacheService.getScriptCache(), n = Number(c.get('kb_n') || 0);
+  let gz = '';
+  if (n) { const ks = []; for (let i = 0; i < n; i++) ks.push('kb_' + i); const m = c.getAll(ks); if (ks.every(function (q) { return m[q]; })) gz = ks.map(function (q) { return m[q]; }).join(''); }
+  if (!gz) {
+    const r = UrlFetchApp.fetch(KB_URL + '?t=' + Date.now(), { muteHttpExceptions: true });
+    if (r.getResponseCode() !== 200) return null;
+    gz = Utilities.base64Encode(kbCrypt(Utilities.base64Decode(r.getContentText().trim()), key));
+    const put = {}, SZ = 90000; let cnt = 0;
+    for (let i = 0; i < gz.length; i += SZ) put['kb_' + (cnt++)] = gz.slice(i, i + SZ);
+    try { c.putAll(put, 21600); c.put('kb_n', String(cnt), 21600); } catch (e) {}
+  }
+  const txt = Utilities.ungzip(Utilities.newBlob(Utilities.base64Decode(gz), 'application/x-gzip', 'kb.gz')).getDataAsString('UTF-8');
+  KB_MEM = JSON.parse(txt);
+  return KB_MEM;
+}
+function kbInfo() {
+  if (!P.getProperty('KB_KEY')) return { ok: true, key: false };
+  try { const kb = kbLoad(); if (!kb) return { ok: true, key: true, docs: 0 };
+    const t = {}; kb.c.forEach(function (x) { if (x.k !== 'memo') t[x.t] = 1; });
+    return { ok: true, key: true, docs: Object.keys(t).length, v: kb.v };
+  } catch (e) { return { ok: false, key: true, err: String(e).slice(0, 120) }; }
+}
+function kbNorm(s) { return String(s || '').toLowerCase().replace(/[\s\-_·.,:;()\[\]{}"'“”‘’\/|]/g, ''); }
+const KB_SYS = { '세콤듀얼R': ['듀얼r'], '세콤듀얼': ['세콤듀얼'], '세콤365': ['365'], '세콤365R': ['365r', '365'], '세콤마스터': ['마스터'], '세콤스마트': ['세콤스마트'],
+  '세콤아트': ['세콤아트'], '세콤V': ['세콤v'], 'SBMS': ['sbms'], '세콤링크': ['세콤링크'], '세콤링크Pro': ['링크pro'], '영상기기': ['영상', 'nvr', '웹게이트', 'idis', 'smartviewer', 'ip카메라', '포트포워딩'],
+  'SVMS': ['svms'], '리더기': ['리더', 'cdr10036', '통신변환기'], '세콤매니저': ['세콤매니저'], '액세스매니저': ['액세스매니저', 's1access'], 'S-1 ACCESS': ['s1access', '액세스'], '모두앱': ['모두'] };
+function kbSearch(kb, terms, sys, limit) {
+  const C = kb.c;
+  if (!kb._n) { kb._n = C.map(function (d) { return kbNorm(d.x); }); kb._t = C.map(function (d) { return kbNorm(d.t); }); }
+  const N = C.length, sc = new Array(N).fill(0), seen = {};
+  terms.forEach(function (o) {
+    const t = kbNorm(o.t); if (t.length < 2 || seen[t]) return; seen[t] = 1;
+    const hits = []; for (let i = 0; i < N; i++) if (C[i].k !== 'memo' && kb._n[i].indexOf(t) >= 0) hits.push(i);
+    if (!hits.length) return;
+    const idf = Math.log(1 + N / hits.length);
+    hits.forEach(function (i) { const cnt = kb._n[i].split(t).length - 1; sc[i] += (1 + Math.min(cnt, 4) * 0.5) * idf * o.w + (kb._t[i].indexOf(t) >= 0 ? idf * o.w * 1.5 : 0); });
+  });
+  const sk = (KB_SYS[sys] || (sys ? [kbNorm(sys)] : []));
+  for (let i = 0; i < N; i++) if (sc[i] > 0) {
+    if (sk.some(function (q) { return kb._t[i].indexOf(q) >= 0; })) sc[i] *= 1.6;
+    if (C[i].k === 'case') sc[i] *= 1.2;
+    if (/목\s?차/.test(C[i].x.slice(0, 40))) sc[i] *= 0.4;   // 목차 조각은 내용이 없어 뒤로
+  }
+  const order = sc.map(function (v, i) { return [v, i]; }).filter(function (a) { return a[0] > 0; }).sort(function (a, b) { return b[0] - a[0]; });
+  const per = {}, res = [];
+  for (let q = 0; q < order.length && res.length < limit; q++) { const d = C[order[q][1]]; per[d.t] = (per[d.t] || 0) + 1; if (per[d.t] <= 3) res.push(d); }
+  return res;
+}
+
+const DIAG_PLAN = ['너는 에스원(세콤) 기기 자료 검색 도우미다. 현장 근무자의 질문(사진·글)을 보고 자료 검색어를 뽑는다.',
+  '사진에 모델명·라벨·표시등·화면 글자가 보이면 그대로 읽어 검색어에 넣는다. 말로 한 질문은 오타·발음 표기를 바로잡는다 (예: 듀얼알→듀얼R, 삼육오→365).',
+  'sys는 다음 중 하나: 세콤듀얼R, 세콤듀얼, 세콤365, 세콤365R, 세콤마스터, 세콤스마트, 세콤아트, 세콤V, SBMS, 세콤링크, 세콤링크Pro, 영상기기, SVMS, 리더기, 세콤매니저, 액세스매니저, S-1 ACCESS, 모두앱, 모름',
+  'JSON만: {"sys":"","dev":"기기·모델(모르면 빈칸)","kind":"장애|사용법|결선사양|고객안내|기타","kw":["검색어 4~10개: 모델코드, 신호코드(BB·CM 등), 증상, 메뉴·기능 이름, 부품"],"q":"질문을 한 줄로 정리"}'].join('\n');
 const DIAG_SYS = [
-  '너는 에스원(세콤) 보안 서비스 출동요원을 돕는 현장 진단 선배다. 20년 경력의 기술팀장처럼, 짧고 정확하게 말한다.',
-  '대상 장비: 세콤 컨트롤러(주장치)·키패드·카드리더·출입통제기, 감지기(열선/적외선·자석·유리파손·화재·가스), 비상버튼, 사이렌, 통신 모듈(유선·LTE), 축전지·전원장치, CCTV 카메라·DVR·NVR·모니터, 도어락·스트라이크, 배선·단자함.',
-  '사진에서 보이는 것(표시등 색·깜빡임, 화면 글자·오류 문구, 배선 상태, 파손·습기·먼지, 부착 위치)을 근거로 판단한다.',
-  '모델명·오류코드가 확실하지 않으면 지어내지 말고 "모델 확인 필요"라고 쓰고, 무엇을 찍으면 되는지 알려 준다.',
-  '현장에서 출동요원이 바로 할 수 있는 조치를 순서대로 쓰고, 기술팀·A/S 접수가 필요한 경우를 분명히 구분한다.',
-  '전기·사다리·고객 재산 관련 안전 주의는 꼭 넣는다. 고객 비밀번호를 묻거나 대신 설정하라는 조치는 절대 쓰지 않는다.',
-  '반드시 JSON만 출력: {"device":"기기 이름(추정이면 \'추정\' 표시)","seen":"사진에서 본 핵심 근거 한두 줄","symptom":"증상 요약",',
-  '"causes":[{"c":"원인","p":"높음|보통|낮음"}] (최대 3개, 가능성 높은 순),"steps":["현장 조치 1", ...] (3~6개, 짧은 명령형),',
-  '"call":"기술팀·A/S 요청이 필요한 조건 한 줄 (없으면 빈칸)","safety":"안전 주의 한 줄","say":"고객에게 할 안내 멘트 한두 문장","more":"더 정확히 보려면 추가로 찍을 사진 (없으면 빈칸)","conf":0~100}',
-  '모든 문장은 한국어, 존댓말 없이 간결하게 (고객 멘트 say 만 존댓말).'
+  '너는 에스원(세콤) 북서울지사 현장 근무자(출동·기술)를 돕는 20년 경력 기술 선배다. 근무자가 현장에서 기술적으로 막혔을 때, 기기 사용·설정 방법이 궁금할 때, 장애 내용을 물을 때 짧고 정확하게 답한다.',
+  '[참고 자료]와 [핵심 메모]는 에스원 공식 매뉴얼·장애사례 발췌다. 이것을 1순위 근거로 쓰고, 자료의 수치·메뉴 이름·버튼·코드·IP·포트는 그대로 옮긴다. 같은 내용이 여러 판이면 최신판을 따른다.',
+  '자료에 없는 내용은 일반 지식으로 답하되 answer나 seen에 "자료에 없음 — 일반 지식"이라고 밝히고 conf를 60 이하로 둔다. 모델명·오류코드를 지어내지 않는다. 확실하지 않으면 무엇을 확인·촬영하면 되는지 more에 쓴다.',
+  '현장에서 바로 할 수 있는 조치를 순서대로 쓰고(버튼·메뉴 이름 포함), 기술팀·A/S 요청이 필요한 조건을 call에 분명히 쓴다.',
+  '전기·사다리·고객 재산 관련 안전 주의는 꼭 넣는다. 고객 비밀번호를 묻거나 대신 설정하는 조치는 쓰지 않는다(영상기기 비밀번호는 고객이 직접 설정하도록 안내). 관리자·복구 계정 같은 내부 정보는 "고객 안내 금지"라고 표시한다.',
+  '질문 종류에 맞춰 채운다: 장애 → causes·steps 중심 / 사용법·설정 → answer에 순서대로 / 결선·사양 → answer에 항목별로 / 고객안내 → say 중심. 해당 없는 칸은 빈칸·빈 배열.',
+  '반드시 JSON만 출력: {"type":"장애|사용법|결선사양|고객안내|기타","title":"핵심 결론 한 줄(30자 안팎)","device":"기기 이름(추정이면 \'추정\' 표시)","seen":"사진에서 본 근거 한두 줄(사진 없으면 빈칸)","symptom":"증상·질문 요약",',
+  '"causes":[{"c":"원인","p":"높음|보통|낮음"}] (최대 3개),"steps":["현장 조치 1", ...] (3~7개, 짧은 명령형),"answer":"설명형 답 (줄바꿈 \\n, 5~12줄)",',
+  '"call":"기술팀·A/S 요청 조건 (없으면 빈칸)","safety":"안전 주의 한 줄 (없으면 빈칸)","say":"고객에게 할 안내 멘트 한두 문장 (필요할 때만)","more":"추가로 확인·촬영할 것 (없으면 빈칸)","refs":["근거로 쓴 자료 제목 (참고 자료의 《》 안 제목 그대로, 최대 3개)"],"conf":0~100}',
+  '모든 문장은 한국어, 존댓말 없이 간결하게 (say만 존댓말).'
 ].join('\n');
 function diagSh() { return evSh('현장진단', DIAG_HEAD); }
 function diag(d) {
   const imgs = (d.imgs || []).slice(0, 3).filter(function (x) { return x && String(x).length < 2500000; });
-  if (!imgs.length) return { ok: false, err: 'img' };
-  const memo = String(d.memo || '').slice(0, 300), name = String(d.name || '').slice(0, 10);
-  const parts = imgs.map(function (b) { return { inlineData: { mimeType: 'image/jpeg', data: String(b).replace(/^data:[^,]+,/, '') } }; });
-  /* 지사에 쌓인 비슷한 사례(도움 됐던 것)를 참고로 붙임 */
+  const q = String(d.q || d.memo || '').slice(0, 1500), name = String(d.name || '').slice(0, 10);
+  const kind = String(d.kind || '').slice(0, 10), sysSel = String(d.sys || '').slice(0, 20), prev = String(d.prev || '').slice(0, 1500);
+  if (!imgs.length && !q.trim()) return { ok: false, err: 'empty' };
+  const imgParts = imgs.map(function (b) { return { inlineData: { mimeType: 'image/jpeg', data: String(b).replace(/^data:[^,]+,/, '') } }; });
+  /* 1단계: 사진·질문에서 시스템·검색어 뽑기 (빠른 모드) */
+  let plan = {};
+  try { plan = geminiCall(DIAG_PLAN, [{ role: 'user', parts: imgParts.concat([{ text: (sysSel ? '근무자가 고른 시스템: ' + sysSel + '\n' : '') + (kind ? '질문 종류: ' + kind + '\n' : '') + (prev ? '이전 대화: ' + prev.slice(0, 400) + '\n' : '') + '질문: ' + (q || '(사진만 보냄)') }]) }], 500, true) || {}; } catch (e) {}
+  const sys = sysSel || (plan.sys && plan.sys !== '모름' ? plan.sys : '');
+  /* 2단계: 자료 검색 */
+  let ctx = '', memo = '', titles = [], kbOn = false;
+  try {
+    const kb = kbLoad();
+    if (kb) {
+      kbOn = true;
+      memo = kb.c.filter(function (x) { return x.k === 'memo'; }).map(function (x) { return x.x; }).join('\n').slice(0, 12000);
+      const terms = [];
+      (plan.kw || []).forEach(function (t) { terms.push({ t: t, w: 1 }); });
+      if (plan.dev) terms.push({ t: plan.dev, w: 1.3 });
+      (String(q + ' ' + (plan.dev || '')).match(/[A-Za-z]{1,5}-?\d{2,6}[A-Za-z]?/g) || []).forEach(function (t) { terms.push({ t: t, w: 1.5 }); });
+      String(q).split(/[\s,.?!]+/).forEach(function (t) { if (t.length >= 2) terms.push({ t: t.replace(/(은|는|이|가|을|를|에|에서|으로|로|의|도|만|요|해요|돼요|안돼요)$/, ''), w: 0.5 }); });
+      const hits = kbSearch(kb, terms, sys, 8);
+      let used = 0;
+      ctx = hits.filter(function (h) { used += h.x.length; return used < 13000; }).map(function (h) { if (titles.indexOf(h.t) < 0) titles.push(h.t); return '《' + h.t + '》\n' + h.x; }).join('\n\n---\n\n');
+    }
+  } catch (e) {}
+  /* 지사에 쌓인 비슷한 사례(도움 됐던 것) */
   let ref = '';
-  try { const rs = diagRows(60).filter(function (r) { return r.fix || r.ok === '도움'; }).slice(0, 8);
-    if (rs.length) ref = '\n\n[지사 과거 사례 — 참고만]\n' + rs.map(function (r) { return '- ' + r.dev + ' / ' + r.sym + ' → ' + (r.fix || r.cause); }).join('\n'); } catch (e) {}
-  parts.push({ text: '출동요원 메모: ' + (memo || '(없음)') + ref + '\n\n위 사진을 진단해서 JSON으로 답해.' });
+  try { const rs = diagRows(60).filter(function (r) { return r.fix || r.ok === '도움'; }).slice(0, 6);
+    if (rs.length) ref = '\n\n[북서울 지사 과거 사례 — 참고만]\n' + rs.map(function (r) { return '- ' + r.dev + ' / ' + r.sym + ' → ' + (r.fix || r.cause); }).join('\n'); } catch (e) {}
+  const txt = (kind ? '질문 종류: ' + kind + '\n' : '') + (sys ? '시스템: ' + sys + '\n' : '') + (plan.dev ? '추정 기기: ' + plan.dev + '\n' : '') +
+    '근무자 질문: ' + (q || '(사진만 보냄 — 사진을 보고 판단)') + (prev ? '\n\n[이전 대화 — 이어서 묻는 중]\n' + prev : '') +
+    '\n\n[참고 자료 — 에스원 매뉴얼·장애사례 발췌]\n' + (ctx || '(관련 자료를 못 찾음)') + ref + '\n\nJSON으로 답해.';
   let j;
-  try { j = geminiCall(DIAG_SYS, [{ role: 'user', parts: parts }], 1600, false); }
+  try { j = geminiCall(DIAG_SYS + (memo ? '\n\n[핵심 메모]\n' + memo : ''), [{ role: 'user', parts: imgParts.concat([{ text: txt }]) }], 2600, false); }
   catch (err) { return { ok: false, err: String(err).slice(0, 200) }; }
+  j.refs = (j.refs || []).filter(function (t) { return titles.indexOf(t) >= 0; });
+  if (!j.refs.length && titles.length && Number(j.conf) > 60) j.refs = titles.slice(0, 2);
   const no = 'D' + Utilities.formatDate(new Date(), 'Asia/Seoul', 'MMddHHmmss') + Math.floor(Math.random() * 90 + 10);
-  try { diagSh().appendRow([new Date(), name, String(j.device || '').slice(0, 60), String(j.symptom || '').slice(0, 120),
-    ((j.causes || [])[0] || {}).c || '', (j.steps || []).slice(0, 3).join(' → ').slice(0, 300), Number(j.conf) || 0, '', '', no]); } catch (e) {}
-  j.ok = true; j.no = no; j.model = LAST_MODEL; return j;
+  try { diagSh().appendRow([new Date(), name, String(j.device || sys || '').slice(0, 60), String((imgs.length ? '📷 ' : '') + (j.symptom || q)).slice(0, 120),
+    ((j.causes || [])[0] || {}).c || String(j.title || '').slice(0, 80), ((j.steps || []).length ? j.steps.slice(0, 3).join(' → ') : String(j.answer || '')).slice(0, 300), Number(j.conf) || 0, '', '', no]); } catch (e) {}
+  j.ok = true; j.no = no; j.model = LAST_MODEL; j.kb = kbOn; j.sys = sys; return j;
 }
 function diagFb(d) {
   const no = String(d.no || ''); if (!no) return { ok: false };

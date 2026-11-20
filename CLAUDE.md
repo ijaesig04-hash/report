@@ -57,4 +57,5 @@
 - 고객체감에는 **공사팀(직무 공사 · 공사품질)을 넣지 않는다** — 사용자 고정 지시. 엑셀에 공사 건이 있어도 CSR·CSD(발송·응답 합계 포함)에서 뺀다. 이름은 한지훈(공사)
 - **화면 정렬·배열은 항상 직접 점검한다** (사용자 고정 지시): 새 메뉴·화면을 만들거나 고칠 때마다 390px로 찍어서 글자 줄바꿈(한글은 word-break:keep-all), 넘침, 큰 글씨 안에 작은 정보가 섞임, 태그 줄바꿈, 제목 잘림 등을 확인하고 어색한 곳은 알아서 정리한 뒤 올린다
 - **AI 응대 서버 로직은 tools/roleplay-core.js 에서 고친다** — Apps Script(tools/roleplay.gs)는 이 파일을 GitHub raw에서 5분 캐시로 읽어 new Function으로 실행하는 고정 로더. 사용자에게 다시 붙여넣기·배포를 시키지 않는다 (로더 자체를 바꿔야 할 때만 예외). 파일 끝 `return { doPost: doPost, doGet: doGet };` 유지
+- **AI 현장 진단(diag.html)** — 사진·글·음성 질문 → 서버(`roleplay-core.js`의 `diag`)가 ①질문에서 검색어 뽑기 ②`kb/kb.dat`에서 매뉴얼·장애사례 조각 검색 ③근거 문서와 함께 답. `kb/kb.dat`는 gzip+ChaCha20 암호화 묶음, 열쇠는 Apps Script 스크립트 속성 `KB_KEY`와 claude.ai 프로젝트 문서 `ai-diagnosis/00_KB_KEY_안내.md`에만 있음(저장소에 넣지 않기). 새 자료 추가: `KB_KEY=... python3 tools/kb_build.py --add 목록.tsv`(제목·manual|case|memo·원문경로, 같은 제목은 교체) → kb.dat만 커밋하면 6시간 안에 자동 반영. 「핵심 메모」(memo)는 매 질문에 항상 붙음
 - **ver.txt는 index.html의 bsr-ver와 항상 같아야 한다** — 앱과 sw.js가 새 버전인지 확인할 때 이 작은 파일만 읽는다(6MB 화면을 통째로 받지 않음). `tools/verify.py`가 자동으로 맞춰 주므로 커밋할 때 `git add ver.txt`를 꼭 같이 한다. 다르면 누구도 새 화면을 못 받는다.
