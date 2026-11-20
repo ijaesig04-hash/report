@@ -146,6 +146,7 @@ th{font-size:12px;color:var(--mute)}
 .hm-ft{margin:14px 4px 4px;font-size:11.5px;line-height:1.5;color:#94a3b8;word-break:keep-all}
 .adm-l{display:block;margin:4px auto 0;border:0;background:none;color:#64748b;font:700 12.5px 'Noto Sans KR',sans-serif;text-decoration:underline;cursor:pointer;padding:8px}
 #weak:empty{display:none}
+.pr-note{background:#fff7ed;border-color:#fed7aa}.pr-note h2{color:#9a3412}.pr-note .sub b{color:#9a3412}
 </style>
 </head>
 <body>
@@ -780,6 +781,7 @@ function showEval(j){
    '<div class="card"><h2>💡 이 상황의 응대 포인트</h2><ul class="l">'+S.sc.key.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>'+(S.sc.ment?'<p class="mt-h">💬 실전 추천 멘트</p>'+S.sc.ment.map(function(m){return '<p class="mt">“'+esc(m)+'”</p>';}).join(""):'')+'</div>'+
    (S.ev?'<div class="card ev-done" id="evres"><h2>📝 평가 '+S.ev.no+'회차 — '+j.total+'점</h2><p class="sub" id="evresm">'+(j.demo?'AI 채점이 안 돼서 이 회차는 점수가 기록되지 않았어요.':'점수를 기록하는 중…')+'</p></div><button class="btn red block" id="evback">📝 평가 탭으로</button>':
    '<button class="btn red block" id="again">같은 상황 다시 연습</button><button class="btn ghost block" id="hm">다른 상황 고르기</button>');
+  if(!S.ev&&homeTab()==="svc") h='<div class="card pr-note"><h2>📌 지금 한 건 「연습」이에요</h2><p class="sub">연습 점수는 평가에 들어가지 않아요. 평가는 <b>📝 평가 탭 → ▶ 평가 시작</b>으로 따로 봐야 직원 현황에 올라가요 (한 달 3번, 최고 점수 반영).</p><button class="btn red block" id="evgo">📝 평가하러 가기</button></div>'+h;
   app.innerHTML=h; window.scrollTo(0,0);
   if(S.ev){ var ev=S.ev; S.ev=null;
     var er=$("#evres"); if(er) app.insertBefore(er, app.firstChild);
@@ -789,7 +791,7 @@ function showEval(j){
       if(!r||!r.ok) throw new Error(r&&r.err||"실패");
       $("#evresm").innerHTML='✅ '+ev.no+'회차 점수를 기록했어요 (등급 '+evGrade(j.total)+'). 3번 중 가장 좋은 점수가 자동으로 평가에 반영돼요.';
     }).catch(function(e){ $("#evresm").textContent="기록하지 못했어요 ("+(e.message||e)+"). 파트장에게 알려 주세요."; });
-  } else { $("#again").onclick=function(){ start(S.sc); }; $("#hm").onclick=home; }
+  } else { $("#again").onclick=function(){ start(S.sc); }; $("#hm").onclick=home; if($("#evgo")) $("#evgo").onclick=function(){ try{ localStorage.setItem("rp_tab","eva"); }catch(e){} EV_TAB="go"; home(); }; }
 
 }
 
