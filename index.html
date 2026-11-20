@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261120111129">
+<meta name="bsr-ver" content="20261120111642">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1201,7 +1201,8 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 .pu-st.on{background:#e7f8ee;border-color:#22a35a;color:#0f5132}.pu-st.off{background:#f1f3f7;border-color:#c5ccd8;color:#334155}.pu-st.wait{background:#f8fafc;border-color:#e2e8f0;color:#64748b}
 .pu-b{display:block;width:100%;border:0;border-radius:14px;padding:14px;font:800 16px 'Noto Sans KR',sans-serif;cursor:pointer}.pu-b.on{background:#1f4fd8;color:#fff}.pu-b.off{background:#fff;color:#b4151f;border:2px solid #f3c2c8}
 .sh-act{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;margin:-4px 0 10px}.sh-act button{border:0;background:#eef2f8;border-radius:10px;padding:8px 12px;font:700 13px 'Noto Sans KR',sans-serif;cursor:pointer;color:#14213a}
-.oj-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#eef1f6;border-radius:12px;padding:4px;margin:4px 0 12px}.oj-tabs button{border:0;background:transparent;border-radius:9px;padding:10px 4px;font:800 14px 'Noto Sans KR',sans-serif;color:#475569;cursor:pointer}.oj-tabs button[aria-selected="true"]{background:#fff;color:#14275c;box-shadow:0 2px 6px rgba(16,32,80,.15)}
+.oj-tabs button:first-child:nth-last-child(3),.oj-tabs button:first-child:nth-last-child(3)~button{font-size:13px;padding:10px 2px;white-space:nowrap;letter-spacing:-.02em}
+.oj-tabs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px;background:#eef1f6;border-radius:12px;padding:4px;margin:4px 0 12px}.oj-tabs button{border:0;background:transparent;border-radius:9px;padding:10px 4px;font:800 14px 'Noto Sans KR',sans-serif;color:#475569;cursor:pointer}.oj-tabs button[aria-selected="true"]{background:#fff;color:#14275c;box-shadow:0 2px 6px rgba(16,32,80,.15)}
 .tl-s{margin:2px 0 0;font-size:11.5px;color:var(--muted);white-space:nowrap}
 .rpb{margin:8px 0 2px;background:linear-gradient(135deg,#fff8e6,#fff 70%);border:1px solid #f3d58a;border-radius:16px;padding:12px 14px;-webkit-user-select:none;user-select:none}.rpb[hidden]{display:none}
 .rpb-h{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}.rpb-h b{font-size:15px;color:#7a4e00}.rpb-h small{font-size:11.5px;color:#9a7b3b}
@@ -3171,7 +3172,7 @@ var DEPTS = {"영업":["최영국","이수열","임영민","정문재","박광�
 var SALES_URL = "https://jhsim2545.github.io/DailySales/User.html";
 var REF_URL = "https://www.appcreator24.com/app4193156-lb0sei";   /* 🤝 소개영업(지사장님 운영) — 지금은 앱 받기 페이지, 웹 주소 받으면 교체 */
 setTimeout(function(){ try{ var b=document.getElementById("vldiag"); if(b && myName()==="이재식") b.hidden=false; }catch(e){} }, 1500);
-function aiRow(){ return '<div class="ai2"><button type="button" class="v" data-vb="open"><i>🎬</i><b>AI 실적 영상 브리핑</b><small>지표로 1분 영상 자동 제작</small></button>'+(myName()==="이재식"?'<a class="d" href="diag.html"><i>📸</i><b>AI 현장 진단</b><small>사진 한 장 → 원인 · 조치</small></a>':'')+'</div>'; }
+function aiRow(){ return myName()==="이재식" ? '<div class="ai2"><a class="d" href="diag.html"><i>📸</i><b>AI 현장 진단</b><small>사진 한 장 → 원인 · 조치 · 고객 멘트 (파트장 전용 · 보완 중)</small></a></div>' : ''; }
 function refLink(){ return '<a class="dh-sales ref" href="'+REF_URL+'" target="_blank" rel="noopener"><i>🤝</i><span><b>소개영업 등록·관리</b><small>지사장님 운영 · 앱 받기</small></span><em>받기 ›</em></a>'; }
 var PROD_URL = "directmall.html#kakao";   /* 에스원 상품 추천 대시보드 */
 function viewSal(){
@@ -3942,6 +3943,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-20c", only:"이재식", date:"11/20", title:"nopush:🎬 AI 영상 → 한 장 요약 탭", tabs:["home"], items:["🎬 AI 실적 영상 브리핑은 이름 버튼 → 한 장 요약 · 월말 결산 옆 「🎬 AI 영상」 탭으로 옮겼어요"]},
  {id:"2026-11-20b", only:"이재식", date:"11/20", title:"nopush:📸 현장 진단 → 파트장 전용", tabs:["home"], items:["📸 AI 현장 진단은 보완될 때까지 이재식만 보여요"]},
  {id:"2026-11-20a", only:"이재식", date:"11/20", title:"nopush:🎬 AI 영상 · 📸 현장 진단", tabs:["home"], items:["🎬 브리핑의 「AI 실적 영상 브리핑」 — 지표로 1분 영상 자동 제작 (AI 원고 · 목소리), 영상 파일 저장 · 카톡 공유","📸 「AI 현장 진단」 — 장비 사진 → 기기 · 원인 · 조치 순서 · 고객 멘트, 지사 사례로 쌓임"]},
  {id:"2026-11-19y", only:"-", date:"11/19", title:"nopush:고객체감 11/19 (이력 숨김)", tabs:["cs"], items:[""]},
@@ -6632,7 +6634,7 @@ function openSheet(html){
 var NH_DATA = {cmp:1,veh:1,ppl:1,mgt:1,eval:1,cs:1,alm:1,drv:1,duty:1}, NH_F = "", NH_N = 20;
 function nhKind(n){ return (n.tabs||[]).some(function(t){return NH_DATA[t]}) ? "data" : "func"; }
 /* 두 화면을 한 메뉴로 — 창 머리글 아래 두 칸 탭 */
-var SH_TABS = { find:[["find","🔍 고객처 한눈에"],["risk","⚠️ 불만 위험 고객처"]], one:[["one","🖨️ 한 장 요약"],["mrep","🧾 월말 결산"]], hist:[["push","📲 알림 받기"],["hist","📜 업데이트 이력"]] };
+var SH_TABS = { find:[["find","🔍 고객처 한눈에"],["risk","⚠️ 불만 위험 고객처"]], one:[["one","🖨️ 한 장 요약"],["mrep","🧾 월말 결산"],["vb","🎬 AI 영상"]], hist:[["push","📲 알림 받기"],["hist","📜 업데이트 이력"]] };
 function shTabs(h, grp, cur){
   var i = h.indexOf('<div class="xs-h'), j = i<0 ? -1 : h.indexOf('</div>', i); if(j<0) return h;
   var t = '<div class="oj-tabs noprint" role="tablist">'+SH_TABS[grp].map(function(x){ return '<button type="button" role="tab" data-shtab="'+x[0]+'" aria-selected="'+(x[0]===cur)+'">'+x[1]+'</button>'; }).join('')+'</div>';
@@ -6641,7 +6643,7 @@ function shTabs(h, grp, cur){
   return h.slice(0, i) + hd + t + act + h.slice(j+6);
 }
 document.addEventListener("click", function(e){ var b=e.target.closest("[data-shtab]"); if(!b) return; var k=b.dataset.shtab;
-  if(k==="find") findView(""); else if(k==="risk") riskView(); else if(k==="one") showOnePage(); else if(k==="mrep") showMonthReport(); else if(k==="hist") showHistory("",0); else if(k==="push") pushView(); });
+  if(k==="find") findView(""); else if(k==="risk") riskView(); else if(k==="one") showOnePage(); else if(k==="mrep") showMonthReport(); else if(k==="hist") showHistory("",0); else if(k==="push") pushView(); else if(k==="vb"){ try{ document.querySelector('[data-xs="close"]').click(); }catch(_){} vbOpen(); } });
 function showHistory(f, more){
   if(f!=null) NH_F = f; NH_N = more ? NH_N+20 : 20;
   var L = NEWS.filter(function(n){ return !NH_F || nhKind(n)===NH_F; }), V = L.slice(0, NH_N);
@@ -6983,7 +6985,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="ref">🤝 소개영업 앱 받기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 고객 응대 롤플레잉</button><button type="button" data-vb="open">🎬 AI 실적 영상 브리핑</button><button type="button" data-vl="diag" id="vldiag" hidden>📸 AI 현장 진단</button><button type="button" data-vl="find">🔍 고객처 한눈에 · 불만 위험</button><button type="button" data-vl="pc">👤 개인 카드</button><button type="button" data-vl="edu">📚 교육 이수 현황</button><button type="button" data-vl="sug">💬 건의 · 질문함</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📲 알림 받기 · 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 · 월말 결산</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm vl-own">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="ref">🤝 소개영업 앱 받기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 고객 응대 롤플레잉</button><button type="button" data-vl="diag" id="vldiag" hidden>📸 AI 현장 진단</button><button type="button" data-vl="find">🔍 고객처 한눈에 · 불만 위험</button><button type="button" data-vl="pc">👤 개인 카드</button><button type="button" data-vl="edu">📚 교육 이수 현황</button><button type="button" data-vl="sug">💬 건의 · 질문함</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📲 알림 받기 · 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 · 월말 결산</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm vl-own">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
