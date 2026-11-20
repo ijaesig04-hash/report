@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261120110641">
+<meta name="bsr-ver" content="20261120111129">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -4181,6 +4181,8 @@ var TABNAME = {home:"브리핑",cmp:"지사별",veh:"차량별",ppl:"개인별",
   all.sort(function(a,b){ return (dn(b.n.date)-dn(a.n.date)) || (a.i-b.i); });
   NEWS.length = 0; all.forEach(function(o){ NEWS.push(o.n); });
 })();
+/* 🔇 11/19~11/22 소식은 업데이트 이력 · 배너 · N 표시에 띄우지 않음 (파트장 지시) */
+(function(){ var q = ["11/19","11/20","11/21","11/22"], k = NEWS.filter(function(n){ return q.indexOf(n.date) < 0; }); NEWS.length = 0; k.forEach(function(n){ NEWS.push(n); }); })();
 function newsFor(t){ for(var i=0;i<NEWS.length;i++){ if(NEWS[i].tabs.indexOf(t)>=0) return NEWS[i]; } return null; }
 function newsFresh(n){ if(!n||!NEWS[0]) return false; function dn(d){ var p=d.split("/"); return (+p[0])*31+(+p[1]); } return dn(NEWS[0].date)-dn(n.date) <= 3; }
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
