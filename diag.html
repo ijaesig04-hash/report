@@ -210,7 +210,6 @@ textarea.rec{border-color:var(--red);box-shadow:0 0 0 3px rgba(228,0,43,.1)}
 <script>
 var API = "https://script.google.com/macros/s/AKfycby7Ggvk7-rHHPYtIia_19uj33TbfJUDefRic63OBz0ifkd7hoOSs1HQ06gkQmNRlTcG/exec";
 var ME = (function(){ try{ var n=localStorage.getItem("bsr_me")||""; return n==="관리자"?"":n; }catch(e){ return ""; } })();
-if(ME!=="이재식"){ location.replace("./"); }
 function $(i){ return document.getElementById(i); }
 function esc(x){ return String(x==null?"":x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]}); }
 function toast(m){ var t=document.createElement("div"); t.className="toast"; t.textContent=m; document.body.appendChild(t); setTimeout(function(){ t.remove(); },2600); }

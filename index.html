@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261123093011">
+<meta name="bsr-ver" content="20261123093229">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -3235,8 +3235,8 @@ var CS_MGR = ["최문혁","이재식","지사장","서비스팀장"];
 var DEPTS = {"영업":["최영국","이수열","임영민","정문재","박광춘"], "기술":["박정훈","김상훈","박광모"]};
 var SALES_URL = "https://jhsim2545.github.io/DailySales/User.html";
 var REF_URL = "https://www.appcreator24.com/app4193156-lb0sei";   /* 🤝 소개영업(지사장님 운영) — 지금은 앱 받기 페이지, 웹 주소 받으면 교체 */
-setTimeout(function(){ try{ var b=document.getElementById("vldiag"); if(b && myName()==="이재식") b.hidden=false; }catch(e){} }, 1500);
-function aiRow(){ return myName()==="이재식" ? '<div class="ai2"><a class="d" href="diag.html"><i>📸</i><b>AI 현장 진단</b><small>사진 · 글 · 말로 질문 → 매뉴얼 근거 답 (파트장 시범)</small></a></div>' : ''; }
+setTimeout(function(){ try{ var b=document.getElementById("vldiag"); if(b) b.hidden=false; }catch(e){} }, 1500);
+function aiRow(){ return '<div class="ai2"><a class="d" href="diag.html"><i>📸</i><b>AI 현장 진단</b><small>현장에서 막히면 사진 · 글 · 말로 질문 → 매뉴얼 · 장애사례 근거 답 (시범 운영)</small></a></div>'; }
 function refLink(){ return '<a class="dh-sales ref" href="'+REF_URL+'" target="_blank" rel="noopener"><i>🤝</i><span><b>소개영업 등록·관리</b><small>지사장님 운영 · 앱 받기</small></span><em>받기 ›</em></a>'; }
 var PROD_URL = "directmall.html#kakao";   /* 에스원 상품 추천 대시보드 */
 function viewSal(){
@@ -4007,6 +4007,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-23c", date:"11/23", title:"📸 AI 현장 진단 공개 (시범)", tabs:["home"], items:["📸 브리핑 화면의 「AI 현장 진단」을 누구나 쓸 수 있어요 — 현장에서 막히면 사진 · 글 · 말로 물어보세요","📚 에스원 매뉴얼 · 장애사례 63종을 찾아 원인 · 조치 순서 · 고객 안내 멘트를 알려줘요 (아직 개발 중 · 참고용)","👍 답이 도움됐는지, 실제로 어떻게 해결했는지 남겨 주면 지사 사례로 쌓여요"]},
  {id:"2026-11-23b", date:"11/23", title:"고객체감 11/23 반영", tabs:["cs"], items:["📞 고객체감 10/1~11/23 누적 발송 311건 · 응답 105건 · 만족도 9.89점","🎉 새 칭찬 — 김상훈 · 이수열 · 최문혁 · 이명섭 · 김지원"]},
  {id:"2026-11-23a", date:"11/23", title:"지표 11/23 업데이트", tabs:["cmp","veh","ppl","mgt","alm"], items:["📊 11/23 기준 지사별·차량별·개인별·관리지표 반영 — 북서울 불필요 90% 미달 · 발보 108% · 25분↑ 144% · 체감 105% · 당사일괄 121%","⏱️ 25분초과 11.01~11.23 — 초과 8건 / 출동 349건 · 김태건·김민석·남현준 각 2건 · 고혁진·이명섭 각 1건","🚗 27호차 불필요 78% · 160호차 25분↑ 53% · 체감 88% 관리 필요"]},
  {id:"2026-11-20c", only:"이재식", date:"11/20", title:"nopush:🎬 AI 영상 → 한 장 요약 탭", tabs:["home"], items:["🎬 AI 실적 영상 브리핑은 이름 버튼 → 한 장 요약 · 월말 결산 옆 「🎬 AI 영상」 탭으로 옮겼어요"]},
@@ -7333,7 +7334,7 @@ menu.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return; menu.hidden = true;
   var a = b.dataset.vl;
   if(a==="pc"){ pcView(); return; } if(a==="sug"){ SUG_TAB="write"; sugView(); return; } if(a==="edu"){ eduView(); return; }
-  if(a==="diag"){ if(myName()==="이재식") location.href="diag.html"; return; }
+  if(a==="diag"){ location.href="diag.html"; return; }
   if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ pushView(); } else if(a==="guide"){ guideView(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="bdg"){ badgeCheck(); } else if(a==="push"){ pushView(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ if(me!=="이재식") return; pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ NL_T==="edu" ? eduTab() : NL_T==="man" ? manTab() : notiList(); } else if(a==="sales"){ window.open(SALES_URL, "_blank"); } else if(a==="ref"){ window.open(REF_URL, "_blank"); } else if(a==="prod"){ location.href = PROD_URL; }   /* 같은 앱 화면에서 열기(주소창 없음) · 상품 추천의 ‹ 버튼으로 돌아옴 */ else if(a==="find"){ findView(""); } else if(a==="praise"){ praiseView(""); } else if(a==="risk"){ riskView(); } else if(a==="help"){ helpView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
 });
 ov.addEventListener("click", function(e){
