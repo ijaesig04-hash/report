@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261123130318">
+<meta name="bsr-ver" content="20261123173548">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2119,7 +2119,7 @@ button.aib{cursor:pointer}
     <button type="button" role="tab" data-tab="duty" aria-selected="false">근무표</button>
     <button type="button" role="tab" data-tab="drv" aria-selected="false">운전성향</button>
     <button type="button" role="tab" data-tab="rep" aria-selected="false">취합건 연동</button>
-    <button type="button" role="tab" data-tab="ai" aria-selected="false">🤖 AI</button>
+    <button type="button" role="tab" data-tab="ai" aria-selected="false">🤖 AI세코미</button>
   </div></nav>
   <main id="view"></main>
   <footer class="brandband" id="band" role="img" aria-label="에스원 서울사업팀 북서울지사"></footer>
@@ -2532,7 +2532,7 @@ var AIMENU = [
   {ic:"📸", t:"AI 현장 진단", s:"현장에서 막히면 사진 · 글 · 말로 질문 → 매뉴얼 근거로 원인 · 조치 · 고객 멘트", tags:["시범 운영","매뉴얼 63종"], href:"diag.html", c:"dg"}
 ];
 function viewAi(){
-  var h = '<div class="aiv-hd"><small>NORTH SEOUL · AI</small><h3>🤖 북서울 AI</h3><p>현장 업무를 돕는 AI 메뉴를 한곳에 모았어요.</p></div>' + aibHtml();
+  var h = '<div class="aiv-hd"><small>NORTH SEOUL · AI</small><h3>🤖 AI세코미</h3><p>현장 업무를 돕는 AI 메뉴를 한곳에 모았어요.</p></div>' + aibHtml();
   h += AIMENU.map(function(m){
     var inner = '<span class="aiv-ic">'+m.ic+'</span><span class="aiv-t"><b>'+m.t+'</b><small>'+m.s+'</small><span class="aiv-tg">'+m.tags.map(function(t){return '<em>'+t+'</em>';}).join('')+'</span></span><i class="aiv-go">›</i>';
     return m.href ? '<a class="aiv-c '+m.c+'" href="'+m.href+'">'+inner+'</a>' : '<button type="button" class="aiv-c '+m.c+'" '+m.a+'>'+inner+'</button>';
@@ -4034,6 +4034,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+{id:"2026-11-23g", date:"11/23", nopush:1, title:"AI 탭 이름 「AI세코미」로 변경", tabs:["home"], items:["🤖 AI 탭 이름이 「AI세코미」로 바뀌었어요","서비스 외 부서(영업·기술 등)는 브리핑 바로 옆에 보여요"]},
  {id:"2026-11-23f", date:"11/23", title:"운전성향 11/20 반영", tabs:["drv"], items:["🚗 11/20 기준 15명 — 양호 14명 · 주의 1명(김태건 평균 5.4건)","📈 주상덕 28건(+11) · 김민석 56건(+5) · 김지원 20건(+5) 늘었어요"]},
  {id:"2026-11-23e", date:"11/23", title:"🚓 순찰방문 11/21 반영", tabs:["rep"], items:["🚓 취합건 연동 › 순찰방문 11.01~11.21 — 순찰 방문 222회 · 안내 문자 297건 · 14명 모두 참여","🏅 방문 많이 한 근무자 — 고혁진 41회 · 용승우 34회 · 양심영 34회 · 전송 실패(잘못된번호) 12건"]},
  {id:"2026-11-23d", date:"11/23", title:"🤖 AI 탭 추가", tabs:["home"], items:["🤖 맨 오른쪽 「AI」 탭에 AI 고객 응대 롤플레잉 · AI 현장 진단을 모았어요"]},
@@ -4256,7 +4257,7 @@ var NEWS_ALL = NEWS.slice();
 try{ (function(){ var me = localStorage.getItem("bsr_me")||""; NEWS = NEWS.filter(function(n){ return !n.only || String(n.only).split(",").indexOf(me)>=0; }); })(); }catch(e){ NEWS = NEWS.filter(function(n){ return !n.only; }); }
 /*NEWS_END*/
 NEWS.forEach(function(n){ n.title = String(n.title).replace(/^nopush:\s*/,""); });
-var TABNAME = {home:"브리핑",cmp:"지사별",veh:"차량별",ppl:"개인별",eval:"월별 평가",cs:"고객체감",alm:"발보관리",mgt:"관리지표",duty:"근무표",drv:"운전성향",rep:"취합건 연동",ai:"AI"};
+var TABNAME = {home:"브리핑",cmp:"지사별",veh:"차량별",ppl:"개인별",eval:"월별 평가",cs:"고객체감",alm:"발보관리",mgt:"관리지표",duty:"근무표",drv:"운전성향",rep:"취합건 연동",ai:"AI세코미"};
 /* 자료가 새로 들어오면 업데이트 이력·N 표시를 자동으로 만듦 (직접 적은 이력이 있으면 그것을 우선) */
 (function autoNews(){
   function md(k){ return (+k.slice(5,7))+"/"+(+k.slice(8,10)); }
@@ -6808,6 +6809,8 @@ function tabOrderFix(){ try{ if(typeof notiRefilter==="function") notiRefilter()
   var mn = typeof myName==="function" ? myName() : ""; document.documentElement.classList.toggle("prod-on", true);
   var salOn = true;
   var st = document.querySelector('[role=tab][data-tab="sal"]'); if(st){ st.hidden = !salOn; /* 서비스 직원 · 관리자는 맨 끝, 영업 · 기술 · 타부서는 브리핑 바로 옆 */ if(d==='서비스'){ if(st.parentNode.lastElementChild!==st) st.parentNode.appendChild(st); } else if(st.parentNode.children[1]!==st) hm.parentNode.insertBefore(st, hm.nextElementSibling); if(st.hidden && state.tab==="sal"){ state.tab="home"; document.querySelectorAll("#tabs button").forEach(function(x){x.setAttribute("aria-selected", x.dataset.tab==="home")}); } }
+  /* AI세코미 탭: 서비스는 맨 끝 쪽(원래 자리), 서비스 외 부서는 브리핑 바로 옆 (11/23) */
+  var at = document.querySelector('[role=tab][data-tab="ai"]'); if(at){ if(d!=='서비스'){ if(hm.nextElementSibling!==at) hm.parentNode.insertBefore(at, hm.nextElementSibling); } else { var rp = document.querySelector('[role=tab][data-tab="rep"]'); if(rp && rp.nextElementSibling!==at) rp.parentNode.insertBefore(at, rp.nextElementSibling); } }
   document.documentElement.classList.toggle("dept-sal", d==="영업" || (typeof mgrIs==="function" && mgrIs()));   /* 개시 방문 체크리스트는 서비스만 */ }catch(e){} }
 function render(){ tabOrderFix();
   var v = state.tab==="home" ? bdayCard()+przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="sal" ? viewSal() : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : state.tab==="ai" ? viewAi() : viewRep();
