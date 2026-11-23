@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261123094749">
+<meta name="bsr-ver" content="20261123095050">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -35,6 +35,18 @@ html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-
 #bsl .t{font-size:19px;font-weight:800;letter-spacing:-.2px}
 #bsl .t i{font-style:normal;display:inline-block;width:9px;height:9px;border-radius:2px;background:#e2231a;box-shadow:12px 0 0 #6f93ff;margin-right:20px;vertical-align:2px}
 #bsl .s{font-size:12.5px;opacity:.7;margin-top:-10px}
+.aiv-hd{border-radius:20px;padding:16px;color:#fff;background:linear-gradient(135deg,#0f2350,#4338ca 55%,#0ea5e9);margin-bottom:12px;box-shadow:0 10px 24px rgba(67,56,202,.22)}
+.aiv-hd small{font-size:11px;letter-spacing:.12em;opacity:.75;font-weight:700}
+.aiv-hd h3{margin:4px 0 2px;font-size:20px}.aiv-hd p{margin:0;font-size:13.5px;opacity:.9;word-break:keep-all}
+.aiv-c{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid #dde3ee;background:#fff;border-radius:18px;padding:14px;margin-top:10px;color:#16203a;text-decoration:none;font-family:inherit;box-shadow:0 4px 14px rgba(15,35,80,.06)}
+.aiv-ic{flex:none;width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.aiv-c.rp .aiv-ic{background:linear-gradient(135deg,#ede9fe,#e0e7ff)}.aiv-c.dg .aiv-ic{background:linear-gradient(135deg,#e0f2fe,#dbeafe)}
+.aiv-t{flex:1;min-width:0}.aiv-t b{display:block;font-size:16px;word-break:keep-all}.aiv-t small{display:block;font-size:12.5px;color:#5d6879;line-height:1.5;margin-top:2px;word-break:keep-all}
+.aiv-tg{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}.aiv-tg em{font-style:normal;font-size:11px;font-weight:700;color:#3730a3;background:#eef2ff;border-radius:7px;padding:1px 7px;white-space:nowrap}
+.aiv-c.dg .aiv-tg em{color:#075985;background:#e0f2fe}
+.sec.aiv a.aiv-c,.sec.aiv button.aiv-c{padding:14px;box-sizing:border-box;margin-left:0}
+.aiv-go{flex:none;font-style:normal;font-size:24px;color:#94a3b8}
+.aiv-ft{font-size:12px;color:#5d6879;text-align:center;margin:12px 0 4px}
 </style>
 <div id="bsl" role="progressbar" aria-label="불러오는 중"><div class="r"><svg viewBox="0 0 156 156"><defs><linearGradient id="bslg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e2231a"/><stop offset=".5" stop-color="#ff7a59"/><stop offset="1" stop-color="#6f93ff"/></linearGradient></defs><circle class="tk" cx="78" cy="78" r="68"/><circle class="bar" id="bslb" cx="78" cy="78" r="68"/></svg><div class="pc"><span id="bslp">0</span><small>%</small></div></div><div class="t"><i></i>북서울 서비스 Report</div><div class="s" id="bslm">최신 지표를 불러오는 중…</div></div>
 <script>
@@ -2107,6 +2119,7 @@ button.aib{cursor:pointer}
     <button type="button" role="tab" data-tab="duty" aria-selected="false">근무표</button>
     <button type="button" role="tab" data-tab="drv" aria-selected="false">운전성향</button>
     <button type="button" role="tab" data-tab="rep" aria-selected="false">취합건 연동</button>
+    <button type="button" role="tab" data-tab="ai" aria-selected="false">🤖 AI</button>
   </div></nav>
   <main id="view"></main>
   <footer class="brandband" id="band" role="img" aria-label="에스원 서울사업팀 북서울지사"></footer>
@@ -2513,6 +2526,19 @@ function patrolSection(per, ym, prevYm, perLabel){
     (fails.length?'<div class="sec"><h2>문자 전송 실패 <span>고객 연락처 확인 필요</span></h2><div class="card">'+fl+'</div></div>':'');
 }
 function addDays(d,n){var t=new Date(d+"T00:00:00Z");t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10)}
+/* 🤖 AI 탭 — AI 응대 롤플레잉 · AI 현장 진단 바로가기 (메뉴를 늘릴 때는 AIMENU에 한 줄 추가) */
+var AIMENU = [
+  {ic:"🎧", t:"AI 고객 응대 롤플레잉", s:"AI 고객과 응대 연습 → 점수 · 코칭", tags:["서비스","영업","📝 월 평가"], a:'data-rpopen="1"', c:"rp"},
+  {ic:"📸", t:"AI 현장 진단", s:"현장에서 막히면 사진 · 글 · 말로 질문 → 매뉴얼 근거로 원인 · 조치 · 고객 멘트", tags:["시범 운영","매뉴얼 63종"], href:"diag.html", c:"dg"}
+];
+function viewAi(){
+  var h = '<div class="aiv-hd"><small>NORTH SEOUL · AI</small><h3>🤖 북서울 AI</h3><p>현장 업무를 돕는 AI 메뉴를 한곳에 모았어요.</p></div>' + aibHtml();
+  h += AIMENU.map(function(m){
+    var inner = '<span class="aiv-ic">'+m.ic+'</span><span class="aiv-t"><b>'+m.t+'</b><small>'+m.s+'</small><span class="aiv-tg">'+m.tags.map(function(t){return '<em>'+t+'</em>';}).join('')+'</span></span><i class="aiv-go">›</i>';
+    return m.href ? '<a class="aiv-c '+m.c+'" href="'+m.href+'">'+inner+'</a>' : '<button type="button" class="aiv-c '+m.c+'" '+m.a+'>'+inner+'</button>';
+  }).join('');
+  return '<div class="sec aiv">'+h+'<p class="aiv-ft">AI 답과 점수는 참고용이에요. 이상한 답은 화면의 👎로 알려 주세요.</p></div>';
+}
 function viewRep(){
   var today = kstDate(0), ym = today.slice(0,7);
   var prevYm = addDays(ym+"-01",-1).slice(0,7);
@@ -4007,6 +4033,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+ {id:"2026-11-23d", date:"11/23", title:"🤖 AI 탭 추가", tabs:["home"], items:["🤖 맨 오른쪽 「AI」 탭에 AI 고객 응대 롤플레잉 · AI 현장 진단을 모았어요"]},
  {id:"2026-11-23c", date:"11/23", title:"📸 AI 현장 진단 공개 (시범)", tabs:["home"], items:["📸 브리핑 화면의 「AI 현장 진단」을 누구나 쓸 수 있어요 — 현장에서 막히면 사진 · 글 · 말로 물어보세요","📚 에스원 매뉴얼 · 장애사례 63종을 찾아 원인 · 조치 순서 · 고객 안내 멘트를 알려줘요 (아직 개발 중 · 참고용)","👍 답이 도움됐는지, 실제로 어떻게 해결했는지 남겨 주면 지사 사례로 쌓여요"]},
  {id:"2026-11-23b", date:"11/23", title:"고객체감 11/23 반영", tabs:["cs"], items:["📞 고객체감 10/1~11/23 누적 발송 311건 · 응답 105건 · 만족도 9.89점","🎉 새 칭찬 — 김상훈 · 이수열 · 최문혁 · 이명섭 · 김지원"]},
  {id:"2026-11-23a", date:"11/23", title:"지표 11/23 업데이트", tabs:["cmp","veh","ppl","mgt","alm"], items:["📊 11/23 기준 지사별·차량별·개인별·관리지표 반영 — 북서울 불필요 90% 미달 · 발보 108% · 25분↑ 144% · 체감 105% · 당사일괄 121%","⏱️ 25분초과 11.01~11.23 — 초과 8건 / 출동 349건 · 김태건·김민석·남현준 각 2건 · 고혁진·이명섭 각 1건","🚗 27호차 불필요 78% · 160호차 25분↑ 53% · 체감 88% 관리 필요"]},
@@ -4226,7 +4253,7 @@ var NEWS_ALL = NEWS.slice();
 try{ (function(){ var me = localStorage.getItem("bsr_me")||""; NEWS = NEWS.filter(function(n){ return !n.only || String(n.only).split(",").indexOf(me)>=0; }); })(); }catch(e){ NEWS = NEWS.filter(function(n){ return !n.only; }); }
 /*NEWS_END*/
 NEWS.forEach(function(n){ n.title = String(n.title).replace(/^nopush:\s*/,""); });
-var TABNAME = {home:"브리핑",cmp:"지사별",veh:"차량별",ppl:"개인별",eval:"월별 평가",cs:"고객체감",alm:"발보관리",mgt:"관리지표",duty:"근무표",drv:"운전성향",rep:"취합건 연동"};
+var TABNAME = {home:"브리핑",cmp:"지사별",veh:"차량별",ppl:"개인별",eval:"월별 평가",cs:"고객체감",alm:"발보관리",mgt:"관리지표",duty:"근무표",drv:"운전성향",rep:"취합건 연동",ai:"AI"};
 /* 자료가 새로 들어오면 업데이트 이력·N 표시를 자동으로 만듦 (직접 적은 이력이 있으면 그것을 우선) */
 (function autoNews(){
   function md(k){ return (+k.slice(5,7))+"/"+(+k.slice(8,10)); }
@@ -5517,7 +5544,7 @@ function aibHtml(noLoad){
   if(myName()!=="이재식") return '';   /* 파트장(이재식)만 보임 */
   if(!noLoad) setTimeout(aibLoad,0);
   var a = AIB, me = myName()==="이재식";
-  if(!a) return '<div id="aibal" class="aib"><span class="aib-i">💳</span><div class="aib-t"><b>AI 응대 충전 잔액</b><small>불러오는 중…</small></div></div>';
+  if(!a) return '<div id="aibal" class="aib"><span class="aib-i">💳</span><div class="aib-t"><b>AI 충전 잔액</b><small>불러오는 중…</small></div></div>';
   var won = function(n){ return Math.round(n).toLocaleString(); }, pct = a.base>0 ? Math.max(0,Math.min(100,Math.round(a.est/a.base*100))) : 0;
   var st = a.empty ? "empty" : a.low ? "low" : "ok";
   var sub = a.empty ? "다 썼어요 · 충전 전까지 통화 멈춤" : a.low ? "2천 원 미만 · 충전 필요" : "오늘 통화 "+a.today.n+"회 · 약 "+won(a.today.won)+"원";
@@ -6780,7 +6807,7 @@ function tabOrderFix(){ try{ if(typeof notiRefilter==="function") notiRefilter()
   var st = document.querySelector('[role=tab][data-tab="sal"]'); if(st){ st.hidden = !salOn; /* 서비스 직원 · 관리자는 맨 끝, 영업 · 기술 · 타부서는 브리핑 바로 옆 */ if(d==='서비스'){ if(st.parentNode.lastElementChild!==st) st.parentNode.appendChild(st); } else if(st.parentNode.children[1]!==st) hm.parentNode.insertBefore(st, hm.nextElementSibling); if(st.hidden && state.tab==="sal"){ state.tab="home"; document.querySelectorAll("#tabs button").forEach(function(x){x.setAttribute("aria-selected", x.dataset.tab==="home")}); } }
   document.documentElement.classList.toggle("dept-sal", d==="영업" || (typeof mgrIs==="function" && mgrIs()));   /* 개시 방문 체크리스트는 서비스만 */ }catch(e){} }
 function render(){ tabOrderFix();
-  var v = state.tab==="home" ? bdayCard()+przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="sal" ? viewSal() : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : viewRep();
+  var v = state.tab==="home" ? bdayCard()+przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="sal" ? viewSal() : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : state.tab==="ai" ? viewAi() : viewRep();
   var nft = newsFor(state.tab); if(nft) markSeen("bsr_tab_"+state.tab, nft.id); nseenAdd(NEWS.slice(0,40).filter(function(n){return n.tabs.indexOf(state.tab)>=0}).map(function(n){return n.id}));
   var VW0 = document.getElementById("view"), dk = function(d){ var sm = d.querySelector('summary'); return (d.className||'')+'|'+(sm?sm.textContent.replace(/[\d\s▾▴]/g,'').slice(0,24):''); }, op = [];
   VW0.querySelectorAll("details[open]").forEach(function(d){ op.push(dk(d)); });
