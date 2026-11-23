@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261123093229">
+<meta name="bsr-ver" content="20261123094749">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -5522,7 +5522,7 @@ function aibHtml(noLoad){
   var st = a.empty ? "empty" : a.low ? "low" : "ok";
   var sub = a.empty ? "다 썼어요 · 충전 전까지 통화 멈춤" : a.low ? "2천 원 미만 · 충전 필요" : "오늘 통화 "+a.today.n+"회 · 약 "+won(a.today.won)+"원";
   return '<'+(me?'button type="button" data-aibset="1"':'div')+' id="aibal" class="aib '+st+'"><span class="aib-i">'+(a.empty?'⛔':a.low?'⚠️':'💳')+'</span>'+
-    '<div class="aib-t"><b>AI 응대 충전 잔액 <em>추정</em></b><small>'+sub+'</small><span class="aib-bar"><i style="width:'+pct+'%"></i></span></div>'+
+    '<div class="aib-t"><b>AI 충전 잔액 <em>추정</em></b><small>'+sub+'</small><span class="aib-bar"><i style="width:'+pct+'%"></i></span></div>'+
     '<div class="aib-v"><b class="num">'+(a.empty?'0':won(a.est))+'<small>원</small></b><small>/ '+won(a.base)+'원</small></div>'+(me?'<i class="aib-a" aria-hidden="true">›</i>':'')+'</'+(me?'button':'div')+'>';
 }
 document.addEventListener("click", function(e){ var b = e.target.closest("[data-aibset]"); if(!b) return;

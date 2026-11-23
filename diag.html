@@ -45,7 +45,7 @@ main{max-width:560px;margin:0 auto;padding:14px 14px 90px}
 textarea{width:100%;min-height:92px;border:1.5px solid var(--line);border-radius:14px;padding:11px 12px;font:15px/1.55 inherit;font-family:inherit;resize:vertical;background:#fff}
 textarea:focus{outline:0;border-color:var(--blue)}
 textarea.rec{border-color:var(--red);box-shadow:0 0 0 3px rgba(228,0,43,.1)}
-.tools{display:grid;grid-template-columns:1fr 1fr 1.35fr;gap:8px;margin-top:10px}
+.tools{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:8px;margin-top:10px}
 .tools button{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:11px 4px;font-weight:800;font-size:13.5px;display:flex;flex-direction:column;align-items:center;gap:2px}
 .tools button i{font-style:normal;font-size:21px;line-height:1}
 .tools .mic{background:linear-gradient(135deg,#fff1f2,#ffe4e6);border-color:#fecdd3;color:#be123c}
@@ -135,6 +135,12 @@ textarea.rec{border-color:var(--red);box-shadow:0 0 0 3px rgba(228,0,43,.1)}
 .empty{text-align:center;color:var(--mute);font-size:13.5px;padding:18px 6px}
 .err{background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;border-radius:14px;padding:12px;font-size:13.5px;margin-bottom:12px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:rgba(15,35,80,.92);color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:700;z-index:20;max-width:88%}
+.bal{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin-top:10px}
+.bal>i{font-style:normal;font-size:22px;flex:none}
+.bal .t{flex:1;min-width:0}.bal .t b{display:block;font-size:13.5px}.bal .t small{display:block;font-size:12px;color:var(--mute)}
+.bal .bar{display:block;height:6px;border-radius:99px;background:#e5eaf3;margin-top:5px;overflow:hidden}.bal .bar em{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#0ea5e9);border-radius:99px}
+.bal .v{text-align:right;flex:none}.bal .v b{font-size:18px;color:var(--navy)}.bal .v small{display:block;font-size:11px;color:var(--mute)}
+.bal.low{border-color:#fde68a;background:#fffbeb}.bal.low .bar em{background:#f59e0b}.bal.empty{border-color:#fecdd3;background:#fff1f2}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -146,6 +152,7 @@ textarea.rec{border-color:var(--red);box-shadow:0 0 0 3px rgba(228,0,43,.1)}
     <p>사진 · 글 · 말로 물어보면 에스원 매뉴얼과 장애사례를 찾아 원인, 조치 순서, 고객 안내까지 알려줘요.</p>
     <span class="kbst" id="kbst"><i></i>자료 연결 확인 중…</span>
   </div>
+  <div class="bal" id="bal" hidden></div>
   <div class="seg" id="seg"><button type="button" data-tab="ask" aria-pressed="true">🛠️ 물어보기</button><button type="button" data-tab="mine" aria-pressed="false">🕘 내 기록</button><button type="button" data-tab="cases" aria-pressed="false">📚 지사 사례</button></div>
 
   <section id="pAsk">
@@ -164,9 +171,9 @@ textarea.rec{border-color:var(--red);box-shadow:0 0 0 3px rgba(228,0,43,.1)}
         <div class="recbar" id="recbar" hidden><i></i>듣는 중이에요 · 다 말하면 🎤를 한 번 더 눌러요</div>
         <div class="thumbs" id="thumbs" hidden></div>
         <div class="tools">
-          <button type="button" id="cam"><i>📷</i>촬영</button>
           <button type="button" id="gal"><i>🖼️</i>사진 고르기</button>
           <button type="button" class="mic" id="mic"><i>🎤</i>말로 하기</button>
+          <button type="button" id="cam"><i>📷</i>촬영</button>
         </div>
         <input type="file" id="file" accept="image/*" capture="environment" hidden>
         <input type="file" id="file2" accept="image/*" multiple hidden>
@@ -383,6 +390,12 @@ function loadCases(){
 }
 
 drawKinds(); drawSys(); drawThumbs();
+/* 💳 AI 충전 잔액(추정) — 이재식 파트장만 보임. 응대 연습 · 현장 진단이 같은 잔액을 씀 */
+if(ME==="이재식") fetch(API+"?action=aibal&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(a){
+  if(!a||!a.ok) return; var w=function(n){ return Math.round(n).toLocaleString(); }, pct=a.base>0?Math.max(0,Math.min(100,Math.round(a.est/a.base*100))):0;
+  var el=$("bal"); el.className="bal"+(a.empty?" empty":a.low?" low":""); el.hidden=false;
+  el.innerHTML='<i>'+(a.empty?'⛔':a.low?'⚠️':'💳')+'</i><div class="t"><b>AI 충전 잔액 <span style="font-weight:500;color:var(--mute);font-size:11.5px">추정 · 파트장만</span></b><small>'+(a.empty?'다 썼어요 · 충전이 필요해요':a.low?'2천 원 미만 · 충전 필요':'응대 · 현장진단 · 오늘 약 '+w((a.today||{}).won||0)+'원')+'</small><span class="bar"><em style="width:'+pct+'%"></em></span></div><div class="v"><b>'+(a.empty?'0':w(a.est))+'</b>원<small>/ '+w(a.base)+'원</small></div>';
+}).catch(function(){});
 fetch(API+"?action=ping&kb=1").catch(function(){});
 fetch(API+"?action=kbinfo&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
   var el=$("kbst");
