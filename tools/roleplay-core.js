@@ -587,13 +587,24 @@ function kbLoad() {
   const c = CacheService.getScriptCache(), n = Number(c.get('kb_n') || 0);
   let gz = '';
   if (n) { const ks = []; for (let i = 0; i < n; i++) ks.push('kb_' + i); const m = c.getAll(ks); if (ks.every(function (q) { return m[q]; })) gz = ks.map(function (q) { return m[q]; }).join(''); }
+  /* 10분마다 GitHub에 kb.dat가 바뀌었는지만 확인 (ETag) — 바뀌었으면 새로 풀기. 새 매뉴얼이 10분 안에 반영됨 */
+  let fresh = null;
+  if (gz && !c.get('kb_chk')) {
+    try {
+      const et = c.get('kb_etag') || '';
+      const h = UrlFetchApp.fetch(KB_URL, { muteHttpExceptions: true, headers: et ? { 'If-None-Match': et } : {} });
+      c.put('kb_chk', '1', 600);
+      if (h.getResponseCode() === 200) { const ne = h.getHeaders()['ETag'] || h.getHeaders()['Etag'] || ''; if (!et || ne !== et) { fresh = h; gz = ''; } }
+    } catch (e) {}
+  }
   if (!gz) {
-    const r = UrlFetchApp.fetch(KB_URL + '?t=' + Date.now(), { muteHttpExceptions: true });
+    const r = fresh || UrlFetchApp.fetch(KB_URL + '?t=' + Date.now(), { muteHttpExceptions: true });
     if (r.getResponseCode() !== 200) return null;
     gz = Utilities.base64Encode(kbCrypt(Utilities.base64Decode(r.getContentText().trim()), key));
     const put = {}, SZ = 90000; let cnt = 0;
     for (let i = 0; i < gz.length; i += SZ) put['kb_' + (cnt++)] = gz.slice(i, i + SZ);
-    try { c.putAll(put, 21600); c.put('kb_n', String(cnt), 21600); } catch (e) {}
+    const hd = r.getHeaders ? r.getHeaders() : {};
+    try { c.putAll(put, 21600); c.put('kb_n', String(cnt), 21600); c.put('kb_etag', hd['ETag'] || hd['Etag'] || '', 21600); c.put('kb_chk', '1', 600); } catch (e) {}
   }
   const txt = Utilities.ungzip(Utilities.newBlob(Utilities.base64Decode(gz), 'application/x-gzip', 'kb.gz')).getDataAsString('UTF-8');
   KB_MEM = JSON.parse(txt);
