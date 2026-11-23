@@ -262,17 +262,38 @@ $("file2").addEventListener("change",function(){ addFiles(this.files); this.valu
 
 /* 🎤 말로 하기 — 휴대폰 음성 인식(크롬·사파리). 안 되면 키보드 마이크 안내 */
 var SR = window.SpeechRecognition||window.webkitSpeechRecognition, REC=null, recBox=null, recBtn=null;
-function micStop(){ if(REC){ try{ REC.stop(); }catch(e){} } }
+var REC_ON=false;
+function micStop(){ REC_ON=false; if(REC){ try{ REC.stop(); }catch(e){} } }
+/* 안드로이드(삼성) 크롬은 연속 인식에서 앞 문장을 결과마다 다시 보내 같은 말이 반복됨
+   → 한 문장씩 듣고(continuous=false) 끝나면 자동으로 다시 듣기, 겹치는 결과는 하나로 합침 */
+function srMerge(res){
+  var out="";
+  for(var i=0;i<res.length;i++){ var t=String(res[i][0].transcript||"").replace(/\s+/g," ").trim(); if(!t) continue;
+    if(!out || t.indexOf(out)===0) out=t; else if(out.indexOf(t)>=0) continue; else out+=" "+t; }
+  return out;
+}
+function srClean(t){ /* 같은 낱말·구절이 연달아 반복되면 한 번만 */
+  var w=t.split(" "), o=[];
+  for(var i=0;i<w.length;i++){ o.push(w[i]);
+    for(var n=Math.min(8,Math.floor(o.length/2));n>=1;n--){ var a=o.slice(-n).join(" "), b=o.slice(-2*n,-n).join(" "); if(a===b){ o.splice(o.length-n,n); break; } } }
+  return o.join(" ");
+}
 function micStart(box, btn){
   if(!SR){ toast("이 폰은 음성 인식을 지원하지 않아요 — 키보드의 🎤 마이크를 눌러 말해 주세요"); box.focus(); return; }
-  if(REC){ micStop(); return; }
-  var base = box.value ? box.value.replace(/\s*$/," ") : "", fin = "";
-  REC = new SR(); REC.lang="ko-KR"; REC.interimResults=true; REC.continuous=true;
-  recBox=box; recBtn=btn; btn.classList.add("on"); box.classList.add("rec"); if(box===$("q")) $("recbar").hidden=false;
-  REC.onresult=function(ev){ var it=""; for(var i=ev.resultIndex;i<ev.results.length;i++){ var t=ev.results[i][0].transcript; if(ev.results[i].isFinal) fin+=t+" "; else it+=t; } box.value=base+fin+it; box.dispatchEvent(new Event("input")); };
-  REC.onerror=function(ev){ if(ev.error==="not-allowed"||ev.error==="service-not-allowed") toast("마이크 권한을 허용해 주세요 (주소창 옆 🔒 → 마이크)"); };
-  REC.onend=function(){ btn.classList.remove("on"); box.classList.remove("rec"); $("recbar").hidden=true; REC=null; box.value=box.value.trim(); box.dispatchEvent(new Event("input")); };
-  try{ REC.start(); }catch(e){ REC.onend(); }
+  if(REC_ON){ micStop(); return; }
+  var done = box.value ? box.value.replace(/\s*$/," ") : "", cur="", quiet=0;
+  REC_ON=true; recBox=box; recBtn=btn; btn.classList.add("on"); box.classList.add("rec"); if(box===$("q")) $("recbar").hidden=false;
+  function show(){ box.value=srClean((done+cur).replace(/\s+/g," ")); box.dispatchEvent(new Event("input")); }
+  function finish(){ REC_ON=false; REC=null; btn.classList.remove("on"); box.classList.remove("rec"); $("recbar").hidden=true; box.value=srClean(box.value.trim()); box.dispatchEvent(new Event("input")); }
+  function once(){
+    cur=""; var r=new SR(); REC=r; r.lang="ko-KR"; r.interimResults=true; r.continuous=false; r.maxAlternatives=1;
+    r.onresult=function(ev){ cur=srMerge(ev.results); quiet=0; show(); };
+    r.onerror=function(ev){ if(ev.error==="not-allowed"||ev.error==="service-not-allowed"){ REC_ON=false; toast("마이크 권한을 허용해 주세요 (주소창 옆 🔒 → 마이크)"); } else if(ev.error==="no-speech"){ quiet++; } };
+    r.onend=function(){ if(cur){ done=srClean((done+cur).replace(/\s+/g," "))+" "; cur=""; show(); }
+      if(REC_ON && quiet<2){ setTimeout(function(){ if(REC_ON){ try{ once(); }catch(e){ finish(); } } },120); } else finish(); };
+    try{ r.start(); }catch(e){ finish(); }
+  }
+  once();
 }
 $("mic").addEventListener("click",function(){ micStart($("q"),this); });
 $("fmic").addEventListener("click",function(){ micStart($("fq"),this); });
