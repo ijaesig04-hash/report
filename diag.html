@@ -90,6 +90,12 @@ textarea.rec{border-color:var(--red);box-shadow:0 0 0 3px rgba(228,0,43,.1)}
 .act button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
 .seen{margin-top:10px;background:#f5f7fb;border-radius:12px;padding:9px 11px;font-size:13.5px;color:#334155}
 .ans{font-size:14.5px;line-height:1.7;white-space:pre-line;color:#1e293b}
+/* 핵심 답변 강조 (11/24) */
+.card.key{border:2px solid #2f6bff;background:linear-gradient(180deg,#f2f6ff,#fff 70%);box-shadow:0 10px 24px rgba(31,79,216,.16);position:relative}
+.card.key h2{margin-bottom:10px}
+.card.key .kh{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#1f4fd8,#0ea5e9);color:#fff;border-radius:10px;padding:5px 12px;font-size:15px}
+.card.key .ans{font-size:16px;line-height:1.75;color:#0f1c3a;font-weight:500;word-break:keep-all}
+.card.key .kan{display:inline-block;font-size:11.5px;font-weight:700;color:#8a5a00;background:#fff4d6;border:1px solid #f5d98a;border-radius:8px;padding:2px 8px;margin-bottom:8px}
 .cz{display:flex;gap:8px;align-items:flex-start;padding:7px 0;border-top:1px solid #eef1f6;font-size:14px}
 .cz:first-of-type{border-top:0}
 .pb{flex:none;font-size:11px;font-weight:800;border-radius:7px;padding:1px 7px;margin-top:2px}
@@ -355,11 +361,13 @@ function resHtml(j, n){
     (j.seen?'<div class="seen">👀 '+esc(j.seen)+'</div>':'')+
     '<div class="act"><button type="button" data-read="'+n+'">🔊 읽어 주기</button><button type="button" data-copy="'+n+'">📋 복사</button></div></div>';
   if((j.causes||[]).length) h+='<div class="card"><h2>🔍 예상 원인</h2>'+j.causes.map(function(c){ return '<div class="cz"><span class="pb '+pcls(c.p)+'">'+esc(c.p||'')+'</span><span>'+esc(c.c)+'</span></div>'; }).join("")+'</div>';
+  if(j.answer){ var at=String(j.answer), an='';
+    var m=at.match(/^\s*(자료에 없음[^\n]*)\n?/); if(m){ an='<span class="kan">ℹ️ '+esc(m[1].replace(/\s*[—-]\s*/,' · '))+'</span>'; at=at.slice(m[0].length); }
+    h+='<div class="card key"><h2><span class="kh">✅ 핵심 답변</span></h2>'+an+'<div class="ans sel">'+esc(at.trim())+'</div></div>'; }
   if((j.steps||[]).length||j.call||j.safety||j.more) h+='<div class="card"><h2>🛠️ '+(ty==="사용법"?"따라 하기":"현장 조치 순서")+' <small>누르면 완료 표시</small></h2>'+(j.steps||[]).map(function(s,i){ return '<button type="button" class="st"><em>'+(i+1)+'</em><span>'+esc(s)+'</span></button>'; }).join("")+
     (j.call?'<div class="box call"><i>📞</i><span><b>기술팀 · A/S 요청</b><br>'+esc(j.call)+'</span></div>':'')+
     (j.safety?'<div class="box safe"><i>⚠️</i><span>'+esc(j.safety)+'</span></div>':'')+
     (j.more?'<div class="box more"><i>📷</i><span>더 정확히 보려면: '+esc(j.more)+'</span></div>':'')+'</div>';
-  if(j.answer) h+='<div class="card"><h2>📖 설명</h2><div class="ans sel">'+esc(j.answer)+'</div></div>';
   if(j.say) h+='<div class="card"><h2>💬 고객 안내 멘트</h2><div class="say"><span class="sel">'+esc(j.say)+'</span><div class="b"><button type="button" data-cps="'+n+'">복사하기</button><button type="button" data-says="'+n+'">🔊 들어 보기</button></div></div></div>';
   h+='<div class="card"><h2>🙋 이 답, 도움이 됐나요?</h2><div class="fb"><button type="button" data-fb="도움" data-n="'+n+'">👍 도움됐어요</button><button type="button" data-fb="아님" data-n="'+n+'">👎 달랐어요</button></div>'+
     '<div class="fix"><input data-fx="'+n+'" placeholder="실제로 해결한 방법 (지사 사례로 남아요)"><button type="button" data-fxs="'+n+'">저장</button></div></div>';
