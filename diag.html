@@ -241,7 +241,7 @@ var S = { kind:"", sys:"모름", imgs:[], thread:[], busy:false };
 function drawKinds(){
   $("q").placeholder = "예) 듀얼R 출입제어기R에 통신이상(CM) 떠요. 카드가 안 먹어요";
   var ex=[]; [0,1].forEach(function(n){ KINDS.forEach(function(o){ if(o.ex[n]) ex.push(o.ex[n]); }); });
-  $("ex").innerHTML = ex.slice(0,6).map(function(e){ return '<button type="button">'+esc(e)+'</button>'; }).join("");
+  $("ex").innerHTML = ex.slice(0,3).map(function(e){ return '<button type="button">'+esc(e)+'</button>'; }).join("");
 }
 function drawSys(){ $("syss").innerHTML = SYSS.map(function(s){ return '<button type="button" data-s="'+s+'" aria-pressed="'+(s===S.sys)+'">'+(s==="모름"?"🤖 자동":esc(s))+'</button>'; }).join(""); }
 function canGo(){ $("go").disabled = S.busy || !(S.imgs.length || $("q").value.trim()); }
