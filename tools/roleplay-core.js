@@ -47,7 +47,11 @@ function doGet(e) {
     if (n >= 2) sh.getRange(2, 1, n - 1, EV_HEAD.length).getValues().forEach(function (r) { const ym = ymOf(r[1]); (m[ym] = m[ym] || {})[String(r[2])] = Number(r[5]) || 0; });
     return out({ ok: true, m: m });
   }
-  if (p.action === 'diags') return out({ ok: true, rows: diagRows(40) });   // 📸 지사 현장 진단 사례 (최근)
+  if (p.action === 'diags') return out({ ok: true, rows: diagRows(40) });   // 📸 공개 사례 — 이름 없음
+  if (p.action === 'diaglog') {   // 🔒 현장진단 질문 기록(이름 포함) — 파트장만 (비밀번호)
+    if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
+    return out({ ok: true, rows: diagLog(150) });
+  }   // 📸 지사 현장 진단 사례 (최근)
   if (p.action === 'myev') return out(evMine(String(p.name || '').slice(0, 10)));   // 내 이번 달 기록 + 제출한 평가
   if (p.action === 'evsubs') {   // 📝 평가 제출 현황 — 파트장만 (비밀번호)
     if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
@@ -552,7 +556,7 @@ function evAdd(d) {
 }
 
 /* ───── 📸 AI 현장 진단 — 사진·글·음성 질문 → 매뉴얼·장애사례(kb/kb.dat) 근거로 답. 사례는 「현장진단」 시트에 쌓임 ───── */
-const DIAG_HEAD = ['시각', '이름', '기기', '증상', '원인', '조치', '확신도', '도움', '실제 조치', '번호'];
+const DIAG_HEAD = ['시각', '이름', '기기', '증상', '원인', '조치', '확신도', '도움', '실제 조치', '번호', '질문'];   // 11/24 '질문'(원문) 추가 — 파트장만 보는 diaglog용
 
 /* 📚 지식베이스: GitHub의 kb/kb.dat (매뉴얼·장애사례 조각, gzip + ChaCha20 암호화). 열쇠는 스크립트 속성 KB_KEY에만 있음.
    한 번 풀면 6시간 캐시. 새 자료는 tools/kb_build.py --add 로 kb.dat만 바꾸면 자동 반영 */
@@ -660,7 +664,7 @@ const DIAG_SYS = [
   '"call":"기술팀·A/S 요청 조건 (없으면 빈칸)","safety":"안전 주의 한 줄 (없으면 빈칸)","say":"고객에게 할 안내 멘트 한두 문장 (필요할 때만)","more":"추가로 확인·촬영할 것 (없으면 빈칸)","refs":["근거로 쓴 자료 제목 (참고 자료의 《》 안 제목 그대로, 최대 3개)"],"conf":0~100}',
   '모든 문장은 한국어, 존댓말 없이 간결하게 (say만 존댓말).'
 ].join('\n');
-function diagSh() { return evSh('현장진단', DIAG_HEAD); }
+function diagSh() { const sh = evSh('현장진단', DIAG_HEAD); try { if (!sh.getRange(1, 11).getValue()) sh.getRange(1, 11).setValue('질문'); } catch (e) {} return sh; }
 function diag(d) {
   const imgs = (d.imgs || []).slice(0, 3).filter(function (x) { return x && String(x).length < 2500000; });
   const q = String(d.q || d.memo || '').slice(0, 1500), name = String(d.name || '').slice(0, 10);
@@ -703,7 +707,7 @@ function diag(d) {
   if (!j.refs.length && titles.length && Number(j.conf) > 60) j.refs = titles.slice(0, 2);
   const no = 'D' + Utilities.formatDate(new Date(), 'Asia/Seoul', 'MMddHHmmss') + Math.floor(Math.random() * 90 + 10);
   try { diagSh().appendRow([new Date(), name, String(j.device || sys || '').slice(0, 60), String((imgs.length ? '📷 ' : '') + (j.symptom || q)).slice(0, 120),
-    ((j.causes || [])[0] || {}).c || String(j.title || '').slice(0, 80), ((j.steps || []).length ? j.steps.slice(0, 3).join(' → ') : String(j.answer || '')).slice(0, 300), Number(j.conf) || 0, '', '', no]); } catch (e) {}
+    ((j.causes || [])[0] || {}).c || String(j.title || '').slice(0, 80), ((j.steps || []).length ? j.steps.slice(0, 3).join(' → ') : String(j.answer || '')).slice(0, 300), Number(j.conf) || 0, '', '', no, String((imgs.length ? '[사진 ' + imgs.length + '장] ' : '') + (prev ? '[이어서] ' : '') + q).slice(0, 600)]); } catch (e) {}
   j.ok = true; j.no = no; j.model = LAST_MODEL; j.kb = kbOn; j.sys = sys; return j;
 }
 function diagFb(d) {
@@ -721,7 +725,15 @@ function diagRows(limit) {
   const sh = diagSh(), n = sh.getLastRow(); if (n < 2) return [];
   const cnt = Math.min(limit, n - 1);
   return sh.getRange(n - cnt + 1, 1, cnt, DIAG_HEAD.length).getValues().reverse().map(function (r) {
-    return { t: new Date(r[0]).getTime(), name: r[1], dev: r[2], sym: r[3], cause: r[4], step: r[5], conf: r[6], ok: r[7], fix: r[8] };
+    return { t: new Date(r[0]).getTime(), dev: r[2], sym: r[3], cause: r[4], step: r[5], conf: r[6], ok: r[7], fix: r[8] };   // 11/24: 공개 사례에는 이름을 빼고 보냄
+  });
+}
+/* 🔒 누가 어떤 질문을 했는지 — 파트장만 (ADMIN_PIN). 접속 현황 화면에서 이재식만 부름 */
+function diagLog(limit) {
+  const sh = diagSh(), n = sh.getLastRow(); if (n < 2) return [];
+  const cnt = Math.min(limit, n - 1);
+  return sh.getRange(n - cnt + 1, 1, cnt, 11).getValues().reverse().map(function (r) {
+    return { t: new Date(r[0]).getTime(), name: r[1], dev: r[2], q: r[10] || r[3], sym: r[3], conf: r[6], ok: r[7] };
   });
 }
 

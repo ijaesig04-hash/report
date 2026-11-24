@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261124190432">
+<meta name="bsr-ver" content="20261124210921">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -4064,6 +4064,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+{id:"2026-11-24h", date:"11/24", nopush:1, title:"AI 현장 진단 지사 사례 정리", tabs:["home"], items:["📚 지사 사례에는 질문한 사람 이름이 나오지 않게 바꿨어요 (북서울 직원으로 표시)"]},
 {id:"2026-11-24g", date:"11/24", nopush:1, title:"AI 현장 진단 물어보기 화면 새 단장", tabs:["home"], items:["✨ 입력창 하나에 촬영 · 앨범 · 말로 하기 · 시스템 선택을 모아 깔끔하게 정리했어요","「AI에게 물어보기」 버튼을 입력창 바로 아래로, 예시는 그 아래로 옮겼어요"]},
 {id:"2026-11-24f", date:"11/24", nopush:1, title:"브리핑 메뉴 자리 정리", tabs:["home"], items:["🎧 AI 고객 응대 롤플레잉을 큰 카드로, 📈 영업일보를 다이렉트몰 옆 작은 칸으로 자리를 바꿨어요","🤝 소개영업 등록·관리는 💼 영업 탭에서만 보여요","📸 AI 현장 진단 카드도 롤플레잉과 같은 크기로 맞추고 청록색으로 바꿨어요 · 두 카드에 NEW 표시"]},
 {id:"2026-11-24e", date:"11/24", nopush:1, title:"AI 현장 진단 답변 화면 정리", tabs:["home"], items:["✅ 가장 중요한 「핵심 답변」을 예상 원인 바로 아래로 올리고 파란 테두리로 강조했어요","💡 「이렇게 물어보세요」 예시는 3개로 줄였어요"]},
@@ -7366,7 +7367,7 @@ function adminView(rows){
   var h = '<div class="vl-hero"><button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button><small>ADMIN · '+kst(now).md+' '+kst(now).hm+'</small><h2>🔒 접속 현황</h2><p>직원 '+ALL.length+'명 기준 · 최근 7일</p></div>';
   h += rpCard;
   h += '<div class="vl-k"><div><span>오늘 접속</span><b>'+tCnt+'</b></div><div class="ng"><span>오늘 미접속</span><b>'+miss.length+'</b></div><div><span>최근 7일</span><b>'+Object.keys(wk).length+'</b></div></div>';
-  var midA = rdCard + (me==="이재식"&&window.PUSH_URL?'<div class="vl-card" id="vlpush"><h3>🔔 알림 받는 직원<small>불러오는 중…</small></h3></div>':'') + vlWeek(rows, now) + vlInstall(rows) + ''; var midB = adminExtra(rows, now, pinFail);
+  var midA = rdCard + (me==="이재식"?'<div class="vl-card" id="vldiag"><h3>🔒 AI 현장 진단 질문 기록<small>불러오는 중…</small></h3></div>':'') + (me==="이재식"&&window.PUSH_URL?'<div class="vl-card" id="vlpush"><h3>🔔 알림 받는 직원<small>불러오는 중…</small></h3></div>':'') + vlWeek(rows, now) + vlInstall(rows) + ''; var midB = adminExtra(rows, now, pinFail);
   var byDay = {}; rows.forEach(function(r){ var d=kst(r[0]).day; (byDay[d]=byDay[d]||[]).push(r); });
   var dKeys = Object.keys(byDay).sort().reverse();
   var logCard = '<div class="vl-card"><h3>접속 기록<small>최근 35일 · 날짜를 누르면 펼침</small></h3>'+(dKeys.length?dKeys.map(function(d,i){ var rs=byDay[d], t0=kst(rs[0][0]), ppl={}; rs.forEach(function(r){ppl[r[1]]=1});
@@ -7384,8 +7385,28 @@ function adminView(rows){
   h += '<button type="button" class="vl-btn sub" data-vl="reload">새로고침</button>';
   open(h);
   if(me==="이재식" && window.PUSH_URL) vlPushWho();
+  if(me==="이재식") vlDiagLog();
 }
-window.vlPushWho = vlPushWho;
+/* 🔒 AI 현장 진단 — 누가 어떤 질문을 했는지 (이재식만 · 접속 현황 안). 서버도 관리자 PIN이 맞아야만 이름과 질문을 줌.
+   지사 사례(공개) 화면에는 이름이 나가지 않음 (11/24) */
+function vlDiagLog(){
+  var el0=document.getElementById("vldiag"); if(!el0) return;
+  if(typeof RP_API==="undefined"||!RP_API){ el0.innerHTML='<h3>🔒 AI 현장 진단 질문 기록</h3><div class="vl-row">서버가 연결되지 않았어요.</div>'; return; }
+  fetch(RP_API+"?action=diaglog&pin="+encodeURIComponent(BSR_PIN())+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
+    var el=document.getElementById("vldiag"); if(!el) return;
+    if(!j||!j.ok){ el.innerHTML='<h3>🔒 AI 현장 진단 질문 기록</h3><div class="vl-row">'+(j&&j.err==="pin"?'관리자 PIN이 AI 서버 비밀번호와 달라 볼 수 없어요.':'불러오지 못했어요.')+'</div>'; return; }
+    var R=j.rows||[], now=Date.now(), by={}, cnt={}, w7=0;
+    R.forEach(function(r){ var d=kst(r.t).day; (by[d]=by[d]||[]).push(r); if(now-r.t<7*86400000){ w7++; cnt[r.name||'(이름 없음)']=(cnt[r.name||'(이름 없음)']||0)+1; } });
+    var top=Object.keys(cnt).sort(function(a,b){return cnt[b]-cnt[a]});
+    var dk=Object.keys(by).sort().reverse();
+    el.innerHTML='<h3>🔒 AI 현장 진단 질문 기록<small>최근 7일 '+w7+'건 · 나만 보기</small></h3>'+
+      (top.length?'<div class="vl-row" style="flex-wrap:wrap;gap:6px">'+top.map(function(n){ return '<span style="background:#eef3ff;color:#1f4fd8;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:800">'+esc(n)+' '+cnt[n]+'</span>'; }).join('')+'</div>':'')+
+      (dk.length?dk.slice(0,14).map(function(d,i){ var rs=by[d], t0=kst(rs[0].t);
+        return '<details class="vl-day"'+(i===0?' open':'')+'><summary><b>'+t0.md+' ('+t0.wd+')</b><span>'+rs.length+'건</span></summary>'+
+          rs.map(function(r){ var t=kst(r.t); return '<div class="vl-row" style="display:block;line-height:1.5"><b style="font-size:13px">'+esc(r.name||'(이름 없음)')+'</b> <em style="float:right;font-style:normal;color:#8a94a6;font-size:11.5px">'+t.hm+(r.ok?' · '+(r.ok==="도움"?'👍':'👎'):'')+'</em><div style="font-size:12.5px;color:#334155;word-break:keep-all">'+esc(String(r.q||r.sym||'').slice(0,160))+'</div>'+(r.dev?'<div style="font-size:11px;color:#8a94a6">🔧 '+esc(r.dev)+(r.conf?' · 확신 '+r.conf+'%':'')+'</div>':'')+'</div>'; }).join('')+'</details>'; }).join(''):'<div class="vl-row">아직 질문이 없어요.</div>');
+  }).catch(function(){ var el=document.getElementById("vldiag"); if(el) el.innerHTML='<h3>🔒 AI 현장 진단 질문 기록</h3><div class="vl-row">불러오지 못했어요.</div>'; });
+}
+window.vlPushWho = vlPushWho; window.vlDiagLog = vlDiagLog;
 /* 🔔 알림 받는 직원 — 이재식만 (접속 현황 안). 알림을 켠 폰이 등록된 직원 = 받음, 없으면 못 받음 */
 function vlPushWho(){
   fetch(PUSH_URL+"?action=names&pin="+encodeURIComponent(BSR_PIN())+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){

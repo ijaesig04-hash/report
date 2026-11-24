@@ -454,7 +454,7 @@ function loadCases(){
   fetch(API+"?action=diags&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
     var R=j.rows||[], okN=R.filter(function(r){return r.ok==="도움"}).length, fxN=R.filter(function(r){return r.fix}).length;
     $("ck").innerHTML='<div><b>'+R.length+'</b><span>질문 · 진단</span></div><div><b>'+okN+'</b><span>도움됐어요</span></div><div><b>'+fxN+'</b><span>해결 방법 공유</span></div>';
-    $("clist").innerHTML = R.length ? R.map(function(r){ var d=new Date(r.t); return '<div class="case"><b>🔧 '+esc(r.dev||'기기')+'</b><small>'+(d.getMonth()+1)+'/'+d.getDate()+' · '+esc(r.name||'')+(r.ok?' · '+(r.ok==="도움"?'👍':'👎'):'')+'</small><p>'+esc(r.sym||'')+(r.cause?' → '+esc(r.cause):'')+'</p>'+(r.fix?'<span class="fx">✅ 실제 해결: '+esc(r.fix)+'</span>':'')+'</div>'; }).join("") : '<div class="empty">아직 사례가 없어요.<br>첫 질문을 해 보세요!</div>';
+    $("clist").innerHTML = R.length ? R.map(function(r){ var d=new Date(r.t); return '<div class="case"><b>🔧 '+esc(r.dev||'기기')+'</b><small>'+(d.getMonth()+1)+'/'+d.getDate()+' · '+'북서울 직원'+(r.ok?' · '+(r.ok==="도움"?'👍':'👎'):'')+'</small><p>'+esc(r.sym||'')+(r.cause?' → '+esc(r.cause):'')+'</p>'+(r.fix?'<span class="fx">✅ 실제 해결: '+esc(r.fix)+'</span>':'')+'</div>'; }).join("") : '<div class="empty">아직 사례가 없어요.<br>첫 질문을 해 보세요!</div>';
   }).catch(function(){ $("clist").innerHTML='<div class="empty">사례를 불러오지 못했어요.</div>'; });
 }
 
