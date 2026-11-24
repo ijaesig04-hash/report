@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261124130415">
+<meta name="bsr-ver" content="20261124130738">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1252,6 +1252,9 @@ details.vnote[open]>summary::after,details.fct[open]>summary::after{content:"접
 @keyframes rpg{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 @media (prefers-reduced-motion:reduce){.fr-rp{animation:none}}
 .fr-pd{background:linear-gradient(135deg,#fff1f2,#ffe4e6);border:1px solid #fbcfd6!important;color:#9f1239}
+.fr-sl{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #c4b5fd!important;color:#5b21b6;text-decoration:none}
+button.dh-sales.rpb{border:0!important;font-family:inherit;cursor:pointer;margin-top:10px;color:#fff!important;background:linear-gradient(120deg,#4f46e5 0%,#7c3aed 55%,#c026d3 100%)!important;box-shadow:0 6px 18px rgba(124,58,237,.28)!important;text-align:left}
+button.dh-sales.rpb b,button.dh-sales.rpb small{color:#fff}
 .fr.rpr{overflow:visible}
 .fr.rpr .fr-c b small.rpe{display:block;margin-top:2px;font-size:10px;font-weight:600;letter-spacing:.3px;opacity:.6;line-height:1.2}.fr.rpr .fr-c>i{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-style:normal;opacity:.5;font-size:14px}
 .fr-b{background:linear-gradient(135deg,#fff1f2,#ffedd5);color:#7c2d12}.fr-b em{font-style:normal;color:#ea580c}.fr-b small{color:#9a3412}
@@ -4057,6 +4060,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+{id:"2026-11-24f", date:"11/24", nopush:1, title:"브리핑 메뉴 자리 정리", tabs:["home"], items:["🎧 AI 고객 응대 롤플레잉을 큰 카드로, 📈 영업일보를 다이렉트몰 옆 작은 칸으로 자리를 바꿨어요","🤝 소개영업 등록·관리는 💼 영업 탭에서만 보여요"]},
 {id:"2026-11-24e", date:"11/24", nopush:1, title:"AI 현장 진단 답변 화면 정리", tabs:["home"], items:["✅ 가장 중요한 「핵심 답변」을 예상 원인 바로 아래로 올리고 파란 테두리로 강조했어요","💡 「이렇게 물어보세요」 예시는 3개로 줄였어요"]},
 {id:"2026-11-24d", date:"11/24", nopush:1, title:"AI 현장 진단 화면 단순화", tabs:["home"], items:["📸 「무엇이 궁금하세요?」 고르기를 없앴어요 — 그냥 사진 · 글 · 말로 물어보면 AI가 알아서 판단해요","① 질문 입력 → ② 시스템(모르면 그대로) 두 단계로 줄였어요"]},
 {id:"2026-11-24c", date:"11/24", nopush:1, title:"AI세코미 메뉴 강조", tabs:["home"], items:["🤖 AI 고객 응대(보라) · AI 현장 진단(하늘) 카드를 색으로 구분해 눈에 잘 띄게 했어요","현장 진단 카드의 자료 수가 자동으로 최신 숫자로 보여요"]},
@@ -4531,7 +4535,7 @@ function deptHome(d){
   var md = function(x){ return (+x.slice(0,2))+'/'+(+x.slice(3)); };
   var h = '<div class="dh">';
   var gg = deptGreet(d); h += '<div class="dh-c dh-hero '+(d==="영업"?'sal':'tec')+'"><small>'+(d==="영업"?'💼':'💻')+' 북서울지사 '+d+' · '+(function(){ var k=new Date(Date.now()+9*3600000); return (k.getUTCMonth()+1)+'/'+k.getUTCDate()+'('+'일월화수목금토'.charAt(k.getUTCDay())+')'; })()+'</small><b>'+esc2(me)+(isLead(me)?' '+d+'팀장':'')+'님, '+gg[0]+' '+gg[1]+'</b><small>'+gg[2]+'</small></div>';
-  h += rpProdRow() + '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + refLink();
+  h += rpProdRow() + '<button type="button" class="dh-sales rpb" data-rpopen="1"><i>🎧</i><span><b>AI 고객 응대 롤플레잉</b><small>AI 고객과 말로 연습 · 점수 · 코칭</small></span><em>연습 ›</em></button>';
   h += aiRow();
   h += (typeof wxCard==="function" ? wxCard() : '');
   h += rpMini();
@@ -4676,7 +4680,7 @@ function brief(){
   var nm2 = myName(), hero = '<div class="hm-hero"><small>TODAY BRIEFING · '+wd(t)+'</small>'+(typeof sfxChip==="function"?sfxChip():'')+'<b>'+(nm2?'<span class="hm-nm">'+esc2(nm2)+'님,</span>':'')+'<span class="hm-gr'+(greet.replace(/ /g,'').length>10?' long':'')+'">'+greet+' <i class="wv">'+gp[1]+'</i></span></b><span>'+gp[2]+'</span></div>';
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
   setTimeout(safeAuto, 300); setTimeout(wxAuto, 900);
-  var salesA = rpProdRow() + '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>' + refLink() + aiRow();
+  var salesA = rpProdRow() + '<button type="button" class="dh-sales rpb" data-rpopen="1"><i>🎧</i><span><b>AI 고객 응대 롤플레잉</b><small>AI 고객과 말로 연습 · 점수 · 코칭</small></span><em>연습 ›</em></button>' + aiRow();
   return '<div class="sec">'+hero+salesA+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+funRow()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<span class="pt-bs"><button type="button" class="fd-btn" data-ptopen="1">🗺️ 구역 조회</button><button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></span></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
@@ -5559,7 +5563,8 @@ function funRow(){
 }
 /* AI 고객 응대 롤플레잉 작은 카드 — 이름·부서와 상관없이 모두에게 보임 (funRow와 별개) */
 function rpProdRow(){
-  return '<div class="fr rpr"><button type="button" class="fr-c fr-rp" data-rpopen="1"><span class="rpi">🎧</span><em class="rpn">NEW</em><b>AI 고객 응대<br>롤플레잉<small class="rpe">Speech</small></b><i>›</i></button>'+
+  /* 11/24: 작은 칸은 영업일보, AI 고객 응대 롤플레잉은 그 아래 큰 카드(.dh-sales.rpb)로 자리 바꿈 */
+  return '<div class="fr rpr"><a class="fr-c fr-sl" href="'+SALES_URL+'" target="_blank" rel="noopener"><span class="rpi">📈</span><b>북서울<br>영업일보<small class="rpe">전화번호 로그인</small></b><i>›</i></a>'+
     '<a class="fr-c fr-pd" href="'+PROD_URL+'"><span class="rpi">🛡️</span><b>에스원<br>다이렉트몰<small class="rpe">Mail · KakaoTalk</small></b><i>›</i></a></div>'+aibHtml();
 }
 /* 💳 AI 응대 충전 잔액(추정) — 이재식 파트장만 보임 · 2천 원 미만 경고 · 소진 시 빨간 알림. 파트장(이재식)은 눌러서 실제 잔액으로 맞춤 */
