@@ -692,7 +692,8 @@ function diag(d) {
   let ref = '';
   try { const rs = diagRows(60).filter(function (r) { return r.fix || r.ok === '도움'; }).slice(0, 6);
     if (rs.length) ref = '\n\n[북서울 지사 과거 사례 — 참고만]\n' + rs.map(function (r) { return '- ' + r.dev + ' / ' + r.sym + ' → ' + (r.fix || r.cause); }).join('\n'); } catch (e) {}
-  const txt = (kind ? '질문 종류: ' + kind + '\n' : '') + (sys ? '시스템: ' + sys + '\n' : '') + (plan.dev ? '추정 기기: ' + plan.dev + '\n' : '') +
+  const kindU = kind || (plan.kind && plan.kind !== '기타' ? plan.kind : '');
+  const txt = (kindU ? '질문 종류: ' + kindU + '\n' : '') + (sys ? '시스템: ' + sys + '\n' : '') + (plan.dev ? '추정 기기: ' + plan.dev + '\n' : '') +
     '근무자 질문: ' + (q || '(사진만 보냄 — 사진을 보고 판단)') + (prev ? '\n\n[이전 대화 — 이어서 묻는 중]\n' + prev : '') +
     '\n\n[참고 자료 — 에스원 매뉴얼·장애사례 발췌]\n' + (ctx || '(관련 자료를 못 찾음)') + ref + '\n\nJSON으로 답해.';
   let j;

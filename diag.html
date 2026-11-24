@@ -158,15 +158,7 @@ textarea.rec{border-color:var(--red);box-shadow:0 0 0 3px rgba(228,0,43,.1)}
   <section id="pAsk">
     <div id="form">
       <div class="card">
-        <h2>① 무엇이 궁금하세요?</h2>
-        <div class="kinds" id="kinds"></div>
-      </div>
-      <div class="card">
-        <h2>② 어떤 시스템인가요? <small>모르면 그대로 두세요</small></h2>
-        <div class="syss" id="syss"></div>
-      </div>
-      <div class="card">
-        <h2>③ 사진 · 글 · 말로 알려 주세요</h2>
+        <h2>① 사진 · 글 · 말로 알려 주세요</h2>
         <textarea id="q" placeholder=""></textarea>
         <div class="recbar" id="recbar" hidden><i></i>듣는 중이에요 · 다 말하면 🎤를 한 번 더 눌러요</div>
         <div class="thumbs" id="thumbs" hidden></div>
@@ -177,6 +169,10 @@ textarea.rec{border-color:var(--red);box-shadow:0 0 0 3px rgba(228,0,43,.1)}
         </div>
         <input type="file" id="file" accept="image/*" capture="environment" hidden>
         <input type="file" id="file2" accept="image/*" multiple hidden>
+      </div>
+      <div class="card">
+        <h2>② 어떤 시스템인가요? <small>모르면 그대로 두세요</small></h2>
+        <div class="syss" id="syss"></div>
       </div>
       <div class="card" id="exCard">
         <h2>💡 이렇게 물어보세요 <small>누르면 입력돼요</small></h2>
@@ -230,16 +226,16 @@ var KINDS = [
   {k:"결선사양", i:"🔌", t:"결선 · 사양", s:"선재 · 거리 · 단자", ph:"예) 출입제어기R 전기정 결선 선재랑 최대 거리",
    ex:["C-LAN 배선 최대 거리와 선재","얼굴인식리더3.0 결선 색깔","세콤스마트 종단저항 값","출입제어기R 루프 확장하는 법"]},
   {k:"고객안내", i:"💬", t:"고객 안내 멘트", s:"설명 · 사과 · 안내", ph:"예) 영상기기 비밀번호를 대신 바꿔 달라는 고객에게 할 말",
-   ex:["영상기기 비밀번호를 대신 설정해 달라는 고객 안내","배터리 교체가 필요하다고 설명하기","오경보가 반복된다는 고객 안내","모두앱 영상이 안 보인다는 고객 안내"]}
+   ex:["비밀번호 대신 바꿔 달라는 고객 안내","배터리 교체가 필요하다고 설명하기","오경보가 반복된다는 고객 안내","모두앱 영상이 안 보인다는 고객 안내"]}
 ];
 var SYSS = ["모름","세콤듀얼R","세콤듀얼","세콤365","세콤365R","세콤마스터","세콤스마트","세콤링크","세콤링크Pro","SBMS","영상기기","SVMS","리더기","세콤매니저","액세스매니저","세콤아트","세콤V","모두앱"];
-var S = { kind:"장애", sys:"모름", imgs:[], thread:[], busy:false };
+var S = { kind:"", sys:"모름", imgs:[], thread:[], busy:false };
 
+/* 질문 종류는 고르지 않음 — AI가 질문을 보고 알아서 판단 (11/24 단순화). 예시는 종류별로 하나씩 섞어서 보여 줌 */
 function drawKinds(){
-  $("kinds").innerHTML = KINDS.map(function(o){ return '<button type="button" data-k="'+o.k+'" aria-pressed="'+(o.k===S.kind)+'"><i>'+o.i+'</i><span><b>'+o.t+'</b><small>'+o.s+'</small></span></button>'; }).join("");
-  var o = KINDS.filter(function(x){ return x.k===S.kind; })[0];
-  $("q").placeholder = o.ph;
-  $("ex").innerHTML = o.ex.map(function(e){ return '<button type="button">'+esc(e)+'</button>'; }).join("");
+  $("q").placeholder = "예) 듀얼R 출입제어기R에 통신이상(CM) 떠요. 카드가 안 먹어요";
+  var ex=[]; [0,1].forEach(function(n){ KINDS.forEach(function(o){ if(o.ex[n]) ex.push(o.ex[n]); }); });
+  $("ex").innerHTML = ex.slice(0,6).map(function(e){ return '<button type="button">'+esc(e)+'</button>'; }).join("");
 }
 function drawSys(){ $("syss").innerHTML = SYSS.map(function(s){ return '<button type="button" data-s="'+s+'" aria-pressed="'+(s===S.sys)+'">'+(s==="모름"?"🤖 자동":esc(s))+'</button>'; }).join(""); }
 function canGo(){ $("go").disabled = S.busy || !(S.imgs.length || $("q").value.trim()); }
@@ -248,7 +244,7 @@ function drawThumbs(){
   $("thumbs").innerHTML = S.imgs.map(function(s,i){ return '<div class="thumb"><img src="'+s+'" alt="사진 '+(i+1)+'"><button type="button" class="x" data-del="'+i+'" aria-label="지우기">✕</button></div>'; }).join("");
   canGo();
 }
-$("kinds").addEventListener("click",function(e){ var b=e.target.closest("[data-k]"); if(!b) return; S.kind=b.dataset.k; drawKinds(); });
+
 $("syss").addEventListener("click",function(e){ var b=e.target.closest("[data-s]"); if(!b) return; S.sys=b.dataset.s; drawSys(); });
 $("ex").addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b) return; $("q").value=b.textContent; canGo(); $("q").focus(); });
 $("q").addEventListener("input",canGo);
@@ -396,7 +392,7 @@ function drawMine(){
   $("mlist").innerHTML = a.length ? a.map(function(x,i){ var d=new Date(x.t); return '<button type="button" class="hist" data-h="'+i+'"><b>'+(TYI[(x.j||{}).type]||"🔧")+' '+esc((x.j||{}).title||x.q)+'</b><small>'+(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,"0")+':'+String(d.getMinutes()).padStart(2,"0")+(x.sys&&x.sys!=="모름"?' · '+esc(x.sys):'')+(x.pic?' · 📷 '+x.pic:'')+'</small><p>'+esc(x.q)+'</p></button>'; }).join("") : '<div class="empty">아직 기록이 없어요.<br>물어본 내용과 답이 여기에 남아요 (이 폰에만 저장).</div>';
 }
 $("mlist").addEventListener("click",function(e){ var b=e.target.closest("[data-h]"); if(!b) return; var x=loadMine()[+b.dataset.h]; if(!x) return;
-  S.thread=[{q:x.q,imgs:[],kind:x.kind,sys:x.sys,t:x.t,j:x.j}]; S.kind=x.kind||"장애"; S.sys=x.sys||"모름"; drawKinds(); drawSys();
+  S.thread=[{q:x.q,imgs:[],kind:x.kind,sys:x.sys,t:x.t,j:x.j}]; S.kind=""; S.sys=x.sys||"모름"; drawKinds(); drawSys();
   tab("ask"); drawThread(); $("form").hidden=true; $("thread").hidden=false; $("after").hidden=false; window.scrollTo(0,0); });
 
 function tab(k){ document.querySelectorAll("#seg button").forEach(function(x){ x.setAttribute("aria-pressed",x.dataset.tab===k); });
