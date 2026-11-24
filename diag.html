@@ -147,6 +147,48 @@ textarea.rec{border-color:var(--red);box-shadow:0 0 0 3px rgba(228,0,43,.1)}
 .bal .bar{display:block;height:6px;border-radius:99px;background:#e5eaf3;margin-top:5px;overflow:hidden}.bal .bar em{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#0ea5e9);border-radius:99px}
 .bal .v{text-align:right;flex:none}.bal .v b{font-size:18px;color:var(--navy)}.bal .v small{display:block;font-size:11px;color:var(--mute)}
 .bal.low{border-color:#fde68a;background:#fffbeb}.bal.low .bar em{background:#f59e0b}.bal.empty{border-color:#fecdd3;background:#fff1f2}
+
+/* ── 11/24 물어보기 리디자인 ── */
+main{padding-top:12px}
+.hero{padding:15px 16px 14px;border-radius:18px}
+.hero h1{font-size:18.5px}
+.hero p{font-size:12.5px;margin-top:3px;opacity:.85}
+.kbst{margin-top:9px;font-size:11.5px;padding:3px 10px}
+.bal{padding:9px 12px;border-radius:14px}
+.seg{margin:12px 0 12px;background:#e3e9f3;border-radius:13px}
+.seg button{padding:8px 0;font-size:13.5px}
+.cmp{background:#fff;border-radius:22px;padding:16px 14px 12px;box-shadow:0 1px 2px rgba(15,35,80,.06),0 12px 32px rgba(15,35,80,.10);border:1px solid #e6ebf4;transition:box-shadow .2s,border-color .2s}
+.cmp:focus-within{border-color:#9db7f5;box-shadow:0 0 0 4px rgba(31,79,216,.10),0 12px 32px rgba(15,35,80,.12)}
+.cmp-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 2px 8px}
+.cmp-h b{font-size:17px;letter-spacing:-.02em;color:var(--navy)}
+.cmp-h span{font-size:11.5px;color:#8a94a6;font-weight:600;white-space:nowrap}
+.cmp textarea{border:0;background:#f5f7fb;border-radius:14px;min-height:104px;padding:12px 13px;font-size:15.5px;resize:none}
+.cmp textarea:focus{background:#f2f6ff;border:0}
+.cmp textarea::placeholder{color:#9aa4b5}
+.cmp textarea.rec{background:#fff5f6;box-shadow:inset 0 0 0 1.5px #fda4af}
+.cmp .tools{grid-template-columns:1fr 1fr 1.3fr;gap:8px;margin-top:10px}
+.cmp .tools button{flex-direction:row;justify-content:center;gap:6px;padding:11px 6px;border:1px solid #e3e8f1;background:#fff;border-radius:13px;font-size:13.5px;color:#26324d}
+.cmp .tools button i{font-size:18px}
+.cmp .tools button:active{transform:scale(.97)}
+.cmp .tools .mic{background:linear-gradient(135deg,#ff4d6d,#e4002b);border-color:transparent;color:#fff;box-shadow:0 6px 14px rgba(228,0,43,.25)}
+.cmp .tools .mic.on{background:#e4002b}
+.cmp .thumbs{flex-wrap:wrap}
+.cmp-s{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:11px;border-top:1px dashed #e3e8f1}
+.cmp-s>span{flex:none;font-size:12px;font-weight:800;color:#8a94a6}
+.cmp-s .syss{flex:1;min-width:0;margin:0;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent);padding-right:18px}
+.cmp-s .syss button{padding:5px 11px;font-size:12.5px;background:#f3f6fb;border-color:#e6ebf4}
+.cmp-s .syss button[aria-pressed=true]{background:var(--navy);border-color:var(--navy)}
+.go{margin-top:12px;border-radius:16px;padding:15px;font-size:16.5px;letter-spacing:-.01em;background:linear-gradient(120deg,#1f4fd8 0%,#2563eb 50%,#0ea5e9 100%);display:flex;align-items:center;justify-content:center;gap:8px}
+.go em{font-style:normal;font-size:18px;transition:transform .2s}
+.go:not(:disabled):active em{transform:translateX(3px)}
+.go:disabled{opacity:1;background:#c9d3e4;color:#fff;box-shadow:none}
+.hint{font-size:11.5px;margin-top:9px}
+.exw{margin-top:18px}
+.exh{font-size:13px;font-weight:800;color:#5d6879;margin:0 4px 8px}
+.ex{gap:7px}
+.ex button{background:#fff;border:1px solid #e6ebf4;border-radius:14px;padding:11px 13px;font-size:13.5px;color:#26324d;align-items:center;box-shadow:0 1px 2px rgba(15,35,80,.04)}
+.ex button:before{content:"";width:6px;height:6px;border-radius:50%;background:#2563eb;flex:none}
+.ex button:after{content:"›";margin-left:auto;color:#a5b0c2;font-size:17px;line-height:1}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -154,8 +196,8 @@ textarea.rec{border-color:var(--red);box-shadow:0 0 0 3px rgba(228,0,43,.1)}
 <div class="top"><button class="back" type="button" onclick="history.length>1?history.back():location.href='./'" aria-label="뒤로">‹</button><b>🛠️ AI 현장 진단</b><span class="me" id="me"></span></div>
 <main>
   <div class="hero" id="hero">
-    <h1>현장에서 막히면 바로 물어보세요</h1>
-    <p>사진 · 글 · 말로 물어보면 에스원 매뉴얼과 장애사례를 찾아 원인, 조치 순서, 고객 안내까지 알려줘요.</p>
+    <h1>현장에서 막히면, 바로 물어보세요</h1>
+    <p>매뉴얼 · 장애사례 근거로 원인 · 조치 · 고객 안내까지</p>
     <span class="kbst" id="kbst"><i></i>자료 연결 확인 중…</span>
   </div>
   <div class="bal" id="bal" hidden></div>
@@ -163,29 +205,27 @@ textarea.rec{border-color:var(--red);box-shadow:0 0 0 3px rgba(228,0,43,.1)}
 
   <section id="pAsk">
     <div id="form">
-      <div class="card">
-        <h2>① 사진 · 글 · 말로 알려 주세요</h2>
+      <!-- 11/24 물어보기 화면 리디자인: 입력창 하나(컴포저)에 사진 · 말 · 시스템을 모으고, 보내기 버튼은 바로 아래 -->
+      <div class="cmp" id="cmp">
+        <div class="cmp-h"><b>어떤 문제가 있나요?</b><span>사진 · 글 · 말 모두 OK</span></div>
         <textarea id="q" placeholder=""></textarea>
         <div class="recbar" id="recbar" hidden><i></i>듣는 중이에요 · 다 말하면 🎤를 한 번 더 눌러요</div>
         <div class="thumbs" id="thumbs" hidden></div>
         <div class="tools">
-          <button type="button" id="gal"><i>🖼️</i>사진 고르기</button>
-          <button type="button" class="mic" id="mic"><i>🎤</i>말로 하기</button>
           <button type="button" id="cam"><i>📷</i>촬영</button>
+          <button type="button" id="gal"><i>🖼️</i>앨범</button>
+          <button type="button" class="mic" id="mic"><i>🎤</i>말로 하기</button>
         </div>
+        <div class="cmp-s"><span>시스템</span><div class="syss" id="syss"></div></div>
         <input type="file" id="file" accept="image/*" capture="environment" hidden>
         <input type="file" id="file2" accept="image/*" multiple hidden>
       </div>
-      <div class="card">
-        <h2>② 어떤 시스템인가요? <small>모르면 그대로 두세요</small></h2>
-        <div class="syss" id="syss"></div>
-      </div>
-      <div class="card" id="exCard">
-        <h2>💡 이렇게 물어보세요 <small>누르면 입력돼요</small></h2>
+      <button class="go" type="button" id="go" disabled>AI에게 물어보기 <em>→</em></button>
+      <p class="hint">🔒 고객 얼굴 · 비밀번호 · 개인정보는 찍히지 않게 해 주세요</p>
+      <div class="exw" id="exCard">
+        <div class="exh">💡 이렇게 물어보세요</div>
         <div class="ex" id="ex"></div>
       </div>
-      <button class="go" type="button" id="go" disabled>🤖 AI에게 물어보기</button>
-      <p class="hint">고객 얼굴 · 비밀번호 · 개인정보가 찍히지 않게 해 주세요</p>
     </div>
     <div id="thread" hidden></div>
     <div id="load" class="card load" hidden>
