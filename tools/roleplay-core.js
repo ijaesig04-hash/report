@@ -19,7 +19,8 @@ function doPost(e) {
     if (d.act === 'evstart') return out(evStart(d));                      // 📝 평가 시작 (한 달 3회)
     if (d.act === 'evpick') return out(evPick(d));                        // 📝 연습 결과를 평가에 반영 (본인이 고른 것만)
     if (d.act === 'evsub') return out(evAdd(d));
-    if (d.act === 'diag') return out(diag(d));                            // 📸 AI 현장 진단 — 사진 → 기기·원인·조치
+    if (d.act === 'diag') return out(diag(d));
+    if (d.act === 'cmp') return out(aiCompare(d));                         // 🧪 Gemini ↔ Claude 비교 시험 — 파트장만 (비밀번호)                            // 📸 AI 현장 진단 — 사진 → 기기·원인·조치
     if (d.act === 'diagfb') return out(diagFb(d));                        // 📸 진단 결과 도움 여부 / 실제 조치 남기기
     if (d.act === 'vbrief') return out(vbrief(d));                        // 🎬 AI 실적 영상 브리핑 — 내레이션 원고                          // 📝 롤플레잉 평가 — 본인이 등급을 골라 제출
     return out({ ok: false, err: 'act' });
@@ -69,28 +70,39 @@ function doGet(e) {
 function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 
 /* AI 부르기: ANTHROPIC_KEY 속성이 있으면 Claude, 없으면 Gemini */
+let FORCE_ENG = '';   // 🧪 비교 시험 때만 'gemini' / 'claude' 로 잠깐 바꿈
+let CMP_MODEL = '';
 function gemini(sys, contents, maxTok, fast) {
-  if (P.getProperty('ANTHROPIC_KEY')) return claude(sys, contents, maxTok, fast);
+  if (FORCE_ENG === 'claude' || (FORCE_ENG !== 'gemini' && P.getProperty('ANTHROPIC_KEY'))) return claude(sys, contents, maxTok, fast);
   return geminiCall(sys, contents, maxTok, fast);
 }
 function claude(sys, contents, maxTok, fast) {
-  const model = P.getProperty('CLAUDE_MODEL') || 'claude-haiku-5-5';
+  const model = CMP_MODEL || P.getProperty('CLAUDE_MODEL') || 'claude-haiku-5-5';
+  const key = P.getProperty('ANTHROPIC_KEY') || P.getProperty('CLAUDE_TEST_KEY');   // CLAUDE_TEST_KEY = 🧪 비교 시험 전용 (실제 서비스는 계속 Gemini)
+  if (!key) throw new Error('Claude 열쇠(CLAUDE_TEST_KEY)가 아직 없어요');
   const msgs = [];
   contents.forEach(function (c) {
-    const role = c.role === 'model' ? 'assistant' : 'user', text = c.parts.map(function (x) { return x.text || ''; }).join('');
-    if (msgs.length && msgs[msgs.length - 1].role === role) msgs[msgs.length - 1].content += '\n' + text;
-    else msgs.push({ role: role, content: text });
+    const role = c.role === 'model' ? 'assistant' : 'user';
+    const blocks = [];
+    c.parts.forEach(function (x) {
+      if (x.inlineData) blocks.push({ type: 'image', source: { type: 'base64', media_type: x.inlineData.mimeType || 'image/jpeg', data: x.inlineData.data } });
+      else if (x.text) blocks.push({ type: 'text', text: x.text });
+    });
+    if (!blocks.length) return;
+    if (msgs.length && msgs[msgs.length - 1].role === role) msgs[msgs.length - 1].content = msgs[msgs.length - 1].content.concat(blocks);
+    else msgs.push({ role: role, content: blocks });
   });
   const body = { model: model, max_tokens: fast ? 300 : Math.max(maxTok || 1000, 1000), system: sys + '\n\n반드시 JSON 한 덩어리만 출력하세요. 설명·코드블록 금지.', messages: msgs };
   let r;
   for (let k = 0; k < 3; k++) {
     r = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', { method: 'post', contentType: 'application/json',
-      headers: { 'x-api-key': P.getProperty('ANTHROPIC_KEY'), 'anthropic-version': '2023-06-01' }, payload: JSON.stringify(body), muteHttpExceptions: true });
+      headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' }, payload: JSON.stringify(body), muteHttpExceptions: true });
     if ([429, 500, 502, 503, 529].indexOf(r.getResponseCode()) < 0) break;
     Utilities.sleep(1500 * (k + 1));
   }
   const j = JSON.parse(r.getContentText());
   if (r.getResponseCode() !== 200) throw new Error((j.error && j.error.message) || ('HTTP ' + r.getResponseCode()));
+  LAST_MODEL = model; LAST_USE = j.usage || null;
   const t = (j.content || []).map(function (x) { return x.text || ''; }).join('');
   const i = t.indexOf('{'), e = t.lastIndexOf('}');
   if (i < 0 || e < i) throw new Error('AI가 빈 답을 줬어요');
@@ -152,7 +164,7 @@ function geminiCall(sys, contents, maxTok, fast) {
   }
   throw new Error('쓸 수 있는 무료 모델이 없어요 — ' + lastErr);
 }
-let LAST_MODEL = '';
+let LAST_MODEL = '', LAST_USE = null;
 
 const LV = { '하': '말투는 비교적 차분하고 설명을 잘 들어 줍니다.', '중': '불만이 꽤 있고 말을 자주 끊지만, 납득되면 누그러집니다.', '상': '매우 화가 나 있고 쉽게 풀리지 않으며, 형식적인 답이나 변명에는 더 화를 냅니다.' };
 
@@ -701,12 +713,12 @@ function diag(d) {
     '근무자 질문: ' + (q || '(사진만 보냄 — 사진을 보고 판단)') + (prev ? '\n\n[이전 대화 — 이어서 묻는 중]\n' + prev : '') +
     '\n\n[참고 자료 — 에스원 매뉴얼·장애사례 발췌]\n' + (ctx || '(관련 자료를 못 찾음)') + ref + '\n\nJSON으로 답해.';
   let j;
-  try { j = geminiCall(DIAG_SYS + (memo ? '\n\n[핵심 메모]\n' + memo : ''), [{ role: 'user', parts: imgParts.concat([{ text: txt }]) }], 2600, false); }
+  try { j = (d._eng === 'claude' ? claude : geminiCall)(DIAG_SYS + (memo ? '\n\n[핵심 메모]\n' + memo : ''), [{ role: 'user', parts: imgParts.concat([{ text: txt }]) }], 2600, false); }
   catch (err) { return { ok: false, err: String(err).slice(0, 200) }; }
   j.refs = (j.refs || []).filter(function (t) { return titles.indexOf(t) >= 0; });
   if (!j.refs.length && titles.length && Number(j.conf) > 60) j.refs = titles.slice(0, 2);
   const no = 'D' + Utilities.formatDate(new Date(), 'Asia/Seoul', 'MMddHHmmss') + Math.floor(Math.random() * 90 + 10);
-  try { diagSh().appendRow([new Date(), name, String(j.device || sys || '').slice(0, 60), String((imgs.length ? '📷 ' : '') + (j.symptom || q)).slice(0, 120),
+  if (!d._cmp) try { diagSh().appendRow([new Date(), name, String(j.device || sys || '').slice(0, 60), String((imgs.length ? '📷 ' : '') + (j.symptom || q)).slice(0, 120),
     ((j.causes || [])[0] || {}).c || String(j.title || '').slice(0, 80), ((j.steps || []).length ? j.steps.slice(0, 3).join(' → ') : String(j.answer || '')).slice(0, 300), Number(j.conf) || 0, '', '', no, String((imgs.length ? '[사진 ' + imgs.length + '장] ' : '') + (prev ? '[이어서] ' : '') + q).slice(0, 600)]); } catch (e) {}
   j.ok = true; j.no = no; j.model = LAST_MODEL; j.kb = kbOn; j.sys = sys; return j;
 }
@@ -749,6 +761,31 @@ function vbrief(d) {
     const j = geminiCall(sys, [{ role: 'user', parts: [{ text: '장면 목록: ' + ids.join(', ') + '\n데이터: ' + data }] }], 1500, false);
     j.ok = true; return j;
   } catch (err) { return { ok: false, err: String(err).slice(0, 200) }; }
+}
+
+
+
+/* ───── 🧪 Gemini ↔ Claude 비교 시험 (파트장만) ─────
+   같은 질문을 두 AI에 각각 보내 답 · 걸린 시간을 나란히 돌려줌. 실제 서비스(직원 화면)는 계속 Gemini.
+   Claude 열쇠는 스크립트 속성 CLAUDE_TEST_KEY (없으면 Claude 칸만 안내 문구). 기록 시트에는 남기지 않음 */
+function aiCompare(d) {
+  if (!P.getProperty('ADMIN_PIN') || String(d.pin || '') !== P.getProperty('ADMIN_PIN')) return { ok: false, err: 'pin' };
+  const what = d.what === 'chat' ? 'chat' : 'diag';
+  const cm = { haiku: 'claude-haiku-5-5', sonnet: 'claude-sonnet-5-5' }[String(d.cmodel || 'haiku')] || 'claude-haiku-5-5';
+  const run = function (eng) {
+    const t0 = Date.now(); FORCE_ENG = eng; CMP_MODEL = eng === 'claude' ? cm : ''; LAST_MODEL = ''; LAST_USE = null;
+    try {
+      let r;
+      if (what === 'diag') r = diag({ q: d.q, sys: d.sys, imgs: d.imgs, name: '비교시험', _cmp: 1, _eng: eng });
+      else r = chat({ sc: { persona: String(d.persona || '').slice(0, 600) }, level: d.level || '중', hist: (d.hist || []).slice(-8) });
+      return { ok: r && r.ok !== false, ms: Date.now() - t0, model: eng === 'claude' ? cm : (LAST_MODEL || (r && r.model) || 'gemini'), use: LAST_USE, r: r };
+    } catch (err) { return { ok: false, ms: Date.now() - t0, model: eng === 'claude' ? cm : 'gemini', err: String(err).slice(0, 200) }; }
+    finally { FORCE_ENG = ''; CMP_MODEL = ''; }
+  };
+  const hasKey = !!(P.getProperty('ANTHROPIC_KEY') || P.getProperty('CLAUDE_TEST_KEY'));
+  const g = run('gemini');
+  const c = hasKey ? run('claude') : { ok: false, err: 'nokey' };
+  return { ok: true, what: what, gemini: g, claude: c, hasKey: hasKey };
 }
 
 return { doPost: doPost, doGet: doGet };
