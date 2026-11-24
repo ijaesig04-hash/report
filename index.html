@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261124074810">
+<meta name="bsr-ver" content="20261124121746">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -47,6 +47,27 @@ html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-
 .sec.aiv a.aiv-c,.sec.aiv button.aiv-c{padding:14px;box-sizing:border-box;margin-left:0}
 .aiv-go{flex:none;font-style:normal;font-size:24px;color:#94a3b8}
 .aiv-ft{font-size:12px;color:#5d6879;text-align:center;margin:12px 0 4px}
+/* AI세코미 핵심 메뉴 2개 — 색으로 구분 · 강조 (11/24) */
+.sec.aiv .aiv-c{position:relative;overflow:hidden;border-width:1.5px;padding:16px 14px 16px 20px;box-shadow:0 8px 20px rgba(15,35,80,.10);transition:transform .12s}
+.sec.aiv .aiv-c:active{transform:scale(.985)}
+.sec.aiv .aiv-c::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px}
+.sec.aiv .aiv-c.rp{background:linear-gradient(135deg,#faf5ff,#ede9fe 55%,#e0e7ff);border-color:#c4b5fd}
+.sec.aiv .aiv-c.rp::before{background:linear-gradient(180deg,#8b5cf6,#6366f1)}
+.sec.aiv .aiv-c.dg{background:linear-gradient(135deg,#f0f9ff,#e0f2fe 55%,#d5f5ee);border-color:#7dd3fc}
+.sec.aiv .aiv-c.dg::before{background:linear-gradient(180deg,#0ea5e9,#14b8a6)}
+.sec.aiv .aiv-c .aiv-ic{width:56px;height:56px;border-radius:17px;font-size:30px}
+.sec.aiv .aiv-c.rp .aiv-ic{background:linear-gradient(135deg,#8b5cf6,#6366f1);box-shadow:0 6px 14px rgba(124,58,237,.35)}
+.sec.aiv .aiv-c.dg .aiv-ic{background:linear-gradient(135deg,#0ea5e9,#14b8a6);box-shadow:0 6px 14px rgba(2,132,199,.35)}
+.sec.aiv .aiv-c .aiv-t b{font-size:17px;font-weight:800}
+.sec.aiv .aiv-c.rp .aiv-t b{color:#4c1d95}
+.sec.aiv .aiv-c.dg .aiv-t b{color:#0c4a6e}
+.sec.aiv .aiv-c .aiv-t small{color:#3f4a5e}
+.sec.aiv .aiv-c.rp .aiv-tg em{color:#fff;background:#7c3aed}
+.sec.aiv .aiv-c.dg .aiv-tg em{color:#fff;background:#0284c7}
+.sec.aiv .aiv-c .aiv-go{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;line-height:1;padding-bottom:2px;box-sizing:border-box}
+.sec.aiv .aiv-c.rp .aiv-go{background:#7c3aed}
+.sec.aiv .aiv-c.dg .aiv-go{background:#0284c7}
+
 </style>
 <div id="bsl" role="progressbar" aria-label="불러오는 중"><div class="r"><svg viewBox="0 0 156 156"><defs><linearGradient id="bslg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e2231a"/><stop offset=".5" stop-color="#ff7a59"/><stop offset="1" stop-color="#6f93ff"/></linearGradient></defs><circle class="tk" cx="78" cy="78" r="68"/><circle class="bar" id="bslb" cx="78" cy="78" r="68"/></svg><div class="pc"><span id="bslp">0</span><small>%</small></div></div><div class="t"><i></i>북서울 서비스 Report</div><div class="s" id="bslm">최신 지표를 불러오는 중…</div></div>
 <script>
@@ -2529,7 +2550,7 @@ function addDays(d,n){var t=new Date(d+"T00:00:00Z");t.setUTCDate(t.getUTCDate()
 /* 🤖 AI 탭 — AI 응대 롤플레잉 · AI 현장 진단 바로가기 (메뉴를 늘릴 때는 AIMENU에 한 줄 추가) */
 var AIMENU = [
   {ic:"🎧", t:"AI 고객 응대 롤플레잉", s:"AI 고객과 응대 연습 → 점수 · 코칭", tags:["서비스","영업","📝 월 평가"], a:'data-rpopen="1"', c:"rp"},
-  {ic:"📸", t:"AI 현장 진단", s:"현장에서 막히면 사진 · 글 · 말로 질문 → 매뉴얼 근거로 원인 · 조치 · 고객 멘트", tags:["시범 운영","매뉴얼 63종"], href:"diag.html", c:"dg"}
+  {ic:"📸", t:"AI 현장 진단", s:"사진 · 글 · 말로 질문하면<br>매뉴얼 근거로 원인 · 조치 · 멘트", tags:["시범 운영","매뉴얼·사례 95종"], href:"diag.html", c:"dg"}
 ];
 function viewAi(){
   var h = '<div class="aiv-hd"><small>NORTH SEOUL · AI</small><h3>🤖 AI세코미</h3><p>현장 업무를 돕는 AI 메뉴를 한곳에 모았어요.</p></div>' + aibHtml();
@@ -2537,6 +2558,7 @@ function viewAi(){
     var inner = '<span class="aiv-ic">'+m.ic+'</span><span class="aiv-t"><b>'+m.t+'</b><small>'+m.s+'</small><span class="aiv-tg">'+m.tags.map(function(t){return '<em>'+t+'</em>';}).join('')+'</span></span><i class="aiv-go">›</i>';
     return m.href ? '<a class="aiv-c '+m.c+'" href="'+m.href+'">'+inner+'</a>' : '<button type="button" class="aiv-c '+m.c+'" '+m.a+'>'+inner+'</button>';
   }).join('');
+  if(!window.AIKB_T){ window.AIKB_T=1; try{ fetch(RP_API+"?action=kbinfo",{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ if(j&&j.docs){ AIMENU[1].tags[1]="매뉴얼·사례 "+j.docs+"종"; var es=document.querySelectorAll(".aiv-c.dg .aiv-tg em"); if(es[1]) es[1].textContent=AIMENU[1].tags[1]; } }).catch(function(){}); }catch(e){} }
   return '<div class="sec aiv">'+h+'<p class="aiv-ft">AI 답과 점수는 참고용이에요. 이상한 답은 화면의 👎로 알려 주세요.</p></div>';
 }
 function viewRep(){
@@ -4035,6 +4057,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+{id:"2026-11-24c", date:"11/24", nopush:1, title:"AI세코미 메뉴 강조", tabs:["home"], items:["🤖 AI 고객 응대(보라) · AI 현장 진단(하늘) 카드를 색으로 구분해 눈에 잘 띄게 했어요","현장 진단 카드의 자료 수가 자동으로 최신 숫자로 보여요"]},
 {id:"2026-11-24b", date:"11/24", title:"고객체감 11/24 반영 (발송 317, 응답 108)", tabs:["cs"], items:["📞 10/1~11/24 발송 317 · 응답 108 (응답률 34.1%) · 만족도 9.89","새 응답 3건(나무다움노원 · 아인 · 크린토피아노원지사) 모두 10점, 11/24 새 발송 6건 추가"]},
 {id:"2026-11-24a", date:"11/24", nopush:1, title:"고객체감 담당자 정정 (스포웰짐월곡점)", tabs:["home"], items:["🔧 11/21 영상방문 스포웰짐월곡점(장**) 건을 고혁진 → 최문혁으로 바로잡았어요","고혁진 발송 10→9건, 최문혁 44→45건 (응답 수는 그대로)"]},
 {id:"2026-11-23g", date:"11/23", nopush:1, title:"AI 탭 이름 「AI세코미」로 변경", tabs:["home"], items:["🤖 AI 탭 이름이 「AI세코미」로 바뀌었어요","서비스 부서가 아니면(지사장·영업·기술·타부서·직접 입력) 브리핑 바로 옆에 보여요"]},
