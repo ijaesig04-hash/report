@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261125170654">
+<meta name="bsr-ver" content="20261126183531">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -53,6 +53,31 @@ html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-
 .sec.aiv .aiv-c{position:relative;overflow:hidden;border-width:1.5px;padding:16px 14px 16px 20px;box-shadow:0 8px 20px rgba(15,35,80,.10);transition:transform .12s}
 .sec.aiv .aiv-c:active{transform:scale(.985)}
 .sec.aiv .aiv-c::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px}
+.sec.aiv .aiv-c.am{background:linear-gradient(135deg,#fff7ed,#ffedd5 55%,#fef3c7);border-color:#fdba74}
+.sec.aiv .aiv-c.am::before{background:linear-gradient(180deg,#f97316,#f59e0b)}
+.sec.aiv .aiv-c.am .aiv-ic{background:linear-gradient(135deg,#f97316,#f59e0b);box-shadow:0 6px 14px rgba(234,88,12,.32)}
+.sec.aiv .aiv-c.am .aiv-t b{color:#7c2d12}.sec.aiv .aiv-c.am .aiv-tg em{color:#fff;background:#ea580c}.sec.aiv .aiv-c.am .aiv-go{background:#ea580c}
+.sec.aiv .aiv-c.ar{background:linear-gradient(135deg,#f0fdfa,#ccfbf1 55%,#e0f2fe);border-color:#5eead4}
+.sec.aiv .aiv-c.ar::before{background:linear-gradient(180deg,#0e9f9a,#14b8a6)}
+.sec.aiv .aiv-c.ar .aiv-ic{background:linear-gradient(135deg,#0e9f9a,#14b8a6);box-shadow:0 6px 14px rgba(13,148,136,.32)}
+.sec.aiv .aiv-c.ar .aiv-t b{color:#134e4a}.sec.aiv .aiv-c.ar .aiv-tg em{color:#fff;background:#0d9488}.sec.aiv .aiv-c.ar .aiv-go{background:#0d9488}
+.am-ld{display:flex;align-items:center;gap:10px;justify-content:center;padding:26px 0;color:var(--muted);font-weight:700}
+.am-ld i{width:18px;height:18px;border-radius:50%;border:3px solid #fed7aa;border-top-color:#ea580c;animation:amsp .8s linear infinite}@keyframes amsp{to{transform:rotate(360deg)}}
+.am-k{border:2px solid #fb923c;background:#fff7ed;border-radius:14px;padding:12px 13px;margin:10px 0}
+.am-k b{display:block;font-size:16px;color:#7c2d12;line-height:1.45}.am-k p{margin:6px 0 0;font-size:13px;color:#57534e;white-space:pre-line}
+.am-b{border:1px solid var(--line);border-radius:14px;padding:11px 13px;margin:8px 0;background:var(--card,#fff)}
+.am-b h4{margin:0 0 6px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.am-b h4 button{margin-left:auto;border:1px solid var(--line);background:transparent;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:800;color:inherit}
+.am-b ol,.am-b ul{margin:0;padding-left:20px;font-size:14px;line-height:1.55}.am-b li{margin:2px 0}
+.am-b .pp{font-size:11px;font-weight:800;border-radius:6px;padding:1px 6px;margin-right:5px;background:#fee2e2;color:#b91c1c}.am-b .pp.m{background:#fef3c7;color:#92400e}.am-b .pp.l{background:#e2e8f0;color:#475569}
+.am-b small{display:block;color:var(--muted);font-size:12px}
+.am-sms{display:inline-block;margin-top:8px;border-radius:10px;padding:7px 12px;font-weight:800;font-size:13px;background:#fef3c7;color:#92400e;text-decoration:none}
+.am-li{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--line)}
+.am-li span{flex:1;min-width:0}.am-li b{display:block;font-size:14.5px}.am-li small{color:var(--muted);font-size:12px}
+.am-li em{font-style:normal;font-weight:800;color:#ea580c;font-size:13px;white-space:nowrap}
+.am-li button,.am-go{border:0;border-radius:10px;padding:7px 11px;font-weight:800;font-size:12.5px;color:#fff;background:linear-gradient(135deg,#f97316,#f59e0b);white-space:nowrap}
+.am-go{display:block;width:100%;padding:11px;font-size:14px;margin:0 0 10px}
+.am-pol{display:block;width:100%;margin-top:8px;border:1.5px solid #5eead4;background:#f0fdfa;color:#0f766e;border-radius:12px;padding:9px;font-weight:800;font-size:13.5px}
 .sec.aiv .aiv-c.rp{background:linear-gradient(135deg,#faf5ff,#ede9fe 55%,#e0e7ff);border-color:#c4b5fd}
 .sec.aiv .aiv-c.rp::before{background:linear-gradient(180deg,#8b5cf6,#6366f1)}
 .sec.aiv .aiv-c.dg{background:linear-gradient(135deg,#f0f9ff,#e0f2fe 55%,#d5f5ee);border-color:#7dd3fc}
@@ -2561,7 +2586,9 @@ function addDays(d,n){var t=new Date(d+"T00:00:00Z");t.setUTCDate(t.getUTCDate()
 /* 🤖 AI 탭 — AI 응대 롤플레잉 · AI 현장 진단 바로가기 (메뉴를 늘릴 때는 AIMENU에 한 줄 추가) */
 var AIMENU = [
   {ic:"🎧", t:"AI 고객 응대 롤플레잉", s:"AI 고객과 응대 연습 → 점수 · 코칭", tags:["서비스","영업","📝 월 평가"], a:'data-rpopen="1"', c:"rp"},
-  {ic:"📸", t:"AI 현장 진단", s:"사진 · 글 · 말로 질문하면<br>매뉴얼 근거로 원인 · 조치 · 멘트", tags:["시범 운영","매뉴얼·사례 95종"], href:"diag.html", c:"dg"}
+  {ic:"📸", t:"AI 현장 진단", s:"사진 · 글 · 말로 질문하면<br>매뉴얼 근거로 원인 · 조치 · 멘트", tags:["시범 운영","매뉴얼·사례 95종"], href:"diag.html", c:"dg"},
+  {ic:"🔁", t:"AI 다발보 원인 분석", s:"반복 발보 고객처를 AI가 분석<br>원인 · 조치 · 키맨 안내 문자", tags:["NEW","발보관리 연동"], a:'data-almlist="1"', c:"am"},
+  {ic:"📝", t:"AI 조치 보고서", s:"말로 하면 보고 문장으로<br>세부내용 · 고객 안내 문자", tags:["NEW","🎤 음성 입력"], href:"actrep.html", c:"ar"}
 ];
 function viewAi(){
   var h = '<div class="aiv-hd"><small>NORTH SEOUL · AI</small><h3>🤖 AI세코미</h3><p>현장 업무를 돕는 AI 메뉴를 한곳에 모았어요.</p></div>' + aibHtml();
@@ -4135,6 +4162,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+  {id:"2026-11-26a", date:"11/26", title:"nopush:🤖 AI세코미 새 기능 2가지", tabs:["home"], items:["🔁 AI 다발보 원인 분석 — 반복 발보 고객처를 AI가 분석해 원인 · 현장 조치 · 키맨 안내 문자까지 (발보관리 조치 입력에서도 바로)","📝 AI 조치 보고서 — 말로 하면 세부내용 · 보고 문장 · 고객 안내 문자로 정리 (조치 입력 칸의 「AI로 문장 다듬기」도 같은 기능)"]},
   {id:"2026-11-25e", date:"11/25", title:"서비스 지표 11/25 반영", tabs:["cmp","veh","ppl","mgt","alm"], items:["📊 사업팀 종합 4위 · 북서울 불필요 14.3%(92%) · 발보율 50.5%(107%) · 25분↑ 2.4%(141%) · 체감 10.0분(106%) · 일괄 13.6분(118%)","🚗 차량별 · 👤 개인별 · 관리지표 · ⏱️ 25분초과(11.01~11.25) 함께 반영"]},
   {id:"2026-11-25d", date:"11/25", title:"nopush:⚡ 앱 가볍게 · 화면 정리", tabs:["home"], items:["⚡ 앱 용량 9.3MB → 7.4MB (중복 사진 정리) — 더 빨리 열려요","🔔 탭마다 그 탭의 최근 소식이 위에 떠요 (발보관리 → 다발보 소식)","🔁 다발보 차량별 막대 숫자를 막대 밖으로 — 겹치지 않게"]},
   {id:"2026-11-25b", date:"11/25", title:"고객체감 11/25 반영", tabs:["cs"], items:["📞 발송 329 · 응답 112 · 만족도 9.89 (10.01~11.25)","새 발송 12건 · 새 응답 2건 (노원문화재단 이명섭 · 최준영주택 고혁진 「친절하세요」)"]},
@@ -7987,9 +8015,59 @@ function actNotify(){ var L = actNew(); if(AA_N>=0 && L.length>AA_N){ var r = L[
 document.addEventListener("click", function(e){ if(e.target.closest("[data-aaok]")){ lsSet('bsr_actseen_'+myName(), String(Date.now())); AA_N = 0; render(); } });
 setInterval(function(){ if(document.visibilityState==="visible" && typeof mgrIs==="function" && mgrIs()) actsLoad(); }, 180000);
 function actsFor(key){ return ACTS.filter(function(r){return r[1]===key}).concat(ACTS_PEND.filter(function(r){return r[1]===key}).map(function(r){ var x=r.slice(0,4); x.pend=1; return x; })); }
+/* 🔁 AI 다발보 원인 분석 — 고객처 발보 묶음을 서버(Gemini + 매뉴얼 자료)에 보내 원인·조치·키맨 안내를 받음. 같은 건수면 이 폰에 결과를 기억(다시 안 부름) */
+function almGroups(){ var g={}, o=[]; almCurRows().forEach(function(r){ var k=r[0]+'|'+r[1]; if(!g[k]){ g[k]={key:k,car:r[0],name:r[1],biz:r[9]||'',rows:[]}; o.push(g[k]); } g[k].rows.push(r); }); return {g:g,o:o}; }
+function almAiList(){
+  var G=almGroups(), L=G.o.filter(function(x){ return x.rows.length>=2; }).sort(function(a,b){ return b.rows.length-a.rows.length || (a.car+a.name).localeCompare(b.car+b.name,"ko"); });
+  var m=almCurM();
+  openSheet('<div class="xs-h"><b>🔁 AI 다발보 원인 분석</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">'+(+m)+'월 다발보 고객처 '+L.length+'곳 · 많이 반복된 순서예요. 고객처를 고르면 AI가 반복 원인과 조치, 키맨 안내 문자를 정리해요.</p>'+
+    L.map(function(x){ var dn=x.rows.some(function(r){return !!r[6]}) || actsFor(x.key).length>0;
+      return '<div class="am-li"><span><b>'+esc2(x.name)+'</b><small>'+x.car+'호 · '+(dn?'✅ 조치 있음':'⏳ 조치 전')+(x.biz?' · '+esc2(x.biz):'')+'</small></span><em>'+x.rows.length+'건</em><button type="button" data-almai="'+esc2(x.key)+'">분석</button></div>'; }).join('')||'<p class="xs-p">이번 달 다발보가 없어요.</p>');
+}
+function almAiShow(key, j, x){
+  var lb = x.name+' · '+x.car+'호 · '+x.rows.length+'건';
+  var pc = function(p){ return p==='높음'?'':p==='보통'?' m':' l'; };
+  openSheet('<div class="xs-h"><b>🔁 AI 원인 분석</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">'+esc2(lb)+'</p>'+
+    '<div class="am-k"><b>'+esc2(j.title||'')+'</b><p>'+esc2(j.pattern||'')+'</p></div>'+
+    ((j.causes||[]).length?'<div class="am-b"><h4>🔎 예상 원인</h4><ul>'+j.causes.map(function(c){ return '<li><span class="pp'+pc(c.p)+'">'+esc2(c.p||'')+'</span>'+esc2(c.c||'')+(c.why?'<small>'+esc2(c.why)+'</small>':'')+'</li>'; }).join('')+'</ul></div>':'')+
+    ((j.steps||[]).length?'<div class="am-b"><h4>🛠️ 현장 조치</h4><ol>'+j.steps.map(function(t){ return '<li>'+esc2(t)+'</li>'; }).join('')+'</ol></div>':'')+
+    (j.keyman?'<div class="am-b"><h4>💬 키맨 안내 문자<button type="button" data-amcp="1">복사</button></h4><div style="font-size:14px;white-space:pre-line">'+esc2(j.keyman)+'</div><a class="am-sms" href="sms:?body='+encodeURIComponent(j.keyman)+'">✉️ 문자 앱으로 보내기</a></div>':'')+
+    (j.tech?'<div class="am-b"><h4>🧑‍🔧 기술팀 요청</h4><div style="font-size:14px">'+esc2(j.tech)+'</div></div>':'')+
+    (j.prevent?'<div class="am-b"><h4>🛡️ 재발 방지</h4><div style="font-size:14px">'+esc2(j.prevent)+'</div></div>':'')+
+    ((j.refs||[]).length?'<p class="xs-p" style="font-size:12px">📚 근거: '+j.refs.map(esc2).join(' · ')+'</p>':'')+
+    '<button type="button" class="ntw-go" data-actf="'+esc2(key)+'" data-actlb="'+esc2(x.name)+'" style="margin-top:6px">✍️ 조치 입력하기</button>'+
+    '<p class="xs-p" style="font-size:11.5px;margin-top:8px">AI 분석은 참고용이에요 · 현장 확인 후 조치해 주세요'+(j._c?' · 이 폰에 저장된 결과':'')+'</p>');
+  window.AM_KM = j.keyman||'';
+}
+function almAiRun(key){
+  var G=almGroups(), x=G.g[key]; if(!x){ return; }
+  var ck='bsr_almai_'+key+'_'+x.rows.length+'_'+actsFor(key).length, c=null; try{ c=JSON.parse(localStorage.getItem(ck)||'null'); }catch(e){}
+  if(c){ c._c=1; almAiShow(key,c,x); return; }
+  openSheet('<div class="xs-h"><b>🔁 AI 원인 분석</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">'+esc2(x.name)+' · '+x.car+'호 · '+x.rows.length+'건</p><div class="am-ld"><i></i>발보 기록과 매뉴얼을 함께 보는 중… (10~20초)</div>');
+  var rows=x.rows.slice().sort(function(a,b){ return (a[2]+a[3]).localeCompare(b[2]+b[3]); }).map(function(r){ return [r[2],r[3],r[4],r[5],r[6]||'',r[8]||'']; });
+  fetch(RP_API,{method:"POST",body:JSON.stringify({act:"almai",name:myName(),place:x.name,car:x.car,biz:x.biz,rows:rows,acts:actsFor(key).map(function(a){ return a[3]; })})})
+    .then(function(r){return r.json()}).then(function(j){
+      var o=document.getElementById("xsheet"); if(!o||o.hidden) return;
+      if(!j||!j.ok){ openSheet('<div class="xs-h"><b>🔁 AI 원인 분석</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">잠시 후 다시 해 주세요. ('+esc2((j&&j.err)||'연결 오류')+')</p>'); return; }
+      try{ localStorage.setItem(ck, JSON.stringify(j)); }catch(e){}
+      almAiShow(key,j,x);
+    }).catch(function(){ openSheet('<div class="xs-h"><b>🔁 AI 원인 분석</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">인터넷 연결을 확인하고 다시 해 주세요.</p>'); });
+}
+document.addEventListener("click", function(e){
+  if(e.target.closest("[data-almlist]")){ almAiList(); return; }
+  var a=e.target.closest("[data-almai]"); if(a){ almAiRun(a.dataset.almai); return; }
+  if(e.target.closest("[data-amcp]")){ var t=window.AM_KM||''; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){ e.target.textContent="복사됨 ✓"; }).catch(function(){}); return; }
+  /* 📝 조치 입력 칸 — AI로 문장 다듬기 (조치 보고서 서버 짧은 모드) */
+  var p=e.target.closest("[data-actpol]"); if(p){ var ta=document.getElementById("act-m"), v=(ta&&ta.value||"").trim(); if(!v){ if(ta) ta.placeholder="먼저 한 일을 편하게 적어 주세요 (키보드 🎤도 돼요)"; return; }
+    p.disabled=true; p.textContent="다듬는 중…";
+    fetch(RP_API,{method:"POST",body:JSON.stringify({act:"actrep",mode:"short",name:myName(),q:v})}).then(function(r){return r.json()}).then(function(j){
+      if(j&&j.ok&&j.detail&&document.getElementById("act-m")===ta){ ta.value=String(j.detail).slice(0,200); p.textContent="✅ 다듬었어요 · 다시 누르면 또 다듬어요"; } else p.textContent="잠시 후 다시 눌러 주세요";
+    }).catch(function(){ p.textContent="인터넷 연결을 확인해 주세요"; }).then(function(){ p.disabled=false; }); return; }
+});
 function actForm(key, label, msg){
   openSheet('<div class="xs-h"><b>✍️ 조치 입력</b><button type="button" data-xs="close">✕</button></div><p class="xs-p"><b>'+esc2(label)+'</b> 고객처에 한 조치를 짧게 적어주세요. 입력자: <b>'+esc2(myName()||'이름 없음')+'</b></p>'+
-    '<div class="ntw"><textarea id="act-m" rows="3" maxlength="200" placeholder="예) 열선감지기 교체, 키맨 취급설명 완료"></textarea><button type="button" class="ntw-go" data-actgo="'+esc2(key)+'" data-actlb="'+esc2(label)+'">✅ 조치 완료로 저장</button>'+(msg?'<p class="ntw-msg">'+msg+'</p>':'')+'</div>'+
+    (/^\d+\|/.test(key)?'<button type="button" class="am-go" data-almai="'+esc2(key)+'">🔁 AI 원인 분석 보기</button>':'')+
+    '<div class="ntw"><textarea id="act-m" rows="3" maxlength="200" placeholder="예) 열선감지기 교체, 키맨 취급설명 완료"></textarea><button type="button" class="am-pol" data-actpol="1">📝 AI로 문장 다듬기</button><button type="button" class="ntw-go" data-actgo="'+esc2(key)+'" data-actlb="'+esc2(label)+'">✅ 조치 완료로 저장</button>'+(msg?'<p class="ntw-msg">'+msg+'</p>':'')+'</div>'+
     (actsFor(key).length?'<div class="xs-h" style="margin-top:12px"><b>입력된 조치</b></div>'+actsFor(key).slice().reverse().map(function(r){return '<div class="alm-act">📝 <span class="num">'+notiDate(r[0])+'</span> '+esc2(r[2])+' · '+esc2(r[3])+'</div>'}).join(''):''));
 }
 document.addEventListener("click", function(e){

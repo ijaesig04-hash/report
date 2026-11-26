@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0f2350">
+<title>AI 조치 보고서 · 북서울 Report</title>
+<style>
+:root{--navy:#0f2350;--blue:#1f4fd8;--red:#e4002b;--ink:#16203a;--mute:#5d6879;--line:#dde3ee;--bg:#eef2f8;--ok:#14804a;--amb:#b45309;--teal:#0e9f9a}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 'Noto Sans KR','Apple SD Gothic Neo',sans-serif;word-break:keep-all;overflow-wrap:anywhere;-webkit-tap-highlight-color:transparent}
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+textarea,input,.sel{-webkit-user-select:text;user-select:text}
+button{font:inherit;cursor:pointer;color:inherit}
+.top{position:sticky;top:0;z-index:5;background:var(--navy);color:#fff;padding:max(12px,env(safe-area-inset-top)) 14px 12px;display:flex;align-items:center;gap:10px}
+.top b{flex:1;font-size:17px}
+.top .me{font-size:12.5px;opacity:.8}
+.back{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:10px;width:40px;height:36px;font-size:20px}
+main{max-width:560px;margin:0 auto;padding:14px 14px 90px}
+.hero{border-radius:20px;padding:16px;color:#fff;background:linear-gradient(135deg,#0f2350 0%,#0e7c79 62%,#14b8a6 100%);box-shadow:0 10px 26px rgba(14,124,121,.25);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.08)}
+.hero h1{margin:0;font-size:20px;letter-spacing:-.02em}
+.hero p{margin:5px 0 0;font-size:13.5px;opacity:.92;line-height:1.55}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin:12px 0}
+.cmp{border:2px solid #7fd3cf}
+.cmp:focus-within{border-color:var(--teal)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.row2 input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:9px 11px;font:14px inherit;font-family:inherit;background:#f8fafd}
+.row2 input:focus{outline:0;border-color:var(--teal);background:#fff}
+textarea{width:100%;min-height:110px;border:0;padding:4px 2px;font:15.5px/1.6 inherit;font-family:inherit;resize:vertical;background:#fff}
+textarea:focus{outline:0}
+textarea.rec{background:#fff5f6}
+.mic{width:100%;margin-top:8px;border:0;border-radius:14px;padding:12px;font-weight:800;font-size:15px;background:linear-gradient(135deg,#fff1f2,#ffe4e6);color:#be123c;display:flex;align-items:center;justify-content:center;gap:8px}
+.mic.on{background:var(--red);color:#fff;animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(228,0,43,.45)}70%{box-shadow:0 0 0 12px rgba(228,0,43,0)}100%{box-shadow:0 0 0 0 rgba(228,0,43,0)}}
+.go{width:100%;border:0;border-radius:16px;padding:15px;font-size:16px;font-weight:800;color:#fff;background:linear-gradient(120deg,#0e7c79,#14b8a6);box-shadow:0 8px 20px rgba(14,124,121,.28)}
+.go:disabled{opacity:.45;box-shadow:none}
+.hint{font-size:12.5px;color:var(--mute);text-align:center;margin:8px 0 0}
+.ex{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.ex small{font-size:12px;color:var(--mute);font-weight:700}
+.ex button{border:1px dashed #b7c3d6;background:#fff;border-radius:12px;padding:9px 12px;text-align:left;font-size:13.5px;color:#334155}
+.out h2{margin:0 0 8px;font-size:14px;color:var(--mute);display:flex;align-items:center;gap:6px}
+.out h2 .cp{margin-left:auto;border:1px solid var(--line);background:#f7f9fd;border-radius:999px;padding:3px 11px;font-size:12px;font-weight:800;color:var(--navy)}
+.big{font-size:17px;font-weight:800;line-height:1.5;color:var(--ink)}
+.key{border:2px solid var(--teal);background:linear-gradient(180deg,#f0fdfa,#fff)}
+.codes{display:flex;flex-wrap:wrap;gap:6px}
+.codes span{background:#eef3ff;border-radius:999px;padding:4px 11px;font-size:13px;font-weight:700;color:#1e3a8a}
+.codes span i{font-style:normal;color:var(--mute);font-weight:600;margin-right:4px}
+.txt{white-space:pre-line;font-size:14.5px}
+.sms{display:inline-flex;margin-top:10px;border-radius:12px;padding:9px 14px;font-weight:800;font-size:13.5px;background:#fef3c7;color:#92400e;text-decoration:none}
+.ask button{display:block;width:100%;text-align:left;border:1px solid #fde68a;background:#fffbeb;border-radius:12px;padding:9px 12px;margin-top:6px;font-size:13.5px}
+.note{font-size:12px;color:var(--mute);margin:6px 2px 0}
+.load{display:flex;align-items:center;gap:10px;justify-content:center;padding:22px;color:var(--mute);font-weight:700}
+.load i{width:18px;height:18px;border-radius:50%;border:3px solid #cdeeea;border-top-color:var(--teal);animation:sp 0.8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:rgba(15,35,80,.94);color:#fff;padding:10px 16px;border-radius:12px;font-size:13.5px;z-index:9;max-width:90%}
+</style>
+</head>
+<body>
+<div class="top"><button class="back" type="button" onclick="history.length>1?history.back():location.href='./'" aria-label="뒤로">‹</button><b>📝 AI 조치 보고서</b><span class="me" id="me"></span></div>
+<main>
+  <div class="hero">
+    <h1>말로 하면, 보고서가 됩니다</h1>
+    <p>조치한 내용을 편하게 말하면 세부내용 · 보고 문장 · 고객 안내 문자로 정리해 드려요</p>
+  </div>
+  <div class="card cmp">
+    <div class="row2"><input id="place" maxlength="40" placeholder="고객처 (선택)"><input id="dev" maxlength="40" placeholder="기기 (선택)"></div>
+    <textarea id="q" maxlength="1500" placeholder="예) 상계제일중 열선 두 개 교체했고 1루프 브라켓이 필요해서 다음에 다시 가야 돼요"></textarea>
+    <button type="button" class="mic" id="mic">🎤 말로 하기</button>
+  </div>
+  <button type="button" class="go" id="go" disabled>AI로 보고서 만들기 →</button>
+  <p class="hint">말한 내용만 정리해요 · 없는 내용은 지어내지 않아요</p>
+  <div class="ex" id="ex"><small>이렇게 말해 보세요</small></div>
+  <div id="res"></div>
+</main>
+<script>
+var API = "https://script.google.com/macros/s/AKfycby7Ggvk7-rHHPYtIia_19uj33TbfJUDefRic63OBz0ifkd7hoOSs1HQ06gkQmNRlTcG/exec";
+var ME = (function(){ try{ var n=localStorage.getItem("bsr_me")||""; return n==="관리자"?"":n; }catch(e){ return ""; } })();
+function $(i){ return document.getElementById(i); }
+function esc(x){ return String(x==null?"":x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]}); }
+function toast(m){ var t=document.createElement("div"); t.className="toast"; t.textContent=m; document.body.appendChild(t); setTimeout(function(){ t.remove(); },2400); }
+$("me").textContent = ME ? ME+"님" : "";
+var EX = ["키맨한테 해제 순서 다시 설명했고 리모컨 배터리 갈아줬어요","창고 쪽 외부인 감지 반복돼서 감지기 방향 틀고 테스트 이상 없음","통신이상 떠서 갔는데 공유기 전원 빠져 있어서 다시 꽂고 정상 확인"];
+$("ex").innerHTML += EX.map(function(e){ return '<button type="button">'+esc(e)+'</button>'; }).join("");
+$("ex").addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b) return; $("q").value=b.textContent; canGo(); });
+/* 다발보 화면 등에서 넘어올 때: ?place=&q= */
+(function(){ try{ var u=new URLSearchParams(location.search); if(u.get("place")) $("place").value=u.get("place"); if(u.get("q")) $("q").value=u.get("q"); if(u.get("dev")) $("dev").value=u.get("dev"); }catch(e){} })();
+var BUSY=false;
+function canGo(){ $("go").disabled = BUSY || !$("q").value.trim(); }
+$("q").addEventListener("input",canGo); canGo();
+
+/* 🎤 말로 하기 — AI 현장 진단과 같은 방식 (한 문장씩 듣고 이어 붙임, 반복 제거) */
+var SR = window.SpeechRecognition||window.webkitSpeechRecognition, REC=null, REC_ON=false;
+function srMerge(res){ var out=""; for(var i=0;i<res.length;i++){ var t=String(res[i][0].transcript||"").replace(/\s+/g," ").trim(); if(!t) continue; if(!out || t.indexOf(out)===0) out=t; else if(out.indexOf(t)>=0) continue; else out+=" "+t; } return out; }
+function srClean(t){ var w=t.split(" "), o=[]; for(var i=0;i<w.length;i++){ o.push(w[i]); for(var n=Math.min(8,Math.floor(o.length/2));n>=1;n--){ var a=o.slice(-n).join(" "), b=o.slice(-2*n,-n).join(" "); if(a===b){ o.splice(o.length-n,n); break; } } } return o.join(" "); }
+function micStop(){ REC_ON=false; if(REC){ try{ REC.stop(); }catch(e){} } }
+$("mic").addEventListener("click",function(){
+  var box=$("q"), btn=this;
+  if(!SR){ toast("이 폰은 음성 인식을 지원하지 않아요 — 키보드의 🎤 마이크를 눌러 말해 주세요"); box.focus(); return; }
+  if(REC_ON){ micStop(); return; }
+  var done = box.value ? box.value.replace(/\s*$/," ") : "", cur="", quiet=0;
+  REC_ON=true; btn.classList.add("on"); btn.textContent="⏹ 듣는 중… 누르면 멈춰요"; box.classList.add("rec");
+  function show(){ box.value=srClean((done+cur).replace(/\s+/g," ")); canGo(); }
+  function finish(){ REC_ON=false; REC=null; btn.classList.remove("on"); btn.textContent="🎤 말로 하기"; box.classList.remove("rec"); box.value=srClean(box.value.trim()); canGo(); }
+  function once(){ cur=""; var r=new SR(); REC=r; r.lang="ko-KR"; r.interimResults=true; r.continuous=false;
+    r.onresult=function(ev){ cur=srMerge(ev.results); quiet=0; show(); };
+    r.onerror=function(ev){ if(ev.error==="not-allowed"||ev.error==="service-not-allowed"){ REC_ON=false; toast("마이크 권한을 허용해 주세요"); } else if(ev.error==="no-speech"){ quiet++; } };
+    r.onend=function(){ if(cur){ done=srClean((done+cur).replace(/\s+/g," "))+" "; cur=""; show(); } if(REC_ON && quiet<2){ setTimeout(function(){ if(REC_ON){ try{ once(); }catch(e){ finish(); } } },120); } else finish(); };
+    try{ r.start(); }catch(e){ finish(); } }
+  once();
+});
+
+function copy(t){ (navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(t):Promise.reject()).then(function(){ toast("복사했어요"); }).catch(function(){ var a=document.createElement("textarea"); a.value=t; document.body.appendChild(a); a.select(); try{ document.execCommand("copy"); toast("복사했어요"); }catch(e){} a.remove(); }); }
+var LAST={};
+function draw(j){
+  LAST=j;
+  var h = '<div class="card out key"><h2>🧾 세부내용 <small>(시스템 입력용)</small><button type="button" class="cp" data-cp="detail">복사</button></h2><div class="big sel">'+esc(j.detail||"")+'</div>'+
+    '<div class="codes" style="margin-top:10px">'+[["원인(대)",j.cause1],["원인(중)",j.cause2],["조치결과",j.result]].filter(function(x){return x[1]}).map(function(x){ return '<span><i>'+x[0]+'</i>'+esc(x[1])+'</span>'; }).join("")+'</div>'+
+    '<p class="note">코드는 AI 추천이에요 — 실제 입력 전에 한 번 확인해 주세요</p></div>';
+  if(j.report) h += '<div class="card out"><h2>📋 보고 문장<button type="button" class="cp" data-cp="report">복사</button></h2><div class="txt sel">'+esc(j.report)+'</div></div>';
+  if(j.customer) h += '<div class="card out"><h2>💬 고객 안내 문자<button type="button" class="cp" data-cp="customer">복사</button></h2><div class="txt sel">'+esc(j.customer)+'</div><a class="sms" href="sms:?body='+encodeURIComponent(j.customer)+'">✉️ 문자 앱으로 보내기</a></div>';
+  if(j.follow) h += '<div class="card out"><h2>📌 후속 조치</h2><div class="txt sel">'+esc(j.follow)+'</div></div>';
+  if(j.ask && j.ask.length) h += '<div class="card out ask"><h2>❓ 이 내용을 더 알려 주면 더 정확해요</h2>'+j.ask.map(function(a){ return '<button type="button" data-ask="'+esc(a)+'">'+esc(a)+' <b style="color:#b45309">+ 답 적기</b></button>'; }).join("")+'</div>';
+  $("res").innerHTML = h;
+  $("res").scrollIntoView({behavior:"smooth",block:"start"});
+}
+$("res").addEventListener("click",function(e){
+  var c=e.target.closest("[data-cp]"); if(c){ copy(LAST[c.dataset.cp]||""); return; }
+  var a=e.target.closest("[data-ask]"); if(a){ var q=$("q"); q.value=q.value.replace(/\s*$/,"")+"\n("+a.dataset.ask.replace(/\?$/,"")+" → ) "; q.focus(); q.setSelectionRange(q.value.length-2,q.value.length-2); window.scrollTo({top:0,behavior:"smooth"}); }
+});
+$("go").addEventListener("click",function(){
+  if(BUSY) return; micStop(); BUSY=true; canGo();
+  $("res").innerHTML='<div class="card"><div class="load"><i></i>보고서로 정리하는 중… (10초 안팎)</div></div>';
+  fetch(API,{method:"POST",body:JSON.stringify({act:"actrep",name:ME,q:$("q").value.trim(),place:$("place").value.trim(),dev:$("dev").value.trim()})})
+    .then(function(r){return r.json()}).then(function(j){
+      if(!j||!j.ok){ $("res").innerHTML='<div class="card"><p style="margin:0">잠시 후 다시 해 주세요. ('+esc((j&&j.err)||"연결 오류")+')</p></div>'; return; }
+      draw(j);
+    }).catch(function(){ $("res").innerHTML='<div class="card"><p style="margin:0">인터넷 연결을 확인하고 다시 해 주세요.</p></div>'; })
+    .then(function(){ BUSY=false; canGo(); });
+});
+</script>
+</body>
+</html>
