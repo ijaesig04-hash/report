@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261126185836">
+<meta name="bsr-ver" content="20261126201350">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -53,6 +53,15 @@ html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-
 .sec.aiv .aiv-c{position:relative;overflow:hidden;border-width:1.5px;padding:16px 14px 16px 20px;box-shadow:0 8px 20px rgba(15,35,80,.10);transition:transform .12s}
 .sec.aiv .aiv-c:active{transform:scale(.985)}
 .sec.aiv .aiv-c::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px}
+.sec.aiv .aiv-c.sp{background:linear-gradient(135deg,#fff7ed,#ffedd5 55%,#fef3c7);border-color:#fdba74}.sec.aiv .aiv-c.sp::before{background:linear-gradient(180deg,#f97316,#f59e0b)}.sec.aiv .aiv-c.sp .aiv-ic{background:linear-gradient(135deg,#f97316,#f59e0b);box-shadow:0 6px 14px rgba(15,35,80,.25)}.sec.aiv .aiv-c.sp .aiv-t b{color:#7c2d12}.sec.aiv .aiv-c.sp .aiv-tg em{color:#fff;background:#ea580c}.sec.aiv .aiv-c.sp .aiv-go{background:#ea580c}
+.sec.aiv .aiv-c.it{background:linear-gradient(135deg,#ecfdf5,#d1fae5 55%,#e0f2fe);border-color:#6ee7b7}.sec.aiv .aiv-c.it::before{background:linear-gradient(180deg,#059669,#10b981)}.sec.aiv .aiv-c.it .aiv-ic{background:linear-gradient(135deg,#059669,#10b981);box-shadow:0 6px 14px rgba(15,35,80,.25)}.sec.aiv .aiv-c.it .aiv-t b{color:#064e3b}.sec.aiv .aiv-c.it .aiv-tg em{color:#fff;background:#059669}.sec.aiv .aiv-c.it .aiv-go{background:#059669}
+.sec.aiv .aiv-c.kpc{background:linear-gradient(135deg,#eef2ff,#e0e7ff 55%,#f1f5f9);border-color:#a5b4fc}.sec.aiv .aiv-c.kpc::before{background:linear-gradient(180deg,#1e3a8a,#4f46e5)}.sec.aiv .aiv-c.kpc .aiv-ic{background:linear-gradient(135deg,#1e3a8a,#4f46e5);box-shadow:0 6px 14px rgba(15,35,80,.25)}.sec.aiv .aiv-c.kpc .aiv-t b{color:#1e1b4b}.sec.aiv .aiv-c.kpc .aiv-tg em{color:#fff;background:#4338ca}.sec.aiv .aiv-c.kpc .aiv-go{background:#4338ca}
+.kc-t{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 4px}.kc-t th{font-size:11.5px;color:var(--muted);font-weight:700;text-align:right;padding:4px 3px;border-bottom:1px solid var(--line)}.kc-t th:first-child,.kc-t td:first-child{text-align:left}
+.kc-t td{padding:6px 3px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}.kc-t td.ng{color:#dc2626;font-weight:800}.kc-t td.ok{color:#059669;font-weight:800}.kc-t td small{display:block;font-size:10.5px;color:var(--muted);font-weight:600}
+.kc-hd{border:2px solid #818cf8;background:#eef2ff;border-radius:14px;padding:12px 13px;margin:10px 0;font-size:16px;font-weight:800;color:#1e1b4b;line-height:1.45}
+.kc-b{border:1px solid var(--line);border-radius:14px;padding:11px 13px;margin:8px 0}.kc-b h4{margin:0 0 6px;font-size:13px;color:var(--muted);display:flex;align-items:center}.kc-b h4 button{margin-left:auto;border:1px solid var(--line);background:transparent;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:800;color:inherit}
+.kc-b ul{margin:0;padding-left:18px;font-size:14px;line-height:1.55}.kc-b li{margin:3px 0}.kc-b li b{color:#4338ca}
+.kc-ld{display:flex;align-items:center;gap:10px;justify-content:center;padding:18px 0;color:var(--muted);font-weight:700;font-size:13.5px}.kc-ld i{width:16px;height:16px;border-radius:50%;border:3px solid #c7d2fe;border-top-color:#4338ca;animation:kcsp .8s linear infinite}@keyframes kcsp{to{transform:rotate(360deg)}}
 .sec.aiv .aiv-c.rp{background:linear-gradient(135deg,#faf5ff,#ede9fe 55%,#e0e7ff);border-color:#c4b5fd}
 .sec.aiv .aiv-c.rp::before{background:linear-gradient(180deg,#8b5cf6,#6366f1)}
 .sec.aiv .aiv-c.dg{background:linear-gradient(135deg,#f0f9ff,#e0f2fe 55%,#d5f5ee);border-color:#7dd3fc}
@@ -2561,11 +2570,15 @@ function addDays(d,n){var t=new Date(d+"T00:00:00Z");t.setUTCDate(t.getUTCDate()
 /* 🤖 AI 탭 — AI 응대 롤플레잉 · AI 현장 진단 바로가기 (메뉴를 늘릴 때는 AIMENU에 한 줄 추가) */
 var AIMENU = [
   {ic:"🎧", t:"AI 고객 응대 롤플레잉", s:"AI 고객과 응대 연습 → 점수 · 코칭", tags:["서비스","영업","📝 월 평가"], a:'data-rpopen="1"', c:"rp"},
-  {ic:"📸", t:"AI 현장 진단", s:"사진 · 글 · 말로 질문하면<br>매뉴얼 근거로 원인 · 조치 · 멘트", tags:["시범 운영","매뉴얼·사례 95종"], href:"diag.html", c:"dg"}
+  {ic:"📸", t:"AI 현장 진단", s:"사진 · 글 · 말로 질문하면<br>매뉴얼 근거로 원인 · 조치 · 멘트", tags:["시범 운영","매뉴얼·사례 95종"], href:"diag.html", c:"dg"},
+  {ic:"🛡️", t:"사진 보안 제안", s:"현장 사진 한 장으로<br>빈틈 · 추천 상품 · 카톡 제안 문자", tags:["NEW","소개영업"], href:"secprop.html", c:"sp"},
+  {ic:"🌏", t:"외국인 고객 통역", s:"말하면 바로 통역 · 읽어 주기<br>중국어 · 베트남어 · 영어 등 9개 언어", tags:["NEW","🎤 음성"], href:"interp.html", c:"it"},
+  {ic:"📈", t:"AI 지표 예측 코치", s:"월말 예상 · 남은 기간 필요 수치<br>차량별 코칭 · 아침 단톡 메시지", tags:["NEW","파트장"], a:'data-kpicoach="1"', c:"kpc", mgr:1}
 ];
 function viewAi(){
   var h = '<div class="aiv-hd"><small>NORTH SEOUL · AI</small><h3>🤖 AI세코미</h3><p>현장 업무를 돕는 AI 메뉴를 한곳에 모았어요.</p></div>' + aibHtml();
-  h += AIMENU.map(function(m){
+  var isMgr = (typeof CS_MGR!=="undefined") && CS_MGR.indexOf(myName())>=0;
+  h += AIMENU.filter(function(m){ return !m.mgr || isMgr; }).map(function(m){
     var inner = '<span class="aiv-ic">'+m.ic+'</span><span class="aiv-t"><b>'+m.t+'</b><small>'+m.s+'</small><span class="aiv-tg">'+m.tags.map(function(t){return '<em>'+t+'</em>';}).join('')+'</span></span><i class="aiv-go">›</i>';
     return m.href ? '<a class="aiv-c '+m.c+'" href="'+m.href+'">'+inner+'</a>' : '<button type="button" class="aiv-c '+m.c+'" '+m.a+'>'+inner+'</button>';
   }).join('');
@@ -2575,6 +2588,56 @@ function viewAi(){
   if(!window.AIKB_T){ window.AIKB_T=1; try{ fetch(RP_API+"?action=kbinfo",{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ if(j&&j.docs){ AIMENU[1].tags[1]="매뉴얼·사례 "+j.docs+"종"; var es=document.querySelectorAll(".aiv-c.dg .aiv-tg em"); if(es[1]) es[1].textContent=AIMENU[1].tags[1]; } }).catch(function(){}); }catch(e){} }
   return '<div class="sec aiv">'+h+'<p class="aiv-ft">AI 답과 점수는 참고용이에요. 이상한 답은 화면의 👎로 알려 주세요.</p></div>';
 }
+/* 📈 AI 지표 예측 코치 (파트장) — 숫자는 앱이 계산(월말 회복 계산기와 같은 식), AI는 코칭 문장만 */
+function kcNeed(t,a,E,ld){ var R=ld-E; if(!(R>0)) return null; return Math.round((t*ld - a*E)/R*10)/10; }
+function kcCalc(){
+  var d=SD.br||DATE, y=+d.slice(0,4), mo=+d.slice(5,7), E=+d.slice(8,10), ld=new Date(y,mo,0).getDate(), R=ld-E;
+  var B=BR.filter(function(b){return b.name===MY})[0]; if(!B) return null;
+  var rank=1+BR.slice().sort(function(a,b){return okc(b)-okc(a) || score(b)-score(a) || score2(b)-score2(a)}).findIndex(function(b){return b.name===MY});
+  var unit=function(k){ return k>=3?'분':'%'; };
+  var row=function(m,k){ var nd=kcNeed(m.t,m.a,E,ld), imp=nd===null?false:nd<=0; return {k:k,name:M[k].short,t:m.t,a:m.a,r:m.r,need:nd,imp:imp,u:unit(k)}; };
+  var me=B.m.map(row), prev=PREV&&PREV.me?PREV.me.m:null;
+  if(prev) me.forEach(function(x,k){ x.dr=Math.round((x.r-prev[k].r)*10)/10; });
+  var cars=VEH.map(function(v){ return {no:v.no,lead:v.lead,m:v.m.map(row)}; });
+  var ppl=PPL.map(function(p){ return {n:p.name,no:p.no,ok:p.ok,weak:p.m.map(function(c,k){return {k:k,r:c.r}}).filter(function(c){return c.r<100}).map(function(c){return M[c.k].short+' '+Math.round(c.r)+'%'})}; });
+  return {d:d,E:E,ld:ld,R:R,rank:rank,tot:BR.length,me:me,cars:cars,ppl:ppl,prevD:PREV?PREV.d:''};
+}
+function kcText(c){
+  var f=function(x){ return x.name+' 목표 '+x.t+x.u+' · 실적 '+x.a+x.u+' · 달성률 '+x.r+'%'+(x.dr!=null?' (직전 '+(x.dr>=0?'+':'')+x.dr+'%p)':'')+' · 남은 '+c.R+'일 필요 수치 '+(x.need===null?'-':(x.imp?'불가(남은 기간 0이어도 미달)':(x.r>=100?'평균 '+x.need+x.u+' 이하면 유지':'평균 '+x.need+x.u+' 이하로 해야 달성'))); };
+  return '기준일 '+c.d+' (이번 달 '+c.E+'일 경과 / '+c.ld+'일, 남은 '+c.R+'일)\n사업팀 '+c.tot+'개 지사 중 '+c.rank+'위\n\n[북서울 지사]\n'+c.me.map(f).join('\n')+
+    '\n\n[차량별]\n'+c.cars.map(function(v){ return v.no+'호(파트장 '+v.lead+'): '+v.m.map(function(x){ return x.name+' '+x.r+'%'+(x.r<100?(x.imp?'(이번 달 불가)':'(필요 '+x.need+x.u+' 이하)'):''); }).join(', '); }).join('\n')+
+    '\n\n[개인별 달성 지표 수]\n'+c.ppl.map(function(p){ return p.n+'('+p.no+'호) '+p.ok+'/5'+(p.weak.length?' 미달: '+p.weak.join(', '):''); }).join('\n');
+}
+function kcOpen(){
+  var c=kcCalc(); if(!c){ openSheet('<div class="xs-h"><b>📈 AI 지표 예측 코치</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">지표 자료가 없어요.</p>'); return; }
+  var cell=function(x){ var cls=x.r>=100?'ok':'ng', nd=x.need===null?'-':x.imp?'불가':(x.r>=100?'≤'+x.need+x.u:'≤'+x.need+x.u);
+    return '<td class="'+cls+'">'+Math.round(x.r)+'%<small>'+x.a+x.u+(x.dr!=null?' · '+(x.dr>=0?'▲':'▼')+Math.abs(x.dr):'')+'</small></td><td>'+nd+'</td>'; };
+  var tb='<table class="kc-t"><tr><th>지표</th><th>달성률<br>(실적)</th><th>남은 '+c.R+'일<br>필요 평균</th></tr>'+c.me.map(function(x){ return '<tr><td><b>'+x.name+'</b></td>'+cell(x)+'</tr>'; }).join('')+'</table>';
+  var vt='<table class="kc-t"><tr><th>차량</th>'+M.map(function(m){return '<th>'+m.short+'</th>'}).join('')+'</tr>'+c.cars.map(function(v){ return '<tr><td><b>'+v.no+'호</b></td>'+v.m.map(function(x){ return '<td class="'+(x.r>=100?'ok':'ng')+'">'+Math.round(x.r)+'%'+(x.r<100?'<small>'+(x.imp?'불가':'≤'+x.need+x.u)+'</small>':'')+'</td>'; }).join('')+'</tr>'; }).join('')+'</table>';
+  var head='<div class="xs-h"><b>📈 AI 지표 예측 코치</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">'+c.d.slice(5).replace('-','/')+' 기준 · 이번 달 '+c.E+'/'+c.ld+'일 · 남은 '+c.R+'일 · 사업팀 '+c.rank+'위<br><small>필요 평균 = 남은 기간 동안 이 값 이하로 가면 월말 달성 (하루 출동 건수가 비슷하다고 가정)</small></p>'+tb;
+  var tail='<div class="kc-b"><h4>🚗 차량별 (미달 칸 아래 = 남은 기간 필요 평균)</h4>'+vt+'</div>';
+  var ck='bsr_kc_'+c.d, cache=null; try{ cache=JSON.parse(localStorage.getItem(ck)||'null'); }catch(e){}
+  var show=function(j){ window.KC_M=j.morning||'';
+    openSheet(head+'<div class="kc-hd">'+esc2(j.headline||'')+'</div>'+
+      ((j.focus||[]).length?'<div class="kc-b"><h4>🎯 오늘 집중</h4><ul>'+j.focus.map(function(f){ return '<li><b>'+esc2(f.m||'')+'</b> — '+esc2(f.msg||'')+'</li>'; }).join('')+'</ul></div>':'')+
+      ((j.cars||[]).length?'<div class="kc-b"><h4>🚗 차량 코칭</h4><ul>'+j.cars.map(function(f){ return '<li><b>'+esc2(String(f.no||'').replace(/호?$/,'호'))+'</b> '+esc2(f.msg||'')+'</li>'; }).join('')+'</ul></div>':'')+
+      (j.praise?'<div class="kc-b"><h4>👏 칭찬</h4><div style="font-size:14px">'+esc2(j.praise)+'</div></div>':'')+
+      (j.morning?'<div class="kc-b"><h4>💬 아침 단톡 메시지<button type="button" data-kccp="1">복사</button></h4><div style="font-size:14px;white-space:pre-line">'+esc2(j.morning)+'</div></div>':'')+
+      tail+'<p class="xs-p" style="font-size:11.5px">숫자는 앱이 계산했고, 코칭 문장은 AI가 썼어요 (참고용)'+(j._c?' · 저장된 결과 <button type="button" data-kcre="1" style="border:0;background:none;color:#4338ca;font-weight:800;padding:0">다시 받기</button>':'')+'</p>'); };
+  if(cache && !window.KC_RE){ cache._c=1; show(cache); return; }
+  window.KC_RE=0;
+  openSheet(head+'<div class="kc-ld"><i></i>AI가 코칭을 정리하는 중… (10초 안팎)</div>'+tail);
+  fetch(RP_API,{method:"POST",body:JSON.stringify({act:"kpicoach",name:myName(),data:kcText(c)})}).then(function(r){return r.json()}).then(function(j){
+    var o=document.getElementById("xsheet"); if(!o||o.hidden) return;
+    if(!j||!j.ok){ openSheet(head+'<p class="xs-p">AI 코칭을 받지 못했어요. 잠시 후 다시 해 주세요. ('+esc2((j&&j.err)||'연결 오류')+')</p>'+tail); return; }
+    try{ localStorage.setItem(ck,JSON.stringify(j)); }catch(e){} show(j);
+  }).catch(function(){ openSheet(head+'<p class="xs-p">인터넷 연결을 확인하고 다시 해 주세요.</p>'+tail); });
+}
+document.addEventListener("click",function(e){
+  if(e.target.closest("[data-kpicoach]")){ kcOpen(); return; }
+  if(e.target.closest("[data-kcre]")){ window.KC_RE=1; kcOpen(); return; }
+  var b=e.target.closest("[data-kccp]"); if(b){ (navigator.clipboard?navigator.clipboard.writeText(window.KC_M||''):Promise.reject()).then(function(){ b.textContent="복사됨 ✓"; }).catch(function(){}); }
+});
 function viewRep(){
   var today = kstDate(0), ym = today.slice(0,7);
   var prevYm = addDays(ym+"-01",-1).slice(0,7);
@@ -4135,6 +4198,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+  {id:"2026-11-26b", date:"11/26", title:"nopush:🤖 AI세코미 새 기능 3가지", tabs:["home"], items:["🛡️ 사진 보안 제안 — 현장 사진 한 장으로 보안 빈틈 · 추천 상품 · 카톡 제안 문자 (소개영업)","🌏 외국인 고객 통역 — 말하면 고객 언어로, 고객 말은 한국어로 (9개 언어)","📈 AI 지표 예측 코치 — 월말 예상 · 남은 기간 필요 수치 · 아침 단톡 메시지 (파트장)"]},
   {id:"2026-11-25e", date:"11/25", title:"서비스 지표 11/25 반영", tabs:["cmp","veh","ppl","mgt","alm"], items:["📊 사업팀 종합 4위 · 북서울 불필요 14.3%(92%) · 발보율 50.5%(107%) · 25분↑ 2.4%(141%) · 체감 10.0분(106%) · 일괄 13.6분(118%)","🚗 차량별 · 👤 개인별 · 관리지표 · ⏱️ 25분초과(11.01~11.25) 함께 반영"]},
   {id:"2026-11-25d", date:"11/25", title:"nopush:⚡ 앱 가볍게 · 화면 정리", tabs:["home"], items:["⚡ 앱 용량 9.3MB → 7.4MB (중복 사진 정리) — 더 빨리 열려요","🔔 탭마다 그 탭의 최근 소식이 위에 떠요 (발보관리 → 다발보 소식)","🔁 다발보 차량별 막대 숫자를 막대 밖으로 — 겹치지 않게"]},
   {id:"2026-11-25b", date:"11/25", title:"고객체감 11/25 반영", tabs:["cs"], items:["📞 발송 329 · 응답 112 · 만족도 9.89 (10.01~11.25)","새 발송 12건 · 새 응답 2건 (노원문화재단 이명섭 · 최준영주택 고혁진 「친절하세요」)"]},

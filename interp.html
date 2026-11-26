@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0f2350">
+<title>외국인 고객 통역 · 북서울 Report</title>
+<style>
+:root{--navy:#0f2350;--blue:#1f4fd8;--red:#e4002b;--ink:#16203a;--mute:#5d6879;--line:#dde3ee;--bg:#eef2f8;--grn:#059669}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 'Noto Sans KR','Apple SD Gothic Neo',sans-serif;word-break:keep-all;overflow-wrap:anywhere;-webkit-tap-highlight-color:transparent}
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+textarea,.sel{-webkit-user-select:text;user-select:text}
+button{font:inherit;cursor:pointer;color:inherit}
+.top{position:sticky;top:0;z-index:5;background:var(--navy);color:#fff;padding:max(12px,env(safe-area-inset-top)) 14px 12px;display:flex;align-items:center;gap:10px}
+.top b{flex:1;font-size:17px}.top .me{font-size:12.5px;opacity:.8}
+.back{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:10px;width:40px;height:36px;font-size:20px}
+main{max-width:560px;margin:0 auto;padding:12px 14px 230px}
+.langs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none}.langs::-webkit-scrollbar{display:none}
+.langs button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font-size:13.5px;font-weight:700;white-space:nowrap}
+.langs button[aria-pressed=true]{background:var(--grn);border-color:var(--grn);color:#fff}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px}
+.quick small{width:100%;font-size:12px;color:var(--mute);font-weight:700}
+.quick button{border:1px dashed #9ac7b8;background:#fff;border-radius:12px;padding:6px 10px;font-size:13px;color:#065f46}
+.log{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.empty{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;font-size:13.5px;color:var(--mute);text-align:center}
+.b{max-width:88%;border-radius:18px;padding:10px 13px;box-shadow:0 2px 8px rgba(15,35,80,.06)}
+.b.me{align-self:flex-end;background:#e7f0ff;border:1px solid #c7d7fb}
+.b.cu{align-self:flex-start;background:#ecfdf5;border:1px solid #a7f3d0}
+.b .src{font-size:12.5px;color:var(--mute)}
+.b .out{font-size:18px;font-weight:800;line-height:1.45;margin-top:3px}
+.b .sub{font-size:12px;color:var(--mute);margin-top:4px}
+.b .tl{display:flex;gap:6px;margin-top:7px}
+.b .tl button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800}
+.dock{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px max(12px,env(safe-area-inset-bottom));z-index:6}
+.dock .in{max-width:560px;margin:0 auto}
+.row{display:flex;gap:8px}
+.row textarea{flex:1;min-height:44px;max-height:110px;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;font:15px/1.5 inherit;font-family:inherit;resize:none}
+.row textarea:focus{outline:0;border-color:var(--blue)}
+.row .send{flex:none;width:52px;border:0;border-radius:14px;background:var(--navy);color:#fff;font-size:18px;font-weight:800}
+.row .send:disabled{opacity:.4}
+.mics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.mics button{border:0;border-radius:16px;padding:13px 6px;font-weight:800;font-size:14.5px;display:flex;align-items:center;justify-content:center;gap:6px}
+.mics .k{background:linear-gradient(135deg,#1f4fd8,#3b82f6);color:#fff}
+.mics .f{background:linear-gradient(135deg,#059669,#10b981);color:#fff}
+.mics .on{background:var(--red)!important;animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(228,0,43,.45)}70%{box-shadow:0 0 0 12px rgba(228,0,43,0)}100%{box-shadow:0 0 0 0 rgba(228,0,43,0)}}
+.dir{font-size:12px;color:var(--mute);margin-bottom:6px;display:flex;gap:6px;align-items:center}
+.dir button{border:1px solid var(--line);background:#f7f9fd;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:800}
+.big{position:fixed;inset:0;background:#0f2350;color:#fff;z-index:20;display:flex;flex-direction:column;justify-content:center;padding:28px;text-align:center}
+.big .t{font-size:34px;font-weight:800;line-height:1.35}
+.big small{display:block;margin-top:18px;font-size:14px;opacity:.75}
+.load{display:inline-block;width:14px;height:14px;border-radius:50%;border:2px solid #a7f3d0;border-top-color:var(--grn);animation:sp .8s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);background:rgba(15,35,80,.94);color:#fff;padding:10px 16px;border-radius:12px;font-size:13.5px;z-index:30;max-width:90%}
+</style>
+</head>
+<body>
+<div class="top"><button class="back" type="button" onclick="history.length>1?history.back():location.href='./'" aria-label="뒤로">‹</button><b>🌏 외국인 고객 통역</b><span class="me" id="me"></span></div>
+<main>
+  <div class="langs" id="langs"></div>
+  <div class="quick" id="quick"><small>자주 쓰는 말 — 누르면 바로 통역</small></div>
+  <div class="log" id="log"><div class="empty">고객 언어를 고르고 아래 버튼을 눌러 말하세요.<br>통역된 글자를 누르면 <b>크게 보여 주기</b>, 🔊는 <b>읽어 주기</b>예요.</div></div>
+</main>
+<div class="dock"><div class="in">
+  <div class="dir"><span id="dirlb">🇰🇷 한국어 → 고객 언어</span><button type="button" id="flip">⇄ 방향 바꾸기</button></div>
+  <div class="row"><textarea id="t" rows="1" maxlength="600" placeholder="글로 적어도 돼요"></textarea><button type="button" class="send" id="send" disabled>➤</button></div>
+  <div class="mics"><button type="button" class="k" id="mk">🎤 내가 말하기</button><button type="button" class="f" id="mf">🎤 고객이 말하기</button></div>
+</div></div>
+<script>
+var API = "https://script.google.com/macros/s/AKfycby7Ggvk7-rHHPYtIia_19uj33TbfJUDefRic63OBz0ifkd7hoOSs1HQ06gkQmNRlTcG/exec";
+var ME = (function(){ try{ var n=localStorage.getItem("bsr_me")||""; return n==="관리자"?"":n; }catch(e){ return ""; } })();
+function $(i){ return document.getElementById(i); }
+function esc(x){ return String(x==null?"":x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]}); }
+function toast(m){ var t=document.createElement("div"); t.className="toast"; t.textContent=m; document.body.appendChild(t); setTimeout(function(){ t.remove(); },2600); }
+$("me").textContent = ME ? ME+"님" : "";
+var LANGS=[{n:"중국어",f:"🇨🇳",c:"zh-CN",hi:"请说"},{n:"베트남어",f:"🇻🇳",c:"vi-VN",hi:"Xin mời nói"},{n:"영어",f:"🇺🇸",c:"en-US",hi:"Please speak"},{n:"몽골어",f:"🇲🇳",c:"mn-MN",hi:"Ярина уу"},{n:"러시아어",f:"🇷🇺",c:"ru-RU",hi:"Говорите"},{n:"우즈베크어",f:"🇺🇿",c:"uz-UZ",hi:"Gapiring"},{n:"태국어",f:"🇹🇭",c:"th-TH",hi:"พูดได้เลย"},{n:"네팔어",f:"🇳🇵",c:"ne-NP",hi:"बोल्नुहोस्"},{n:"일본어",f:"🇯🇵",c:"ja-JP",hi:"どうぞ"}];
+var L=0; try{ L=Math.max(0,LANGS.map(function(x){return x.n}).indexOf(localStorage.getItem("bsr_itp_lang"))); }catch(e){}
+var DIR="ko"; /* ko: 한국어→고객 / fo: 고객→한국어 */
+var QUICK=["안녕하세요, 에스원에서 점검하러 왔습니다","경보가 울려서 확인하러 왔어요","나가실 때 보안 모드를 켜고 나가 주세요","들어오시면 바로 보안 모드를 꺼 주세요","비밀번호는 사장님이 직접 바꾸셔야 해요","감지기를 교체해야 해요","점검 끝났습니다. 이상 없습니다","궁금한 점은 언제든 저에게 연락 주세요"];
+function drawLangs(){ $("langs").innerHTML=LANGS.map(function(x,i){ return '<button type="button" data-l="'+i+'" aria-pressed="'+(i===L)+'">'+x.f+' '+x.n+'</button>'; }).join(""); $("mf").textContent="🎤 고객이 말하기 ("+LANGS[L].n+")"; drawDir(); }
+function drawDir(){ $("dirlb").textContent = DIR==="ko" ? "🇰🇷 한국어 → "+LANGS[L].f+" "+LANGS[L].n : LANGS[L].f+" "+LANGS[L].n+" → 🇰🇷 한국어"; }
+$("quick").innerHTML+=QUICK.map(function(q){ return '<button type="button">'+esc(q)+'</button>'; }).join("");
+drawLangs();
+$("langs").addEventListener("click",function(e){ var b=e.target.closest("[data-l]"); if(!b) return; L=+b.dataset.l; try{ localStorage.setItem("bsr_itp_lang",LANGS[L].n); }catch(x){} drawLangs(); });
+$("quick").addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b) return; go(b.textContent,"ko"); });
+$("flip").addEventListener("click",function(){ DIR = DIR==="ko"?"fo":"ko"; drawDir(); });
+$("t").addEventListener("input",function(){ $("send").disabled=!this.value.trim(); this.style.height="auto"; this.style.height=Math.min(110,this.scrollHeight)+"px"; });
+$("send").addEventListener("click",function(){ var v=$("t").value.trim(); if(!v) return; $("t").value=""; $("send").disabled=true; go(v,DIR); });
+
+/* 🔊 읽어 주기 — 폰에 그 언어 목소리가 없으면 크게 보여 주기로 */
+function speak(text,code){
+  if(!window.speechSynthesis){ toast("읽어 주기가 안 되는 폰이에요 — 글자를 눌러 크게 보여 주세요"); return; }
+  speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(text); u.lang=code; u.rate=0.95;
+  var vs=speechSynthesis.getVoices(); if(vs.length && !vs.some(function(v){ return v.lang && v.lang.replace("_","-").toLowerCase().indexOf(code.slice(0,2).toLowerCase())===0; })) toast("이 폰에 "+(code==="ko-KR"?"한국어":LANGS[L].n)+" 목소리가 없을 수 있어요 — 글자를 눌러 크게 보여 주세요");
+  speechSynthesis.speak(u);
+}
+function big(text,code){ var d=document.createElement("div"); d.className="big"; d.innerHTML='<div class="t">'+esc(text)+'</div><small>화면을 누르면 닫혀요</small>'; d.addEventListener("click",function(){ d.remove(); }); document.body.appendChild(d); }
+var N=0, ITEMS={};
+function add(dir,src){ var id="b"+(++N), fo=LANGS[L];
+  if(N===1) $("log").innerHTML="";
+  var div=document.createElement("div"); div.className="b "+(dir==="ko"?"me":"cu"); div.id=id;
+  div.innerHTML='<div class="src">'+(dir==="ko"?"🇰🇷 ":fo.f+" ")+esc(src)+'</div><div class="out"><span class="load"></span></div>';
+  $("log").appendChild(div); div.scrollIntoView({behavior:"smooth",block:"end"}); return id; }
+function go(text,dir){
+  var fo=LANGS[L], id=add(dir,text), from=dir==="ko"?"한국어":fo.n, to=dir==="ko"?fo.n:"한국어", code=dir==="ko"?fo.c:"ko-KR";
+  fetch(API,{method:"POST",body:JSON.stringify({act:"interp",name:ME,text:text,from:from,to:to})}).then(function(r){return r.json()}).then(function(j){
+    var el=$(id); if(!el) return;
+    if(!j||!j.ok||!j.out){ el.querySelector(".out").innerHTML='<span style="font-size:14px;color:#b91c1c">통역 실패 — 다시 해 주세요</span>'; return; }
+    ITEMS[id]={t:j.out,c:code};
+    el.querySelector(".out").innerHTML='<span class="sel" data-big="'+id+'">'+esc(j.out)+'</span>';
+    var sub=[]; if(j.pron) sub.push("🗣️ "+esc(j.pron)); if(j.back) sub.push("✔ 뜻 확인: "+esc(j.back));
+    el.insertAdjacentHTML("beforeend",(sub.length?'<div class="sub">'+sub.join("<br>")+'</div>':'')+'<div class="tl"><button type="button" data-say="'+id+'">🔊 읽어 주기</button><button type="button" data-big="'+id+'">🔍 크게 보여 주기</button></div>');
+    el.scrollIntoView({behavior:"smooth",block:"end"});
+    if(dir==="ko") speak(j.out,code);
+  }).catch(function(){ var el=$(id); if(el) el.querySelector(".out").innerHTML='<span style="font-size:14px;color:#b91c1c">인터넷 연결을 확인해 주세요</span>'; });
+}
+$("log").addEventListener("click",function(e){ var s=e.target.closest("[data-say]"); if(s){ var x=ITEMS[s.dataset.say]; if(x) speak(x.t,x.c); return; } var b=e.target.closest("[data-big]"); if(b){ var y=ITEMS[b.dataset.big]; if(y) big(y.t,y.c); } });
+
+/* 🎤 말하기 — 한 문장 듣고 바로 통역 */
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition, REC=null;
+function listen(dir,btn){
+  if(!SR){ toast("이 폰은 음성 인식이 안 돼요 — 키보드 🎤로 말하거나 글로 적어 주세요"); $("t").focus(); return; }
+  if(REC){ try{ REC.stop(); }catch(e){} return; }
+  if(window.speechSynthesis) speechSynthesis.cancel();
+  var r=new SR(), txt="", lab=btn.textContent; REC=r; r.lang = dir==="ko"?"ko-KR":LANGS[L].c; r.interimResults=true; r.continuous=false;
+  btn.classList.add("on"); btn.textContent = dir==="ko" ? "⏹ 듣는 중…" : "⏹ "+LANGS[L].hi+"…";
+  r.onresult=function(ev){ txt=""; for(var i=0;i<ev.results.length;i++) txt+=ev.results[i][0].transcript; $("t").value=txt; };
+  r.onerror=function(ev){ if(ev.error==="not-allowed") toast("마이크 권한을 허용해 주세요"); else if(ev.error==="language-not-supported") toast(LANGS[L].n+" 음성 인식이 안 되는 폰이에요 — 고객에게 글로 적어 달라고 해 주세요"); };
+  r.onend=function(){ REC=null; btn.classList.remove("on"); btn.textContent=lab; txt=txt.trim(); if(txt){ $("t").value=""; $("send").disabled=true; go(txt,dir); } };
+  try{ r.start(); }catch(e){ REC=null; btn.classList.remove("on"); btn.textContent=lab; }
+}
+$("mk").addEventListener("click",function(){ listen("ko",this); });
+$("mf").addEventListener("click",function(){ listen("fo",this); });
+if(window.speechSynthesis) speechSynthesis.getVoices();
+</script>
+</body>
+</html>
