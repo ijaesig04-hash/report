@@ -22,8 +22,6 @@ function doPost(e) {
     if (d.act === 'diag') return out(diag(d));
     if (d.act === 'cmp') return out(aiCompare(d));                         // 🧪 Gemini ↔ Claude 비교 시험 — 파트장만 (비밀번호)                            // 📸 AI 현장 진단 — 사진 → 기기·원인·조치
     if (d.act === 'diagfb') return out(diagFb(d));                        // 📸 진단 결과 도움 여부 / 실제 조치 남기기
-    if (d.act === 'almai') return out(almAi(d));                         // 🔁 AI 다발보 원인 분석 — 고객처 발보 묶음 → 원인·조치·키맨 안내
-    if (d.act === 'actrep') return out(actRep(d));                        // 📝 AI 조치 보고서 — 말한 내용 → 세부내용·고객 안내
     if (d.act === 'vbrief') return out(vbrief(d));                        // 🎬 AI 실적 영상 브리핑 — 내레이션 원고                          // 📝 롤플레잉 평가 — 본인이 등급을 골라 제출
     return out({ ok: false, err: 'act' });
   } catch (err) { return out({ ok: false, err: String(err) }); }
@@ -763,68 +761,6 @@ function vbrief(d) {
     const j = geminiCall(sys, [{ role: 'user', parts: [{ text: '장면 목록: ' + ids.join(', ') + '\n데이터: ' + data }] }], 1500, false);
     j.ok = true; return j;
   } catch (err) { return { ok: false, err: String(err).slice(0, 200) }; }
-}
-
-/* ───── 🔁 AI 다발보 원인 분석 ─────
-   같은 고객처에서 반복된 발보(루프·종료처리·시각·조치내용)를 보고 반복 원인 · 현장 조치 · 키맨 안내를 정리.
-   매뉴얼·장애사례 자료(kb)에서 감지기·증상 관련 조각을 찾아 근거로 씀. 기록 시트에는 남기지 않음 */
-const ALM_SYS = [
-  '너는 에스원(세콤) 북서울지사 20년 경력 서비스 선배다. 한 고객처에서 반복된 경보(다발보) 기록을 보고, 왜 반복되는지와 다시 안 나게 하는 방법을 짧고 정확하게 정리한다.',
-  '[발보 기록]의 루프번호(S=감지·P=열선 등, 숫자는 루프), 종료처리(해제미스·미해제출입·외부인 감지·열선감지기(SPI)·소동물·고객시설물 불완전 등), 발생 시각 패턴(새벽·영업 전후·특정 요일), 같은 루프 반복 여부, 이미 한 조치를 모두 근거로 쓴다.',
-  '고객 조작 실수(해제미스·미해제출입·경비미스)와 기기·환경 원인(감지기 노후·방향·소동물·냉난방기 바람·선로)을 구분한다. 같은 루프가 반복되면 그 감지기 위치·환경을 먼저 의심한다.',
-  '이미 "키맨 취급설명" 같은 조치를 했는데도 또 났으면 다른 원인을 의심하고, 그 사실을 pattern에 쓴다.',
-  '[참고 자료]는 에스원 매뉴얼·장애사례 발췌다. 감지기 특성·점검 방법은 자료를 따르고, 자료에 없는 내용은 일반 지식이라고 밝힌다. 기록에 없는 사실(고객 이름·기기 모델)은 지어내지 않는다.',
-  '반드시 JSON만: {"title":"핵심 결론 한 줄(25자 안팎)","pattern":"반복 패턴 요약 2~3줄 (시각·루프·종료처리 근거)","causes":[{"c":"원인","p":"높음|보통|낮음","why":"근거 한 줄"}] (최대 3개),',
-  '"steps":["현장 조치 (짧은 명령형)", ...] (3~6개),"keyman":"키맨(고객)에게 보낼 안내 문자 — 존댓말 2~3문장, 쉬운 말","tech":"기술팀·A/S가 필요한 조건 (없으면 빈칸)","prevent":"재발 방지 한 줄","refs":["근거 자료 제목 (참고 자료 《》 안 제목 그대로, 최대 2개)"],"conf":0~100}',
-  '모든 문장은 한국어, keyman만 존댓말.'
-].join('\n');
-function almAi(d) {
-  const rows = (d.rows || []).slice(0, 30).map(function (r) { return (r || []).slice(0, 7).map(function (x) { return String(x == null ? '' : x).slice(0, 80); }); });
-  if (!rows.length) return { ok: false, err: 'empty' };
-  const place = String(d.place || '').slice(0, 40), car = String(d.car || '').slice(0, 6), biz = String(d.biz || '').slice(0, 30);
-  const acts = (d.acts || []).slice(0, 8).map(function (x) { return String(x).slice(0, 120); });
-  const lines = rows.map(function (r) { return '- ' + r[0] + ' ' + r[1] + ' · 루프 ' + r[2] + ' · ' + r[3] + (r[4] ? ' · 조치 ' + r[4] + (r[5] ? ' (' + r[5] + ')' : '') : ' · 조치 없음'); }).join('\n');
-  let ctx = '', titles = [];
-  try {
-    const kb = kbLoad();
-    if (kb) {
-      const terms = [], seen = {};
-      rows.forEach(function (r) { [r[3]].concat(String(r[3]).match(/\(([A-Z]{2,4})\)/) ? [String(r[3]).match(/\(([A-Z]{2,4})\)/)[1]] : []).forEach(function (t) { if (t && !seen[t]) { seen[t] = 1; terms.push({ t: t, w: 1 }); } }); });
-      ['오경보', '다발', '감지기 점검'].forEach(function (t) { terms.push({ t: t, w: 0.6 }); });
-      const hits = kbSearch(kb, terms, '', 6); let used = 0;
-      ctx = hits.filter(function (h) { used += h.x.length; return used < 9000; }).map(function (h) { if (titles.indexOf(h.t) < 0) titles.push(h.t); return '《' + h.t + '》\n' + h.x; }).join('\n\n---\n\n');
-    }
-  } catch (e) {}
-  const txt = '고객처: ' + (place || '(이름 가림)') + (car ? ' · 담당 ' + car + '호' : '') + (biz ? ' · 업종 ' + biz : '') + '\n발보 ' + rows.length + '건\n\n[발보 기록]\n' + lines +
-    (acts.length ? '\n\n[근무자가 앱에 남긴 조치]\n' + acts.map(function (a) { return '- ' + a; }).join('\n') : '') +
-    '\n\n[참고 자료]\n' + (ctx || '(관련 자료를 못 찾음)') + '\n\nJSON으로 답해.';
-  let j;
-  try { j = geminiCall(ALM_SYS, [{ role: 'user', parts: [{ text: txt }] }], 1800, false); }
-  catch (err) { return { ok: false, err: String(err).slice(0, 200) }; }
-  j.refs = (j.refs || []).filter(function (t) { return titles.indexOf(t) >= 0; });
-  j.ok = true; j.model = LAST_MODEL; return j;
-}
-
-/* ───── 📝 AI 조치 보고서 ─────
-   근무자가 말·글로 대충 적은 조치 내용 → 서비스지원시스템에 넣을 세부내용 · 보고 문장 · 고객 안내 문자로 다듬기.
-   원인·결과 코드는 '추천'일 뿐 — 실제 코드는 근무자가 확인. 기록은 남기지 않음 */
-const ACT_SYS = [
-  '너는 에스원(세콤) 북서울지사 서비스 근무자의 조치 보고를 다듬어 주는 선배다. 근무자가 말로 대충 한 조치 내용을 회사 시스템에 넣을 깔끔한 문장으로 바꾼다.',
-  '근무자가 말하지 않은 사실(부품 개수·모델명·시간·고객 반응)은 절대 지어내지 않는다. 빠진 정보가 보고에 꼭 필요하면 ask에 짧은 질문으로 적는다.',
-  '음성 인식 오타는 문맥으로 바로잡는다 (예: 열선→열선감지기, 키맨→키맨, 듀얼알→듀얼R, 삼육오→365).',
-  'detail은 서비스지원시스템 "세부내용" 칸에 넣을 업무체 한 줄(60자 이내, 명사형 끝맺음, 예: "열선감지기(P01) 2개 교체, 브라켓 추가 필요"). report는 파트장 보고용 2~3줄(원인 → 조치 → 결과/후속).',
-  '원인코드(대)는 서비스사유|시스템사유|고객사유|CS업무일지 중, 원인코드(중)는 조작미스|무선기기|감지기|선로|전원|통신|방문업무|기타 중, 조치결과는 기기점검|기기교체|감지기점검|사용설명(고객MISS)|고객관리|기타 중에서 가장 맞는 것을 고른다 (확실하지 않으면 기타).',
-  '반드시 JSON만: {"detail":"세부내용 한 줄","report":"보고 2~3줄 (줄바꿈 \\n)","cause1":"원인코드(대) 추천","cause2":"원인코드(중) 추천","result":"조치결과 추천","customer":"고객에게 보낼 조치 완료 안내 문자 — 존댓말 2~3문장, 에스원 북서울지사 명의","follow":"후속 조치·재방문 필요 내용 (없으면 빈칸)","ask":["보고에 빠진 정보 질문 (없으면 빈 배열, 최대 2개)"]}',
-  '모든 문장은 한국어. customer만 존댓말.'
-].join('\n');
-function actRep(d) {
-  const q = String(d.q || '').slice(0, 1500), place = String(d.place || '').slice(0, 40), dev = String(d.dev || '').slice(0, 40), mode = String(d.mode || '');
-  if (!q.trim()) return { ok: false, err: 'empty' };
-  const txt = (place ? '고객처: ' + place + '\n' : '') + (dev ? '기기: ' + dev + '\n' : '') + '근무자가 말한 조치 내용: ' + q + '\n\nJSON으로 답해.';
-  let j;
-  try { j = geminiCall(ACT_SYS, [{ role: 'user', parts: [{ text: txt }] }], mode === 'short' ? 700 : 1400, mode === 'short'); }
-  catch (err) { return { ok: false, err: String(err).slice(0, 200) }; }
-  j.ok = true; j.model = LAST_MODEL; return j;
 }
 
 

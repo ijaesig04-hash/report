@@ -33,7 +33,7 @@ self.addEventListener("fetch",function(e){
     return;
   }
   if(r.mode==="navigate"){
-    if(/\.html$/i.test(name) && !/^(index|404|risk|patrol|directmall|card|mail-setup|roleplay|roleplay-setup|roster|diag|vbrief|aitest|actrep)\.html$/i.test(name)){ e.respondWith(Response.redirect(home()+u.hash,302)); return; }
+    if(/\.html$/i.test(name) && !/^(index|404|risk|patrol|directmall|card|mail-setup|roleplay|roleplay-setup|roster|diag|vbrief|aitest)\.html$/i.test(name)){ e.respondWith(Response.redirect(home()+u.hash,302)); return; }
     if(name!=="" && !/^index\.html$/i.test(name)){ e.respondWith(fetch(r,{cache:"no-store"}).catch(function(){return caches.match(r)})); return; }
     /* 작은 버전 파일로 먼저 확인 → 같으면 저장본, 다르면 새 화면을 끝까지 받아서 띄움 */
     e.respondWith(caches.open(C).then(function(c){
