@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261126203535">
+<meta name="bsr-ver" content="20261126214138">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -53,7 +53,6 @@ html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-
 .sec.aiv .aiv-c{position:relative;overflow:hidden;border-width:1.5px;padding:16px 14px 16px 20px;box-shadow:0 8px 20px rgba(15,35,80,.10);transition:transform .12s}
 .sec.aiv .aiv-c:active{transform:scale(.985)}
 .sec.aiv .aiv-c::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px}
-.sec.aiv .aiv-c.sp{background:linear-gradient(135deg,#fff7ed,#ffedd5 55%,#fef3c7);border-color:#fdba74}.sec.aiv .aiv-c.sp::before{background:linear-gradient(180deg,#f97316,#f59e0b)}.sec.aiv .aiv-c.sp .aiv-ic{background:linear-gradient(135deg,#f97316,#f59e0b);box-shadow:0 6px 14px rgba(15,35,80,.25)}.sec.aiv .aiv-c.sp .aiv-t b{color:#7c2d12}.sec.aiv .aiv-c.sp .aiv-tg em{color:#fff;background:#ea580c}.sec.aiv .aiv-c.sp .aiv-go{background:#ea580c}
 .sec.aiv .aiv-c.it{background:linear-gradient(135deg,#ecfdf5,#d1fae5 55%,#e0f2fe);border-color:#6ee7b7}.sec.aiv .aiv-c.it::before{background:linear-gradient(180deg,#059669,#10b981)}.sec.aiv .aiv-c.it .aiv-ic{background:linear-gradient(135deg,#059669,#10b981);box-shadow:0 6px 14px rgba(15,35,80,.25)}.sec.aiv .aiv-c.it .aiv-t b{color:#064e3b}.sec.aiv .aiv-c.it .aiv-tg em{color:#fff;background:#059669}.sec.aiv .aiv-c.it .aiv-go{background:#059669}
 .sec.aiv .aiv-c.kpc{background:linear-gradient(135deg,#eef2ff,#e0e7ff 55%,#f1f5f9);border-color:#a5b4fc}.sec.aiv .aiv-c.kpc::before{background:linear-gradient(180deg,#1e3a8a,#4f46e5)}.sec.aiv .aiv-c.kpc .aiv-ic{background:linear-gradient(135deg,#1e3a8a,#4f46e5);box-shadow:0 6px 14px rgba(15,35,80,.25)}.sec.aiv .aiv-c.kpc .aiv-t b{color:#1e1b4b}.sec.aiv .aiv-c.kpc .aiv-tg em{color:#fff;background:#4338ca}.sec.aiv .aiv-c.kpc .aiv-go{background:#4338ca}
 .kc-t{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 4px}.kc-t th{font-size:11.5px;color:var(--muted);font-weight:700;text-align:right;padding:4px 3px;border-bottom:1px solid var(--line)}.kc-t th:first-child,.kc-t td:first-child{text-align:left}
@@ -2572,7 +2571,6 @@ function addDays(d,n){var t=new Date(d+"T00:00:00Z");t.setUTCDate(t.getUTCDate()
 var AIMENU = [
   {ic:"🎧", t:"AI 고객 응대 롤플레잉", s:"AI 고객과 응대 연습 → 점수 · 코칭", tags:["서비스","영업","📝 월 평가"], a:'data-rpopen="1"', c:"rp"},
   {ic:"📸", t:"AI 현장 진단", s:"사진 · 글 · 말로 질문하면<br>매뉴얼 근거로 원인 · 조치 · 멘트", tags:["시범 운영","매뉴얼·사례 95종"], href:"diag.html", c:"dg"},
-  {ic:"🛡️", t:"사진 보안 제안", s:"현장 사진 한 장으로<br>빈틈 · 추천 상품 · 카톡 제안 문자", tags:["NEW","소개영업"], href:"secprop.html", c:"sp"},
   {ic:"🛍️", t:"에스원 다이렉트몰", s:"고객에게 보낼 홍보 메일 · 카톡<br>상품 추천 · 사번 10% 추가 할인", tags:["홍보 스튜디오","소개영업"], href:"directmall.html#kakao", c:"dm"},
   {ic:"🌏", t:"외국인 고객 통역", s:"말하면 바로 통역 · 읽어 주기<br>중국어 · 베트남어 · 영어 등 9개 언어", tags:["NEW","🎤 음성"], href:"interp.html", c:"it"},
   {ic:"📈", t:"AI 지표 예측 코치", s:"월말 예상 · 남은 기간 필요 수치<br>차량별 코칭 · 아침 단톡 메시지", tags:["NEW","파트장"], a:'data-kpicoach="1"', c:"kpc", mgr:1}
@@ -4200,7 +4198,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
-  {id:"2026-11-26b", date:"11/26", title:"nopush:🤖 AI세코미 새 기능 3가지", tabs:["home"], items:["🛡️ 사진 보안 제안 — 현장 사진 한 장으로 보안 빈틈 · 추천 상품 · 카톡 제안 문자 (소개영업)","🌏 외국인 고객 통역 — 말하면 고객 언어로, 고객 말은 한국어로 (9개 언어)","📈 AI 지표 예측 코치 — 월말 예상 · 남은 기간 필요 수치 · 아침 단톡 메시지 (파트장)"]},
+  {id:"2026-11-26b", date:"11/26", title:"nopush:🤖 AI세코미 새 기능 2가지", tabs:["home"], items:["🌏 외국인 고객 통역 — 말하면 고객 언어로, 고객 말은 한국어로 (9개 언어)","📈 AI 지표 예측 코치 — 월말 예상 · 남은 기간 필요 수치 · 아침 단톡 메시지 (파트장)"]},
   {id:"2026-11-25e", date:"11/25", title:"서비스 지표 11/25 반영", tabs:["cmp","veh","ppl","mgt","alm"], items:["📊 사업팀 종합 4위 · 북서울 불필요 14.3%(92%) · 발보율 50.5%(107%) · 25분↑ 2.4%(141%) · 체감 10.0분(106%) · 일괄 13.6분(118%)","🚗 차량별 · 👤 개인별 · 관리지표 · ⏱️ 25분초과(11.01~11.25) 함께 반영"]},
   {id:"2026-11-25d", date:"11/25", title:"nopush:⚡ 앱 가볍게 · 화면 정리", tabs:["home"], items:["⚡ 앱 용량 9.3MB → 7.4MB (중복 사진 정리) — 더 빨리 열려요","🔔 탭마다 그 탭의 최근 소식이 위에 떠요 (발보관리 → 다발보 소식)","🔁 다발보 차량별 막대 숫자를 막대 밖으로 — 겹치지 않게"]},
   {id:"2026-11-25b", date:"11/25", title:"고객체감 11/25 반영", tabs:["cs"], items:["📞 발송 329 · 응답 112 · 만족도 9.89 (10.01~11.25)","새 발송 12건 · 새 응답 2건 (노원문화재단 이명섭 · 최준영주택 고혁진 「친절하세요」)"]},

@@ -22,7 +22,6 @@ function doPost(e) {
     if (d.act === 'diag') return out(diag(d));
     if (d.act === 'cmp') return out(aiCompare(d));                         // 🧪 Gemini ↔ Claude 비교 시험 — 파트장만 (비밀번호)                            // 📸 AI 현장 진단 — 사진 → 기기·원인·조치
     if (d.act === 'diagfb') return out(diagFb(d));                        // 📸 진단 결과 도움 여부 / 실제 조치 남기기
-    if (d.act === 'secprop') return out(secProp(d));                      // 📸 사진 한 장 보안 제안 (소개영업)
     if (d.act === 'interp') return out(interp(d));                        // 🌏 외국인 고객 통역
     if (d.act === 'kpicoach') return out(kpiCoach(d));                    // 📈 지표 예측 코치 (파트장)
     if (d.act === 'vbrief') return out(vbrief(d));                        // 🎬 AI 실적 영상 브리핑 — 내레이션 원고                          // 📝 롤플레잉 평가 — 본인이 등급을 골라 제출
@@ -764,42 +763,6 @@ function vbrief(d) {
     const j = geminiCall(sys, [{ role: 'user', parts: [{ text: '장면 목록: ' + ids.join(', ') + '\n데이터: ' + data }] }], 1500, false);
     j.ok = true; return j;
   } catch (err) { return { ok: false, err: String(err).slice(0, 200) }; }
-}
-
-/* ───── 📸 사진 한 장 보안 제안 (소개영업) ─────
-   근무자가 찍은 매장·주택·사무실 사진 → 보안 취약한 곳 · 맞는 에스원 상품 · 고객에게 보낼 제안 문자.
-   가격은 아래 목록에 있는 것만 말함(지어내지 않음). 사진 속 사람·개인정보는 언급하지 않음. 기록은 남기지 않음 */
-const SEC_CATALOG = [
-  '[다이렉트몰 상품 — 가격 확인된 것]',
-  '- AI 도어캠: 339,000원 (현관 앞 방문자·택배 확인, 공사 없이 설치)',
-  '- 도어캠 + 홈카메라 패키지: 371,000원 (정가 437,000원, 15% 할인)',
-  '- 홈카메라 + 부가서비스 12개월(안심보상·긴급출동 1년) 패키지: 185,000원 (정가 217,000원)',
-  '- 결제 페이지 할인코드 칸에 직원 사번 입력 시 10% 추가 할인 (소개한 근무자 사번)',
-  '[다이렉트몰 상품 — 가격은 몰에서 확인]',
-  '- AI 홈카메라 (실내 확인·양방향 대화), 안전금고(루셀 UP·메타큐브), 상업용 도어락, 이지스 금고, 소화기, 구급함·구급가방, 대용량 공기청정기, AED 패드·배터리',
-  '[세콤 계약 상품 — 가격은 영업 상담]',
-  '- 세콤 무인경비(출입문·창문 감지기, 열선감지기, 비상벨, 출동), 세콤 CCTV·영상 서비스, 출입통제(카드·얼굴인식 리더), 블루스캔(스마트 건물관리), 화재 감지'
-].join('\n');
-const SEC_SYS = [
-  '너는 에스원(세콤) 북서울지사의 보안 컨설턴트 선배다. 서비스 근무자가 출동·점검 간 고객 현장에서 찍은 사진을 보고, 고객에게 자연스럽게 추가 보안을 제안할 수 있게 돕는다.',
-  '사진에서 실제로 보이는 것(출입문 종류, 창문, 셔터, 계산대·금고 위치, 사각지대, 카메라 유무, 소화기 유무 등)만 근거로 쓴다. 보이지 않는 것은 "사진으로는 확인 안 됨"으로 둔다. 사람 얼굴·차량 번호·개인정보는 언급하지 않는다.',
-  '추천은 아래 [상품 목록] 안에서만 고르고, 가격은 목록에 적힌 숫자만 쓴다. 목록에 가격이 없으면 price를 "다이렉트몰 확인" 또는 "영업 상담"으로 둔다. 과장·공포 마케팅은 하지 않는다.',
-  SEC_CATALOG,
-  '반드시 JSON만: {"place":"사진 속 장소 한 줄 요약","risks":[{"spot":"위치","why":"왜 취약한지 한 줄","lv":"높음|보통|낮음"}] (최대 4개),',
-  '"recs":[{"name":"상품명 (목록 그대로)","why":"이 고객에게 필요한 이유 한 줄","price":"가격 또는 다이렉트몰 확인/영업 상담","kind":"다이렉트몰|세콤 상담"}] (최대 3개, 가장 맞는 순서),',
-  '"talk":"근무자가 고객에게 자연스럽게 꺼낼 한두 문장 (존댓말, 부담 없게)","kakao":"고객에게 보낼 카톡 제안 문자 — 존댓말 4~6문장, 에스원 북서울지사 명의, 추천 이유·혜택·문의 안내","ok":"이미 잘 돼 있는 점 한 줄 (없으면 빈칸)"}',
-  '모든 문장은 한국어.'
-].join('\n');
-function secProp(d) {
-  const imgs = (d.imgs || []).slice(0, 3).filter(function (x) { return x && String(x).length < 2500000; });
-  const kind = String(d.kind || '').slice(0, 20), memo = String(d.memo || '').slice(0, 400);
-  if (!imgs.length) return { ok: false, err: 'noimg' };
-  const parts = imgs.map(function (b) { return { inlineData: { mimeType: 'image/jpeg', data: String(b).replace(/^data:[^,]+,/, '') } }; });
-  parts.push({ text: '장소 종류: ' + (kind || '모름') + (memo ? '\n근무자 메모(고객 고민 등): ' + memo : '') + '\n\n사진을 보고 JSON으로 답해.' });
-  let j;
-  try { j = geminiCall(SEC_SYS, [{ role: 'user', parts: parts }], 1800, false); }
-  catch (err) { return { ok: false, err: String(err).slice(0, 200) }; }
-  j.ok = true; j.model = LAST_MODEL; return j;
 }
 
 /* ───── 🌏 외국인 고객 통역 ─────
