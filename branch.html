@@ -66,7 +66,8 @@ var S={tab:"up", br:MGR?BRC:(ls("bsr_bd_br")||BRC), all:null, pv:null, one:{}};
 function auth(br){ return MGR ? ls("bsr_brpw_"+br) : (pin() || ls("bsr_brpw_"+br)); }
 /* 지사 목록 — 리포트 「지사별」 탭과 같은 순서 (지사가 바뀌면 여기만 고치면 됨) */
 var BRL=["북서울","강남광역","서초","제주","서강","구로","강서","영등포","남양주","송파","서울동부","강동","동서울","서서울","강북광역(중앙)","강북광역(한남)","성북(직할)","성북(SSFT)"];
-function brs(){ var o={}; BRL.forEach(function(k){o[k]=1}); if(S.all) Object.keys(S.all).forEach(function(k){o[k]=1}); if(S.pv&&S.pv.branch) o[S.pv.branch]=1; return Object.keys(o); }
+function brX(){ try{ return JSON.parse(ls("bsr_bd_extra")||"[]"); }catch(e){ return []; } }   /* 직접 입력해 추가한 지사 (이 폰에 기억) */
+function brs(){ var o={}; BRL.concat(brX()).concat([S.br]).forEach(function(k){ if(k) o[k]=1; }); if(S.all) Object.keys(S.all).forEach(function(k){o[k]=1}); if(S.pv&&S.pv.branch) o[S.pv.branch]=1; return Object.keys(o); }
 function pin(){ return ls("bsr_pin"); }
 
 function draw(){
@@ -78,7 +79,7 @@ function draw(){
 }
 function body(){ var el=$("body"); if(S.tab==="up") el.innerHTML=upHtml(); else if(S.tab==="view") el.innerHTML=viewHtml(); else if(S.tab==="pw") el.innerHTML=myPwCard(); else el.innerHTML=cmpHtml(); }
 document.addEventListener("change",function(e){
-  if(e.target.id==="br"){ var v=e.target.value; if(v==="+"){ v=(prompt("지사 이름 (예: 서서울)")||"").replace(/\s|지사$/g,""); if(!v){ draw(); return; } } S.br=v; ls("bsr_bd_br",v); draw(); }
+  if(e.target.id==="br"){ var v=e.target.value; if(v==="+"){ v=(prompt("지사 이름 (예: 서서울)")||"").replace(/\s/g,"").replace(/지사$/,""); if(!v){ draw(); return; } var X=brX(); if(BRL.indexOf(v)<0 && X.indexOf(v)<0){ X.push(v); ls("bsr_bd_extra",JSON.stringify(X)); } toast(v+"지사를 추가했어요"); } S.br=v; ls("bsr_bd_br",v); draw(); }
   if(e.target.id==="file") readFile(e.target.files[0]);
 });
 document.addEventListener("click",function(e){
