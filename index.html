@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261128162117">
+<meta name="bsr-ver" content="20261128163216">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1838,6 +1838,7 @@ button.aib{cursor:pointer}
 .vl-brrow{grid-column:1/-1;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:10px 12px}.vl-brrow label{font-weight:800;white-space:nowrap}.vl-brrow select{flex:1;min-width:0;border:0;border-radius:10px;padding:9px 10px;font:800 15px "Noto Sans KR",sans-serif;background:#fff;color:#0f2350}
 .vl-brtip{grid-column:1/-1;margin:-4px 2px 0;font-size:12px;opacity:.75}.vl-ro-msg{grid-column:1/-1;text-align:center;padding:18px 10px;border:1px dashed rgba(255,255,255,.35);border-radius:14px;font-size:14px;line-height:1.6}
 .vl-ro-ed{grid-column:1/-1}.vl-ro-ed p{font-size:13px;line-height:1.6;margin:0 0 8px}.vl-ro-ed textarea{width:100%;box-sizing:border-box;border-radius:12px;border:0;padding:10px;font:14px/1.6 "Noto Sans KR",sans-serif;color:#14213a}
+html.bso-x .bso{display:none!important}
 .xs-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.xs-h b{font-size:16px}
 .xs-h button{border:0;background:#eef2f8;border-radius:10px;padding:7px 11px;font:700 13px "Noto Sans KR",sans-serif;cursor:pointer;margin-left:4px;color:#14213a}
 .xs-n{border-top:1px solid #e3e9f3;padding:10px 0}.xs-n div{display:flex;gap:8px;align-items:baseline}.xs-n span{color:#1f4fd8;font-weight:800;font-size:12px}
@@ -2192,6 +2193,8 @@ var CSG = ["정용묵","이동규","김대영","강보순"];
 function brFree(){ var n=""; try{ n=localStorage.getItem("bsr_me")||""; }catch(e){} return n==="이재식"||n==="그룹장"||CSG.indexOf(n)>=0; }
 function brCan(){ return brFree(); }   /* 지사 선택 버튼이 보이는 사람 (지금은 이재식·그룹장·서울CS지원만) */
 try{ var _b=localStorage.getItem("bsr_br"); if(_b && (_b==="북서울" || brFree() || localStorage.getItem("bsr_brok_"+_b)==="1")) MY=_b; }catch(e){}
+/* 북서울 전용 기능(영업일보 · 소개영업 앱 · 담당구역 출동차량 조회 · 해피콜 발송 현황)은 다른 지사를 고르면 숨김 — class="bso" */
+document.documentElement.classList.toggle("bso-x", MY!=="북서울");
 
 /* 셀 = 목표,실적,달성률 / 5개 지표를 | 로 구분. 시트의 달성률을 그대로 옮겼습니다.
    (엑셀에서 100%로 보이지만 미달로 표시된 2곳은 99.5로 넣어 미달 처리) */
@@ -3515,14 +3518,14 @@ var SALES_URL = "https://jhsim2545.github.io/DailySales/User.html";
 var REF_URL = "https://www.appcreator24.com/app4193156-lb0sei";   /* 🤝 소개영업(지사장님 운영) — 지금은 앱 받기 페이지, 웹 주소 받으면 교체 */
 setTimeout(function(){ try{ var b=document.getElementById("vldiag"); if(b) b.hidden=false; }catch(e){} }, 1500);
 function aiRow(){ return '<a class="dh-sales dgb" href="diag.html"><i>📸</i><span><b>AI 현장 진단</b><u class="nw">NEW</u><small>사진 · 글 · 말로 질문 · 매뉴얼로 답</small></span><em>질문 ›</em></a>'; }   /* 11/24: 롤플레잉 카드와 같은 크기 · 청록색 */
-function refLink(){ return '<a class="dh-sales ref" href="'+REF_URL+'" target="_blank" rel="noopener"><i>🤝</i><span><b>소개영업 등록·관리</b><small>지사장님 운영 · 앱 받기</small></span><em>받기 ›</em></a>'; }
+function refLink(){ return '<a class="dh-sales ref bso" href="'+REF_URL+'" target="_blank" rel="noopener"><i>🤝</i><span><b>소개영업 등록·관리</b><small>지사장님 운영 · 앱 받기</small></span><em>받기 ›</em></a>'; }
 var PROD_URL = "directmall.html#kakao";   /* 에스원 상품 추천 대시보드 */
 function viewSal(){
   var c = function(href,ic,t,sub,attr){ return '<a class="sal-c" href="'+href+'"'+(/^directmall\.html/.test(href)?'':' target="_blank" rel="noopener"')+(attr||'')+'><i>'+ic+'</i><b>'+t+'</b><small>'+sub+'</small></a>'; };
   return '<div class="sec"><div class="sal-h"><span style="font-size:30px">💼</span><span><b>영업 메뉴</b><small>영업에 필요한 메뉴를 한곳에 모았어요</small></span></div>'+
-    '<a class="dh-sales" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>'+refLink()+
+    '<a class="dh-sales bso" href="'+SALES_URL+'" target="_blank" rel="noopener"><i>📈</i><span><b>북서울 영업일보</b><small>지사장님 운영 · 전화번호로 로그인</small></span><em>열기 ›</em></a>'+refLink()+
     '<div class="sal-g">'+c("directmall.html#kakao","💬","카톡으로 상품 홍보","카드 20종 · 버튼 하나로 바로 보내기")+c("directmall.html","✉️","메일로 상품 홍보","메일형 20종 + 카드형 20종")+
-    c("https://s1directmall.co.kr/","🛒","에스원 다이렉트몰","상품 · 가격 바로 보기")+'<button type="button" class="sal-c" data-goto="cs"><i>📞</i><b>내 고객체감</b><small>해피콜 발송 · 응답 · 만족도</small></button><button type="button" class="sal-c" data-ptopen="1"><i>🗺️</i><b>담당구역 출동차량 조회</b><small>우리 구역에 누가 출동하나</small></button><button type="button" class="sal-c sal-rp" data-rpopen="sales"><i>🎧</i><b>AI 영업 상담 연습</b><small>AI 고객과 말로 연습 · 점수 받기</small></button></div>'+
+    c("https://s1directmall.co.kr/","🛒","에스원 다이렉트몰","상품 · 가격 바로 보기")+'<button type="button" class="sal-c" data-goto="cs"><i>📞</i><b>내 고객체감</b><small>해피콜 발송 · 응답 · 만족도</small></button><button type="button" class="sal-c bso" data-ptopen="1"><i>🗺️</i><b>담당구역 출동차량 조회</b><small>우리 구역에 누가 출동하나</small></button><button type="button" class="sal-c sal-rp" data-rpopen="sales"><i>🎧</i><b>AI 영업 상담 연습</b><small>AI 고객과 말로 연습 · 점수 받기</small></button></div>'+
     '<div class="sal-tip"><span style="font-size:22px">🎁</span><span>고객이 다이렉트몰에서 구매할 때 담당자 <b>사원번호</b>를 입력하면 <b>10% 추가 할인</b>이 돼요</span></div></div>';
 }
 function prodLink(){ return '<a class="dh-prod" href="'+PROD_URL+'"><i>🛡️</i><span>에스원 상품 추천 <small style="font-weight:600;color:#8a5a66;font-size:11px">카톡 · 메일 홍보</small></span><em>열기 ›</em></a>'; }   /* 지사 영업일보 (지사장님 운영 · 로그인 필요) */
@@ -4779,7 +4782,7 @@ function brief(){
   var links = '<div class="hm-links">'+[["cmp","🏢","지사"],["veh","🚓","차량"],["ppl","👤","개인"],["eval","🏅","월별평가"],["cs","💬","고객체감"],["alm","🔔","발보"],["mgt","📊","관리지표"],["duty","📅","근무표"],["drv","🚗","운전성향"],["rep","🔗","취합연동"]].map(function(x){return '<button type="button" data-goto="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div>';
   setTimeout(safeAuto, 300); setTimeout(wxAuto, 900);
   var salesA = rpProdRow() + '<button type="button" class="dh-sales rpb" data-rpopen="1"><i>🎧</i><span><b>AI 고객 응대 롤플레잉</b><u class="nw">NEW</u><small>AI 고객과 말로 연습 · 점수 · 코칭</small></span><em>연습 ›</em></button>' + aiRow();
-  return '<div class="sec">'+hero+salesA+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+funRow()+hcCard()+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<span class="pt-bs"><button type="button" class="fd-btn" data-ptopen="1">🗺️ 구역 조회</button><button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></span></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
+  return '<div class="sec">'+hero+salesA+vwCard()+cheerCard()+mvpDueCard()+safeCard()+(typeof actAlertCard==="function"?actAlertCard():'')+mxCard()+wxCard()+funRow()+(MY==="북서울"?hcCard():'')+'<div class="bf">'+h.replace(/<div class="bf-hi">[\s\S]*?<\/div>/,'')+'</div></div>'+mgrCard()+myBox()+'<div class="sec"><h2 style="font-size:14px;display:flex;justify-content:space-between;align-items:center">🚀 바로가기<span class="pt-bs"><button type="button" class="fd-btn bso" data-ptopen="1">🗺️ 구역 조회</button><button type="button" class="fd-btn" data-find="1">🔍 고객처 검색</button></span></h2>'+links+'</div><div class="brf-img" role="img" aria-label="오늘의 브리핑"></div>';
 }
 
 /* 미응답 고객 응답 요청 문자 — 예시 문구는 여기만 수정. {이름}은 앱에서 고른 이름으로 자동 입력(없으면 000) */
@@ -5662,7 +5665,7 @@ function funRow(){
 /* AI 고객 응대 롤플레잉 작은 카드 — 이름·부서와 상관없이 모두에게 보임 (funRow와 별개) */
 function rpProdRow(){
   /* 11/24: 작은 칸은 영업일보, AI 고객 응대 롤플레잉은 그 아래 큰 카드(.dh-sales.rpb)로 자리 바꿈 */
-  return '<div class="fr rpr"><a class="fr-c fr-sl" href="'+SALES_URL+'" target="_blank" rel="noopener"><span class="rpi">📈</span><b>북서울<br>영업일보<small class="rpe">전화번호 로그인</small></b><i>›</i></a>'+
+  return '<div class="fr rpr"><a class="fr-c fr-sl bso" href="'+SALES_URL+'" target="_blank" rel="noopener"><span class="rpi">📈</span><b>북서울<br>영업일보<small class="rpe">전화번호 로그인</small></b><i>›</i></a>'+
     '<a class="fr-c fr-pd" href="'+PROD_URL+'"><span class="rpi">🛡️</span><b>에스원<br>다이렉트몰<small class="rpe">Mail · KakaoTalk</small></b><i>›</i></a></div>'+aibHtml();
 }
 /* 💳 AI 응대 충전 잔액(추정) — 이재식 파트장만 보임 · 2천 원 미만 경고 · 소진 시 빨간 알림. 파트장(이재식)은 눌러서 실제 잔액으로 맞춤 */
@@ -7242,7 +7245,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="roster" class="vl-brm">📋 지사 명단 관리</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="ref">🤝 소개영업 앱 받기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 고객 응대 롤플레잉</button><button type="button" data-vl="diag" id="vldiag" hidden>📸 AI 현장 진단</button><button type="button" data-vl="find">🔍 고객처 한눈에 · 불만 위험</button><button type="button" data-vl="pc">👤 개인 카드</button><button type="button" data-vl="edu">📚 교육 이수 현황</button><button type="button" data-vl="sug">💬 건의 · 질문함</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📲 알림 받기 · 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 · 월말 결산</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-aiperf="1" class="vl-adm">📊 AI 활용 성과 리포트</button><button type="button" data-vl="bd" class="vl-adm vl-own">🧪 지사 현황 (엑셀 반영 시범)</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm vl-own">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="roster" class="vl-brm">📋 지사 명단 관리</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales" class="bso">📈 영업일보 열기</button><button type="button" data-vl="ref" class="bso">🤝 소개영업 앱 받기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1" class="bso">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 고객 응대 롤플레잉</button><button type="button" data-vl="diag" id="vldiag" hidden>📸 AI 현장 진단</button><button type="button" data-vl="find">🔍 고객처 한눈에 · 불만 위험</button><button type="button" data-vl="pc">👤 개인 카드</button><button type="button" data-vl="edu">📚 교육 이수 현황</button><button type="button" data-vl="sug">💬 건의 · 질문함</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📲 알림 받기 · 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 · 월말 결산</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-aiperf="1" class="vl-adm">📊 AI 활용 성과 리포트</button><button type="button" data-vl="bd" class="vl-adm vl-own">🧪 지사 현황 (엑셀 반영 시범)</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm vl-own">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
