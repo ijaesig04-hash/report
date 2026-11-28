@@ -24,6 +24,7 @@ function doPost(e) {
     if (d.act === 'diagfb') return out(diagFb(d));                        // 📸 진단 결과 도움 여부 / 실제 조치 남기기
     if (d.act === 'bdput') return out(bdPut(d));
   if (d.act === 'brpw') return out(brPwSet(d));
+  if (d.act === 'brpw2') return out(brPwMine(d));
   if (d.act === 'rosterput') {   // 지사 비밀번호 또는 관리자 PIN
     var rb = String(d.branch || '').replace(/\s/g, '').slice(0, 20), pw = String(d.pw || '');
     if (!rb || rb === '북서울') return out({ ok: false, err: 'branch' });
@@ -65,6 +66,7 @@ function doGet(e) {
     var pw = brPw()[String(p.br || '')] || '0000';
     return out({ ok: String(p.pw || '') === pw });
   }
+  if (p.action === 'bdbr') return out(bdBr(p.br));
   if (p.action === 'bdget') {   // 🏢 지사별 최신 데이터 (엑셀 자동 반영 시범) — 관리자 PIN
     if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
     return out(bdGet());
@@ -817,9 +819,11 @@ function aiStats() {
 
 /* ───── 🏢 지사 데이터 (횡전개 시범) — 지사가 올린 엑셀을 폰에서 요약해 보내면 지사·종류별로 최신본을 보관 ───── */
 const BD_HEAD = ['시각', '지사', '종류', '기간', '데이터', '올린 사람'];
+function isAdm(x) { return !!P.getProperty('ADMIN_PIN') && String(x || '') === P.getProperty('ADMIN_PIN'); }
+function brOk(br, pw) { return br !== '북서울' && String(pw || '') !== '' && String(pw) === (brPw()[br] || '0000'); }   // 지사 담당자(서비스 팀장·파트장) = 지사 비밀번호
 function bdPut(d) {
-  if (!P.getProperty('ADMIN_PIN') || d.pin !== P.getProperty('ADMIN_PIN')) return { ok: false, err: 'pin' };
   const br = String(d.branch || '').replace(/\s/g, '').slice(0, 20), kind = String(d.kind || '').slice(0, 10);
+  if (!isAdm(d.pin) && !brOk(br, d.pin)) return { ok: false, err: 'pin' };
   if (!br || ['cs', 'alm'].indexOf(kind) < 0) return { ok: false, err: 'bad' };
   const js = JSON.stringify(d.data || {});
   if (js.length > 48000) return { ok: false, err: 'too big' };
@@ -833,6 +837,15 @@ function brPwSet(d) {   // 관리자 PIN으로 지사 비밀번호 변경
   if (!P.getProperty('ADMIN_PIN') || String(d.pin || '') !== P.getProperty('ADMIN_PIN')) return { ok: false, err: 'pin' };
   var b = String(d.branch || '').replace(/\s/g, '').slice(0, 20), w = String(d.pw || '').trim().slice(0, 20);
   if (!b || !w) return { ok: false, err: 'empty' };
+  var m = brPw(); m[b] = w; P.setProperty('BR_PW', JSON.stringify(m)); return { ok: true };
+}
+function bdBr(br) {   // 한 지사 최신 자료 (리포트 탭 표시용 — 고객명·고객처는 이미 가려진 요약)
+  const all = bdGet().branches; return { ok: true, br: br, d: all[String(br || '').replace(/\s/g, '')] || {} };
+}
+function brPwMine(d) {   // 지사 담당자가 지금 비밀번호로 새 비밀번호 설정
+  var b = String(d.branch || '').replace(/\s/g, '').slice(0, 20), w = String(d.pw || '').trim().slice(0, 20);
+  if (!b || !w || w.length < 4) return { ok: false, err: 'short' };
+  if (!brOk(b, d.old) && !isAdm(d.old)) return { ok: false, err: 'pw' };
   var m = brPw(); m[b] = w; P.setProperty('BR_PW', JSON.stringify(m)); return { ok: true };
 }
 function bdGet() {
