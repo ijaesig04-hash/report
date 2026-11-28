@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261128144945">
+<meta name="bsr-ver" content="20261128150659">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -4562,8 +4562,8 @@ function almOver(a){
 function viewAlm(){
   var k = ALM[state.al] ? state.al : "multi", a = ALM[k];
   var seg = '<div class="dper al3" role="group" aria-label="발보관리 항목">'+Object.keys(ALM).map(function(x){ return '<button type="button" data-al="'+x+'" aria-pressed="'+(x===k)+'">'+ALM[x].name+'</button>'; }).join('')+'</div>';
-  var hero = '<div class="alm-hero"><small>'+a.en+' · 북서울지사</small><h3>'+a.ic+' '+a.name+'</h3><p>'+a.desc+'</p></div>';
-  var body = a.rows.length ? (k==="multi" ? almMulti(a) : k==="fee" ? almFee(a) : almOver(a)) : '<div class="card alm-wait"><b>📥</b>'+a.name+' 자료 취합 대기 중입니다.<br>자료가 들어오면 이곳에 표시됩니다.</div>';
+  var hero = '<div class="alm-hero"><small>'+a.en+' · '+MY+'지사</small><h3>'+a.ic+' '+a.name+'</h3><p>'+a.desc+'</p></div>';
+  var body = MY!=="북서울" ? '<div class="card alm-wait"><b>📥</b>'+MY+'지사 '+a.name+' 자료는 아직 없어요.<br>지사에서 엑셀을 올리면 이곳에 표시됩니다.</div>' : a.rows.length ? (k==="multi" ? almMulti(a) : k==="fee" ? almFee(a) : almOver(a)) : '<div class="card alm-wait"><b>📥</b>'+a.name+' 자료 취합 대기 중입니다.<br>자료가 들어오면 이곳에 표시됩니다.</div>';
   return '<div class="sec"><h2>발보관리 <span>다발보 · 출동료청구 · 25분초과</span></h2>'+seg+'</div><div class="sec">'+hero+'</div><div class="sec">'+body+'</div>';
 }
 
@@ -6942,7 +6942,7 @@ function tabOrderFix(){ try{ if(typeof notiRefilter==="function") notiRefilter()
   var at = document.querySelector('[role=tab][data-tab="ai"]'); if(at){ if(!isSvc){ if(hm.nextElementSibling!==at) hm.parentNode.insertBefore(at, hm.nextElementSibling); } else { var rp = document.querySelector('[role=tab][data-tab="rep"]'); if(rp && rp.nextElementSibling!==at) rp.parentNode.insertBefore(at, rp.nextElementSibling); } }
   document.documentElement.classList.toggle("dept-sal", d==="영업" || (typeof mgrIs==="function" && mgrIs()));   /* 개시 방문 체크리스트는 서비스만 */ }catch(e){} }
 function render(){ tabOrderFix();
-  var v = (MY!=="북서울" && ["cmp","mgt","ai","sal"].indexOf(state.tab)<0) ? brWait(state.tab) : state.tab==="home" ? bdayCard()+przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="sal" ? viewSal() : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : state.tab==="ai" ? viewAi() : viewRep();
+  var v = (MY!=="북서울" && ["cmp","mgt","ai","sal","alm"].indexOf(state.tab)<0) ? brWait(state.tab) : state.tab==="home" ? bdayCard()+przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="sal" ? viewSal() : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : state.tab==="ai" ? viewAi() : viewRep();
   var nft = newsFor(state.tab); if(nft) markSeen("bsr_tab_"+state.tab, nft.id); nseenAdd(NEWS.slice(0,40).filter(function(n){return n.tabs.indexOf(state.tab)>=0}).map(function(n){return n.id}));
   var VW0 = document.getElementById("view"), dk = function(d){ var sm = d.querySelector('summary'); return (d.className||'')+'|'+(sm?sm.textContent.replace(/[\d\s▾▴]/g,'').slice(0,24):''); }, op = [];
   VW0.querySelectorAll("details[open]").forEach(function(d){ op.push(dk(d)); });
