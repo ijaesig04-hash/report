@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261128175239">
+<meta name="bsr-ver" content="20261128180553">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -7338,7 +7338,7 @@ function roHtml(){ var r=RO[PB];
   if(!r||r.busy) return '<div class="vl-ro-msg">명단 불러오는 중…</div>';
   if(r.err) return '<div class="vl-ro-msg">명단을 불러오지 못했어요. 인터넷 연결을 확인해 주세요.</div>';
   var p=r.p, h='', btn=function(n,sub,boss,ic){ return '<button type="button" class="vl-n'+(boss?' boss':'')+'" data-nm="'+esc(n)+'" aria-pressed="'+(n===pick)+'">'+(ic||'')+esc(n)+(sub?'<small>'+esc(sub)+'</small>':'')+'</button>'; };
-  if(!p.mgr.length&&!p.cars.length&&!p.sal.length&&!p.tec.length) return '<div class="vl-div vl-sec"><span>🔒 관리자</span></div><button type="button" class="vl-n boss" data-nm="그룹장" aria-pressed="'+("그룹장"===pick)+'"><span style="white-space:nowrap;font-size:13.5px;letter-spacing:-.5px">🎖️서비스 그룹장</span><small>서울CS지원</small></button><div class="vl-ro-msg">'+esc(PB)+'지사 명단이 아직 등록되지 않았어요.<br>지사 관리자가 이름 버튼 → 📋 지사 명단 관리에서 등록하면 여기에 나와요.</div>';
+  if(!p.mgr.length&&!p.cars.length&&!p.sal.length&&!p.tec.length) return '<div class="vl-div vl-sec"><span>🔒 관리자</span></div><button type="button" class="vl-n boss" data-nm="그룹장" aria-pressed="'+("그룹장"===pick)+'"><span style="white-space:nowrap;font-size:13.5px;letter-spacing:-.5px">🎖️서비스 그룹장</span><small>서울CS지원</small></button><div class="vl-ro-msg">'+esc(PB)+'지사 명단이 아직 없어요.<br><b>지사 담당자(서비스 팀장·파트장)</b>는 아래 「직접 입력」에 이름을 넣고 시작하면 담당자로 등록돼요.<br>그다음 이름 버튼 → 📋 지사 명단 관리에서 직원 명단을 넣어 주세요.</div>';
   h += '<div class="vl-div vl-sec"><span>🔒 관리자</span></div><div class="vl-g">'+esc(PB)+'지사 관리자</div>'+p.mgr.map(function(n){ return btn(n,n==="지사장"?"관리자":"서비스 관리자",1,n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':''); }).join('')+'<button type="button" class="vl-n boss" data-nm="그룹장" aria-pressed="'+("그룹장"===pick)+'"><span style="white-space:nowrap;font-size:13.5px;letter-spacing:-.5px">🎖️서비스 그룹장</span><small>서울CS지원</small></button>';
   if(p.cars.length) h += '<div class="vl-div vl-sec"><span>🚓 차량 근무자</span></div>'+p.cars.map(function(c){ return '<div class="vl-g">'+esc(c[0])+'</div>'+c[1].map(function(n){ return btn(n); }).join(''); }).join('');
   if(p.sal.length||p.tec.length) h += '<div class="vl-div vl-sec"><span>💼 영업 · 💻 기술</span></div>'+
@@ -7369,7 +7369,7 @@ function roSave(){ var t=document.getElementById("rotx"); if(!t) return; var pw 
     else alert(j&&j.err==="pw"?"비밀번호가 맞지 않아요.":"저장하지 못했어요."); }).catch(function(){ alert("인터넷 연결을 확인해 주세요."); }); }
 function pickView(){
   var h = '<div class="vl-hero">'+(me?'<button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button>':'')+'<small>'+(PB==="북서울"?'BUKSEOUL':'S1 · '+esc(PB))+' REPORT</small><h2>누구신가요? 👋</h2><p>처음 한 번만 선택하면 이 폰에서 기억합니다.</p></div><div class="vl-grid">'+
-    (brCan()?'<div class="vl-brrow"><label for="vlbr">🏢 지사</label><select id="vlbr">'+brList().map(function(n){ var lk=n!=="북서울"&&!brFree()&&g("bsr_brok_"+n)!=="1"; return '<option value="'+esc(n)+'"'+(n===PB?' selected':'')+'>'+esc(n)+'지사'+(lk?' 🔒':'')+'</option>'; }).join('')+'</select></div><p class="vl-brtip">지사를 바꾸면 그 지사 직원 명단이 나와요 (서비스 그룹장은 그대로)</p>':'')+
+    ((brCan()||brMgr()||g("bsr_brinv")==="1")?'<div class="vl-brrow"><label for="vlbr">🏢 지사</label><select id="vlbr">'+brList().map(function(n){ var lk=n!=="북서울"&&!brFree()&&g("bsr_brok_"+n)!=="1"; return '<option value="'+esc(n)+'"'+(n===PB?' selected':'')+'>'+esc(n)+'지사'+(lk?' 🔒':'')+'</option>'; }).join('')+'</select></div><p class="vl-brtip">지사를 바꾸면 그 지사 직원 명단이 나와요 (서비스 그룹장은 그대로)</p>':'')+
     '<div class="vl-role"><b>선택한 이름에 따라 보이는 기능이 달라요</b>'+
     '<p><i>👑 부서장</i><span>오늘 할 일 · 공지 쓰기 · 💬 응원 코멘트</span></p>'+
     '<p><i>⭐ 서비스 관리자</i><span>관리자 기능 + 📱 해피콜 현황</span></p>'+
@@ -7652,7 +7652,13 @@ ov.addEventListener("click", function(e){
   else if(a==="devok") devCheck();
   else if(a==="devno"){ devNext=null; if(me==="이재식" && !devOk()){ me=null; try{ localStorage.removeItem("bsr_me"); }catch(_){} showChip(); } pick=null; PB=MY; pickView(); }
   else if(a==="start" && pick==="이재식" && !devOk()){ devNext=function(){ var st=box.querySelector('[data-vl="start"]'); pickView(); var b2=box.querySelector('[data-vl="start"]'); if(b2) b2.click(); }; devView(); }
-  else if(a==="start" && pick && PB!==MY){ try{ var rm=RO[PB]&&RO[PB].p; if(PB!=="북서울" && rm && rm.mgr.indexOf(pick)>=0 && pick!=="지사장") localStorage.setItem("bsr_brmgr", PB); else localStorage.removeItem("bsr_brmgr"); }catch(_){} me = pick; s("bsr_me", me); try{ localStorage.setItem("bsr_br", PB); }catch(_){} location.reload(); }
+  else if(a==="start" && pick && PB!==MY){ var first=false, rm=RO[PB]&&RO[PB].p;
+    try{ if(PB!=="북서울" && rm && rm.mgr.indexOf(pick)>=0 && pick!=="지사장") localStorage.setItem("bsr_brmgr", PB);
+      else if(PB!=="북서울" && rm && !rm.mgr.length && ["그룹장","이재식","타부서"].indexOf(pick)<0 && roNames(PB).indexOf(pick)<0){ localStorage.setItem("bsr_brmgr", PB); first=true; }
+      else localStorage.removeItem("bsr_brmgr"); }catch(_){}
+    me = pick; s("bsr_me", me); try{ localStorage.setItem("bsr_br", PB); }catch(_){}
+    var go=function(){ location.reload(); };
+    if(first && g("bsr_brpw_"+PB)){ var tx=(RO[PB].raw||"").replace(/^\s*관리자\s*[:：].*$/m,"").trim(); fetch(RP_API,{method:"POST",body:JSON.stringify({act:"rosterput",branch:PB,pw:g("bsr_brpw_"+PB),text:"관리자: "+pick+(tx?"\n"+tx:"")})}).then(go,go); setTimeout(go,4000); } else go(); }
   else if(a==="start" && pick){ var changed = pick!==me; me = pick; s("bsr_me", me); showChip(); close(); try{ if(window.render) render(); }catch(_){} if(changed){ sent = {}; send(openTag()); sent[window.state?state.tab:"cmp"]=1; } }
   else if(a==="pinok"){ var i=document.getElementById("vlpin"); loadAdmin(i?i.value.trim():""); }
   else if(a==="reload") loadAdmin(pin);
@@ -7674,7 +7680,10 @@ document.addEventListener("visibilitychange", function(){
   else if(hiddenAt && Date.now()-hiddenAt > 30*60000){ sent = {}; send(openTag()); sent[window.state?state.tab:"cmp"]=1; }
 });
 showChip();
-if(!me) pickView(); else { send(openTag()); sent[window.state?state.tab:"cmp"]=1; }
+/* 🔗 지사 담당자 초대 링크 (…/report/#br=서서울) — 지사 비밀번호를 넣고 그 지사 명단에서 이름을 고름 */
+var INV = (function(){ var m=/[#&]br=([^&]+)/.exec(location.hash||""); if(!m) return ""; var b=""; try{ b=decodeURIComponent(m[1]); history.replaceState(null,"",location.pathname); }catch(_){} return (brList().indexOf(b)>=0 && b!=="북서울") ? b : ""; })();
+if(INV){ s("bsr_brinv","1"); pick=null; PB=MY; pickView(); setTimeout(function(){ brPickTo(INV); }, 300); }
+else if(!me) pickView(); else { send(openTag()); sent[window.state?state.tab:"cmp"]=1; }
 })();
 </script>
 

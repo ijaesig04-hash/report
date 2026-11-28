@@ -42,6 +42,7 @@ td{padding:7px 4px;text-align:right;border-bottom:1px solid #eef1f6;white-space:
 .empty{color:var(--mute);text-align:center;padding:18px 6px;font-size:14px}
 .lock{max-width:420px;margin:80px auto;text-align:center;color:var(--mute);padding:0 20px}
 .seg.s4{grid-template-columns:1fr 1fr 1fr 44px}
+.inv{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.inv button{border:1.5px solid var(--line);background:#f7f9fd;border-radius:10px;padding:9px 2px;font-weight:800;font-size:13px;color:var(--navy);word-break:keep-all}
 .oth{background:#f7f9fd;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:10px}.oth b{font-size:14px}.oth p{font-size:12.5px;color:var(--mute);margin:4px 0 6px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:rgba(15,35,80,.94);color:#fff;padding:10px 16px;border-radius:12px;font-size:13.5px;z-index:9;max-width:90%}
 </style>
@@ -233,7 +234,7 @@ function cmpHtml(){
   if(!cs.length&&!al.length) h+='<div class="card"><div class="empty">아직 올라온 지사 자료가 없어요.</div></div>';
   if(cs.length) h+='<div class="card"><h2>📞 고객체감 순위 <small>만족도 → 응답률</small></h2><table><tr><th>지사</th><th>발송</th><th>응답률</th><th>만족도</th></tr>'+cs.map(function(r,i){ return '<tr'+mk(r[0])+'><td><b>'+(i+1)+'</b> '+esc(r[0])+rf(r[4])+'</td><td>'+r[1]+'</td><td>'+r[2]+'%</td><td>'+(r[3]==null?'-':r[3])+'</td></tr>'; }).join("")+'</table></div>';
   if(al.length) h+='<div class="card"><h2>🔁 다발보 조치율 순위</h2><table><tr><th>지사</th><th>고객처</th><th>건수</th><th>조치율</th><th>3회↑</th></tr>'+al.map(function(r,i){ return '<tr'+mk(r[0])+'><td><b>'+(i+1)+'</b> '+esc(r[0])+rf(r[5])+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td class="'+(r[3]>=50?'ok':'ng')+'">'+r[3]+'%</td><td>'+r[4]+'</td></tr>'; }).join("")+'</table></div>';
-  if(FREE){ h+=upStat(); h+=pwCard(); }
+  if(FREE){ h+=invCard(); h+=upStat(); h+=pwCard(); }
   return h+'<p class="note">지사마다 가장 최근 자료로 비교해요. 「참고」는 다른 지사가 올린 전체 엑셀에서 가져온 숫자예요.</p>';
 }
 /* 📅 지사별 마지막 업로드 (그룹장 · 개발자용) — 7일 넘으면 빨간색 */
@@ -244,6 +245,12 @@ function myPwCard(){ return '<div class="card"><h2>🔑 '+esc(S.br)+'지사 비�
 document.addEventListener("click",function(e){ if(!e.target.closest("#npwok")) return; var o=$("opw").value.trim(), w=$("npw").value.trim(); if(!o||w.length<4){ toast("새 비밀번호는 4자리 이상이에요"); return; }
   fetch(API,{method:"POST",body:JSON.stringify({act:"brpw2",branch:S.br,old:o,pw:w})}).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok){ ls("bsr_brpw_"+S.br,w); toast("비밀번호를 바꿨어요 — 직원들에게 새 비밀번호를 알려 주세요"); $("opw").value=""; $("npw").value=""; } else toast(j&&j.err==="pw"?"지금 비밀번호가 맞지 않아요":"바꾸지 못했어요"); }).catch(function(){ toast("인터넷 연결을 확인해 주세요"); });
 });
+/* 🔗 지사 담당자 초대 — 링크를 카톡으로 보내면 그 지사 비밀번호 → 명단(없으면 직접 입력)으로 담당자 등록 */
+function invTxt(k){ return "[북서울 Report · "+k+"지사 담당자 초대]\n"+k+"지사 서비스 팀장·파트장님, 아래 링크를 열고\n① 지사 비밀번호 0000 입력\n② 본인 이름 선택 (명단이 없으면 「직접 입력」에 이름 → 담당자로 등록)\n③ 이름 버튼 → 🔑 비밀번호를 우리 지사만 아는 번호로 바꿔 주세요\n👉 https://ijaesig04-hash.github.io/report/#br="+encodeURIComponent(k); }
+function invCard(){ return '<div class="card"><h2>🔗 지사 담당자 초대 <small>카톡으로 보내기</small></h2><p class="note" style="margin:0 0 6px">지사를 눌러 안내문을 복사한 뒤 그 지사 서비스 팀장·파트장에게 보내 주세요.</p><div class="inv">'+BRL.filter(function(k){return k!=="북서울"}).map(function(k){ return '<button type="button" data-inv="'+esc(k)+'">'+esc(k)+'</button>'; }).join('')+'</div></div>'; }
+document.addEventListener("click",function(e){ var t=e.target.closest("[data-inv]"); if(!t) return; var x=invTxt(t.dataset.inv);
+  var done=function(){ toast(t.dataset.inv+"지사 초대 안내를 복사했어요 — 카톡에 붙여넣기"); };
+  try{ navigator.clipboard.writeText(x).then(done,function(){ prompt("길게 눌러 복사하세요",x); }); }catch(_){ prompt("길게 눌러 복사하세요",x); } });
 function pwCard(){ return '<div class="card"><h2>🔑 지사 비밀번호 바꾸기 <small>초기 0000</small></h2><p class="note" style="margin:0">리포트에서 이 지사를 고를 때 넣는 비밀번호예요. 위에서 고른 <b>'+esc(S.br)+'지사</b>에 적용돼요.</p><div class="pin"><input id="bpw" type="text" inputmode="numeric" maxlength="20" placeholder="새 비밀번호"><button type="button" class="go" id="bpwok" style="width:auto;margin:0;padding:9px 16px">바꾸기</button></div></div>'; }
 document.addEventListener("click",function(e){ if(!e.target.closest("#bpwok")) return; var w=$("bpw").value.trim(); if(!w) return;
   fetch(API,{method:"POST",body:JSON.stringify({act:"brpw",pin:pin(),branch:S.br,pw:w})}).then(function(r){return r.json()}).then(function(j){ toast(j&&j.ok?S.br+"지사 비밀번호를 바꿨어요":"바꾸지 못했어요 ("+((j&&j.err)||"오류")+")"); if(j&&j.ok) $("bpw").value=""; }).catch(function(){ toast("인터넷 연결을 확인해 주세요"); });
