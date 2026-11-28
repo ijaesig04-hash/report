@@ -67,6 +67,7 @@ function doGet(e) {
     return out({ ok: String(p.pw || '') === pw });
   }
   if (p.action === 'bdbr') return out(bdBr(p.br));
+  if (p.action === 'bdcmp') return out(bdCmp());
   if (p.action === 'bdget') {   // 🏢 지사별 최신 데이터 (엑셀 자동 반영 시범) — 관리자 PIN
     if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
     return out(bdGet());
@@ -822,14 +823,29 @@ const BD_HEAD = ['시각', '지사', '종류', '기간', '데이터', '올린 �
 function isAdm(x) { return !!P.getProperty('ADMIN_PIN') && String(x || '') === P.getProperty('ADMIN_PIN'); }
 function brOk(br, pw) { return br !== '북서울' && String(pw || '') !== '' && String(pw) === (brPw()[br] || '0000'); }   // 지사 담당자(서비스 팀장·파트장) = 지사 비밀번호
 function bdPut(d) {
-  const br = String(d.branch || '').replace(/\s/g, '').slice(0, 20), kind = String(d.kind || '').slice(0, 10);
-  if (!isAdm(d.pin) && !brOk(br, d.pin)) return { ok: false, err: 'pin' };
-  if (!br || ['cs', 'alm'].indexOf(kind) < 0) return { ok: false, err: 'bad' };
-  const js = JSON.stringify(d.data || {});
+  const br = String(d.branch || '').replace(/\s/g, '').slice(0, 20), adm = isAdm(d.pin);
+  if (!adm && !brOk(br, d.pin)) return { ok: false, err: 'pin' };
+  // 여러 지사가 든 엑셀: 관리자 PIN이면 모든 지사 본자료, 지사 비밀번호면 자기 지사만 본자료 · 다른 지사는 비교용 참고(_r)
+  if (Array.isArray(d.items)) {
+    let n = 0;
+    d.items.slice(0, 40).forEach(function (it) {
+      const b = String(it.branch || '').replace(/\s/g, '').slice(0, 20), k = String(it.kind || '');
+      if (!b || ['cs', 'alm'].indexOf(k) < 0) return;
+      const own = adm || b === br;
+      const r = bdSave(b, own ? k : k + '_r', it.period, it.data, d.name);
+      if (r.ok) n++;
+    });
+    return { ok: n > 0, n: n };
+  }
+  return bdSave(br, String(d.kind || '').slice(0, 10), d.period, d.data, d.name);
+}
+function bdSave(br, kind, period, data, name) {
+  if (!br || ['cs', 'alm', 'cs_r', 'alm_r'].indexOf(kind) < 0) return { ok: false, err: 'bad' };
+  const js = JSON.stringify(data || {});
   if (js.length > 48000) return { ok: false, err: 'too big' };
   const sh = evSh('지사데이터', BD_HEAD), n = sh.getLastRow();
   if (n > 1) { const v = sh.getRange(2, 2, n - 1, 2).getValues(); for (let i = v.length - 1; i >= 0; i--) if (String(v[i][0]) === br && String(v[i][1]) === kind) sh.deleteRow(i + 2); }
-  sh.appendRow([new Date(), br, kind, String(d.period || '').slice(0, 40), js, String(d.name || '').slice(0, 10)]);
+  sh.appendRow([new Date(), br, kind, String(period || '').slice(0, 40), js, String(name || '').slice(0, 10)]);
   return { ok: true };
 }
 function brPw() { try { return JSON.parse(P.getProperty('BR_PW') || '{}'); } catch (e) { return {}; } }
@@ -838,6 +854,15 @@ function brPwSet(d) {   // 관리자 PIN으로 지사 비밀번호 변경
   var b = String(d.branch || '').replace(/\s/g, '').slice(0, 20), w = String(d.pw || '').trim().slice(0, 20);
   if (!b || !w) return { ok: false, err: 'empty' };
   var m = brPw(); m[b] = w; P.setProperty('BR_PW', JSON.stringify(m)); return { ok: true };
+}
+function bdCmp() {   // 🏆 지사 비교 — 요약 숫자만 (본자료와 참고 중 최근 것)
+  const all = bdGet().branches, o = {};
+  Object.keys(all).forEach(function (b) { const B = all[b];
+    ['cs', 'alm'].forEach(function (k) { const a = B[k], r = B[k + '_r'], x = a && (!r || a.t >= r.t) ? a : r; if (!x) return; const d = x.data || {};
+      (o[b] = o[b] || {})[k] = { t: x.t, period: x.period, ref: x === r ? 1 : 0, own: a ? a.t : 0,
+        s: k === 'cs' ? { sent: d.sent, resp: d.resp, sat: d.sat } : { places: d.places, alarms: d.alarms, done: d.done, hot: d.hot } }; });
+  });
+  return { ok: true, branches: o };
 }
 function bdBr(br) {   // 한 지사 최신 자료 (리포트 탭 표시용 — 고객명·고객처는 이미 가려진 요약)
   const all = bdGet().branches; return { ok: true, br: br, d: all[String(br || '').replace(/\s/g, '')] || {} };

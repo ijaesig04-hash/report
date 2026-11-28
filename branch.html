@@ -41,6 +41,8 @@ td{padding:7px 4px;text-align:right;border-bottom:1px solid #eef1f6;white-space:
 .pin{display:flex;gap:8px;margin-top:8px}.pin input{flex:1;border:1.5px solid var(--line);border-radius:10px;padding:9px 11px}
 .empty{color:var(--mute);text-align:center;padding:18px 6px;font-size:14px}
 .lock{max-width:420px;margin:80px auto;text-align:center;color:var(--mute);padding:0 20px}
+.seg.s4{grid-template-columns:1fr 1fr 1fr 44px}
+.oth{background:#f7f9fd;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:10px}.oth b{font-size:14px}.oth p{font-size:12.5px;color:var(--mute);margin:4px 0 6px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:rgba(15,35,80,.94);color:#fff;padding:10px 16px;border-radius:12px;font-size:13.5px;z-index:9;max-width:90%}
 </style>
 </head>
@@ -67,8 +69,8 @@ function brs(){ var o={}; BRL.forEach(function(k){o[k]=1}); if(S.all) Object.key
 function pin(){ return ls("bsr_pin"); }
 
 function draw(){
-  var tabs = MGR ? [["up","📥 엑셀 올리기"],["view","📊 우리 지사"],["pw","🔑 비밀번호"]] : [["up","📥 엑셀 올리기"],["view","📊 지사 현황"],["cmp","🏆 지사 비교"]];
-  if(MGR){ $("main").innerHTML='<div class="bsel"><span>지사</span><b style="flex:1;color:#0f2350;font-size:16px">'+esc(S.br)+'지사 <small style="color:#5d6879;font-weight:600">· '+esc(ME)+' 담당</small></b></div><div class="seg" id="seg">'+tabs.map(function(x){ return '<button type="button" data-t="'+x[0]+'" aria-pressed="'+(S.tab===x[0])+'">'+x[1]+'</button>'; }).join("")+'</div><div id="body"></div>'; body(); return; }
+  var tabs = MGR ? [["up","📥 엑셀 올리기"],["view","📊 우리 지사"],["cmp","🏆 비교"],["pw","🔑"]] : [["up","📥 엑셀 올리기"],["view","📊 지사 현황"],["cmp","🏆 지사 비교"]];
+  if(MGR){ $("main").innerHTML='<div class="bsel"><span>지사</span><b style="flex:1;color:#0f2350;font-size:16px">'+esc(S.br)+'지사 <small style="color:#5d6879;font-weight:600">· '+esc(ME)+' 담당</small></b></div><div class="seg s4" id="seg">'+tabs.map(function(x){ return '<button type="button" data-t="'+x[0]+'" aria-pressed="'+(S.tab===x[0])+'">'+x[1]+'</button>'; }).join("")+'</div><div id="body"></div>'; body(); return; }
   var h='<div class="bsel"><span>지사</span><select id="br">'+brs().map(function(b){ return '<option'+(b===S.br?' selected':'')+'>'+esc(b)+'</option>'; }).join("")+'<option value="+">＋ 다른 지사 입력</option></select></div>'+
     '<div class="seg" id="seg">'+[["up","📥 엑셀 올리기"],["view","📊 지사 현황"],["cmp","🏆 지사 비교"]].map(function(x){ return '<button type="button" data-t="'+x[0]+'" aria-pressed="'+(S.tab===x[0])+'">'+x[1]+'</button>'; }).join("")+'</div><div id="body"></div>';
   $("main").innerHTML=h; body();
@@ -100,11 +102,25 @@ function readFile(f){
   if(!f) return; S.pv={busy:1,name:f.name}; body(); $("body").insertAdjacentHTML("beforeend",'<div class="card"><div class="empty">읽는 중…</div></div>');
   needXL().then(function(X){ return f.arrayBuffer().then(function(buf){ return X.read(buf,{type:"array",cellDates:true}); }); }).then(function(wb){
     var res=null;
-    wb.SheetNames.some(function(n){ var rows=XL.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:""}); res=parseCS(rows)||parseALM(rows); return !!res; });
+    wb.SheetNames.some(function(n){ var rows=XL.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:""}); res=multi(rows); return !!res; });
+    if(res&&res.err){ S.pv={err:res.err,name:f.name}; draw(); return; }
     if(!res){ S.pv={err:"고객체감·다발보 형식을 찾지 못했어요. 첫 줄에 「사원명·발송일」 또는 「계약처명·종료처리」 칸이 있는 엑셀인지 확인해 주세요.",name:f.name}; }
-    else { res.name=f.name; if(MGR && res.branch && res.branch!==S.br){ S.pv={err:"이 엑셀은 「"+res.branch+"지사」 자료예요. "+S.br+"지사 자료만 올릴 수 있어요.",name:f.name}; draw(); return; } if(!res.branch||MGR) res.branch=S.br; S.pv=res; S.br=res.branch; if(!MGR) ls("bsr_bd_br",S.br); }
+    else { res.name=f.name; if(MGR && res.branch && res.branch!==S.br && !res.others){ S.pv={err:"이 엑셀은 「"+res.branch+"지사」 자료예요. "+S.br+"지사 자료만 올릴 수 있어요.",name:f.name}; draw(); return; } if(!res.branch||MGR) res.branch=S.br; S.pv=res; S.br=res.branch; if(!MGR) ls("bsr_bd_br",S.br); }
     draw();
   }).catch(function(err){ S.pv={err:"파일을 열지 못했어요 ("+String(err&&err.message||err).slice(0,60)+"). 회사 보안(DRM)이 걸린 파일이면 열 수 없어요.",name:f.name}; draw(); });
+}
+/* 여러 지사가 섞인 엑셀: 지사 칸으로 나눠서 읽음 → 고른 지사(담당자는 자기 지사)가 본 자료, 나머지 지사는 지사 비교용 */
+function brCount(rows,need){ var h=findHead(rows,need); if(!h) return null; var c=col(h,["지사"]), o={}; if(c<0) return o; rows.slice(h.i+1).forEach(function(r){ var b=brName(r[c]); if(b) o[b]=(o[b]||0)+1; }); return o; }
+function summ(k,d){ return k==="cs"?{sent:d.sent,resp:d.resp,sat:d.sat,ten:d.ten,low:d.low}:{places:d.places,alarms:d.alarms,done:d.done,hot:d.hot}; }
+function multi(rows){
+  var kind=null, cnt=brCount(rows,["사원명","발송일"]), fn=parseCS; if(cnt) kind="cs"; else { cnt=brCount(rows,["계약처명","종료처리"]); fn=parseALM; if(cnt) kind="alm"; }
+  if(!kind) return null;
+  var B=Object.keys(cnt); if(B.length<=1) return fn(rows);
+  var main = MGR ? S.br : (B.indexOf(S.br)>=0 ? S.br : B.sort(function(a,b){return cnt[b]-cnt[a]})[0]);
+  var res = fn(rows, main); if(!res) return {err:"이 엑셀에 「"+main+"지사」 자료가 없어요 (들어 있는 지사: "+B.join(", ")+")."};
+  res.branch = main; res.others = [];
+  B.forEach(function(b){ if(b===main) return; var o=fn(rows,b); if(o){ o.branch=b; res.others.push(o); } });
+  return res;
 }
 function norm(s){ return String(s==null?"":s).replace(/\s+/g,""); }
 function findHead(rows,need){ for(var i=0;i<Math.min(rows.length,15);i++){ var r=rows[i].map(norm); if(need.every(function(k){ return r.indexOf(k)>=0; })) return {i:i,c:r}; } return null; }
@@ -117,12 +133,13 @@ function per(ds){ ds=ds.filter(Boolean).sort(); return ds.length?ds[0].replace(/
 function avg(a){ return a.length?Math.round(a.reduce(function(t,x){return t+x},0)/a.length*100)/100:null; }
 
 /* 고객체감 ExcelDown */
-function parseCS(rows){
+function parseCS(rows,only){
   var h=findHead(rows,["사원명","발송일"]); if(!h) return null;
   var C={br:col(h,["지사"]),nm:col(h,["사원명"]),job:col(h,["직무"]),sd:col(h,["발송일"]),rd:col(h,["답변일","응답일"]),rt:col(h,["접수경로"]),sc:col(h,["종합만족도","만족도"]),cat:col(h,["종합의견카테고리","카테고리"]),cm:col(h,["종합의견"]),shop:col(h,["서비스제공처","고객처"])};
   var R=[], ex={gong:0,blank:0}, brc={};
   rows.slice(h.i+1).forEach(function(r){
     var nm=String(r[C.nm]||"").trim(), sd=day(r[C.sd]); if(!nm||!sd) return;
+    if(only && C.br>=0 && brName(r[C.br])!==only) return;
     var job=String(C.job>=0?r[C.job]:"").trim(), rt=String(C.rt>=0?r[C.rt]:"").trim();
     if(/공사/.test(job)||/공사/.test(rt)){ ex.gong++; return; }
     if(!job){ ex.blank++; return; }
@@ -140,12 +157,13 @@ function parseCS(rows){
     cm:R.filter(function(x){return x.cm}).sort(function(x,y){return y.rd.localeCompare(x.rd)}).slice(0,10).map(function(x){ return [x.rd.slice(5),x.nm,x.sc,x.cm.slice(0,80),x.shop]; })}};
 }
 /* 다발보 ExcelDown */
-function parseALM(rows){
+function parseALM(rows,only){
   var h=findHead(rows,["계약처명","종료처리"]); if(!h) return null;
   var C={br:col(h,["지사"]),car:col(h,["담당차량","차량"]),no:col(h,["계약번호"]),nm:col(h,["계약처명"]),d:col(h,["발생일자"]),lp:col(h,["루프번호1","루프번호"]),end:col(h,["종료처리"]),ad:col(h,["조치일자"])};
   var G={}, ord=[], ends={}, ds=[], brc={}, n=0;
   rows.slice(h.i+1).forEach(function(r){
-    var nm=String(r[C.nm]||"").trim(); if(!nm) return; n++;
+    var nm=String(r[C.nm]||"").trim(); if(!nm) return;
+    if(only && C.br>=0 && brName(r[C.br])!==only) return; n++;
     var k=(C.no>=0&&r[C.no]?String(r[C.no]):nm), car=String(C.car>=0?r[C.car]:"").replace(/^0+/,"");
     if(C.br>=0&&r[C.br]) brc[brName(r[C.br])]=(brc[brName(r[C.br])]||0)+1;
     if(!G[k]){ G[k]={car:car,nm:mask(nm),n:0,done:0,e:{}}; ord.push(k); }
@@ -162,13 +180,17 @@ function pvHtml(p){
   if(p.err) return '<div class="card"><div class="warn">⚠️ '+esc(p.err)+'</div></div>';
   var h='<div class="card"><h2>👀 미리보기 <small>'+esc(p.name)+'</small></h2><p class="note" style="margin:0 0 8px"><b>'+esc(p.branch)+'지사</b> · '+(p.kind==="cs"?"고객체감":"다발보")+' · '+esc(p.period)+'</p>'+(p.kind==="cs"?csBody(p.data):almBody(p.data));
   if(p.ex&&(p.ex.gong||p.ex.blank)) h+='<p class="note">자동으로 뺀 줄: '+(p.ex.gong?'공사팀 '+p.ex.gong+'건':'')+(p.ex.gong&&p.ex.blank?' · ':'')+(p.ex.blank?'직무 빈 줄(업체 등) '+p.ex.blank+'건':'')+'</p>';
-  h+='<button type="button" class="go" id="save">✅ '+esc(p.branch)+'지사 '+(p.kind==="cs"?"고객체감":"다발보")+'로 저장</button>'+(auth(p.branch)?'':'<p class="note">저장할 때 '+(MGR?'지사 비밀번호':'관리자 PIN 또는 지사 비밀번호')+'가 필요해요</p>')+'</div>';
+  if(p.others&&p.others.length){
+    h+='<div class="oth"><b>🏢 함께 들어 있는 다른 지사 '+p.others.length+'곳</b><p>'+(MGR?esc(p.branch)+'지사 자료만 우리 지사 화면에 반영되고, 다른 지사 자료는 <b>지사 비교</b>에만 참고로 들어가요.':'모든 지사 자료가 각 지사 화면과 지사 비교에 함께 저장돼요.')+'</p>'+
+      '<table><tr><th>지사</th>'+(p.kind==="cs"?'<th>발송</th><th>응답률</th><th>만족도</th>':'<th>고객처</th><th>건수</th><th>조치율</th>')+'</tr>'+p.others.map(function(o){ var d=o.data; return '<tr><td>'+esc(o.branch)+'</td>'+(p.kind==="cs"?'<td>'+d.sent+'</td><td>'+pc(d.resp,d.sent)+'%</td><td>'+(d.sat==null?'-':d.sat)+'</td>':'<td>'+d.places+'</td><td>'+d.alarms+'</td><td>'+pc(d.done,d.places)+'%</td>')+'</tr>'; }).join('')+'</table></div>'; }
+  h+='<button type="button" class="go" id="save">✅ '+(p.others&&p.others.length&&!MGR?'지사 '+(p.others.length+1)+'곳 ':esc(p.branch)+'지사 ')+(p.kind==="cs"?"고객체감":"다발보")+'로 저장</button>'+(auth(p.branch)?'':'<p class="note">저장할 때 '+(MGR?'지사 비밀번호':'관리자 PIN 또는 지사 비밀번호')+'가 필요해요</p>')+'</div>';
   return h;
 }
 function save(){
   var p=S.pv; if(!p||!p.kind) return; var pn=auth(p.branch); if(!pn){ pn=(prompt(MGR?p.branch+"지사 비밀번호":"관리자 PIN 또는 "+p.branch+"지사 비밀번호")||"").trim(); if(!pn) return; }
   var b=$("save"); b.disabled=true; b.textContent="저장 중…";
-  fetch(API,{method:"POST",body:JSON.stringify({act:"bdput",pin:pn,name:ME,branch:p.branch,kind:p.kind,period:p.period,data:p.data})}).then(function(r){return r.json()}).then(function(j){
+  var items=[{branch:p.branch,kind:p.kind,period:p.period,data:p.data}].concat((p.others||[]).map(function(o){ return MGR?{branch:o.branch,kind:p.kind,period:o.period,data:summ(p.kind,o.data),ref:1}:{branch:o.branch,kind:p.kind,period:o.period,data:o.data}; }));
+  fetch(API,{method:"POST",body:JSON.stringify({act:"bdput",pin:pn,name:ME,branch:p.branch,kind:p.kind,period:p.period,data:p.data,items:items})}).then(function(r){return r.json()}).then(function(j){
     if(j&&j.ok){ if(pn!==pin()) ls("bsr_brpw_"+p.branch,pn); toast("저장했어요 — 리포트 고객체감 · 발보관리 탭에도 바로 나와요"); S.pv=null; S.all=null; delete S.one[p.branch]; S.tab="view"; draw(); one(); }
     else { b.disabled=false; b.textContent="다시 저장"; toast(j&&j.err==="pin"?"비밀번호(PIN)가 맞지 않아요":"저장하지 못했어요 ("+((j&&j.err)||"오류")+")"); }
   }).catch(function(){ b.disabled=false; b.textContent="다시 저장"; toast("인터넷 연결을 확인해 주세요"); });
@@ -187,11 +209,7 @@ function almBody(d){
    '<table style="margin-top:10px"><tr><th>많이 반복된 고객처</th><th>건수</th><th>조치</th></tr>'+d.top.slice(0,10).map(function(r){ return '<tr><td class="w">'+esc(r[1])+' <small style="color:#5d6879">'+esc(r[0])+'호 · '+esc(r[4])+'</small></td><td>'+r[2]+'</td><td class="'+(r[3]?'ok':'ng')+'">'+(r[3]?'✅':'⏳')+'</td></tr>'; }).join("")+'</table>';
 }
 function load(){
-  var pn=pin(); if(!pn){ S.all={}; body(); return; }
-  fetch(API+"?action=bdget&pin="+encodeURIComponent(pn)+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
-    if(j&&j.ok){ S.all=j.branches||{}; } else { S.all={}; if(j&&j.err==="pin") ls("bsr_pin",""); }
-    draw();
-  }).catch(function(){ S.all={}; draw(); });
+  fetch(API+"?action=bdcmp&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ S.all=(j&&j.ok&&j.branches)||{}; if(S.tab==="cmp") body(); }).catch(function(){ S.all={}; if(S.tab==="cmp") body(); });
 }
 function needPin(){ return '<div class="card"><h2>🔒 관리자 PIN</h2><p class="note" style="margin:0">지사 데이터는 관리자만 볼 수 있어요 (접속 현황 PIN과 같아요)</p><div class="pin"><input id="pinin" type="password" inputmode="numeric" maxlength="12"><button type="button" class="go" id="pinok" style="width:auto;margin:0;padding:9px 16px">확인</button></div></div>'; }
 function when(t){ var d=new Date(t); return (d.getMonth()+1)+'/'+d.getDate()+' '+("0"+d.getHours()).slice(-2)+':'+("0"+d.getMinutes()).slice(-2); }
@@ -207,21 +225,20 @@ function viewHtml(){
   return h;
 }
 function cmpHtml(){
-  if(!pin()) return needPin();
-  if(!S.all) return '<div class="card"><div class="empty">불러오는 중…</div></div>';
-  var K=Object.keys(S.all); if(!K.length) return '<div class="card"><div class="empty">아직 올라온 지사 자료가 없어요.</div></div>'+upStat()+pwCard();
-  var cs=K.filter(function(k){return S.all[k].cs}).map(function(k){ var d=S.all[k].cs.data; return [k,d.sent,pc(d.resp,d.sent),d.sat]; }).sort(function(a,b){ return (b[3]||0)-(a[3]||0) || b[2]-a[2]; });
-  var al=K.filter(function(k){return S.all[k].alm}).map(function(k){ var d=S.all[k].alm.data; return [k,d.places,d.alarms,pc(d.done,d.places),d.hot]; }).sort(function(a,b){ return b[3]-a[3]; });
+  if(!S.all){ load(); return '<div class="card"><div class="empty">불러오는 중…</div></div>'; }
+  var K=Object.keys(S.all), mk=function(b){ return b===S.br?' style="background:#fff7d6"':''; }, rf=function(x){ return x.ref?' <small style="color:#5d6879">참고</small>':''; };
+  var cs=K.filter(function(k){return S.all[k].cs}).map(function(k){ var x=S.all[k].cs, d=x.s; return [k,d.sent,pc(d.resp,d.sent),d.sat,x]; }).sort(function(a,b){ return (b[3]||0)-(a[3]||0) || b[2]-a[2]; });
+  var al=K.filter(function(k){return S.all[k].alm}).map(function(k){ var x=S.all[k].alm, d=x.s; return [k,d.places,d.alarms,pc(d.done,d.places),d.hot,x]; }).sort(function(a,b){ return b[3]-a[3]; });
   var h='';
-  if(cs.length) h+='<div class="card"><h2>📞 고객체감 순위 <small>만족도 → 응답률</small></h2><table><tr><th>지사</th><th>발송</th><th>응답률</th><th>만족도</th></tr>'+cs.map(function(r,i){ return '<tr><td><b>'+(i+1)+'</b> '+esc(r[0])+'</td><td>'+r[1]+'</td><td>'+r[2]+'%</td><td>'+(r[3]==null?'-':r[3])+'</td></tr>'; }).join("")+'</table></div>';
-  if(al.length) h+='<div class="card"><h2>🔁 다발보 조치율 순위</h2><table><tr><th>지사</th><th>고객처</th><th>건수</th><th>조치율</th><th>3회↑</th></tr>'+al.map(function(r,i){ return '<tr><td><b>'+(i+1)+'</b> '+esc(r[0])+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td class="'+(r[3]>=50?'ok':'ng')+'">'+r[3]+'%</td><td>'+r[4]+'</td></tr>'; }).join("")+'</table></div>';
-  h+=upStat();
-  h+=pwCard();
-  return h+'<p class="note">각 지사가 엑셀을 올리면 자동으로 이 표에 들어가요 (지사마다 최신 1개씩)</p>';
+  if(!cs.length&&!al.length) h+='<div class="card"><div class="empty">아직 올라온 지사 자료가 없어요.</div></div>';
+  if(cs.length) h+='<div class="card"><h2>📞 고객체감 순위 <small>만족도 → 응답률</small></h2><table><tr><th>지사</th><th>발송</th><th>응답률</th><th>만족도</th></tr>'+cs.map(function(r,i){ return '<tr'+mk(r[0])+'><td><b>'+(i+1)+'</b> '+esc(r[0])+rf(r[4])+'</td><td>'+r[1]+'</td><td>'+r[2]+'%</td><td>'+(r[3]==null?'-':r[3])+'</td></tr>'; }).join("")+'</table></div>';
+  if(al.length) h+='<div class="card"><h2>🔁 다발보 조치율 순위</h2><table><tr><th>지사</th><th>고객처</th><th>건수</th><th>조치율</th><th>3회↑</th></tr>'+al.map(function(r,i){ return '<tr'+mk(r[0])+'><td><b>'+(i+1)+'</b> '+esc(r[0])+rf(r[5])+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td class="'+(r[3]>=50?'ok':'ng')+'">'+r[3]+'%</td><td>'+r[4]+'</td></tr>'; }).join("")+'</table></div>';
+  if(FREE){ h+=upStat(); h+=pwCard(); }
+  return h+'<p class="note">지사마다 가장 최근 자료로 비교해요. 「참고」는 다른 지사가 올린 전체 엑셀에서 가져온 숫자예요.</p>';
 }
 /* 📅 지사별 마지막 업로드 (그룹장 · 개발자용) — 7일 넘으면 빨간색 */
-function upStat(){ var now=Date.now(), c=function(x){ if(!x) return '<td class="ng">미등록</td>'; var d=Math.floor((now-x.t)/86400000); return '<td class="'+(d>7?'ng':'ok')+'">'+(new Date(x.t).getMonth()+1)+'/'+new Date(x.t).getDate()+(d>7?' ('+d+'일)':'')+'</td>'; };
-  return '<div class="card"><h2>📅 지사별 자료 올림 현황 <small>7일 넘으면 빨간색</small></h2><table><tr><th>지사</th><th>고객체감</th><th>다발보</th></tr>'+BRL.filter(function(k){return k!=="북서울"}).map(function(k){ var B=(S.all||{})[k]||{}; return '<tr><td>'+esc(k)+'</td>'+c(B.cs)+c(B.alm)+'</tr>'; }).join("")+'</table><p class="note">북서울은 리포트에 직접 반영해서 이 표에서 빠져요.</p></div>'; }
+function upStat(){ var now=Date.now(), c=function(x){ if(!x||!x.own) return '<td class="ng">미등록'+(x?' <small>(참고만)</small>':'')+'</td>'; x={t:x.own}; var d=Math.floor((now-x.t)/86400000); return '<td class="'+(d>7?'ng':'ok')+'">'+(new Date(x.t).getMonth()+1)+'/'+new Date(x.t).getDate()+(d>7?' ('+d+'일)':'')+'</td>'; };
+  return '<div class="card"><h2>📅 자료 올림 현황 <small>직접 올린 날 · 7일↑ 빨강</small></h2><table><tr><th>지사</th><th>고객체감</th><th>다발보</th></tr>'+BRL.filter(function(k){return k!=="북서울"}).map(function(k){ var B=(S.all||{})[k]||{}; return '<tr><td>'+esc(k)+'</td>'+c(B.cs)+c(B.alm)+'</tr>'; }).join("")+'</table><p class="note">북서울은 리포트에 직접 반영해서 이 표에서 빠져요.</p></div>'; }
 function myPwCard(){ return '<div class="card"><h2>🔑 '+esc(S.br)+'지사 비밀번호 바꾸기</h2><p class="note" style="margin:0 0 6px">리포트에서 '+esc(S.br)+'지사를 고를 때와 자료를 올릴 때 쓰는 비밀번호예요. 처음 비밀번호는 0000이에요. 4자리 이상으로 바꿔 주세요.</p>'+
   '<div class="pin"><input id="opw" type="password" inputmode="numeric" maxlength="20" placeholder="지금 비밀번호"></div><div class="pin"><input id="npw" type="password" inputmode="numeric" maxlength="20" placeholder="새 비밀번호 (4자리 이상)"><button type="button" class="go" id="npwok" style="width:auto;margin:0;padding:9px 16px">바꾸기</button></div></div>'; }
 document.addEventListener("click",function(e){ if(!e.target.closest("#npwok")) return; var o=$("opw").value.trim(), w=$("npw").value.trim(); if(!o||w.length<4){ toast("새 비밀번호는 4자리 이상이에요"); return; }
@@ -231,7 +248,7 @@ function pwCard(){ return '<div class="card"><h2>🔑 지사 비밀번호 바꾸
 document.addEventListener("click",function(e){ if(!e.target.closest("#bpwok")) return; var w=$("bpw").value.trim(); if(!w) return;
   fetch(API,{method:"POST",body:JSON.stringify({act:"brpw",pin:pin(),branch:S.br,pw:w})}).then(function(r){return r.json()}).then(function(j){ toast(j&&j.ok?S.br+"지사 비밀번호를 바꿨어요":"바꾸지 못했어요 ("+((j&&j.err)||"오류")+")"); if(j&&j.ok) $("bpw").value=""; }).catch(function(){ toast("인터넷 연결을 확인해 주세요"); });
 });
-if(OK){ draw(); if(FREE) load(); one(); }
+if(OK){ draw(); load(); one(); }
 </script>
 </body>
 </html>
