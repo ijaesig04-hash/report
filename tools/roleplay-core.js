@@ -22,6 +22,7 @@ function doPost(e) {
     if (d.act === 'diag') return out(diag(d));
     if (d.act === 'cmp') return out(aiCompare(d));                         // 🧪 Gemini ↔ Claude 비교 시험 — 파트장만 (비밀번호)                            // 📸 AI 현장 진단 — 사진 → 기기·원인·조치
     if (d.act === 'diagfb') return out(diagFb(d));                        // 📸 진단 결과 도움 여부 / 실제 조치 남기기
+    if (d.act === 'bdput') return out(bdPut(d));                          // 🏢 지사 데이터 저장 (엑셀 자동 반영 시범) — 관리자 PIN
     if (d.act === 'interp') return out(interp(d));                        // 🌏 외국인 고객 통역
     if (d.act === 'kpicoach') return out(kpiCoach(d));                    // 📈 지표 예측 코치 (파트장)
     if (d.act === 'vbrief') return out(vbrief(d));                        // 🎬 AI 실적 영상 브리핑 — 내레이션 원고                          // 📝 롤플레잉 평가 — 본인이 등급을 골라 제출
@@ -49,6 +50,10 @@ function doGet(e) {
     const m = {}; const sh = evSh('평가제출', EV_HEAD), n = sh.getLastRow();
     if (n >= 2) sh.getRange(2, 1, n - 1, EV_HEAD.length).getValues().forEach(function (r) { const ym = ymOf(r[1]); (m[ym] = m[ym] || {})[String(r[2])] = Number(r[5]) || 0; });
     return out({ ok: true, m: m });
+  }
+  if (p.action === 'bdget') {   // 🏢 지사별 최신 데이터 (엑셀 자동 반영 시범) — 관리자 PIN
+    if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
+    return out(bdGet());
   }
   if (p.action === 'aistats') return out(aiStats());                     // 📊 AI 활용 성과 — 월별 건수만 (이름 없음)
   if (p.action === 'diags') return out({ ok: true, rows: diagRows(40) });   // 📸 공개 사례 — 이름 없음
@@ -794,6 +799,28 @@ function aiStats() {
   } catch (e) {}
   ['diag', 'rp', 'ev'].forEach(function (k) { Object.keys(o[k]).forEach(function (m) { const b = o[k][m]; b.u = Object.keys(b.u).length; b.avg = b.cnt ? Math.round(b.sum / b.cnt * 10) / 10 : null; delete b.sum; delete b.cnt; }); });
   return o;
+}
+
+/* ───── 🏢 지사 데이터 (횡전개 시범) — 지사가 올린 엑셀을 폰에서 요약해 보내면 지사·종류별로 최신본을 보관 ───── */
+const BD_HEAD = ['시각', '지사', '종류', '기간', '데이터', '올린 사람'];
+function bdPut(d) {
+  if (!P.getProperty('ADMIN_PIN') || d.pin !== P.getProperty('ADMIN_PIN')) return { ok: false, err: 'pin' };
+  const br = String(d.branch || '').replace(/\s/g, '').slice(0, 20), kind = String(d.kind || '').slice(0, 10);
+  if (!br || ['cs', 'alm'].indexOf(kind) < 0) return { ok: false, err: 'bad' };
+  const js = JSON.stringify(d.data || {});
+  if (js.length > 48000) return { ok: false, err: 'too big' };
+  const sh = evSh('지사데이터', BD_HEAD), n = sh.getLastRow();
+  if (n > 1) { const v = sh.getRange(2, 2, n - 1, 2).getValues(); for (let i = v.length - 1; i >= 0; i--) if (String(v[i][0]) === br && String(v[i][1]) === kind) sh.deleteRow(i + 2); }
+  sh.appendRow([new Date(), br, kind, String(d.period || '').slice(0, 40), js, String(d.name || '').slice(0, 10)]);
+  return { ok: true };
+}
+function bdGet() {
+  const sh = evSh('지사데이터', BD_HEAD), n = sh.getLastRow(), o = {};
+  if (n > 1) sh.getRange(2, 1, n - 1, 6).getValues().forEach(function (r) {
+    const br = String(r[1]); if (!br) return; let data = {}; try { data = JSON.parse(r[4]); } catch (e) {}
+    (o[br] = o[br] || {})[String(r[2])] = { t: new Date(r[0]).getTime(), period: String(r[3]), data: data };
+  });
+  return { ok: true, branches: o };
 }
 
 /* ───── 🌏 외국인 고객 통역 ─────
