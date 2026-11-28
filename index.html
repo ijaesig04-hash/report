@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261127224143">
+<meta name="bsr-ver" content="20261128140751">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -55,6 +55,11 @@ html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-
 .sec.aiv .aiv-c::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px}
 .sec.aiv .aiv-c.it{background:linear-gradient(135deg,#ecfdf5,#d1fae5 55%,#e0f2fe);border-color:#6ee7b7}.sec.aiv .aiv-c.it::before{background:linear-gradient(180deg,#059669,#10b981)}.sec.aiv .aiv-c.it .aiv-ic{background:linear-gradient(135deg,#059669,#10b981);box-shadow:0 6px 14px rgba(15,35,80,.25)}.sec.aiv .aiv-c.it .aiv-t b{color:#064e3b}.sec.aiv .aiv-c.it .aiv-tg em{color:#fff;background:#059669}.sec.aiv .aiv-c.it .aiv-go{background:#059669}
 .sec.aiv .aiv-c.kpc{background:linear-gradient(135deg,#eef2ff,#e0e7ff 55%,#f1f5f9);border-color:#a5b4fc}.sec.aiv .aiv-c.kpc::before{background:linear-gradient(180deg,#1e3a8a,#4f46e5)}.sec.aiv .aiv-c.kpc .aiv-ic{background:linear-gradient(135deg,#1e3a8a,#4f46e5);box-shadow:0 6px 14px rgba(15,35,80,.25)}.sec.aiv .aiv-c.kpc .aiv-t b{color:#1e1b4b}.sec.aiv .aiv-c.kpc .aiv-tg em{color:#fff;background:#4338ca}.sec.aiv .aiv-c.kpc .aiv-go{background:#4338ca}
+.ap-k{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:4px 0}.ap-k div{background:#eef2ff;border-radius:12px;padding:9px 6px;text-align:center}.ap-k b{display:block;font-size:20px;color:#1e1b4b;line-height:1.2}.ap-k b small{font-size:11px;color:var(--muted);font-weight:700}.ap-k span{font-size:11.5px;color:var(--muted)}
+.ap-n{font-size:12px;color:var(--muted);margin:6px 0 0;line-height:1.5}.kc-t td small{white-space:normal}
+.ap-sv input{width:52px;border:1.5px solid var(--line);border-radius:8px;padding:4px 5px;font:inherit;font-size:13px;text-align:right;background:var(--card,#fff);color:inherit}
+.ap-tot{margin-top:8px;font-size:15px;font-weight:800;color:#1e1b4b;background:#eef2ff;border-radius:10px;padding:9px 12px}.ap-tot b{font-size:20px;color:#4338ca}
+.ap-c{border-top:1px solid var(--line);padding:8px 0}.ap-c:first-of-type{border-top:0}.ap-c p{margin:3px 0;font-size:13.5px}.ap-c span{font-size:13px;color:#047857;font-weight:700}.ap-c small{color:var(--muted)}
 .kc-t{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 4px}.kc-t th{font-size:11.5px;color:var(--muted);font-weight:700;text-align:right;padding:4px 3px;border-bottom:1px solid var(--line)}.kc-t th:first-child,.kc-t td:first-child{text-align:left}
 .kc-t td{padding:6px 3px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}.kc-t td.ng{color:#dc2626;font-weight:800}.kc-t td.ok{color:#059669;font-weight:800}.kc-t td small{display:block;font-size:10.5px;color:var(--muted);font-weight:600}
 .kc-hd{border:2px solid #818cf8;background:#eef2ff;border-radius:14px;padding:12px 13px;margin:10px 0;font-size:16px;font-weight:800;color:#1e1b4b;line-height:1.45}
@@ -2573,6 +2578,7 @@ var AIMENU = [
   {ic:"📸", t:"AI 현장 진단", s:"사진 · 글 · 말로 질문하면<br>매뉴얼 근거로 원인 · 조치 · 멘트", tags:["시범 운영","매뉴얼·사례 95종"], href:"diag.html", c:"dg"},
   {ic:"🛍️", t:"에스원 다이렉트몰", s:"고객에게 보낼 홍보 메일 · 카톡<br>상품 추천 · 사번 10% 추가 할인", tags:["홍보 스튜디오","소개영업"], href:"directmall.html#kakao", c:"dm"},
   {ic:"🌏", t:"외국인 고객 통역", s:"말하면 바로 통역 · 읽어 주기<br>중국어 · 베트남어 · 영어 등 9개 언어", tags:["NEW","🎤 음성"], href:"interp.html", c:"it"},
+  {ic:"📊", t:"AI 활용 성과 리포트", s:"사용 현황 · AI 해결률 · 지표 변화<br>업무시간 절감 · 본사 보고 문구", tags:["NEW","관리자"], a:'data-aiperf="1"', c:"kpc", mgr:1},
   {ic:"📈", t:"AI 지표 예측 코치", s:"월말 예상 · 남은 기간 필요 수치<br>차량별 코칭 · 아침 단톡 메시지", tags:["NEW","파트장"], a:'data-kpicoach="1"', c:"kpc", mgr:1}
 ];
 function viewAi(){
@@ -2638,6 +2644,78 @@ document.addEventListener("click",function(e){
   if(e.target.closest("[data-kcre]")){ window.KC_RE=1; kcOpen(); return; }
   var b=e.target.closest("[data-kccp]"); if(b){ (navigator.clipboard?navigator.clipboard.writeText(window.KC_M||''):Promise.reject()).then(function(){ b.textContent="복사됨 ✓"; }).catch(function(){}); }
 });
+/* 📊 AI 활용 성과 리포트 (관리자) — 본사 보고용. 사용 현황(접속 기록) · AI 기능 사용(서버 집계, 이름 없음) · 지표 변화 · 업무시간 절감(파트장 입력) · 해결 사례 */
+var AP_SAVE_DEF=[["근무 편성 (AI 근태)",210,1,1],["지표 취합 · 공유 (캡처 단톡 → 앱 한 화면)",0,0,0],["고객체감 발송 관리",0,0,0],["판넬 · 위험예지 취합",0,0,0],["공지 · 교육 확인 관리",0,0,0]];
+function apSave(){ try{ var v=JSON.parse(localStorage.getItem("bsr_tsave")||"null"); if(v&&v.length) return v; }catch(e){} return AP_SAVE_DEF.map(function(r){return r.slice()}); }
+function apSaveMin(R){ return R.reduce(function(t,r){ var b=+r[1]||0,a=+r[2]||0,n=+r[3]||0; return t+Math.max(0,b-a)*n; },0); }
+function apOpen(){
+  var now=new Date(Date.now()+9*3600000), ym=now.toISOString().slice(0,7), mo=+ym.slice(5);
+  var A={log:null,st:null,cs:null,err:{}};
+  var brD=DATES.filter(function(x){return x.br}).map(function(x){return x.d}).sort(), d0=brD[0], d1=brD[brD.length-1];
+  var meAt=function(d){ var e=DATES.filter(function(x){return x.d===d&&x.br})[0]; return e?mapBR(e.br).filter(function(b){return b.name===MY})[0]:null; };
+  var b0=meAt(d0), b1=meAt(d1);
+  var csK=Object.keys(CSD).sort(), cs1=CSD[csK[csK.length-1]], cs0=CSD[csK[0]];
+  var lic=0; Object.keys(BEVAL).forEach(function(m){ (BEVAL[m].log||[]).forEach(function(l){ if(/자격증 취득/.test(l[3])) lic++; }); });
+  function draw(){
+    var h='<div class="xs-h"><b>📊 AI 활용 성과 리포트</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">'+now.getUTCFullYear()+'년 '+mo+'월 · 북서울 서비스 Report<br><small>본사 보고용 · 숫자는 앱·서버 기록에서 자동 집계</small></p>';
+    /* ① 사용 현황 */
+    h+='<div class="kc-b"><h4>📱 ① 앱 사용 현황 (이번 달)</h4>';
+    if(A.log){ var L=A.log.filter(function(r){ return new Date(r[0]+9*3600000).toISOString().slice(0,7)===ym; }), U={}, D={}, op=0;
+      L.forEach(function(r){ if(window.BSR_ALL.indexOf(r[1])<0) return; U[r[1]]=1; (D[r[1]]=D[r[1]]||{})[new Date(r[0]+9*3600000).toISOString().slice(0,10)]=1; if(/^앱 열기/.test(r[2]||"앱 열기")) op++; });
+      var un=Object.keys(U).length, ad=un?Math.round(Object.keys(D).reduce(function(t,n){return t+Object.keys(D[n]).length},0)/un*10)/10:0;
+      A.u={un:un,all:window.BSR_ALL.length,op:op,ad:ad,n:L.length};
+      h+='<div class="ap-k"><div><b>'+un+'<small>/'+window.BSR_ALL.length+'명</small></b><span>사용 인원</span></div><div><b>'+L.length.toLocaleString()+'</b><span>화면 열람</span></div><div><b>'+ad+'<small>일</small></b><span>1인 평균 사용일</span></div></div><p class="ap-n">접속 기록 서버에 남은 기록 기준</p>';
+    } else h+='<p class="ap-n">'+(A.err.log?'접속 기록을 불러오지 못했어요 · 접속 현황에서 PIN을 한 번 넣어 주세요':'불러오는 중…')+'</p>';
+    h+='</div>';
+    /* ② AI 기능 */
+    h+='<div class="kc-b"><h4>🤖 ② AI 기능 사용 (이번 달 · 누적)</h4>';
+    if(A.st){ var sum=function(k,f){ return Object.keys(A.st[k]).reduce(function(t,m){ return t+(A.st[k][m][f]||0); },0); }, cur=function(k){ return A.st[k][ym]||{n:0,u:0,ok:0,no:0,fix:0,avg:null}; };
+      var dg=cur("diag"), rp=cur("rp"), ev=cur("ev"), okA=sum("diag","ok"), noA=sum("diag","no");
+      A.ai={dn:dg.n,du:dg.u,dt:sum("diag","n"),ok:okA,no:noA,fix:sum("diag","fix"),rn:rp.n,ru:rp.u,rt:sum("rp","n"),ra:rp.avg,en:ev.n,eu:ev.u};
+      h+='<table class="kc-t"><tr><th>기능</th><th>이번 달</th><th>누적</th></tr>'+
+        '<tr><td><b>📸 AI 현장 진단</b><small>질문</small></td><td>'+dg.n+'건<small>'+dg.u+'명</small></td><td>'+A.ai.dt+'건</td></tr>'+
+        '<tr><td><b>👍 도움됐어요</b><small>응답한 것 중</small></td><td>'+(dg.ok+dg.no?Math.round(dg.ok/(dg.ok+dg.no)*100)+'%':'-')+'<small>'+dg.ok+'/'+(dg.ok+dg.no)+'</small></td><td>'+(okA+noA?Math.round(okA/(okA+noA)*100)+'%':'-')+'<small>'+okA+'/'+(okA+noA)+'</small></td></tr>'+
+        '<tr><td><b>✅ 현장 해결 사례</b><small>실제 해결 방법 공유</small></td><td>'+dg.fix+'건</td><td>'+A.ai.fix+'건</td></tr>'+
+        '<tr><td><b>🎧 AI 응대 연습</b><small>롤플레잉</small></td><td>'+rp.n+'회<small>'+rp.u+'명'+(rp.avg!=null?' · 평균 '+rp.avg+'점':'')+'</small></td><td>'+A.ai.rt+'회</td></tr>'+
+        '<tr><td><b>📝 AI 응대 평가</b><small>지사평가 반영용</small></td><td>'+ev.n+'건<small>'+ev.u+'명</small></td><td>'+sum("ev","n")+'건</td></tr></table>';
+    } else h+='<p class="ap-n">'+(A.err.st?'AI 사용 기록을 불러오지 못했어요 (서버 반영까지 5분 걸릴 수 있어요)':'불러오는 중…')+'</p>';
+    h+='</div>';
+    /* ③ 지표 변화 */
+    h+='<div class="kc-b"><h4>📈 ③ 서비스 지표 변화 ('+d0.slice(5).replace('-','/')+' → '+d1.slice(5).replace('-','/')+')</h4>';
+    if(b0&&b1){ h+='<table class="kc-t"><tr><th>지표</th><th>처음</th><th>지금</th></tr>'+M.map(function(m,k){ var r0=b0.m[k].r, r1=b1.m[k].r; return '<tr><td><b>'+m.short+'</b></td><td class="'+(r0>=100?'ok':'ng')+'">'+Math.round(r0)+'%</td><td class="'+(r1>=100?'ok':'ng')+'">'+Math.round(r1)+'%'+(r1!==r0?'<small>'+(r1>r0?'▲':'▼')+Math.abs(Math.round(r1-r0))+'%p</small>':'')+'</td></tr>'; }).join('')+
+        '<tr><td><b>달성 지표 수</b></td><td>'+okc(b0)+'/5</td><td><b>'+okc(b1)+'/5</b></td></tr></table>'; }
+    h+='<p class="ap-n">고객체감 만족도 '+cs0.sat+'점 → <b>'+cs1.sat+'점</b> · 발송 '+cs1.sent+'건 · 응답 '+cs1.resp+'건 ('+cs1.period+')'+(lic?' · 근무자 자격증 취득 '+lic+'건 (지사평가 가점 기록)':'')+'</p></div>';
+    /* ④ 업무시간 절감 */
+    var SV=apSave(), tot=apSaveMin(SV);
+    h+='<div class="kc-b"><h4>⏱️ ④ 업무시간 절감 <small style="margin-left:6px;font-weight:600">파트장 입력 기준 · 이 폰에 저장</small></h4><table class="kc-t ap-sv"><tr><th>업무</th><th>예전(분)</th><th>지금(분)</th><th>월 횟수</th></tr>'+
+      SV.map(function(r,i){ return '<tr><td style="white-space:normal">'+esc2(r[0])+'</td>'+[1,2,3].map(function(c){ return '<td><input type="number" inputmode="numeric" min="0" data-sv="'+i+'_'+c+'" value="'+(+r[c]||'')+'" placeholder="0"></td>'; }).join('')+'</tr>'; }).join('')+
+      '</table><div class="ap-tot">한 달 약 <b id="ap-tot">'+(Math.round(tot/6)/10)+'</b>시간 절감</div><p class="ap-n">근무 편성은 예전 3~4시간 → AI 근태 약 1분. 다른 업무는 예전 걸리던 시간을 넣으면 합계에 들어가요.</p></div>';
+    /* ⑤ 해결 사례 */
+    h+='<div class="kc-b"><h4>✅ ⑤ 현장 해결 사례</h4>'+(A.cs?(A.cs.length?A.cs.slice(0,3).map(function(r){ var d=new Date(r.t); return '<div class="ap-c"><b>🔧 '+esc2(r.dev||'기기')+'</b> <small>'+(d.getMonth()+1)+'/'+d.getDate()+'</small><p>'+esc2(r.sym||'')+'</p><span>✅ '+esc2(r.fix)+'</span></div>'; }).join(''):'<p class="ap-n">아직 공유된 해결 사례가 없어요 · AI 현장 진단 결과 아래에 실제 해결 방법을 남기면 모여요</p>'):'<p class="ap-n">불러오는 중…</p>')+'</div>';
+    h+='<button type="button" class="ntw-go" data-apcp="1">📋 보고 문구 복사</button>';
+    openSheet(h);
+  }
+  draw();
+  var pin=window.BSR_PIN?window.BSR_PIN():"";
+  if(pin&&window.BSR_API) fetch(window.BSR_API+"?pin="+encodeURIComponent(pin)+"&t="+Date.now()).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok){ A.log=j.rows||[]; } else A.err.log=1; draw(); }).catch(function(){ A.err.log=1; draw(); });
+  else A.err.log=1;
+  fetch(RP_API+"?action=aistats&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ if(j&&j.ok) A.st=j; else A.err.st=1; draw(); }).catch(function(){ A.err.st=1; draw(); });
+  fetch(RP_API+"?action=diags&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ A.cs=(j.rows||[]).filter(function(r){return r.fix}); draw(); }).catch(function(){ A.cs=[]; draw(); });
+  window.AP_TXT=function(){ var t='[북서울 서비스 Report · AI 활용 성과 '+mo+'월]\n';
+    if(A.u) t+='■ 앱 사용: 직원 '+A.u.all+'명 중 '+A.u.un+'명 사용 · 화면 열람 '+A.u.n+'회 · 1인 평균 '+A.u.ad+'일\n';
+    if(A.ai) t+='■ AI 현장 진단: 이번 달 '+A.ai.dn+'건('+A.ai.du+'명) · 누적 '+A.ai.dt+'건 · 도움됐어요 '+(A.ai.ok+A.ai.no?Math.round(A.ai.ok/(A.ai.ok+A.ai.no)*100)+'%':'-')+' · 현장 해결 사례 '+A.ai.fix+'건\n■ AI 응대 롤플레잉: 이번 달 '+A.ai.rn+'회('+A.ai.ru+'명)'+(A.ai.ra!=null?' 평균 '+A.ai.ra+'점':'')+' · 누적 '+A.ai.rt+'회 · 평가 '+A.ai.en+'건\n';
+    if(b0&&b1) t+='■ 서비스 지표('+d0.slice(5).replace('-','/')+'→'+d1.slice(5).replace('-','/')+'): 달성 '+okc(b0)+'/5 → '+okc(b1)+'/5 · '+M.map(function(m,k){ return m.short+' '+Math.round(b0.m[k].r)+'→'+Math.round(b1.m[k].r)+'%'; }).join(', ')+'\n';
+    t+='■ 고객체감 만족도 '+cs0.sat+' → '+cs1.sat+'점'+(lic?' · 자격증 취득 '+lic+'건':'')+'\n';
+    var m=apSaveMin(apSave()); if(m) t+='■ 업무시간 절감: 한 달 약 '+(Math.round(m/6)/10)+'시간 ('+apSave().filter(function(r){return (+r[1])>(+r[2])&&(+r[3])}).map(function(r){return r[0]+' '+r[1]+'분→'+r[2]+'분'}).join(', ')+')\n';
+    return t; };
+}
+document.addEventListener("input",function(e){ var i=e.target.closest&&e.target.closest("[data-sv]"); if(!i) return; var p=i.dataset.sv.split("_"), R=apSave(); R[+p[0]][+p[1]]=+i.value||0; try{ localStorage.setItem("bsr_tsave",JSON.stringify(R)); }catch(x){} var el=document.getElementById("ap-tot"); if(el) el.textContent=Math.round(apSaveMin(R)/6)/10; });
+document.addEventListener("click",function(e){
+  if(e.target.closest("[data-aiperf]")){ var m=document.getElementById("vlmenu"); if(m) m.hidden=true; apOpen(); return; }
+  var c=e.target.closest("[data-apcp]"); if(c&&window.AP_TXT){ var t=window.AP_TXT(); (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){ c.textContent="복사됨 ✓ 카톡·메일에 붙여 넣으세요"; }).catch(function(){ prompt("복사해서 쓰세요",t); }); }
+});
+/* 접속 기록 서버 주소 만들기 — 아래쪽 코드 묶음 안에만 있어서 관리자 화면(누가 봤나 등)에서 못 찾던 문제 보완 */
+function apiUrl(q){ var u=window.BSR_API||""; return u+(u.indexOf("?")<0?"?":"&")+q+"&t="+Date.now(); }
 function viewRep(){
   var today = kstDate(0), ym = today.slice(0,7);
   var prevYm = addDays(ym+"-01",-1).slice(0,7);
@@ -4198,6 +4276,7 @@ function viewDrive(){
 /*NEWS_START*/
 /* 업데이트 소식 — 맨 위가 최신. tabs: 바뀐 탭(빨간 점 표시) */
 var NEWS = [
+  {id:"2026-11-28a", date:"11/28", title:"nopush:📊 AI 활용 성과 리포트 · 해결 사례집", tabs:["home"], items:["📊 관리자: AI 활용 성과 리포트 — 사용 현황 · AI 해결률 · 지표 변화 · 업무시간 절감 · 본사 보고 문구 복사","📸 AI 현장 진단: 「도움됐어요/달랐어요」를 눌러 주세요 — 실제 해결 방법을 남기면 ✅ 해결 사례집에 모여요"]},
   {id:"2026-11-27b", date:"11/27", title:"근무표 11월·12월 변경 반영", tabs:["duty"], items:["🗓️ 11월: 이재식 20일 휴가 · 박수안 29~30일 주간 · 김동현 29~30일 휴가","🗓️ 12월 새 편성 — 15명 (김지원 160호로 · 박수안·김동현 제외), 🗂️ 원본 사진도 최신으로"]},
   {id:"2026-11-27a", date:"11/27", title:"고객체감 11/27 반영", tabs:["cs"], items:["📞 발송 350 · 응답 118 · 만족도 9.88 (10.01~11.27)","새 발송 21건 · 새 응답 6건 — 남현준 2건(삼부프라자 · 노원구어린이급식지원센터) · 김상훈 · 이명섭 · 박정훈 · 이재식"]},
   {id:"2026-11-26b", date:"11/26", title:"nopush:🤖 AI세코미 새 기능 2가지", tabs:["home"], items:["🌏 외국인 고객 통역 — 말하면 고객 언어로, 고객 말은 한국어로 (9개 언어)","📈 AI 지표 예측 코치 — 월말 예상 · 남은 기간 필요 수치 · 아침 단톡 메시지 (파트장)"]},
@@ -7127,7 +7206,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="ref">🤝 소개영업 앱 받기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 고객 응대 롤플레잉</button><button type="button" data-vl="diag" id="vldiag" hidden>📸 AI 현장 진단</button><button type="button" data-vl="find">🔍 고객처 한눈에 · 불만 위험</button><button type="button" data-vl="pc">👤 개인 카드</button><button type="button" data-vl="edu">📚 교육 이수 현황</button><button type="button" data-vl="sug">💬 건의 · 질문함</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📲 알림 받기 · 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 · 월말 결산</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm vl-own">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="ref">🤝 소개영업 앱 받기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 고객 응대 롤플레잉</button><button type="button" data-vl="diag" id="vldiag" hidden>📸 AI 현장 진단</button><button type="button" data-vl="find">🔍 고객처 한눈에 · 불만 위험</button><button type="button" data-vl="pc">👤 개인 카드</button><button type="button" data-vl="edu">📚 교육 이수 현황</button><button type="button" data-vl="sug">💬 건의 · 질문함</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📲 알림 받기 · 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 · 월말 결산</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-aiperf="1" class="vl-adm">📊 AI 활용 성과 리포트</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm vl-own">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){

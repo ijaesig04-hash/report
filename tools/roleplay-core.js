@@ -50,6 +50,7 @@ function doGet(e) {
     if (n >= 2) sh.getRange(2, 1, n - 1, EV_HEAD.length).getValues().forEach(function (r) { const ym = ymOf(r[1]); (m[ym] = m[ym] || {})[String(r[2])] = Number(r[5]) || 0; });
     return out({ ok: true, m: m });
   }
+  if (p.action === 'aistats') return out(aiStats());                     // 📊 AI 활용 성과 — 월별 건수만 (이름 없음)
   if (p.action === 'diags') return out({ ok: true, rows: diagRows(40) });   // 📸 공개 사례 — 이름 없음
   if (p.action === 'diaglog') {   // 🔒 현장진단 질문 기록(이름 포함) — 파트장만 (비밀번호)
     if (!P.getProperty('ADMIN_PIN') || p.pin !== P.getProperty('ADMIN_PIN')) return out({ ok: false, err: 'pin' });
@@ -763,6 +764,36 @@ function vbrief(d) {
     const j = geminiCall(sys, [{ role: 'user', parts: [{ text: '장면 목록: ' + ids.join(', ') + '\n데이터: ' + data }] }], 1500, false);
     j.ok = true; return j;
   } catch (err) { return { ok: false, err: String(err).slice(0, 200) }; }
+}
+
+/* ───── 📊 AI 활용 성과 — 월별 사용 건수 · 도움 비율 · 해결 공유 · 응대 연습/평가 (이름은 내보내지 않고 인원 수만) ───── */
+function aiStats() {
+  const o = { ok: true, ym: ymNow(), diag: {}, rp: {}, ev: {} };
+  const add = function (box, ym) { return box[ym] || (box[ym] = { n: 0, u: {}, ok: 0, no: 0, fix: 0, sum: 0, cnt: 0 }); };
+  try {
+    const sh = diagSh(), n = sh.getLastRow();
+    if (n > 1) sh.getRange(2, 1, n - 1, 9).getValues().forEach(function (r) {
+      if (!r[0]) return; const b = add(o.diag, ymOf(r[0])); b.n++; if (r[1]) b.u[r[1]] = 1;
+      if (String(r[7]) === '도움') b.ok++; else if (String(r[7]) === '아님') b.no++;
+      if (String(r[8] || '').trim()) b.fix++;
+    });
+  } catch (e) {}
+  try {
+    const sh = sheet(), n = sh.getLastRow();
+    if (n > 1) sh.getRange(2, 1, n - 1, 5).getValues().forEach(function (r) {
+      if (!r[0]) return; const b = add(o.rp, ymOf(r[0])); b.n++; if (r[1]) b.u[r[1]] = 1;
+      const t = Number(r[4]); if (t > 0) { b.sum += t; b.cnt++; }
+    });
+  } catch (e) {}
+  try {
+    const sh = evSh('평가제출', EV_HEAD), n = sh.getLastRow();
+    if (n > 1) sh.getRange(2, 1, n - 1, EV_HEAD.length).getValues().forEach(function (r) {
+      if (!r[0]) return; const b = add(o.ev, ymOf(r[1] || r[0])); b.n++; if (r[2]) b.u[r[2]] = 1;
+      const t = Number(r[5]); if (t > 0) { b.sum += t; b.cnt++; }
+    });
+  } catch (e) {}
+  ['diag', 'rp', 'ev'].forEach(function (k) { Object.keys(o[k]).forEach(function (m) { const b = o[k][m]; b.u = Object.keys(b.u).length; b.avg = b.cnt ? Math.round(b.sum / b.cnt * 10) / 10 : null; delete b.sum; delete b.cnt; }); });
+  return o;
 }
 
 /* ───── 🌏 외국인 고객 통역 ─────

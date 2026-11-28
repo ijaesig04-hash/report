@@ -115,6 +115,11 @@ textarea.rec{border-color:var(--red);box-shadow:0 0 0 3px rgba(228,0,43,.1)}
 .fb{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .fb button{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 0;font-weight:800}
 .fb button.on{border-color:var(--blue);background:#e8efff;color:var(--blue)}
+.fb button.no.on{border-color:#dc2626;background:#fef2f2;color:#b91c1c}
+.card.fbc{border:2px solid #fcd34d;background:linear-gradient(180deg,#fffbeb,#fff)}
+.card.fbc h2 small{font-weight:600;color:#92400e}
+.fbm{font-size:13px;color:#065f46;background:#ecfdf5;border-radius:10px;padding:8px 10px;margin-top:8px}
+.cf{display:flex;gap:6px;margin:0 0 10px}.cf button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:800}.cf button[aria-pressed=true]{background:#0f2350;border-color:#0f2350;color:#fff}
 .fix{display:flex;gap:6px;margin-top:8px}
 .fix input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:12px;padding:9px 11px;font:14px inherit;font-family:inherit}
 .fix button{flex:none;border:0;border-radius:12px;background:var(--navy);color:#fff;padding:0 14px;font-weight:800}
@@ -205,7 +210,7 @@ main{padding-top:12px}
     <span class="kbst" id="kbst"><i></i>자료 연결 확인 중…</span>
   </div>
   <div class="bal" id="bal" hidden></div>
-  <div class="seg" id="seg"><button type="button" data-tab="ask" aria-pressed="true">🛠️ 물어보기</button><button type="button" data-tab="mine" aria-pressed="false">🕘 내 기록</button><button type="button" data-tab="cases" aria-pressed="false">📚 지사 사례</button></div>
+  <div class="seg" id="seg"><button type="button" data-tab="ask" aria-pressed="true">🛠️ 물어보기</button><button type="button" data-tab="mine" aria-pressed="false">🕘 내 기록</button><button type="button" data-tab="cases" aria-pressed="false">✅ 해결 사례집</button></div>
 
   <section id="pAsk">
     <div id="form">
@@ -257,6 +262,7 @@ main{padding-top:12px}
 
   <section id="pCases" hidden>
     <div class="kpi" id="ck"></div>
+    <div class="cf" id="cf"><button type="button" data-cf="fix" aria-pressed="true">✅ 해결 사례</button><button type="button" data-cf="all" aria-pressed="false">전체 질문</button></div>
     <div class="card" id="clist"><div class="empty">불러오는 중…</div></div>
   </section>
 </main>
@@ -413,8 +419,9 @@ function resHtml(j, n){
     (j.safety?'<div class="box safe"><i>⚠️</i><span>'+esc(j.safety)+'</span></div>':'')+
     (j.more?'<div class="box more"><i>📷</i><span>더 정확히 보려면: '+esc(j.more)+'</span></div>':'')+'</div>';
   if(j.say) h+='<div class="card"><h2>💬 고객 안내 멘트</h2><div class="say"><span class="sel">'+esc(j.say)+'</span><div class="b"><button type="button" data-cps="'+n+'">복사하기</button><button type="button" data-says="'+n+'">🔊 들어 보기</button></div></div></div>';
-  h+='<div class="card"><h2>🙋 이 답, 도움이 됐나요?</h2><div class="fb"><button type="button" data-fb="도움" data-n="'+n+'">👍 도움됐어요</button><button type="button" data-fb="아님" data-n="'+n+'">👎 달랐어요</button></div>'+
-    '<div class="fix"><input data-fx="'+n+'" placeholder="실제로 해결한 방법 (지사 사례로 남아요)"><button type="button" data-fxs="'+n+'">저장</button></div></div>';
+  h+='<div class="card fbc"><h2>🙋 이 답, 도움이 됐나요? <small>한 번만 눌러 주세요 · AI가 더 정확해져요</small></h2><div class="fb"><button type="button" data-fb="도움" data-n="'+n+'">👍 도움됐어요</button><button type="button" class="no" data-fb="아님" data-n="'+n+'">👎 달랐어요</button></div>'+
+    '<div class="fbm" data-fbm="'+n+'" hidden></div>'+
+    '<div class="fix"><input data-fx="'+n+'" placeholder="실제로 해결한 방법 (✅ 해결 사례집에 올라가요)"><button type="button" data-fxs="'+n+'">저장</button></div></div>';
   return h;
 }
 function drawThread(){
@@ -432,7 +439,9 @@ $("thread").addEventListener("click",function(e){
   if(d.copy!=null){ t=S.thread[+d.copy]; if(t&&t.j) copy(plain(t.j)); return; }
   if(d.cps!=null){ t=S.thread[+d.cps]; if(t&&t.j) copy(t.j.say,null,"고객 안내 멘트를 복사했어요"); return; }
   if(d.says!=null){ t=S.thread[+d.says]; if(t&&t.j) speak(t.j.say); return; }
-  if(d.fb){ b.parentNode.querySelectorAll("button").forEach(function(x){ x.classList.toggle("on",x===b); }); fb(+d.n,{ok:d.fb}); return; }
+  if(d.fb){ b.parentNode.querySelectorAll("button").forEach(function(x){ x.classList.toggle("on",x===b); }); fb(+d.n,{ok:d.fb});
+    var m=document.querySelector('[data-fbm="'+d.n+'"]'); if(m){ m.hidden=false; m.textContent = d.fb==="도움" ? "고마워요! 실제로 어떻게 해결했는지 아래에 한 줄 남겨 주면 지사 해결 사례집에 올라가요." : "알려 줘서 고마워요. 실제 원인·해결 방법을 아래에 적어 주면 다음부터 AI가 참고해요."; }
+    var inp=document.querySelector('[data-fx="'+d.n+'"]'); if(inp) inp.focus(); return; }
   if(d.fxs!=null){ var inp=document.querySelector('[data-fx="'+d.fxs+'"]'), v=inp&&inp.value.trim(); if(!v) return; b.disabled=true; fb(+d.fxs,{fix:v}).then(function(){ b.textContent="저장됨 ✓"; }); return; }
 });
 
@@ -450,11 +459,14 @@ $("mlist").addEventListener("click",function(e){ var b=e.target.closest("[data-h
 function tab(k){ document.querySelectorAll("#seg button").forEach(function(x){ x.setAttribute("aria-pressed",x.dataset.tab===k); });
   $("pAsk").hidden=k!=="ask"; $("pMine").hidden=k!=="mine"; $("pCases").hidden=k!=="cases"; if(k==="cases") loadCases(); if(k==="mine") drawMine(); }
 $("seg").addEventListener("click",function(e){ var b=e.target.closest("[data-tab]"); if(b) tab(b.dataset.tab); });
+var CF="fix";
+$("cf").addEventListener("click",function(e){ var b=e.target.closest("[data-cf]"); if(!b) return; CF=b.dataset.cf; this.querySelectorAll("button").forEach(function(x){ x.setAttribute("aria-pressed",x===b); }); loadCases(); });
 function loadCases(){
   fetch(API+"?action=diags&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
-    var R=j.rows||[], okN=R.filter(function(r){return r.ok==="도움"}).length, fxN=R.filter(function(r){return r.fix}).length;
-    $("ck").innerHTML='<div><b>'+R.length+'</b><span>질문 · 진단</span></div><div><b>'+okN+'</b><span>도움됐어요</span></div><div><b>'+fxN+'</b><span>해결 방법 공유</span></div>';
-    $("clist").innerHTML = R.length ? R.map(function(r){ var d=new Date(r.t); return '<div class="case"><b>🔧 '+esc(r.dev||'기기')+'</b><small>'+(d.getMonth()+1)+'/'+d.getDate()+' · '+'북서울 직원'+(r.ok?' · '+(r.ok==="도움"?'👍':'👎'):'')+'</small><p>'+esc(r.sym||'')+(r.cause?' → '+esc(r.cause):'')+'</p>'+(r.fix?'<span class="fx">✅ 실제 해결: '+esc(r.fix)+'</span>':'')+'</div>'; }).join("") : '<div class="empty">아직 사례가 없어요.<br>첫 질문을 해 보세요!</div>';
+    var R0=j.rows||[], okN=R0.filter(function(r){return r.ok==="도움"}).length, noN=R0.filter(function(r){return r.ok==="아님"}).length, fxN=R0.filter(function(r){return r.fix}).length;
+    $("ck").innerHTML='<div><b>'+R0.length+'</b><span>질문 · 진단</span></div><div><b>'+(okN+noN?Math.round(okN/(okN+noN)*100)+'%':'-')+'</b><span>도움됐어요 ('+okN+'/'+(okN+noN)+')</span></div><div><b>'+fxN+'</b><span>해결 사례</span></div>';
+    var R = CF==="fix" ? R0.filter(function(r){return r.fix}) : R0;
+    $("clist").innerHTML = R.length ? R.map(function(r){ var d=new Date(r.t); return '<div class="case"><b>🔧 '+esc(r.dev||'기기')+'</b><small>'+(d.getMonth()+1)+'/'+d.getDate()+' · '+'북서울 직원'+(r.ok?' · '+(r.ok==="도움"?'👍':'👎'):'')+'</small><p>'+esc(r.sym||'')+(r.cause?' → '+esc(r.cause):'')+'</p>'+(r.fix?'<span class="fx">✅ 실제 해결: '+esc(r.fix)+'</span>':'')+'</div>'; }).join("") : (CF==="fix"?'<div class="empty">아직 해결 사례가 없어요.<br>진단 결과 아래 「실제로 해결한 방법」을 남기면 여기에 쌓여요.</div>':'<div class="empty">아직 사례가 없어요.<br>첫 질문을 해 보세요!</div>');
   }).catch(function(){ $("clist").innerHTML='<div class="empty">사례를 불러오지 못했어요.</div>'; });
 }
 
