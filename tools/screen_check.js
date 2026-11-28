@@ -16,7 +16,7 @@ fs.mkdirSync(out, { recursive: true });
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
   // '누구신가요?' 선택·첫 안내창을 건너뛰도록 휴대폰에 저장된 값처럼 미리 넣어 둠
   const me = process.env.BSR_ME || '이재식';
-  await ctx.addInitScript(n => { try { localStorage.setItem('bsr_me', n); localStorage.setItem('bsr_darktip', '1'); localStorage.setItem('bsr_rpnew1', '1'); localStorage.setItem('bsr_inst_snz', String(Date.now())); } catch (e) {} }, me);
+  await ctx.addInitScript(n => { try { localStorage.setItem('bsr_me', n); localStorage.setItem('bsr_dev', '64a6a0b6670bdd2a88250eeb9927cdccefa41b82fef81ebca7f0309db3723f2d'); localStorage.setItem('bsr_darktip', '1'); localStorage.setItem('bsr_rpnew1', '1'); localStorage.setItem('bsr_inst_snz', String(Date.now())); } catch (e) {} }, me);
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push({ tab: cur, msg: String(e.message || e).slice(0, 200) }));

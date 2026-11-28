@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261128161450">
+<meta name="bsr-ver" content="20261128162117">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -7257,6 +7257,18 @@ function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function s(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 var me = g("bsr_me"); if(me==="관리자"){ me=null; try{ localStorage.removeItem("bsr_me"); }catch(e){} }
 var pick = me, sent = {}, hiddenAt = 0, pin = g("bsr_pin")||"";
+/* 🔐 개발자(이재식) 이름 잠금 — 비밀번호는 해시로만 비교 (폰마다 처음 한 번) */
+var DEV_H = "64a6a0b6670bdd2a88250eeb9927cdccefa41b82fef81ebca7f0309db3723f2d", devNext = null;
+function devOk(){ return g("bsr_dev")===DEV_H; }
+function devHash(t){ return crypto.subtle.digest("SHA-256", new TextEncoder().encode("bsr-dev:"+t)).then(function(b){ return Array.prototype.map.call(new Uint8Array(b),function(x){return ("0"+x.toString(16)).slice(-2)}).join(""); }); }
+function devView(msg){
+  open('<div class="vl-hero"><small>DEVELOPER</small><h2>🔐 이재식 (앱 개발자)</h2><p>개발자 이름은 비밀번호로 잠겨 있어요.</p></div>'+
+    '<div class="vl-pin"><input id="vldev" type="password" inputmode="numeric" autocomplete="off" maxlength="12" aria-label="개발자 비밀번호"><div class="vl-err">'+(msg||'')+'</div>'+
+    '<button type="button" class="vl-btn" data-vl="devok" style="width:200px;margin:0">확인</button><button type="button" class="vl-btn" data-vl="devno" style="width:200px;margin:8px 0 0;background:none;box-shadow:none;text-decoration:underline;font-size:14px">다른 이름 고르기</button></div>');
+  setTimeout(function(){ var i=document.getElementById("vldev"); if(i) i.focus(); },50);
+}
+function devCheck(){ var i=document.getElementById("vldev"), v=i?i.value.trim():""; if(!v) return;
+  devHash(v).then(function(x){ if(x===DEV_H){ s("bsr_dev", x); var f=devNext; devNext=null; if(f) f(); else close(); } else devView("비밀번호가 맞지 않아요."); }).catch(function(){ devView("이 폰에서는 확인할 수 없어요."); }); }
 window.BSR_PIN = function(){ return MGRS.indexOf(me)>=0 ? pin : ""; };
 var chip = document.getElementById("mechip"), menu = document.getElementById("vlmenu"), ov = document.getElementById("vlov"), box = document.getElementById("vlin");
 function dnm(n){ return n==="그룹장"?"서비스 그룹장":n; }
@@ -7603,6 +7615,9 @@ ov.addEventListener("click", function(e){
   var a = b.dataset.vl;
   if(a==="close") close();
   else if(a==="rosave") roSave();
+  else if(a==="devok") devCheck();
+  else if(a==="devno"){ devNext=null; if(me==="이재식" && !devOk()){ me=null; try{ localStorage.removeItem("bsr_me"); }catch(_){} showChip(); } pick=null; PB=MY; pickView(); }
+  else if(a==="start" && pick==="이재식" && !devOk()){ devNext=function(){ var st=box.querySelector('[data-vl="start"]'); pickView(); var b2=box.querySelector('[data-vl="start"]'); if(b2) b2.click(); }; devView(); }
   else if(a==="start" && pick && PB!==MY){ me = pick; s("bsr_me", me); try{ localStorage.setItem("bsr_br", PB); }catch(_){} location.reload(); }
   else if(a==="start" && pick){ var changed = pick!==me; me = pick; s("bsr_me", me); showChip(); close(); try{ if(window.render) render(); }catch(_){} if(changed){ sent = {}; send(openTag()); sent[window.state?state.tab:"cmp"]=1; } }
   else if(a==="pinok"){ var i=document.getElementById("vlpin"); loadAdmin(i?i.value.trim():""); }
@@ -7616,7 +7631,9 @@ ov.addEventListener("input", function(e){
   pick = v || null;
   if(b){ b.disabled = !v; b.textContent = v ? dnm(v)+ro(dnm(v))+' 시작하기' : '이름을 선택해 주세요'; }
 });
-ov.addEventListener("keydown", function(e){ if(e.key==="Enter" && e.target.id==="vlpin") loadAdmin(e.target.value.trim()); });
+ov.addEventListener("keydown", function(e){ if(e.key==="Enter" && e.target.id==="vlpin") loadAdmin(e.target.value.trim()); if(e.key==="Enter" && e.target.id==="vldev") devCheck(); });
+/* 이미 이재식으로 들어와 있는 폰도 처음 한 번 확인 */
+if(me==="이재식" && !devOk()) setTimeout(function(){ devNext=function(){ close(); }; devView(); }, 600);
 document.getElementById("tabs").addEventListener("click", function(e){ var b=e.target.closest("[data-tab]"); if(b) logTab(b.dataset.tab); });
 document.addEventListener("visibilitychange", function(){
   if(document.visibilityState==="hidden") hiddenAt = Date.now();
