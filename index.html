@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261128180553">
+<meta name="bsr-ver" content="20261128182655">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -7347,7 +7347,7 @@ function roHtml(){ var r=RO[PB];
   return h; }
 function brPickTo(v){
   var go=function(){ PB=v; try{ if(brFree()) localStorage.setItem("bsr_brok_"+v,"1"); }catch(_){}
-    var keep=["그룹장"].concat(CSG).concat(v==="북서울"?["타부서"]:[]).concat(devOk()?["이재식"]:[]); if(pick && keep.indexOf(pick)<0){ var L=v==="북서울"?ALL.concat(DEPTS["영업"]).concat(DEPTS["기술"]):roNames(v); if(L.indexOf(pick)<0) pick=null; }
+    var keep=["그룹장"].concat(CSG).concat(devOk()?["이재식"]:[]); if(pick && keep.indexOf(pick)<0){ var L=v==="북서울"?ALL.concat(DEPTS["영업"]).concat(DEPTS["기술"]):roNames(v); if(L.indexOf(pick)<0) pick=null; }
     pickView(); roLoad(v, function(){ if(PB===v && !ov.hidden){ if(pick && keep.indexOf(pick)<0 && v!=="북서울" && roNames(v).indexOf(pick)<0) pick=null; pickView(); } }); };
   if(v==="북서울"||brFree()||g("bsr_brok_"+v)==="1"){ go(); return; }
   var pw=prompt(v+"지사 비밀번호를 입력하세요"); if(!pw){ pickView(); return; }
@@ -7376,14 +7376,14 @@ function pickView(){
     '<p><i>🚗 직원</i><span>내 근무·미응답·지표 · 해피콜 제출</span></p>'+
     '<p><i>🎖️ 서비스 그룹장</i><span>서울CS지원 · 지표 보기 · 💬 응원 코멘트</span></p>'+
     '<p><i>💼 영업 · 💻 기술</i><span>내 해피콜 · 부서 공지 · 지표 보기</span></p>'+
-    '<p><i>👀 타부서</i><span>지표 보기 전용</span></p></div>';
+    '</div>';
   if(PB!=="북서울") h += roHtml(); else {
   STAFF.forEach(function(gr, gi){ if(gi===0) h += '<div class="vl-div vl-sec"><span>🔒 관리자</span></div>'; if(gi===2) h += '<div class="vl-div vl-sec"><span>🚓 차량 근무자</span></div>'; h += '<div class="vl-g">'+gr[0]+'</div>'; (gi===0?gr[1].concat(["그룹장"]):gr[1]).forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장"||n==="그룹장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':n==="이재식"?'👨‍💻 ':'')+(n==="그룹장"?'<span style="white-space:nowrap;font-size:13.5px;letter-spacing:-.5px">🎖️서비스 그룹장</span>':n)+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
   h += '<div class="vl-div vl-sec"><span>💼 영업 · 💻 기술</span></div>';
   Object.keys(DEPTS).forEach(function(k){ h += '<div class="vl-g">'+(k==="영업"?'💼 ':'💻 ')+k+'</div>'+DEPTS[k].map(function(n){ var ld = DEPT_LEAD[k]===n; return '<button type="button" class="vl-n'+(ld?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(ld?(k==="영업"?'👔 ':'🧑‍💻 '):'')+n+'<small>'+k+(ld?'팀장':'')+'</small></button>'; }).join(''); });
   }
   var listed = ALL.concat(["그룹장","타부서"]).concat(CSG).concat(DEPTS["영업"]).concat(DEPTS["기술"]).concat(roNames(PB)), typed = pick && listed.indexOf(pick)<0 ? pick : "";
-  if(PB==="북서울") h += '<div class="vl-g">그 외</div>'+["타부서"].map(function(n){ return '<button type="button" class="vl-n'+(n==="그룹장"?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="그룹장"?'🎖️ ':'')+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('');
+  /* 타부서 버튼은 11/28 삭제 (기존에 타부서로 고른 폰은 그대로 동작) */
   h += '<div class="vl-div"><span>목록에 이름이 없으면</span></div><div class="vl-in-row"><label for="vlname">직접 입력</label><input id="vlname" type="text" maxlength="10" autocomplete="off" placeholder="이름을 입력하세요" value="'+esc(typed)+'" aria-label="이름 직접 입력"></div></div>';
   if(PB!=="북서울" && me==="이재식" && devOk() && !pick) pick="이재식";
   h += '<button type="button" class="vl-btn" data-vl="start"'+(pick?'':' disabled')+'>'+(pick==="이재식"&&PB!=="북서울"?'👨‍💻 개발자(이재식)로 '+esc(PB)+'지사 보기':pick?esc(dnm(pick))+ro(dnm(pick))+' 시작하기':'이름을 선택해 주세요')+'</button>';
