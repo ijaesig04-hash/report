@@ -203,14 +203,19 @@ function viewHtml(){
 function cmpHtml(){
   if(!pin()) return needPin();
   if(!S.all) return '<div class="card"><div class="empty">불러오는 중…</div></div>';
-  var K=Object.keys(S.all); if(!K.length) return '<div class="card"><div class="empty">아직 올라온 지사 자료가 없어요.</div></div>';
+  var K=Object.keys(S.all); if(!K.length) return '<div class="card"><div class="empty">아직 올라온 지사 자료가 없어요.</div></div>'+pwCard();
   var cs=K.filter(function(k){return S.all[k].cs}).map(function(k){ var d=S.all[k].cs.data; return [k,d.sent,pc(d.resp,d.sent),d.sat]; }).sort(function(a,b){ return (b[3]||0)-(a[3]||0) || b[2]-a[2]; });
   var al=K.filter(function(k){return S.all[k].alm}).map(function(k){ var d=S.all[k].alm.data; return [k,d.places,d.alarms,pc(d.done,d.places),d.hot]; }).sort(function(a,b){ return b[3]-a[3]; });
   var h='';
   if(cs.length) h+='<div class="card"><h2>📞 고객체감 순위 <small>만족도 → 응답률</small></h2><table><tr><th>지사</th><th>발송</th><th>응답률</th><th>만족도</th></tr>'+cs.map(function(r,i){ return '<tr><td><b>'+(i+1)+'</b> '+esc(r[0])+'</td><td>'+r[1]+'</td><td>'+r[2]+'%</td><td>'+(r[3]==null?'-':r[3])+'</td></tr>'; }).join("")+'</table></div>';
   if(al.length) h+='<div class="card"><h2>🔁 다발보 조치율 순위</h2><table><tr><th>지사</th><th>고객처</th><th>건수</th><th>조치율</th><th>3회↑</th></tr>'+al.map(function(r,i){ return '<tr><td><b>'+(i+1)+'</b> '+esc(r[0])+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td class="'+(r[3]>=50?'ok':'ng')+'">'+r[3]+'%</td><td>'+r[4]+'</td></tr>'; }).join("")+'</table></div>';
+  h+=pwCard();
   return h+'<p class="note">각 지사가 엑셀을 올리면 자동으로 이 표에 들어가요 (지사마다 최신 1개씩)</p>';
 }
+function pwCard(){ return '<div class="card"><h2>🔑 지사 비밀번호 바꾸기 <small>초기 0000</small></h2><p class="note" style="margin:0">리포트에서 이 지사를 고를 때 넣는 비밀번호예요. 위에서 고른 <b>'+esc(S.br)+'지사</b>에 적용돼요.</p><div class="pin"><input id="bpw" type="text" inputmode="numeric" maxlength="20" placeholder="새 비밀번호"><button type="button" class="go" id="bpwok" style="width:auto;margin:0;padding:9px 16px">바꾸기</button></div></div>'; }
+document.addEventListener("click",function(e){ if(!e.target.closest("#bpwok")) return; var w=$("bpw").value.trim(); if(!w) return;
+  fetch(API,{method:"POST",body:JSON.stringify({act:"brpw",pin:pin(),branch:S.br,pw:w})}).then(function(r){return r.json()}).then(function(j){ toast(j&&j.ok?S.br+"지사 비밀번호를 바꿨어요":"바꾸지 못했어요 ("+((j&&j.err)||"오류")+")"); if(j&&j.ok) $("bpw").value=""; }).catch(function(){ toast("인터넷 연결을 확인해 주세요"); });
+});
 if(ME==="이재식"){ draw(); load(); }
 </script>
 </body>

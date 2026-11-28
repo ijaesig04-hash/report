@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261128143531">
+<meta name="bsr-ver" content="20261128144945">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1832,6 +1832,9 @@ button.aib{cursor:pointer}
 .xs{position:fixed;inset:0;z-index:85;background:rgba(6,16,42,.55);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(env(safe-area-inset-top,0px) + 20px) 12px 30px}
 .xs[hidden]{display:none}
 .xs-in{max-width:560px;margin:0 auto;background:#fff;color:#14213a;border-radius:18px;padding:14px 16px 18px;color-scheme:only light}
+.brsel{margin-top:8px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:6px 14px;font-weight:800;font-size:14px;cursor:pointer}.brsel i{font-style:normal;opacity:.8}
+.brl{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.brl button{border:1.5px solid #dbe3f0;background:#f7f9fd;border-radius:12px;padding:11px 6px;font-weight:800;font-size:14px;color:#14213a;word-break:keep-all}.brl button[aria-pressed=true]{background:#0f2350;color:#fff;border-color:#0f2350}.brl small{font-size:11px}
+.brw{text-align:center;padding:26px 16px}.brw-i{font-size:38px}.brw b{display:block;font-size:17px;margin:6px 0}.brw p{color:#5d6879;font-size:14px;margin:0 0 14px;word-break:keep-all}.brw-go{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.brw-go button,.brw-back{border:0;border-radius:12px;padding:10px 14px;font-weight:800;background:#e8efff;color:#1f4fd8;cursor:pointer}.brw-back{margin-top:10px;background:none;color:#5d6879;text-decoration:underline}
 .xs-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.xs-h b{font-size:16px}
 .xs-h button{border:0;background:#eef2f8;border-radius:10px;padding:7px 11px;font:700 13px "Noto Sans KR",sans-serif;cursor:pointer;margin-left:4px;color:#14213a}
 .xs-n{border-top:1px solid #e3e9f3;padding:10px 0}.xs-n div{display:flex;gap:8px;align-items:baseline}.xs-n span{color:#1f4fd8;font-weight:800;font-size:12px}
@@ -2181,6 +2184,11 @@ var M = [
   {name:"당사일괄 총시간",   short:"일괄",   tl:"목표"}
 ];
 var DATE = "2026-10-15", MY = "북서울";
+/* 🏢 지사 선택 (횡전개 대비) — 고른 지사는 폰에 기억. 북서울 외 지사는 비밀번호(서버 확인, 초기 0000). 서비스 그룹장·서울CS지원은 비밀번호 없이 모든 지사, 이재식(북서울 CS파트장)은 앱 개발자라 마스터 권한 */
+var CSG = ["정용묵","이동규","김대영","강보순"];
+function brFree(){ var n=""; try{ n=localStorage.getItem("bsr_me")||""; }catch(e){} return n==="이재식"||n==="그룹장"||CSG.indexOf(n)>=0; }
+function brCan(){ return brFree(); }   /* 지사 선택 버튼이 보이는 사람 (지금은 이재식·그룹장·서울CS지원만) */
+try{ var _b=localStorage.getItem("bsr_br"); if(_b && brCan() && (_b==="북서울" || brFree() || localStorage.getItem("bsr_brok_"+_b)==="1")) MY=_b; }catch(e){}
 
 /* 셀 = 목표,실적,달성률 / 5개 지표를 | 로 구분. 시트의 달성률을 그대로 옮겼습니다.
    (엑셀에서 100%로 보이지만 미달로 표시된 2곳은 99.5로 넣어 미달 처리) */
@@ -2282,7 +2290,7 @@ function renderHero(){
   document.getElementById("hero").innerHTML =
     '<div class="himg" role="img" aria-label="오늘도 고객의 안전을 지키는 에스원"></div>'+
     '<div class="htop"><div class="eyebrow"><i></i>에스원 서울사업팀 · 기준일 '+DATE+(SD.br!==DATE?' (지표 '+md(SD.br)+')':'')+'</div>'+
-    '<div class="dsel" role="group" aria-label="기준일 선택">'+DATES.map(function(x){return '<button type="button" data-date="'+x.d+'" aria-pressed="'+(x.d===DATE)+'">'+x.d.slice(5).replace("-","/")+'</button>'}).join("")+'</div>'+'<h1>북서울 서비스 Report</h1></div>'+
+    '<div class="dsel" role="group" aria-label="기준일 선택">'+DATES.map(function(x){return '<button type="button" data-date="'+x.d+'" aria-pressed="'+(x.d===DATE)+'">'+x.d.slice(5).replace("-","/")+'</button>'}).join("")+'</div>'+'<h1>'+MY+' 서비스 Report</h1>'+(brCan()?'<button type="button" class="brsel" data-brsel="1" aria-label="지사 선택">🏢 '+MY+'지사 <i>▾</i></button>':'')+'</div>'+
     '<div class="hbody"><div class="score"><div class="big">'+n+'<small>/5</small></div><p><b>차량지표</b>달성 현황'+(PREV?'<br><span class="dlnote">▲▼ '+md(PREV.d)+' 대비 %p</span>':'')+'</p></div>'+
     '<div class="hchips">'+chips+'</div></div>';
 }
@@ -2312,7 +2320,7 @@ function mySummary(){
   var _bs = '';
   var mine = me.m.map(function(c,i){ return kpiCard(i,c,rank(i,c.r)); }).join("");
   var nOk = okc(me), avgRk = Math.round(me.m.reduce(function(a,c,i){return a+rank(i,c.r)},0)/5);
-  return _bs+'<div class="sec"><h2>북서울지사 전체 <span>사업팀 '+BR.length+'개 지사·직할 기준</span></h2>'+
+  return _bs+'<div class="sec"><h2>'+MY+'지사 전체 <span>사업팀 '+BR.length+'개 지사·직할 기준</span></h2>'+
     brHero(nOk,avgRk)+
     '<div class="kpgrid">'+mine+'</div>'+
     '<div class="legend"><span><i class="g"></i>100% 이상</span><span><i class="w"></i>80~99%</span><span><i class="b"></i>80% 미만</span><span>오른쪽 숫자는 사업팀 순위</span></div></div>';
@@ -2424,7 +2432,7 @@ function brRankTable(rows){
   }).join("");
   return '<div class="sec"><h2>지사별 순위표 <span>달성 지표 수 → 종합점수 순</span></h2><div class="card brk-w">'+
     '<div class="brk head"><span>순위</span><span>지사</span><span>지표 5개</span><span>달성</span><span>점수</span></div>'+body+'</div>'+
-    '<p class="note">종합점수 = 지표 5개 달성률 평균(각 0~100%로 맞춤). 점수가 같으면 초과 달성분까지 넣은 평균으로 순위를 가립니다. 북서울은 노란색으로 표시됩니다.</p></div>';
+    '<p class="note">종합점수 = 지표 5개 달성률 평균(각 0~100%로 맞춤). 점수가 같으면 초과 달성분까지 넣은 평균으로 순위를 가립니다. '+MY+'은(는) 노란색으로 표시됩니다.</p></div>';
 }
 function viewCmp(){
   var labels = [["all","종합"]].concat(M.map(function(m,i){return [String(i),m.name]}));
@@ -2882,7 +2890,7 @@ function viewMgt(){
   var chips = labels.map(function(l){
     return '<button type="button" class="chip" data-mg="'+l[0]+'" aria-pressed="'+(state.mg===l[0])+'">'+l[1]+'</button>';
   }).join("");
-  return '<div class="sec"><h2>북서울지사 관리지표 <span>기준일 '+SD.mgn+'</span></h2>'+mgHero(N)+
+  return '<div class="sec"><h2>'+MY+'지사 관리지표 <span>기준일 '+SD.mgn+'</span></h2>'+mgHero(N)+
     '<div class="card"><div class="gtitle">사고현황</div>'+acc+car+safe+'</div>'+
     '<div class="card"><div class="gtitle">기본준수</div>'+loop+video+sent+'</div>'+
     '<p class="note">영상가림 달성률은 목표 '+VT+'% 대비이며 실적이 낮을수록 높아집니다. 전송률은 80% 이상 초록, 70~79% 노랑, 70% 미만 빨강입니다. 차량/안전 무사고는 숫자사원 대상(차량사고: 가해·단독·피해)입니다.</p></div>'+
@@ -3316,7 +3324,7 @@ function loadDate(d){
   BR = mapBR(Db.br); VEH = mapVEH(Dv.veh);
   MGN = Dm.mgn.map(function(x){return {name:x[0],cars:x[1],acc:x[2],carLast:x[3],carDays:liveDays(x[3],x[4]),safeLast:x[5],safeDays:liveDays(x[5],x[6]),lpC:x[7],lpO:x[8],lpD:x[9],vAct:x[10],vRate:x[11],vTot:x[12],vSent:x[13],sent:x[14]}});
   MGT = Object.assign({}, Dm.mgt, {carDays:liveDays(Dm.mgt.carLast,Dm.mgt.carDays), safeDays:liveDays(Dm.mgt.safeLast,Dm.mgt.safeDays)});
-  mg = MGN.filter(function(b){return b.name===MY})[0];
+  mg = MGN.filter(function(b){return b.name===MY})[0] || MGN.filter(function(b){return b.name===MY.replace(/\(.*\)/,"")})[0] || MGN.filter(function(b){return b.name==="북서울"})[0];
   me = BR.filter(function(b){return b.name===MY})[0];
   /* 개인별의 불필요·발보율은 같은 날(없으면 그 이전) 차량별 값 */
   var VP = mapVEH(pick("veh",Dp.d).veh);
@@ -5782,7 +5790,7 @@ var NG_AT = 0;
 function notiGate(){
   try{
     if(typeof NOTI==="undefined" || typeof notiAcked!=="function" || document.getElementById("ngate") || document.getElementById("mxc") || document.getElementById("bday")) return;
-    var me = myName(); if(!me || mgrIs() || ["타부서","그룹장"].indexOf(me)>=0) return;
+    var me = myName(); if(!me || mgrIs() || ["타부서","그룹장"].concat(CSG).indexOf(me)>=0) return;
     if(Date.now()-NG_AT < 90000) return;
     var x0 = document.getElementById("xsheet"); if(x0 && !x0.hidden) return;
     var lim = Date.now()-30*86400000, L = NOTI.items.filter(function(x){ return x.t>lim && !notiAcked(x.id); });
@@ -6930,15 +6938,15 @@ function tabOrderFix(){ try{ if(typeof notiRefilter==="function") notiRefilter()
   var salOn = true;
   var st = document.querySelector('[role=tab][data-tab="sal"]'); if(st){ st.hidden = !salOn; /* 서비스 직원 · 관리자는 맨 끝, 영업 · 기술 · 타부서는 브리핑 바로 옆 */ if(d==='서비스'){ if(st.parentNode.lastElementChild!==st) st.parentNode.appendChild(st); } else if(st.parentNode.children[1]!==st) hm.parentNode.insertBefore(st, hm.nextElementSibling); if(st.hidden && state.tab==="sal"){ state.tab="home"; document.querySelectorAll("#tabs button").forEach(function(x){x.setAttribute("aria-selected", x.dataset.tab==="home")}); } }
   /* AI세코미 탭: 서비스 부서(서비스 관리자 · 차량 근무자 · 서비스 그룹장)는 원래 자리, 그 밖(지사장 · 영업 · 기술 · 타부서 · 직접 입력)은 브리핑 바로 옆 (11/23) */
-  var svcN = (window.BSR_ALL||[]).filter(function(x){ return x!=="지사장"; }).concat(["그룹장"]), isSvc = svcN.indexOf(mn)>=0;
+  var svcN = (window.BSR_ALL||[]).filter(function(x){ return x!=="지사장"; }).concat(["그룹장"]).concat(CSG), isSvc = svcN.indexOf(mn)>=0;
   var at = document.querySelector('[role=tab][data-tab="ai"]'); if(at){ if(!isSvc){ if(hm.nextElementSibling!==at) hm.parentNode.insertBefore(at, hm.nextElementSibling); } else { var rp = document.querySelector('[role=tab][data-tab="rep"]'); if(rp && rp.nextElementSibling!==at) rp.parentNode.insertBefore(at, rp.nextElementSibling); } }
   document.documentElement.classList.toggle("dept-sal", d==="영업" || (typeof mgrIs==="function" && mgrIs()));   /* 개시 방문 체크리스트는 서비스만 */ }catch(e){} }
 function render(){ tabOrderFix();
-  var v = state.tab==="home" ? bdayCard()+przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="sal" ? viewSal() : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : state.tab==="ai" ? viewAi() : viewRep();
+  var v = (MY!=="북서울" && ["cmp","mgt","ai","sal"].indexOf(state.tab)<0) ? brWait(state.tab) : state.tab==="home" ? bdayCard()+przBanner()+'<div class="brt">'+viewHome()+'</div>' : state.tab==="sal" ? viewSal() : state.tab==="veh" ? viewVeh() : state.tab==="cmp" ? viewCmp() : state.tab==="mgt" ? viewMgt() : state.tab==="ppl" ? viewPpl() : state.tab==="eval" ? viewEval() : state.tab==="cs" ? viewCs() : state.tab==="duty" ? viewDuty() : state.tab==="drv" ? viewDrive() : state.tab==="alm" ? viewAlm() : state.tab==="ai" ? viewAi() : viewRep();
   var nft = newsFor(state.tab); if(nft) markSeen("bsr_tab_"+state.tab, nft.id); nseenAdd(NEWS.slice(0,40).filter(function(n){return n.tabs.indexOf(state.tab)>=0}).map(function(n){return n.id}));
   var VW0 = document.getElementById("view"), dk = function(d){ var sm = d.querySelector('summary'); return (d.className||'')+'|'+(sm?sm.textContent.replace(/[\d\s▾▴]/g,'').slice(0,24):''); }, op = [];
   VW0.querySelectorAll("details[open]").forEach(function(d){ op.push(dk(d)); });
-  var HTML = '<div class="wrap" style="gap:20px">'+(window.notiBanner?notiBanner():'')+newsBanner()+staleNote()+v+'</div>';
+  var HTML = '<div class="wrap" style="gap:20px">'+(MY==="북서울"?(window.notiBanner?notiBanner():'')+newsBanner():'')+staleNote()+v+'</div>';
   /* 자동 새로고침(날씨 · 동기화 · 앱 복귀 등)인데 내용이 그대로면 화면을 다시 그리지 않음 → 스크롤 중 깜빡임 방지 */
   if(window._RQ && VW0._html===HTML){ return; }
   VW0._html = HTML; VW0.innerHTML = HTML;
@@ -7002,7 +7010,32 @@ document.getElementById("view").addEventListener("click",function(e){   var dsw 
   else if(v){ state.veh = +v.dataset.veh; render(); }
   else if(m){ state.met = m.dataset.met; render(); }
 });
+function brWait(t){
+  var nm = {home:"브리핑",veh:"차량별",ppl:"개인별",eval:"월별 평가",cs:"고객체감",duty:"근무표",drv:"운전성향",alm:"다발보",rep:"취합건 연동"}[t]||"이 탭";
+  return '<div class="sec"><div class="card brw"><div class="brw-i" aria-hidden="true">🏢</div><b>'+esc2(MY)+'지사 · '+nm+'</b><p>이 지사의 '+nm+' 자료는 아직 없어요.<br>지사에서 엑셀을 올리면 여기에 나와요.</p>'+
+    '<div class="brw-go"><button type="button" data-brgo="cmp">📊 지사별 지표 보기</button><button type="button" data-brgo="mgt">🛡️ 관리지표 보기</button></div>'+
+    '<button type="button" class="brw-back" data-brset="북서울">↩ 북서울지사로 돌아가기</button></div></div>';
+}
+function brSheet(){
+  var L = BR.map(function(b){return b.name}); if(L.indexOf("북서울")>0){ L.splice(L.indexOf("북서울"),1); L.unshift("북서울"); }
+  openSheet('<div class="xs-h"><b>🏢 지사 선택</b><button type="button" data-xs="close">✕</button></div><p class="xs-p">고른 지사 기준으로 제목·지표·순위 표시가 바뀌어요.'+(brFree()?'':' 북서울 외 지사는 비밀번호가 필요해요.')+'</p><div class="brl">'+
+    L.map(function(n){ var lk = n!=="북서울" && !brFree() && (function(){ try{ return localStorage.getItem("bsr_brok_"+n)!=="1"; }catch(e){ return true; } })();
+      return '<button type="button" data-brset="'+esc2(n)+'" aria-pressed="'+(n===MY)+'">'+esc2(n)+(lk?' <small>🔒</small>':'')+'</button>'; }).join('')+'</div>');
+}
+function brSet(n){
+  var go = function(){ MY = n; try{ localStorage.setItem("bsr_br", n); }catch(e){} var o=document.getElementById("xsheet"); if(o){ o.hidden=true; document.body.style.overflow=""; } loadDate(DATE); renderHero(); render(); window.scrollTo(0,0); };
+  if(n==="북서울" || brFree() || (function(){ try{ return localStorage.getItem("bsr_brok_"+n)==="1"; }catch(e){ return false; } })()){ go(); return; }
+  var pw = prompt(n+"지사 비밀번호를 입력하세요"); if(!pw) return;
+  fetch(RP_API+"?action=brchk&br="+encodeURIComponent(n)+"&pw="+encodeURIComponent(pw)+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
+    if(j && j.ok){ try{ localStorage.setItem("bsr_brok_"+n,"1"); }catch(e){} go(); } else alert("비밀번호가 맞지 않아요.");
+  }).catch(function(){ alert("인터넷 연결을 확인해 주세요."); });
+}
+document.addEventListener("click",function(e){
+  var s = e.target.closest("[data-brset]"); if(s){ e.preventDefault(); brSet(s.dataset.brset); return; }
+  var g = e.target.closest("[data-brgo]"); if(g){ var tb=document.querySelector('#tabs [data-tab="'+g.dataset.brgo+'"]'); if(tb) tb.click(); }
+});
 document.getElementById("hero").addEventListener("click",function(e){
+  if(e.target.closest("[data-brsel]")){ brSheet(); return; }
   var b = e.target.closest("[data-date]"); if(!b || b.dataset.date===DATE) return;
   loadDate(b.dataset.date); renderHero(); render();
 });
@@ -7251,9 +7284,10 @@ function pickView(){
     '<p><i>💼 영업 · 💻 기술</i><span>내 해피콜 · 부서 공지 · 지표 보기</span></p>'+
     '<p><i>👀 타부서</i><span>지표 보기 전용</span></p></div>';
   STAFF.forEach(function(gr, gi){ if(gi===0) h += '<div class="vl-div vl-sec"><span>🔒 관리자</span></div>'; if(gi===2) h += '<div class="vl-div vl-sec"><span>🚓 차량 근무자</span></div>'; h += '<div class="vl-g">'+gr[0]+'</div>'; (gi===0?gr[1].concat(["그룹장"]):gr[1]).forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장"||n==="그룹장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':n==="이재식"?'👨‍💻 ':'')+(n==="그룹장"?'<span style="white-space:nowrap;font-size:13.5px;letter-spacing:-.5px">🎖️서비스 그룹장</span>':n)+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
+  h += '<div class="vl-div vl-sec"><span>🎖️ 서울CS지원</span></div><div class="vl-g">서울CS지원</div>'+CSG.map(function(n){ return '<button type="button" class="vl-n" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+n+'<small>서울CS지원</small></button>'; }).join('');
   h += '<div class="vl-div vl-sec"><span>💼 영업 · 💻 기술</span></div>';
   Object.keys(DEPTS).forEach(function(k){ h += '<div class="vl-g">'+(k==="영업"?'💼 ':'💻 ')+k+'</div>'+DEPTS[k].map(function(n){ var ld = DEPT_LEAD[k]===n; return '<button type="button" class="vl-n'+(ld?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(ld?(k==="영업"?'👔 ':'🧑‍💻 '):'')+n+'<small>'+k+(ld?'팀장':'')+'</small></button>'; }).join(''); });
-  var listed = ALL.concat(["그룹장","타부서"]).concat(DEPTS["영업"]).concat(DEPTS["기술"]), typed = pick && listed.indexOf(pick)<0 ? pick : "";
+  var listed = ALL.concat(["그룹장","타부서"]).concat(CSG).concat(DEPTS["영업"]).concat(DEPTS["기술"]), typed = pick && listed.indexOf(pick)<0 ? pick : "";
   h += '<div class="vl-g">그 외</div>'+["타부서"].map(function(n){ return '<button type="button" class="vl-n'+(n==="그룹장"?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="그룹장"?'🎖️ ':'')+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('')+
     '<div class="vl-div"><span>목록에 이름이 없으면</span></div><div class="vl-in-row"><label for="vlname">직접 입력</label><input id="vlname" type="text" maxlength="10" autocomplete="off" placeholder="이름을 입력하세요" value="'+esc(typed)+'" aria-label="이름 직접 입력"></div></div>';
   h += '<button type="button" class="vl-btn" data-vl="start"'+(pick?'':' disabled')+'>'+(pick?esc(dnm(pick))+ro(dnm(pick))+' 시작하기':'이름을 선택해 주세요')+'</button>';
