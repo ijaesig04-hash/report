@@ -23,7 +23,13 @@ function doPost(e) {
     if (d.act === 'cmp') return out(aiCompare(d));                         // 🧪 Gemini ↔ Claude 비교 시험 — 파트장만 (비밀번호)                            // 📸 AI 현장 진단 — 사진 → 기기·원인·조치
     if (d.act === 'diagfb') return out(diagFb(d));                        // 📸 진단 결과 도움 여부 / 실제 조치 남기기
     if (d.act === 'bdput') return out(bdPut(d));
-  if (d.act === 'brpw') return out(brPwSet(d));                          // 🏢 지사 데이터 저장 (엑셀 자동 반영 시범) — 관리자 PIN
+  if (d.act === 'brpw') return out(brPwSet(d));
+  if (d.act === 'rosterput') {   // 지사 비밀번호 또는 관리자 PIN
+    var rb = String(d.branch || '').replace(/\s/g, '').slice(0, 20), pw = String(d.pw || '');
+    if (!rb || rb === '북서울') return out({ ok: false, err: 'branch' });
+    if (pw !== (brPw()[rb] || '0000') && !(P.getProperty('ADMIN_PIN') && pw === P.getProperty('ADMIN_PIN'))) return out({ ok: false, err: 'pw' });
+    P.setProperty('RO_' + rb, String(d.text || '').slice(0, 6000)); return out({ ok: true });
+  }                          // 🏢 지사 데이터 저장 (엑셀 자동 반영 시범) — 관리자 PIN
     if (d.act === 'interp') return out(interp(d));                        // 🌏 외국인 고객 통역
     if (d.act === 'kpicoach') return out(kpiCoach(d));                    // 📈 지표 예측 코치 (파트장)
     if (d.act === 'vbrief') return out(vbrief(d));                        // 🎬 AI 실적 영상 브리핑 — 내레이션 원고                          // 📝 롤플레잉 평가 — 본인이 등급을 골라 제출
@@ -51,6 +57,9 @@ function doGet(e) {
     const m = {}; const sh = evSh('평가제출', EV_HEAD), n = sh.getLastRow();
     if (n >= 2) sh.getRange(2, 1, n - 1, EV_HEAD.length).getValues().forEach(function (r) { const ym = ymOf(r[1]); (m[ym] = m[ym] || {})[String(r[2])] = Number(r[5]) || 0; });
     return out({ ok: true, m: m });
+  }
+  if (p.action === 'roster') {   // 📋 지사 직원 명단 (이름 고르기 화면용)
+    return out({ ok: true, text: P.getProperty('RO_' + String(p.br || '').replace(/\s/g, '').slice(0, 20)) || '' });
   }
   if (p.action === 'brchk') {   // 🏢 지사 선택 비밀번호 확인 (초기 0000, 관리자가 bdpw로 변경)
     var pw = brPw()[String(p.br || '')] || '0000';

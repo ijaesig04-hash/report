@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261128160442">
+<meta name="bsr-ver" content="20261128161450">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -1835,6 +1835,9 @@ button.aib{cursor:pointer}
 .brsel{margin-top:8px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:6px 14px;font-weight:800;font-size:14px;cursor:pointer}.brsel i{font-style:normal;opacity:.8}
 .brl{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.brl button{border:1.5px solid #dbe3f0;background:#f7f9fd;border-radius:12px;padding:11px 6px;font-weight:800;font-size:14px;color:#14213a;word-break:keep-all}.brl button[aria-pressed=true]{background:#0f2350;color:#fff;border-color:#0f2350}.brl small{font-size:11px}
 .brw{text-align:center;padding:26px 16px}.brw-i{font-size:38px}.brw b{display:block;font-size:17px;margin:6px 0}.brw p{color:#5d6879;font-size:14px;margin:0 0 14px;word-break:keep-all}.brw-go{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.brw-go button,.brw-back{border:0;border-radius:12px;padding:10px 14px;font-weight:800;background:#e8efff;color:#1f4fd8;cursor:pointer}.brw-back{margin-top:10px;background:none;color:#5d6879;text-decoration:underline}
+.vl-brrow{grid-column:1/-1;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:10px 12px}.vl-brrow label{font-weight:800;white-space:nowrap}.vl-brrow select{flex:1;min-width:0;border:0;border-radius:10px;padding:9px 10px;font:800 15px "Noto Sans KR",sans-serif;background:#fff;color:#0f2350}
+.vl-brtip{grid-column:1/-1;margin:-4px 2px 0;font-size:12px;opacity:.75}.vl-ro-msg{grid-column:1/-1;text-align:center;padding:18px 10px;border:1px dashed rgba(255,255,255,.35);border-radius:14px;font-size:14px;line-height:1.6}
+.vl-ro-ed{grid-column:1/-1}.vl-ro-ed p{font-size:13px;line-height:1.6;margin:0 0 8px}.vl-ro-ed textarea{width:100%;box-sizing:border-box;border-radius:12px;border:0;padding:10px;font:14px/1.6 "Noto Sans KR",sans-serif;color:#14213a}
 .xs-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.xs-h b{font-size:16px}
 .xs-h button{border:0;background:#eef2f8;border-radius:10px;padding:7px 11px;font:700 13px "Noto Sans KR",sans-serif;cursor:pointer;margin-left:4px;color:#14213a}
 .xs-n{border-top:1px solid #e3e9f3;padding:10px 0}.xs-n div{display:flex;gap:8px;align-items:baseline}.xs-n span{color:#1f4fd8;font-weight:800;font-size:12px}
@@ -2188,7 +2191,7 @@ var DATE = "2026-10-15", MY = "북서울";
 var CSG = ["정용묵","이동규","김대영","강보순"];
 function brFree(){ var n=""; try{ n=localStorage.getItem("bsr_me")||""; }catch(e){} return n==="이재식"||n==="그룹장"||CSG.indexOf(n)>=0; }
 function brCan(){ return brFree(); }   /* 지사 선택 버튼이 보이는 사람 (지금은 이재식·그룹장·서울CS지원만) */
-try{ var _b=localStorage.getItem("bsr_br"); if(_b && brCan() && (_b==="북서울" || brFree() || localStorage.getItem("bsr_brok_"+_b)==="1")) MY=_b; }catch(e){}
+try{ var _b=localStorage.getItem("bsr_br"); if(_b && (_b==="북서울" || brFree() || localStorage.getItem("bsr_brok_"+_b)==="1")) MY=_b; }catch(e){}
 
 /* 셀 = 목표,실적,달성률 / 5개 지표를 | 로 구분. 시트의 달성률을 그대로 옮겼습니다.
    (엑셀에서 100%로 보이지만 미달로 표시된 2곳은 99.5로 넣어 미달 처리) */
@@ -2290,7 +2293,7 @@ function renderHero(){
   document.getElementById("hero").innerHTML =
     '<div class="himg" role="img" aria-label="오늘도 고객의 안전을 지키는 에스원"></div>'+
     '<div class="htop"><div class="eyebrow"><i></i>에스원 서울사업팀 · 기준일 '+DATE+(SD.br!==DATE?' (지표 '+md(SD.br)+')':'')+'</div>'+
-    '<div class="dsel" role="group" aria-label="기준일 선택">'+DATES.map(function(x){return '<button type="button" data-date="'+x.d+'" aria-pressed="'+(x.d===DATE)+'">'+x.d.slice(5).replace("-","/")+'</button>'}).join("")+'</div>'+'<h1>'+MY+' 서비스 Report</h1>'+(brCan()?'<button type="button" class="brsel" data-brsel="1" aria-label="지사 선택">🏢 '+MY+'지사 <i>▾</i></button>':'')+'</div>'+
+    '<div class="dsel" role="group" aria-label="기준일 선택">'+DATES.map(function(x){return '<button type="button" data-date="'+x.d+'" aria-pressed="'+(x.d===DATE)+'">'+x.d.slice(5).replace("-","/")+'</button>'}).join("")+'</div>'+'<h1>'+MY+' 서비스 Report</h1>'+'</div>'+
     '<div class="hbody"><div class="score"><div class="big">'+n+'<small>/5</small></div><p><b>차량지표</b>달성 현황'+(PREV?'<br><span class="dlnote">▲▼ '+md(PREV.d)+' 대비 %p</span>':'')+'</p></div>'+
     '<div class="hchips">'+chips+'</div></div>';
 }
@@ -7027,7 +7030,7 @@ function brSet(n){
   if(n==="북서울" || brFree() || (function(){ try{ return localStorage.getItem("bsr_brok_"+n)==="1"; }catch(e){ return false; } })()){ go(); return; }
   var pw = prompt(n+"지사 비밀번호를 입력하세요"); if(!pw) return;
   fetch(RP_API+"?action=brchk&br="+encodeURIComponent(n)+"&pw="+encodeURIComponent(pw)+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
-    if(j && j.ok){ try{ localStorage.setItem("bsr_brok_"+n,"1"); }catch(e){} go(); } else alert("비밀번호가 맞지 않아요.");
+    if(j && j.ok){ try{ localStorage.setItem("bsr_brok_"+n,"1"); localStorage.setItem("bsr_brpw_"+n,pw); }catch(e){} go(); } else alert("비밀번호가 맞지 않아요.");
   }).catch(function(){ alert("인터넷 연결을 확인해 주세요."); });
 }
 document.addEventListener("click",function(e){
@@ -7239,7 +7242,7 @@ document.addEventListener("click", function(e){ if(e.target.closest('[data-rpsyn
 .vl-menu button.vl-adm{background:#fffbef;color:#5a4300}.vl-menu button.vl-adm:active{background:#fff1c4}
 </style>
 <button type="button" id="mechip" hidden></button>
-<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="ref">🤝 소개영업 앱 받기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 고객 응대 롤플레잉</button><button type="button" data-vl="diag" id="vldiag" hidden>📸 AI 현장 진단</button><button type="button" data-vl="find">🔍 고객처 한눈에 · 불만 위험</button><button type="button" data-vl="pc">👤 개인 카드</button><button type="button" data-vl="edu">📚 교육 이수 현황</button><button type="button" data-vl="sug">💬 건의 · 질문함</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📲 알림 받기 · 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 · 월말 결산</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-aiperf="1" class="vl-adm">📊 AI 활용 성과 리포트</button><button type="button" data-vl="bd" class="vl-adm vl-own">🧪 지사 현황 (엑셀 반영 시범)</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm vl-own">🔒 접속 현황</button></div>
+<div class="vl-menu" id="vlmenu" hidden><button type="button" data-vl="pick">👤 이름 바꾸기</button><button type="button" data-vl="roster" class="vl-brm">📋 지사 명단 관리</button><button type="button" data-vl="help">📖 사용 안내 · 도움말</button><button type="button" data-vl="noti">📢 공지 · 경조사 · 매뉴얼 보기</button><button type="button" data-vl="sales">📈 영업일보 열기</button><button type="button" data-vl="ref">🤝 소개영업 앱 받기</button><button type="button" data-vl="prod">🛡️ 에스원 상품 추천</button><button type="button" data-ptopen="1">🗺️ 담당구역 출동차량 조회</button><button type="button" data-rpopen="1">🎧 AI 고객 응대 롤플레잉</button><button type="button" data-vl="diag" id="vldiag" hidden>📸 AI 현장 진단</button><button type="button" data-vl="find">🔍 고객처 한눈에 · 불만 위험</button><button type="button" data-vl="pc">👤 개인 카드</button><button type="button" data-vl="edu">📚 교육 이수 현황</button><button type="button" data-vl="sug">💬 건의 · 질문함</button><button type="button" data-vl="big">🔠 글자 크게 / 원래대로</button><button type="button" data-vl="fresh">🔄 최신 버전 받기</button><button type="button" data-vl="hist">📲 알림 받기 · 업데이트 이력</button><button type="button" data-vl="one">🖨️ 한 장 요약 · 월말 결산</button><div class="vl-sep vl-adm">🔒 관리자 메뉴</div><button type="button" data-vl="week" class="vl-adm">📋 주간 보고 문구</button><button type="button" data-vl="share" class="vl-adm">📊 톡방 지표 요약 복사</button><button type="button" data-vl="notice" class="vl-adm">📋 카톡 공지 문구 복사</button><button type="button" data-vl="mgr" class="vl-adm">✅ 관리자 오늘 할 일</button><button type="button" data-vl="mvp" class="vl-adm">🏆 이달의 MVP</button><button type="button" data-aiperf="1" class="vl-adm">📊 AI 활용 성과 리포트</button><button type="button" data-vl="bd" class="vl-adm vl-own">🧪 지사 현황 (엑셀 반영 시범)</button><button type="button" data-vl="notiw" class="vl-adm">✏️ 공지 · 교육 올리기</button><button type="button" data-vl="admin" class="vl-adm vl-own">🔒 접속 현황</button></div>
 <div class="vl-ov" id="vlov" hidden role="dialog" aria-modal="true"><div class="vl-in" id="vlin"></div></div>
 <script>
 (function(){
@@ -7274,8 +7277,53 @@ function open(html,pk){ box.innerHTML = html; vlFold(); ov.classList.toggle("pk"
 function esc(x){ return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]}); }
 
 function ro(w){ var c=w.charCodeAt(w.length-1)-0xAC00; if(c<0||c>11171) return "로"; var j=c%28; return (j===0||j===8)?"로":"으로"; }
+/* 🏢 이름 · 지사 바꾸기 — PB: 고르는 중인 지사. 북서울 명단은 앱 안(STAFF·DEPTS), 다른 지사는 서버 명단(지사 관리자가 「지사 명단 관리」에서 입력) */
+var PB = MY, RO = {};
+function brList(){ var L = BR.map(function(b){return b.name}); var i=L.indexOf("북서울"); if(i>0){ L.splice(i,1); L.unshift("북서울"); } return L; }
+function roParse(t){ var o={mgr:[],cars:[],sal:[],tec:[],salLead:"",tecLead:""};
+  String(t||"").split(/\n/).forEach(function(line){ var m=line.match(/^\s*([^:：]+)[:：](.*)$/); if(!m) return; var k=m[1].trim(), ns=m[2].split(/[,，、]/).map(function(x){return x.trim()}).filter(Boolean), out=[];
+    ns.forEach(function(n){ var ld=/\(팀장\)$/.test(n); n=n.replace(/\(팀장\)$/,"").trim(); if(!n) return; out.push(n); if(ld){ if(k==="영업") o.salLead=n; if(k==="기술") o.tecLead=n; } });
+    if(k==="관리자") o.mgr=out; else if(k==="영업") o.sal=out; else if(k==="기술") o.tec=out; else if(out.length) o.cars.push([k,out]); });
+  return o; }
+function roNames(b){ var r=RO[b]; if(!r||!r.p) return []; var p=r.p; return p.mgr.concat(p.sal,p.tec).concat([].concat.apply([],p.cars.map(function(c){return c[1]}))); }
+function roLoad(b, cb){ if(b==="북서울"||(RO[b]&&RO[b].p)){ if(cb) cb(); return; } RO[b]={busy:1};
+  fetch(RP_API+"?action=roster&br="+encodeURIComponent(b)+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){ RO[b]={p:roParse(j&&j.text), raw:(j&&j.text)||""}; if(cb) cb(); }).catch(function(){ RO[b]={err:1}; if(cb) cb(); }); }
+function roHtml(){ var r=RO[PB];
+  if(!r||r.busy) return '<div class="vl-ro-msg">명단 불러오는 중…</div>';
+  if(r.err) return '<div class="vl-ro-msg">명단을 불러오지 못했어요. 인터넷 연결을 확인해 주세요.</div>';
+  var p=r.p, h='', btn=function(n,sub,boss,ic){ return '<button type="button" class="vl-n'+(boss?' boss':'')+'" data-nm="'+esc(n)+'" aria-pressed="'+(n===pick)+'">'+(ic||'')+esc(n)+(sub?'<small>'+esc(sub)+'</small>':'')+'</button>'; };
+  if(!p.mgr.length&&!p.cars.length&&!p.sal.length&&!p.tec.length) return '<div class="vl-ro-msg">'+esc(PB)+'지사 명단이 아직 등록되지 않았어요.<br>지사 관리자가 이름 버튼 → 📋 지사 명단 관리에서 등록하면 여기에 나와요.</div>';
+  if(p.mgr.length) h += '<div class="vl-div vl-sec"><span>🔒 관리자</span></div><div class="vl-g">'+esc(PB)+'지사 관리자</div>'+p.mgr.map(function(n){ return btn(n,"관리자",1,n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':''); }).join('');
+  if(p.cars.length) h += '<div class="vl-div vl-sec"><span>🚓 차량 근무자</span></div>'+p.cars.map(function(c){ return '<div class="vl-g">'+esc(c[0])+'</div>'+c[1].map(function(n){ return btn(n); }).join(''); }).join('');
+  if(p.sal.length||p.tec.length) h += '<div class="vl-div vl-sec"><span>💼 영업 · 💻 기술</span></div>'+
+    (p.sal.length?'<div class="vl-g">💼 영업</div>'+p.sal.map(function(n){ var l=n===p.salLead; return btn(n,l?"영업팀장":"영업",l,l?'👔 ':''); }).join(''):'')+
+    (p.tec.length?'<div class="vl-g">💻 기술</div>'+p.tec.map(function(n){ var l=n===p.tecLead; return btn(n,l?"기술팀장":"기술",l,l?'🧑‍💻 ':''); }).join(''):'');
+  return h; }
+function brPickTo(v){
+  var go=function(){ PB=v; try{ if(brFree()) localStorage.setItem("bsr_brok_"+v,"1"); }catch(_){}
+    var keep=["그룹장","타부서"].concat(CSG).concat(["이재식"]); if(pick && keep.indexOf(pick)<0){ var L=v==="북서울"?ALL.concat(DEPTS["영업"]).concat(DEPTS["기술"]):roNames(v); if(L.indexOf(pick)<0) pick=null; }
+    pickView(); roLoad(v, function(){ if(PB===v && !ov.hidden){ if(pick && keep.indexOf(pick)<0 && v!=="북서울" && roNames(v).indexOf(pick)<0) pick=null; pickView(); } }); };
+  if(v==="북서울"||brFree()||g("bsr_brok_"+v)==="1"){ go(); return; }
+  var pw=prompt(v+"지사 비밀번호를 입력하세요"); if(!pw){ pickView(); return; }
+  fetch(RP_API+"?action=brchk&br="+encodeURIComponent(v)+"&pw="+encodeURIComponent(pw)+"&t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
+    if(j&&j.ok){ try{ localStorage.setItem("bsr_brok_"+v,"1"); localStorage.setItem("bsr_brpw_"+v,pw); }catch(_){} go(); } else { alert("비밀번호가 맞지 않아요."); pickView(); } }).catch(function(){ alert("인터넷 연결을 확인해 주세요."); pickView(); });
+}
+/* 📋 지사 명단 관리 (북서울 외 지사) — 지사 비밀번호 또는 관리자 PIN으로 저장 */
+var RB = "";
+function roEdit(){ var L=brList().filter(function(n){return n!=="북서울"}); if(!RB||L.indexOf(RB)<0) RB = MY!=="북서울"?MY:L[0];
+  open('<div class="vl-hero"><button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button><small>ROSTER</small><h2>📋 지사 명단 관리</h2><p>이름 고르기 화면에 나오는 지사별 직원 명단이에요.</p></div>'+
+    '<div class="vl-grid"><div class="vl-brrow" style="grid-column:1/-1"><label for="rob">🏢 지사</label><select id="rob">'+L.map(function(n){ return '<option'+(n===RB?' selected':'')+'>'+esc(n)+'</option>'; }).join('')+'</select></div>'+
+    '<div class="vl-ro-ed"><p>한 줄에 한 묶음 · <b>묶음: 이름, 이름</b> 형식으로 적어요.<br>「관리자」「영업」「기술」은 그대로 쓰고, 나머지 줄은 차량(호차)으로 나와요. 팀장은 이름 뒤에 <b>(팀장)</b>.</p>'+
+    '<textarea id="rotx" rows="12" placeholder="불러오는 중…"></textarea><button type="button" class="vl-btn" data-vl="rosave" style="margin:10px 0 0">💾 저장</button><p class="vl-tip">개인별 자료가 들어오면 그 명단을 참고해 채워도 돼요. 영업·기술은 직접 입력해 주세요.</p></div></div>');
+  var t=document.getElementById("rotx"); delete RO[RB]; roLoad(RB, function(){ var r=RO[RB]; if(!t) return; t.value = (r&&r.raw) || "관리자: 지사장, 서비스팀장, \n1호: \n2호: \n영업: \n기술: "; t.placeholder=""; });
+}
+function roSave(){ var t=document.getElementById("rotx"); if(!t) return; var pw = (MGRS.indexOf(me)>=0&&pin) || g("bsr_brpw_"+RB) || prompt(RB+"지사 비밀번호를 입력하세요") || ""; if(!pw) return;
+  fetch(RP_API,{method:"POST",body:JSON.stringify({act:"rosterput",branch:RB,pw:pw,text:t.value})}).then(function(r){return r.json()}).then(function(j){
+    if(j&&j.ok){ try{ localStorage.setItem("bsr_brpw_"+RB,pw); }catch(_){} RO[RB]={p:roParse(t.value),raw:t.value}; alert(RB+"지사 명단을 저장했어요."); }
+    else alert(j&&j.err==="pw"?"비밀번호가 맞지 않아요.":"저장하지 못했어요."); }).catch(function(){ alert("인터넷 연결을 확인해 주세요."); }); }
 function pickView(){
-  var h = '<div class="vl-hero">'+(me?'<button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button>':'')+'<small>BUKSEOUL REPORT</small><h2>누구신가요? 👋</h2><p>처음 한 번만 선택하면 이 폰에서 기억합니다.</p></div><div class="vl-grid">'+
+  var h = '<div class="vl-hero">'+(me?'<button type="button" class="vl-x" data-vl="close" aria-label="닫기">✕</button>':'')+'<small>'+(PB==="북서울"?'BUKSEOUL':'S1 · '+esc(PB))+' REPORT</small><h2>누구신가요? 👋</h2><p>처음 한 번만 선택하면 이 폰에서 기억합니다.</p></div><div class="vl-grid">'+
+    (brCan()?'<div class="vl-brrow"><label for="vlbr">🏢 지사</label><select id="vlbr">'+brList().map(function(n){ var lk=n!=="북서울"&&!brFree()&&g("bsr_brok_"+n)!=="1"; return '<option value="'+esc(n)+'"'+(n===PB?' selected':'')+'>'+esc(n)+'지사'+(lk?' 🔒':'')+'</option>'; }).join('')+'</select></div><p class="vl-brtip">지사를 바꾸면 그 지사 직원 명단이 나와요 (서울CS지원그룹은 그대로)</p>':'')+
     '<div class="vl-role"><b>선택한 이름에 따라 보이는 기능이 달라요</b>'+
     '<p><i>👑 부서장</i><span>오늘 할 일 · 공지 쓰기 · 💬 응원 코멘트</span></p>'+
     '<p><i>⭐ 서비스 관리자</i><span>관리자 기능 + 📱 해피콜 현황</span></p>'+
@@ -7283,12 +7331,14 @@ function pickView(){
     '<p><i>🎖️ 서비스 그룹장</i><span>서울CS지원 · 지표 보기 · 💬 응원 코멘트</span></p>'+
     '<p><i>💼 영업 · 💻 기술</i><span>내 해피콜 · 부서 공지 · 지표 보기</span></p>'+
     '<p><i>👀 타부서</i><span>지표 보기 전용</span></p></div>';
+  if(PB!=="북서울") h += roHtml(); else {
   STAFF.forEach(function(gr, gi){ if(gi===0) h += '<div class="vl-div vl-sec"><span>🔒 관리자</span></div>'; if(gi===2) h += '<div class="vl-div vl-sec"><span>🚓 차량 근무자</span></div>'; h += '<div class="vl-g">'+gr[0]+'</div>'; gr[1].forEach(function(n){ h += '<button type="button" class="vl-n'+((n==="지사장"||n==="서비스팀장"||n==="그룹장")?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="지사장"?'👑 ':n==="서비스팀장"?'⭐ ':n==="이재식"?'👨‍💻 ':'')+(n==="그룹장"?'<span style="white-space:nowrap;font-size:13.5px;letter-spacing:-.5px">🎖️서비스 그룹장</span>':n)+(NM_SUB[n]?'<small>'+NM_SUB[n]+'</small>':'')+'</button>'; }); });
   h += '<div class="vl-div vl-sec"><span>💼 영업 · 💻 기술</span></div>';
   Object.keys(DEPTS).forEach(function(k){ h += '<div class="vl-g">'+(k==="영업"?'💼 ':'💻 ')+k+'</div>'+DEPTS[k].map(function(n){ var ld = DEPT_LEAD[k]===n; return '<button type="button" class="vl-n'+(ld?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(ld?(k==="영업"?'👔 ':'🧑‍💻 '):'')+n+'<small>'+k+(ld?'팀장':'')+'</small></button>'; }).join(''); });
+  }
   h += '<div class="vl-div vl-sec"><span>🎖️ 서울CS지원그룹</span></div><div class="vl-g">서울CS지원</div>'+['<button type="button" class="vl-n boss" data-nm="그룹장" aria-pressed="'+("그룹장"===pick)+'"><span style="white-space:nowrap;font-size:13.5px;letter-spacing:-.5px">🎖️서비스 그룹장</span><small>서울CS지원</small></button>'].concat(CSG.map(function(n){ return '<button type="button" class="vl-n" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+n+'<small>서울CS지원</small></button>'; })).join('');
-  var listed = ALL.concat(["그룹장","타부서"]).concat(CSG).concat(DEPTS["영업"]).concat(DEPTS["기술"]), typed = pick && listed.indexOf(pick)<0 ? pick : "";
-  h += '<div class="vl-g">그 외</div>'+["타부서"].map(function(n){ return '<button type="button" class="vl-n'+(n==="그룹장"?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="그룹장"?'🎖️ ':'')+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('')+
+  var listed = ALL.concat(["그룹장","타부서"]).concat(CSG).concat(DEPTS["영업"]).concat(DEPTS["기술"]).concat(roNames(PB)), typed = pick && listed.indexOf(pick)<0 ? pick : "";
+  h += '<div class="vl-g">그 외</div>'+(PB!=="북서울"?'<button type="button" class="vl-n" data-nm="이재식" aria-pressed="'+("이재식"===pick)+'">👨‍💻 이재식<small>앱 개발자</small></button>':'')+["타부서"].map(function(n){ return '<button type="button" class="vl-n'+(n==="그룹장"?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="그룹장"?'🎖️ ':'')+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('')+
     '<div class="vl-div"><span>목록에 이름이 없으면</span></div><div class="vl-in-row"><label for="vlname">직접 입력</label><input id="vlname" type="text" maxlength="10" autocomplete="off" placeholder="이름을 입력하세요" value="'+esc(typed)+'" aria-label="이름 직접 입력"></div></div>';
   h += '<button type="button" class="vl-btn" data-vl="start"'+(pick?'':' disabled')+'>'+(pick?esc(dnm(pick))+ro(dnm(pick))+' 시작하기':'이름을 선택해 주세요')+'</button>';
   h += '<p class="vl-tip">※ 지표 확인 현황과 화면 선호도 조사를 위해 이름을 선택해 주세요. 더 보기 편한 리포트를 만드는 데 활용됩니다.</p>';
@@ -7536,7 +7586,7 @@ function vlPushWho(){
       '<p class="note" style="margin:8px 2px 0">못 받는 직원은 설치한 앱에서 이름 버튼 → 「알림 받기 · 업데이트 이력」 → 알림 켜기를 해야 해요. 폰을 바꾸거나 앱을 지우면 받음으로 보여도 실제로는 안 갈 수 있어요.</p>';
   }).catch(function(){ var el=document.getElementById("vlpush"); if(el) el.innerHTML='<h3>🔔 알림 받는 직원</h3><div class="vl-row">목록을 불러오지 못했어요.</div>'; });
 }
-chip.addEventListener("click", function(e){ e.stopPropagation(); var adm = MGRS.indexOf(me)>=0;   /* 관리자 메뉴는 관리자 이름을 고른 경우에만 (PIN이 저장된 폰이라도 직원 이름이면 숨김) */ menu.querySelectorAll(".vl-adm").forEach(function(x){ x.hidden = !adm || (x.classList.contains("vl-own") && me!=="이재식"); });   /* 접속 현황은 이재식만 */ menu.hidden = !menu.hidden; });
+chip.addEventListener("click", function(e){ e.stopPropagation(); var adm = MGRS.indexOf(me)>=0;   /* 관리자 메뉴는 관리자 이름을 고른 경우에만 (PIN이 저장된 폰이라도 직원 이름이면 숨김) */ menu.querySelectorAll(".vl-adm").forEach(function(x){ x.hidden = !adm || (x.classList.contains("vl-own") && me!=="이재식"); }); menu.querySelectorAll(".vl-brm").forEach(function(x){ x.hidden = !brCan(); }); var pk0=menu.querySelector('[data-vl="pick"]'); if(pk0) pk0.textContent = brCan()?"👤 이름 · 지사 바꾸기":"👤 이름 바꾸기";   /* 접속 현황은 이재식만 */ menu.hidden = !menu.hidden; });
 document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contains(e.target)) menu.hidden = true; });
 menu.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return; menu.hidden = true;
@@ -7544,7 +7594,7 @@ menu.addEventListener("click", function(e){
   if(a==="pc"){ pcView(); return; } if(a==="sug"){ SUG_TAB="write"; sugView(); return; } if(a==="edu"){ eduView(); return; }
   if(a==="diag"){ location.href="diag.html"; return; }
   if(a==="bd"){ location.href="branch.html"; return; }
-  if(a==="pick"){ pick = me; pickView(); } else if(a==="hist"){ pushView(); } else if(a==="guide"){ guideView(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="bdg"){ badgeCheck(); } else if(a==="push"){ pushView(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ if(me!=="이재식") return; pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ NL_T==="edu" ? eduTab() : NL_T==="man" ? manTab() : notiList(); } else if(a==="sales"){ window.open(SALES_URL, "_blank"); } else if(a==="ref"){ window.open(REF_URL, "_blank"); } else if(a==="prod"){ location.href = PROD_URL; }   /* 같은 앱 화면에서 열기(주소창 없음) · 상품 추천의 ‹ 버튼으로 돌아옴 */ else if(a==="find"){ findView(""); } else if(a==="praise"){ praiseView(""); } else if(a==="risk"){ riskView(); } else if(a==="help"){ helpView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
+  if(a==="pick"){ pick = me; PB = MY; pickView(); if(PB!=="북서울") roLoad(PB, function(){ if(!ov.hidden) pickView(); }); } else if(a==="roster"){ roEdit(); } else if(a==="hist"){ pushView(); } else if(a==="guide"){ guideView(); } else if(a==="fresh"){ var go=function(){ location.replace("./?t="+Date.now()); }; try{ caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k)})); }).then(go,go); }catch(er){ go(); } setTimeout(go,3000); } else if(a==="bdg"){ badgeCheck(); } else if(a==="push"){ pushView(); } else if(a==="brf"){ var tb=document.querySelector('#tabs [data-tab="home"]'); if(tb) tb.click(); } else if(a==="one"){ showOnePage(); } else if(a==="notice"){ copyNotice(); } else if(a==="share"){ sxCopy('톡방 지표 요약', shareText()); } else if(a==="admin"){ if(me!=="이재식") return; pin ? loadAdmin(pin) : pinView(); } else if(a==="noti"){ NL_T==="edu" ? eduTab() : NL_T==="man" ? manTab() : notiList(); } else if(a==="sales"){ window.open(SALES_URL, "_blank"); } else if(a==="ref"){ window.open(REF_URL, "_blank"); } else if(a==="prod"){ location.href = PROD_URL; }   /* 같은 앱 화면에서 열기(주소창 없음) · 상품 추천의 ‹ 버튼으로 돌아옴 */ else if(a==="find"){ findView(""); } else if(a==="praise"){ praiseView(""); } else if(a==="risk"){ riskView(); } else if(a==="help"){ helpView(""); } else if(a==="big"){ bigToggle(); } else if(a==="week"){ weeklyView(); } else if(a==="mgr"){ mgrView(); mgrLoad(function(){ var o=document.getElementById("xsheet"); if(o && !o.hidden) mgrView(); }); } else if(a==="mrep"){ showMonthReport(); } else if(a==="mvp"){ MX_SEL=null; mxView(); } else if(a==="notiw"){ pin ? notiWrite() : pinView("공지를 쓰려면 먼저 관리자 PIN을 입력하세요."); }
 });
 ov.addEventListener("click", function(e){
   var n = e.target.closest("[data-nm]");
@@ -7552,10 +7602,13 @@ ov.addEventListener("click", function(e){
   var b = e.target.closest("[data-vl]"); if(!b) return;
   var a = b.dataset.vl;
   if(a==="close") close();
+  else if(a==="rosave") roSave();
+  else if(a==="start" && pick && PB!==MY){ me = pick; s("bsr_me", me); try{ localStorage.setItem("bsr_br", PB); }catch(_){} location.reload(); }
   else if(a==="start" && pick){ var changed = pick!==me; me = pick; s("bsr_me", me); showChip(); close(); try{ if(window.render) render(); }catch(_){} if(changed){ sent = {}; send(openTag()); sent[window.state?state.tab:"cmp"]=1; } }
   else if(a==="pinok"){ var i=document.getElementById("vlpin"); loadAdmin(i?i.value.trim():""); }
   else if(a==="reload") loadAdmin(pin);
 });
+ov.addEventListener("change", function(e){ if(e.target.id==="vlbr") brPickTo(e.target.value); if(e.target.id==="rob"){ RB=e.target.value; roEdit(); } });
 ov.addEventListener("input", function(e){
   if(e.target.id!=="vlname") return;
   var v = e.target.value.trim(), b = box.querySelector('[data-vl="start"]');
