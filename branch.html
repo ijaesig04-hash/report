@@ -58,7 +58,9 @@ if(ME!=="이재식"){ $("main").innerHTML='<div class="lock">🔒<br>준비 중�
 
 /* ───── 상태 ───── */
 var S={tab:"up", br:ls("bsr_bd_br")||"북서울", all:null, pv:null};
-function brs(){ var o={"북서울":1}; if(S.all) Object.keys(S.all).forEach(function(k){o[k]=1}); if(S.pv&&S.pv.branch) o[S.pv.branch]=1; return Object.keys(o).sort(function(a,b){ return a==="북서울"?-1:b==="북서울"?1:a.localeCompare(b,"ko"); }); }
+/* 지사 목록 — 리포트 「지사별」 탭과 같은 순서 (지사가 바뀌면 여기만 고치면 됨) */
+var BRL=["북서울","강남광역","서초","제주","서강","구로","강서","영등포","남양주","송파","서울동부","강동","동서울","서서울","강북광역(중앙)","강북광역(한남)","성북(직할)","성북(SSFT)"];
+function brs(){ var o={}; BRL.forEach(function(k){o[k]=1}); if(S.all) Object.keys(S.all).forEach(function(k){o[k]=1}); if(S.pv&&S.pv.branch) o[S.pv.branch]=1; return Object.keys(o); }
 function pin(){ return ls("bsr_pin"); }
 
 function draw(){
