@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="bsr-ver" content="20261128173049">
+<meta name="bsr-ver" content="20261128175239">
 <title>북서울 서비스 Report</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'">
 <meta name="color-scheme" content="only light">
@@ -2688,7 +2688,7 @@ function apOpen(){
     h+='</div>';
     /* ② AI 기능 */
     h+='<div class="kc-b"><h4>🤖 ② AI 기능 사용 (이번 달 · 누적)</h4>';
-    if(A.st){ var sum=function(k,f){ return Object.keys(A.st[k]).reduce(function(t,m){ return t+(A.st[k][m][f]||0); },0); }, cur=function(k){ return A.st[k][ym]||{n:0,u:0,ok:0,no:0,fix:0,avg:null}; };
+    if(A.st){ var sum=function(k,f){ var o=A.st[k]||{}; return Object.keys(o).reduce(function(t,m){ return t+((o[m]||{})[f]||0); },0); }, cur=function(k){ return (A.st[k]||{})[ym]||{n:0,u:0,ok:0,no:0,fix:0,avg:null}; };
       var dg=cur("diag"), rp=cur("rp"), ev=cur("ev"), okA=sum("diag","ok"), noA=sum("diag","no");
       A.ai={dn:dg.n,du:dg.u,dt:sum("diag","n"),ok:okA,no:noA,fix:sum("diag","fix"),rn:rp.n,ru:rp.u,rt:sum("rp","n"),ra:rp.avg,en:ev.n,eu:ev.u};
       h+='<table class="kc-t"><tr><th>기능</th><th>이번 달</th><th>누적</th></tr>'+
@@ -5690,7 +5690,7 @@ function aibHtml(noLoad){
   if(!a) return '<div id="aibal" class="aib"><span class="aib-i">💳</span><div class="aib-t"><b>AI 충전 잔액</b><small>불러오는 중…</small></div></div>';
   var won = function(n){ return Math.round(n).toLocaleString(); }, pct = a.base>0 ? Math.max(0,Math.min(100,Math.round(a.est/a.base*100))) : 0;
   var st = a.empty ? "empty" : a.low ? "low" : "ok";
-  var sub = a.empty ? "다 썼어요 · 충전 전까지 통화 멈춤" : a.low ? "2천 원 미만 · 충전 필요" : "오늘 통화 "+a.today.n+"회 · 약 "+won(a.today.won)+"원";
+  var sub = a.empty ? "다 썼어요 · 충전 전까지 통화 멈춤" : a.low ? "2천 원 미만 · 충전 필요" : "오늘 통화 "+((a.today||{}).n||0)+"회 · 약 "+won((a.today||{}).won||0)+"원";
   return '<'+(me?'button type="button" data-aibset="1"':'div')+' id="aibal" class="aib '+st+'"><span class="aib-i">'+(a.empty?'⛔':a.low?'⚠️':'💳')+'</span>'+
     '<div class="aib-t"><b>AI 충전 잔액 <em>추정</em></b><small>'+sub+'</small><span class="aib-bar"><i style="width:'+pct+'%"></i></span></div>'+
     '<div class="aib-v"><b class="num">'+(a.empty?'0':won(a.est))+'<small>원</small></b><small>/ '+won(a.base)+'원</small></div>'+(me?'<i class="aib-a" aria-hidden="true">›</i>':'')+'</'+(me?'button':'div')+'>';
@@ -7347,7 +7347,7 @@ function roHtml(){ var r=RO[PB];
   return h; }
 function brPickTo(v){
   var go=function(){ PB=v; try{ if(brFree()) localStorage.setItem("bsr_brok_"+v,"1"); }catch(_){}
-    var keep=["그룹장","타부서"].concat(CSG).concat(["이재식"]); if(pick && keep.indexOf(pick)<0){ var L=v==="북서울"?ALL.concat(DEPTS["영업"]).concat(DEPTS["기술"]):roNames(v); if(L.indexOf(pick)<0) pick=null; }
+    var keep=["그룹장"].concat(CSG).concat(v==="북서울"?["타부서"]:[]).concat(devOk()?["이재식"]:[]); if(pick && keep.indexOf(pick)<0){ var L=v==="북서울"?ALL.concat(DEPTS["영업"]).concat(DEPTS["기술"]):roNames(v); if(L.indexOf(pick)<0) pick=null; }
     pickView(); roLoad(v, function(){ if(PB===v && !ov.hidden){ if(pick && keep.indexOf(pick)<0 && v!=="북서울" && roNames(v).indexOf(pick)<0) pick=null; pickView(); } }); };
   if(v==="북서울"||brFree()||g("bsr_brok_"+v)==="1"){ go(); return; }
   var pw=prompt(v+"지사 비밀번호를 입력하세요"); if(!pw){ pickView(); return; }
@@ -7383,9 +7383,10 @@ function pickView(){
   Object.keys(DEPTS).forEach(function(k){ h += '<div class="vl-g">'+(k==="영업"?'💼 ':'💻 ')+k+'</div>'+DEPTS[k].map(function(n){ var ld = DEPT_LEAD[k]===n; return '<button type="button" class="vl-n'+(ld?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(ld?(k==="영업"?'👔 ':'🧑‍💻 '):'')+n+'<small>'+k+(ld?'팀장':'')+'</small></button>'; }).join(''); });
   }
   var listed = ALL.concat(["그룹장","타부서"]).concat(CSG).concat(DEPTS["영업"]).concat(DEPTS["기술"]).concat(roNames(PB)), typed = pick && listed.indexOf(pick)<0 ? pick : "";
-  h += '<div class="vl-g">그 외</div>'+(PB!=="북서울"?'<button type="button" class="vl-n" data-nm="이재식" aria-pressed="'+("이재식"===pick)+'">👨‍💻 이재식<small>앱 개발자</small></button>':'')+["타부서"].map(function(n){ return '<button type="button" class="vl-n'+(n==="그룹장"?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="그룹장"?'🎖️ ':'')+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('')+
-    '<div class="vl-div"><span>목록에 이름이 없으면</span></div><div class="vl-in-row"><label for="vlname">직접 입력</label><input id="vlname" type="text" maxlength="10" autocomplete="off" placeholder="이름을 입력하세요" value="'+esc(typed)+'" aria-label="이름 직접 입력"></div></div>';
-  h += '<button type="button" class="vl-btn" data-vl="start"'+(pick?'':' disabled')+'>'+(pick?esc(dnm(pick))+ro(dnm(pick))+' 시작하기':'이름을 선택해 주세요')+'</button>';
+  if(PB==="북서울") h += '<div class="vl-g">그 외</div>'+["타부서"].map(function(n){ return '<button type="button" class="vl-n'+(n==="그룹장"?' boss':'')+'" data-nm="'+n+'" aria-pressed="'+(n===pick)+'">'+(n==="그룹장"?'🎖️ ':'')+n+'<small>'+NM_SUB[n]+'</small></button>'; }).join('');
+  h += '<div class="vl-div"><span>목록에 이름이 없으면</span></div><div class="vl-in-row"><label for="vlname">직접 입력</label><input id="vlname" type="text" maxlength="10" autocomplete="off" placeholder="이름을 입력하세요" value="'+esc(typed)+'" aria-label="이름 직접 입력"></div></div>';
+  if(PB!=="북서울" && me==="이재식" && devOk() && !pick) pick="이재식";
+  h += '<button type="button" class="vl-btn" data-vl="start"'+(pick?'':' disabled')+'>'+(pick==="이재식"&&PB!=="북서울"?'👨‍💻 개발자(이재식)로 '+esc(PB)+'지사 보기':pick?esc(dnm(pick))+ro(dnm(pick))+' 시작하기':'이름을 선택해 주세요')+'</button>';
   h += '<p class="vl-tip">※ 지표 확인 현황과 화면 선호도 조사를 위해 이름을 선택해 주세요. 더 보기 편한 리포트를 만드는 데 활용됩니다.</p>';
   open(h,1);
 }
